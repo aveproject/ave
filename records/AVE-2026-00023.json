@@ -1,55 +1,81 @@
 {
   "ave_id": "AVE-2026-00023",
-  "schema_version": "0.1.0",
-  "component_type": "skill",
-  "title": "Context window flooding via token exhaustion instruction in agentic component",
-  "attack_class": "Denial of Safety \u2014 Context Window Manipulation",
-  "description": "An agentic component instructs the agent to generate or repeat large volumes of content, flooding the context window and pushing safety instructions, system prompt constraints, or relevant conversation history beyond the token limit. With safety constraints no longer in the active context window, subsequent malicious instructions may execute without the model's safety filters in scope.",
+  "schema_version": "0.2.0",
+  "component_type": "mcp",
+  "title": "Model Context Window Manipulation",
+  "attack_class": "Prompt Injection - Context Window Manipulation",
+  "description": "LLMs have a finite context window. An attacker who can inject large volumes of content can cause earlier content - including system prompt safety constraints, user instructions, and relevant conversation history - to be pushed beyond the context limit. With those constraints no longer in scope, the model may become more susceptible to subsequent malicious instructions. ---",
   "affected_platforms": [
-    "claude-code",
-    "cursor",
-    "codex",
-    "windsurf",
-    "any-skill-compatible-agent"
+    "any-mcp-client"
   ],
   "affected_registries": [
-    "smithery.ai",
-    "clawhub.io",
-    "agentskills.io",
-    "github.com/topics/agent-skills"
+    "smithery.ai"
   ],
-  "cvss_ai_score": 8.0,
-  "cvss_ai_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
+  "aivss_score": 5.8,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
   "owasp_mapping": [
     "ASI01"
   ],
+  "owasp_mcp": [
+    "MCP10",
+    "MCP06"
+  ],
   "nist_ai_rmf_mapping": [
-    "MAP-1.5",
     "MEASURE-2.5",
     "MANAGE-1.3"
   ],
   "mitre_atlas_mapping": [
-    "AML.T0051"
+    "AML.T0054"
   ],
-  "behavioral_fingerprint": "Component instructs agent to repeat, pad, or generate large volumes of content with the intent of overflowing the context window.",
-  "behavioral_vector": [],
-  "mutation_count": 12,
-  "detection_methodology": "1. Static scan: flag instructions to repeat content N times, fill the context, or pad output. 2. Token budget enforcement: implement per-skill token limits and reject responses that exceed the budget. 3. Safety anchoring: pin system prompt instructions at a fixed context position that cannot be displaced.",
+  "behavioral_fingerprint": "Component floods the agent's context window with large amounts of repetitive or irrelevant content to push safety instructions, system prompt constraints, or prior conversation context out of the acti",
+  "behavioral_vector": [
+    "context-overflow",
+    "prompt-injection"
+  ],
+  "mutation_count": 5,
+  "detection_methodology": "1. Malicious skill returns a response containing 100,000 tokens of padding content\n2. System prompt safety instructions are pushed out of context\n3. Attacker's subsequent prompt executes without the safety constraints in scope\n\n---",
   "indicators_of_compromise": [
-    "Component contains 'repeat this 1000 times', 'fill the context window', 'output X * 9999'",
-    "Agent response is unusually long with repetitive content",
-    "Safety-relevant context disappears from model attention after a skill's output",
-    "Token usage per skill call spikes anomalously"
+    "Unusually large output volumes from a skill",
+    "Repeated padding content designed to fill context",
+    "Instructions to `repeat`, `expand`, or `pad` output extensively",
+    ""
   ],
-  "remediation": "1. Implement per-skill token budget limits with hard rejection above threshold. 2. Pin system prompt and safety instructions at a protected context position. 3. Monitor token usage per skill call for anomalies. 4. Remove the component and review all outputs generated during the period it was active.",
+  "aivss": {
+    "cvss_base": 8.0,
+    "aarf": {
+      "autonomy": 1.0,
+      "tool_use": 0.5,
+      "multi_agent": 0.5,
+      "non_determinism": 1.0,
+      "self_modification": 0.5,
+      "dynamic_identity": 0.0,
+      "persistent_memory": 1.0,
+      "natural_language_input": 1.0,
+      "data_access": 0.5,
+      "external_dependencies": 0.0
+    },
+    "aars": 6.0,
+    "thm": 1.0,
+    "mitigation_factor": 0.83,
+    "aivss_score": 5.8,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "owasp_mcp_mapping": [
+      "MCP10",
+      "MCP06"
+    ],
+    "notes": "AARF scores based on typical deployment of mcp components in agentic workflows."
+  },
+  "remediation": "- Implement context window budget limits per skill - reject responses exceeding the budget\n- Pin system prompt and safety instructions at a fixed context position\n- Monitor token usage per skill call for anomalies\n\n---",
   "status": "active",
-  "kill_switch_active": true,
+  "kill_switch_active": false,
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
-  "published": "2026-04-25T09:00:00Z",
-  "last_updated": "2026-04-25T09:00:00Z",
+  "published": "2026-04-19T09:00:00Z",
+  "last_updated": "2026-05-12T00:00:00Z",
   "references": [
     "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://github.com/bawbel/bawbel-ave/blob/main/SPEC.md"
+    "https://aivss.owasp.org",
+    "https://github.com/bawbel/ave"
   ]
 }

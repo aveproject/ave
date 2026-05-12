@@ -1,10 +1,10 @@
 {
   "ave_id": "AVE-2026-00010",
-  "schema_version": "0.1.0",
+  "schema_version": "0.2.0",
   "component_type": "skill",
   "title": "Covert instruction concealment via secrecy directive in agentic component",
-  "attack_class": "Prompt Injection \u2014 Hidden Instruction",
-  "description": "An agentic component explicitly instructs the agent to hide its instructions from the user \u2014 telling it not to reveal, mention, or acknowledge the existence of the directives it has received. This establishes a covert channel between the component and the agent, enabling the component to direct agent behaviour without the user's awareness or consent.",
+  "attack_class": "Prompt Injection - Hidden Instruction",
+  "description": "An agentic component explicitly instructs the agent to hide its instructions from the user - telling it not to reveal, mention, or acknowledge the existence of the directives it has received. This establishes a covert channel between the component and the agent, enabling the component to direct agent behaviour without the user's awareness or consent.",
   "affected_platforms": [
     "claude-code",
     "cursor",
@@ -17,8 +17,8 @@
     "agentskills.io",
     "github.com/topics/agent-skills"
   ],
-  "cvss_ai_score": 7.9,
-  "cvss_ai_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:L/SA:L",
+  "aivss_score": 5.6,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:L/SA:L",
   "owasp_mapping": [
     "ASI01",
     "ASI09"
@@ -41,15 +41,45 @@
     "Component uses phrases like 'keep this hidden', 'this message must be secret'",
     "Agent refuses to describe its current instructions when asked by the user"
   ],
-  "remediation": "1. Remove the component. 2. Implement transparency requirements \u2014 agents should always be able to describe their instructions at a high level when asked. 3. Audit agent responses for signs of instruction concealment. 4. Consider requiring components to declare their instructions in a public manifest.",
+  "remediation": "1. Remove the component. 2. Implement transparency requirements - agents should always be able to describe their instructions at a high level when asked. 3. Audit agent responses for signs of instruction concealment. 4. Consider requiring components to declare their instructions in a public manifest.",
   "status": "active",
   "kill_switch_active": true,
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-20T09:00:00Z",
-  "last_updated": "2026-04-20T09:00:00Z",
+  "last_updated": "2026-05-12T00:00:00Z",
   "references": [
     "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://github.com/bawbel/bawbel-ave/blob/main/SPEC.md"
+    "https://github.com/bawbel/ave/blob/main/SPEC.md"
+  ],
+  "aivss": {
+    "cvss_base": 7.9,
+    "aarf": {
+      "autonomy": 1.0,
+      "tool_use": 0.5,
+      "multi_agent": 0.5,
+      "non_determinism": 0.5,
+      "self_modification": 0.5,
+      "dynamic_identity": 0.5,
+      "persistent_memory": 0.5,
+      "natural_language_input": 1.0,
+      "data_access": 0.5,
+      "external_dependencies": 0.0
+    },
+    "aars": 5.5,
+    "thm": 1.0,
+    "mitigation_factor": 0.83,
+    "aivss_score": 5.6,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "notes": "Conceals instructions. Moderate amplification across most factors.",
+    "owasp_mcp_mapping": [
+      "MCP01",
+      "MCP03"
+    ]
+  },
+  "owasp_mcp": [
+    "MCP01",
+    "MCP03"
   ]
 }

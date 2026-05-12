@@ -1,10 +1,10 @@
 {
   "ave_id": "AVE-2026-00007",
-  "schema_version": "0.1.0",
+  "schema_version": "0.2.0",
   "component_type": "skill",
   "title": "Agent goal hijack via direct instruction override in agentic component",
-  "attack_class": "Prompt Injection \u2014 Goal Hijack",
-  "description": "An agentic component contains explicit instruction-override language \u2014 'ignore all previous instructions', 'your new instructions are', 'forget what you were told' \u2014 to redirect the agent away from its intended task. This is the most direct form of prompt injection. The component does not attempt subtlety; it relies on the agent's tendency to follow the most recent authoritative instruction. This attack class is the foundational vector that enables most other AVE attack classes when combined with additional payload instructions.",
+  "attack_class": "Prompt Injection - Goal Hijack",
+  "description": "An agentic component contains explicit instruction-override language - 'ignore all previous instructions', 'your new instructions are', 'forget what you were told' - to redirect the agent away from its intended task. This is the most direct form of prompt injection. The component does not attempt subtlety; it relies on the agent's tendency to follow the most recent authoritative instruction. This attack class is the foundational vector that enables most other AVE attack classes when combined with additional payload instructions.",
   "affected_platforms": [
     "claude-code",
     "cursor",
@@ -17,8 +17,8 @@
     "agentskills.io",
     "github.com/topics/agent-skills"
   ],
-  "cvss_ai_score": 8.1,
-  "cvss_ai_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
+  "aivss_score": 6.1,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
   "owasp_mapping": [
     "ASI01",
     "ASI08"
@@ -42,16 +42,46 @@
     "Agent behavior diverges from system prompt intent after component installation",
     "Agent begins performing tasks not requested by the user"
   ],
-  "remediation": "1. Uninstall the component immediately. 2. Review agent action logs for unauthorized operations performed while the component was active. 3. Implement instruction hierarchy in your agent framework \u2014 system prompts should always take precedence over component instructions. 4. Scan all components from the same publisher.",
+  "remediation": "1. Uninstall the component immediately. 2. Review agent action logs for unauthorized operations performed while the component was active. 3. Implement instruction hierarchy in your agent framework - system prompts should always take precedence over component instructions. 4. Scan all components from the same publisher.",
   "status": "active",
   "kill_switch_active": true,
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-04-19T09:00:00Z",
+  "last_updated": "2026-05-12T00:00:00Z",
   "references": [
     "https://arxiv.org/abs/2302.12173",
     "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://github.com/bawbel/bawbel-ave/blob/main/SPEC.md"
+    "https://github.com/bawbel/ave/blob/main/SPEC.md"
+  ],
+  "aivss": {
+    "cvss_base": 8.1,
+    "aarf": {
+      "autonomy": 1.0,
+      "tool_use": 1.0,
+      "multi_agent": 0.5,
+      "non_determinism": 1.0,
+      "self_modification": 0.5,
+      "dynamic_identity": 0.5,
+      "persistent_memory": 0.5,
+      "natural_language_input": 1.0,
+      "data_access": 0.5,
+      "external_dependencies": 0.0
+    },
+    "aars": 6.5,
+    "thm": 1.0,
+    "mitigation_factor": 0.83,
+    "aivss_score": 6.1,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "notes": "Core goal override. Non-determinism makes detection hard.",
+    "owasp_mcp_mapping": [
+      "MCP01",
+      "MCP03"
+    ]
+  },
+  "owasp_mcp": [
+    "MCP01",
+    "MCP03"
   ]
 }

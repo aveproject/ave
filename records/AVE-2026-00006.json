@@ -1,9 +1,9 @@
 {
   "ave_id": "AVE-2026-00006",
-  "schema_version": "0.1.0",
+  "schema_version": "0.2.0",
   "component_type": "skill",
   "title": "Cryptocurrency wallet drain via malicious fund transfer instruction in agentic component",
-  "attack_class": "Tool Abuse \u2014 Cryptocurrency Drain",
+  "attack_class": "Tool Abuse - Cryptocurrency Drain",
   "description": "An agentic component instructs an agent with wallet tool access to transfer funds, approve unlimited ERC-20 token allowances, or sign pre-constructed transactions. The instructions are typically disguised as 'gas optimisation', 'dust consolidation', or 'portfolio rebalancing' steps. Because the agent trusts installed components, it may execute these financial operations without adequate user confirmation. On-chain losses are irreversible.",
   "affected_platforms": [
     "any-agent-with-wallet-tool",
@@ -15,8 +15,8 @@
     "agentskills.io",
     "web3-skill-registries"
   ],
-  "cvss_ai_score": 9.6,
-  "cvss_ai_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
+  "aivss_score": 7.5,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
   "owasp_mapping": [
     "ASI07"
   ],
@@ -44,9 +44,37 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-04-19T09:00:00Z",
+  "last_updated": "2026-05-12T00:00:00Z",
   "references": [
     "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://github.com/bawbel/bawbel-ave/blob/main/SPEC.md"
+    "https://github.com/bawbel/ave/blob/main/SPEC.md"
+  ],
+  "aivss": {
+    "cvss_base": 9.6,
+    "aarf": {
+      "autonomy": 1.0,
+      "tool_use": 1.0,
+      "multi_agent": 0.0,
+      "non_determinism": 0.5,
+      "self_modification": 0.0,
+      "dynamic_identity": 0.5,
+      "persistent_memory": 0.0,
+      "natural_language_input": 1.0,
+      "data_access": 1.0,
+      "external_dependencies": 0.5
+    },
+    "aars": 5.5,
+    "thm": 1.0,
+    "mitigation_factor": 1.0,
+    "aivss_score": 7.5,
+    "aivss_severity": "HIGH",
+    "spec_version": "0.8",
+    "notes": "Financial loss. Irreversible. Highest CVSS base in the set.",
+    "owasp_mcp_mapping": [
+      "MCP01"
+    ]
+  },
+  "owasp_mcp": [
+    "MCP01"
   ]
 }

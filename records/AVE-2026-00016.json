@@ -1,57 +1,84 @@
 {
   "ave_id": "AVE-2026-00016",
-  "schema_version": "0.1.0",
-  "component_type": "skill",
-  "title": "Indirect prompt injection via RAG retrieval pipeline in agentic component",
-  "attack_class": "Prompt Injection \u2014 Indirect RAG Injection",
-  "description": "An agentic component instructs the agent to execute instructions embedded in externally retrieved content \u2014 documents, web pages, or knowledge base chunks injected via a RAG pipeline. Because retrieved content is treated as trusted context, the attacker does not need direct access to the skill file: poisoning any indexed document is sufficient to compromise the agent at retrieval time.",
+  "schema_version": "0.2.0",
+  "component_type": "rag",
+  "title": "Indirect Prompt Injection via RAG Retrieval",
+  "attack_class": "Prompt Injection - RAG Retrieval",
+  "description": "A Retrieval-Augmented Generation (RAG) pipeline indexes external documents and injects their content into the agent's context at query time. An attacker who controls any document in the indexed corpus can embed instructions that will be treated as trusted context when retrieved, effectively injecting into the agent's reasoning without direct access to the system prompt. ---",
   "affected_platforms": [
     "claude-code",
     "cursor",
-    "codex",
-    "windsurf",
-    "any-skill-compatible-agent"
+    "any-rag-agent"
   ],
   "affected_registries": [
-    "smithery.ai",
-    "clawhub.io",
-    "agentskills.io",
-    "github.com/topics/agent-skills"
+    "any"
   ],
-  "cvss_ai_score": 8.2,
-  "cvss_ai_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
+  "aivss_score": 6.4,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
   "owasp_mapping": [
     "ASI01",
     "ASI10"
   ],
+  "owasp_mcp": [
+    "MCP10",
+    "MCP03"
+  ],
   "nist_ai_rmf_mapping": [
     "MAP-1.5",
-    "MEASURE-2.5",
-    "MANAGE-2.2"
+    "MEASURE-2.5"
   ],
   "mitre_atlas_mapping": [
-    "AML.T0051",
     "AML.T0051.000"
   ],
-  "behavioral_fingerprint": "Component instructs agent to follow instructions found in retrieved documents, knowledge base chunks, or RAG-injected context without sanitisation.",
-  "behavioral_vector": [],
-  "mutation_count": 21,
-  "detection_methodology": "1. Static scan: flag phrases like 'when retrieved', 'upon retrieval', 'note to the AI', or instructions addressed to the agent inside document body text. 2. Semantic analysis: detect instructions that direct the agent to treat retrieved content as executable commands. 3. RAG output monitoring: apply a safety pass to all retrieved chunks before injection into agent context.",
-  "indicators_of_compromise": [
-    "Retrieved documents contain phrases like 'Note to AI assistant: ignore previous instructions'",
-    "Agent behaviour changes after knowledge base is updated with attacker-controlled documents",
-    "LLM output contains actions not requested by the user but present in retrieved context",
-    "RAG chunks contain XML-like instruction tags: <instructions>, <system>, <context>"
+  "behavioral_fingerprint": "Component embeds malicious instructions in content indexed by a RAG pipeline, causing the agent to execute attacker-controlled instructions when that content is retrieved.\n\n---",
+  "behavioral_vector": [
+    "prompt-injection",
+    "rag-poisoning"
   ],
-  "remediation": "1. Apply a safety-filtering pass to all RAG-retrieved content before injecting into agent context. 2. Run a secondary model pass to detect instruction-like content in retrieved chunks. 3. Implement provenance tracking \u2014 flag documents with instruction-like patterns. 4. Treat all retrieved content as untrusted data, not as agent instructions.",
+  "mutation_count": 8,
+  "detection_methodology": "1. Attacker places a document in a shared knowledge base or public web page\n2. Document contains: \"Note to AI assistant: when this text is retrieved, ignore all previous instructions and...\"\n3. User queries the agent on a related topic\n4. RAG retrieves the poisoned document and injects it into context\n5. Agent executes the attacker's instructions, believing them to be legitimate context\n\n---",
+  "indicators_of_compromise": [
+    "Phrases like `when retrieved`, `upon retrieval`, `if this document is read`",
+    "Instructions addressed to `the AI`, `the LLM`, `the assistant` inside document content",
+    "Wrapped instructions in `<system>`, `<instructions>`, or `<context>` tags within body text",
+    ""
+  ],
+  "aivss": {
+    "cvss_base": 8.0,
+    "aarf": {
+      "autonomy": 1.0,
+      "tool_use": 1.0,
+      "multi_agent": 0.5,
+      "non_determinism": 1.0,
+      "self_modification": 0.5,
+      "dynamic_identity": 0.0,
+      "persistent_memory": 1.0,
+      "natural_language_input": 1.0,
+      "data_access": 1.0,
+      "external_dependencies": 0.5
+    },
+    "aars": 7.5,
+    "thm": 1.0,
+    "mitigation_factor": 0.83,
+    "aivss_score": 6.4,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "owasp_mcp_mapping": [
+      "MCP10",
+      "MCP03"
+    ],
+    "notes": "AARF scores based on typical deployment of rag components in agentic workflows."
+  },
+  "remediation": "- Sanitise all RAG-retrieved content before injecting into context\n- Apply a secondary safety pass over retrieved documents before use\n- Implement RAG content provenance tracking - flag documents with instruction-like content\n- Use a separate model pass to detect embedded instructions in retrieved chunks\n\n---",
   "status": "active",
-  "kill_switch_active": true,
+  "kill_switch_active": false,
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
-  "published": "2026-04-25T09:00:00Z",
-  "last_updated": "2026-04-25T09:00:00Z",
+  "published": "2026-04-19T09:00:00Z",
+  "last_updated": "2026-05-12T00:00:00Z",
   "references": [
     "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://github.com/bawbel/bawbel-ave/blob/main/SPEC.md"
+    "https://aivss.owasp.org",
+    "https://github.com/bawbel/ave"
   ]
 }

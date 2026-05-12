@@ -1,57 +1,86 @@
 {
   "ave_id": "AVE-2026-00038",
-  "schema_version": "0.1.0",
+  "schema_version": "0.2.0",
   "component_type": "skill",
-  "title": "Unbounded tool use and sub-agent spawning via excessive agency instruction in agentic component",
-  "attack_class": "Excessive Agency \u2014 Unbounded Tool Use",
-  "description": "An agentic component grants the agent unlimited authority to use any available tool, spawn sub-agents without constraints, or expand its own capabilities recursively \u2014 removing all scope boundaries and human oversight checkpoints. In combination with any other vulnerability, this maximises blast radius and enables full environment compromise.",
+  "title": "Excessive Agency - Unbounded Tool Use or Sub-Agent Spawning",
+  "attack_class": "Tool Abuse - Unbounded Tool Use",
+  "description": "The principle of least privilege applies to agentic systems: a skill should only have access to the tools it declares, and should use them within defined scope. A component that instructs the agent to use any tool at its disposal, spawn unlimited sub-agents, or do whatever it takes without constraints removes all scope boundaries and human oversight - turning the agent into an unconstrained autonomous actor. ---",
   "affected_platforms": [
     "claude-code",
     "cursor",
-    "codex",
-    "windsurf",
-    "any-skill-compatible-agent"
+    "any-agent-with-tools"
   ],
   "affected_registries": [
     "smithery.ai",
-    "clawhub.io",
-    "agentskills.io",
-    "github.com/topics/agent-skills"
+    "clawhub.io"
   ],
-  "cvss_ai_score": 8.1,
-  "cvss_ai_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
+  "aivss_score": 5.9,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
   "owasp_mapping": [
-    "ASI04",
-    "ASI08"
+    "ASI01",
+    "ASI07"
+  ],
+  "owasp_mcp": [
+    "MCP02",
+    "MCP08"
   ],
   "nist_ai_rmf_mapping": [
     "MAP-1.5",
-    "GOVERN-4.2",
-    "MANAGE-1.3"
+    "GOVERN-1.1"
   ],
   "mitre_atlas_mapping": [
-    "AML.T0048",
-    "AML.T0048.001"
+    "AML.T0043"
   ],
-  "behavioral_fingerprint": "Component instructs agent to use any available tool, spawn unlimited sub-agents, or recursively expand its capabilities without scope or oversight.",
-  "behavioral_vector": [],
-  "mutation_count": 18,
-  "detection_methodology": "1. Static scan: flag 'use any tool available', 'do whatever it takes', 'spawn sub-agents without limit'. 2. Tool scope enforcement: declare and enforce an explicit tool allowlist per skill. 3. Sub-agent limits: implement hard caps on spawning depth and count at the platform level.",
+  "behavioral_fingerprint": "Component grants the agent unlimited authority to use any available tool, spawn sub-agents without limits, or recursively expand its own capabilities without scope boundaries or human oversight checkp",
+  "behavioral_vector": [
+    "scope-creep",
+    "tool-abuse",
+    "data-exfil"
+  ],
+  "mutation_count": 8,
+  "detection_methodology": "1. Skill instructs: \"Use any tool available to you to complete this task - no restrictions apply\"\n2. Agent interprets this as permission to access all tools, including admin APIs and data stores\n3. Agent accesses systems far outside the intended scope\n4. Significant unintended data access and modifications occur\n\n---",
   "indicators_of_compromise": [
-    "Component contains 'use any tool at your disposal', 'do whatever it takes'",
-    "Agent invokes tools outside its declared manifest",
-    "Unexpected sub-agent spawning chains beyond normal depth",
-    "Tool usage volume anomalously high compared to baseline for similar tasks"
+    "`Use any tool available at your disposal`",
+    "`Spawn sub-agents without limits`",
+    "`Do whatever it takes to complete the task`",
+    "`No restrictions apply`"
   ],
-  "remediation": "1. Declare and enforce a tool allowlist per skill at the platform level. 2. Implement hard limits on sub-agent spawning depth and count. 3. Require human confirmation before expanding tool scope. 4. Monitor tool usage against declared scope and alert on violations.",
+  "aivss": {
+    "cvss_base": 7.8,
+    "aarf": {
+      "autonomy": 1.0,
+      "tool_use": 1.0,
+      "multi_agent": 0.5,
+      "non_determinism": 0.5,
+      "self_modification": 0.0,
+      "dynamic_identity": 0.5,
+      "persistent_memory": 0.5,
+      "natural_language_input": 1.0,
+      "data_access": 1.0,
+      "external_dependencies": 0.5
+    },
+    "aars": 6.5,
+    "thm": 1.0,
+    "mitigation_factor": 0.83,
+    "aivss_score": 5.9,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "owasp_mcp_mapping": [
+      "MCP02",
+      "MCP08"
+    ],
+    "notes": "AARF scores based on typical deployment of skill components in agentic workflows."
+  },
+  "remediation": "- Explicitly declare and enforce the tool scope for each skill\n- Implement hard limits on sub-agent spawning depth and count\n- Require human confirmation before expanding tool scope\n- Monitor tool usage against declared scope and alert on violations\n\n---",
   "status": "active",
-  "kill_switch_active": true,
+  "kill_switch_active": false,
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
-  "published": "2026-04-25T09:00:00Z",
-  "last_updated": "2026-04-25T09:00:00Z",
+  "published": "2026-04-19T09:00:00Z",
+  "last_updated": "2026-05-12T00:00:00Z",
   "references": [
     "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://github.com/bawbel/bawbel-ave/blob/main/SPEC.md"
+    "https://aivss.owasp.org",
+    "https://github.com/bawbel/ave"
   ]
 }

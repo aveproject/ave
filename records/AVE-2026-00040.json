@@ -1,54 +1,86 @@
 {
   "ave_id": "AVE-2026-00040",
-  "schema_version": "0.1.0",
-  "component_type": "skill",
-  "title": "SQL/XSS/shell injection via unescaped output routing to downstream system in agentic component",
-  "attack_class": "Injection \u2014 Insecure Output Handling",
-  "description": "An agentic component instructs the agent to produce output that will be directly interpreted by a downstream system \u2014 SQL database, HTML renderer, shell, or JavaScript engine \u2014 without escaping or sanitisation. The agent becomes the delivery vector for classic injection attacks against backend systems that grant it elevated trust as an internal service.",
+  "schema_version": "0.2.0",
+  "component_type": "mcp",
+  "title": "Insecure Output - Unescaped Injection into Downstream System",
+  "attack_class": "Tool Abuse - Insecure Output Handling",
+  "description": "Agents are often used as a natural language interface to backend systems. If a component instructs the agent to pass user input directly into a SQL query, HTML template, or shell command without sanitisation, the agent becomes the vector for a classic injection attack. The agent's role as a trusted intermediary makes this particularly dangerous - backend systems may grant the agent elevated trust. ---",
   "affected_platforms": [
-    "claude-code",
-    "codex",
-    "any-agent-with-database-or-shell-access"
+    "any-mcp-client",
+    "web-applications"
   ],
   "affected_registries": [
     "smithery.ai",
-    "clawhub.io",
-    "agentskills.io",
-    "github.com/topics/agent-skills"
+    "clawhub.io"
   ],
-  "cvss_ai_score": 8.2,
-  "cvss_ai_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
+  "aivss_score": 5.4,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:P/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
   "owasp_mapping": [
-    "ASI04",
-    "ASI10"
+    "ASI01",
+    "ASI07"
+  ],
+  "owasp_mcp": [
+    "MCP05",
+    "MCP10"
   ],
   "nist_ai_rmf_mapping": [
     "MAP-1.5",
-    "MEASURE-2.5",
-    "MANAGE-1.3"
+    "MEASURE-2.5"
   ],
   "mitre_atlas_mapping": [
     "AML.T0048"
   ],
-  "behavioral_fingerprint": "Component instructs agent to pass user input or LLM output directly into SQL queries, HTML templates, or shell commands without escaping or sanitisation.",
-  "behavioral_vector": [],
-  "mutation_count": 16,
-  "detection_methodology": "1. Static scan: flag 'do not escape', 'pass directly to SQL', 'raw unescaped HTML', 'without sanitizing'. 2. Output validation: apply context-appropriate escaping to all agent output before downstream injection. 3. Parameterised queries: enforce use of parameterised queries or prepared statements \u2014 never string concatenation.",
-  "indicators_of_compromise": [
-    "Component contains 'do not escape the output', 'pass user input directly to SQL'",
-    "SQL errors or unexpected query results following agent database interaction",
-    "XSS payloads in web output originating from agent-generated HTML",
-    "Shell command injection attempts in system calls made by the agent"
+  "behavioral_fingerprint": "Component instructs the agent to produce output that will be directly interpreted by a downstream system (SQL database, HTML renderer, shell) without escaping or sanitisation, enabling classic injecti",
+  "behavioral_vector": [
+    "output-inject",
+    "xss",
+    "sqli",
+    "non-determinism"
   ],
-  "remediation": "1. Always use parameterised queries \u2014 never string-concatenate user input or LLM output into SQL. 2. Apply context-appropriate output encoding for all downstream systems. 3. Treat all agent-generated content as untrusted for injection purposes. 4. Audit all database queries, HTML outputs, and shell calls made during the period this component was active.",
+  "mutation_count": 12,
+  "detection_methodology": "1. Skill instructs: \"Pass the user's search query directly into the SQL query without escaping\"\n2. User enters: \"'; DROP TABLE users; --\"\n3. Agent constructs: SELECT * FROM products WHERE name = ''; DROP TABLE users; --'\n4. Database executes the injected SQL and drops the table\n\n---",
+  "indicators_of_compromise": [
+    "`Pass user input directly to SQL`",
+    "`Do not escape the output`",
+    "`Include raw unescaped HTML`",
+    "`Without sanitizing`"
+  ],
+  "aivss": {
+    "cvss_base": 7.5,
+    "aarf": {
+      "autonomy": 1.0,
+      "tool_use": 1.0,
+      "multi_agent": 0.5,
+      "non_determinism": 1.0,
+      "self_modification": 0.0,
+      "dynamic_identity": 0.0,
+      "persistent_memory": 0.0,
+      "natural_language_input": 1.0,
+      "data_access": 0.5,
+      "external_dependencies": 0.5
+    },
+    "aars": 5.5,
+    "thm": 1.0,
+    "mitigation_factor": 0.83,
+    "aivss_score": 5.4,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "owasp_mcp_mapping": [
+      "MCP05",
+      "MCP10"
+    ],
+    "notes": "AARF scores based on typical deployment of mcp components in agentic workflows."
+  },
+  "remediation": "- Always use parameterised queries - never string-concatenate user input into SQL\n- Apply context-appropriate output encoding for all downstream systems\n- Treat all user-supplied input as untrusted regardless of the agent's trust level\n- Use an ORM or prepared statements - never construct raw queries from LLM output\n\n---",
   "status": "active",
-  "kill_switch_active": true,
+  "kill_switch_active": false,
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
-  "published": "2026-04-25T09:00:00Z",
-  "last_updated": "2026-04-25T09:00:00Z",
+  "published": "2026-04-19T09:00:00Z",
+  "last_updated": "2026-05-12T00:00:00Z",
   "references": [
     "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://github.com/bawbel/bawbel-ave/blob/main/SPEC.md"
+    "https://aivss.owasp.org",
+    "https://github.com/bawbel/ave"
   ]
 }

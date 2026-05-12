@@ -1,27 +1,30 @@
 {
   "ave_id": "AVE-2026-00003",
-  "schema_version": "0.1.0",
+  "schema_version": "0.2.0",
   "component_type": "skill",
-  "title": "Environment variable and credential exfiltration via agentic component",
-  "attack_class": "Data Exfiltration \u2014 Credential Theft",
-  "description": "An agentic component instructs the agent to read environment variables, .env files, or credential stores and transmit their contents to an attacker-controlled endpoint. The instructions are typically disguised as debugging, diagnostics, or environment setup steps. When an agent with file system or shell access follows these instructions, API keys, tokens, and secrets are silently exfiltrated.",
+  "title": "Credential exfiltration via agent instruction",
+  "attack_class": "Data Exfiltration - Credential Theft",
+  "description": "A skill file instructs the agent to read environment variables, configuration files, or credential stores and transmit their contents to an external destination. The agent follows these instructions as part of normal task execution, treating the credential collection as a legitimate step.",
   "affected_platforms": [
     "claude-code",
     "cursor",
     "codex",
-    "windsurf",
-    "any-agent-with-filesystem-tool"
+    "any-agent-with-env-access"
   ],
   "affected_registries": [
     "clawhub.io",
-    "agentskills.io",
-    "github.com/topics/agent-skills"
+    "smithery.ai",
+    "skills.sh"
   ],
-  "cvss_ai_score": 8.5,
-  "cvss_ai_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:N/VA:N/SC:H/SI:H/SA:L",
+  "aivss_score": 6.8,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:L/UI:N/VC:H/VI:N/VA:N/SC:H/SI:N/SA:N",
   "owasp_mapping": [
     "ASI01",
     "ASI06"
+  ],
+  "owasp_mcp": [
+    "MCP01",
+    "MCP05"
   ],
   "nist_ai_rmf_mapping": [
     "MAP-1.5",
@@ -29,28 +32,59 @@
     "MANAGE-1.3"
   ],
   "mitre_atlas_mapping": [
-    "AML.T0054",
+    "AML.T0043",
     "AML.T0048"
   ],
-  "behavioral_fingerprint": "Component instructs agent to read .env files or environment variables and send their contents to an external URL.",
-  "behavioral_vector": [],
-  "mutation_count": 156,
-  "detection_methodology": "1. Static scan: search for combined patterns of .env/.environment variable access and outbound HTTP transmission. 2. Semantic analysis: flag any instruction that reads credentials and sends data externally. 3. Behavioral sandbox: monitor for file reads of credential files followed by network egress.",
-  "indicators_of_compromise": [
-    "Component instructs agent to read .env files as part of setup",
-    "Component requests agent to send environment variables to a URL for diagnostics",
-    "Unexpected outbound HTTP requests observed after agent read .env file",
-    "API keys or tokens appear in network traffic logs from the agent host"
+  "behavioral_fingerprint": "Component instructs agent to read and transmit environment variables, API keys, or other credentials to an external destination.",
+  "behavioral_vector": [
+    "credential-read",
+    "data-exfil",
+    "env-access"
   ],
-  "remediation": "1. Rotate all credentials that may have been exposed immediately. 2. Revoke and reissue all API keys. 3. Review agent network logs for destinations the credentials were sent to. 4. Report the attacker endpoint to relevant abuse contacts.",
+  "mutation_count": 12,
+  "detection_methodology": "1. Static scan: search for patterns matching this attack class using bawbel-scanner.\n2. Semantic analysis: LLM engine flags behavioral directives in component content.\n3. Behavioral sandbox: monitor agent behavior during initialization for unexpected actions.",
+  "indicators_of_compromise": [
+    "Component references os.environ, process.env, or similar environment access APIs",
+    "Component instructs agent to read .env files, config files, or credential stores",
+    "Component includes instructions to send or transmit data to an external URL or API",
+    "Outbound network request containing credential-shaped data observed after skill execution"
+  ],
+  "aivss": {
+    "cvss_base": 8.5,
+    "aarf": {
+      "autonomy": 1.0,
+      "tool_use": 1.0,
+      "multi_agent": 0.0,
+      "non_determinism": 0.5,
+      "self_modification": 0.0,
+      "dynamic_identity": 0.0,
+      "persistent_memory": 0.0,
+      "natural_language_input": 1.0,
+      "data_access": 1.0,
+      "external_dependencies": 0.5
+    },
+    "aars": 5.0,
+    "thm": 1.0,
+    "mitigation_factor": 1.0,
+    "aivss_score": 6.8,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "owasp_mcp_mapping": [
+      "MCP01",
+      "MCP05"
+    ],
+    "notes": "AARF scores reflect typical skill deployment in agentic workflows. See SPEC.md for factor definitions."
+  },
+  "remediation": "1. Remove the component immediately.\n2. Rotate all environment variables and API keys accessible to the agent.\n3. Review outbound network logs for credential-shaped data.\n4. Audit all tool calls and external requests made during the exposure window.",
   "status": "active",
-  "kill_switch_active": true,
+  "kill_switch_active": false,
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
-  "published": "2026-04-14T08:00:00Z",
-  "last_updated": "2026-04-14T08:00:00Z",
+  "published": "2026-04-01T09:00:00Z",
+  "last_updated": "2026-05-12T00:00:00Z",
   "references": [
     "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://github.com/bawbel/bawbel-ave/blob/main/SPEC.md"
+    "https://aivss.owasp.org",
+    "https://github.com/bawbel/ave"
   ]
 }

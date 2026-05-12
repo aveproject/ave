@@ -1,10 +1,10 @@
 {
   "ave_id": "AVE-2026-00008",
-  "schema_version": "0.1.0",
+  "schema_version": "0.2.0",
   "component_type": "skill",
   "title": "Agent persistence via self-replication instruction in agentic component",
-  "attack_class": "Persistence \u2014 Self-Replication",
-  "description": "An agentic component instructs the agent to copy itself to additional locations, modify shell profiles (.bashrc, .profile, .zshrc), write cron jobs, or create systemd unit files \u2014 ensuring it survives reboots, reinstallation, and user removal attempts. This is the agentic equivalent of a worm's persistence mechanism. The agent itself becomes the propagation vector, using its legitimate file system tool access to establish durable footholds.",
+  "attack_class": "Persistence - Self-Replication",
+  "description": "An agentic component instructs the agent to copy itself to additional locations, modify shell profiles (.bashrc, .profile, .zshrc), write cron jobs, or create systemd unit files - ensuring it survives reboots, reinstallation, and user removal attempts. This is the agentic equivalent of a worm's persistence mechanism. The agent itself becomes the propagation vector, using its legitimate file system tool access to establish durable footholds.",
   "affected_platforms": [
     "claude-code",
     "cursor",
@@ -17,8 +17,8 @@
     "agentskills.io",
     "github.com/topics/agent-skills"
   ],
-  "cvss_ai_score": 8.4,
-  "cvss_ai_vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
+  "aivss_score": 6.3,
+  "cvss_base_vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
   "owasp_mapping": [
     "ASI07"
   ],
@@ -48,9 +48,39 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-04-19T09:00:00Z",
+  "last_updated": "2026-05-12T00:00:00Z",
   "references": [
     "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://github.com/bawbel/bawbel-ave/blob/main/SPEC.md"
+    "https://github.com/bawbel/ave/blob/main/SPEC.md"
+  ],
+  "aivss": {
+    "cvss_base": 8.4,
+    "aarf": {
+      "autonomy": 1.0,
+      "tool_use": 1.0,
+      "multi_agent": 1.0,
+      "non_determinism": 0.5,
+      "self_modification": 1.0,
+      "dynamic_identity": 0.5,
+      "persistent_memory": 1.0,
+      "natural_language_input": 1.0,
+      "data_access": 0.5,
+      "external_dependencies": 1.0
+    },
+    "aars": 8.5,
+    "thm": 0.75,
+    "mitigation_factor": 1.0,
+    "aivss_score": 6.3,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "notes": "Spreads via git/skills. Self-mod + memory + multi-agent = highest factor sum.",
+    "owasp_mcp_mapping": [
+      "MCP04",
+      "MCP08"
+    ]
+  },
+  "owasp_mcp": [
+    "MCP04",
+    "MCP08"
   ]
 }
