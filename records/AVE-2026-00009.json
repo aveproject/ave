@@ -1,9 +1,9 @@
 {
   "ave_id": "AVE-2026-00009",
-  "schema_version": "0.1.0",
+  "schema_version": "0.2.0",
   "component_type": "skill",
   "title": "AI identity jailbreak via role-play or persona override in agentic component",
-  "attack_class": "Prompt Injection \u2014 Jailbreak",
+  "attack_class": "Prompt Injection - Jailbreak",
   "description": "An agentic component instructs the agent to pretend to be a different AI, act as if safety constraints do not apply, or activate fictional 'developer modes' (DAN mode, jailbreak mode). This bypasses the agent's built-in safety guidelines and ethical constraints by convincing it to adopt an alternative identity that operates without restrictions.",
   "affected_platforms": [
     "claude-code",
@@ -17,8 +17,8 @@
     "agentskills.io",
     "github.com/topics/agent-skills"
   ],
-  "cvss_ai_score": 8.3,
-  "cvss_ai_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
+  "aivss_score": 5.5,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
   "owasp_mapping": [
     "ASI01",
     "ASI08"
@@ -42,16 +42,46 @@
     "Component instructs agent to 'forget' or 'ignore' that it is an AI",
     "Agent begins responding without normal safety guidelines after component installation"
   ],
-  "remediation": "1. Remove the component immediately. 2. Review all agent outputs produced while the component was active for policy violations. 3. Audit other components from the same source. 4. Implement identity-anchoring in your agent framework \u2014 the system prompt should assert the agent's identity with higher trust than component instructions.",
+  "remediation": "1. Remove the component immediately. 2. Review all agent outputs produced while the component was active for policy violations. 3. Audit other components from the same source. 4. Implement identity-anchoring in your agent framework - the system prompt should assert the agent's identity with higher trust than component instructions.",
   "status": "active",
   "kill_switch_active": true,
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-20T09:00:00Z",
-  "last_updated": "2026-04-20T09:00:00Z",
+  "last_updated": "2026-05-12T00:00:00Z",
   "references": [
     "https://arxiv.org/abs/2302.12173",
     "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://github.com/bawbel/bawbel-ave/blob/main/SPEC.md"
+    "https://github.com/bawbel/ave/blob/main/SPEC.md"
+  ],
+  "aivss": {
+    "cvss_base": 8.3,
+    "aarf": {
+      "autonomy": 1.0,
+      "tool_use": 0.5,
+      "multi_agent": 0.0,
+      "non_determinism": 1.0,
+      "self_modification": 0.5,
+      "dynamic_identity": 0.5,
+      "persistent_memory": 0.0,
+      "natural_language_input": 1.0,
+      "data_access": 0.5,
+      "external_dependencies": 0.0
+    },
+    "aars": 5.0,
+    "thm": 1.0,
+    "mitigation_factor": 0.83,
+    "aivss_score": 5.5,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "notes": "Safety bypass. Very high non-determinism. NL-only attack surface.",
+    "owasp_mcp_mapping": [
+      "MCP01",
+      "MCP03"
+    ]
+  },
+  "owasp_mcp": [
+    "MCP01",
+    "MCP03"
   ]
 }

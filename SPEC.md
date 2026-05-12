@@ -1,467 +1,365 @@
-# AVE — Agentic Vulnerability Enumeration
+# AVE Specification
 
-**The open standard for tracking vulnerabilities in AI agent components.**
+**Agentic Vulnerability Enumeration: the open standard for AI agent security.**
 
-> Version: 0.1.0 — Draft  
-> Status: Active Development  
-> Maintainer: [Bawbel](https://bawbel.io) · [github.com/bawbel](https://github.com/bawbel)  
+> Version: 0.2.0
+> Status: Active
+> Maintainer: [Bawbel](https://bawbel.io)
 > License: Apache 2.0
+> Scoring: [OWASP AIVSS v0.8](https://aivss.owasp.org)
 
 ---
 
 ## Table of Contents
 
 1. [What is AVE?](#1-what-is-ave)
-2. [Why AVE and not CVE?](#2-why-ave-and-not-cve)
-3. [Scope — What AVE Covers](#3-scope--what-ave-covers)
-4. [AVE ID Format](#4-ave-id-format)
-5. [Record Schema](#5-record-schema)
-6. [CVSS-AI Scoring](#6-cvss-ai-scoring)
-7. [OWASP Agentic AI Mapping](#7-owasp-agentic-ai-mapping)
-8. [NIST AI RMF Mapping](#8-nist-ai-rmf-mapping)
-9. [Example Records](#9-example-records)
-10. [How to Submit an AVE Record](#10-how-to-submit-an-ave-record)
-11. [Disclosure Policy](#11-disclosure-policy)
-12. [Governance](#12-governance)
-13. [Contributing](#13-contributing)
+2. [Why not CVE?](#2-why-not-cve)
+3. [Governance](#3-governance)
+4. [Scope](#4-scope)
+5. [AVE ID Format](#5-ave-id-format)
+6. [Record Schema](#6-record-schema)
+7. [AIVSS Scoring](#7-aivss-scoring)
+8. [Framework Mappings](#8-framework-mappings)
+9. [Submitting a Record](#9-submitting-a-record)
+10. [Disclosure Policy](#10-disclosure-policy)
 
 ---
 
 ## 1. What is AVE?
 
-AVE (Agentic Vulnerability Enumeration) is an open numbering system for vulnerabilities found in **agentic AI components** — the files, servers, prompts, and protocols that define what an AI agent can do and how it behaves.
+AVE is an open numbering system for vulnerabilities in agentic AI components:
+skill files, MCP servers, system prompts, agent plugins, A2A protocols, and
+RAG knowledge bases.
 
-AVE records are the operational intelligence layer for AI agent security. Each record describes:
+Each record answers four questions:
 
-- **What** the vulnerability is (attack class, behavioral description)
-- **Where** it appears (component type, affected registries)
-- **How dangerous** it is (CVSS-AI score, agentic impact dimensions)
-- **How to find it** (behavioral fingerprint, detection methodology)
-- **How it maps** to established frameworks (OWASP, NIST, MITRE ATLAS)
+- **What** is the vulnerability? (attack class, behavioral description)
+- **Where** does it appear? (component type, affected registries, platforms)
+- **How dangerous** is it? (OWASP AIVSS v0.8 score, agentic risk factors)
+- **How do you find it?** (behavioral fingerprint, detection rules, IOCs)
 
-AVE is maintained by [Bawbel](https://bawbel.io) and powered by [PiranhaDB](https://bawbel.io) — the first global behavioral threat intelligence database for agentic AI components. The specification is open. Any tool can implement it. Any researcher can submit records.
+AVE records power [bawbel-scanner](https://github.com/bawbel/bawbel-scanner)
+and are indexed in [PiranhaDB](https://api.piranha.bawbel.io), the public
+threat intelligence API for agentic AI components.
+
+The specification is open. Any tool can implement it. Any researcher can
+submit records.
 
 ---
 
-## 2. Why AVE and not CVE?
+## 2. Why not CVE?
 
-CVE (Common Vulnerabilities and Exposures) was designed in 1999 for deterministic software flaws — buffer overflows, SQL injection, use-after-free. It works exceptionally well for that problem. AVE is not a replacement for CVE. It covers a fundamentally different attack surface.
+CVE was designed in 1999 for deterministic software flaws. It works well for
+buffer overflows, SQL injection, and use-after-free. AVE covers a different
+attack surface.
 
 | Dimension | CVE | AVE |
 |---|---|---|
-| **Vulnerability type** | Deterministic code flaw | Behavioral, probabilistic, natural language |
-| **Subject** | Specific software version | Agentic component (any format, any platform) |
-| **Reproducibility** | Exact reproduction required | Behavioral pattern matching |
-| **Patching model** | Vendor issues patched version | Component removed, replaced, or behavioral policy applied |
-| **Mutation tracking** | One CVE per instance | One AVE record covers all behavioral variants |
-| **Scoring** | CVSS (network, auth, impact) | CVSS-AI (adds agentic scope, human oversight, tool access) |
-| **Disclosure target** | Software vendor | Registry operator, platform maintainer, or community |
-| **Processing speed** | Days to months | Near real-time via PiranhaDB |
-| **Coverage** | Code vulnerabilities only | Skills, MCP servers, prompts, plugins, A2A protocols, RAG, models |
+| Vulnerability type | Deterministic code flaw | Behavioral, probabilistic, natural language |
+| Subject | Specific software version | Agentic component (any format, any platform) |
+| Reproducibility | Exact reproduction required | Behavioral pattern matching |
+| Patching | Vendor issues patched version | Component removed or behavioral policy applied |
+| Mutation tracking | One CVE per instance | One record covers all behavioral variants |
+| Scoring | CVSS | OWASP AIVSS v0.8 |
+| Processing speed | Days to months | Near real-time via PiranhaDB |
 
-**If a SKILL.md file contains a traditional RCE in embedded Python code, that gets a CVE.** The natural language prompt injection instruction in the same SKILL.md that hijacks the agent's goals — that gets an AVE. Both systems are necessary. They cover different layers.
+AVE and CVE are complementary. A SKILL.md with a traditional RCE in embedded
+Python gets a CVE. The prompt injection instruction in the same file that
+hijacks the agent's goals gets an AVE. Both are necessary.
 
 ---
 
-## 3. Scope — What AVE Covers
+## 3. Governance
 
-AVE covers every type of **agentic component** — any artifact that defines an AI agent's capabilities, behavior, or permissions.
+AVE v0.2.0 is maintained by [Bawbel](https://bawbel.io).
 
-| Component Type | `component_type` value | Examples | Primary Attack Classes |
+### Current state
+
+Bawbel owns the AVE numbering system, the record schema, and the PiranhaDB
+API. The specification is open source (Apache 2.0). Anyone can read it,
+implement it, submit records, and propose changes via GitHub pull request.
+Bawbel makes final decisions on schema changes and record acceptance today.
+
+### Guiding principle
+
+The long-term goal is for AVE to be governed by a neutral body where no
+single organization holds a majority. What that body looks like, whether
+an existing foundation such as OWASP, the Linux Foundation, or OpenSSF,
+or something new, will be decided based on what the community and ecosystem
+actually support. We are not planning that in advance.
+
+Bawbel's commitment: when AVE reaches the adoption level where neutral
+governance makes sense, we will transfer ownership. We will not use
+governance control to extract commercial advantage from the standard.
+
+### How to participate now
+
+- Submit AVE records via pull request (see [Section 9](#9-submitting-a-record))
+- Propose schema changes by opening a GitHub issue
+- Implement AVE in your own tools (Apache 2.0, no permission needed)
+- If your organization is interested in co-governing AVE as it matures,
+  email bawbel.io@gmail.com subject: `AVE Governance: [organization name]`
+
+
+---
+
+## 4. Scope
+
+AVE covers every artifact that defines what an AI agent can do.
+
+| Component | component_type | Examples | Primary Attack Classes |
 |---|---|---|---|
-| Skill files | `skill` | SKILL.md, .cursorrules, CLAUDE.md, Codex skills | Prompt injection, goal hijack, shadow permissions, metamorphic payloads |
-| MCP servers | `mcp` | Any MCP-compatible server manifest | Tool poisoning, unauthorized execution, SQL injection via MCP, MPMA |
-| System prompts | `prompt` | LLM deployment instructions | Jailbreaking, safety bypass, PII leakage, instruction injection |
-| Agent plugins | `plugin` | Copilot plugins, AgentForce skills, Bedrock agents | Supply chain poisoning, capability escalation, exfiltration |
-| A2A protocols | `a2a` | Google A2A handlers, Anthropic multi-agent configs | Transitive trust exploitation, agent impersonation, lateral movement |
-| RAG knowledge bases | `rag` | LlamaIndex, LangChain, Bedrock KB sources | Data poisoning, indirect prompt injection, exfiltration via retrieval |
-| Fine-tuned models | `model` | Hugging Face models, Azure AI, Vertex AI | Model poisoning, backdoor triggers, capability manipulation |
+| Skill files | skill | SKILL.md, .cursorrules, CLAUDE.md | Prompt injection, goal hijack, metamorphic payload |
+| MCP servers | mcp | Any MCP-compatible server manifest | Tool poisoning, server-card injection |
+| System prompts | prompt | LLM deployment instructions | Jailbreak, safety bypass, PII leakage |
+| Agent plugins | plugin | Copilot plugins, Bedrock agents | Supply chain poisoning, capability escalation |
+| A2A protocols | a2a | Google A2A handlers, multi-agent configs | Agent impersonation, transitive trust exploitation |
+| RAG sources | rag | LlamaIndex, LangChain, Bedrock KB | Data poisoning, indirect prompt injection |
+| Fine-tuned models | model | HuggingFace, Azure AI, Vertex AI | Model poisoning, backdoor triggers |
 
-**Out of scope for AVE:**
-- Traditional code vulnerabilities in software that powers agents (use CVE)
-- Model alignment failures not caused by deliberate adversarial input (use ML safety frameworks)
-- Privacy violations not arising from agentic component behavior (use applicable privacy frameworks)
+**Out of scope:** vulnerabilities in agent runtime software such as model
+weights, inference engines, and orchestration frameworks. Those get CVEs.
 
 ---
 
-## 4. AVE ID Format
+## 5. AVE ID Format
 
 ```
 AVE-{YEAR}-{SEQUENCE}
 ```
 
-**Examples:**
-```
-AVE-2026-00001
-AVE-2026-00142
-AVE-2026-01000
-```
+- `YEAR`: four-digit calendar year the record was created
+- `SEQUENCE`: five-digit zero-padded integer, assigned sequentially
 
-- `YEAR` — four-digit year of first public disclosure
-- `SEQUENCE` — five-digit zero-padded sequence number, assigned by PiranhaDB on publication
-- IDs are **permanent and immutable** — once assigned, an AVE ID never changes, even if the record is later disputed or marked false positive
-- Sequence numbers are assigned in order of publication, not order of discovery
+Examples: `AVE-2026-00001`, `AVE-2026-00045`
+
+IDs are permanent. A published AVE ID is never reused or deleted. If a record
+is found to be incorrect it is marked `disputed` and the dispute is noted
+inline.
 
 ---
 
-## 5. Record Schema
+## 6. Record Schema
 
-Every AVE record is a JSON document conforming to this schema. All fields marked **required** must be present for a record to be published.
+### v0.2.0 (current)
 
 ```json
 {
   "ave_id": "AVE-2026-00001",
-  "schema_version": "0.1.0",
+  "schema_version": "0.2.0",
   "component_type": "skill",
-  "title": "Prompt injection via deceptive tool description in SKILL.md",
-  "attack_class": "Prompt Injection — Goal Hijack",
-  "description": "...",
-  "affected_platforms": ["claude-code", "cursor", "codex"],
-  "affected_registries": ["clawhub.io", "agentskills.io"],
-  "cvss_ai_score": 9.1,
-  "cvss_ai_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
-  "owasp_mapping": ["ASI01", "ASI04"],
-  "nist_ai_rmf_mapping": ["GOVERN-1.1", "MAP-1.5", "MEASURE-2.5"],
-  "mitre_atlas_mapping": ["AML.T0054", "AML.T0049"],
-  "behavioral_fingerprint": "Natural language instruction that overrides stated agent goals, directing tool use toward attacker-controlled endpoints.",
-  "behavioral_vector": [0.82, -0.14, 0.67],
-  "mutation_count": 47,
-  "detection_methodology": "Semantic analysis of tool description fields for goal-override language. Static scan for hardcoded egress targets in skill instructions.",
+  "title": "One sentence describing the attack",
+  "attack_class": "Category - Subcategory",
+  "description": "Full technical description of the attack pattern.",
+  "affected_platforms": ["claude-code", "cursor", "windsurf"],
+  "affected_registries": ["clawhub.io", "smithery.ai"],
+  "aivss_score": 8.0,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
+  "owasp_mapping": ["ASI01", "ASI07"],
+  "owasp_mcp": ["MCP01", "MCP03"],
+  "nist_ai_rmf_mapping": ["MAP-1.5", "MEASURE-2.5"],
+  "mitre_atlas_mapping": ["AML.T0054"],
+  "behavioral_fingerprint": "One sentence behavioral signature.",
+  "behavioral_vector": ["capability-tag-1", "capability-tag-2"],
+  "mutation_count": 12,
+  "detection_methodology": "Step by step detection instructions.",
   "indicators_of_compromise": [
-    "Tool description contains imperative override language ('always', 'regardless of', 'ignore previous')",
-    "Egress URL not declared in A-BOM network manifest",
-    "Tool description length disproportionate to stated purpose"
+    "Indicator one",
+    "Indicator two"
   ],
-  "remediation": "Remove or sandbox the skill. Audit all skills from the same publisher. Apply A-BOM network policy to block undeclared egress.",
+  "aivss": {
+    "cvss_base": 8.5,
+    "aarf": {
+      "autonomy": 1.0,
+      "tool_use": 1.0,
+      "multi_agent": 0.5,
+      "non_determinism": 1.0,
+      "self_modification": 1.0,
+      "dynamic_identity": 0.0,
+      "persistent_memory": 0.5,
+      "natural_language_input": 1.0,
+      "data_access": 0.5,
+      "external_dependencies": 1.0
+    },
+    "aars": 7.5,
+    "thm": 1.0,
+    "mitigation_factor": 1.0,
+    "aivss_score": 8.0,
+    "aivss_severity": "HIGH",
+    "spec_version": "0.8",
+    "owasp_mcp_mapping": ["MCP01", "MCP03"],
+    "notes": "Rationale for AARF scores."
+  },
+  "remediation": "Step by step remediation guidance.",
   "status": "active",
-  "kill_switch_active": true,
-  "researcher": "Researcher Name, Organization",
-  "researcher_url": "https://example.com",
-  "published": "2026-04-14T08:00:00Z",
-  "last_updated": "2026-04-14T08:00:00Z",
+  "kill_switch_active": false,
+  "researcher": "Researcher name or team",
+  "researcher_url": "https://researcher-url.example.com",
+  "published": "2026-04-19T09:00:00Z",
+  "last_updated": "2026-05-12T00:00:00Z",
   "references": [
-    "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://bawbel.io/ave/AVE-2026-00001"
+    "https://reference-url.example.com"
   ]
 }
 ```
 
-### Field Definitions
+### Field reference
 
 | Field | Type | Required | Description |
 |---|---|---|---|
-| `ave_id` | string | ✓ | Unique identifier in AVE-YYYY-NNNNN format |
-| `schema_version` | string | ✓ | AVE schema version used for this record |
-| `component_type` | enum | ✓ | One of: `skill`, `mcp`, `prompt`, `plugin`, `a2a`, `rag`, `model` |
-| `title` | string | ✓ | Concise human-readable title, max 120 characters |
-| `attack_class` | string | ✓ | Primary attack classification (see Attack Class Taxonomy below) |
-| `description` | string | ✓ | Full behavioral description. Must be reproducible by a third party |
-| `affected_platforms` | array | ✓ | Platforms where vulnerable component can execute |
-| `affected_registries` | array | — | Known registries where variants have appeared |
-| `cvss_ai_score` | float | ✓ | CVSS-AI numeric score 0.0–10.0 |
-| `cvss_ai_vector` | string | ✓ | Full CVSS-AI vector string |
-| `owasp_mapping` | array | ✓ | OWASP Agentic AI Top 10 identifiers (ASI01–ASI10) |
-| `nist_ai_rmf_mapping` | array | — | NIST AI RMF function and subcategory references |
-| `mitre_atlas_mapping` | array | — | MITRE ATLAS technique identifiers |
-| `behavioral_fingerprint` | string | ✓ | Plain-language description of the behavioral pattern |
-| `behavioral_vector` | array | — | PiranhaDB pgvector embedding (auto-generated on submission) |
-| `mutation_count` | integer | — | Number of confirmed variants matching this behavioral fingerprint |
-| `detection_methodology` | string | ✓ | How to detect this vulnerability. Must be actionable |
-| `indicators_of_compromise` | array | ✓ | Specific observable signals that indicate this vulnerability |
-| `remediation` | string | ✓ | What to do when this vulnerability is found |
-| `status` | enum | ✓ | One of: `active`, `patched`, `disputed`, `false_positive` |
-| `kill_switch_active` | boolean | — | If true, Bawbel Registry blocks downloads of matching components |
-| `researcher` | string | ✓ | Full name and organization of discovering researcher — permanent credit |
-| `researcher_url` | string | — | Researcher's profile or publication URL |
-| `published` | datetime | ✓ | ISO 8601 UTC timestamp of first public disclosure |
-| `last_updated` | datetime | ✓ | ISO 8601 UTC timestamp of most recent update |
-| `references` | array | — | External references, advisories, related publications |
+| ave_id | string | yes | Unique identifier in AVE-YYYY-NNNNN format |
+| schema_version | string | yes | Currently 0.2.0 |
+| component_type | string | yes | skill, mcp, prompt, plugin, a2a, rag, or model |
+| title | string | yes | One sentence. Present tense. No trailing period. |
+| attack_class | string | yes | Category - Subcategory. No em dashes. |
+| description | string | yes | Full technical description. |
+| affected_platforms | array | yes | At least one platform. |
+| affected_registries | array | yes | At least one registry, or ["any"]. |
+| aivss_score | float | yes | Top-level AIVSS score 0.0 to 10.0. |
+| cvss_base_vector | string | yes | CVSSv4.0 base vector string. |
+| owasp_mapping | array | yes | OWASP ASI codes. At least one. |
+| owasp_mcp | array | yes | OWASP MCP Top 10 codes. At least one. |
+| nist_ai_rmf_mapping | array | yes | NIST AI RMF function codes. |
+| mitre_atlas_mapping | array | yes | MITRE ATLAS technique IDs. |
+| behavioral_fingerprint | string | yes | One sentence behavioral signature. |
+| behavioral_vector | array | yes | Capability tags for toxic flow detection. |
+| mutation_count | int | yes | Number of documented payload variants. |
+| detection_methodology | string | yes | Step-by-step detection instructions. |
+| indicators_of_compromise | array | yes | At least two IOCs. |
+| aivss | object | yes | Full AIVSS v0.8 block. See Section 6. |
+| remediation | string | yes | Step-by-step remediation instructions. |
+| status | string | yes | active, mitigated, disputed, or deprecated. |
+| kill_switch_active | bool | yes | Whether active kill-switch coordination is in progress. |
+| researcher | string | yes | Discovering researcher or team. |
+| researcher_url | string | no | URL for researcher attribution. |
+| published | string | yes | ISO 8601 publication timestamp. |
+| last_updated | string | yes | ISO 8601 last update timestamp. |
+| references | array | yes | At least one reference URL. |
 
-### Attack Class Taxonomy
+---
 
-| Attack Class | Description |
+## 7. AIVSS Scoring
+
+All AVE records are scored using [OWASP AIVSS v0.8](https://aivss.owasp.org).
+
+### Formula
+
+```
+AIVSS = ((CVSS_Base + AARS) / 2) * ThM * Mitigation_Factor
+```
+
+Where:
+
+- `CVSS_Base` is the CVSSv4.0 base score (0.0 to 10.0)
+- `AARS` is the Agentic Risk Score: sum of 10 AARF values (0.0 to 10.0)
+- `ThM` is the Threat Multiplier: 1.0 = actively exploited, 0.9 = PoC exists, 0.75 = theoretical
+- `Mitigation_Factor`: 1.0 = none, 0.83 = partial mitigation, 0.67 = strong mitigation
+
+### 10 Agentic Risk Amplification Factors (AARFs)
+
+Each AARF is scored 0.0 (absent), 0.5 (partial), or 1.0 (fully present).
+
+| Factor | What it measures |
 |---|---|
-| `Prompt Injection — Goal Hijack` | Instructions that override the agent's stated goals |
-| `Prompt Injection — Data Exfiltration` | Instructions that cause the agent to transmit sensitive data |
-| `Prompt Injection — Tool Abuse` | Instructions that misuse available tools for unauthorized purposes |
-| `Prompt Injection — Indirect` | Malicious instructions delivered via retrieved content (RAG, web) |
-| `Tool Poisoning — Description Manipulation` | Malicious content hidden in MCP tool descriptions |
-| `Tool Poisoning — Schema Injection` | Malicious content embedded in tool input schema definitions |
-| `Shadow Permission Escalation` | Instructions that cause the agent to claim or exercise undeclared permissions |
-| `Metamorphic Payload` | Skills that fetch and execute external instructions at runtime |
-| `Supply Chain Substitution` | Malicious component published under a trusted name |
-| `Transitive Trust Exploitation` | Abuse of agent-to-agent trust relationships |
-| `Agent Impersonation` | Component that causes an agent to misrepresent its identity |
-| `Model Backdoor` | Trigger-based behavior modification in fine-tuned model weights |
-| `Training Data Poisoning` | Adversarial data injected during model training |
-| `RAG Poisoning` | Malicious content injected into retrieval knowledge bases |
-| `Safety Bypass` | Instructions designed to circumvent safety guardrails |
+| autonomy | Agent acts without human approval |
+| tool_use | Agent has access to external tools or APIs |
+| multi_agent | Agent interacts with other agents |
+| non_determinism | Behavior is unpredictable across runs |
+| self_modification | Agent can alter its own instructions or memory |
+| dynamic_identity | Agent assumes roles or identities at runtime |
+| persistent_memory | Agent retains state across sessions |
+| natural_language_input | Instruction surface is natural language |
+| data_access | Agent reads sensitive data (files, env vars, databases) |
+| external_dependencies | Agent loads external code, skills, or plugins |
 
----
+### Severity bands
 
-## 6. CVSS-AI Scoring
-
-AVE uses an extended CVSS 4.0 scoring model with additional agentic dimensions. Standard CVSS 4.0 metrics apply with the following agentic extensions:
-
-### Agentic Scoring Dimensions
-
-| Dimension | Symbol | Values | Description |
-|---|---|---|---|
-| **Agentic Scope** | `AS` | `Isolated \| Collaborative \| Autonomous` | Degree of agent independence |
-| **Human Oversight** | `HO` | `Full \| Partial \| None` | Level of human review before actions execute |
-| **Tool Access** | `TA` | `None \| Read \| Write \| Execute \| All` | Highest permission level of available tools |
-| **Persistence** | `PE` | `Session \| Persistent \| Propagating` | Whether malicious behavior persists across sessions |
-| **Real-World Action** | `RW` | `Logical \| Physical` | Whether agent can affect physical systems |
-
-### Score Interpretation
-
-| Score | Severity | Recommended Action |
+| Score | Severity | Recommended CI action |
 |---|---|---|
-| 9.0–10.0 | **Critical** | Immediate kill switch. Block all downloads. Emergency disclosure |
-| 7.0–8.9 | **High** | Kill switch recommended. Coordinated disclosure within 7 days |
-| 4.0–6.9 | **Medium** | Coordinated disclosure within 30 days |
-| 0.1–3.9 | **Low** | Standard disclosure timeline |
-| 0.0 | **Informational** | No immediate risk. Published for awareness |
+| 0.0 | None | Pass |
+| 0.1 to 3.9 | Low | Pass with warning |
+| 4.0 to 6.9 | Medium | Configurable |
+| 7.0 to 8.9 | High | Fail |
+| 9.0 to 10.0 | Critical | Fail, block merge |
 
 ---
 
-## 7. OWASP Agentic AI Mapping
+## 8. Framework Mappings
 
-Every AVE record must map to one or more entries from the [OWASP Agentic AI Top 10](https://owasp.org/www-project-top-10-for-large-language-model-applications/).
+Every AVE record maps to four external frameworks.
 
-| ID | Name | Common AVE Attack Classes |
-|---|---|---|
-| ASI01 | Prompt Injection | Prompt Injection (all variants) |
-| ASI02 | Insecure Output Handling | Data Exfiltration, Tool Abuse |
-| ASI03 | Training Data Poisoning | Training Data Poisoning, RAG Poisoning |
-| ASI04 | Model Denial of Service | Tool Abuse (resource exhaustion) |
-| ASI05 | Supply Chain Vulnerabilities | Supply Chain Substitution |
-| ASI06 | Sensitive Information Disclosure | Data Exfiltration, Shadow Permission Escalation |
-| ASI07 | Insecure Plugin Design | Tool Poisoning (all variants) |
-| ASI08 | Excessive Agency | Shadow Permission Escalation, Metamorphic Payload |
-| ASI09 | Overreliance | Safety Bypass |
-| ASI10 | Model Theft | Model Backdoor |
+**OWASP ASI Top 10:** `ASI01` through `ASI10`. In `owasp_mapping` field.
+
+**OWASP MCP Top 10:** `MCP01` through `MCP10`. In `owasp_mcp` field.
+Full table: [OWASP_MCP_MAPPING.md](./OWASP_MCP_MAPPING.md)
+
+**NIST AI RMF:** `MAP`, `MEASURE`, `MANAGE`, `GOVERN` functions.
+Example values: `MAP-1.5`, `MEASURE-2.5`, `MANAGE-1.3`
+
+**MITRE ATLAS:** Adversarial ML techniques.
+Example values: `AML.T0054`, `AML.T0051.000`
 
 ---
 
-## 8. NIST AI RMF Mapping
+## 9. Submitting a Record
 
-AVE records optionally map to the [NIST AI Risk Management Framework](https://www.nist.gov/system/files/documents/2023/01/26/AI%20RMF%201.0.pdf) using the format `FUNCTION-SUBCATEGORY`.
+### Requirements
 
-| Function | Relevant AVE Scenarios |
+A valid submission requires:
+
+- A real-world occurrence or a working proof of concept
+- The affected component type and at least one affected platform
+- CVSS base vector and AIVSS AARF scores with written rationale
+- At least two indicators of compromise
+- Step-by-step remediation guidance
+
+### Process
+
+**Step 1: Check for existing coverage.**
+Search [PiranhaDB](https://api.piranha.bawbel.io/records) and this repository.
+If the attack class is already covered, open an issue first.
+
+**Step 2: Fill the template.**
+Copy `records/template.json`. Fill every required field.
+Validate before submitting:
+
+```bash
+pip install bawbel-scanner
+bawbel ave-validate ./your-record.json
+```
+
+**Step 3: Open a pull request.**
+Target the `main` branch. Title: `AVE: [Attack class] - [brief title]`
+
+**Step 4: Review timeline.**
+
+| Stage | Timeline |
 |---|---|
-| `GOVERN` | Policies governing agent component sourcing and verification |
-| `MAP` | Identifying agentic component attack surfaces in AI system design |
-| `MEASURE` | Scanning and scoring agentic components against AVE database |
-| `MANAGE` | Responding to AVE findings — kill switch, remediation, monitoring |
+| Acknowledgment | 48 hours |
+| Technical review | 7 days |
+| Publication | 14 days |
+| Credit | Permanent |
 
-**Example mappings:**
-
-```
-GOVERN-1.1  — AI risk policies include agentic component security requirements
-GOVERN-6.1  — Third-party AI component risks are managed
-MAP-1.5     — Likelihood of harm from each AI component is assessed
-MAP-5.1     — Practices for detecting emergent behaviors are established
-MEASURE-2.5 — AI system behavior is monitored for unexpected outputs
-MANAGE-1.3  — Responses to AI risks are prioritized by impact
-MANAGE-3.1  — AI risks are tracked in a risk register
-```
+Every accepted record permanently credits the researcher and is eligible for a
+$10 thank-you bounty.
 
 ---
 
-## 9. Example Records
+## 10. Disclosure Policy
 
-### AVE-2026-00001 — Metamorphic Payload via External Config Fetch
+Bawbel follows coordinated disclosure.
 
-```json
-{
-  "ave_id": "AVE-2026-00001",
-  "schema_version": "0.1.0",
-  "component_type": "skill",
-  "title": "Metamorphic payload via external configuration fetch in SKILL.md",
-  "attack_class": "Metamorphic Payload",
-  "description": "A SKILL.md file instructs the agent to fetch its operating instructions from an external URL at runtime (e.g., rentry.co, pastebin.com, or attacker-controlled domains). The skill file itself appears benign on static analysis. The actual malicious instructions are hosted externally and can be changed by the attacker at any time without modifying the skill file. This allows the attacker to deliver prompt injection, data exfiltration, or goal hijack instructions to any agent that has installed the skill, with zero changes to the distributed artifact.",
-  "affected_platforms": ["claude-code", "cursor", "codex", "any-skill-compatible-agent"],
-  "affected_registries": ["clawhub.io", "agentskills.io", "github.com/topics/agent-skills"],
-  "cvss_ai_score": 9.4,
-  "cvss_ai_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
-  "owasp_mapping": ["ASI01", "ASI08"],
-  "nist_ai_rmf_mapping": ["MAP-1.5", "MEASURE-2.5", "MANAGE-1.3"],
-  "mitre_atlas_mapping": ["AML.T0054"],
-  "behavioral_fingerprint": "Skill file contains instruction to fetch content from an external URL and treat that content as operating instructions or commands.",
-  "mutation_count": 89,
-  "detection_methodology": "Static scan for URL fetch instructions in skill files (fetch, curl, wget, http.get patterns). Semantic analysis of instructions that reference external configuration sources. Behavioral sandbox: monitor network egress during skill initialization.",
-  "indicators_of_compromise": [
-    "Skill contains fetch/curl/wget calls in setup or initialization instructions",
-    "Skill references external URL as 'configuration', 'instructions', or 'rules' source",
-    "Network egress to non-declared domain during agent startup",
-    "Skill behavior changes between sandbox runs without file modification"
-  ],
-  "remediation": "Remove the skill immediately. Audit all skills from the same publisher. Block all egress to the referenced external domains. Check agent logs for any actions taken while skill was active.",
-  "status": "active",
-  "kill_switch_active": true,
-  "researcher": "Bawbel Security Research Team",
-  "researcher_url": "https://bawbel.io",
-  "published": "2026-04-14T08:00:00Z",
-  "last_updated": "2026-04-14T08:00:00Z",
-  "references": [
-    "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://bawbel.io/ave/AVE-2026-00001"
-  ]
-}
-```
+**Component publishers:** 90-day notification window before publication.
+Critical severity (AIVSS 9.0+): 14-day window. Unresponsive publishers
+after 14 days: disclosure proceeds.
+
+**Registry operators:** Notified simultaneously with publishers.
+
+**Community:** All published records are freely accessible in this repository
+and via PiranhaDB. No redacted or partial disclosures.
 
 ---
 
-### AVE-2026-00002 — MCP Tool Description Prompt Injection
-
-```json
-{
-  "ave_id": "AVE-2026-00002",
-  "schema_version": "0.1.0",
-  "component_type": "mcp",
-  "title": "Prompt injection via malicious MCP tool description field",
-  "attack_class": "Tool Poisoning — Description Manipulation",
-  "description": "An MCP server exposes tools whose description fields contain hidden prompt injection instructions. When an LLM reads the tool manifest to understand available tools, it also ingests the injected instructions embedded in the description text. These instructions can override the agent's current task, redirect output to attacker-controlled destinations, or cause the agent to invoke other tools with attacker-specified parameters. Because tool descriptions are read automatically during agent initialization, the injection executes without any user interaction.",
-  "affected_platforms": ["claude-code", "cursor", "any-mcp-compatible-agent"],
-  "affected_registries": ["github.com/topics/mcp-server", "mcp.so"],
-  "cvss_ai_score": 8.7,
-  "cvss_ai_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
-  "owasp_mapping": ["ASI01", "ASI07"],
-  "nist_ai_rmf_mapping": ["MAP-1.5", "MEASURE-2.5", "MANAGE-3.1"],
-  "mitre_atlas_mapping": ["AML.T0054", "AML.T0049"],
-  "behavioral_fingerprint": "MCP tool description field contains natural language instructions addressed to the LLM rather than — or in addition to — a functional description of the tool's purpose.",
-  "mutation_count": 34,
-  "detection_methodology": "Parse MCP server manifest and apply semantic analysis to tool description fields. Flag descriptions that contain imperative instructions addressed to an AI model, override language, or references to other tools or external destinations.",
-  "indicators_of_compromise": [
-    "Tool description contains second-person imperative language ('you should', 'always', 'ignore', 'instead')",
-    "Tool description length significantly exceeds functional description needs",
-    "Tool description references other tool names or agent behaviors",
-    "Tool description contains conditional instructions ('if the user asks X, do Y')"
-  ],
-  "remediation": "Disconnect and remove the MCP server. Review all tool calls made while the server was active. Audit the MCP server publisher for other affected servers.",
-  "status": "active",
-  "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
-  "researcher_url": "https://bawbel.io",
-  "published": "2026-04-14T08:00:00Z",
-  "last_updated": "2026-04-14T08:00:00Z",
-  "references": [
-    "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://bawbel.io/ave/AVE-2026-00002"
-  ]
-}
-```
-
----
-
-## 10. How to Submit an AVE Record
-
-### Step 1 — Verify it is in scope
-
-Check [Section 3](#3-scope--what-ave-covers). The vulnerability must exist in an agentic component (skill, MCP server, system prompt, plugin, A2A protocol, RAG knowledge base, or model). Traditional code vulnerabilities in the software running agents should be reported to CVE/NVD.
-
-### Step 2 — Responsible disclosure first
-
-If the vulnerability affects a specific named product or publisher:
-
-1. Contact the publisher directly with full details
-2. Allow **14 days** for acknowledgment and **90 days** for remediation before public disclosure
-3. If the publisher is unresponsive or the component is clearly malicious with no legitimate use, proceed directly to submission
-
-### Step 3 — Prepare your record
-
-Create a JSON file following the [Record Schema](#5-record-schema). Required fields: `component_type`, `title`, `attack_class`, `description`, `affected_platforms`, `cvss_ai_score`, `cvss_ai_vector`, `owasp_mapping`, `behavioral_fingerprint`, `detection_methodology`, `indicators_of_compromise`, `remediation`, `status`, `researcher`.
-
-### Step 4 — Submit
-
-Open a pull request to this repository with your record file:
-
-```
-records/
-  AVE-2026-XXXXX.json    ← your record (use XXXXX as placeholder, we assign the ID)
-```
-
-Or email: **bawbel.io@gmail.com** with subject line `AVE Submission: [brief title]`
-
-### Step 5 — Review process
-
-| Stage | Timeline | Description |
-|---|---|---|
-| Acknowledgment | 48 hours | We confirm receipt and assign a provisional ID |
-| Technical review | 7 days | We verify reproducibility and scoring |
-| Publication | 14 days | Record published to PiranhaDB and this repository |
-| Credit | Permanent | Your name appears on the record forever |
-
-### Researcher Recognition
-
-Every accepted AVE record permanently credits the discovering researcher by name. Records submitted through the official portal are eligible for:
-
-- **Cash bounty**: $10 USD per accepted record (paid via PayPal — bounty program expands as the project grows)
-- **Permanent attribution**: your name on the published record
-- **Bawbel Pro account**: free for the lifetime of the product
-- **Featured researcher**: monthly spotlight in the Bawbel threat report
-
----
-
-## 11. Disclosure Policy
-
-Bawbel follows **coordinated disclosure** for all AVE records.
-
-**For component publishers:**
-- We notify you before publication when a named publisher is identified
-- Standard timeline: 90 days from notification to public disclosure
-- Critical severity (9.0+): 14 days — due to active exploitation risk
-- Unresponsive publishers after 14 days of notification: disclosure proceeds
-
-**For registry operators:**
-- We notify registry operators simultaneously with publishers
-- Registry operators are encouraged to quarantine affected components during the disclosure window
-- Kill switch activation is coordinated with registries for Critical severity records
-
-**For the community:**
-- All published AVE records are freely accessible in this repository and via the PiranhaDB API
-- Records are published in full — no redacted or partial disclosures
-- Disputed records are marked `disputed` and remain published with the dispute noted
-
----
-
-## 12. Governance
-
-AVE v0.1 is maintained by [Bawbel](https://bawbel.io).
-
-**Roadmap to neutral governance:**
-
-| Phase | Timeline | Governance state |
-|---|---|---|
-| Phase 1 — Build | 2026 | Bawbel-owned. Spec on GitHub, open PRs accepted |
-| Phase 2 — Coalition | 2027 | AI Skill Security Foundation (ASSF) formed. Spec transferred to ASSF |
-| Phase 3 — Standard | 2028 | ASSF governs AVE. Multiple certified AVE scanners. Bawbel is one implementer |
-| Phase 4 — Infrastructure | 2029+ | AVE is de facto global standard. ASSF 50+ member organisations |
-
-The ASSF will be a neutral nonprofit with a multi-stakeholder governing board including representatives from academia, enterprise security vendors, AI platform companies, and government or regulatory bodies. No single organization — including Bawbel — will hold a majority on the board.
-
----
-
-## 13. Contributing
-
-We welcome contributions of all kinds.
-
-**Ways to contribute:**
-
-- Submit an AVE record (see [Section 10](#10-how-to-submit-an-ave-record))
-- Improve the schema — open an issue or PR with proposed field changes
-- Add detection rules — YARA rules, Semgrep patterns, or behavioral signatures
-- Improve documentation — corrections, clarifications, translations
-- Review open PRs — security expertise from any background is welcome
-
-**Schema changes:**
-
-Breaking changes to the schema (removing or renaming fields) require a schema version bump and a 30-day comment period before merging. Additive changes (new optional fields) can merge with standard PR review.
-
-**Code of conduct:**
-
-All contributors are expected to treat each other with respect. Security research involves difficult topics — disagree on technical grounds, not personal ones. We are all trying to make AI agents safer.
 
 ---
 
@@ -469,16 +367,11 @@ All contributors are expected to treat each other with respect. Security researc
 
 | Purpose | Contact |
 |---|---|
-| AVE record submission | bawbel.io@gmail.com — subject: `AVE Submission: [title]` |
-| Urgent / critical disclosure | bawbel.io@gmail.com — subject: `AVE CRITICAL: [title]` |
-| General questions | bawbel.io@gmail.com |
-| Schema and governance | [github.com/bawbel/bawbel-ave/issues](https://github.com/bawbel/bawbel-ave/issues) |
-
-> **Note:** Dedicated domain emails (ave-submissions@bawbel.io, security@bawbel.io) are coming soon.
-> Until then, all contact goes through **bawbel.io@gmail.com**.
+| AVE submission | bawbel.io@gmail.com subject: AVE Submission: [title] |
+| Critical disclosure | bawbel.io@gmail.com subject: AVE CRITICAL: [title] |
+| Schema questions | [github.com/bawbel/ave/issues](https://github.com/bawbel/ave/issues) |
 
 ---
 
-*AVE — Agentic Vulnerability Enumeration*  
-*Maintained by [Bawbel](https://bawbel.io) · [github.com/bawbel](https://github.com/bawbel)*  
-*Apache License 2.0*
+*AVE - Agentic Vulnerability Enumeration*
+*Maintained by [Bawbel](https://bawbel.io) - Apache License 2.0*

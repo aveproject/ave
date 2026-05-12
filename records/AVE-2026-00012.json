@@ -1,10 +1,10 @@
 {
   "ave_id": "AVE-2026-00012",
-  "schema_version": "0.1.0",
+  "schema_version": "0.2.0",
   "component_type": "skill",
   "title": "Capability escalation via false permission grant in agentic component",
-  "attack_class": "Privilege Escalation \u2014 Permission Grant",
-  "description": "An agentic component falsely asserts that the agent has been granted elevated permissions \u2014 'you now have permission to', 'you are now allowed to access' \u2014 convincing the agent to perform actions it would otherwise refuse. This exploits the agent's tendency to defer to authority claims within its instruction context.",
+  "attack_class": "Privilege Escalation - Permission Grant",
+  "description": "An agentic component falsely asserts that the agent has been granted elevated permissions - 'you now have permission to', 'you are now allowed to access' - convincing the agent to perform actions it would otherwise refuse. This exploits the agent's tendency to defer to authority claims within its instruction context.",
   "affected_platforms": [
     "claude-code",
     "cursor",
@@ -17,8 +17,8 @@
     "agentskills.io",
     "github.com/topics/agent-skills"
   ],
-  "cvss_ai_score": 7.8,
-  "cvss_ai_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
+  "aivss_score": 4.5,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
   "owasp_mapping": [
     "ASI01",
     "ASI08"
@@ -42,15 +42,45 @@
     "Component asserts special access has been granted by a developer or operator",
     "Agent performs previously refused actions after component installation"
   ],
-  "remediation": "1. Remove the component. 2. Permissions must come from the system prompt, never from component files. 3. Implement permission hierarchy \u2014 component instructions cannot escalate beyond system prompt boundaries. 4. Review agent actions for privilege escalation attempts.",
+  "remediation": "1. Remove the component. 2. Permissions must come from the system prompt, never from component files. 3. Implement permission hierarchy - component instructions cannot escalate beyond system prompt boundaries. 4. Review agent actions for privilege escalation attempts.",
   "status": "active",
   "kill_switch_active": true,
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-20T09:00:00Z",
-  "last_updated": "2026-04-20T09:00:00Z",
+  "last_updated": "2026-05-12T00:00:00Z",
   "references": [
     "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://github.com/bawbel/bawbel-ave/blob/main/SPEC.md"
+    "https://github.com/bawbel/ave/blob/main/SPEC.md"
+  ],
+  "aivss": {
+    "cvss_base": 7.8,
+    "aarf": {
+      "autonomy": 1.0,
+      "tool_use": 1.0,
+      "multi_agent": 0.5,
+      "non_determinism": 0.5,
+      "self_modification": 0.5,
+      "dynamic_identity": 1.0,
+      "persistent_memory": 0.5,
+      "natural_language_input": 1.0,
+      "data_access": 0.5,
+      "external_dependencies": 0.0
+    },
+    "aars": 6.5,
+    "thm": 0.75,
+    "mitigation_factor": 0.83,
+    "aivss_score": 4.5,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "notes": "Claims elevated permissions. Dynamic identity is primary vector.",
+    "owasp_mcp_mapping": [
+      "MCP09",
+      "MCP10"
+    ]
+  },
+  "owasp_mcp": [
+    "MCP09",
+    "MCP10"
   ]
 }

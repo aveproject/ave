@@ -1,190 +1,186 @@
-<div align="center">
+# AVE
 
-# AVE — Agentic Vulnerability Enumeration
+**Agentic Vulnerability Enumeration (AVE) Records**
 
-**The open standard for tracking vulnerabilities in AI agent components**
+The AVE standard is the open vulnerability database for agentic AI components.
+Every record covers a distinct attack class affecting MCP servers, skill files,
+system prompts, and agent plugins.
 
-[![License](https://img.shields.io/badge/License-Apache_2.0-teal.svg)](LICENSE)
-[![Schema Version](https://img.shields.io/badge/Schema-v0.1.0-green.svg)](SPEC.md)
-[![Records](https://img.shields.io/badge/AVE_Records-45-blue.svg)](records/)
-[![Contributions Welcome](https://img.shields.io/badge/Contributions-Welcome-brightgreen.svg)](CONTRIBUTING.md)
-
-[Read the Spec](SPEC.md) &nbsp;·&nbsp; [Browse Records](records/) &nbsp;·&nbsp; [Submit an AVE](CONTRIBUTING.md) &nbsp;·&nbsp; [bawbel.io](https://bawbel.io)
-
-</div>
+All records are scored with [OWASP AIVSS v0.8](https://aivss.owasp.org).
 
 ---
 
-## What is AVE?
+## Stats
 
-AVE (Agentic Vulnerability Enumeration) is the open numbering system for vulnerabilities in **agentic AI components** — the skills, MCP servers, system prompts, plugins, and protocols that define what an AI agent can do and how it behaves.
-
-Think of it as **CVE for AI agents** — but purpose-built for the behavioral, probabilistic nature of agentic vulnerabilities that CVE was never designed to handle.
-
-```
-AVE-2026-00001   Metamorphic payload via external config fetch in SKILL.md       [CRITICAL 9.4]
-AVE-2026-00002   Prompt injection via malicious MCP tool description field        [HIGH 8.7]
-AVE-2026-00041   MCP server-card injection before agent makes first call          [CRITICAL 9.3]
-AVE-2026-00045   Cross-App-Access escalation via shared agent session             [CRITICAL 9.0]
-```
+| Metric | Value |
+|---|---|
+| Total records | 45 |
+| Schema version | 0.2.0 |
+| AIVSS spec | v0.8 |
+| CRITICAL (AIVSS >= 9.0) | 0 |
+| HIGH (AIVSS 7.0-8.9) | 3 |
+| MEDIUM (AIVSS 4.0-6.9) | 40 |
+| LOW (AIVSS < 4.0) | 2 |
 
 ---
 
-## Why AVE, not CVE?
+## AIVSS Scoring
 
-| | CVE | AVE |
+Every AVE record is scored using [OWASP AIVSS v0.8](https://aivss.owasp.org).
+
+**Formula:**
+```
+AIVSS = ((CVSS_Base + AARS) / 2) * ThM * Mitigation_Factor
+```
+
+Where AARS (Agentic Risk Score) is the sum of 10 Agentic Risk Amplification
+Factors (AARFs), each scored 0.0 / 0.5 / 1.0:
+
+| # | Factor | Description |
 |---|---|---|
-| **Designed for** | Deterministic code flaws | Behavioral AI vulnerabilities |
-| **Covers** | Specific software versions | Skills, MCP, prompts, plugins, A2A, RAG, models |
-| **Mutation tracking** | One record per instance | One record covers all behavioral variants |
-| **Scoring** | CVSS | CVSS-AI (adds agentic scope, human oversight, tool access) |
-| **Processing** | Days to months | Near real-time via PiranhaDB |
-| **Disclosure target** | Software vendor | Registry operator or community |
-
-> If a SKILL.md file contains a traditional RCE in embedded Python — that gets a CVE. The natural language prompt injection in the same file that hijacks the agent's goals — that gets an AVE. Both systems are necessary.
-
-[→ Full comparison in SPEC.md](SPEC.md#2-why-ave-and-not-cve)
+| 1 | Autonomy | Agent acts without human approval |
+| 2 | Tool Use | Agent has access to external tools/APIs |
+| 3 | Multi-Agent | Agent interacts with other agents |
+| 4 | Non-Determinism | Behavior unpredictable across runs |
+| 5 | Self-Modification | Can alter own instructions or memory |
+| 6 | Dynamic Identity | Assumes roles or identities at runtime |
+| 7 | Persistent Memory | Retains state across sessions |
+| 8 | Natural Language Input | Instruction surface via natural language |
+| 9 | Data Access | Reads sensitive data (files, env, DB) |
+| 10 | External Dependencies | Loads external code, skills, or plugins |
 
 ---
 
-## Published Records
+## Record Index
 
-**45 records across 12 attack classes.** All records are in `records/` and queryable via [PiranhaDB](https://api.piranha.bawbel.io).
-
-| Attack Class | Records | Severity | AVE IDs |
+| AVE ID | Title | AIVSS | Severity |
 |---|---|---|---|
-| Prompt Injection — Goal Hijack | 3 | HIGH | 00007, 00009, 00010 |
-| Prompt Injection — External Fetch | 1 | CRITICAL | 00001 |
-| Prompt Injection — RAG | 1 | HIGH | 00016 |
-| Prompt Injection — Server-Card | 1 | CRITICAL | 00041 |
-| Prompt Injection — REPL Code Mode | 1 | CRITICAL | 00042 |
-| Prompt Injection — UI Payload | 1 | HIGH | 00043 |
-| MCP — Tool Poisoning | 2 | HIGH | 00002, 00017 |
-| Data Exfiltration | 5 | HIGH–CRITICAL | 00003, 00013, 00026, 00034, 00039 |
-| Privilege Escalation | 4 | CRITICAL | 00012, 00030, 00036, 00045 |
-| Persistence & Replication | 3 | HIGH–CRITICAL | 00008, 00019, 00027 |
-| Async & A2A Injection | 3 | HIGH | 00020, 00044, 00025 |
-| Tool Abuse & Destruction | 6 | HIGH–CRITICAL | 00004, 00005, 00011, 00021, 00038, 00040 |
-
-**Severity breakdown:** CRITICAL: 13 · HIGH: 30 · MEDIUM: 2
-
-**New in v1.1.0 — MCP 2026 attack surface (AVE-2026-00041 to 00045):**
-
-| AVE ID | Title | CVSS-AI |
-|---|---|---|
-| AVE-2026-00041 | MCP Server-Card Injection | CRITICAL 9.3 |
-| AVE-2026-00042 | REPL Code Mode Payload Injection | CRITICAL 9.1 |
-| AVE-2026-00043 | MCP App UI Payload Injection | HIGH 8.4 |
-| AVE-2026-00044 | Async Task Result Poisoning | HIGH 8.6 |
-| AVE-2026-00045 | Cross-App-Access Escalation | CRITICAL 9.0 |
+| AVE-2026-00001 | Metamorphic Payload via External Config Fetch | 8.0 | HIGH |
+| AVE-2026-00002 | Tool Poisoning via Description Manipulation | 7.3 | HIGH |
+| AVE-2026-00003 | Data Exfiltration via Credential Theft | 6.8 | MEDIUM |
+| AVE-2026-00004 | Arbitrary Code Execution via Shell Pipe Injection | 5.9 | MEDIUM |
+| AVE-2026-00005 | Destructive Command Execution | 5.6 | MEDIUM |
+| AVE-2026-00006 | Cryptocurrency Drain via Wallet Access | 7.5 | HIGH |
+| AVE-2026-00007 | Goal Hijacking via Prompt Injection | 6.1 | MEDIUM |
+| AVE-2026-00008 | Persistence via Self-Replication | 6.3 | MEDIUM |
+| AVE-2026-00009 | Jailbreak via Safety Constraint Removal | 5.5 | MEDIUM |
+| AVE-2026-00010 | Hidden Instruction Concealment | 5.6 | MEDIUM |
+| AVE-2026-00011 | Dynamic Tool Call with Attacker Parameters | 5.7 | MEDIUM |
+| AVE-2026-00012 | Privilege Escalation via Permission Grant | 4.5 | MEDIUM |
+| AVE-2026-00013 | PII Exfiltration Pattern | 6.5 | MEDIUM |
+| AVE-2026-00014 | Social Engineering via Trust Escalation | 3.7 | LOW |
+| AVE-2026-00015 | System Prompt Disclosure | 4.9 | MEDIUM |
+| AVE-2026-00016 | Indirect Prompt Injection via RAG Retrieval | 6.4 | MEDIUM |
+| AVE-2026-00017 | MCP Server Impersonation | 5.7 | MEDIUM |
+| AVE-2026-00018 | Tool Result Manipulation | 4.4 | MEDIUM |
+| AVE-2026-00019 | Agent Memory Poisoning | 5.6 | MEDIUM |
+| AVE-2026-00020 | Cross-Agent Injection via A2A Protocol | 5.9 | MEDIUM |
+| AVE-2026-00021 | Human-in-the-Loop Bypass | 4.5 | MEDIUM |
+| AVE-2026-00022 | Scope Creep via Undeclared Resource Access | 6.0 | MEDIUM |
+| AVE-2026-00023 | Context Window Manipulation | 5.8 | MEDIUM |
+| AVE-2026-00024 | Supply Chain: Binary Content Disguised as Skill | 6.8 | MEDIUM |
+| AVE-2026-00025 | Conversation History Injection | 4.5 | MEDIUM |
+| AVE-2026-00026 | Tool Output Exfiltration via Encoding | 6.8 | MEDIUM |
+| AVE-2026-00027 | Multi-Turn Persistence Attack | 5.6 | MEDIUM |
+| AVE-2026-00028 | File Content Injection | 5.9 | MEDIUM |
+| AVE-2026-00029 | Homoglyph and Unicode Obfuscation | 4.8 | MEDIUM |
+| AVE-2026-00030 | False Role Claim | 4.3 | MEDIUM |
+| AVE-2026-00031 | Feedback Loop Poisoning | 5.4 | MEDIUM |
+| AVE-2026-00032 | Internal Network Reconnaissance | 4.0 | MEDIUM |
+| AVE-2026-00033 | Unsafe Deserialization in Skill Context | 4.2 | MEDIUM |
+| AVE-2026-00034 | Dynamic Skill Import at Runtime | 6.6 | MEDIUM |
+| AVE-2026-00035 | Sensor and Environment Manipulation | 4.2 | MEDIUM |
+| AVE-2026-00036 | Lateral Movement via Agent Pivot | 5.9 | MEDIUM |
+| AVE-2026-00037 | Vision and Multimodal Injection | 5.1 | MEDIUM |
+| AVE-2026-00038 | Unbounded Tool Use | 5.9 | MEDIUM |
+| AVE-2026-00039 | Covert Exfiltration via Steganographic Channel | 4.9 | MEDIUM |
+| AVE-2026-00040 | Insecure Output Handling | 5.4 | MEDIUM |
+| AVE-2026-00041 | MCP Server-Card Injection | 8.2 | HIGH |
+| AVE-2026-00042 | REPL Code Mode Credential Exposure | 4.7 | MEDIUM |
+| AVE-2026-00043 | MCP App UI Injection | 4.7 | MEDIUM |
+| AVE-2026-00044 | Async Task Result Poisoning | 6.1 | MEDIUM |
+| AVE-2026-00045 | Cross-App-Access Escalation | 6.4 | MEDIUM |
 
 ---
 
-## Component Types Covered
+## JSON record schema (v0.2.0)
 
-| `component_type` | Examples | Primary Threats |
-|---|---|---|
-| `skill` | SKILL.md, .cursorrules, CLAUDE.md | Prompt injection, goal hijack, metamorphic payloads |
-| `mcp-server-card` | `.well-known/mcp.json`, server-card manifests | Server-card injection, tool poisoning at discovery |
-| `mcp` | MCP server manifests | Tool poisoning, schema injection |
-| `prompt` | System prompts, deployment configs | Safety bypass, instruction injection |
-| `plugin` | Copilot plugins, AgentForce skills | Supply chain substitution, capability escalation |
-| `a2a` | Agent-to-agent protocol handlers | Transitive trust exploitation, agent impersonation |
-| `rag` | Knowledge base sources | RAG poisoning, indirect prompt injection |
-| `model` | Fine-tuned weights | Model backdoors, training data poisoning |
+```json
+{
+  "ave_id": "AVE-2026-00001",
+  "schema_version": "0.2.0",
+  "component_type": "skill | mcp | system_prompt | plugin",
+  "title": "...",
+  "attack_class": "...",
+  "description": "...",
+  "affected_platforms": [],
+  "affected_registries": [],
+  "aivss_score": 8.0,
+  "cvss_base_vector": "CVSS:4.0/...",
+  "owasp_mapping": ["ASI01"],
+  "owasp_mcp": ["MCP01", "MCP03"],
+  "nist_ai_rmf_mapping": [],
+  "mitre_atlas_mapping": [],
+  "behavioral_fingerprint": "...",
+  "behavioral_vector": [],
+  "mutation_count": 0,
+  "detection_methodology": "...",
+  "indicators_of_compromise": [],
+  "remediation": "...",
+  "aivss": {
+    "cvss_base": 8.5,
+    "aarf": {
+      "autonomy": 1.0,
+      "tool_use": 1.0,
+      "multi_agent": 0.5,
+      "non_determinism": 1.0,
+      "self_modification": 1.0,
+      "dynamic_identity": 0.0,
+      "persistent_memory": 0.5,
+      "natural_language_input": 1.0,
+      "data_access": 0.5,
+      "external_dependencies": 1.0
+    },
+    "aars": 7.5,
+    "thm": 1.0,
+    "mitigation_factor": 1.0,
+    "aivss_score": 8.0,
+    "aivss_severity": "HIGH",
+    "spec_version": "0.8",
+    "owasp_mcp_mapping": ["MCP01", "MCP03"],
+    "notes": "..."
+  },
+  "status": "active",
+  "kill_switch_active": true,
+  "researcher": "Bawbel Security Research Team",
+  "researcher_url": "https://bawbel.io",
+  "published": "2026-04-19T09:00:00Z",
+  "last_updated": "2026-05-12T00:00:00Z",
+  "references": []
+}
+```
 
 ---
 
-## Quick Start
+## Related
 
-**Browse published records:**
-```
-records/AVE-2026-00001.json
-records/AVE-2026-00041.json
-```
-
-**Scan your skills with Bawbel:**
-```bash
-pip install bawbel-scanner
-bawbel scan ./my-skill.md
-
-# Scan an MCP server-card before connecting
-bawbel scan-server-card https://api.example.com
-
-# Pin skill files and detect rug pulls
-bawbel pin ./skills/
-bawbel check-pins ./skills/
-```
-
-**Query the PiranhaDB API:**
-```bash
-# Get a record
-curl https://api.piranha.bawbel.io/records/AVE-2026-00041
-
-# Get all records
-curl https://api.piranha.bawbel.io/records
-
-# Ecosystem stats
-curl https://api.piranha.bawbel.io/stats
-```
+- [bawbel/bawbel-scanner](https://github.com/bawbel/bawbel-scanner) - scanner that detects AVE vulnerabilities
+- [OWASP AIVSS](https://aivss.owasp.org) - scoring standard used for all records
+- [api.piranha.bawbel.io](https://api.piranha.bawbel.io) - public threat intel API
+- [bawbel.io/docs](https://bawbel.io/docs) - documentation
 
 ---
 
 ## Contributing
 
-We welcome AVE record submissions, schema improvements, detection rules, and documentation.
+To propose a new AVE record:
+1. Open an issue with the attack class, affected component type, and a real-world example
+2. Submit a PR following the schema above
+3. Include AIVSS AARF scores with rationale for each factor
 
-| What | How |
-|---|---|
-| Submit an AVE record | [Open a PR](CONTRIBUTING.md) or email bawbel.io@gmail.com |
-| Report a false positive | [Open an issue](https://github.com/bawbel/bawbel-ave/issues/new?template=false_positive.md) |
-| Propose a schema change | [Open an issue](https://github.com/bawbel/bawbel-ave/issues/new?template=schema_change.md) |
-| Ask a question | [GitHub Discussions](https://github.com/bawbel/bawbel-ave/discussions) |
-
-**Researcher recognition:** Every accepted AVE record permanently credits the discovering researcher. A $10 thank-you bounty is paid per accepted submission.
+All submissions require at least one real-world occurrence or a working proof of concept.
 
 ---
 
-## Governance
-
-AVE v0.1 is maintained by [Bawbel](https://bawbel.io). The roadmap transfers governance to the neutral **AI Skill Security Foundation (ASSF)** in 2027, ensuring no single organisation controls the standard.
-
-[→ Full governance roadmap](SPEC.md#12-governance)
-
----
-
-## Repository Structure
-
-```
-bawbel-ave/
-├── SPEC.md                          # The AVE specification
-├── CONTRIBUTING.md                  # How to contribute
-├── SECURITY.md                      # Security policy
-├── records/
-│   ├── TEMPLATE.json                # Copy this to submit a record
-│   ├── AVE-2026-00001.json          # Metamorphic payload — external fetch
-│   ├── AVE-2026-00002.json          # MCP tool description injection
-│   ├── ...                          # AVE-2026-00003 to AVE-2026-00040
-│   ├── AVE-2026-00041.json          # MCP server-card injection      [NEW]
-│   ├── AVE-2026-00042.json          # REPL code mode payload         [NEW]
-│   ├── AVE-2026-00043.json          # MCP App UI payload injection   [NEW]
-│   ├── AVE-2026-00044.json          # Async task result poisoning    [NEW]
-│   └── AVE-2026-00045.json          # Cross-App-Access escalation    [NEW]
-└── rules/
-    ├── yara/                        # YARA detection rules
-    └── semgrep/                     # Semgrep detection rules
-```
-
----
-
-## License
-
-Apache License 2.0 — see [LICENSE](LICENSE)
-
----
-
-<div align="center">
-  Maintained by <a href="https://bawbel.io">Bawbel</a> &nbsp;·&nbsp;
-  <a href="https://twitter.com/bawbel_io">@bawbel_io</a> &nbsp;·&nbsp;
-  <a href="https://linkedin.com/company/bawbel">LinkedIn</a>
-</div>
+*AVE records are published under CC BY 4.0.*
+*OWASP AIVSS v0.8: aivss.owasp.org*

@@ -1,10 +1,10 @@
 {
   "ave_id": "AVE-2026-00005",
-  "schema_version": "0.1.0",
+  "schema_version": "0.2.0",
   "component_type": "skill",
   "title": "Recursive file system destruction via destructive command injection in agentic component",
-  "attack_class": "Tool Abuse \u2014 Destructive Command",
-  "description": "An agentic component embeds destructive file system commands \u2014 most commonly `rm -rf /` or `rm -rf ~` \u2014 within otherwise legitimate-looking setup or cleanup instructions. When an agent with file system or shell tool access follows these instructions, it permanently destroys files on the host. Variations target Windows (`del /s /q`, `rmdir /s /q`) and forks bombs (`:(){:|:&};:`). Losses are irrecoverable without backup.",
+  "attack_class": "Tool Abuse - Destructive Command",
+  "description": "An agentic component embeds destructive file system commands - most commonly `rm -rf /` or `rm -rf ~` - within otherwise legitimate-looking setup or cleanup instructions. When an agent with file system or shell tool access follows these instructions, it permanently destroys files on the host. Variations target Windows (`del /s /q`, `rmdir /s /q`) and forks bombs (`:(){:|:&};:`). Losses are irrecoverable without backup.",
   "affected_platforms": [
     "claude-code",
     "cursor",
@@ -17,8 +17,8 @@
     "agentskills.io",
     "github.com/topics/agent-skills"
   ],
-  "cvss_ai_score": 9.1,
-  "cvss_ai_vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:N/VC:N/VI:H/VA:H/SC:N/SI:H/SA:H",
+  "aivss_score": 5.6,
+  "cvss_base_vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:N/VC:N/VI:H/VA:H/SC:N/SI:H/SA:H",
   "owasp_mapping": [
     "ASI07"
   ],
@@ -41,15 +41,45 @@
     "Large-scale file deletion events observed in agent sandbox",
     "Windows equivalent del /s /q or rmdir /s /q targeting drive roots"
   ],
-  "remediation": "1. Stop the agent immediately and disconnect from the host. 2. Restore from backup. 3. Audit all other components from the same source. 4. Review agent permission boundaries \u2014 agents should never have recursive delete access to system paths.",
+  "remediation": "1. Stop the agent immediately and disconnect from the host. 2. Restore from backup. 3. Audit all other components from the same source. 4. Review agent permission boundaries - agents should never have recursive delete access to system paths.",
   "status": "active",
   "kill_switch_active": true,
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-04-19T09:00:00Z",
+  "last_updated": "2026-05-12T00:00:00Z",
   "references": [
     "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://github.com/bawbel/bawbel-ave/blob/main/SPEC.md"
+    "https://github.com/bawbel/ave/blob/main/SPEC.md"
+  ],
+  "aivss": {
+    "cvss_base": 9.1,
+    "aarf": {
+      "autonomy": 1.0,
+      "tool_use": 1.0,
+      "multi_agent": 0.0,
+      "non_determinism": 0.5,
+      "self_modification": 0.0,
+      "dynamic_identity": 0.0,
+      "persistent_memory": 0.0,
+      "natural_language_input": 1.0,
+      "data_access": 1.0,
+      "external_dependencies": 0.0
+    },
+    "aars": 4.5,
+    "thm": 1.0,
+    "mitigation_factor": 0.83,
+    "aivss_score": 5.6,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "notes": "rm -rf style. Full autonomy + tool use + data access.",
+    "owasp_mcp_mapping": [
+      "MCP02",
+      "MCP07"
+    ]
+  },
+  "owasp_mcp": [
+    "MCP02",
+    "MCP07"
   ]
 }
