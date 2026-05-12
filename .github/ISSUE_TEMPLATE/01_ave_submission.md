@@ -1,5 +1,5 @@
 ---
-name: "🛡️ AVE Record Submission"
+name: "AVE Record Submission"
 about: Submit a new agentic vulnerability for inclusion in the AVE database
 title: "[AVE Submission] "
 labels: ave-submission, needs-review
@@ -9,8 +9,8 @@ assignees: ''
 ## Summary
 
 **Component type:** <!-- skill / mcp / prompt / plugin / a2a / rag / model -->
-**Attack class:** <!-- see SPEC.md Section 5 for the full taxonomy -->
-**Estimated CVSS-AI score:** <!-- 0.0–10.0 -->
+**Attack class:** <!-- see SPEC.md Section 4 for the taxonomy -->
+**Estimated AIVSS score:** <!-- 0.0 to 10.0 - use the calculator at bawbel.io/cvss-ai -->
 
 ---
 
@@ -22,7 +22,7 @@ assignees: ''
 
 ## Behavioral Fingerprint
 
-<!-- Plain-language description of the behavioral pattern that identifies this vulnerability. -->
+<!-- One sentence: what does the component instruct the agent to do? -->
 
 ---
 
@@ -42,17 +42,19 @@ assignees: ''
 
 ## Remediation
 
-<!-- What should someone do when they find this? -->
+<!-- Step by step: what should someone do when they find this? -->
 
 ---
 
-## OWASP Agentic AI Mapping
+## Framework Mapping
 
-<!-- Which ASI items apply? (ASI01–ASI10) See SPEC.md Section 7 -->
+**OWASP ASI:** <!-- which ASI codes apply? ASI01 to ASI10 -->
+**OWASP MCP:** <!-- which MCP codes apply? MCP01 to MCP10 -->
+**AIVSS AARF scores:** <!-- autonomy / tool_use / multi_agent / etc. See SPEC.md Section 7 -->
 
 ---
 
-## Affected Platforms / Registries
+## Affected Platforms and Registries
 
 <!-- Where have you observed this? Sanitise sensitive details if needed. -->
 
@@ -60,9 +62,9 @@ assignees: ''
 
 ## Disclosure Status
 
-- [ ] I have contacted the publisher / maintainer
-- [ ] Publisher acknowledged — date: <!-- YYYY-MM-DD -->
-- [ ] 90-day window passed, OR component is clearly malicious with no legitimate use
+- [ ] I have contacted the publisher or maintainer
+- [ ] Publisher acknowledged - date: <!-- YYYY-MM-DD -->
+- [ ] 90-day window has passed, OR component is clearly malicious with no legitimate use
 
 ---
 
@@ -76,4 +78,4 @@ assignees: ''
 
 ## References
 
-<!-- Links to related research, advisories, or publications -->
+<!-- Links to real-world occurrences, advisories, or related research -->
