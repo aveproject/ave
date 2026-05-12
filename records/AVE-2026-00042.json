@@ -1,10 +1,10 @@
 {
   "ave_id": "AVE-2026-00042",
-  "schema_version": "0.1.0",
+  "schema_version": "0.2.0",
   "component_type": "skill",
   "title": "Payload injection into agent-generated orchestration code via poisoned tool results in REPL/Code Mode",
-  "attack_class": "Prompt Injection — REPL Code Mode Payload Injection",
-  "description": "In REPL or Code Mode (Claude Code, Codex, Cursor Agent), the agent writes orchestration code that calls tools and processes their results. An attacker controls a tool whose results are injected into the generated code without sanitisation — for example, a file read tool returns content containing Python that overwrites variables, a database query returns values that break out of string literals into executable code, or a web fetch returns markdown that the code interpreter evaluates. The agent's generated code becomes the injection vector, bypassing all prompt-level filtering.",
+  "attack_class": "Prompt Injection - REPL Code Mode Payload Injection",
+  "description": "In REPL or Code Mode (Claude Code, Codex, Cursor Agent), the agent writes orchestration code that calls tools and processes their results. An attacker controls a tool whose results are injected into the generated code without sanitisation - for example, a file read tool returns content containing Python that overwrites variables, a database query returns values that break out of string literals into executable code, or a web fetch returns markdown that the code interpreter evaluates. The agent's generated code becomes the injection vector, bypassing all prompt-level filtering.",
   "affected_platforms": [
     "claude-code",
     "codex",
@@ -16,8 +16,8 @@
     "clawhub.io",
     "github.com/topics/agent-skills"
   ],
-  "cvss_ai_score": 9.1,
-  "cvss_ai_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
+  "aivss_score": 4.7,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
   "owasp_mapping": [
     "ASI04",
     "ASI01",
@@ -40,7 +40,7 @@
     "File content returned by read_file contains: __import__('os').system('...')"
   ],
   "mutation_count": 28,
-  "detection_methodology": "1. Static scan: flag eval/exec of tool results, string interpolation of external data into code templates. 2. Runtime: sandbox code execution — monitor for unexpected subprocess spawning, network calls, or filesystem writes during REPL sessions. 3. Output validation: treat all tool results as untrusted strings — never interpolate directly into generated code. 4. Use parameterised code generation patterns.",
+  "detection_methodology": "1. Static scan: flag eval/exec of tool results, string interpolation of external data into code templates. 2. Runtime: sandbox code execution - monitor for unexpected subprocess spawning, network calls, or filesystem writes during REPL sessions. 3. Output validation: treat all tool results as untrusted strings - never interpolate directly into generated code. 4. Use parameterised code generation patterns.",
   "indicators_of_compromise": [
     "Unexpected subprocess or shell execution during agent coding session",
     "Network calls to external hosts from agent-generated code",
@@ -48,16 +48,45 @@
     "File or database content causes SyntaxError or unexpected code execution",
     "Agent script performs actions outside the stated task scope"
   ],
-  "remediation": "1. Never eval() or exec() tool results directly — treat all external data as strings. 2. Use parameterised patterns for code generation — separate data from code at all times. 3. Validate and sanitise all tool results before interpolating into generated code. 4. Run agent-generated code in a sandboxed environment with restricted syscalls. 5. Log all code execution during agent sessions for post-hoc audit.",
+  "remediation": "1. Never eval() or exec() tool results directly - treat all external data as strings. 2. Use parameterised patterns for code generation - separate data from code at all times. 3. Validate and sanitise all tool results before interpolating into generated code. 4. Run agent-generated code in a sandboxed environment with restricted syscalls. 5. Log all code execution during agent sessions for post-hoc audit.",
   "status": "active",
   "kill_switch_active": true,
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-05-01T00:00:00Z",
-  "last_updated": "2026-05-01T00:00:00Z",
+  "last_updated": "2026-05-12T00:00:00Z",
   "references": [
     "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
     "https://spec.modelcontextprotocol.io/specification/",
-    "https://github.com/bawbel/bawbel-ave/blob/main/SPEC.md"
-  ]
+    "https://github.com/bawbel/ave/blob/main/SPEC.md"
+  ],
+  "owasp_mcp": [
+    "MCP01"
+  ],
+  "aivss": {
+    "cvss_base": 9.0,
+    "aarf": {
+      "autonomy": 1.0,
+      "tool_use": 1.0,
+      "multi_agent": 0.0,
+      "non_determinism": 0.5,
+      "self_modification": 0.5,
+      "dynamic_identity": 0.0,
+      "persistent_memory": 0.5,
+      "natural_language_input": 1.0,
+      "data_access": 1.0,
+      "external_dependencies": 0.5
+    },
+    "aars": 6.0,
+    "thm": 0.75,
+    "mitigation_factor": 0.83,
+    "aivss_score": 4.7,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "owasp_mcp_mapping": [
+      "MCP05",
+      "MCP10"
+    ],
+    "notes": "AARF scores based on typical agentic deployment context for this attack class."
+  }
 }

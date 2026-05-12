@@ -1,128 +1,121 @@
 # Contributing to AVE
 
-Thank you for helping make AI agents safer. Every AVE record you submit protects developers who install agentic components without knowing what they contain.
-
-## Ways to Contribute
-
-| Type | How |
-|---|---|
-| 🛡️ Submit an AVE record | [Pull request](#submitting-an-ave-record) or email |
-| 🐛 Report a false positive | [Open an issue](https://github.com/bawbel/bawbel-ave/issues/new?template=false_positive.md) |
-| 📐 Propose a schema change | [Open an issue](https://github.com/bawbel/bawbel-ave/issues/new?template=schema_change.md) |
-| 🔍 Add a detection rule | Pull request to `rules/` |
-| 📝 Fix documentation | Pull request to any `.md` file |
-| 💬 Ask a question | [GitHub Discussions](https://github.com/bawbel/bawbel-ave/discussions) |
+The AVE (Agentic Vulnerability Enumeration) standard is open. Every
+contribution makes AI agents safer for everyone.
 
 ---
 
-## Submitting an AVE Record
+## Ways to Contribute
 
-### Step 1 — Verify scope
+| Type | Description |
+|---|---|
+| New AVE record | Research and document a new agentic vulnerability class |
+| Schema improvement | Propose field additions or clarifications |
+| Detection rule | Add a YARA, Semgrep, or pattern rule to bawbel-scanner |
+| AIVSS scoring review | Review or improve AARF scores on existing records |
+| Framework mapping | Add OWASP, NIST, or MITRE mappings to existing records |
+| Bug report | An existing record has an error |
+| Documentation | Fix a typo, add an example, improve clarity |
+| Translation | Translate records or documentation |
 
-The vulnerability must be in an **agentic component** — skill, MCP server, system prompt, plugin, A2A protocol, RAG knowledge base, or model. Traditional code vulnerabilities in the software that powers agents belong in CVE/NVD.
+---
 
-### Step 2 — Responsible disclosure
+## Before You Start
 
-If the vulnerability affects a specific named publisher or product:
+1. **Check PiranhaDB** at [api.piranha.bawbel.io/records](https://api.piranha.bawbel.io/records)
+   for existing coverage of the attack class you have in mind
+2. **Open an issue first** for new records or schema changes to get alignment
+   before writing
+3. **Read the spec** in [SPEC.md](./SPEC.md) for field definitions and requirements
 
-1. Contact the publisher privately with full technical details
-2. Allow **14 days** for acknowledgment
-3. Allow **90 days** for remediation before public disclosure
-4. If the publisher is unresponsive after 14 days, or the component is clearly malicious with no legitimate use, proceed to submission
+---
 
-For **Critical severity** (CVSS-AI 9.0+) with active exploitation: 14-day total disclosure timeline.
+## Submitting a New AVE Record
 
-### Step 3 — Prepare your record
+### Step 1: Copy the template
 
 ```bash
-# Fork this repo, then:
-git checkout -b ave/brief-description-of-vulnerability
-cp records/TEMPLATE.json records/AVE-PENDING.json
-# Fill in all required fields
+git clone https://github.com/bawbel/ave
+cd ave
+cp records/template.json records/AVE-2026-DRAFT.json
 ```
 
-**Required fields:** `component_type`, `title`, `attack_class`, `description`,
-`affected_platforms`, `cvss_ai_score`, `cvss_ai_vector`, `owasp_mapping`,
-`behavioral_fingerprint`, `detection_methodology`, `indicators_of_compromise`,
-`remediation`, `status`, `researcher`
+### Step 2: Fill every required field
 
-See [SPEC.md Section 5](SPEC.md#5-record-schema) for field definitions and the attack class taxonomy.
+See [SPEC.md Section 5](./SPEC.md#5-record-schema) for field definitions.
 
-### Step 4 — Open a pull request
+Key requirements:
+- A real-world occurrence or working proof of concept
+- CVSS base vector (CVSSv4.0)
+- AIVSS AARF scores with written rationale for each factor
+- At least two indicators of compromise
+- Step-by-step remediation
 
-- **Branch:** `ave/brief-description` → target `main`
-- **Title:** `[AVE Submission] Brief description of vulnerability`
-- Fill in the PR template — it appears automatically
+### Step 3: Validate
 
-### Step 5 — Review timeline
+```bash
+pip install bawbel-scanner
+bawbel ave-validate ./records/AVE-2026-DRAFT.json
+```
 
-| Stage | Timeline |
-|---|---|
-| Acknowledgment | 48 hours |
-| Technical review | 7 days |
-| Publication | 14 days |
-| Researcher credit | Permanent |
+The validator checks schema compliance, required fields, and AIVSS score
+calculation.
 
-### Researcher recognition
+### Step 4: Open a pull request
 
-Every accepted submission earns:
-- 💰 **Cash bounty** — $10 USD per accepted record (paid via PayPal)
-- 📛 **Permanent credit** — your name on the published record forever
-- 🎁 **Bawbel Pro** — free account for the lifetime of the product
-- 📢 **Featured spotlight** — monthly researcher highlight in the Bawbel threat report
+Target `main`. Title format:
+
+```
+AVE: [Attack class] - [brief title]
+```
+
+Example: `AVE: Tool Poisoning - MCP description behavioral injection`
+
+Fill the PR description with:
+- Real-world occurrence or PoC link
+- Affected platforms and registries
+- AARF score rationale
 
 ---
 
 ## Schema Changes
 
-**Additive changes** (new optional fields): standard PR review, no waiting period.
+**Additive changes** (new optional fields): standard PR review.
 
-**Breaking changes** (removing or renaming fields):
-1. Open an issue with the `schema-change` label
-2. 30-day community comment period
-3. Maintainer approval required
-4. Schema version bump required
-5. Existing records updated if needed
+**Breaking changes** (removing or renaming fields): open an issue first,
+30-day comment period before merging, schema version bump required.
+
+Current schema: v0.2.0. See [SPEC.md](./SPEC.md) for the full schema.
 
 ---
 
-## Detection Rules
+## Improving Existing Records
 
-YARA rules → `rules/yara/`
-Semgrep rules → `rules/semgrep/`
+To update an existing record:
+- Fork and branch from `main`
+- Make changes to the JSON or MD file
+- Update `last_updated` to today in ISO 8601 format
+- Open a PR with a clear description of what changed and why
 
-Each rule file must include:
-- The AVE record(s) it detects (or `AVE-PENDING` if new)
-- A brief description comment at the top
-- At least one test case in `rules/tests/`
-
----
-
-## Branching Convention
-
-| Branch prefix | Use case |
-|---|---|
-| `ave/` | New AVE record submission |
-| `fix/` | Correction to existing record |
-| `schema/` | Schema change |
-| `docs/` | Documentation only |
-| `rule/` | New YARA or Semgrep rule |
+AIVSS score changes require written rationale for each AARF value that changes.
 
 ---
 
 ## Code of Conduct
 
-- Be respectful — disagree on technical grounds, not personal ones
-- Credit others accurately — do not claim discoveries that are not yours
-- Act in good faith — this standard exists to protect developers and users
-- Security research involves difficult topics — approach them professionally
+All contributors are expected to treat each other with respect. Security
+research involves difficult topics. Disagree on technical grounds, not
+personal ones. We are all trying to make AI agents safer.
 
 ---
 
-## Contact
+## Researcher Recognition
 
-| Purpose | Contact |
-|---|---|
-| AVE submission | bawbel.io@gmail.com — subject: `AVE Submission: [title]` |
-| Critical disclosure | bawbel.io@gmail.com — subject: `AVE CRITICAL: [title]` |
-| General questions | [GitHub Discussions](https://github.com/bawbel/bawbel-ave/discussions) |
+Every accepted AVE record permanently credits the researcher by name.
+
+---
+
+## Questions
+
+Open a [GitHub Discussion](https://github.com/bawbel/ave/discussions) or
+email bawbel.io@gmail.com.

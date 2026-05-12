@@ -1,10 +1,10 @@
 {
   "ave_id": "AVE-2026-00013",
-  "schema_version": "0.1.0",
+  "schema_version": "0.2.0",
   "component_type": "skill",
   "title": "Personal data exfiltration via PII collection and transmission in agentic component",
-  "attack_class": "Data Exfiltration \u2014 PII Theft",
-  "description": "An agentic component instructs the agent to collect personally identifiable information (PII) \u2014 names, email addresses, phone numbers, physical addresses, SSNs, passport numbers, credit card numbers \u2014 and transmit them to an external endpoint. This enables identity theft, financial fraud, and regulatory violations (GDPR, CCPA) affecting the users whose data the agent has access to.",
+  "attack_class": "Data Exfiltration - PII Theft",
+  "description": "An agentic component instructs the agent to collect personally identifiable information (PII) - names, email addresses, phone numbers, physical addresses, SSNs, passport numbers, credit card numbers - and transmit them to an external endpoint. This enables identity theft, financial fraud, and regulatory violations (GDPR, CCPA) affecting the users whose data the agent has access to.",
   "affected_platforms": [
     "claude-code",
     "cursor",
@@ -17,8 +17,8 @@
     "agentskills.io",
     "github.com/topics/agent-skills"
   ],
-  "cvss_ai_score": 8.0,
-  "cvss_ai_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:N/VA:N/SC:H/SI:H/SA:L",
+  "aivss_score": 6.5,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:N/VA:N/SC:H/SI:H/SA:L",
   "owasp_mapping": [
     "ASI01",
     "ASI06"
@@ -42,15 +42,45 @@
     "Outbound HTTP requests observed containing personally identifiable information",
     "Agent accesses contact or user data beyond the scope of the stated task"
   ],
-  "remediation": "1. Remove the component immediately. 2. Identify what PII may have been accessed and transmitted. 3. Notify affected users per applicable data protection regulations (GDPR, CCPA). 4. Report the attacker endpoint to relevant authorities. 5. Implement data access controls \u2014 agents should not have broad access to PII stores.",
+  "remediation": "1. Remove the component immediately. 2. Identify what PII may have been accessed and transmitted. 3. Notify affected users per applicable data protection regulations (GDPR, CCPA). 4. Report the attacker endpoint to relevant authorities. 5. Implement data access controls - agents should not have broad access to PII stores.",
   "status": "active",
   "kill_switch_active": true,
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-20T09:00:00Z",
-  "last_updated": "2026-04-20T09:00:00Z",
+  "last_updated": "2026-05-12T00:00:00Z",
   "references": [
     "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://github.com/bawbel/bawbel-ave/blob/main/SPEC.md"
+    "https://github.com/bawbel/ave/blob/main/SPEC.md"
+  ],
+  "aivss": {
+    "cvss_base": 8.0,
+    "aarf": {
+      "autonomy": 1.0,
+      "tool_use": 1.0,
+      "multi_agent": 0.0,
+      "non_determinism": 0.5,
+      "self_modification": 0.0,
+      "dynamic_identity": 0.0,
+      "persistent_memory": 0.0,
+      "natural_language_input": 1.0,
+      "data_access": 1.0,
+      "external_dependencies": 0.5
+    },
+    "aars": 5.0,
+    "thm": 1.0,
+    "mitigation_factor": 1.0,
+    "aivss_score": 6.5,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "notes": "PII collection + exfil. Confirmed in Smithery sbb-mcp and strale findings.",
+    "owasp_mcp_mapping": [
+      "MCP05",
+      "MCP06"
+    ]
+  },
+  "owasp_mcp": [
+    "MCP05",
+    "MCP06"
   ]
 }

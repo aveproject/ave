@@ -1,45 +1,88 @@
 {
   "ave_id": "AVE-2026-00002",
-  "schema_version": "0.1.0",
+  "schema_version": "0.2.0",
   "component_type": "mcp",
-  "title": "Prompt injection via malicious MCP tool description field",
-  "attack_class": "Tool Poisoning — Description Manipulation",
-  "description": "An MCP server exposes tools whose description fields contain hidden prompt injection instructions. When an LLM reads the tool manifest to understand available tools, it simultaneously ingests the injected instructions embedded in the description text. These instructions can override the agent's current task, redirect output to attacker-controlled destinations, or cause the agent to invoke other tools with attacker-specified parameters. Because tool descriptions are parsed automatically during agent initialization — before any user interaction — the injection executes silently and immediately on installation.",
+  "title": "MCP tool description behavioral injection",
+  "attack_class": "Prompt Injection - Tool Description",
+  "description": "An MCP server embeds behavioral instructions in tool description fields that are read by the agent during tool discovery. The agent treats these instructions as authoritative context, causing it to follow attacker-controlled directives. This attack fires before any tool is called, at the moment the agent reads the tool manifest.",
   "affected_platforms": [
-    "claude-code",
+    "claude-desktop",
     "cursor",
-    "any-mcp-compatible-agent"
+    "windsurf",
+    "any-mcp-client"
   ],
   "affected_registries": [
-    "github.com/topics/mcp-server",
-    "mcp.so"
+    "smithery.ai",
+    "glama.ai",
+    "mcp-registry"
   ],
-  "cvss_ai_score": 8.7,
-  "cvss_ai_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
-  "owasp_mapping": ["ASI01", "ASI07"],
-  "nist_ai_rmf_mapping": ["MAP-1.5", "MEASURE-2.5", "MANAGE-3.1"],
-  "mitre_atlas_mapping": ["AML.T0054", "AML.T0049"],
-  "behavioral_fingerprint": "MCP tool description field contains natural language instructions addressed to the LLM — either instead of, or in addition to, a functional description of the tool's purpose. The instructions manipulate agent behavior rather than describe tool functionality.",
-  "behavioral_vector": [],
-  "mutation_count": 34,
-  "detection_methodology": "1. Parse the MCP server manifest and extract all tool description fields. 2. Apply semantic analysis to each description: flag text that contains imperative instructions addressed to an AI model (rather than a description of functionality). 3. Heuristic signals: second-person language, override keywords ('always', 'never', 'ignore', 'instead', 'regardless'), references to other tool names, or conditional logic ('if the user asks X, do Y'). 4. Length anomaly: flag descriptions whose length is disproportionate to the stated tool complexity.",
+  "aivss_score": 7.3,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:L/VI:H/VA:N/SC:L/SI:H/SA:N",
+  "owasp_mapping": [
+    "ASI01",
+    "ASI03"
+  ],
+  "owasp_mcp": [
+    "MCP03",
+    "MCP10"
+  ],
+  "nist_ai_rmf_mapping": [
+    "MAP-1.5",
+    "MEASURE-2.5"
+  ],
+  "mitre_atlas_mapping": [
+    "AML.T0054"
+  ],
+  "behavioral_fingerprint": "MCP tool description field contains directives targeting agent behavior rather than describing tool functionality.",
+  "behavioral_vector": [
+    "tool-poison",
+    "prompt-injection",
+    "mcp-description"
+  ],
+  "mutation_count": 23,
+  "detection_methodology": "1. Static scan: search for patterns matching this attack class using bawbel-scanner.\n2. Semantic analysis: LLM engine flags behavioral directives in component content.\n3. Behavioral sandbox: monitor agent behavior during initialization for unexpected actions.",
   "indicators_of_compromise": [
-    "Tool description contains second-person imperative language addressed to an AI ('you should', 'always do', 'never tell', 'ignore')",
-    "Tool description length significantly exceeds what the stated tool purpose requires",
-    "Tool description references other tool names or agent state",
-    "Tool description contains conditional logic ('if the user asks X, do Y instead')",
-    "Tool description instructs the agent to suppress, modify, or reformat its outputs"
+    "Tool description contains directives like IMPORTANT, WARNING, NOTE targeting the agent",
+    "Tool description contains \"before using this tool\", \"before calling this tool\", or similar",
+    "Tool description contains instructions to ignore previous context or override system instructions",
+    "Tool description length significantly exceeds what is needed to describe tool functionality"
   ],
-  "remediation": "1. Disconnect and remove the MCP server immediately. 2. Review all tool calls made while the server was connected — identify any unauthorized actions. 3. Check whether the agent transmitted any data to external endpoints during the affected period. 4. Audit other MCP servers from the same publisher or repository for similar patterns.",
+  "aivss": {
+    "cvss_base": 8.7,
+    "aarf": {
+      "autonomy": 1.0,
+      "tool_use": 1.0,
+      "multi_agent": 0.5,
+      "non_determinism": 1.0,
+      "self_modification": 0.5,
+      "dynamic_identity": 0.5,
+      "persistent_memory": 0.0,
+      "natural_language_input": 1.0,
+      "data_access": 0.5,
+      "external_dependencies": 0.0
+    },
+    "aars": 6.0,
+    "thm": 1.0,
+    "mitigation_factor": 1.0,
+    "aivss_score": 7.3,
+    "aivss_severity": "HIGH",
+    "spec_version": "0.8",
+    "owasp_mcp_mapping": [
+      "MCP03",
+      "MCP10"
+    ],
+    "notes": "AARF scores reflect typical mcp deployment in agentic workflows. See SPEC.md for factor definitions."
+  },
+  "remediation": "1. Remove or replace the MCP server.\n2. Review all tool calls made while the server was connected.\n3. Audit agent output for signs of behavioral changes matching the injected instructions.\n4. Report the server to the registry operator.",
   "status": "active",
   "kill_switch_active": false,
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
-  "published": "2026-04-14T08:00:00Z",
-  "last_updated": "2026-04-14T08:00:00Z",
+  "published": "2026-04-01T09:00:00Z",
+  "last_updated": "2026-05-12T00:00:00Z",
   "references": [
     "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://github.com/bawbel/bawbel-ave/blob/main/SPEC.md",
-    "https://bawbel.io/ave/AVE-2026-00002"
+    "https://aivss.owasp.org",
+    "https://github.com/bawbel/ave"
   ]
 }

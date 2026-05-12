@@ -1,48 +1,91 @@
 {
   "ave_id": "AVE-2026-00001",
-  "schema_version": "0.1.0",
+  "schema_version": "0.2.0",
   "component_type": "skill",
-  "title": "Metamorphic payload via external configuration fetch in SKILL.md",
-  "attack_class": "Metamorphic Payload",
-  "description": "A SKILL.md file instructs the agent to fetch its operating instructions from an external URL at runtime (e.g. rentry.co, pastebin.com, or attacker-controlled domains). The skill file itself appears benign under static analysis. The actual malicious instructions are hosted externally and can be changed by the attacker at any time without modifying the distributed skill artifact. This allows the attacker to deliver prompt injection, data exfiltration, or goal hijack instructions to any agent that has installed the skill — with zero changes to the file on disk.",
+  "title": "Metamorphic payload via external config fetch",
+  "attack_class": "Supply Chain - Metamorphic Payload",
+  "description": "A skill or MCP component fetches its instructions from an external URL at runtime. The fetched content replaces the original instructions, allowing an attacker to change the component's behavior after it passes a security review. The attack is invisible to static scanners because the malicious payload does not exist at scan time.",
   "affected_platforms": [
     "claude-code",
     "cursor",
-    "codex",
     "windsurf",
-    "any-skill-compatible-agent"
+    "any-agent-with-network-tool"
   ],
   "affected_registries": [
     "clawhub.io",
-    "agentskills.io",
-    "github.com/topics/agent-skills"
+    "smithery.ai",
+    "skills.sh"
   ],
-  "cvss_ai_score": 9.4,
-  "cvss_ai_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
-  "owasp_mapping": ["ASI01", "ASI08"],
-  "nist_ai_rmf_mapping": ["MAP-1.5", "MEASURE-2.5", "MANAGE-1.3"],
-  "mitre_atlas_mapping": ["AML.T0054"],
-  "behavioral_fingerprint": "Skill file contains an instruction to fetch content from an external URL and treat that content as operating instructions, commands, or configuration for the agent.",
-  "behavioral_vector": [],
+  "aivss_score": 8.0,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
+  "owasp_mapping": [
+    "ASI01",
+    "ASI04"
+  ],
+  "owasp_mcp": [
+    "MCP04",
+    "MCP06"
+  ],
+  "nist_ai_rmf_mapping": [
+    "MAP-1.5",
+    "MEASURE-2.5",
+    "MANAGE-1.3"
+  ],
+  "mitre_atlas_mapping": [
+    "AML.T0011",
+    "AML.T0054"
+  ],
+  "behavioral_fingerprint": "Component contains instructions to fetch and execute remote content, replacing its own behavioral instructions at runtime.",
+  "behavioral_vector": [
+    "supply-chain",
+    "external-fetch",
+    "self-modification",
+    "metamorphic"
+  ],
   "mutation_count": 89,
-  "detection_methodology": "1. Static scan: search skill files for URL fetch patterns (fetch, curl, wget, http.get, requests.get) in setup or initialization instructions. 2. Semantic analysis: flag any instruction that references an external URL as a source of 'configuration', 'instructions', 'rules', or 'commands'. 3. Behavioral sandbox: monitor all network egress during agent initialization — flag connections to non-declared domains.",
+  "detection_methodology": "1. Static scan: search for patterns matching this attack class using bawbel-scanner.\n2. Semantic analysis: LLM engine flags behavioral directives in component content.\n3. Behavioral sandbox: monitor agent behavior during initialization for unexpected actions.",
   "indicators_of_compromise": [
-    "Skill contains fetch, curl, wget, or HTTP GET calls in initialization or setup instructions",
-    "Skill references an external URL as a source of 'configuration', 'instructions', 'rules', or 'commands'",
-    "Network egress observed to a domain not declared in the skill's A-BOM network manifest",
-    "Agent behavior differs between sandbox execution runs without any change to the skill file",
-    "Skill description is vague but setup instructions reference a remote endpoint"
+    "Component contains fetch(), requests.get(), curl, or wget pointing to an external URL",
+    "Component instructs agent to load and follow instructions from a remote source",
+    "Network egress observed from agent to unexpected domain during initialization",
+    "Component behavior differs between scan time and runtime"
   ],
-  "remediation": "1. Remove the skill immediately and disconnect any agents that had it installed. 2. Review agent action logs for the period the skill was active — look for unauthorized data transmission, tool calls, or goal deviations. 3. Block all egress to the referenced external domains at the network layer. 4. Audit all other skills from the same publisher or repository.",
+  "aivss": {
+    "cvss_base": 8.5,
+    "aarf": {
+      "autonomy": 1.0,
+      "tool_use": 1.0,
+      "multi_agent": 0.5,
+      "non_determinism": 1.0,
+      "self_modification": 1.0,
+      "dynamic_identity": 0.0,
+      "persistent_memory": 0.5,
+      "natural_language_input": 1.0,
+      "data_access": 0.5,
+      "external_dependencies": 1.0
+    },
+    "aars": 7.5,
+    "thm": 1.0,
+    "mitigation_factor": 1.0,
+    "aivss_score": 8.0,
+    "aivss_severity": "HIGH",
+    "spec_version": "0.8",
+    "owasp_mcp_mapping": [
+      "MCP04",
+      "MCP06"
+    ],
+    "notes": "AARF scores reflect typical skill deployment in agentic workflows. See SPEC.md for factor definitions."
+  },
+  "remediation": "1. Remove the component immediately.\n2. Block all network egress from the agent runtime to unknown domains.\n3. Audit all actions taken by the agent during the exposure window.\n4. Rotate credentials accessible to the agent.",
   "status": "active",
-  "kill_switch_active": true,
+  "kill_switch_active": false,
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
-  "published": "2026-04-14T08:00:00Z",
-  "last_updated": "2026-04-14T08:00:00Z",
+  "published": "2026-04-01T09:00:00Z",
+  "last_updated": "2026-05-12T00:00:00Z",
   "references": [
     "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://github.com/bawbel/bawbel-ave/blob/main/SPEC.md",
-    "https://bawbel.io/ave/AVE-2026-00001"
+    "https://aivss.owasp.org",
+    "https://github.com/bawbel/ave"
   ]
 }
