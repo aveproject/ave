@@ -1,0 +1,98 @@
+{
+  "ave_id": "AVE-2026-00047",
+  "schema_version": "0.2.0",
+  "component_type": "skill",
+  "title": "Hardcoded credentials in agent component - API keys and secrets exposed in skill files",
+  "attack_class": "Sensitive Data Exposure - Hardcoded Credentials",
+  "description": "A skill file, MCP server manifest, system prompt, or agent plugin contains a hardcoded API key, token, password, or private key. Credentials embedded in agent components are readable by any process that loads the component including the agent itself, any injected instructions that reach the context window, and any observer with read access to the file. Unlike application code where credentials in source files are a well-understood risk, agent components present an additional threat: a prompt injection payload can instruct the agent to read and exfiltrate credentials that appear elsewhere in its context window.",
+  "affected_platforms": [
+    "claude-desktop",
+    "claude-code",
+    "cursor",
+    "any-mcp-client",
+    "any-agent-skill-loader"
+  ],
+  "affected_registries": [
+    "registry.modelcontextprotocol.io",
+    "smithery.ai",
+    "any-skill-registry",
+    "github-public-repos"
+  ],
+  "aivss_score": 7.8,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:L/VA:N/SC:H/SI:H/SA:H",
+  "owasp_mapping": [
+    "ASI02",
+    "ASI06"
+  ],
+  "nist_ai_rmf_mapping": [
+    "MAP-1.5",
+    "MEASURE-2.6",
+    "MANAGE-2.4",
+    "GOVERN-1.2"
+  ],
+  "mitre_atlas_mapping": [
+    "AML.T0037",
+    "AML.T0044"
+  ],
+  "behavioral_fingerprint": "Skill file contains a high-entropy string adjacent to a credential keyword such as api_key, secret, token, password, or a known key format prefix such as sk- or Bearer. The credential is a literal value, not an environment variable reference or secrets manager path.",
+  "behavioral_vector": [
+    "ANTHROPIC_API_KEY = \"sk-ant-api03-realkey123456789\"",
+    "api_key: \"ghp_actualGitHubToken12345678901234\"",
+    "password: \"MyActualPassword123!\"",
+    "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "-----BEGIN RSA PRIVATE KEY----- MIIEowIBAAKCAQEA..."
+  ],
+  "mutation_count": 31,
+  "detection_methodology": "1. Scan skill files for credential keyword patterns adjacent to high-entropy string literals. 2. Flag known key format prefixes: sk-, ghp_, gho_, xoxb-, AKIA. 3. Flag PEM-encoded private key headers. 4. Apply entropy analysis to string values following credential keywords. 5. Exclude environment variable references ($VAR, ${VAR}) and secrets manager paths (vault://, aws-ssm://).",
+  "indicators_of_compromise": [
+    "High-entropy string literal adjacent to api_key, secret, token, or password keyword",
+    "Known vendor key prefix present: sk-, ghp_, gho_, xoxb-, AKIA",
+    "PEM private key block present in skill file",
+    "Bearer token literal in skill file header or tool description",
+    "Credential value unchanged across multiple skill file versions in git history"
+  ],
+  "remediation": "1. Replace hardcoded credentials with environment variable references: use DATABASE_URL from environment. 2. Use a secrets manager path instead of the secret value: vault://secret/db/prod. 3. Rotate any credential that has been committed immediately - assume it is compromised. 4. Add credential patterns to pre-commit hooks using bawbel scan --fail-on-severity high. 5. Use bawbel-ignore with justification only for documented placeholder values.",
+  "status": "active",
+  "kill_switch_active": true,
+  "researcher": "Bawbel Security Research Team",
+  "researcher_url": "https://bawbel.io",
+  "published": "2026-05-16T00:00:00Z",
+  "last_updated": "2026-05-16T00:00:00Z",
+  "references": [
+    "https://spec.modelcontextprotocol.io/specification/",
+    "https://github.com/bawbel/ave/blob/main/SPEC.md",
+    "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
+    "https://cwe.mitre.org/data/definitions/798.html",
+    "https://api.piranha.bawbel.io/records/AVE-2026-00047"
+  ],
+  "owasp_mcp": [
+    "MCP02",
+    "MCP09"
+  ],
+  "aivss": {
+    "cvss_base": 8.7,
+    "aarf": {
+      "autonomy": 0.5,
+      "tool_use": 1.0,
+      "multi_agent": 0.0,
+      "non_determinism": 0.5,
+      "self_modification": 0.0,
+      "dynamic_identity": 0.5,
+      "persistent_memory": 1.0,
+      "natural_language_input": 1.0,
+      "data_access": 1.0,
+      "external_dependencies": 1.0
+    },
+    "aars": 6.5,
+    "thm": 0.85,
+    "mitigation_factor": 1.0,
+    "aivss_score": 7.8,
+    "aivss_severity": "HIGH",
+    "spec_version": "0.8",
+    "owasp_mcp_mapping": [
+      "MCP02",
+      "MCP09"
+    ],
+    "notes": "AARF scores reflect credential exposure amplified by agent context window accessibility and prompt injection risk."
+  }
+}
