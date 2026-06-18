@@ -93,8 +93,8 @@
   "severity": "MEDIUM",
   "evidence_kind_default": "file_type_mismatch",
   "detection_stage": "static_detection",
-  "detection_layer": "registry_metadata",
-  "confidence_baseline": 0.82,
+  "detection_layer": "content",
+  "confidence_baseline": 0.9,
   "evidence_basis_engines": [
     "pattern",
     "semgrep",

@@ -108,10 +108,10 @@
     "notes": "AARF scores based on typical agentic deployment context for this attack class."
   },
   "severity": "HIGH",
-  "evidence_kind_default": "config_schema",
+  "evidence_kind_default": "tool_description_pattern",
   "detection_stage": "static_detection",
   "detection_layer": "server_card",
-  "confidence_baseline": 0.72,
+  "confidence_baseline": 0.82,
   "evidence_basis_engines": [
     "pattern",
     "semgrep"

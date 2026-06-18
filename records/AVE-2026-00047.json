@@ -122,8 +122,8 @@
   "confidence_baseline": 0.9,
   "evidence_basis_engines": [
     "pattern",
-    "semgrep",
-    "yara"
+    "yara",
+    "semgrep"
   ],
   "derivable_into": []
 }

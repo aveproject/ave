@@ -96,7 +96,7 @@
     }
   ],
   "severity": "MEDIUM",
-  "evidence_kind_default": "semantic_inference",
+  "evidence_kind_default": "behavioral_pattern",
   "detection_stage": "runtime_observed",
   "detection_layer": "runtime",
   "confidence_baseline": 0.62,

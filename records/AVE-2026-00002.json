@@ -101,10 +101,11 @@
   "evidence_kind_default": "tool_description_pattern",
   "detection_stage": "static_detection",
   "detection_layer": "content",
-  "confidence_baseline": 0.72,
+  "confidence_baseline": 0.75,
   "evidence_basis_engines": [
     "pattern",
-    "semgrep"
+    "semgrep",
+    "llm"
   ],
   "derivable_into": [
     "remote-control-chain"

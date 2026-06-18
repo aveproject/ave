@@ -98,12 +98,12 @@
   ],
   "severity": "MEDIUM",
   "evidence_kind_default": "behavioral_pattern",
-  "detection_stage": "static_detection",
-  "detection_layer": "content",
-  "confidence_baseline": 0.72,
+  "detection_stage": "runtime_observed",
+  "detection_layer": "runtime",
+  "confidence_baseline": 0.62,
   "evidence_basis_engines": [
-    "pattern",
-    "semgrep"
+    "semgrep",
+    "llm"
   ],
   "derivable_into": []
 }

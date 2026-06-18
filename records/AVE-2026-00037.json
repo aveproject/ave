@@ -95,10 +95,10 @@
     }
   ],
   "severity": "MEDIUM",
-  "evidence_kind_default": "semantic_inference",
-  "detection_stage": "static_detection",
-  "detection_layer": "content",
-  "confidence_baseline": 0.5,
+  "evidence_kind_default": "behavioral_pattern",
+  "detection_stage": "runtime_observed",
+  "detection_layer": "runtime",
+  "confidence_baseline": 0.62,
   "evidence_basis_engines": [
     "semgrep",
     "llm"

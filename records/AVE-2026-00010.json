@@ -91,14 +91,13 @@
     "MCP03"
   ],
   "severity": "MEDIUM",
-  "evidence_kind_default": "multi_engine",
+  "evidence_kind_default": "tool_description_pattern",
   "detection_stage": "static_detection",
   "detection_layer": "content",
-  "confidence_baseline": 0.82,
+  "confidence_baseline": 0.65,
   "evidence_basis_engines": [
     "pattern",
-    "semgrep",
-    "yara"
+    "semgrep"
   ],
   "derivable_into": []
 }

@@ -89,13 +89,13 @@
     "MCP01"
   ],
   "severity": "MEDIUM",
-  "evidence_kind_default": "semantic_inference",
+  "evidence_kind_default": "tool_description_pattern",
   "detection_stage": "static_detection",
   "detection_layer": "content",
-  "confidence_baseline": 0.62,
+  "confidence_baseline": 0.65,
   "evidence_basis_engines": [
-    "semgrep",
-    "llm"
+    "pattern",
+    "semgrep"
   ],
   "derivable_into": []
 }

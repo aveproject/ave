@@ -93,13 +93,12 @@
     }
   ],
   "severity": "MEDIUM",
-  "evidence_kind_default": "multi_engine",
+  "evidence_kind_default": "tool_description_pattern",
   "detection_stage": "static_detection",
   "detection_layer": "content",
-  "confidence_baseline": 0.9,
+  "confidence_baseline": 0.75,
   "evidence_basis_engines": [
     "pattern",
-    "semgrep",
     "yara"
   ],
   "derivable_into": []

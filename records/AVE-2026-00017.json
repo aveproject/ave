@@ -97,11 +97,11 @@
   "severity": "MEDIUM",
   "evidence_kind_default": "config_schema",
   "detection_stage": "static_detection",
-  "detection_layer": "server_card",
-  "confidence_baseline": 0.62,
+  "detection_layer": "registry_metadata",
+  "confidence_baseline": 0.83,
   "evidence_basis_engines": [
-    "semgrep",
-    "llm"
+    "pattern",
+    "semgrep"
   ],
   "derivable_into": []
 }
