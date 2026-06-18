@@ -109,5 +109,16 @@
     ],
     "notes": "AARF scores reflect multi-agent amplification - blast radius compounds with each delegation hop."
   },
-  "severity": "HIGH"
+  "severity": "HIGH",
+  "evidence_kind_default": "behavioral_pattern",
+  "detection_stage": "static_detection",
+  "detection_layer": "content",
+  "confidence_baseline": 0.72,
+  "evidence_basis_engines": [
+    "pattern",
+    "semgrep"
+  ],
+  "derivable_into": [
+    "privilege-escalation-chain"
+  ]
 }

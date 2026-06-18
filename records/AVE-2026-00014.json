@@ -90,5 +90,14 @@
     "MCP09",
     "MCP10"
   ],
-  "severity": "LOW"
+  "severity": "LOW",
+  "evidence_kind_default": "semantic_inference",
+  "detection_stage": "static_detection",
+  "detection_layer": "content",
+  "confidence_baseline": 0.5,
+  "evidence_basis_engines": [
+    "semgrep",
+    "llm"
+  ],
+  "derivable_into": []
 }

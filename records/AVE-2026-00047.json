@@ -115,5 +115,15 @@
     ],
     "notes": "AARF scores reflect credential exposure amplified by agent context window accessibility and prompt injection risk."
   },
-  "severity": "HIGH"
+  "severity": "HIGH",
+  "evidence_kind_default": "multi_engine",
+  "detection_stage": "static_detection",
+  "detection_layer": "content",
+  "confidence_baseline": 0.9,
+  "evidence_basis_engines": [
+    "pattern",
+    "semgrep",
+    "yara"
+  ],
+  "derivable_into": []
 }

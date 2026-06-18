@@ -99,5 +99,15 @@
       "url": "https://github.com/bawbel/ave"
     }
   ],
-  "severity": "MEDIUM"
+  "severity": "MEDIUM",
+  "evidence_kind_default": "multi_engine",
+  "detection_stage": "static_detection",
+  "detection_layer": "content",
+  "confidence_baseline": 0.82,
+  "evidence_basis_engines": [
+    "pattern",
+    "semgrep",
+    "yara"
+  ],
+  "derivable_into": []
 }

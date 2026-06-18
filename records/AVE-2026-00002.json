@@ -97,5 +97,16 @@
       "url": "https://github.com/bawbel/ave"
     }
   ],
-  "severity": "HIGH"
+  "severity": "HIGH",
+  "evidence_kind_default": "tool_description_pattern",
+  "detection_stage": "static_detection",
+  "detection_layer": "content",
+  "confidence_baseline": 0.72,
+  "evidence_basis_engines": [
+    "pattern",
+    "semgrep"
+  ],
+  "derivable_into": [
+    "remote-control-chain"
+  ]
 }

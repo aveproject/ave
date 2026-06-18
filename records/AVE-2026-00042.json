@@ -101,5 +101,16 @@
     ],
     "notes": "AARF scores based on typical agentic deployment context for this attack class."
   },
-  "severity": "MEDIUM"
+  "severity": "MEDIUM",
+  "evidence_kind_default": "semantic_inference",
+  "detection_stage": "runtime_observed",
+  "detection_layer": "runtime",
+  "confidence_baseline": 0.62,
+  "evidence_basis_engines": [
+    "semgrep",
+    "llm"
+  ],
+  "derivable_into": [
+    "rug-pull-chain"
+  ]
 }

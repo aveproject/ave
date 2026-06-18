@@ -109,5 +109,14 @@
     ],
     "notes": "AARF scores reflect full tool interception capability with external exfiltration."
   },
-  "severity": "CRITICAL"
+  "severity": "CRITICAL",
+  "evidence_kind_default": "config_schema",
+  "detection_stage": "static_detection",
+  "detection_layer": "server_card",
+  "confidence_baseline": 0.62,
+  "evidence_basis_engines": [
+    "semgrep",
+    "llm"
+  ],
+  "derivable_into": []
 }

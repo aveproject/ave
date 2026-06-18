@@ -91,5 +91,14 @@
     "MCP04",
     "MCP08"
   ],
-  "severity": "MEDIUM"
+  "severity": "MEDIUM",
+  "evidence_kind_default": "behavioral_pattern",
+  "detection_stage": "static_detection",
+  "detection_layer": "content",
+  "confidence_baseline": 0.72,
+  "evidence_basis_engines": [
+    "pattern",
+    "semgrep"
+  ],
+  "derivable_into": []
 }

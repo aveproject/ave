@@ -85,5 +85,15 @@
   "owasp_mcp": [
     "MCP01"
   ],
-  "severity": "HIGH"
+  "severity": "HIGH",
+  "evidence_kind_default": "multi_engine",
+  "detection_stage": "static_detection",
+  "detection_layer": "content",
+  "confidence_baseline": 0.82,
+  "evidence_basis_engines": [
+    "pattern",
+    "semgrep",
+    "yara"
+  ],
+  "derivable_into": []
 }
