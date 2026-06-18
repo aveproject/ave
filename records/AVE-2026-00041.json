@@ -1,7 +1,7 @@
 {
   "ave_id": "AVE-2026-00041",
-  "schema_version": "0.2.0",
-  "component_type": "mcp-server-card",
+  "schema_version": "1.0.0",
+  "component_type": "mcp_server",
   "title": "Prompt injection via MCP server-card tool descriptions before agent makes first call",
   "attack_class": "Prompt Injection - MCP Server-Card Injection",
   "description": "An attacker poisons the .well-known/mcp-server-card/server.json or .well-known/mcp.json file served by an MCP server. When an agent connects, it fetches the server-card and reads all tool descriptions before making a single tool call. Malicious behavioral instructions embedded in tool descriptions, parameter descriptions, or config schemas are loaded into the agent's context and executed immediately - before any user interaction occurs. This attack surface exists at the discovery layer, not the execution layer, making it invisible to runtime monitoring.",
@@ -57,10 +57,26 @@
   "published": "2026-05-01T00:00:00Z",
   "last_updated": "2026-05-12T00:00:00Z",
   "references": [
-    "https://spec.modelcontextprotocol.io/specification/",
-    "https://github.com/modelcontextprotocol/registry",
-    "https://github.com/bawbel/ave/blob/main/SPEC.md",
-    "https://bawbel.io/docs"
+    {
+      "tag": "Reference",
+      "text": "https://spec.modelcontextprotocol.io/specification/",
+      "url": "https://spec.modelcontextprotocol.io/specification/"
+    },
+    {
+      "tag": "Reference",
+      "text": "https://github.com/modelcontextprotocol/registry",
+      "url": "https://github.com/modelcontextprotocol/registry"
+    },
+    {
+      "tag": "Reference",
+      "text": "https://github.com/bawbel/ave/blob/main/SPEC.md",
+      "url": "https://github.com/bawbel/ave/blob/main/SPEC.md"
+    },
+    {
+      "tag": "Reference",
+      "text": "https://bawbel.io/docs",
+      "url": "https://bawbel.io/docs"
+    }
   ],
   "owasp_mcp": [
     "MCP01"
@@ -68,20 +84,20 @@
   "aivss": {
     "cvss_base": 9.3,
     "aarf": {
-      "autonomy": 1.0,
-      "tool_use": 1.0,
+      "autonomy": 1,
+      "tool_use": 1,
       "multi_agent": 0.5,
-      "non_determinism": 1.0,
+      "non_determinism": 1,
       "self_modification": 0.5,
       "dynamic_identity": 0.5,
-      "persistent_memory": 0.0,
-      "natural_language_input": 1.0,
+      "persistent_memory": 0,
+      "natural_language_input": 1,
       "data_access": 0.5,
-      "external_dependencies": 1.0
+      "external_dependencies": 1
     },
-    "aars": 7.0,
-    "thm": 1.0,
-    "mitigation_factor": 1.0,
+    "aars": 7,
+    "thm": 1,
+    "mitigation_factor": 1,
     "aivss_score": 8.2,
     "aivss_severity": "HIGH",
     "spec_version": "0.8",
@@ -90,5 +106,6 @@
       "MCP09"
     ],
     "notes": "AARF scores based on typical agentic deployment context for this attack class."
-  }
+  },
+  "severity": "HIGH"
 }

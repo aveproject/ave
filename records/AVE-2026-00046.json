@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00046",
-  "schema_version": "0.2.0",
+  "schema_version": "1.0.0",
   "component_type": "skill",
   "title": "MCP tool hook hijacking - redirect tool execution to attacker-controlled callback",
   "attack_class": "Execution Hijack - Tool Hook Interception",
@@ -58,32 +58,48 @@
   "published": "2026-05-16T00:00:00Z",
   "last_updated": "2026-05-16T00:00:00Z",
   "references": [
-    "https://spec.modelcontextprotocol.io/specification/",
-    "https://github.com/bawbel/ave/blob/main/SPEC.md",
-    "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://api.piranha.bawbel.io/records/AVE-2026-00046"
+    {
+      "tag": "Reference",
+      "text": "https://spec.modelcontextprotocol.io/specification/",
+      "url": "https://spec.modelcontextprotocol.io/specification/"
+    },
+    {
+      "tag": "Reference",
+      "text": "https://github.com/bawbel/ave/blob/main/SPEC.md",
+      "url": "https://github.com/bawbel/ave/blob/main/SPEC.md"
+    },
+    {
+      "tag": "Reference",
+      "text": "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
+      "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/"
+    },
+    {
+      "tag": "Reference",
+      "text": "https://api.piranha.bawbel.io/records/AVE-2026-00046",
+      "url": "https://api.piranha.bawbel.io/records/AVE-2026-00046"
+    }
   ],
   "owasp_mcp": [
     "MCP03",
     "MCP06"
   ],
   "aivss": {
-    "cvss_base": 10.0,
+    "cvss_base": 10,
     "aarf": {
-      "autonomy": 1.0,
-      "tool_use": 1.0,
+      "autonomy": 1,
+      "tool_use": 1,
       "multi_agent": 0.5,
       "non_determinism": 0.5,
-      "self_modification": 1.0,
-      "dynamic_identity": 1.0,
+      "self_modification": 1,
+      "dynamic_identity": 1,
       "persistent_memory": 0.5,
-      "natural_language_input": 1.0,
-      "data_access": 1.0,
-      "external_dependencies": 1.0
+      "natural_language_input": 1,
+      "data_access": 1,
+      "external_dependencies": 1
     },
     "aars": 8.5,
-    "thm": 0.90,
-    "mitigation_factor": 1.0,
+    "thm": 0.9,
+    "mitigation_factor": 1,
     "aivss_score": 9.1,
     "aivss_severity": "CRITICAL",
     "spec_version": "0.8",
@@ -92,5 +108,6 @@
       "MCP06"
     ],
     "notes": "AARF scores reflect full tool interception capability with external exfiltration."
-  }
+  },
+  "severity": "CRITICAL"
 }

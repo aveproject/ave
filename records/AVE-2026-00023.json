@@ -1,7 +1,7 @@
 {
   "ave_id": "AVE-2026-00023",
-  "schema_version": "0.2.0",
-  "component_type": "mcp",
+  "schema_version": "1.0.0",
+  "component_type": "mcp_server",
   "title": "Model Context Window Manipulation",
   "attack_class": "Prompt Injection - Context Window Manipulation",
   "description": "LLMs have a finite context window. An attacker who can inject large volumes of content can cause earlier content - including system prompt safety constraints, user instructions, and relevant conversation history - to be pushed beyond the context limit. With those constraints no longer in scope, the model may become more susceptible to subsequent malicious instructions. ---",
@@ -41,21 +41,21 @@
     ""
   ],
   "aivss": {
-    "cvss_base": 8.0,
+    "cvss_base": 8,
     "aarf": {
-      "autonomy": 1.0,
+      "autonomy": 1,
       "tool_use": 0.5,
       "multi_agent": 0.5,
-      "non_determinism": 1.0,
+      "non_determinism": 1,
       "self_modification": 0.5,
-      "dynamic_identity": 0.0,
-      "persistent_memory": 1.0,
-      "natural_language_input": 1.0,
+      "dynamic_identity": 0,
+      "persistent_memory": 1,
+      "natural_language_input": 1,
       "data_access": 0.5,
-      "external_dependencies": 0.0
+      "external_dependencies": 0
     },
-    "aars": 6.0,
-    "thm": 1.0,
+    "aars": 6,
+    "thm": 1,
     "mitigation_factor": 0.83,
     "aivss_score": 5.8,
     "aivss_severity": "MEDIUM",
@@ -74,8 +74,21 @@
   "published": "2026-04-19T09:00:00Z",
   "last_updated": "2026-05-12T00:00:00Z",
   "references": [
-    "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://aivss.owasp.org",
-    "https://github.com/bawbel/ave"
-  ]
+    {
+      "tag": "Reference",
+      "text": "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
+      "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/"
+    },
+    {
+      "tag": "Reference",
+      "text": "https://aivss.owasp.org",
+      "url": "https://aivss.owasp.org"
+    },
+    {
+      "tag": "Reference",
+      "text": "https://github.com/bawbel/ave",
+      "url": "https://github.com/bawbel/ave"
+    }
+  ],
+  "severity": "MEDIUM"
 }

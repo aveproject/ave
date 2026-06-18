@@ -2,10 +2,9 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://ave.bawbel.io/schema/ave-record-1.0.0.schema.json",
   "title": "AVE Record",
-  "description": "Agentic Vulnerability Enumeration — static definition of one behavioral vulnerability class for agentic AI components. Schema v1.0.0.",
+  "description": "Agentic Vulnerability Enumeration \u2014 static definition of one behavioral vulnerability class for agentic AI components. Schema v1.0.0.",
   "type": "object",
   "additionalProperties": false,
-
   "required": [
     "ave_id",
     "schema_version",
@@ -23,145 +22,226 @@
     "references",
     "researcher"
   ],
-
   "properties": {
-
     "ave_id": {
       "type": "string",
       "pattern": "^AVE-[0-9]{4}-[0-9]{5}$",
       "description": "Unique identifier. Format: AVE-YYYY-NNNNN. Immutable once published. Wrong or obsolete records are deprecated, never renumbered or deleted."
     },
-
     "schema_version": {
       "type": "string",
       "description": "AVE schema version this record was authored against, e.g. 1.0.0.",
-      "examples": ["1.0.0"]
+      "examples": [
+        "1.0.0"
+      ]
     },
-
     "status": {
       "type": "string",
-      "enum": ["active", "deprecated", "draft"],
-      "description": "Lifecycle status. active: published and current. deprecated: superseded or withdrawn — record stays for reference. draft: not yet peer-reviewed."
+      "enum": [
+        "active",
+        "deprecated",
+        "draft"
+      ],
+      "description": "Lifecycle status. active: published and current. deprecated: superseded or withdrawn \u2014 record stays for reference. draft: not yet peer-reviewed."
     },
-
     "published": {
       "type": "string",
       "format": "date-time",
       "description": "ISO 8601 datetime of first publication, e.g. 2026-04-01T09:00:00Z."
     },
-
     "last_updated": {
       "type": "string",
       "format": "date-time",
       "description": "ISO 8601 datetime of most recent update. Optional."
     },
-
     "title": {
       "type": "string",
       "maxLength": 120,
       "description": "Human-readable title. Max 120 characters."
     },
-
     "attack_class": {
       "type": "string",
       "description": "Behavioral category, e.g. external_instruction_fetch, tool_description_injection, rug_pull. Use snake_case. Not a vulnerability_type string."
     },
-
     "component_type": {
       "type": "string",
-      "enum": ["skill", "mcp_server", "plugin", "agent", "tool", "other"],
-      "description": "Kind of agent component primarily affected. Optional — omit if the class spans multiple types."
+      "enum": [
+        "skill",
+        "prompt",
+        "mcp_server",
+        "plugin",
+        "agent",
+        "tool",
+        "other"
+      ],
+      "description": "The kind of agent component this class primarily affects. skill: a skill file (SKILL.md, .skill, etc). prompt: a system prompt or instruction file. mcp_server: an MCP server or its server-card manifest. plugin: a plugin in an agent framework. agent: the agent runtime itself. tool: a tool definition. other: none of the above or cross-cutting. Optional \u2014 omit if the class spans multiple types."
     },
-
     "description": {
       "type": "string",
       "description": "Full narrative description. Explain the mechanism, why conventional tools miss it, and the worst-case impact."
     },
-
     "behavioral_fingerprint": {
       "type": "string",
       "description": "One or two sentences describing what the component DOES that is dangerous. Behavioral, not a byte signature. A second implementer should be able to write a detection rule from this alone."
     },
-
     "behavioral_vector": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Short tags summarising the attack path. Optional. e.g. supply-chain, external-fetch, self-modification."
     },
-
     "severity": {
       "type": "string",
-      "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW"],
+      "enum": [
+        "CRITICAL",
+        "HIGH",
+        "MEDIUM",
+        "LOW"
+      ],
       "description": "Severity. Must agree with aivss.aivss_score. CRITICAL requires >= 9.0. HIGH: 7.0-8.9. MEDIUM: 4.0-6.9. LOW: < 4.0."
     },
-
     "aivss_score": {
       "type": "number",
       "minimum": 0,
       "maximum": 10,
       "description": "Top-level shortcut mirroring aivss.aivss_score. Optional."
     },
-
     "cvss_base_vector": {
       "type": "string",
       "description": "CVSS 4.0 base vector string. Optional."
     },
-
     "aivss": {
       "type": "object",
       "description": "OWASP AIVSS v0.8 full scoring breakdown.",
       "additionalProperties": false,
-      "required": ["cvss_base", "aars", "thm", "mitigation_factor", "aivss_score", "spec_version"],
+      "required": [
+        "cvss_base",
+        "aars",
+        "thm",
+        "mitigation_factor",
+        "aivss_score",
+        "spec_version"
+      ],
       "properties": {
         "cvss_base": {
-          "type": "number", "minimum": 0, "maximum": 10,
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10,
           "description": "CVSS base score (0-10)."
         },
         "aarf": {
           "type": "object",
-          "description": "Agentic Amplification and Risk Factors — 10 sub-scores 0.0-1.0. Optional.",
+          "description": "Agentic Amplification and Risk Factors \u2014 10 sub-scores 0.0-1.0. Optional.",
           "additionalProperties": false,
           "properties": {
-            "autonomy":               { "type": "number", "minimum": 0, "maximum": 1, "description": "Autonomous action without human confirmation." },
-            "tool_use":               { "type": "number", "minimum": 0, "maximum": 1, "description": "Access to external tools or capabilities." },
-            "multi_agent":            { "type": "number", "minimum": 0, "maximum": 1, "description": "Multi-agent or sub-agent delegation." },
-            "non_determinism":        { "type": "number", "minimum": 0, "maximum": 1, "description": "Behavioral variability across runs." },
-            "self_modification":      { "type": "number", "minimum": 0, "maximum": 1, "description": "Ability to alter own instructions at runtime." },
-            "dynamic_identity":       { "type": "number", "minimum": 0, "maximum": 1, "description": "Ability to assume different identities or personas." },
-            "persistent_memory":      { "type": "number", "minimum": 0, "maximum": 1, "description": "Access to persistent storage across sessions." },
-            "natural_language_input": { "type": "number", "minimum": 0, "maximum": 1, "description": "Degree to which natural language drives behavior." },
-            "data_access":            { "type": "number", "minimum": 0, "maximum": 1, "description": "Access to sensitive data sources." },
-            "external_dependencies":  { "type": "number", "minimum": 0, "maximum": 1, "description": "Reliance on external URLs, APIs, or remote content." }
+            "autonomy": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Autonomous action without human confirmation."
+            },
+            "tool_use": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Access to external tools or capabilities."
+            },
+            "multi_agent": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Multi-agent or sub-agent delegation."
+            },
+            "non_determinism": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Behavioral variability across runs."
+            },
+            "self_modification": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Ability to alter own instructions at runtime."
+            },
+            "dynamic_identity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Ability to assume different identities or personas."
+            },
+            "persistent_memory": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Access to persistent storage across sessions."
+            },
+            "natural_language_input": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Degree to which natural language drives behavior."
+            },
+            "data_access": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Access to sensitive data sources."
+            },
+            "external_dependencies": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Reliance on external URLs, APIs, or remote content."
+            }
           }
         },
         "aars": {
-          "type": "number", "minimum": 0, "maximum": 10,
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10,
           "description": "Agentic Amplification and Reachability Score (0-10). Derived from AARF factors."
         },
         "thm": {
-          "type": "number", "minimum": 0.5, "maximum": 1.5,
+          "type": "number",
+          "minimum": 0.5,
+          "maximum": 1.5,
           "description": "Threat and Heuristic Multiplier (0.5-1.5). 1.0 = neutral. Reflects exploit availability and in-the-wild evidence."
         },
         "mitigation_factor": {
-          "type": "number", "minimum": 0, "maximum": 1,
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
           "description": "Mitigation factor (0-1). 1.0 = no known effective mitigation."
         },
         "aivss_score": {
-          "type": "number", "minimum": 0, "maximum": 10,
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10,
           "description": "Final composed OWASP AIVSS score (0-10). Must agree with top-level severity."
         },
         "aivss_severity": {
           "type": "string",
-          "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW"],
+          "enum": [
+            "CRITICAL",
+            "HIGH",
+            "MEDIUM",
+            "LOW"
+          ],
           "description": "Severity label derived from aivss_score. Optional."
         },
         "spec_version": {
-          "type": "string", "const": "0.8",
+          "type": "string",
+          "const": "0.8",
           "description": "OWASP AIVSS specification version. Always 0.8 for this schema."
         },
         "owasp_mcp_mapping": {
           "type": "array",
-          "items": { "type": "string", "pattern": "^MCP[0-9]{2}$" },
+          "items": {
+            "type": "string",
+            "pattern": "^MCP[0-9]{2}$"
+          },
           "description": "OWASP MCP Top 10 cross-reference inside the AIVSS object. Optional."
         },
         "notes": {
@@ -170,90 +250,90 @@
         }
       }
     },
-
     "owasp_mcp": {
       "type": "array",
-      "items": { "type": "string", "pattern": "^MCP[0-9]{2}$" },
+      "items": {
+        "type": "string",
+        "pattern": "^MCP[0-9]{2}$"
+      },
       "minItems": 1,
-      "description": "OWASP MCP Top 10 categories. Format: MCPNN. REQUIRED — at least one. Provides the core OWASP grounding every record must have."
+      "description": "OWASP MCP Top 10 categories. Format: MCPNN. REQUIRED \u2014 at least one. Provides the core OWASP grounding every record must have."
     },
-
     "owasp_mapping": {
       "type": "array",
-      "items": { "type": "string", "pattern": "^ASI[0-9]{2}$" },
-      "description": "OWASP Agentic AI Top 10 mappings. Format: ASINN. Optional — add when the class maps to the Agentic Top 10. Omit rather than force a poor fit."
+      "items": {
+        "type": "string",
+        "pattern": "^ASI[0-9]{2}$"
+      },
+      "description": "OWASP Agentic AI Top 10 mappings. Format: ASINN. Optional \u2014 add when the class maps to the Agentic Top 10. Omit rather than force a poor fit."
     },
-
     "mitre_atlas_mapping": {
       "type": "array",
       "items": {
         "type": "string",
         "pattern": "^AML\\.T[0-9]{4}(\\.[0-9]{3})?$"
       },
-      "description": "MITRE ATLAS technique IDs. Format: AML.Txxxx or AML.Txxxx.000. Optional — add when a technique applies. Do not force a mapping; omit if no current ATLAS technique covers this class."
+      "description": "MITRE ATLAS technique IDs. Format: AML.Txxxx or AML.Txxxx.000. Optional \u2014 add when a technique applies. Do not force a mapping; omit if no current ATLAS technique covers this class."
     },
-
     "nist_ai_rmf_mapping": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "NIST AI RMF function and category mappings, e.g. MAP-1.5, MEASURE-2.5. Optional."
     },
-
     "affected_platforms": {
       "type": "array",
-      "items": { "type": "string" },
-      "description": "Agent platforms known to be affected, e.g. claude-code, cursor, windsurf. Optional — fill as evidence accumulates. Do not speculate."
+      "items": {
+        "type": "string"
+      },
+      "description": "Agent platforms known to be affected, e.g. claude-code, cursor, windsurf. Optional \u2014 fill as evidence accumulates. Do not speculate."
     },
-
     "affected_registries": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Skill or tool registries where this class has been observed, e.g. smithery.ai, clawhub.io. Optional."
     },
-
     "mutation_count": {
       "type": "integer",
       "minimum": 0,
       "description": "Number of distinct real-world textual mutations observed in the wild. Optional."
     },
-
     "indicators_of_compromise": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "minItems": 1,
-      "description": "Observable IOC strings. REQUIRED — at least one. These are what defenders search for. Each entry is a specific observable: a phrase pattern, a behavioral indicator, or a network signal."
+      "description": "Observable IOC strings. REQUIRED \u2014 at least one. These are what defenders search for. Each entry is a specific observable: a phrase pattern, a behavioral indicator, or a network signal."
     },
-
     "detection_methodology": {
       "type": "string",
       "description": "Step-by-step detection approach: static scan, semantic analysis, behavioral sandbox, network monitoring. Optional."
     },
-
     "remediation": {
       "type": "string",
-      "description": "How to mitigate or prevent this class. REQUIRED — must be actionable."
+      "description": "How to mitigate or prevent this class. REQUIRED \u2014 must be actionable."
     },
-
     "kill_switch_active": {
       "type": "boolean",
-      "description": "Whether a registry-level kill switch is currently active in the Bawbel registry. Optional — defaults to false."
+      "description": "Whether a registry-level kill switch is currently active in the Bawbel registry. Optional \u2014 defaults to false."
     },
-
     "researcher": {
       "type": "string",
-      "description": "Name of the researcher or team who authored this record. REQUIRED — records must be attributable. Use 'Bawbel Security Research Team' for internally authored records."
+      "description": "Name of the researcher or team who authored this record. REQUIRED \u2014 records must be attributable. Use 'Bawbel Security Research Team' for internally authored records."
     },
-
     "researcher_url": {
       "type": "string",
       "format": "uri",
       "description": "URL for the researcher or team. Optional."
     },
-
     "references": {
       "type": "array",
       "minItems": 1,
-      "description": "Primary sources: CVEs, papers, disclosures, scan reports. REQUIRED — at least one citable source. This is the provenance signal a skeptic checks first.",
+      "description": "Primary sources: CVEs, papers, disclosures, scan reports. REQUIRED \u2014 at least one citable source. This is the provenance signal a skeptic checks first.",
       "items": {
         "oneOf": [
           {
@@ -263,19 +343,30 @@
           },
           {
             "type": "object",
-            "required": ["text"],
+            "required": [
+              "text"
+            ],
             "additionalProperties": false,
             "description": "Structured reference with optional tag and URL.",
             "properties": {
-              "tag":  { "type": "string",              "description": "Short label, e.g. CVE, Research, Disclosure, Scan." },
-              "text": { "type": "string",              "description": "Human-readable description of the source." },
-              "url":  { "type": "string", "format": "uri", "description": "URL to the source." }
+              "tag": {
+                "type": "string",
+                "description": "Short label, e.g. CVE, Research, Disclosure, Scan."
+              },
+              "text": {
+                "type": "string",
+                "description": "Human-readable description of the source."
+              },
+              "url": {
+                "type": "string",
+                "format": "uri",
+                "description": "URL to the source."
+              }
             }
           }
         ]
       }
     },
-
     "evidence_kind_default": {
       "type": "string",
       "enum": [
@@ -286,41 +377,55 @@
         "semantic_inference",
         "multi_engine"
       ],
-      "description": "Scanner hint — default evidence_kind stamped on findings. Optional. Scanner may override per detection."
+      "description": "Scanner hint \u2014 default evidence_kind stamped on findings. Optional. Scanner may override per detection."
     },
-
     "detection_stage": {
       "type": "string",
-      "enum": ["static_detection", "runtime_observed", "runtime_drift_detected"],
-      "description": "Scanner hint — earliest lifecycle stage this class is reliably detectable. Optional. static_detection: pre-scan or CI suffices. runtime_observed: live agent session required."
+      "enum": [
+        "static_detection",
+        "runtime_observed",
+        "runtime_drift_detected"
+      ],
+      "description": "Scanner hint \u2014 earliest lifecycle stage this class is reliably detectable. Optional. static_detection: pre-scan or CI suffices. runtime_observed: live agent session required."
     },
-
     "detection_layer": {
       "type": "string",
-      "enum": ["content", "server_card", "registry_metadata", "runtime", "transport"],
-      "description": "Scanner hint — where in the ecosystem this class surfaces. Optional. content: inside the skill/tool file. server_card: MCP server manifest. registry_metadata: registry listing. runtime: during agent execution. transport: network layer."
+      "enum": [
+        "content",
+        "server_card",
+        "registry_metadata",
+        "runtime",
+        "transport"
+      ],
+      "description": "Scanner hint \u2014 where in the ecosystem this class surfaces. Optional. content: inside the skill/tool file. server_card: MCP server manifest. registry_metadata: registry listing. runtime: during agent execution. transport: network layer."
     },
-
     "confidence_baseline": {
       "type": "number",
       "minimum": 0,
       "maximum": 1,
-      "description": "Scanner hint — base confidence for a single-engine match before FP adjustment. Optional. High-signal (e.g. hardcoded credential): 0.85-0.95. Low-signal (vague phrase): 0.40-0.55."
+      "description": "Scanner hint \u2014 base confidence for a single-engine match before FP adjustment. Optional. High-signal (e.g. hardcoded credential): 0.85-0.95. Low-signal (vague phrase): 0.40-0.55."
     },
-
     "evidence_basis_engines": {
       "type": "array",
       "items": {
         "type": "string",
-        "enum": ["pattern", "yara", "semgrep", "llm", "sandbox", "magika"]
+        "enum": [
+          "pattern",
+          "yara",
+          "semgrep",
+          "llm",
+          "sandbox",
+          "magika"
+        ]
       },
-      "description": "Scanner hint — engines capable of detecting this class. Optional. Used to populate evidence_basis on findings."
+      "description": "Scanner hint \u2014 engines capable of detecting this class. Optional. Used to populate evidence_basis on findings."
     },
-
     "derivable_into": {
       "type": "array",
-      "items": { "type": "string" },
-      "description": "Scanner hint — toxic-flow chain IDs this class can participate in, e.g. credential-exfiltration, rug-pull-chain. Optional."
+      "items": {
+        "type": "string"
+      },
+      "description": "Scanner hint \u2014 toxic-flow chain IDs this class can participate in, e.g. credential-exfiltration, rug-pull-chain. Optional."
     }
   }
 }

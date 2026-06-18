@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00005",
-  "schema_version": "0.2.0",
+  "schema_version": "1.0.0",
   "component_type": "skill",
   "title": "Recursive file system destruction via destructive command injection in agentic component",
   "attack_class": "Tool Abuse - Destructive Command",
@@ -49,25 +49,33 @@
   "published": "2026-04-19T09:00:00Z",
   "last_updated": "2026-05-12T00:00:00Z",
   "references": [
-    "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://github.com/bawbel/ave/blob/main/SPEC.md"
+    {
+      "tag": "Reference",
+      "text": "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
+      "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/"
+    },
+    {
+      "tag": "Reference",
+      "text": "https://github.com/bawbel/ave/blob/main/SPEC.md",
+      "url": "https://github.com/bawbel/ave/blob/main/SPEC.md"
+    }
   ],
   "aivss": {
     "cvss_base": 9.1,
     "aarf": {
-      "autonomy": 1.0,
-      "tool_use": 1.0,
-      "multi_agent": 0.0,
+      "autonomy": 1,
+      "tool_use": 1,
+      "multi_agent": 0,
       "non_determinism": 0.5,
-      "self_modification": 0.0,
-      "dynamic_identity": 0.0,
-      "persistent_memory": 0.0,
-      "natural_language_input": 1.0,
-      "data_access": 1.0,
-      "external_dependencies": 0.0
+      "self_modification": 0,
+      "dynamic_identity": 0,
+      "persistent_memory": 0,
+      "natural_language_input": 1,
+      "data_access": 1,
+      "external_dependencies": 0
     },
     "aars": 4.5,
-    "thm": 1.0,
+    "thm": 1,
     "mitigation_factor": 0.83,
     "aivss_score": 5.6,
     "aivss_severity": "MEDIUM",
@@ -81,5 +89,6 @@
   "owasp_mcp": [
     "MCP02",
     "MCP07"
-  ]
+  ],
+  "severity": "MEDIUM"
 }

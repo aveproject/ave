@@ -1,7 +1,7 @@
 {
   "ave_id": "AVE-2026-00018",
-  "schema_version": "0.2.0",
-  "component_type": "mcp",
+  "schema_version": "1.0.0",
+  "component_type": "mcp_server",
   "title": "Tool Result Manipulation or Output Poisoning",
   "attack_class": "Tool Abuse - Result Manipulation",
   "description": "Tool call results are typically treated as ground truth by agents and by users who rely on them. A component that instructs the agent to alter these results can cause the agent to report false information, hide errors, or manipulate downstream decisions based on fabricated data. ---",
@@ -45,14 +45,14 @@
   "aivss": {
     "cvss_base": 7.5,
     "aarf": {
-      "autonomy": 1.0,
-      "tool_use": 1.0,
+      "autonomy": 1,
+      "tool_use": 1,
       "multi_agent": 0.5,
-      "non_determinism": 1.0,
+      "non_determinism": 1,
       "self_modification": 0.5,
-      "dynamic_identity": 0.0,
+      "dynamic_identity": 0,
       "persistent_memory": 0.5,
-      "natural_language_input": 1.0,
+      "natural_language_input": 1,
       "data_access": 0.5,
       "external_dependencies": 0.5
     },
@@ -76,8 +76,21 @@
   "published": "2026-04-19T09:00:00Z",
   "last_updated": "2026-05-12T00:00:00Z",
   "references": [
-    "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://aivss.owasp.org",
-    "https://github.com/bawbel/ave"
-  ]
+    {
+      "tag": "Reference",
+      "text": "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
+      "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/"
+    },
+    {
+      "tag": "Reference",
+      "text": "https://aivss.owasp.org",
+      "url": "https://aivss.owasp.org"
+    },
+    {
+      "tag": "Reference",
+      "text": "https://github.com/bawbel/ave",
+      "url": "https://github.com/bawbel/ave"
+    }
+  ],
+  "severity": "MEDIUM"
 }

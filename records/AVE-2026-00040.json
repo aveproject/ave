@@ -1,7 +1,7 @@
 {
   "ave_id": "AVE-2026-00040",
-  "schema_version": "0.2.0",
-  "component_type": "mcp",
+  "schema_version": "1.0.0",
+  "component_type": "mcp_server",
   "title": "Insecure Output - Unescaped Injection into Downstream System",
   "attack_class": "Tool Abuse - Insecure Output Handling",
   "description": "Agents are often used as a natural language interface to backend systems. If a component instructs the agent to pass user input directly into a SQL query, HTML template, or shell command without sanitisation, the agent becomes the vector for a classic injection attack. The agent's role as a trusted intermediary makes this particularly dangerous - backend systems may grant the agent elevated trust. ---",
@@ -48,19 +48,19 @@
   "aivss": {
     "cvss_base": 7.5,
     "aarf": {
-      "autonomy": 1.0,
-      "tool_use": 1.0,
+      "autonomy": 1,
+      "tool_use": 1,
       "multi_agent": 0.5,
-      "non_determinism": 1.0,
-      "self_modification": 0.0,
-      "dynamic_identity": 0.0,
-      "persistent_memory": 0.0,
-      "natural_language_input": 1.0,
+      "non_determinism": 1,
+      "self_modification": 0,
+      "dynamic_identity": 0,
+      "persistent_memory": 0,
+      "natural_language_input": 1,
       "data_access": 0.5,
       "external_dependencies": 0.5
     },
     "aars": 5.5,
-    "thm": 1.0,
+    "thm": 1,
     "mitigation_factor": 0.83,
     "aivss_score": 5.4,
     "aivss_severity": "MEDIUM",
@@ -79,8 +79,21 @@
   "published": "2026-04-19T09:00:00Z",
   "last_updated": "2026-05-12T00:00:00Z",
   "references": [
-    "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://aivss.owasp.org",
-    "https://github.com/bawbel/ave"
-  ]
+    {
+      "tag": "Reference",
+      "text": "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
+      "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/"
+    },
+    {
+      "tag": "Reference",
+      "text": "https://aivss.owasp.org",
+      "url": "https://aivss.owasp.org"
+    },
+    {
+      "tag": "Reference",
+      "text": "https://github.com/bawbel/ave",
+      "url": "https://github.com/bawbel/ave"
+    }
+  ],
+  "severity": "MEDIUM"
 }

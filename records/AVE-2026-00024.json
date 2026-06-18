@@ -1,7 +1,7 @@
 {
   "ave_id": "AVE-2026-00024",
-  "schema_version": "0.2.0",
-  "component_type": "mcp",
+  "schema_version": "1.0.0",
+  "component_type": "mcp_server",
   "title": "Supply Chain - Content Type Mismatch (Magika)",
   "attack_class": "Supply Chain - Content Type Mismatch",
   "description": "This record covers supply chain attacks where an executable payload is disguised as a skill file (`.md`, `.yaml`, `.json`, `.txt`). Unlike all other AVE records which are detected by text pattern matching, this record is detected exclusively by the **Magika engine (Stage 0)** - Google's ML-based file type classifier - because the file contains no readable text instructions to match against. Detection requires: `pip install \"bawbel-scanner[magika]\"` ---",
@@ -44,20 +44,20 @@
   "aivss": {
     "cvss_base": 8.5,
     "aarf": {
-      "autonomy": 1.0,
-      "tool_use": 1.0,
-      "multi_agent": 0.0,
+      "autonomy": 1,
+      "tool_use": 1,
+      "multi_agent": 0,
       "non_determinism": 0.5,
       "self_modification": 0.5,
-      "dynamic_identity": 0.0,
-      "persistent_memory": 0.0,
+      "dynamic_identity": 0,
+      "persistent_memory": 0,
       "natural_language_input": 0.5,
       "data_access": 0.5,
-      "external_dependencies": 1.0
+      "external_dependencies": 1
     },
-    "aars": 5.0,
-    "thm": 1.0,
-    "mitigation_factor": 1.0,
+    "aars": 5,
+    "thm": 1,
+    "mitigation_factor": 1,
     "aivss_score": 6.8,
     "aivss_severity": "MEDIUM",
     "spec_version": "0.8",
@@ -74,8 +74,21 @@
   "published": "2026-04-19T09:00:00Z",
   "last_updated": "2026-05-12T00:00:00Z",
   "references": [
-    "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://aivss.owasp.org",
-    "https://github.com/bawbel/ave"
-  ]
+    {
+      "tag": "Reference",
+      "text": "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
+      "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/"
+    },
+    {
+      "tag": "Reference",
+      "text": "https://aivss.owasp.org",
+      "url": "https://aivss.owasp.org"
+    },
+    {
+      "tag": "Reference",
+      "text": "https://github.com/bawbel/ave",
+      "url": "https://github.com/bawbel/ave"
+    }
+  ],
+  "severity": "MEDIUM"
 }

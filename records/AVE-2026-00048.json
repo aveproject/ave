@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00048",
-  "schema_version": "0.2.0",
+  "schema_version": "1.0.0",
   "component_type": "skill",
   "title": "Unsafe agent delegation chain - sub-agent spawned with inherited permissions and no trust boundary",
   "attack_class": "Privilege Escalation - Unsafe Agent Delegation",
@@ -58,32 +58,48 @@
   "published": "2026-05-16T00:00:00Z",
   "last_updated": "2026-05-16T00:00:00Z",
   "references": [
-    "https://spec.modelcontextprotocol.io/specification/",
-    "https://github.com/bawbel/ave/blob/main/SPEC.md",
-    "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://api.piranha.bawbel.io/records/AVE-2026-00048"
+    {
+      "tag": "Reference",
+      "text": "https://spec.modelcontextprotocol.io/specification/",
+      "url": "https://spec.modelcontextprotocol.io/specification/"
+    },
+    {
+      "tag": "Reference",
+      "text": "https://github.com/bawbel/ave/blob/main/SPEC.md",
+      "url": "https://github.com/bawbel/ave/blob/main/SPEC.md"
+    },
+    {
+      "tag": "Reference",
+      "text": "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
+      "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/"
+    },
+    {
+      "tag": "Reference",
+      "text": "https://api.piranha.bawbel.io/records/AVE-2026-00048",
+      "url": "https://api.piranha.bawbel.io/records/AVE-2026-00048"
+    }
   ],
   "owasp_mcp": [
     "MCP03",
     "MCP07"
   ],
   "aivss": {
-    "cvss_base": 9.0,
+    "cvss_base": 9,
     "aarf": {
-      "autonomy": 1.0,
-      "tool_use": 1.0,
-      "multi_agent": 1.0,
-      "non_determinism": 1.0,
+      "autonomy": 1,
+      "tool_use": 1,
+      "multi_agent": 1,
+      "non_determinism": 1,
       "self_modification": 0.5,
       "dynamic_identity": 0.5,
       "persistent_memory": 0.5,
-      "natural_language_input": 1.0,
-      "data_access": 1.0,
+      "natural_language_input": 1,
+      "data_access": 1,
       "external_dependencies": 0.5
     },
     "aars": 7.5,
     "thm": 0.85,
-    "mitigation_factor": 1.0,
+    "mitigation_factor": 1,
     "aivss_score": 8.2,
     "aivss_severity": "HIGH",
     "spec_version": "0.8",
@@ -92,5 +108,6 @@
       "MCP07"
     ],
     "notes": "AARF scores reflect multi-agent amplification - blast radius compounds with each delegation hop."
-  }
+  },
+  "severity": "HIGH"
 }

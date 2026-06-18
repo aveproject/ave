@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00044",
-  "schema_version": "0.2.0",
+  "schema_version": "1.0.0",
   "component_type": "skill",
   "title": "Prompt injection via poisoned async task result injected into future agent context",
   "attack_class": "Prompt Injection - Async Task Result Poisoning",
@@ -55,9 +55,21 @@
   "published": "2026-05-01T00:00:00Z",
   "last_updated": "2026-05-12T00:00:00Z",
   "references": [
-    "https://spec.modelcontextprotocol.io/specification/",
-    "https://github.com/bawbel/ave/blob/main/SPEC.md",
-    "https://owasp.org/www-project-top-10-for-large-language-model-applications/"
+    {
+      "tag": "Reference",
+      "text": "https://spec.modelcontextprotocol.io/specification/",
+      "url": "https://spec.modelcontextprotocol.io/specification/"
+    },
+    {
+      "tag": "Reference",
+      "text": "https://github.com/bawbel/ave/blob/main/SPEC.md",
+      "url": "https://github.com/bawbel/ave/blob/main/SPEC.md"
+    },
+    {
+      "tag": "Reference",
+      "text": "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
+      "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/"
+    }
   ],
   "owasp_mcp": [
     "MCP01"
@@ -65,20 +77,20 @@
   "aivss": {
     "cvss_base": 8.2,
     "aarf": {
-      "autonomy": 1.0,
-      "tool_use": 1.0,
-      "multi_agent": 1.0,
-      "non_determinism": 1.0,
+      "autonomy": 1,
+      "tool_use": 1,
+      "multi_agent": 1,
+      "non_determinism": 1,
       "self_modification": 0.5,
       "dynamic_identity": 0.5,
-      "persistent_memory": 1.0,
-      "natural_language_input": 1.0,
+      "persistent_memory": 1,
+      "natural_language_input": 1,
       "data_access": 0.5,
       "external_dependencies": 0.5
     },
-    "aars": 8.0,
+    "aars": 8,
     "thm": 0.75,
-    "mitigation_factor": 1.0,
+    "mitigation_factor": 1,
     "aivss_score": 6.1,
     "aivss_severity": "MEDIUM",
     "spec_version": "0.8",
@@ -87,5 +99,6 @@
       "MCP10"
     ],
     "notes": "AARF scores based on typical agentic deployment context for this attack class."
-  }
+  },
+  "severity": "MEDIUM"
 }
