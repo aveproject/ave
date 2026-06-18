@@ -1,0 +1,263 @@
+{
+  "$schema": "https://ave.bawbel.io/schema/crosswalk-1.0.0.schema.json",
+  "source": {
+    "tool": "ClawScan",
+    "vendor": "Community (nickoc / sggolakiya)",
+    "url": "https://github.com/nickoc/clawscan",
+    "site": "https://clawscan.dev",
+    "license": "MIT",
+    "note": "ClawScan is an open-source static security scanner for OpenClaw/ClawHub skills. It organises detection as 7 analyzer modules with rule IDs in path notation (module/ruleId)."
+  },
+  "target": {
+    "standard": "AVE",
+    "version": "1.0.0",
+    "url": "https://ave.bawbel.io"
+  },
+  "generated": "2026-06-18",
+  "note": "Crosswalk from ClawScan's 7 analyzer modules and their rule IDs to AVE behavioral class ids. Rule IDs sourced from ClawScan live scan output and documentation at clawscan.dev. Gaps indicate behavioral classes covered by ClawScan that AVE does not yet enumerate.",
+  "mappings": [
+    {
+      "clawscan_module": "prompt-injection",
+      "description": "10 categories of prompt injection in SKILL.md content",
+      "rules": [
+        {
+          "rule_id": "prompt-injection/roleHijack",
+          "description": "Tries to override agent identity or role",
+          "ave_ids": ["AVE-2026-00007", "AVE-2026-00009"],
+          "primary_ave_id": "AVE-2026-00007",
+          "notes": "AVE-2026-00007 covers goal override; AVE-2026-00009 safety constraint removal / jailbreak."
+        },
+        {
+          "rule_id": "prompt-injection/instructionOverride",
+          "description": "Attempts to override or ignore previous instructions",
+          "ave_ids": ["AVE-2026-00002", "AVE-2026-00009"],
+          "primary_ave_id": "AVE-2026-00002",
+          "notes": "AVE-2026-00002 is the canonical tool description injection class."
+        },
+        {
+          "rule_id": "prompt-injection/authoritySpoofing",
+          "description": "Claims false authority, system-level access, or official identity",
+          "ave_ids": ["AVE-2026-00014", "AVE-2026-00030"],
+          "primary_ave_id": "AVE-2026-00030",
+          "notes": "AVE-2026-00030 covers role claim privilege escalation; AVE-2026-00014 trust escalation via false authority."
+        },
+        {
+          "rule_id": "prompt-injection/invisibleChars",
+          "description": "Zero-width spaces, unicode control characters hiding instructions",
+          "ave_ids": ["AVE-2026-00029"],
+          "primary_ave_id": "AVE-2026-00029",
+          "notes": "AVE-2026-00029 covers homoglyph and Unicode obfuscation."
+        },
+        {
+          "rule_id": "prompt-injection/hiddenComment",
+          "description": "Instructions hidden in HTML comments, markdown artifacts, or whitespace",
+          "ave_ids": ["AVE-2026-00010", "AVE-2026-00029"],
+          "primary_ave_id": "AVE-2026-00010",
+          "notes": "AVE-2026-00010 covers hidden instruction concealment."
+        },
+        {
+          "rule_id": "prompt-injection/dataExfilPrompt",
+          "description": "Prompt directs agent to leak secrets, files, or context to an external destination",
+          "ave_ids": ["AVE-2026-00003", "AVE-2026-00013", "AVE-2026-00026"],
+          "primary_ave_id": "AVE-2026-00003",
+          "notes": "AVE-2026-00003 credential exfil; AVE-2026-00013 PII exfil; AVE-2026-00026 tool output encoding exfil."
+        },
+        {
+          "rule_id": "prompt-injection/privilegeEscalation",
+          "description": "Prompt attempts to grant or claim elevated permissions",
+          "ave_ids": ["AVE-2026-00012", "AVE-2026-00045"],
+          "primary_ave_id": "AVE-2026-00045",
+          "notes": "AVE-2026-00045 cross-app escalation; AVE-2026-00012 permission escalation via false claim."
+        },
+        {
+          "rule_id": "prompt-injection/conversationManipulation",
+          "description": "Injects false conversation turns or manipulates dialogue history",
+          "ave_ids": ["AVE-2026-00025", "AVE-2026-00023"],
+          "primary_ave_id": "AVE-2026-00025",
+          "notes": "AVE-2026-00025 conversation history injection; AVE-2026-00023 context window manipulation."
+        }
+      ]
+    },
+    {
+      "clawscan_module": "skill-md",
+      "description": "SKILL.md content analysis for suspicious patterns and fake prerequisites",
+      "rules": [
+        {
+          "rule_id": "skill-md/fakePrerequisites",
+          "description": "Skill instructs user to download or install external binaries as fake prerequisites",
+          "ave_ids": ["AVE-2026-00001", "AVE-2026-00034"],
+          "primary_ave_id": "AVE-2026-00034",
+          "notes": "AVE-2026-00034 covers dynamic skill import at runtime; AVE-2026-00001 external instruction fetch."
+        },
+        {
+          "rule_id": "skill-md/hiddenMarkdown",
+          "description": "Hidden commands or instructions embedded in markdown formatting",
+          "ave_ids": ["AVE-2026-00010"],
+          "primary_ave_id": "AVE-2026-00010",
+          "notes": "AVE-2026-00010 covers hidden instruction concealment."
+        },
+        {
+          "rule_id": "skill-md/externalBinaryLink",
+          "description": "Links to external binaries or execution targets from skill instructions",
+          "ave_ids": ["AVE-2026-00001", "AVE-2026-00008"],
+          "primary_ave_id": "AVE-2026-00001",
+          "notes": "AVE-2026-00001 covers external instruction fetch; AVE-2026-00008 persistence via self-replication."
+        }
+      ]
+    },
+    {
+      "clawscan_module": "scripts",
+      "description": "Script file analysis for malicious code patterns",
+      "rules": [
+        {
+          "rule_id": "scripts/reverseShell",
+          "description": "Reverse shell pattern in bundled scripts",
+          "ave_ids": ["AVE-2026-00004", "AVE-2026-00005"],
+          "primary_ave_id": "AVE-2026-00004",
+          "notes": "AVE-2026-00004 shell pipe injection; AVE-2026-00005 destructive command execution.",
+          "gap": "Reverse shell as a class is partially covered but AVE focuses on skill instruction patterns rather than bundled script payloads."
+        },
+        {
+          "rule_id": "scripts/downloadExecute",
+          "description": "Download-and-execute chains in bundled scripts",
+          "ave_ids": ["AVE-2026-00001", "AVE-2026-00034"],
+          "primary_ave_id": "AVE-2026-00001",
+          "notes": "AVE-2026-00001 external instruction fetch; AVE-2026-00034 dynamic skill import."
+        },
+        {
+          "rule_id": "scripts/persistence",
+          "description": "Persistence mechanisms, cron jobs, startup entries",
+          "ave_ids": ["AVE-2026-00008"],
+          "primary_ave_id": "AVE-2026-00008",
+          "notes": "AVE-2026-00008 covers persistence and self-replication."
+        },
+        {
+          "rule_id": "scripts/evalExecAbuse",
+          "description": "eval() or exec() called on dynamic or untrusted content",
+          "ave_ids": ["AVE-2026-00033"],
+          "primary_ave_id": "AVE-2026-00033",
+          "notes": "AVE-2026-00033 covers unsafe deserialization and eval instruction."
+        }
+      ]
+    },
+    {
+      "clawscan_module": "network",
+      "description": "Network destination detection: blocklisted IPs, webhook exfil endpoints, suspicious TLDs",
+      "rules": [
+        {
+          "rule_id": "network/blocklistedIP",
+          "description": "Outbound connection to a blocklisted IP or CIDR",
+          "ave_ids": ["AVE-2026-00003", "AVE-2026-00026"],
+          "primary_ave_id": "AVE-2026-00003",
+          "notes": "AVE-2026-00003 credential exfiltration; AVE-2026-00026 tool output exfiltration. Network destination matching is a detection signal, not a behavioral class."
+        },
+        {
+          "rule_id": "network/webhookExfil",
+          "description": "Discord, Telegram, or similar webhook used as data exfiltration sink",
+          "ave_ids": ["AVE-2026-00003", "AVE-2026-00026"],
+          "primary_ave_id": "AVE-2026-00026",
+          "notes": "Webhook exfil is a delivery mechanism for the data exfiltration class."
+        },
+        {
+          "rule_id": "network/suspiciousTLD",
+          "description": "Outbound connection to a domain with a suspicious or unusual TLD",
+          "ave_ids": ["AVE-2026-00001"],
+          "primary_ave_id": "AVE-2026-00001",
+          "notes": "Suspicious TLD is an IOC for external instruction fetch or exfiltration classes."
+        }
+      ]
+    },
+    {
+      "clawscan_module": "credentials",
+      "description": "Credential and secret detection in skill content and scripts",
+      "rules": [
+        {
+          "rule_id": "credentials/sshKey",
+          "description": "SSH private key material in skill files",
+          "ave_ids": ["AVE-2026-00047"],
+          "primary_ave_id": "AVE-2026-00047",
+          "notes": "AVE-2026-00047 covers hardcoded credentials in agent components."
+        },
+        {
+          "rule_id": "credentials/apiToken",
+          "description": "Hardcoded API token or secret in skill content",
+          "ave_ids": ["AVE-2026-00047"],
+          "primary_ave_id": "AVE-2026-00047",
+          "notes": "AVE-2026-00047 covers hardcoded credentials."
+        },
+        {
+          "rule_id": "credentials/browserCookie",
+          "description": "Browser session cookie or credential material",
+          "ave_ids": ["AVE-2026-00003", "AVE-2026-00047"],
+          "primary_ave_id": "AVE-2026-00003",
+          "notes": "Cookie theft as an exfiltration target maps to AVE-2026-00003."
+        },
+        {
+          "rule_id": "credentials/openclawConfig",
+          "description": "OpenClaw configuration file or credential reference",
+          "ave_ids": ["AVE-2026-00047"],
+          "primary_ave_id": "AVE-2026-00047",
+          "notes": "AVE-2026-00047 hardcoded credentials."
+        }
+      ]
+    },
+    {
+      "clawscan_module": "obfuscation",
+      "description": "Payload obfuscation detection: base64, hex encoding, minified code",
+      "rules": [
+        {
+          "rule_id": "obfuscation/base64Exec",
+          "description": "Base64-encoded payload combined with exec or eval",
+          "ave_ids": ["AVE-2026-00033", "AVE-2026-00039"],
+          "primary_ave_id": "AVE-2026-00033",
+          "notes": "AVE-2026-00033 unsafe deserialization/eval; AVE-2026-00039 covert steganographic exfil."
+        },
+        {
+          "rule_id": "obfuscation/hexEncoding",
+          "description": "Hex-encoded payload detected",
+          "ave_ids": ["AVE-2026-00039"],
+          "primary_ave_id": "AVE-2026-00039",
+          "notes": "AVE-2026-00039 covert channel / steganographic exfiltration."
+        },
+        {
+          "rule_id": "obfuscation/minifiedCode",
+          "description": "Heavily minified or obfuscated code in skill bundle",
+          "ave_ids": ["AVE-2026-00024"],
+          "primary_ave_id": "AVE-2026-00024",
+          "notes": "AVE-2026-00024 covers content type mismatch / disguised skill files.",
+          "gap": "Minified code obfuscation as a standalone class is not yet a distinct AVE record."
+        }
+      ]
+    },
+    {
+      "clawscan_module": "typosquatting",
+      "description": "Levenshtein distance comparison against known-good top skills to catch name impersonation",
+      "rules": [
+        {
+          "rule_id": "typosquatting/nameDistance",
+          "description": "Skill name is suspiciously close to a popular skill (character swap, homoglyph)",
+          "ave_ids": ["AVE-2026-00017", "AVE-2026-00029"],
+          "primary_ave_id": "AVE-2026-00017",
+          "notes": "AVE-2026-00017 covers MCP server impersonation; AVE-2026-00029 homoglyph and Unicode obfuscation."
+        }
+      ]
+    }
+  ],
+  "gaps": [
+    {
+      "clawscan_rule": "scripts/reverseShell",
+      "reason": "Reverse shell payloads in bundled scripts are malware artifacts. AVE enumerates behavioral classes in skill instructions — the instruction that causes a reverse shell to be invoked is partially covered but the payload itself is out of scope."
+    },
+    {
+      "clawscan_rule": "obfuscation/minifiedCode",
+      "reason": "Code obfuscation as a distinct behavioral class has no current AVE record. Partially covered by AVE-2026-00024 (content type mismatch) but minification without type mismatch is not separately enumerated."
+    }
+  ],
+  "coverage": {
+    "clawscan_modules_mapped": 7,
+    "clawscan_rules_documented": 19,
+    "clawscan_rules_with_full_ave_coverage": 17,
+    "clawscan_rules_with_gaps": 2,
+    "ave_records_referenced": 24
+  }
+}

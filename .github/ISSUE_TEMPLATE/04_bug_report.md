@@ -1,47 +1,20 @@
 ---
-name: "Bug Report"
-about: Report an error in a record, the schema, or documentation
-title: "[Bug] "
+name: Bug report
+about: An existing AVE record has an error
+title: "[BUG] AVE-2026-NNNNN — <brief description>"
 labels: bug
 assignees: ''
 ---
 
-## What is wrong?
+## AVE ID
 
-<!-- Describe the error clearly and specifically. -->
+## What is wrong
 
----
+<!-- Is it a field value, a scoring error, a broken reference link, a schema validation
+     failure, or something else? -->
 
-## Location
+## What it should be
 
-**File:** <!-- e.g. records/AVE-2026-00004.json or SPEC.md -->
-**Field or section:** <!-- e.g. aivss.aars or Section 7 -->
-**Line number (if known):**
+## Source or evidence
 
----
-
-## Current value
-
-```
-paste the incorrect content here
-```
-
----
-
-## What it should say
-
-```
-paste the correct content here
-```
-
----
-
-## Why it is wrong
-
-<!-- Explain why the current value is incorrect. Link to the spec or a reference if relevant. -->
-
----
-
-## Additional context
-
-<!-- Anything else that would help us fix this quickly. -->
+<!-- Link or reference supporting the correct value -->

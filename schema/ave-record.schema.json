@@ -1,0 +1,279 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ave.bawbel.io/schema/ave-record-1.0.0.schema.json",
+  "title": "AVE Record",
+  "description": "Agentic Vulnerability Enumeration record v1.0.0. Static definition of one behavioral vulnerability class for agentic AI components.",
+  "type": "object",
+  "additionalProperties": false,
+
+  "required": [
+    "ave_id",
+    "schema_version",
+    "status",
+    "published",
+    "title",
+    "description",
+    "attack_class",
+    "severity",
+    "behavioral_fingerprint",
+    "aivss",
+    "owasp_mcp",
+    "indicators_of_compromise",
+    "remediation",
+    "references",
+    "researcher"
+  ],
+
+  "properties": {
+
+    "ave_id": {
+      "type": "string",
+      "pattern": "^AVE-[0-9]{4}-[0-9]{5}$",
+      "description": "Unique identifier. Format AVE-YYYY-NNNNN. Immutable once published. Deprecated via status, never deleted or renumbered."
+    },
+
+    "schema_version": {
+      "type": "string",
+      "description": "AVE schema version this record conforms to, e.g. 1.0.0."
+    },
+
+    "status": {
+      "type": "string",
+      "enum": ["active", "deprecated", "draft"],
+      "description": "Lifecycle status."
+    },
+
+    "published": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 datetime when the record was first published."
+    },
+
+    "last_updated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 datetime of the most recent update."
+    },
+
+    "title": {
+      "type": "string",
+      "maxLength": 120
+    },
+
+    "attack_class": {
+      "type": "string",
+      "description": "Behavioral category. Not a vulnerability_type string."
+    },
+
+    "component_type": {
+      "type": "string",
+      "enum": ["skill", "mcp_server", "plugin", "agent", "tool", "other"],
+      "description": "The kind of agent component this class affects."
+    },
+
+    "description": {
+      "type": "string"
+    },
+
+    "behavioral_fingerprint": {
+      "type": "string",
+      "description": "What the component DOES that is dangerous. Behavioral, not a byte signature."
+    },
+
+    "behavioral_vector": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Tags summarising the attack path, e.g. supply-chain, external-fetch."
+    },
+
+    "severity": {
+      "type": "string",
+      "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW"],
+      "description": "CRITICAL implies aivss.aivss_score >= 9.0."
+    },
+
+    "aivss_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 10,
+      "description": "Top-level shortcut to aivss.aivss_score for quick access."
+    },
+
+    "cvss_base_vector": {
+      "type": "string",
+      "description": "CVSS 4.0 base vector string."
+    },
+
+    "aivss": {
+      "type": "object",
+      "description": "OWASP AIVSS v0.8 full scoring breakdown.",
+      "required": ["cvss_base", "aars", "thm", "mitigation_factor", "aivss_score", "spec_version"],
+      "properties": {
+        "cvss_base":         { "type": "number", "minimum": 0, "maximum": 10 },
+        "aarf": {
+          "type": "object",
+          "description": "Agentic Amplification and Risk Factors — 10 sub-scores (0–1 each).",
+          "properties": {
+            "autonomy":               { "type": "number", "minimum": 0, "maximum": 1 },
+            "tool_use":               { "type": "number", "minimum": 0, "maximum": 1 },
+            "multi_agent":            { "type": "number", "minimum": 0, "maximum": 1 },
+            "non_determinism":        { "type": "number", "minimum": 0, "maximum": 1 },
+            "self_modification":      { "type": "number", "minimum": 0, "maximum": 1 },
+            "dynamic_identity":       { "type": "number", "minimum": 0, "maximum": 1 },
+            "persistent_memory":      { "type": "number", "minimum": 0, "maximum": 1 },
+            "natural_language_input": { "type": "number", "minimum": 0, "maximum": 1 },
+            "data_access":            { "type": "number", "minimum": 0, "maximum": 1 },
+            "external_dependencies":  { "type": "number", "minimum": 0, "maximum": 1 }
+          },
+          "additionalProperties": false
+        },
+        "aars":              { "type": "number", "minimum": 0, "maximum": 10 },
+        "thm":               { "type": "number", "minimum": 0.5, "maximum": 1.5 },
+        "mitigation_factor": { "type": "number", "minimum": 0, "maximum": 1 },
+        "aivss_score":       { "type": "number", "minimum": 0, "maximum": 10 },
+        "aivss_severity":    { "type": "string", "enum": ["CRITICAL","HIGH","MEDIUM","LOW"] },
+        "spec_version":      { "type": "string", "const": "0.8" },
+        "owasp_mcp_mapping": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^MCP[0-9]{2}$" }
+        },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+
+    "owasp_mcp": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^MCP[0-9]{2}$" },
+      "description": "OWASP MCP Top 10. Format: MCPNN. Required — provides OWASP grounding.",
+      "minItems": 1
+    },
+
+    "owasp_mapping": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^ASI[0-9]{2}$" },
+      "description": "OWASP Agentic AI Top 10 mappings. Format: ASINN. Optional — add when the class maps to the Agentic Top 10."
+    },
+
+    "mitre_atlas_mapping": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^AML\\.T[0-9]{4}(\\.[0-9]{3})?$" },
+      "description": "MITRE ATLAS technique IDs. Format: AML.Txxxx. Optional — add when an ATLAS technique applies. Use an empty array with a note if no technique exists yet."
+    },
+
+    "nist_ai_rmf_mapping": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "NIST AI RMF mappings, e.g. MAP-1.5, MEASURE-2.5. Optional."
+    },
+
+    "affected_platforms": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Agent platforms known to be affected. Optional — fill in as evidence accumulates."
+    },
+
+    "affected_registries": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Skill/tool registries where this class has been observed. Optional."
+    },
+
+    "mutation_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of distinct real-world mutations observed. Optional."
+    },
+
+    "indicators_of_compromise": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Observable IOC strings. Required — at least one. Defenders need something actionable.",
+      "minItems": 1
+    },
+
+    "detection_methodology": {
+      "type": "string",
+      "description": "Step-by-step detection approach. Optional."
+    },
+
+    "remediation": {
+      "type": "string",
+      "description": "How to mitigate or prevent the class. Required."
+    },
+
+    "kill_switch_active": {
+      "type": "boolean",
+      "description": "Whether a registry kill switch is currently active. Optional."
+    },
+
+    "researcher": {
+      "type": "string",
+      "description": "Name of the researcher or team who authored the record. Required — records must be attributable."
+    },
+
+    "researcher_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL for the researcher or team. Optional."
+    },
+
+    "references": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "type": "string", "format": "uri" },
+          {
+            "type": "object",
+            "required": ["text"],
+            "properties": {
+              "tag":  { "type": "string" },
+              "text": { "type": "string" },
+              "url":  { "type": "string", "format": "uri" }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
+      "description": "Primary sources: CVEs, papers, disclosures. Required — at least one citable source.",
+      "minItems": 1
+    },
+
+    "evidence_kind_default": {
+      "type": "string",
+      "enum": ["tool_description_pattern","config_schema","file_type_mismatch","behavioral_pattern","semantic_inference","multi_engine"],
+      "description": "Scanner default: evidence_kind stamped on findings of this class."
+    },
+
+    "detection_stage": {
+      "type": "string",
+      "enum": ["static_detection","runtime_observed","runtime_drift_detected"],
+      "description": "Earliest lifecycle stage where this class is detectable."
+    },
+
+    "detection_layer": {
+      "type": "string",
+      "enum": ["content","server_card","registry_metadata","runtime","transport"],
+      "description": "Where in the ecosystem this class surfaces."
+    },
+
+    "confidence_baseline": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Base confidence for a single-engine match before FP adjustment."
+    },
+
+    "evidence_basis_engines": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["pattern","yara","semgrep","llm","sandbox","magika"] },
+      "description": "Engines capable of detecting this class."
+    },
+
+    "derivable_into": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Toxic-flow chain IDs this class can participate in."
+    }
+  }
+}

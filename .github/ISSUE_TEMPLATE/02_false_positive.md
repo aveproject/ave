@@ -1,50 +1,30 @@
 ---
-name: "False Positive Report"
-about: Report an AVE record or detection rule that fires incorrectly on legitimate content
-title: "[False Positive] AVE-2026-"
-labels: false-positive, needs-review
+name: False positive report
+about: A detection rule fires incorrectly on a benign file
+title: "[FP] <rule_id> fires on <description>"
+labels: false-positive
 assignees: ''
 ---
 
-## AVE Record
+## Rule ID
 
-**AVE ID:** <!-- e.g. AVE-2026-00002 -->
-**Record title:** <!-- copy the title from the record -->
+<!-- The bawbel rule id, e.g. bawbel-tool-description-injection -->
 
----
+## AVE ID
 
-## Why is this a false positive?
+<!-- The AVE record the rule implements, e.g. AVE-2026-00002 -->
 
-<!-- Explain clearly why this record is incorrect, overly broad, or misclassified. -->
+## Description of the false positive
 
----
+<!-- What benign file or pattern triggers the rule? Why is it not malicious? -->
 
-## Technical Evidence
+## Reproduction
 
-<!-- Provide specific technical evidence. Show the content that triggered the finding
-     and explain why it is not actually dangerous. -->
+```
+# Minimal file content or pattern that triggers the false positive
+```
 
----
+## Suggested fix
 
-## Context
-
-**Tool version:** <!-- bawbel-scanner version that produced the finding -->
-**Detection engine:** <!-- pattern / yara / semgrep / llm / magika -->
-**Component type:** <!-- skill / mcp / prompt / plugin / etc. -->
-
----
-
-## Suggested Resolution
-
-- [ ] Narrow the behavioral fingerprint in the AVE record
-- [ ] Update the detection methodology to add an exclusion
-- [ ] Update the detection rule in bawbel-scanner
-- [ ] Mark this specific case as accepted risk (not a record change)
-- [ ] Other: <!-- describe -->
-
----
-
-## Your Details (optional)
-
-**Name:**
-**Organisation:**
+<!-- Optional: how would you tighten the rule to avoid this false positive
+     without losing the true positive? Include a negative fixture suggestion. -->
