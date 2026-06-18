@@ -1,19 +1,24 @@
 <div align="center">
 
-<!-- <img src="https://bawbel.io/assets/bawbel-logo.svg" alt="Bawbel" width="80" /> -->
+<img src="https://ave.bawbel.io/ave-logo-full.svg" alt="AVE — Agentic Vulnerability Enumeration" width="280" />
 
-# AVE: Agentic Vulnerability Enumeration
+<br/>
+<br/>
 
-**The open vulnerability database for agentic AI components.**
+**The open behavioral vulnerability standard for agentic AI components.**
 
-Every record covers a distinct attack class affecting MCP servers, skill files,
-system prompts, and agent plugins. All records are scored with OWASP AIVSS v0.8.
+Every record defines a distinct attack class affecting MCP servers, skill files,
+system prompts, and agent plugins — scored with OWASP AIVSS v0.8, mapped to
+OWASP MCP Top 10 and MITRE ATLAS.
 
-[![Records](https://img.shields.io/badge/records-48-critical?style=flat-square&color=e53e3e)](records/)
-[![Schema](https://img.shields.io/badge/schema-v0.2.0-blue?style=flat-square)](SPEC.md)
-[![AIVSS](https://img.shields.io/badge/AIVSS-v0.8-orange?style=flat-square)](https://aivss.owasp.org)
+[![Records](https://img.shields.io/badge/records-48-critical?style=flat-square&color=0f6e56)](records/)
+[![Schema](https://img.shields.io/badge/schema-v1.0.0-0a3024?style=flat-square)](schema/ave-record-1.0.0.schema.json)
+[![AIVSS](https://img.shields.io/badge/AIVSS-v0.8-d4a017?style=flat-square)](https://aivss.owasp.org)
+[![OWASP MCP](https://img.shields.io/badge/OWASP-MCP%20Top%2010-0a3024?style=flat-square)](https://owasp.org)
+[![MITRE ATLAS](https://img.shields.io/badge/MITRE-ATLAS-4a3f9e?style=flat-square)](https://atlas.mitre.org)
 [![License](https://img.shields.io/badge/license-Apache%202.0-green?style=flat-square)](LICENSE)
-[![Scanner](https://img.shields.io/badge/scanner-bawbel--scanner-black?style=flat-square)](https://github.com/bawbel/scanner)
+
+[Registry](https://ave.bawbel.io/registry.html) · [Schema](https://ave.bawbel.io/schema.html) · [Crosswalks](https://ave.bawbel.io/crosswalks.html) · [Architecture](https://ave.bawbel.io/architecture.html) · [Scanner](https://github.com/bawbel/scanner)
 
 </div>
 
@@ -26,8 +31,18 @@ instructions, not documentation. Any process that loads them runs them.
 There is no compiler, no type checker, no sandbox. The runtime is an LLM
 that reads natural language and acts on it.
 
-AVE gives this attack surface stable IDs, reproducible scoring, detection
-rules, and remediation steps. Same idea as CVE and CWE, applied to agents.
+CVE identifies flaws in software. OSV maps them to packages and version
+ranges. Neither can describe a prompt injection hidden in an MCP tool
+description — there is no package, no version, no vulnerable dependency.
+The danger is in what the component *does*, not what it imports.
+
+**AVE fills that gap.** It assigns stable identifiers to distinct behavioral
+vulnerability classes in agentic AI, scores them with OWASP AIVSS v0.8,
+and maps every record to OWASP MCP Top 10 and MITRE ATLAS so it lands in
+frameworks defenders already use.
+
+AVE is a standard, not a product. The `bawbel-scanner` implements it.
+Any tool can map to it.
 
 ```
 Your CI pipeline scans Python for CVEs.
@@ -39,86 +54,83 @@ AVE + Bawbel fixes that.
 
 ## How it works
 
+**Without AVE:**
 ```
-  Attacker crafts          Developer ships          Agent loads
-  malicious payload   →    skill file          →    skill file
-                           (unscanned)              at runtime
-                                ↓
-                         Agent executes
-                         attacker payload
-                         (data exfiltrated,
-                          credentials stolen,
-                          goals hijacked)
+Attacker crafts          Developer ships          Agent loads
+malicious payload   →    skill file          →    skill file
+                         (unscanned)              at runtime
+                              ↓
+                        Agent executes attacker payload
+                        (data exfiltrated, credentials stolen, goals hijacked)
 ```
 
 **With AVE + Bawbel Scanner:**
-
 ```
-  Developer commits        bawbel scan fires        Finding blocked
-  skill file          →    in pre-commit hook   →    before deploy
-                                ↓
-                         AVE-2026-00001 detected:
-                         External instruction fetch
-                         AIVSS 8.0 / HIGH
-                         Line 7: "fetch your instructions from..."
+Developer commits        bawbel scan fires        Finding blocked
+skill file          →    in CI / pre-commit   →   before deploy
+                              ↓
+                        AVE-2026-00001 detected:
+                        Metamorphic payload via external config fetch
+                        AIVSS 8.0 · HIGH · owasp_mcp: MCP03, MCP04
+                        Line 7: "fetch your instructions from..."
 ```
-
-The scanner checks every skill file against all 48 AVE records using five
-detection engines: pattern matching, YARA, Semgrep, file type verification,
-and optional LLM meta-analysis.
 
 ---
 
 ## Stats
 
-| Metric | Value |
+| | |
 |---|---|
 | Total records | 48 |
-| Schema version | 0.2.0 |
+| Schema version | 1.0.0 |
 | AIVSS spec | v0.8 |
-| CRITICAL (AIVSS ≥ 9.0) | 1 |
-| HIGH (AIVSS 7.0-8.9) | 6 |
-| MEDIUM (AIVSS 4.0-6.9) | 39 |
-| LOW (AIVSS < 4.0) | 2 |
+| CRITICAL (≥ 9.0) | 1 |
+| HIGH (7.0–8.9) | 6 |
+| MEDIUM (4.0–6.9) | 39 |
+| LOW (< 4.0) | 2 |
+| Framework: OWASP MCP Top 10 | all records |
+| Framework: MITRE ATLAS | where applicable |
+| Framework: OWASP Agentic AI Top 10 | where applicable |
+| Framework: NIST AI RMF | where applicable |
 
 ---
 
 ## AIVSS Scoring
 
-Every AVE record is scored using [OWASP AIVSS v0.8](https://aivss.owasp.org).
+Every record is scored with [OWASP AIVSS v0.8](https://aivss.owasp.org):
 
 ```
 AIVSS = ((CVSS_Base + AARS) / 2) × ThM × Mitigation_Factor
 ```
 
-**AARS** (Agentic Risk Score) is the weighted sum of 10 Agentic Risk
-Amplification Factors (AARFs), each scored 0.0 / 0.5 / 1.0:
+**AARS** (Agentic Amplification and Reachability Score) is the weighted sum
+of 10 Agentic Amplification and Risk Factors (AARF), each scored 0.0–1.0:
 
 | # | Factor | Why it matters |
 |---|---|---|
 | 1 | **Autonomy** | Agent acts without human approval |
-| 2 | **Tool Use** | Agent has access to external tools/APIs |
+| 2 | **Tool Use** | Agent has access to external tools or APIs |
 | 3 | **Multi-Agent** | Agent interacts with or spawns other agents |
-| 4 | **Non-Determinism** | Behavior unpredictable across runs |
-| 5 | **Self-Modification** | Can alter own instructions or memory |
+| 4 | **Non-Determinism** | Behavior varies unpredictably across runs |
+| 5 | **Self-Modification** | Can alter own instructions or memory at runtime |
 | 6 | **Dynamic Identity** | Assumes roles or identities at runtime |
 | 7 | **Persistent Memory** | Retains state across sessions |
 | 8 | **Natural Language Input** | Instruction surface via natural language |
-| 9 | **Data Access** | Reads sensitive data (files, env, DB) |
-| 10 | **External Dependencies** | Loads external code, skills, or plugins |
+| 9 | **Data Access** | Reads sensitive data (files, env vars, databases) |
+| 10 | **External Dependencies** | Loads external code, skills, or remote content |
 
 **Severity bands:**
 
-| Band | AIVSS Range | Meaning |
+| Band | AIVSS | Meaning |
 |---|---|---|
-| CRITICAL | 9.0 - 10.0 | Immediate exploitation, full agent compromise |
-| HIGH | 7.0 - 8.9 | Significant data loss or privilege escalation |
-| MEDIUM | 4.0 - 6.9 | Meaningful risk requiring review |
-| LOW | 0.1 - 3.9 | Limited impact or requires chaining |
+| CRITICAL | ≥ 9.0 | Immediate exploitation, full agent compromise |
+| HIGH | 7.0–8.9 | Significant data loss or privilege escalation |
+| MEDIUM | 4.0–6.9 | Meaningful risk requiring review |
+| LOW | < 4.0 | Limited impact or requires chaining |
 
 ---
 
-## Record Index
+## Record index
 
 | AVE ID | Title | AIVSS | Severity |
 |---|---|---|---|
@@ -176,7 +188,8 @@ Amplification Factors (AARFs), each scored 0.0 / 0.5 / 1.0:
 ## Detect with Bawbel Scanner
 
 Every AVE record has detection rules in
-[bawbel/scanner](https://github.com/bawbel/scanner).
+[bawbel/scanner](https://github.com/bawbel/scanner) — the reference
+implementation of this standard.
 
 ```bash
 pip install bawbel-scanner
@@ -187,20 +200,81 @@ bawbel scan ./my-skill.md
 # Scan a directory recursively
 bawbel scan ./skills/ --recursive --fail-on-severity high
 
+# Scan an MCP server card
+bawbel scan-server-card https://api.your-mcp-server.io
+
 # Full remediation report
 bawbel report ./my-skill.md
-
-# Scan an MCP server card
-bawbel ssc https://api.your-mcp-server.io
 ```
 
-Output:
+Example output:
 
 ```
-CRITICAL  bawbel-hook-hijack          AVE-2026-00046  line 3   AIVSS 9.1
-HIGH      bawbel-unsafe-delegation    AVE-2026-00048  line 11  AIVSS 8.2
-HIGH      bawbel-hardcoded-credential AVE-2026-00047  line 5   AIVSS 7.8
+CRITICAL  bawbel-hook-hijack           AVE-2026-00046  line 3   AIVSS 9.1
+HIGH      bawbel-unsafe-delegation     AVE-2026-00048  line 11  AIVSS 8.2
+HIGH      bawbel-hardcoded-credential  AVE-2026-00047  line 5   AIVSS 7.8
 ```
+
+Any tool can implement AVE — the records, schema, and rules are open.
+See the [architecture guide](https://ave.bawbel.io/architecture.html)
+for the implementer contract.
+
+---
+
+## Schema v1.0.0
+
+Records validate against
+[`schema/ave-record-1.0.0.schema.json`](schema/ave-record-1.0.0.schema.json).
+
+Canonical `$id`:
+`https://ave.bawbel.io/schema/ave-record-1.0.0.schema.json`
+
+**15 required fields:**
+
+```
+ave_id · schema_version · status · published
+title · description · attack_class · severity · behavioral_fingerprint
+aivss · owasp_mcp
+indicators_of_compromise · remediation
+references · researcher
+```
+
+**Minimal valid record:**
+
+```json
+{
+  "ave_id": "AVE-2026-00001",
+  "schema_version": "1.0.0",
+  "status": "active",
+  "published": "2026-04-01T09:00:00Z",
+  "title": "Metamorphic payload via external config fetch",
+  "attack_class": "Supply Chain - Metamorphic Payload",
+  "severity": "HIGH",
+  "description": "A skill fetches its instructions from an external URL at runtime...",
+  "behavioral_fingerprint": "Component fetches and executes remote content, replacing its own instructions at runtime.",
+  "aivss": {
+    "cvss_base": 8.5, "aars": 7.5, "thm": 1.0,
+    "mitigation_factor": 1.0, "aivss_score": 8.0, "spec_version": "0.8"
+  },
+  "owasp_mcp": ["MCP04", "MCP06"],
+  "indicators_of_compromise": ["fetch() pointing to external URL"],
+  "remediation": "Remove the component. Block network egress. Audit agent actions.",
+  "references": [{"tag": "Disclosure", "text": "Source", "url": "https://..."}],
+  "researcher": "Bawbel Security Research Team"
+}
+```
+
+**All optional fields:**
+`component_type` · `last_updated` · `behavioral_vector` · `aivss_score` ·
+`cvss_base_vector` · `owasp_mapping` · `mitre_atlas_mapping` ·
+`nist_ai_rmf_mapping` · `affected_platforms` · `affected_registries` ·
+`mutation_count` · `detection_methodology` · `kill_switch_active` ·
+`researcher_url` · `aivss.aarf` · `aivss.aivss_severity` ·
+`aivss.owasp_mcp_mapping` · `aivss.notes` · `evidence_kind_default` ·
+`detection_stage` · `detection_layer` · `confidence_baseline` ·
+`evidence_basis_engines` · `derivable_into`
+
+Full schema reference: [ave.bawbel.io/schema.html](https://ave.bawbel.io/schema.html)
 
 ---
 
@@ -208,161 +282,101 @@ HIGH      bawbel-hardcoded-credential AVE-2026-00047  line 5   AIVSS 7.8
 
 ### When to add a record
 
-A new record needs three things: the attack class is not already covered,
-there is real-world evidence (working PoC, published exploit, or observed
-incident), and the vulnerability is specific to agentic components (skill
-files, MCP servers, system prompts, plugins) rather than a generic
-web or API issue.
+A new record needs all three: the attack class is not already covered by an
+existing record, there is a citable primary source (CVE, paper, disclosed
+incident, or working PoC), and the class is specific to agentic components —
+not a generic web or API vulnerability.
 
-### Step 1: Open an issue first
+If you think an existing class covers the behavior you found, open an issue
+anyway. It may warrant a sub-case note in the parent record rather than a
+new id.
 
-Open an issue before writing any JSON. Use the **New AVE Record** template
-and include the attack class, component type, one real-world example or PoC,
-and your proposed AARF scores with a short rationale for each factor.
+### Step 1 — Open an issue
 
-This keeps maintainers in the loop and gets you the next AVE ID before
-you write anything.
+Open a **New AVE Record** issue before writing any JSON. Include:
+- The proposed `attack_class` and one-sentence `behavioral_fingerprint`
+- A link to the primary source
+- Whether this is net-new or a variant of an existing record
 
-### Step 2: Create the JSON record
+The maintainer will confirm the next AVE id and whether it is a new class
+or a variant update.
 
-Copy [`records/AVE-2026-00045.json`](records/AVE-2026-00045.json) as your
-template. Fill every field. Required fields:
+### Step 2 — Write the record
 
+Copy [`records/AVE-2026-00001.json`](records/AVE-2026-00001.json) as a
+template. All 15 required fields must be present and valid.
+
+AIVSS calculation:
 ```
-ave_id, schema_version, component_type, title, attack_class, description,
-aivss_score, owasp_mapping, behavioral_fingerprint, behavioral_vector,
-detection_methodology, indicators_of_compromise, remediation, aivss, status,
-published
-```
-
-AIVSS calculation checklist:
-
-```
-1. Score each AARF factor: 0.0 (not applicable), 0.5 (partial), 1.0 (full)
+1. Score each AARF factor 0.0–1.0
 2. AARS = sum of all 10 AARF scores
-3. Pick CVSS_Base from the cvss_base_vector
-4. AIVSS = ((CVSS_Base + AARS) / 2) × ThM × Mitigation_Factor
-5. ThM = 0.75 default; raise to 0.90 for actively exploited, 1.0 for weaponised
-6. Round to 1 decimal place
-7. Set aivss_severity: CRITICAL ≥ 9.0, HIGH ≥ 7.0, MEDIUM ≥ 4.0, LOW < 4.0
+3. AIVSS = ((CVSS_Base + AARS) / 2) × ThM × Mitigation_Factor
+4. ThM: 0.75 theoretical · 0.90 PoC exists · 1.0 in-the-wild
+5. Round to 1 decimal
+6. Severity: CRITICAL ≥ 9.0 · HIGH ≥ 7.0 · MEDIUM ≥ 4.0 · LOW < 4.0
 ```
 
-### Step 3: Add detection rules to bawbel/scanner
-
-Every AVE record needs at least a pattern rule in the scanner. Open a
-coordinated PR in [bawbel/scanner](https://github.com/bawbel/scanner):
-
-```
-scanner/engines/pattern.py     ← add entry to PATTERN_RULES
-scanner/rules/yara/ave_rules.yar    ← add YARA rule
-scanner/rules/semgrep/ave_rules.yaml ← add Semgrep rule
-```
-
-Pattern rule structure:
-
-```python
-{
-    "rule_id":     "bawbel-your-rule-id",
-    "ave_id":      "AVE-2026-NNNNN",
-    "title":       "Short title under 80 chars",
-    "description": "Full description for remediation report.",
-    "severity":    Severity.HIGH,
-    "aivss_score": 7.5,
-    "owasp":       ["ASI01"],
-    "owasp_mcp":   ["MCP03"],
-    "patterns": [
-        r"pattern one regex",
-        r"pattern two regex",
-    ],
-},
+Validate before opening a PR:
+```bash
+npm install ajv ajv-formats
+node -e "
+const Ajv = require('ajv/dist/2020');
+const addFormats = require('ajv-formats');
+const ajv = new Ajv({ strict: false });
+addFormats(ajv);
+const schema = require('./schema/ave-record-1.0.0.schema.json');
+const record = require('./records/AVE-2026-NNNNN.json');
+const ok = ajv.validate(schema, record);
+if (!ok) console.error(ajv.errors); else console.log('valid');
+"
 ```
 
-Rule naming: `bawbel-<attack-class>` in kebab-case. No abbreviations.
+### Step 3 — Add detection rules
 
-### Step 4: Update this README
+Open a coordinated PR in [bawbel/scanner](https://github.com/bawbel/scanner)
+with at least one detection rule and a positive and negative fixture.
+The AVE record PR and the scanner PR should reference each other.
 
-Add a row to the Record Index table and update the Stats block at the top.
-Increment `Total records` and the right severity band counter.
+### Step 4 — PR format
 
-### Step 5: Submit the PR
-
-PR title format: `feat: AVE-2026-NNNNN - <attack class>`
+Title: `feat: AVE-2026-NNNNN — <attack class>`
 
 The PR description must include:
 - Link to the issue
-- AARF scores with rationale
-- At least one `behavioral_vector` example
+- AARF scores with a one-line rationale for each non-zero factor
+- At least one `indicators_of_compromise` entry a defender can actually search for
+- Link to the primary source
 - Link to the coordinated scanner PR
 
 ---
 
-## JSON record schema (v0.2.0)
+## Framework crosswalks
 
-```json
-{
-  "ave_id": "AVE-2026-00001",
-  "schema_version": "0.2.0",
-  "component_type": "skill | mcp | system_prompt | plugin",
-  "title": "...",
-  "attack_class": "...",
-  "description": "...",
-  "affected_platforms": [],
-  "affected_registries": [],
-  "aivss_score": 8.0,
-  "cvss_base_vector": "CVSS:4.0/...",
-  "owasp_mapping": ["ASI01"],
-  "owasp_mcp": ["MCP01"],
-  "nist_ai_rmf_mapping": [],
-  "mitre_atlas_mapping": [],
-  "behavioral_fingerprint": "...",
-  "behavioral_vector": [],
-  "mutation_count": 0,
-  "detection_methodology": "...",
-  "indicators_of_compromise": [],
-  "remediation": "...",
-  "aivss": {
-    "cvss_base": 8.5,
-    "aarf": {
-      "autonomy": 1.0,
-      "tool_use": 1.0,
-      "multi_agent": 0.5,
-      "non_determinism": 1.0,
-      "self_modification": 1.0,
-      "dynamic_identity": 0.0,
-      "persistent_memory": 0.5,
-      "natural_language_input": 1.0,
-      "data_access": 0.5,
-      "external_dependencies": 1.0
-    },
-    "aars": 7.5,
-    "thm": 0.75,
-    "mitigation_factor": 1.0,
-    "aivss_score": 8.0,
-    "aivss_severity": "HIGH",
-    "spec_version": "0.8",
-    "owasp_mcp_mapping": ["MCP01"],
-    "notes": "..."
-  },
-  "status": "active",
-  "kill_switch_active": true,
-  "researcher": "...",
-  "researcher_url": "...",
-  "published": "2026-05-16T00:00:00Z",
-  "last_updated": "2026-05-16T00:00:00Z",
-  "references": []
-}
-```
+AVE records map to four external frameworks. Full crosswalk tables are
+at [ave.bawbel.io/crosswalks.html](https://ave.bawbel.io/crosswalks.html).
+
+| This scanner | Maps to AVE via |
+|---|---|
+| SkillSpector (NVIDIA) | [`crosswalks/skillspector-to-ave.json`](crosswalks/) |
+| ClawScan (OpenClaw) | [`crosswalks/clawscan-to-ave.json`](crosswalks/) |
+
+Maintaining a scanner? Map your finding types to AVE ids so your results
+interoperate with every other AVE implementation.
 
 ---
 
 ## Related
 
-- [bawbel/scanner](https://github.com/bawbel/scanner): the CLI scanner that detects these
-- [OWASP AIVSS v0.8](https://aivss.owasp.org): the scoring formula
-- [api.piranha.bawbel.io](https://api.piranha.bawbel.io): threat intel API, one record per AVE ID
-- [bawbel.io/docs](https://bawbel.io/docs): docs
+| | |
+|---|---|
+| [ave.bawbel.io](https://ave.bawbel.io) | Public registry and documentation |
+| [bawbel/scanner](https://github.com/bawbel/scanner) | Reference implementation |
+| [bawbel/ave-site](https://github.com/bawbel/ave-site) | Website source |
+| [api.piranha.bawbel.io](https://api.piranha.bawbel.io) | Threat intel API |
+| [OWASP AIVSS v0.8](https://aivss.owasp.org) | Scoring specification |
+| [MITRE ATLAS](https://atlas.mitre.org) | AI threat technique catalog |
+| [OWASP MCP Top 10](https://owasp.org) | MCP attack surface framework |
 
 ---
 
-AVE records are published under [Apache 2.0](LICENSE).
-OWASP AIVSS v0.8: [aivss.owasp.org](https://aivss.owasp.org)
+AVE records and schema are published under [Apache 2.0](LICENSE).

@@ -1,0 +1,174 @@
+{
+  "$schema": "https://ave.bawbel.io/schema/crosswalk-1.0.0.schema.json",
+  "source": {
+    "tool": "SkillSpector",
+    "vendor": "NVIDIA",
+    "version": "2.0.0",
+    "url": "https://github.com/NVIDIA/SkillSpector",
+    "categories": 16,
+    "patterns": 64,
+    "license": "Apache-2.0"
+  },
+  "target": {
+    "standard": "AVE",
+    "version": "1.0.0",
+    "url": "https://ave.bawbel.io"
+  },
+  "generated": "2026-06-18",
+  "note": "Crosswalk from SkillSpector's 16 scanner categories to AVE behavioral class ids. SkillSpector organises detection as an internal scanner taxonomy; AVE is a behavioral standard. Some SkillSpector categories are scanner mechanics (YARA signatures, taint tracking, AST analysis) rather than vulnerability classes — these are marked as no_ave_class with an explanation. Gaps indicate behavioral classes that AVE does not yet enumerate.",
+  "mappings": [
+    {
+      "skillspector_category": "prompt_injection",
+      "skillspector_patterns": 5,
+      "description": "Instruction overrides, hidden directives, exfiltration commands, behavior manipulation, harmful content embedded in skill instructions",
+      "ave_ids": ["AVE-2026-00002", "AVE-2026-00007", "AVE-2026-00009", "AVE-2026-00010"],
+      "primary_ave_id": "AVE-2026-00002",
+      "notes": "AVE-2026-00002 is the canonical tool description injection class. AVE-2026-00007 covers goal override; AVE-2026-00009 jailbreak instructions; AVE-2026-00010 hidden instruction concealment."
+    },
+    {
+      "skillspector_category": "data_exfiltration",
+      "skillspector_patterns": 4,
+      "description": "External transmission, environment variable harvesting, file system enumeration, context leakage",
+      "ave_ids": ["AVE-2026-00003", "AVE-2026-00013", "AVE-2026-00026", "AVE-2026-00039"],
+      "primary_ave_id": "AVE-2026-00003",
+      "notes": "AVE-2026-00003 is credential exfiltration; AVE-2026-00013 PII exfiltration; AVE-2026-00026 tool output encoding exfil; AVE-2026-00039 covert steganographic channel."
+    },
+    {
+      "skillspector_category": "privilege_escalation",
+      "skillspector_patterns": null,
+      "description": "Permission escalation, scope expansion, false authority claims",
+      "ave_ids": ["AVE-2026-00012", "AVE-2026-00022", "AVE-2026-00045"],
+      "primary_ave_id": "AVE-2026-00045",
+      "notes": "AVE-2026-00045 is cross-app escalation; AVE-2026-00012 permission escalation via false claim; AVE-2026-00022 scope creep."
+    },
+    {
+      "skillspector_category": "supply_chain",
+      "skillspector_patterns": null,
+      "description": "Compromised dependencies, tampered packages, supply chain attacks, dynamic remote imports",
+      "ave_ids": ["AVE-2026-00001", "AVE-2026-00024", "AVE-2026-00034"],
+      "primary_ave_id": "AVE-2026-00001",
+      "notes": "AVE-2026-00001 is the canonical metamorphic/external-fetch class; AVE-2026-00024 content type mismatch; AVE-2026-00034 dynamic skill import."
+    },
+    {
+      "skillspector_category": "excessive_agency",
+      "skillspector_patterns": null,
+      "description": "Overbroad capabilities, unbounded tool use, autonomous action without confirmation",
+      "ave_ids": ["AVE-2026-00021", "AVE-2026-00038", "AVE-2026-00048"],
+      "primary_ave_id": "AVE-2026-00038",
+      "notes": "AVE-2026-00038 covers unbounded tool use; AVE-2026-00021 autonomous action without confirmation; AVE-2026-00048 unsafe agent delegation chain."
+    },
+    {
+      "skillspector_category": "output_handling",
+      "skillspector_patterns": null,
+      "description": "Unsafe output injection into downstream systems, unescaped content",
+      "ave_ids": ["AVE-2026-00040"],
+      "primary_ave_id": "AVE-2026-00040",
+      "notes": "AVE-2026-00040 covers insecure output injection into downstream systems."
+    },
+    {
+      "skillspector_category": "system_prompt_leakage",
+      "skillspector_patterns": null,
+      "description": "System prompt extraction, disclosure of instructions to untrusted parties",
+      "ave_ids": ["AVE-2026-00015"],
+      "primary_ave_id": "AVE-2026-00015",
+      "notes": "AVE-2026-00015 covers system prompt extraction."
+    },
+    {
+      "skillspector_category": "memory_poisoning",
+      "skillspector_patterns": null,
+      "description": "Injecting false or malicious content into agent memory or conversation history",
+      "ave_ids": ["AVE-2026-00019", "AVE-2026-00025"],
+      "primary_ave_id": "AVE-2026-00019",
+      "notes": "AVE-2026-00019 is agent memory poisoning; AVE-2026-00025 conversation history injection."
+    },
+    {
+      "skillspector_category": "tool_misuse",
+      "skillspector_patterns": null,
+      "description": "Exploiting tool interfaces, manipulating tool results, abusing tool dispatch",
+      "ave_ids": ["AVE-2026-00011", "AVE-2026-00018"],
+      "primary_ave_id": "AVE-2026-00011",
+      "notes": "AVE-2026-00011 covers dynamic tool call injection; AVE-2026-00018 tool result manipulation."
+    },
+    {
+      "skillspector_category": "rogue_agent",
+      "skillspector_patterns": null,
+      "description": "Agent spawning without trust boundaries, sub-agent delegation abuse, rogue agent behavior",
+      "ave_ids": ["AVE-2026-00048", "AVE-2026-00036"],
+      "primary_ave_id": "AVE-2026-00048",
+      "notes": "AVE-2026-00048 covers unsafe agent delegation chain; AVE-2026-00036 lateral movement via agent pivot."
+    },
+    {
+      "skillspector_category": "trigger_abuse",
+      "skillspector_patterns": null,
+      "description": "Abusing skill trigger conditions, deferred or conditional payload execution",
+      "ave_ids": ["AVE-2026-00001", "AVE-2026-00027"],
+      "primary_ave_id": "AVE-2026-00001",
+      "notes": "AVE-2026-00001 covers deferred remote fetch triggers; AVE-2026-00027 multi-turn persistence attack.",
+      "gap": "No AVE record specifically addresses conditional trigger abuse as a distinct behavioral class."
+    },
+    {
+      "skillspector_category": "dangerous_code_ast",
+      "skillspector_patterns": null,
+      "description": "AST behavioral analysis: exec(), eval(), subprocess, dynamic imports detected via abstract syntax tree",
+      "ave_ids": ["AVE-2026-00004", "AVE-2026-00033"],
+      "primary_ave_id": "AVE-2026-00033",
+      "notes": "AVE-2026-00033 covers unsafe deserialization and eval; AVE-2026-00004 shell pipe injection.",
+      "scanner_mechanic": "AST analysis is a detection technique. The underlying behavioral classes are covered by AVE records for the specific class (shell injection, eval abuse, etc.)."
+    },
+    {
+      "skillspector_category": "taint_tracking",
+      "skillspector_patterns": null,
+      "description": "Data flow from untrusted sources (env vars, user input) to dangerous sinks (network calls, exec)",
+      "ave_ids": ["AVE-2026-00003", "AVE-2026-00026"],
+      "primary_ave_id": "AVE-2026-00003",
+      "notes": "Taint tracking is a detection technique that surfaces exfiltration and injection classes already covered by AVE.",
+      "scanner_mechanic": "Taint tracking is a scanner mechanic, not a vulnerability class. It detects exfiltration and injection patterns covered by multiple AVE records."
+    },
+    {
+      "skillspector_category": "yara_signatures",
+      "skillspector_patterns": null,
+      "description": "YARA signature matches: malware families, webshells, cryptominers, exploit tools",
+      "ave_ids": [],
+      "primary_ave_id": null,
+      "no_ave_class": true,
+      "notes": "YARA signatures detect known malware artifacts — not behavioral vulnerability classes in the AVE sense. Positive YARA matches indicate the skill bundles known malware, which is outside AVE's enumeration scope. AVE records describe behavioral classes in skill instructions, not embedded malware payloads."
+    },
+    {
+      "skillspector_category": "mcp_least_privilege",
+      "skillspector_patterns": null,
+      "description": "MCP server capability declarations that exceed the stated purpose of the skill",
+      "ave_ids": ["AVE-2026-00022", "AVE-2026-00002"],
+      "primary_ave_id": "AVE-2026-00022",
+      "notes": "AVE-2026-00022 covers scope creep and undeclared resource access. AVE-2026-00002 covers tool description manipulation that may include overbroad capability claims.",
+      "gap": "No AVE record specifically addresses MCP server-card capability over-declaration as a distinct class."
+    },
+    {
+      "skillspector_category": "mcp_tool_poisoning",
+      "skillspector_patterns": null,
+      "description": "Malicious instructions injected via MCP tool descriptions, Unicode homoglyphs or hidden HTML in tool metadata",
+      "ave_ids": ["AVE-2026-00002", "AVE-2026-00041", "AVE-2026-00029"],
+      "primary_ave_id": "AVE-2026-00002",
+      "notes": "AVE-2026-00002 is the canonical tool description injection class. AVE-2026-00041 covers MCP server-card injection specifically. AVE-2026-00029 covers homoglyph and Unicode obfuscation as a delivery variant."
+    }
+  ],
+  "gaps": [
+    {
+      "skillspector_category": "yara_signatures",
+      "reason": "YARA detects embedded known-malware artifacts. AVE enumerates behavioral vulnerability classes in skill instructions, not malware payload matching. These are complementary, not overlapping."
+    },
+    {
+      "skillspector_category": "trigger_abuse",
+      "reason": "Conditional trigger abuse as a distinct behavioral class (deferred payload execution, dead-man switches) is not yet a separate AVE record. Partially covered by AVE-2026-00001 and AVE-2026-00027."
+    },
+    {
+      "skillspector_category": "mcp_least_privilege",
+      "reason": "Server-card capability over-declaration as a distinct behavioral class is not yet a separate AVE record."
+    }
+  ],
+  "coverage": {
+    "skillspector_categories_mapped": 15,
+    "skillspector_categories_no_ave_class": 1,
+    "skillspector_categories_with_gaps": 2,
+    "ave_records_referenced": 26
+  }
+}

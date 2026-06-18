@@ -2,8 +2,9 @@
 
 - [ ] New AVE record submission
 - [ ] Update to existing AVE record
-- [ ] Schema change (v0.2.0)
-- [ ] New detection rule (YARA / Semgrep)
+- [ ] Schema change (v1.0.0)
+- [ ] New detection rule (YARA / Semgrep / pattern)
+- [ ] Crosswalk addition or update
 - [ ] Documentation improvement
 - [ ] Other:
 
@@ -16,7 +17,7 @@
 
 ---
 
-## AVE Record(s)
+## AVE record(s)
 
 <!-- List AVE IDs. Use AVE-PENDING for new submissions not yet assigned a number. -->
 
@@ -26,39 +27,39 @@
 
 ### For new AVE record submissions
 
-- [ ] Record follows schema v0.2.0 (see SPEC.md Section 6)
-- [ ] All required fields are present and non-empty
-- [ ] `attack_class` uses "Category - Subcategory" format with no em dashes
-- [ ] `behavioral_fingerprint` is one clear sentence
-- [ ] `detection_methodology` is step-by-step and reproducible
-- [ ] `indicators_of_compromise` has at least 2 entries
-- [ ] `owasp_mapping` (ASI codes) is correct
-- [ ] `owasp_mcp` (MCP codes) is correct
-- [ ] `aivss` block is complete with all 10 AARF scores and written rationale in `notes`
-- [ ] `aivss_score` at top level matches `aivss.aivss_score`
-- [ ] `cvss_base_vector` is a valid CVSSv4.0 vector string
-- [ ] `mutation_count` is an integer >= 0
-- [ ] Responsible disclosure process followed (see CONTRIBUTING.md)
-- [ ] Researcher name is accurate and has been verified with them
+- [ ] Linked issue confirms the id and that this is a new class, not a variant
+- [ ] Record validates against `schema/ave-record-1.0.0.schema.json`
+- [ ] All 15 required fields are present and non-empty
+- [ ] `behavioral_fingerprint` is one clear sentence describing what the component DOES
+- [ ] `indicators_of_compromise` has at least one entry a defender can actually search for
+- [ ] `owasp_mcp` is present with at least one entry
+- [ ] `aivss` block is complete — required sub-fields: cvss_base, aars, thm, mitigation_factor, aivss_score, spec_version
+- [ ] `aivss.aivss_score` agrees with `severity` (CRITICAL >= 9.0, HIGH 7.0–8.9, MEDIUM 4.0–6.9, LOW < 4.0)
+- [ ] Top-level `aivss_score` matches `aivss.aivss_score` if both are present
+- [ ] `references` has at least one citable primary source
+- [ ] `researcher` is set
+- [ ] AARF rationale for each non-zero factor is in the PR description
+- [ ] Coordinated scanner PR in bawbel/scanner is linked (rule + positive and negative fixtures)
+- [ ] Responsible disclosure followed if this involves a specific component or publisher
 
 ### For updates to existing records
 
 - [ ] `last_updated` is set to today in ISO 8601 format
-- [ ] Change is explained in PR description
-- [ ] If AIVSS score changes: new AARF rationale is in `aivss.notes`
+- [ ] Change is explained in the PR description
+- [ ] If `aivss_score` changes: AARF rationale for each changed factor is in the PR description
 
 ### For schema changes
 
-- [ ] Issue opened first with 30-day comment period completed (breaking changes only)
-- [ ] SPEC.md updated to reflect the change
-- [ ] `records/template.json` updated
-- [ ] Existing records updated if required (or PR description explains why not)
-- [ ] Schema version bumped if breaking
+- [ ] Issue opened first with 30-day comment period completed (structural changes only)
+- [ ] `schema/ave-record-1.0.0.schema.json` updated
+- [ ] New versioned schema file added (e.g. `schema/ave-record-1.1.0.schema.json`)
+- [ ] CHANGELOG.md updated
+- [ ] Migration path for existing records documented
 
 ### For all PRs
 
 - [ ] I have read CONTRIBUTING.md
-- [ ] No em dashes in any field values (use hyphens instead)
-- [ ] No CVSS-AI references (use AIVSS)
-- [ ] No bawbel/bawbel-ave URLs (use bawbel/ave)
+- [ ] `ave_id` values are immutable — no renumbering
+- [ ] Schema version string is `1.0.0`
+- [ ] No references to SPEC.md (removed), template.json (removed), or bawbel/bawbel-ave (wrong path)
 - [ ] I agree my contribution is licensed under Apache 2.0
