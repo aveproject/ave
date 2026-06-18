@@ -6,6 +6,54 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 
 ---
 
+## [1.1.0] — 2026-06-18
+
+### Summary
+
+- All 48 records migrated from schema_version 0.2.0 → 1.0.0
+- Schema v1.0.0 is now the active schema for all published records
+- Evidence declaration fields backfilled on all 48 records (canonical values from evidence-declarations-all-48.json)
+- Detection rules and test fixtures added for 5 priority records
+- `--skip-validation` flag can now be removed from ave-site builds
+
+### All 48 records — fields added or corrected
+
+- `schema_version`: `"0.2.0"` → `"1.0.0"`
+- `severity` promoted to top level (was at `aivss.aivss_severity`)
+- `aivss_score` promoted to top level (was only at `aivss.aivss_score`)
+- `references` converted from URI strings to `{tag, text, url}` objects
+- `status`, `published`, `researcher`, `researcher_url` backfilled where missing
+- `component_type` normalised: `mcp` → `mcp_server`, `mcp-server-card` → `mcp_server`, `rag` → `other`
+- `"prompt"` added to the `component_type` enum in schema v1.0.0
+
+### Evidence declarations — all 48 records
+
+Six fields backfilled on every record: `evidence_kind_default`, `detection_stage`, `detection_layer`, `confidence_baseline`, `evidence_basis_engines`, `derivable_into`.
+
+Priority records (authoritative `derivable_into` chains set):
+
+| Record | evidence_kind_default | detection_stage | confidence_baseline |
+|---|---|---|---|
+| AVE-2026-00001 | multi_engine | static_detection | 0.83 |
+| AVE-2026-00002 | tool_description_pattern | static_detection | 0.75 |
+| AVE-2026-00042 | behavioral_pattern | runtime_observed | 0.62 |
+| AVE-2026-00045 | tool_description_pattern | static_detection | 0.75 |
+| AVE-2026-00048 | tool_description_pattern | static_detection | 0.83 |
+
+### New files
+
+- `scripts/migrate-records.js`
+- `scripts/backfill-evidence.js`
+- `scripts/merge-evidence-declarations.js`
+- `docs/migrations/evidence-declarations-all-48.json`
+- `tests/test_fixtures.py`
+- `rules/pattern/AVE-2026-0000{1,2}.py`
+- `rules/pattern/AVE-2026-000{42,45,48}.py`
+- `tests/fixtures/AVE-2026-0000{1,2}_{positive,negative}.md`
+- `tests/fixtures/AVE-2026-000{42,45,48}_{positive,negative}.md`
+
+---
+
 ## [1.0.0] — 2026-06-18
 
 ### The first stable release of the AVE standard.
@@ -108,12 +156,12 @@ Three ADRs are locked and documented in `docs/adr/`:
 
 ---
 
-## Planned for v1.1
+## Planned for v1.2
 
-- Migrate all 48 records from schema v0.2.0 to v1.0.0
-- Backfill evidence declaration fields on priority records: AVE-2026-00001, 00002, 00042, 00045, 00048
-- Publish crosswalk files: `crosswalks/skillspector-to-ave.json`, `crosswalks/clawscan-to-ave.json`, `crosswalks/ave-to-frameworks.md`
-- Add AVE-in-SARIF convention: `docs/specs/ave-in-sarif.md`
-- First `research-new-attack-classes` benchmark report committed to `docs/agents/research/`
-- OWASP project proposal drafted: `docs/governance/owasp-proposal.md`
+- Detection rules and fixtures for all 48 records (96 tests)
 - New records for confirmed gaps: header injection (BadHost), parasitic toolchain, OAuth discovery rebinding
+- Toxic-flow chain derivation (`derivable_into`) research and completion
+- Publish crosswalk files: `crosswalks/skillspector-to-ave.json`, `crosswalks/clawscan-to-ave.json`
+- AVE-in-SARIF convention: `docs/specs/ave-in-sarif.md`
+- Research-new-attack-classes benchmark report
+- OWASP project proposal: `docs/governance/owasp-proposal.md`
