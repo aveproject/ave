@@ -1,56 +1,28 @@
 ---
-name: "Schema Change Proposal"
-about: Propose a change to the AVE record schema (v0.2.0)
-title: "[Schema] "
-labels: schema-change
+name: Schema change proposal
+about: Propose a change to ave-record-1.0.0.schema.json
+title: "[SCHEMA] <brief description>"
+labels: schema
 assignees: ''
 ---
 
-## Change Type
+## Change type
 
-- [ ] **Breaking change** - removing or renaming a field (requires 30-day comment period before merge)
-- [ ] **Additive change** - new optional field (standard PR review, no waiting period)
+- [ ] Additive — new optional field (no version bump required)
+- [ ] Structural — new required field, renamed field, removed field, or changed validation (requires version bump + 30-day comment period)
 
----
+## Proposed change
 
-## Proposed Change
-
-**Field name:**
-**Current definition (if existing):**
-**Proposed definition:**
-**Type:** <!-- string / integer / float / boolean / enum / array / object -->
-**Required:** <!-- yes / no -->
-**Allowed values (if enum):**
-
----
+<!-- Describe the field name, type, required/optional, and description. -->
 
 ## Rationale
 
-<!-- Why is this change needed?
-     What attack class or detection capability does it enable that the current schema cannot express?
-     Why can the same goal not be achieved with existing fields? -->
+<!-- Why is this field needed? What real-world use case does it serve? -->
 
----
+## Migration path for existing records
 
-## Impact on Existing Records
+<!-- How will the 48 existing records be updated? Can this be done with an automated script? -->
 
-<!-- How many of the 45 published records would be affected?
-     Would they need updating? Are you willing to update them in the same PR? -->
+## Impact on consumers
 
----
-
-## Example
-
-```json
-{
-  "ave_id": "AVE-2026-00001",
-  "new_field_name": "example value showing the field in use"
-}
-```
-
----
-
-## Backwards Compatibility
-
-<!-- If this is an additive change: can parsers that do not know this field
-     safely ignore it without breaking? -->
+<!-- Does this change affect the scanner, PiranhaDB, the ave-site build, or the crosswalk files? -->

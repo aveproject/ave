@@ -1,81 +1,54 @@
 ---
-name: "AVE Record Submission"
-about: Submit a new agentic vulnerability for inclusion in the AVE database
-title: "[AVE Submission] "
-labels: ave-submission, needs-review
+name: New AVE record
+about: Propose a new Agentic Vulnerability Enumeration record
+title: "[AVE] New class: <attack_class>"
+labels: ave-record, new-class
 assignees: ''
 ---
 
-## Summary
+## Before you open this issue
 
-**Component type:** <!-- skill / mcp / prompt / plugin / a2a / rag / model -->
-**Attack class:** <!-- see SPEC.md Section 4 for the taxonomy -->
-**Estimated AIVSS score:** <!-- 0.0 to 10.0 - use the calculator at bawbel.io/cvss-ai -->
-
----
-
-## Description
-
-<!-- Describe the vulnerability in detail. Must be reproducible by a third party. -->
+- [ ] I have searched the registry at ave.bawbel.io and the `records/` directory
+- [ ] This is a genuinely distinct behavioral class, not a variant of an existing record
+- [ ] I have a citable primary source (CVE, paper, disclosure, or working PoC)
 
 ---
 
-## Behavioral Fingerprint
+## Behavioral fingerprint
 
-<!-- One sentence: what does the component instruct the agent to do? -->
+<!-- One or two sentences: what does the vulnerable component DO that is dangerous?
+     Behavioral, not a byte signature. A second implementer should be able to write
+     a detection rule from this alone. -->
 
----
+## Why this is a new class, not a variant
 
-## Detection Method
+<!-- Which existing records did you check? Why does none of them cover this behavior? -->
 
-<!-- How can someone detect this? Be specific and actionable. -->
+## Primary source
 
----
+<!-- CVE id, arXiv link, vendor disclosure URL, or PoC reference. Required. -->
 
-## Indicators of Compromise
+## Proposed record skeleton
 
-- <!-- Observable signal 1 -->
-- <!-- Observable signal 2 -->
-- <!-- Observable signal 3 -->
+```
+attack_class:
+severity:           (estimate — CRITICAL / HIGH / MEDIUM / LOW)
+owasp_mcp:          [MCPxx]
+owasp_mapping:      [ASIxx]   (if applicable)
+mitre_atlas_mapping: [AML.Txxxx]  (if applicable)
+detection_layer:    content | server_card | registry_metadata | runtime | transport
+detection_stage:    static_detection | runtime_observed
+evidence_basis_engines: [pattern | yara | semgrep | llm | sandbox]
+```
 
----
+## Real-world evidence
 
-## Remediation
+<!-- CVE id, in-the-wild observation, or "theoretical only" — affects THM in AIVSS scoring -->
 
-<!-- Step by step: what should someone do when they find this? -->
+## Indicators of compromise
 
----
+<!-- At least one observable string or pattern a defender can search for in a real file -->
 
-## Framework Mapping
+## Researcher
 
-**OWASP ASI:** <!-- which ASI codes apply? ASI01 to ASI10 -->
-**OWASP MCP:** <!-- which MCP codes apply? MCP01 to MCP10 -->
-**AIVSS AARF scores:** <!-- autonomy / tool_use / multi_agent / etc. See SPEC.md Section 7 -->
-
----
-
-## Affected Platforms and Registries
-
-<!-- Where have you observed this? Sanitise sensitive details if needed. -->
-
----
-
-## Disclosure Status
-
-- [ ] I have contacted the publisher or maintainer
-- [ ] Publisher acknowledged - date: <!-- YYYY-MM-DD -->
-- [ ] 90-day window has passed, OR component is clearly malicious with no legitimate use
-
----
-
-## Researcher Credit
-
-**Name:**
-**Organisation (optional):**
-**URL (optional):**
-
----
-
-## References
-
-<!-- Links to real-world occurrences, advisories, or related research -->
+<!-- Your name or handle — will appear in the published record's researcher field -->
