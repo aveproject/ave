@@ -129,6 +129,22 @@ of 10 Agentic Amplification and Risk Factors (AARF), each scored 0.0–1.0:
 | MEDIUM | 4.0–6.9 | Meaningful risk requiring review |
 | LOW | < 4.0 | Limited impact or requires chaining |
 
+**ThM (Threat Maturity) valid values:** `0.75` (theoretical) · `0.90` (PoC exists) · `1.0` (in-the-wild)
+
+**Worked example — AVE-2026-00001 (Metamorphic Payload):**
+
+```
+AARF factors:
+  autonomy=1.0  tool_use=1.0  multi_agent=0.5  non_determinism=1.0  self_modification=1.0
+  dynamic_identity=0.0  persistent_memory=0.5  natural_language_input=1.0
+  data_access=0.5  external_dependencies=1.0
+
+AARS = 1.0 + 1.0 + 0.5 + 1.0 + 1.0 + 0.0 + 0.5 + 1.0 + 0.5 + 1.0 = 7.5
+CVSS_Base = 8.5   ThM = 1.0 (in-the-wild)   Mitigation_Factor = 1
+
+AIVSS = ((8.5 + 7.5) / 2) × 1.0 × 1 = 8.0  →  HIGH
+```
+
 ---
 
 ## Record index
@@ -359,10 +375,17 @@ The PR description must include:
 AVE records map to four external frameworks. Full crosswalk tables are
 at [ave.bawbel.io/crosswalks.html](https://ave.bawbel.io/crosswalks.html).
 
+| Framework | Field | Crosswalk |
+|---|---|---|
+| [OWASP AST10](https://owasp.org/www-project-agentic-ai-security/) | `owasp_mapping` (ASI01–ASI10) | [`crosswalks/ave-to-ast10.md`](crosswalks/ave-to-ast10.md) |
+| OWASP MCP Top 10 | `owasp_mcp` | all records |
+| MITRE ATLAS | `mitre_atlas_mapping` | where applicable |
+| NIST AI RMF | `nist_ai_rmf_mapping` | where applicable |
+
 | This scanner | Maps to AVE via |
 |---|---|
-| SkillSpector (NVIDIA) | [`crosswalks/skillspector-to-ave.json`](crosswalks/) |
-| ClawScan (OpenClaw) | [`crosswalks/clawscan-to-ave.json`](crosswalks/) |
+| SkillSpector (NVIDIA) | [`crosswalks/skillspector-to-ave.json`](crosswalks/skillspector-to-ave.json) |
+| ClawScan (OpenClaw) | [`crosswalks/clawscan-to-ave.json`](crosswalks/clawscan-to-ave.json) |
 
 Maintaining a scanner? Map your finding types to AVE ids so your results
 interoperate with every other AVE implementation.
