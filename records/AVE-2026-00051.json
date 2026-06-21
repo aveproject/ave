@@ -5,7 +5,7 @@
   "published": "2026-06-21T00:00:00Z",
   "last_updated": "2026-06-21T00:00:00Z",
   "component_type": "mcp_server",
-  "title": "OAuth Discovery Rebinding — Authorization Endpoint Redirected to Attacker Server",
+  "title": "OAuth Discovery Rebinding \u2014 Authorization Endpoint Redirected to Attacker Server",
   "attack_class": "Supply Chain - OAuth Discovery Rebinding",
   "severity": "HIGH",
   "description": "An MCP server's OAuth discovery endpoint (/.well-known/oauth-authorization-server or /.well-known/openid-configuration) returns an authorization_endpoint or token_endpoint URL that points to an attacker-controlled server rather than the legitimate authorization server. The agent, following the OAuth 2.0 Authorization Server Metadata standard (RFC 8414) or OIDC Discovery, fetches these endpoints and trusts the returned metadata. The attacker intercepts the OAuth flow and receives authorization codes, access tokens, and any credentials the agent passes during the exchange. This class represents the MCP-specific instance of DNS rebinding and OAuth metadata poisoning, where the vector is the server's own discovery document rather than a network-level attack.",
@@ -53,29 +53,34 @@
     "OAuth discovery document served over HTTP rather than HTTPS",
     "authorization_endpoint or token_endpoint containing IP addresses rather than registered domain names"
   ],
-  "remediation": "1. Validate that all endpoint URLs in the OAuth discovery document share the same origin as the MCP server's declared base URL. 2. Pin the authorization server to a pre-approved list in the agent's MCP client configuration; reject any discovery document that references a different authorization server. 3. Require HTTPS for all OAuth discovery documents and endpoint URLs — reject HTTP. 4. Treat the MCP manifest authorizationUrl as untrusted user input; validate it against the server's registered domain before initiating any OAuth flow. 5. Implement PKCE (RFC 7636) to limit the damage of intercepted authorization codes.",
+  "remediation": "1. Validate that all endpoint URLs in the OAuth discovery document share the same origin as the MCP server's declared base URL. 2. Pin the authorization server to a pre-approved list in the agent's MCP client configuration; reject any discovery document that references a different authorization server. 3. Require HTTPS for all OAuth discovery documents and endpoint URLs \u2014 reject HTTP. 4. Treat the MCP manifest authorizationUrl as untrusted user input; validate it against the server's registered domain before initiating any OAuth flow. 5. Implement PKCE (RFC 7636) to limit the damage of intercepted authorization codes.",
   "kill_switch_active": true,
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "references": [
     {
       "tag": "RFC 8414",
-      "text": "RFC 8414 — OAuth 2.0 Authorization Server Metadata",
+      "text": "RFC 8414 \u2014 OAuth 2.0 Authorization Server Metadata (IETF)",
       "url": "https://datatracker.ietf.org/doc/html/rfc8414"
     },
     {
+      "tag": "RFC 7636",
+      "text": "RFC 7636 \u2014 Proof Key for Code Exchange by OAuth Public Clients (PKCE)",
+      "url": "https://datatracker.ietf.org/doc/html/rfc7636"
+    },
+    {
       "tag": "MCP OAuth Spec",
-      "text": "Model Context Protocol — Authorization specification",
+      "text": "Model Context Protocol \u2014 Authorization specification (OAuth 2.0 flow)",
       "url": "https://spec.modelcontextprotocol.io/specification/2025-03-26/basic/authorization/"
     },
     {
-      "tag": "Formal Security Framework for MCP",
-      "text": "Formal Security Framework for MCP — OAuth Discovery Rebinding class",
-      "url": "https://spec.modelcontextprotocol.io/specification/security_best_practices/"
+      "tag": "CWE-601",
+      "text": "CWE-601: URL Redirection to Untrusted Site ('Open Redirect') \u2014 MITRE Common Weakness Enumeration",
+      "url": "https://cwe.mitre.org/data/definitions/601.html"
     },
     {
-      "tag": "Reference",
-      "text": "https://api.piranha.bawbel.io/records/AVE-2026-00051",
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00051 \u2014 AVE behavioral vulnerability registry",
       "url": "https://api.piranha.bawbel.io/records/AVE-2026-00051"
     }
   ],

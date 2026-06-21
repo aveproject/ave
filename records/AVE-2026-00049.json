@@ -58,23 +58,28 @@
   "researcher_url": "https://bawbel.io",
   "references": [
     {
-      "tag": "BadHost Research",
-      "text": "BadHost: HTTP Host Header Injection in Agent-Initiated Requests",
-      "url": "https://spec.modelcontextprotocol.io/specification/security_best_practices/"
-    },
-    {
-      "tag": "OWASP",
-      "text": "OWASP Host Header Injection",
+      "tag": "OWASP Host Header Testing",
+      "text": "OWASP Web Security Testing Guide \u2014 Testing for Host Header Injection (WSTG-INPV-17)",
       "url": "https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/07-Input_Validation_Testing/17-Testing_for_Host_Header_Injection"
     },
     {
-      "tag": "CWE",
+      "tag": "CWE-644",
       "text": "CWE-644: Improper Neutralization of HTTP Headers for Scripting Syntax",
       "url": "https://cwe.mitre.org/data/definitions/644.html"
     },
     {
-      "tag": "Reference",
-      "text": "https://api.piranha.bawbel.io/records/AVE-2026-00049",
+      "tag": "CWE-20",
+      "text": "CWE-20: Improper Input Validation \u2014 MITRE Common Weakness Enumeration",
+      "url": "https://cwe.mitre.org/data/definitions/20.html"
+    },
+    {
+      "tag": "PortSwigger",
+      "text": "PortSwigger Web Security Academy \u2014 HTTP Host header attacks",
+      "url": "https://portswigger.net/web-security/host-header"
+    },
+    {
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00049 \u2014 AVE behavioral vulnerability registry",
       "url": "https://api.piranha.bawbel.io/records/AVE-2026-00049"
     }
   ],

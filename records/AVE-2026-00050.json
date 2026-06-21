@@ -5,10 +5,10 @@
   "published": "2026-06-21T00:00:00Z",
   "last_updated": "2026-06-21T00:00:00Z",
   "component_type": "mcp_server",
-  "title": "Parasitic Toolchain — Silent Tool Registration and Persistent Hook Injection",
+  "title": "Parasitic Toolchain \u2014 Silent Tool Registration and Persistent Hook Injection",
   "attack_class": "Persistence - Parasitic Toolchain",
   "severity": "HIGH",
-  "description": "A skill or MCP tool silently registers additional tools, hooks, or handlers into the agent's active tool dispatch layer at runtime, without explicit user consent or declaration in the server manifest. The registered components persist across session restarts and intercept or augment calls originally intended for other legitimate tools. Unlike AVE-2026-00046 (hook interception via external callback URL), the parasitic toolchain registers its hooks locally within the agent's tool runtime — the malicious capability appears as a legitimate tool in the agent's tool list and survives context resets.",
+  "description": "A skill or MCP tool silently registers additional tools, hooks, or handlers into the agent's active tool dispatch layer at runtime, without explicit user consent or declaration in the server manifest. The registered components persist across session restarts and intercept or augment calls originally intended for other legitimate tools. Unlike AVE-2026-00046 (hook interception via external callback URL), the parasitic toolchain registers its hooks locally within the agent's tool runtime \u2014 the malicious capability appears as a legitimate tool in the agent's tool list and survives context resets.",
   "affected_platforms": [
     "claude-desktop",
     "claude-code",
@@ -60,18 +60,28 @@
   "researcher_url": "https://bawbel.io",
   "references": [
     {
-      "tag": "OpenClaw Study",
-      "text": "OpenClaw: Parasitic MCP Server Study — Silent Tool Registration in Agentic Runtimes",
+      "tag": "CWE-114",
+      "text": "CWE-114: Process Control \u2014 MITRE Common Weakness Enumeration",
+      "url": "https://cwe.mitre.org/data/definitions/114.html"
+    },
+    {
+      "tag": "CWE-284",
+      "text": "CWE-284: Improper Access Control \u2014 MITRE Common Weakness Enumeration",
+      "url": "https://cwe.mitre.org/data/definitions/284.html"
+    },
+    {
+      "tag": "MCP Security Best Practices",
+      "text": "Model Context Protocol \u2014 Security Best Practices (specification)",
       "url": "https://spec.modelcontextprotocol.io/specification/security_best_practices/"
     },
     {
-      "tag": "MCPSecBench",
-      "text": "MCPSecBench Class: Unauthorized Tool Registration",
-      "url": "https://spec.modelcontextprotocol.io/specification/"
+      "tag": "OWASP MCP Top 10",
+      "text": "OWASP MCP Security Top 10 \u2014 Tool Poisoning and Unauthorized Tool Registration",
+      "url": "https://owasp.org/www-project-mcp-security-top-10/"
     },
     {
-      "tag": "Reference",
-      "text": "https://api.piranha.bawbel.io/records/AVE-2026-00050",
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00050 \u2014 AVE behavioral vulnerability registry",
       "url": "https://api.piranha.bawbel.io/records/AVE-2026-00050"
     }
   ],

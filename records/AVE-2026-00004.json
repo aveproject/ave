@@ -51,14 +51,24 @@
   "last_updated": "2026-05-12T00:00:00Z",
   "references": [
     {
-      "tag": "Reference",
-      "text": "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-      "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/"
+      "tag": "CWE-78",
+      "text": "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')",
+      "url": "https://cwe.mitre.org/data/definitions/78.html"
     },
     {
-      "tag": "Reference",
-      "text": "https://github.com/bawbel/ave/blob/main/SPEC.md",
-      "url": "https://github.com/bawbel/ave/blob/main/SPEC.md"
+      "tag": "OWASP A03:2021",
+      "text": "OWASP Top 10:2021 \u2014 A03: Injection",
+      "url": "https://owasp.org/Top10/A03_2021-Injection/"
+    },
+    {
+      "tag": "CWE-77",
+      "text": "CWE-77: Improper Neutralization of Special Elements used in a Command ('Command Injection')",
+      "url": "https://cwe.mitre.org/data/definitions/77.html"
+    },
+    {
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00004 \u2014 AVE behavioral vulnerability registry",
+      "url": "https://api.piranha.bawbel.io/records/AVE-2026-00004"
     }
   ],
   "aivss": {

@@ -79,19 +79,24 @@
   "last_updated": "2026-05-12T00:00:00Z",
   "references": [
     {
-      "tag": "Reference",
-      "text": "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-      "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/"
+      "tag": "CWE-290",
+      "text": "CWE-290: Authentication Bypass by Spoofing \u2014 MITRE Common Weakness Enumeration",
+      "url": "https://cwe.mitre.org/data/definitions/290.html"
     },
     {
-      "tag": "Reference",
-      "text": "https://aivss.owasp.org",
-      "url": "https://aivss.owasp.org"
+      "tag": "MITRE ATLAS AML.T0010",
+      "text": "MITRE ATLAS \u2014 ML Supply Chain Compromise (AML.T0010)",
+      "url": "https://atlas.mitre.org/techniques/AML.T0010"
     },
     {
-      "tag": "Reference",
-      "text": "https://github.com/bawbel/ave",
-      "url": "https://github.com/bawbel/ave"
+      "tag": "OWASP MCP Top 10",
+      "text": "OWASP MCP Security Top 10 \u2014 Tool Poisoning and Server Impersonation",
+      "url": "https://owasp.org/www-project-mcp-security-top-10/"
+    },
+    {
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00017 \u2014 AVE behavioral vulnerability registry",
+      "url": "https://api.piranha.bawbel.io/records/AVE-2026-00017"
     }
   ],
   "severity": "MEDIUM",

@@ -51,19 +51,24 @@
   "last_updated": "2026-05-12T00:00:00Z",
   "references": [
     {
-      "tag": "Reference",
-      "text": "https://arxiv.org/abs/2302.12173",
-      "url": "https://arxiv.org/abs/2302.12173"
+      "tag": "Wei 2023",
+      "text": "Wei et al. \u2014 Jailbroken: How Does LLM Safety Training Fail? (arXiv 2307.02483)",
+      "url": "https://arxiv.org/abs/2307.02483"
     },
     {
-      "tag": "Reference",
-      "text": "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
+      "tag": "Zou 2023",
+      "text": "Zou et al. \u2014 Universal and Transferable Adversarial Attacks on Aligned Language Models (arXiv 2307.15043)",
+      "url": "https://arxiv.org/abs/2307.15043"
+    },
+    {
+      "tag": "OWASP LLM01",
+      "text": "OWASP Top 10 for LLM Applications \u2014 LLM01: Prompt Injection",
       "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/"
     },
     {
-      "tag": "Reference",
-      "text": "https://github.com/bawbel/ave/blob/main/SPEC.md",
-      "url": "https://github.com/bawbel/ave/blob/main/SPEC.md"
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00009 \u2014 AVE behavioral vulnerability registry",
+      "url": "https://api.piranha.bawbel.io/records/AVE-2026-00009"
     }
   ],
   "aivss": {

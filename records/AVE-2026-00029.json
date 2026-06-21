@@ -38,7 +38,7 @@
   "detection_methodology": "1. Attacker writes a skill where key instruction words use Cyrillic lookalikes\n2. Human reviewer reads \"ignore\" (appears Latin) but the model reads the Cyrillic codepoints\n3. Safety scanner using naive string matching misses the hidden instruction\n4. Model executes the concealed instruction\n\n---",
   "indicators_of_compromise": [
     "Zero-width characters (U+200B, U+200C, U+200D, U+2060, U+FEFF) in text",
-    "Bidirectional control characters (U+202A–U+202E, U+2066–U+2069)",
+    "Bidirectional control characters (U+202A\u2013U+202E, U+2066\u2013U+2069)",
     "Cyrillic characters mixed with Latin in instruction-like text",
     "References to `zero-width`, `invisible`, `hidden`, or `bidirectional` characters"
   ],
@@ -77,19 +77,24 @@
   "last_updated": "2026-05-12T00:00:00Z",
   "references": [
     {
-      "tag": "Reference",
-      "text": "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-      "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/"
+      "tag": "Boucher 2021",
+      "text": "Boucher et al. \u2014 Trojan Source: Invisible Vulnerabilities (arXiv 2111.00169)",
+      "url": "https://arxiv.org/abs/2111.00169"
     },
     {
-      "tag": "Reference",
-      "text": "https://aivss.owasp.org",
-      "url": "https://aivss.owasp.org"
+      "tag": "CVE-2021-42574",
+      "text": "CVE-2021-42574 \u2014 Trojan Source: Bidirectional Unicode text control character injection in source code",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-42574"
     },
     {
-      "tag": "Reference",
-      "text": "https://github.com/bawbel/ave",
-      "url": "https://github.com/bawbel/ave"
+      "tag": "CWE-116",
+      "text": "CWE-116: Improper Encoding or Escaping of Output \u2014 MITRE Common Weakness Enumeration",
+      "url": "https://cwe.mitre.org/data/definitions/116.html"
+    },
+    {
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00029 \u2014 AVE behavioral vulnerability registry",
+      "url": "https://api.piranha.bawbel.io/records/AVE-2026-00029"
     }
   ],
   "severity": "MEDIUM",

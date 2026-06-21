@@ -78,19 +78,24 @@
   "last_updated": "2026-05-12T00:00:00Z",
   "references": [
     {
-      "tag": "Reference",
-      "text": "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
+      "tag": "Greshake 2023",
+      "text": "Greshake et al. \u2014 Not What You've Signed Up For: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injections (arXiv 2302.12173)",
+      "url": "https://arxiv.org/abs/2302.12173"
+    },
+    {
+      "tag": "OWASP LLM Excessive Agency",
+      "text": "OWASP Top 10 for LLM Applications \u2014 Excessive Agency",
       "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/"
     },
     {
-      "tag": "Reference",
-      "text": "https://aivss.owasp.org",
-      "url": "https://aivss.owasp.org"
+      "tag": "CWE-284",
+      "text": "CWE-284: Improper Access Control \u2014 MITRE Common Weakness Enumeration",
+      "url": "https://cwe.mitre.org/data/definitions/284.html"
     },
     {
-      "tag": "Reference",
-      "text": "https://github.com/bawbel/ave",
-      "url": "https://github.com/bawbel/ave"
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00021 \u2014 AVE behavioral vulnerability registry",
+      "url": "https://api.piranha.bawbel.io/records/AVE-2026-00021"
     }
   ],
   "severity": "MEDIUM",

@@ -58,24 +58,29 @@
   "last_updated": "2026-05-12T00:00:00Z",
   "references": [
     {
-      "tag": "Reference",
-      "text": "https://spec.modelcontextprotocol.io/specification/",
-      "url": "https://spec.modelcontextprotocol.io/specification/"
+      "tag": "CWE-269",
+      "text": "CWE-269: Improper Privilege Management \u2014 MITRE Common Weakness Enumeration",
+      "url": "https://cwe.mitre.org/data/definitions/269.html"
     },
     {
-      "tag": "Reference",
-      "text": "https://github.com/bawbel/ave/blob/main/SPEC.md",
-      "url": "https://github.com/bawbel/ave/blob/main/SPEC.md"
-    },
-    {
-      "tag": "Reference",
-      "text": "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
+      "tag": "OWASP LLM Excessive Agency",
+      "text": "OWASP Top 10 for LLM Applications \u2014 Excessive Agency",
       "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/"
     },
     {
-      "tag": "Reference",
-      "text": "https://api.piranha.bawbel.io/records/AVE-2026-00036",
-      "url": "https://api.piranha.bawbel.io/records/AVE-2026-00036"
+      "tag": "OWASP MCP Top 10",
+      "text": "OWASP MCP Security Top 10 \u2014 Insufficient Access Controls",
+      "url": "https://owasp.org/www-project-mcp-security-top-10/"
+    },
+    {
+      "tag": "MCP Authorization Spec",
+      "text": "Model Context Protocol \u2014 Authorization specification",
+      "url": "https://spec.modelcontextprotocol.io/specification/2025-03-26/basic/authorization/"
+    },
+    {
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00045 \u2014 AVE behavioral vulnerability registry",
+      "url": "https://api.piranha.bawbel.io/records/AVE-2026-00045"
     }
   ],
   "owasp_mcp": [
