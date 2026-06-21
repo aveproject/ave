@@ -16,7 +16,7 @@
     "smithery.ai",
     "any-skill-registry"
   ],
-  "aivss_score": 8.2,
+  "aivss_score": 7.7,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
   "owasp_mapping": [
     "ASI04",
@@ -84,7 +84,7 @@
     "MCP07"
   ],
   "aivss": {
-    "cvss_base": 9,
+    "cvss_base": 9.0,
     "aarf": {
       "autonomy": 1,
       "tool_use": 1,
@@ -98,9 +98,9 @@
       "external_dependencies": 0.5
     },
     "aars": 7.5,
-    "thm": 0.85,
+    "thm": 0.9,
     "mitigation_factor": 1,
-    "aivss_score": 8.2,
+    "aivss_score": 7.7,
     "aivss_severity": "HIGH",
     "spec_version": "0.8",
     "owasp_mcp_mapping": [
