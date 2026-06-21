@@ -32,7 +32,7 @@ docs/                 ADRs, guides, research reports
 ```mermaid
 flowchart LR
     RECORD[AVE Record\nrecords/AVE-YYYY-NNNNN.json\nthe definition]
-    RULE[Detection Rule\nrules/pattern|yara|semgrep\nthe implementation]
+    RULE[Detection Rule\nrules/pattern\nyara\nsemgrep\nthe implementation]
     POS[Positive Fixture\ntests/fixtures/\nMUST trigger]
     NEG[Negative Fixture\ntests/fixtures/\nMUST NOT trigger]
 

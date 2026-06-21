@@ -208,7 +208,7 @@ Three ADRs are locked and documented in `docs/adr/`:
 - Detection rules and fixtures for all 48 records (96 tests)
 - New records for confirmed gaps: header injection (BadHost), parasitic toolchain, OAuth discovery rebinding
 - Toxic-flow chain derivation (`derivable_into`) research and completion
-- Publish crosswalk files: `crosswalks/skillspector-to-ave.json`, `crosswalks/clawscan-to-ave.json`
+- Publish crosswalk files: `crosswalks/skillspector-to-ave.json`, `crosswalks/clawscan-to-ave.json`, `crosswalks/ave-to-ast10.json`
 - AVE-in-SARIF convention: `docs/specs/ave-in-sarif.md`
 - Research-new-attack-classes benchmark report
 - OWASP project proposal: `docs/governance/owasp-proposal.md`
