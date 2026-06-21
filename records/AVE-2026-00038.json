@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00038",
-  "schema_version": "0.2.0",
+  "schema_version": "1.0.0",
   "component_type": "skill",
   "title": "Excessive Agency - Unbounded Tool Use or Sub-Agent Spawning",
   "attack_class": "Tool Abuse - Unbounded Tool Use",
@@ -48,19 +48,19 @@
   "aivss": {
     "cvss_base": 7.8,
     "aarf": {
-      "autonomy": 1.0,
-      "tool_use": 1.0,
+      "autonomy": 1,
+      "tool_use": 1,
       "multi_agent": 0.5,
       "non_determinism": 0.5,
-      "self_modification": 0.0,
+      "self_modification": 0,
       "dynamic_identity": 0.5,
       "persistent_memory": 0.5,
-      "natural_language_input": 1.0,
-      "data_access": 1.0,
+      "natural_language_input": 1,
+      "data_access": 1,
       "external_dependencies": 0.5
     },
     "aars": 6.5,
-    "thm": 1.0,
+    "thm": 1,
     "mitigation_factor": 0.83,
     "aivss_score": 5.9,
     "aivss_severity": "MEDIUM",
@@ -79,8 +79,35 @@
   "published": "2026-04-19T09:00:00Z",
   "last_updated": "2026-05-12T00:00:00Z",
   "references": [
-    "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://aivss.owasp.org",
-    "https://github.com/bawbel/ave"
-  ]
+    {
+      "tag": "CWE-400",
+      "text": "CWE-400: Uncontrolled Resource Consumption \u2014 MITRE Common Weakness Enumeration",
+      "url": "https://cwe.mitre.org/data/definitions/400.html"
+    },
+    {
+      "tag": "OWASP LLM Excessive Agency",
+      "text": "OWASP Top 10 for LLM Applications \u2014 Excessive Agency",
+      "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/"
+    },
+    {
+      "tag": "Cohen 2024",
+      "text": "Cohen et al. \u2014 Here Comes The AI Worm: Unleashing Zero-click Worms that Target GenAI-Powered Applications (arXiv 2403.02817)",
+      "url": "https://arxiv.org/abs/2403.02817"
+    },
+    {
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00038 \u2014 AVE behavioral vulnerability registry",
+      "url": "https://api.piranha.bawbel.io/records/AVE-2026-00038"
+    }
+  ],
+  "severity": "MEDIUM",
+  "evidence_kind_default": "behavioral_pattern",
+  "detection_stage": "static_detection",
+  "detection_layer": "content",
+  "confidence_baseline": 0.65,
+  "evidence_basis_engines": [
+    "semgrep",
+    "llm"
+  ],
+  "derivable_into": []
 }

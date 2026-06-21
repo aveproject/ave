@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00033",
-  "schema_version": "0.2.0",
+  "schema_version": "1.0.0",
   "component_type": "skill",
   "title": "Unsafe Deserialization or Eval Instruction",
   "attack_class": "Tool Abuse - Unsafe Deserialization",
@@ -49,18 +49,18 @@
   "aivss": {
     "cvss_base": 8.5,
     "aarf": {
-      "autonomy": 1.0,
-      "tool_use": 1.0,
-      "multi_agent": 0.0,
+      "autonomy": 1,
+      "tool_use": 1,
+      "multi_agent": 0,
       "non_determinism": 0.5,
       "self_modification": 0.5,
-      "dynamic_identity": 0.0,
-      "persistent_memory": 0.0,
+      "dynamic_identity": 0,
+      "persistent_memory": 0,
       "natural_language_input": 0.5,
       "data_access": 0.5,
-      "external_dependencies": 1.0
+      "external_dependencies": 1
     },
-    "aars": 5.0,
+    "aars": 5,
     "thm": 0.75,
     "mitigation_factor": 0.83,
     "aivss_score": 4.2,
@@ -80,8 +80,36 @@
   "published": "2026-04-19T09:00:00Z",
   "last_updated": "2026-05-12T00:00:00Z",
   "references": [
-    "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://aivss.owasp.org",
-    "https://github.com/bawbel/ave"
-  ]
+    {
+      "tag": "CWE-502",
+      "text": "CWE-502: Deserialization of Untrusted Data \u2014 MITRE Common Weakness Enumeration",
+      "url": "https://cwe.mitre.org/data/definitions/502.html"
+    },
+    {
+      "tag": "CWE-94",
+      "text": "CWE-94: Improper Control of Generation of Code ('Code Injection')",
+      "url": "https://cwe.mitre.org/data/definitions/94.html"
+    },
+    {
+      "tag": "OWASP A08:2021",
+      "text": "OWASP Top 10:2021 \u2014 A08: Software and Data Integrity Failures",
+      "url": "https://owasp.org/Top10/A08_2021-Software_and_Data_Integrity_Failures/"
+    },
+    {
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00033 \u2014 AVE behavioral vulnerability registry",
+      "url": "https://api.piranha.bawbel.io/records/AVE-2026-00033"
+    }
+  ],
+  "severity": "MEDIUM",
+  "evidence_kind_default": "behavioral_pattern",
+  "detection_stage": "static_detection",
+  "detection_layer": "content",
+  "confidence_baseline": 0.9,
+  "evidence_basis_engines": [
+    "pattern",
+    "semgrep",
+    "yara"
+  ],
+  "derivable_into": []
 }

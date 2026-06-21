@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00013",
-  "schema_version": "0.2.0",
+  "schema_version": "1.0.0",
   "component_type": "skill",
   "title": "Personal data exfiltration via PII collection and transmission in agentic component",
   "attack_class": "Data Exfiltration - PII Theft",
@@ -50,26 +50,44 @@
   "published": "2026-04-20T09:00:00Z",
   "last_updated": "2026-05-12T00:00:00Z",
   "references": [
-    "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://github.com/bawbel/ave/blob/main/SPEC.md"
+    {
+      "tag": "CWE-359",
+      "text": "CWE-359: Exposure of Private Personal Information to an Unauthorized Actor \u2014 MITRE Common Weakness Enumeration",
+      "url": "https://cwe.mitre.org/data/definitions/359.html"
+    },
+    {
+      "tag": "CWE-200",
+      "text": "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor",
+      "url": "https://cwe.mitre.org/data/definitions/200.html"
+    },
+    {
+      "tag": "OWASP LLM Sensitive Info",
+      "text": "OWASP Top 10 for LLM Applications \u2014 Sensitive Information Disclosure",
+      "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/"
+    },
+    {
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00013 \u2014 AVE behavioral vulnerability registry",
+      "url": "https://api.piranha.bawbel.io/records/AVE-2026-00013"
+    }
   ],
   "aivss": {
-    "cvss_base": 8.0,
+    "cvss_base": 8,
     "aarf": {
-      "autonomy": 1.0,
-      "tool_use": 1.0,
-      "multi_agent": 0.0,
+      "autonomy": 1,
+      "tool_use": 1,
+      "multi_agent": 0,
       "non_determinism": 0.5,
-      "self_modification": 0.0,
-      "dynamic_identity": 0.0,
-      "persistent_memory": 0.0,
-      "natural_language_input": 1.0,
-      "data_access": 1.0,
+      "self_modification": 0,
+      "dynamic_identity": 0,
+      "persistent_memory": 0,
+      "natural_language_input": 1,
+      "data_access": 1,
       "external_dependencies": 0.5
     },
-    "aars": 5.0,
-    "thm": 1.0,
-    "mitigation_factor": 1.0,
+    "aars": 5,
+    "thm": 1,
+    "mitigation_factor": 1,
     "aivss_score": 6.5,
     "aivss_severity": "MEDIUM",
     "spec_version": "0.8",
@@ -82,5 +100,16 @@
   "owasp_mcp": [
     "MCP05",
     "MCP06"
-  ]
+  ],
+  "severity": "MEDIUM",
+  "evidence_kind_default": "multi_engine",
+  "detection_stage": "static_detection",
+  "detection_layer": "content",
+  "confidence_baseline": 0.83,
+  "evidence_basis_engines": [
+    "pattern",
+    "semgrep",
+    "yara"
+  ],
+  "derivable_into": []
 }

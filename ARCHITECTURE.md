@@ -69,6 +69,44 @@ The ave-site build script reads records/ to generate the public registry.
 
 ---
 
+## The five detection layers
+
+Every AVE record declares a `detection_layer` — where in the agent ecosystem the vulnerability
+class surfaces. This determines what kind of scanner or monitoring reaches it.
+
+```
+Ecosystem location          Layer              Scanner that reaches it
+─────────────────────────   ─────────────────  ──────────────────────────────────
+Skill / prompt file body    content            Static file scanner (bawbel scan)
+MCP server manifest         server_card        Server-card scanner (bawbel scan-server-card)
+Registry listing            registry_metadata  Registry audit
+Live agent execution        runtime            Behavioral sandbox / runtime monitor
+Network layer               transport          Proxy / network monitor
+```
+
+**content** is the most common layer (33 of 48 records). The payload is text in the file body.
+A static scanner catches it before the agent ever runs. This is the layer bawbel-scanner covers
+primarily.
+
+**server_card** means the injection is in the MCP server manifest — `.well-known/mcp.json`, tool
+description fields, or parameter schemas. The agent reads this before making its first tool call.
+Scannable by fetching the manifest and running the same content rules.
+
+**registry_metadata** means the attack is in the registry listing itself — a typosquatted server
+name, a false vendor claim in the publisher field. Detectable by auditing the registry before
+installation.
+
+**runtime** means the evidence only exists during a live agent session. The injected payload
+arrives as a tool result, a memory write, an A2A message, a rendered UI artifact, or an async
+task payload. No static scanner sees this. Requires a behavioral sandbox or runtime monitoring.
+12 records are at this layer — they are the hardest to defend against because they bypass
+pre-deployment scanning entirely.
+
+**transport** means the attack is in the network layer — a redirected OAuth endpoint, a manipulated
+Host header, a poisoned DNS response. Requires a proxy or network monitor.
+
+---
+
 ## The declares → assigns contract
 
 The record declares baselines and defaults. The scanner assigns per-detection
