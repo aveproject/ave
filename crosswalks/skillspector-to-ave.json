@@ -12,10 +12,11 @@
   "target": {
     "standard": "AVE",
     "version": "1.0.0",
-    "url": "https://ave.bawbel.io"
+    "url": "https://ave.bawbel.io",
+    "record_count": 51
   },
-  "generated": "2026-06-18",
-  "note": "Crosswalk from SkillSpector's 16 scanner categories to AVE behavioral class ids. SkillSpector organises detection as an internal scanner taxonomy; AVE is a behavioral standard. Some SkillSpector categories are scanner mechanics (YARA signatures, taint tracking, AST analysis) rather than vulnerability classes — these are marked as no_ave_class with an explanation. Gaps indicate behavioral classes that AVE does not yet enumerate.",
+  "generated": "2026-06-21",
+  "note": "Crosswalk from SkillSpector's 16 scanner categories to AVE behavioral class ids. Updated for the 51-record set (v1.1 migration added AVE-2026-00049, 00050, 00051). SkillSpector organises detection as an internal scanner taxonomy; AVE is a behavioral standard. Some SkillSpector categories are scanner mechanics (YARA signatures, taint tracking, AST analysis) rather than vulnerability classes -- these are marked as no_ave_class with an explanation. Gaps indicate behavioral classes that AVE does not yet enumerate.",
   "mappings": [
     {
       "skillspector_category": "prompt_injection",
@@ -45,9 +46,9 @@
       "skillspector_category": "supply_chain",
       "skillspector_patterns": null,
       "description": "Compromised dependencies, tampered packages, supply chain attacks, dynamic remote imports",
-      "ave_ids": ["AVE-2026-00001", "AVE-2026-00024", "AVE-2026-00034"],
+      "ave_ids": ["AVE-2026-00001", "AVE-2026-00024", "AVE-2026-00034", "AVE-2026-00049", "AVE-2026-00051"],
       "primary_ave_id": "AVE-2026-00001",
-      "notes": "AVE-2026-00001 is the canonical metamorphic/external-fetch class; AVE-2026-00024 content type mismatch; AVE-2026-00034 dynamic skill import."
+      "notes": "AVE-2026-00001 is the canonical metamorphic/external-fetch class; AVE-2026-00024 content type mismatch; AVE-2026-00034 dynamic skill import. AVE-2026-00049 (HTTP Host Header Injection) and AVE-2026-00051 (OAuth Discovery Rebinding) added: both are attack_class='Supply Chain - ...' in AVE's own taxonomy, sharing the supply-chain framing of a trusted server delivering tampered routing/auth metadata rather than tampered code."
     },
     {
       "skillspector_category": "excessive_agency",
@@ -93,9 +94,9 @@
       "skillspector_category": "rogue_agent",
       "skillspector_patterns": null,
       "description": "Agent spawning without trust boundaries, sub-agent delegation abuse, rogue agent behavior",
-      "ave_ids": ["AVE-2026-00048", "AVE-2026-00036"],
+      "ave_ids": ["AVE-2026-00048", "AVE-2026-00036", "AVE-2026-00050"],
       "primary_ave_id": "AVE-2026-00048",
-      "notes": "AVE-2026-00048 covers unsafe agent delegation chain; AVE-2026-00036 lateral movement via agent pivot."
+      "notes": "AVE-2026-00048 covers unsafe agent delegation chain; AVE-2026-00036 lateral movement via agent pivot. AVE-2026-00050 (Parasitic Toolchain) added: a component that silently registers itself as additional tools/hooks in the agent's runtime is a rogue-agent pattern -- it behaves as an unauthorised actor inside the trusted tool dispatch layer, surviving session resets like a persistent rogue presence."
     },
     {
       "skillspector_category": "trigger_abuse",
@@ -119,9 +120,9 @@
       "skillspector_category": "taint_tracking",
       "skillspector_patterns": null,
       "description": "Data flow from untrusted sources (env vars, user input) to dangerous sinks (network calls, exec)",
-      "ave_ids": ["AVE-2026-00003", "AVE-2026-00026"],
+      "ave_ids": ["AVE-2026-00003", "AVE-2026-00026", "AVE-2026-00049"],
       "primary_ave_id": "AVE-2026-00003",
-      "notes": "Taint tracking is a detection technique that surfaces exfiltration and injection classes already covered by AVE.",
+      "notes": "Taint tracking is a detection technique that surfaces exfiltration and injection classes already covered by AVE. AVE-2026-00049 (HTTP Host Header Injection) added: the attacker-controlled host value flows from a tainted source into the Host header sink -- a textbook taint-tracking detection target.",
       "scanner_mechanic": "Taint tracking is a scanner mechanic, not a vulnerability class. It detects exfiltration and injection patterns covered by multiple AVE records."
     },
     {
@@ -131,15 +132,15 @@
       "ave_ids": [],
       "primary_ave_id": null,
       "no_ave_class": true,
-      "notes": "YARA signatures detect known malware artifacts — not behavioral vulnerability classes in the AVE sense. Positive YARA matches indicate the skill bundles known malware, which is outside AVE's enumeration scope. AVE records describe behavioral classes in skill instructions, not embedded malware payloads."
+      "notes": "YARA signatures detect known malware artifacts -- not behavioral vulnerability classes in the AVE sense. Positive YARA matches indicate the skill bundles known malware, which is outside AVE's enumeration scope. AVE records describe behavioral classes in skill instructions, not embedded malware payloads."
     },
     {
       "skillspector_category": "mcp_least_privilege",
       "skillspector_patterns": null,
       "description": "MCP server capability declarations that exceed the stated purpose of the skill",
-      "ave_ids": ["AVE-2026-00022", "AVE-2026-00002"],
+      "ave_ids": ["AVE-2026-00022", "AVE-2026-00002", "AVE-2026-00050"],
       "primary_ave_id": "AVE-2026-00022",
-      "notes": "AVE-2026-00022 covers scope creep and undeclared resource access. AVE-2026-00002 covers tool description manipulation that may include overbroad capability claims.",
+      "notes": "AVE-2026-00022 covers scope creep and undeclared resource access. AVE-2026-00002 covers tool description manipulation that may include overbroad capability claims. AVE-2026-00050 (Parasitic Toolchain) added: a component registering tool handlers beyond its declared manifest scope is a direct least-privilege violation at the MCP tool-registration layer.",
       "gap": "No AVE record specifically addresses MCP server-card capability over-declaration as a distinct class."
     },
     {
@@ -162,13 +163,13 @@
     },
     {
       "skillspector_category": "mcp_least_privilege",
-      "reason": "Server-card capability over-declaration as a distinct behavioral class is not yet a separate AVE record."
+      "reason": "Server-card capability over-declaration as a distinct behavioral class is not yet a separate AVE record, though AVE-2026-00050 now covers the runtime registration variant of this gap."
     }
   ],
   "coverage": {
     "skillspector_categories_mapped": 15,
     "skillspector_categories_no_ave_class": 1,
     "skillspector_categories_with_gaps": 2,
-    "ave_records_referenced": 26
+    "ave_records_referenced": 29
   }
 }

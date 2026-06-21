@@ -5,17 +5,18 @@
 <br/>
 <br/>
 
-**The open behavioral vulnerability standard for agentic AI components.**
+**The behavioral vulnerability enumeration standard for agentic AI components.**
 
 Every record defines a distinct attack class affecting MCP servers, skill files,
 system prompts, and agent plugins — scored with OWASP AIVSS v0.8, mapped to
 OWASP MCP Top 10 and MITRE ATLAS.
 
-[![Records](https://img.shields.io/badge/records-48-critical?style=flat-square&color=0f6e56)](records/)
+[![Records](https://img.shields.io/badge/records-51-critical?style=flat-square&color=0f6e56)](records/)
 [![Schema](https://img.shields.io/badge/schema-v1.0.0-0a3024?style=flat-square)](schema/ave-record-1.0.0.schema.json)
 [![AIVSS](https://img.shields.io/badge/AIVSS-v0.8-d4a017?style=flat-square)](https://aivss.owasp.org)
 [![OWASP MCP](https://img.shields.io/badge/OWASP-MCP%20Top%2010-0a3024?style=flat-square)](https://owasp.org)
 [![MITRE ATLAS](https://img.shields.io/badge/MITRE-ATLAS-4a3f9e?style=flat-square)](https://atlas.mitre.org)
+[![SARIF](https://img.shields.io/badge/SARIF-v2.1.0-0057b7?style=flat-square)](docs/specs/ave-in-sarif.md)
 [![License](https://img.shields.io/badge/license-Apache%202.0-green?style=flat-square)](LICENSE)
 
 [Registry](https://ave.bawbel.io/registry.html) · [Schema](https://ave.bawbel.io/schema.html) · [Crosswalks](https://ave.bawbel.io/crosswalks.html) · [Architecture](https://ave.bawbel.io/architecture.html) · [Scanner](https://github.com/bawbel/scanner)
@@ -81,13 +82,13 @@ skill file          →    in CI / pre-commit   →   before deploy
 
 | | |
 |---|---|
-| Total records | 48 |
+| Total records | 51 |
 | Schema version | 1.0.0 |
 | AIVSS spec | v0.8 |
 | CRITICAL (≥ 9.0) | 1 |
-| HIGH (7.0–8.9) | 6 |
-| MEDIUM (4.0–6.9) | 39 |
-| LOW (< 4.0) | 2 |
+| HIGH (7.0–8.9) | 9 |
+| MEDIUM (4.0–6.9) | 40 |
+| LOW (< 4.0) | 1 |
 | Framework: OWASP MCP Top 10 | all records |
 | Framework: MITRE ATLAS | where applicable |
 | Framework: OWASP Agentic AI Top 10 | where applicable |
@@ -127,6 +128,22 @@ of 10 Agentic Amplification and Risk Factors (AARF), each scored 0.0–1.0:
 | HIGH | 7.0–8.9 | Significant data loss or privilege escalation |
 | MEDIUM | 4.0–6.9 | Meaningful risk requiring review |
 | LOW | < 4.0 | Limited impact or requires chaining |
+
+**ThM (Threat Maturity) valid values:** `0.75` (theoretical) · `0.90` (PoC exists) · `1.0` (in-the-wild)
+
+**Worked example — AVE-2026-00001 (Metamorphic Payload):**
+
+```
+AARF factors:
+  autonomy=1.0  tool_use=1.0  multi_agent=0.5  non_determinism=1.0  self_modification=1.0
+  dynamic_identity=0.0  persistent_memory=0.5  natural_language_input=1.0
+  data_access=0.5  external_dependencies=1.0
+
+AARS = 1.0 + 1.0 + 0.5 + 1.0 + 1.0 + 0.0 + 0.5 + 1.0 + 0.5 + 1.0 = 7.5
+CVSS_Base = 8.5   ThM = 1.0 (in-the-wild)   Mitigation_Factor = 1
+
+AIVSS = ((8.5 + 7.5) / 2) × 1.0 × 1 = 8.0  →  HIGH
+```
 
 ---
 
@@ -179,9 +196,12 @@ of 10 Agentic Amplification and Risk Factors (AARF), each scored 0.0–1.0:
 | [AVE-2026-00043](records/AVE-2026-00043.json) | MCP App UI Injection | 4.7 | MEDIUM |
 | [AVE-2026-00044](records/AVE-2026-00044.json) | Async Task Result Poisoning | 6.1 | MEDIUM |
 | [AVE-2026-00045](records/AVE-2026-00045.json) | Cross-App-Access Escalation | 6.4 | MEDIUM |
-| [AVE-2026-00046](records/AVE-2026-00046.json) | MCP Tool Hook Hijacking | 9.1 | **CRITICAL** |
-| [AVE-2026-00047](records/AVE-2026-00047.json) | Hardcoded Credentials in Agent Component | 7.8 | HIGH |
-| [AVE-2026-00048](records/AVE-2026-00048.json) | Unsafe Agent Delegation Chain | 8.2 | HIGH |
+| [AVE-2026-00046](records/AVE-2026-00046.json) | MCP Tool Hook Hijacking | 9.2 | **CRITICAL** |
+| [AVE-2026-00047](records/AVE-2026-00047.json) | Hardcoded Credentials in Agent Component | 7.6 | HIGH |
+| [AVE-2026-00048](records/AVE-2026-00048.json) | Unsafe Agent Delegation Chain | 7.7 | HIGH |
+| [AVE-2026-00049](records/AVE-2026-00049.json) | HTTP Host Header Injection (BadHost) | 7.2 | HIGH |
+| [AVE-2026-00050](records/AVE-2026-00050.json) | Parasitic Toolchain — Silent Tool Registration | 7.2 | HIGH |
+| [AVE-2026-00051](records/AVE-2026-00051.json) | OAuth Discovery Rebinding | 7.2 | HIGH |
 
 ---
 
@@ -210,9 +230,9 @@ bawbel report ./my-skill.md
 Example output:
 
 ```
-CRITICAL  bawbel-hook-hijack           AVE-2026-00046  line 3   AIVSS 9.1
-HIGH      bawbel-unsafe-delegation     AVE-2026-00048  line 11  AIVSS 8.2
-HIGH      bawbel-hardcoded-credential  AVE-2026-00047  line 5   AIVSS 7.8
+CRITICAL  bawbel-hook-hijack           AVE-2026-00046  line 3   AIVSS 9.2
+HIGH      bawbel-unsafe-delegation     AVE-2026-00048  line 11  AIVSS 7.7
+HIGH      bawbel-hardcoded-credential  AVE-2026-00047  line 5   AIVSS 7.6
 ```
 
 Any tool can implement AVE — the records, schema, and rules are open.
@@ -355,10 +375,17 @@ The PR description must include:
 AVE records map to four external frameworks. Full crosswalk tables are
 at [ave.bawbel.io/crosswalks.html](https://ave.bawbel.io/crosswalks.html).
 
+| Framework | Field | Crosswalk |
+|---|---|---|
+| [OWASP AST10](https://owasp.org/www-project-agentic-ai-security/) | `owasp_mapping` (ASI01–ASI10) | [`crosswalks/ave-to-ast10.md`](crosswalks/ave-to-ast10.md) |
+| OWASP MCP Top 10 | `owasp_mcp` | all records |
+| MITRE ATLAS | `mitre_atlas_mapping` | where applicable |
+| NIST AI RMF | `nist_ai_rmf_mapping` | where applicable |
+
 | This scanner | Maps to AVE via |
 |---|---|
-| SkillSpector (NVIDIA) | [`crosswalks/skillspector-to-ave.json`](crosswalks/) |
-| ClawScan (OpenClaw) | [`crosswalks/clawscan-to-ave.json`](crosswalks/) |
+| SkillSpector (NVIDIA) | [`crosswalks/skillspector-to-ave.json`](crosswalks/skillspector-to-ave.json) |
+| ClawScan (OpenClaw) | [`crosswalks/clawscan-to-ave.json`](crosswalks/clawscan-to-ave.json) |
 
 Maintaining a scanner? Map your finding types to AVE ids so your results
 interoperate with every other AVE implementation.

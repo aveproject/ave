@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00029",
-  "schema_version": "0.2.0",
+  "schema_version": "1.0.0",
   "component_type": "skill",
   "title": "Homoglyph or Unicode Obfuscation Attack",
   "attack_class": "Obfuscation - Unicode Homoglyph",
@@ -38,26 +38,26 @@
   "detection_methodology": "1. Attacker writes a skill where key instruction words use Cyrillic lookalikes\n2. Human reviewer reads \"ignore\" (appears Latin) but the model reads the Cyrillic codepoints\n3. Safety scanner using naive string matching misses the hidden instruction\n4. Model executes the concealed instruction\n\n---",
   "indicators_of_compromise": [
     "Zero-width characters (U+200B, U+200C, U+200D, U+2060, U+FEFF) in text",
-    "Bidirectional control characters (U+202A–U+202E, U+2066–U+2069)",
+    "Bidirectional control characters (U+202A\u2013U+202E, U+2066\u2013U+2069)",
     "Cyrillic characters mixed with Latin in instruction-like text",
     "References to `zero-width`, `invisible`, `hidden`, or `bidirectional` characters"
   ],
   "aivss": {
     "cvss_base": 7.5,
     "aarf": {
-      "autonomy": 1.0,
+      "autonomy": 1,
       "tool_use": 0.5,
-      "multi_agent": 0.0,
-      "non_determinism": 1.0,
-      "self_modification": 0.0,
-      "dynamic_identity": 0.0,
-      "persistent_memory": 0.0,
-      "natural_language_input": 1.0,
+      "multi_agent": 0,
+      "non_determinism": 1,
+      "self_modification": 0,
+      "dynamic_identity": 0,
+      "persistent_memory": 0,
+      "natural_language_input": 1,
       "data_access": 0.5,
-      "external_dependencies": 0.0
+      "external_dependencies": 0
     },
-    "aars": 4.0,
-    "thm": 1.0,
+    "aars": 4,
+    "thm": 1,
     "mitigation_factor": 0.83,
     "aivss_score": 4.8,
     "aivss_severity": "MEDIUM",
@@ -76,8 +76,35 @@
   "published": "2026-04-19T09:00:00Z",
   "last_updated": "2026-05-12T00:00:00Z",
   "references": [
-    "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://aivss.owasp.org",
-    "https://github.com/bawbel/ave"
-  ]
+    {
+      "tag": "Boucher 2021",
+      "text": "Boucher et al. \u2014 Trojan Source: Invisible Vulnerabilities (arXiv 2111.00169)",
+      "url": "https://arxiv.org/abs/2111.00169"
+    },
+    {
+      "tag": "CVE-2021-42574",
+      "text": "CVE-2021-42574 \u2014 Trojan Source: Bidirectional Unicode text control character injection in source code",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-42574"
+    },
+    {
+      "tag": "CWE-116",
+      "text": "CWE-116: Improper Encoding or Escaping of Output \u2014 MITRE Common Weakness Enumeration",
+      "url": "https://cwe.mitre.org/data/definitions/116.html"
+    },
+    {
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00029 \u2014 AVE behavioral vulnerability registry",
+      "url": "https://api.piranha.bawbel.io/records/AVE-2026-00029"
+    }
+  ],
+  "severity": "MEDIUM",
+  "evidence_kind_default": "tool_description_pattern",
+  "detection_stage": "static_detection",
+  "detection_layer": "content",
+  "confidence_baseline": 0.75,
+  "evidence_basis_engines": [
+    "pattern",
+    "yara"
+  ],
+  "derivable_into": []
 }

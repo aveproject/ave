@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00009",
-  "schema_version": "0.2.0",
+  "schema_version": "1.0.0",
   "component_type": "skill",
   "title": "AI identity jailbreak via role-play or persona override in agentic component",
   "attack_class": "Prompt Injection - Jailbreak",
@@ -50,26 +50,43 @@
   "published": "2026-04-20T09:00:00Z",
   "last_updated": "2026-05-12T00:00:00Z",
   "references": [
-    "https://arxiv.org/abs/2302.12173",
-    "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://github.com/bawbel/ave/blob/main/SPEC.md"
+    {
+      "tag": "Wei 2023",
+      "text": "Wei et al. \u2014 Jailbroken: How Does LLM Safety Training Fail? (arXiv 2307.02483)",
+      "url": "https://arxiv.org/abs/2307.02483"
+    },
+    {
+      "tag": "Zou 2023",
+      "text": "Zou et al. \u2014 Universal and Transferable Adversarial Attacks on Aligned Language Models (arXiv 2307.15043)",
+      "url": "https://arxiv.org/abs/2307.15043"
+    },
+    {
+      "tag": "OWASP LLM01",
+      "text": "OWASP Top 10 for LLM Applications \u2014 LLM01: Prompt Injection",
+      "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/"
+    },
+    {
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00009 \u2014 AVE behavioral vulnerability registry",
+      "url": "https://api.piranha.bawbel.io/records/AVE-2026-00009"
+    }
   ],
   "aivss": {
     "cvss_base": 8.3,
     "aarf": {
-      "autonomy": 1.0,
+      "autonomy": 1,
       "tool_use": 0.5,
-      "multi_agent": 0.0,
-      "non_determinism": 1.0,
+      "multi_agent": 0,
+      "non_determinism": 1,
       "self_modification": 0.5,
       "dynamic_identity": 0.5,
-      "persistent_memory": 0.0,
-      "natural_language_input": 1.0,
+      "persistent_memory": 0,
+      "natural_language_input": 1,
       "data_access": 0.5,
-      "external_dependencies": 0.0
+      "external_dependencies": 0
     },
-    "aars": 5.0,
-    "thm": 1.0,
+    "aars": 5,
+    "thm": 1,
     "mitigation_factor": 0.83,
     "aivss_score": 5.5,
     "aivss_severity": "MEDIUM",
@@ -83,5 +100,16 @@
   "owasp_mcp": [
     "MCP01",
     "MCP03"
-  ]
+  ],
+  "severity": "MEDIUM",
+  "evidence_kind_default": "behavioral_pattern",
+  "detection_stage": "static_detection",
+  "detection_layer": "content",
+  "confidence_baseline": 0.75,
+  "evidence_basis_engines": [
+    "pattern",
+    "semgrep",
+    "llm"
+  ],
+  "derivable_into": []
 }

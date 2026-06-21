@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00032",
-  "schema_version": "0.2.0",
+  "schema_version": "1.0.0",
   "component_type": "skill",
   "title": "Network Reconnaissance Instruction",
   "attack_class": "Reconnaissance - Internal Network Scanning",
@@ -13,7 +13,7 @@
   "affected_registries": [
     "smithery.ai"
   ],
-  "aivss_score": 4.0,
+  "aivss_score": 4,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:L/UI:N/VC:H/VI:N/VA:N/SC:H/SI:N/SA:N",
   "owasp_mapping": [
     "ASI05",
@@ -48,21 +48,21 @@
   "aivss": {
     "cvss_base": 7.8,
     "aarf": {
-      "autonomy": 1.0,
-      "tool_use": 1.0,
-      "multi_agent": 0.0,
+      "autonomy": 1,
+      "tool_use": 1,
+      "multi_agent": 0,
       "non_determinism": 0.5,
-      "self_modification": 0.0,
-      "dynamic_identity": 0.0,
-      "persistent_memory": 0.0,
-      "natural_language_input": 1.0,
-      "data_access": 1.0,
+      "self_modification": 0,
+      "dynamic_identity": 0,
+      "persistent_memory": 0,
+      "natural_language_input": 1,
+      "data_access": 1,
       "external_dependencies": 0.5
     },
-    "aars": 5.0,
+    "aars": 5,
     "thm": 0.75,
     "mitigation_factor": 0.83,
-    "aivss_score": 4.0,
+    "aivss_score": 4,
     "aivss_severity": "MEDIUM",
     "spec_version": "0.8",
     "owasp_mcp_mapping": [
@@ -79,8 +79,36 @@
   "published": "2026-04-19T09:00:00Z",
   "last_updated": "2026-05-12T00:00:00Z",
   "references": [
-    "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://aivss.owasp.org",
-    "https://github.com/bawbel/ave"
-  ]
+    {
+      "tag": "CWE-918",
+      "text": "CWE-918: Server-Side Request Forgery (SSRF) \u2014 MITRE Common Weakness Enumeration",
+      "url": "https://cwe.mitre.org/data/definitions/918.html"
+    },
+    {
+      "tag": "MITRE ATT&CK T1595",
+      "text": "MITRE ATT&CK \u2014 T1595: Active Scanning",
+      "url": "https://attack.mitre.org/techniques/T1595/"
+    },
+    {
+      "tag": "OWASP A10:2021",
+      "text": "OWASP Top 10:2021 \u2014 A10: Server-Side Request Forgery (SSRF)",
+      "url": "https://owasp.org/Top10/A10_2021-Server-Side_Request_Forgery_%28SSRF%29/"
+    },
+    {
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00032 \u2014 AVE behavioral vulnerability registry",
+      "url": "https://api.piranha.bawbel.io/records/AVE-2026-00032"
+    }
+  ],
+  "severity": "MEDIUM",
+  "evidence_kind_default": "behavioral_pattern",
+  "detection_stage": "static_detection",
+  "detection_layer": "content",
+  "confidence_baseline": 0.9,
+  "evidence_basis_engines": [
+    "pattern",
+    "semgrep",
+    "yara"
+  ],
+  "derivable_into": []
 }

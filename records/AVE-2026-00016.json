@@ -1,7 +1,7 @@
 {
   "ave_id": "AVE-2026-00016",
-  "schema_version": "0.2.0",
-  "component_type": "rag",
+  "schema_version": "1.0.0",
+  "component_type": "other",
   "title": "Indirect Prompt Injection via RAG Retrieval",
   "attack_class": "Prompt Injection - RAG Retrieval",
   "description": "A Retrieval-Augmented Generation (RAG) pipeline indexes external documents and injects their content into the agent's context at query time. An attacker who controls any document in the indexed corpus can embed instructions that will be treated as trusted context when retrieved, effectively injecting into the agent's reasoning without direct access to the system prompt. ---",
@@ -44,21 +44,21 @@
     ""
   ],
   "aivss": {
-    "cvss_base": 8.0,
+    "cvss_base": 8,
     "aarf": {
-      "autonomy": 1.0,
-      "tool_use": 1.0,
+      "autonomy": 1,
+      "tool_use": 1,
       "multi_agent": 0.5,
-      "non_determinism": 1.0,
+      "non_determinism": 1,
       "self_modification": 0.5,
-      "dynamic_identity": 0.0,
-      "persistent_memory": 1.0,
-      "natural_language_input": 1.0,
-      "data_access": 1.0,
+      "dynamic_identity": 0,
+      "persistent_memory": 1,
+      "natural_language_input": 1,
+      "data_access": 1,
       "external_dependencies": 0.5
     },
     "aars": 7.5,
-    "thm": 1.0,
+    "thm": 1,
     "mitigation_factor": 0.83,
     "aivss_score": 6.4,
     "aivss_severity": "MEDIUM",
@@ -77,8 +77,35 @@
   "published": "2026-04-19T09:00:00Z",
   "last_updated": "2026-05-12T00:00:00Z",
   "references": [
-    "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
-    "https://aivss.owasp.org",
-    "https://github.com/bawbel/ave"
-  ]
+    {
+      "tag": "Greshake 2023",
+      "text": "Greshake et al. \u2014 Not What You've Signed Up For: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injections (arXiv 2302.12173)",
+      "url": "https://arxiv.org/abs/2302.12173"
+    },
+    {
+      "tag": "Zou 2024",
+      "text": "Zou et al. \u2014 PoisonedRAG: Knowledge Corruption Attacks to Retrieval-Augmented Generation of Large Language Models (arXiv 2402.07867)",
+      "url": "https://arxiv.org/abs/2402.07867"
+    },
+    {
+      "tag": "OWASP LLM01",
+      "text": "OWASP Top 10 for LLM Applications \u2014 LLM01: Prompt Injection",
+      "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/"
+    },
+    {
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00016 \u2014 AVE behavioral vulnerability registry",
+      "url": "https://api.piranha.bawbel.io/records/AVE-2026-00016"
+    }
+  ],
+  "severity": "MEDIUM",
+  "evidence_kind_default": "behavioral_pattern",
+  "detection_stage": "runtime_observed",
+  "detection_layer": "runtime",
+  "confidence_baseline": 0.62,
+  "evidence_basis_engines": [
+    "semgrep",
+    "llm"
+  ],
+  "derivable_into": []
 }

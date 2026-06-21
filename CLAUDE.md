@@ -7,9 +7,9 @@ Single source of truth for how work happens in this repo.
 
 ## Project
 
-bawbel/ave — the Agentic Vulnerability Enumeration standard.
-The CVE for AI agent components. An independent standard that
-bawbel-scanner implements. NOT a feature of the scanner.
+bawbel/ave — the behavioral vulnerability enumeration standard for
+agentic AI components. An independent standard that bawbel-scanner
+implements. NOT a feature of the scanner.
 
 - Records: 48 published (schema_version 0.2.0, migrating to 1.0.0 in v1.1)
 - Schema: schema/ave-record-1.0.0.schema.json
