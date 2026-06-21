@@ -11,10 +11,11 @@
   "target": {
     "standard": "AVE",
     "version": "1.0.0",
-    "url": "https://ave.bawbel.io"
+    "url": "https://ave.bawbel.io",
+    "record_count": 51
   },
-  "generated": "2026-06-18",
-  "note": "Crosswalk from ClawScan's 7 analyzer modules and their rule IDs to AVE behavioral class ids. Rule IDs sourced from ClawScan live scan output and documentation at clawscan.dev. Gaps indicate behavioral classes covered by ClawScan that AVE does not yet enumerate.",
+  "generated": "2026-06-21",
+  "note": "Crosswalk from ClawScan's 7 analyzer modules and their rule IDs to AVE behavioral class ids. Updated for the 51-record set (v1.1 migration added AVE-2026-00049, 00050, 00051). Rule IDs sourced from ClawScan live scan output and documentation at clawscan.dev. Gaps indicate behavioral classes covered by ClawScan that AVE does not yet enumerate.",
   "mappings": [
     {
       "clawscan_module": "prompt-injection",
@@ -127,9 +128,9 @@
         {
           "rule_id": "scripts/persistence",
           "description": "Persistence mechanisms, cron jobs, startup entries",
-          "ave_ids": ["AVE-2026-00008"],
+          "ave_ids": ["AVE-2026-00008", "AVE-2026-00050"],
           "primary_ave_id": "AVE-2026-00008",
-          "notes": "AVE-2026-00008 covers persistence and self-replication."
+          "notes": "AVE-2026-00008 covers persistence and self-replication. AVE-2026-00050 (Parasitic Toolchain) added: registered tool hooks that persist across session restarts are a runtime-layer persistence mechanism, the agentic-runtime equivalent of a cron job or startup entry."
         },
         {
           "rule_id": "scripts/evalExecAbuse",
@@ -142,7 +143,7 @@
     },
     {
       "clawscan_module": "network",
-      "description": "Network destination detection: blocklisted IPs, webhook exfil endpoints, suspicious TLDs",
+      "description": "Network destination detection: blocklisted IPs, webhook exfil endpoints, suspicious TLDs, header tampering, OAuth misconfiguration, content-type spoofing",
       "rules": [
         {
           "rule_id": "network/blocklistedIP",
@@ -164,6 +165,27 @@
           "ave_ids": ["AVE-2026-00001"],
           "primary_ave_id": "AVE-2026-00001",
           "notes": "Suspicious TLD is an IOC for external instruction fetch or exfiltration classes."
+        },
+        {
+          "rule_id": "network/header-tamper",
+          "description": "HTTP request headers (Host, X-Forwarded-Host, X-Original-URL) overridden to values inconsistent with the target URL",
+          "ave_ids": ["AVE-2026-00049"],
+          "primary_ave_id": "AVE-2026-00049",
+          "notes": "Direct, exact match. AVE-2026-00049 (HTTP Host Header Injection / BadHost) is precisely this rule's target class -- a component overrides the Host header (or X-Forwarded-Host / X-Original-URL) on an outbound request to redirect it, along with any carried credentials, to an attacker-controlled server."
+        },
+        {
+          "rule_id": "network/oauth-misconfig",
+          "description": "OAuth discovery or authorization endpoint configuration pointing to an unexpected or untrusted host",
+          "ave_ids": ["AVE-2026-00051"],
+          "primary_ave_id": "AVE-2026-00051",
+          "notes": "Direct, exact match. AVE-2026-00051 (OAuth Discovery Rebinding) is precisely this rule's target class -- the server's OAuth discovery document (authorization_endpoint, token_endpoint, jwks_uri) is poisoned to point at attacker infrastructure rather than the legitimate authorization server."
+        },
+        {
+          "rule_id": "network/type-spoof",
+          "description": "Declared content type does not match actual transmitted content type",
+          "ave_ids": ["AVE-2026-00024"],
+          "primary_ave_id": "AVE-2026-00024",
+          "notes": "AVE-2026-00024 covers content type mismatch (executable payload disguised as a skill file), detected primarily via the Magika engine."
         }
       ]
     },
@@ -246,18 +268,18 @@
   "gaps": [
     {
       "clawscan_rule": "scripts/reverseShell",
-      "reason": "Reverse shell payloads in bundled scripts are malware artifacts. AVE enumerates behavioral classes in skill instructions — the instruction that causes a reverse shell to be invoked is partially covered but the payload itself is out of scope."
+      "reason": "Reverse shell payloads in bundled scripts are malware artifacts. AVE covers the instruction that causes execution -- the compiled payload itself is out of scope."
     },
     {
       "clawscan_rule": "obfuscation/minifiedCode",
-      "reason": "Code obfuscation as a distinct behavioral class has no current AVE record. Partially covered by AVE-2026-00024 (content type mismatch) but minification without type mismatch is not separately enumerated."
+      "reason": "Code obfuscation without content type mismatch has no current AVE record. Partially covered by AVE-2026-00024."
     }
   ],
   "coverage": {
     "clawscan_modules_mapped": 7,
-    "clawscan_rules_documented": 19,
-    "clawscan_rules_with_full_ave_coverage": 17,
+    "clawscan_rules_documented": 21,
+    "clawscan_rules_with_full_ave_coverage": 19,
     "clawscan_rules_with_gaps": 2,
-    "ave_records_referenced": 24
+    "ave_records_referenced": 25
   }
 }
