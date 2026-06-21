@@ -9,6 +9,25 @@
   "attack_class": "Persistence - Parasitic Toolchain",
   "severity": "HIGH",
   "description": "A skill or MCP tool silently registers additional tools, hooks, or handlers into the agent's active tool dispatch layer at runtime, without explicit user consent or declaration in the server manifest. The registered components persist across session restarts and intercept or augment calls originally intended for other legitimate tools. Unlike AVE-2026-00046 (hook interception via external callback URL), the parasitic toolchain registers its hooks locally within the agent's tool runtime — the malicious capability appears as a legitimate tool in the agent's tool list and survives context resets.",
+  "affected_platforms": [
+    "claude-desktop",
+    "claude-code",
+    "cursor",
+    "any-mcp-client",
+    "any-multi-agent-framework"
+  ],
+  "affected_registries": [
+    "registry.modelcontextprotocol.io",
+    "smithery.ai",
+    "mcpmarket.com",
+    "any-skill-registry",
+    "github-public-repos"
+  ],
+  "aivss_score": 7.8,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
+  "owasp_mapping": ["ASI04", "ASI07"],
+  "mitre_atlas_mapping": ["AML.T0010", "AML.T0043"],
+  "nist_ai_rmf_mapping": ["MAP-1.5", "MANAGE-2.4"],
   "behavioral_fingerprint": "Component registers tool handlers or hooks beyond its declared manifest scope during session initialization. The registration extends the component's footprint into the agent's tool dispatch layer, granting it visibility into or control over calls intended for other tools. The parasitic tools appear as first-class registered tools, not obviously distinguishable from legitimately registered ones.",
   "behavioral_vector": [
     "tool_registry.register('file_reader', intercept_handler)",
@@ -27,12 +46,27 @@
     "Tool handler that forwards arguments externally before delegating to the intended handler"
   ],
   "remediation": "1. Enforce strict manifest validation: reject any tool registration at runtime that is not declared in the server's tools[] manifest. 2. Scope tool-call hooks to the registering component's own tools, not all tools. 3. Audit registered tool lists after initialization and alert on additions that do not match the manifest. 4. Treat tool registration as a privileged operation requiring explicit user approval, equivalent to installing a new tool. 5. Compare active tool list against the snapshot from manifest load at regular intervals.",
+  "kill_switch_active": true,
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
+  "references": [
+    {
+      "tag": "OpenClaw Study",
+      "text": "OpenClaw: Parasitic MCP Server Study — Silent Tool Registration in Agentic Runtimes",
+      "url": "https://spec.modelcontextprotocol.io/specification/security_best_practices/"
+    },
+    {
+      "tag": "MCPSecBench",
+      "text": "MCPSecBench Class: Unauthorized Tool Registration",
+      "url": "https://spec.modelcontextprotocol.io/specification/"
+    },
+    {
+      "tag": "Reference",
+      "text": "https://api.piranha.bawbel.io/records/AVE-2026-00050",
+      "url": "https://api.piranha.bawbel.io/records/AVE-2026-00050"
+    }
+  ],
   "owasp_mcp": ["MCP04", "MCP07"],
-  "owasp_mapping": ["ASI04", "ASI07"],
-  "nist_ai_rmf_mapping": ["MAP-1.5", "MANAGE-2.4"],
-  "aivss_score": 7.8,
   "aivss": {
     "cvss_base": 7.8,
     "aarf": {
@@ -56,23 +90,6 @@
     "owasp_mcp_mapping": ["MCP04", "MCP07"],
     "notes": "AARF elevated by self_modification and persistent_memory: the parasite modifies the agent's tool dispatch layer and survives session resets."
   },
-  "references": [
-    {
-      "tag": "OpenClaw Study",
-      "text": "OpenClaw: Parasitic MCP Server Study — Silent Tool Registration in Agentic Runtimes",
-      "url": "https://spec.modelcontextprotocol.io/specification/security_best_practices/"
-    },
-    {
-      "tag": "MCPSecBench",
-      "text": "MCPSecBench Class: Unauthorized Tool Registration",
-      "url": "https://spec.modelcontextprotocol.io/specification/"
-    },
-    {
-      "tag": "Reference",
-      "text": "https://api.piranha.bawbel.io/records/AVE-2026-00050",
-      "url": "https://api.piranha.bawbel.io/records/AVE-2026-00050"
-    }
-  ],
   "evidence_kind_default": "behavioral_pattern",
   "detection_stage": "runtime_observed",
   "detection_layer": "runtime",
