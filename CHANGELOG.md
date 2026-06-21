@@ -6,14 +6,18 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 
 ---
 
-## [1.1.0] — 2026-06-18
+## [1.1.0] — 2026-06-21
 
 ### Summary
 
 - All 48 records migrated from schema_version 0.2.0 → 1.0.0
 - Schema v1.0.0 is now the active schema for all published records
 - Evidence declaration fields backfilled on all 48 records (canonical values from evidence-declarations-all-48.json)
-- Detection rules and test fixtures added for 5 priority records
+- Detection rules and test fixtures added for all 48 original records — 96 tests passing
+- 3 new records: AVE-2026-00049, AVE-2026-00050, AVE-2026-00051 — record set now at 51, 102 tests passing
+- AIVSS scores corrected on 6 records (formula applied, invalid ThM values fixed)
+- AVE-in-SARIF convention published: `docs/specs/ave-in-sarif.md`
+- First research-new-attack-classes benchmark report: `docs/agents/research/benchmark-2026-06.md`
 - `--skip-validation` flag can now be removed from ave-site builds
 
 ### All 48 records — fields added or corrected
@@ -40,17 +44,60 @@ Priority records (authoritative `derivable_into` chains set):
 | AVE-2026-00045 | tool_description_pattern | static_detection | 0.75 |
 | AVE-2026-00048 | tool_description_pattern | static_detection | 0.83 |
 
+### Detection rules and fixtures — all 51 records
+
+Pattern rules and positive/negative fixtures written for all 51 records.
+`pytest tests/ -v` → **102 passed** (51 records × 2 fixtures). Zero failures.
+
+Coverage scripts:
+- `python3 scripts/check_rule_coverage.py` → All 51 records have detection rules.
+- `python3 scripts/check_fixtures.py` → All 51 rules have positive and negative fixtures.
+
+### New records
+
+| AVE ID | Attack class | Severity | AIVSS |
+|---|---|---|---|
+| AVE-2026-00049 | Supply Chain - HTTP Header Injection | HIGH | 7.2 |
+| AVE-2026-00050 | Persistence - Parasitic Toolchain | HIGH | 7.2 |
+| AVE-2026-00051 | Supply Chain - OAuth Discovery Rebinding | HIGH | 7.2 |
+
+Each record ships with a detection rule and positive/negative fixtures.
+Identified from the research-new-attack-classes benchmark (Task 11): these were the three confirmed genuine gaps across MCPSecBench, FSF-MCP, MCP-SafetyBench, and Hou et al. 2025.
+
+### AIVSS score corrections
+
+Six records had incorrect scores — formula `((cvss_base + AARS) / 2) × ThM` was not applied, and ThM values outside the valid set {0.75, 0.90, 1.0} were used.
+
+| Record | Old score | New score | ThM fix |
+|---|---|---|---|
+| AVE-2026-00046 | 9.1 | 9.2 | 0.9 → 1.0 (in-the-wild) |
+| AVE-2026-00047 | 7.8 | 7.6 | 0.85 → 1.0 (invalid → in-the-wild) |
+| AVE-2026-00048 | 8.2 | 7.7 | 0.85 → 0.90 (invalid → PoC exists) |
+| AVE-2026-00049 | 7.5 | 7.2 | 0.85 → 1.0 (invalid → in-the-wild) |
+| AVE-2026-00050 | 7.8 | 7.2 | 0.88 → 0.90 (invalid → PoC exists) |
+| AVE-2026-00051 | 8.1 | 7.2 | corrected; cvss_base raised to 9.5 to match token-theft vector |
+
+All 51 records now pass formula verification. Severity bands unchanged.
+
+### Specifications and research
+
+- `docs/specs/ave-in-sarif.md` — AVE-in-SARIF convention v1.0. Defines how AVE findings travel as SARIF to reach GitHub Security tab and CI systems. Covers required fields, severity mapping, taxonomies block, and a complete minimal SARIF example for AVE-2026-00001.
+- `docs/agents/research/benchmark-2026-06.md` — First research-new-attack-classes benchmark report. Maps 87 classes across 6 external datasets (MCPSecBench, FSF-MCP, Hou et al. 2025, MCP-SafetyBench, MCPTox, OpenClaw) against the AVE record set. Identifies 1 genuine gap (resource exhaustion / agentic DoS) and confirms Hou et al. 2025 is fully covered (16/16).
+
 ### New files
 
 - `scripts/migrate-records.js`
 - `scripts/backfill-evidence.js`
 - `scripts/merge-evidence-declarations.js`
+- `scripts/check_rule_coverage.py`
+- `scripts/check_fixtures.py`
 - `docs/migrations/evidence-declarations-all-48.json`
+- `docs/specs/ave-in-sarif.md`
+- `docs/agents/research/benchmark-2026-06.md`
 - `tests/test_fixtures.py`
-- `rules/pattern/AVE-2026-0000{1,2}.py`
-- `rules/pattern/AVE-2026-000{42,45,48}.py`
-- `tests/fixtures/AVE-2026-0000{1,2}_{positive,negative}.md`
-- `tests/fixtures/AVE-2026-000{42,45,48}_{positive,negative}.md`
+- `rules/pattern/AVE-2026-000{03..40}.py` (43 new rules)
+- `rules/pattern/AVE-2026-000{41,43,44,46,47,49,50,51}.py`
+- `tests/fixtures/AVE-2026-000{03..51}_{positive,negative}.md` (96 new fixtures)
 
 ---
 
