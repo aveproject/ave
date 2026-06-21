@@ -72,6 +72,41 @@ The false-positive guard. A rule without a negative fixture is incomplete.
 
 ---
 
+## Detection layers
+
+The five values of `detection_layer` define where evidence surfaces and what scanner reaches it.
+
+**content** — Evidence is in the text body of the skill file, prompt file, or MCP tool description
+field. Detectable by a static scanner reading the file before the agent runs. 33 of the 48 records
+are at this layer.
+
+**server_card** — Evidence is in the MCP server manifest: `.well-known/mcp.json`, tool schemas, or
+parameter descriptions. Detectable when the server-card is fetched, before any tool is called.
+
+**registry_metadata** — Evidence is in the registry listing: server name, publisher name, or
+description on smithery.ai, glama.ai, or the official MCP registry. Detectable by auditing the
+registry before installation.
+
+**runtime** — Evidence only appears during live agent execution: injected via tool results, memory
+writes, A2A messages, rendered UI payloads, image pixels, or async task payloads. A static scanner
+cannot catch these. Requires a behavioral sandbox or runtime monitoring. 12 of the 48 records are
+at this layer.
+
+**transport** — Evidence is in the network layer: HTTP headers, OAuth discovery endpoints, webhook
+destinations, or DNS responses. Requires a proxy or network monitor.
+
+The layer determines what detection stage is reachable:
+
+| detection_layer | detection_stage | Scanner type needed |
+|---|---|---|
+| content | static_detection | File-level static scanner (bawbel scan) |
+| server_card | static_detection | Server-card scanner (bawbel scan-server-card) |
+| registry_metadata | static_detection | Registry audit tool |
+| runtime | runtime_observed | Behavioral sandbox or runtime monitor |
+| transport | runtime_observed | Network proxy or monitor |
+
+---
+
 ## Evidence declaration fields
 
 These fields declare DEFAULTS the scanner uses to assign per-finding values.

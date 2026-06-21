@@ -1,0 +1,150 @@
+{
+  "$schema": "https://ave.bawbel.io/schema/crosswalk-1.0.0.schema.json",
+  "source": {
+    "standard": "AVE",
+    "version": "1.0.0",
+    "url": "https://ave.bawbel.io"
+  },
+  "target": {
+    "tool": "OWASP Agentic Skills Top 10 (AST10)",
+    "lead": "Ken Huang",
+    "url": "https://owasp.org/www-project-agentic-skills-top-10/",
+    "github": "https://github.com/OWASP/www-project-agentic-skills-top-10",
+    "status": "OWASP Incubator project, incubated at OWASP Project Summit Oslo 2026",
+    "checked_against_live_site": "2026-06-19"
+  },
+  "generated": "2026-06-19",
+  "note": "Crosswalk from AVE behavioral vulnerability records to OWASP AST10 risk categories, verified against the live AST10 visual overview as of 2026-06-19. AST10 documents 10 categories of skill-layer risk at the principle level, each with a severity rating (Critical/High/Medium); AVE provides 48 records at the level of individual behavioral classes with AIVSS v0.8 scores, detection layers, and indicators of compromise. This crosswalk is offered as a basis for collaboration, not as a competing taxonomy.",
+  "revision_note": "AST05 was retitled from 'Prompt Injection' to 'Unsafe Deserialization' between the time this crosswalk was first drafted and verification against the live site. Prompt-injection-as-mechanism is now distributed across AST01 (prose instructions that hijack the agent) and AST03 (excess access weaponised by injection). This revision reflects the corrected, current structure.",
+  "mappings": [
+    {
+      "ast_id": "AST01",
+      "ast_title": "Malicious Skills",
+      "ast_severity": "Critical",
+      "ast_description": "Skills that look legitimate but hide credential stealers, reverse shells, or prose instructions that hijack the agent.",
+      "ave_ids": ["AVE-2026-00004", "AVE-2026-00005", "AVE-2026-00006", "AVE-2026-00007", "AVE-2026-00008", "AVE-2026-00009", "AVE-2026-00010", "AVE-2026-00032", "AVE-2026-00047"],
+      "primary_ave_id": "AVE-2026-00007",
+      "notes": "9 distinct AVE records. AST01 covers both code-level malice (shell injection, destructive commands, crypto drain, credential theft) and prose-level malice (goal hijack, jailbreak, hidden instructions) — AVE provides a separately scored, separately fingerprinted record for each."
+    },
+    {
+      "ast_id": "AST02",
+      "ast_title": "Supply Chain Compromise",
+      "ast_severity": "Critical",
+      "ast_description": "Registries without provenance let attackers mass-upload, take over accounts, and poison distribution channels.",
+      "ave_ids": ["AVE-2026-00001", "AVE-2026-00017", "AVE-2026-00024", "AVE-2026-00034"],
+      "primary_ave_id": "AVE-2026-00001",
+      "notes": "AVE-2026-00001 (metamorphic payload via external fetch) and AVE-2026-00034 (dynamic third-party skill import) map directly. AVE-2026-00024 adds a detection mechanism (Magika file-type mismatch) not currently specified in AST02."
+    },
+    {
+      "ast_id": "AST03",
+      "ast_title": "Over-Privileged Skills",
+      "ast_severity": "High",
+      "ast_description": "Skills granted far more access than they need — weaponisable by prompt injection into a huge blast radius.",
+      "ave_ids": ["AVE-2026-00012", "AVE-2026-00016", "AVE-2026-00020", "AVE-2026-00021", "AVE-2026-00022", "AVE-2026-00038", "AVE-2026-00044", "AVE-2026-00045", "AVE-2026-00048"],
+      "primary_ave_id": "AVE-2026-00045",
+      "notes": "9 distinct AVE records, the largest mapping after AST01. AST03's own description names prompt injection as the exploit mechanism for this risk — AVE-2026-00016 (RAG injection), AVE-2026-00020 (A2A injection), and AVE-2026-00044 (async task poisoning) are injection techniques that specifically exploit over-broad access, distinct from AST01's direct-hijack records. AVE-2026-00045 (cross-app-access escalation) and AVE-2026-00048 (unsafe agent delegation) extend this to multi-server and multi-agent sessions, which AST03 does not currently break out separately."
+    },
+    {
+      "ast_id": "AST04",
+      "ast_title": "Insecure Metadata",
+      "ast_severity": "High",
+      "ast_description": "Unvalidated, unsigned metadata enables brand impersonation, understated permissions, and poisoned search.",
+      "ave_ids": ["AVE-2026-00002", "AVE-2026-00029", "AVE-2026-00041"],
+      "primary_ave_id": "AVE-2026-00041",
+      "notes": "AVE-2026-00041 (MCP server-card injection) is a server-card-specific variant of this risk not currently broken out separately in AST04. AVE-2026-00029 (Unicode/homoglyph obfuscation) provides a specific detection signature for metadata concealment."
+    },
+    {
+      "ast_id": "AST05",
+      "ast_title": "Unsafe Deserialization",
+      "ast_severity": "High",
+      "ast_description": "YAML/JSON/Markdown parsers execute embedded payloads at skill-load time — before any user action.",
+      "ave_ids": ["AVE-2026-00033", "AVE-2026-00042"],
+      "primary_ave_id": "AVE-2026-00033",
+      "notes": "AVE-2026-00033 (unsafe deserialization / eval instruction) is an exact match. AVE-2026-00042 (REPL code mode payload injection) is a runtime variant — payload execution via tool-result interpolation into agent-generated code, rather than at parse time. Worth confirming with AST05's authors whether runtime code-mode injection is in scope or belongs elsewhere."
+    },
+    {
+      "ast_id": "AST06",
+      "ast_title": "Weak Isolation",
+      "ast_severity": "High",
+      "ast_description": "Skills run in the agent's full security context — with no sandbox, every skill is a potential full-system compromise.",
+      "ave_ids": ["AVE-2026-00036", "AVE-2026-00046"],
+      "primary_ave_id": "AVE-2026-00046",
+      "notes": "AVE-2026-00046 (MCP tool hook hijacking) is AVE's only CRITICAL-severity record and is a direct example of full-security-context abuse with no isolation boundary. AVE-2026-00036 (lateral movement) covers the consequence of weak isolation across systems."
+    },
+    {
+      "ast_id": "AST07",
+      "ast_title": "Update Drift",
+      "ast_severity": "Medium",
+      "ast_description": "Without pinning or verification, skills silently drift to vulnerable — or freshly malicious — versions.",
+      "ave_ids": ["AVE-2026-00001"],
+      "primary_ave_id": "AVE-2026-00001",
+      "notes": "Shared with AST02 from a different angle: AST02 treats AVE-2026-00001 as a distribution-channel problem, AST07 treats it as a post-approval drift problem. Same record, two valid lenses. AVE does not yet have a record for drift via direct version republish without external fetch — a gap worth closing."
+    },
+    {
+      "ast_id": "AST08",
+      "ast_title": "Poor Scanning",
+      "ast_severity": "Medium",
+      "ast_description": "Natural-language-plus-code blends defeat signature scanners, so malicious skills pass every automated check.",
+      "ave_ids": [],
+      "primary_ave_id": null,
+      "notes": "Not an AVE behavioral class — AST08 describes a tooling gap, not a vulnerability. AVE's five-engine scanner design (pattern, semgrep, yara, llm, magika) and detection_layer/evidence_basis_engines fields are a direct technical response to AST08, but this is a tooling capability, not an enumerable record."
+    },
+    {
+      "ast_id": "AST09",
+      "ast_title": "No Governance",
+      "ast_severity": "Medium",
+      "ast_description": "No inventory, approval, audit, or revocation — a shadow-AI layer that security teams cannot see or control.",
+      "ave_ids": ["AVE-2026-00019", "AVE-2026-00027", "AVE-2026-00031"],
+      "primary_ave_id": "AVE-2026-00019",
+      "notes": "AVE-2026-00019 (memory poisoning), AVE-2026-00027 (multi-turn persistence), and AVE-2026-00031 (feedback loop poisoning) are all consequences of missing audit/revocation over persistent agent state. AST09 is broader (organizational governance) than AVE's scope (behavioral classes), so this mapping is partial by design."
+    },
+    {
+      "ast_id": "AST10",
+      "ast_title": "Cross-Platform Reuse",
+      "ast_severity": "Medium",
+      "ast_description": "Porting skills across platforms drops the source format's security metadata, opening exploitable gaps.",
+      "ave_ids": [],
+      "primary_ave_id": null,
+      "notes": "Not an AVE behavioral class — AST10 describes a platform-portability risk. AVE's affected_platforms field on each record (tracking which agent runtimes a class has been observed on) is relevant supporting data but does not constitute a distinct AVE record. AVE could supply the per-class platform-applicability data the Universal Skill Format would need."
+    }
+  ],
+  "gaps_in_ave": [
+    {
+      "ast_id": "AST07",
+      "reason": "No AVE record for update drift via direct version republish on a registry, as opposed to drift via external runtime fetch (AVE-2026-00001 covers only the latter)."
+    },
+    {
+      "ast_id": "AST10",
+      "reason": "No dedicated AVE record class for cross-platform metadata loss during skill porting; affected_platforms field provides supporting data only."
+    }
+  ],
+  "gaps_in_ast10": [
+    {
+      "topic": "MCP server-card injection",
+      "ave_id": "AVE-2026-00041",
+      "reason": "AST04 covers metadata mismatch generally; AVE-2026-00041 isolates the specific case of injection via the .well-known/mcp.json server-card, which fires before any tool call and is invisible to runtime monitoring."
+    },
+    {
+      "topic": "Cross-App-Access escalation",
+      "ave_id": "AVE-2026-00045",
+      "reason": "AST03 covers over-privileged access generally; AVE-2026-00045 isolates the MCP-2026 multi-server-session confused-deputy pattern specifically, a protocol-level capability AST03 predates."
+    },
+    {
+      "topic": "Tool hook hijacking",
+      "ave_id": "AVE-2026-00046",
+      "reason": "AST06 covers weak isolation generally; AVE-2026-00046 isolates interception/redirection of tool execution via a registered hook. This is AVE's only CRITICAL-severity record."
+    },
+    {
+      "topic": "AIVSS v0.8 quantitative scoring",
+      "ave_id": "all 48 records",
+      "reason": "AST10 risks carry a qualitative severity label (Critical/High/Medium) per category. Every AVE record carries a full AIVSS v0.8 score (cvss_base, AARF ten-factor breakdown, aars, thm, mitigation_factor) at the individual-class level — a finer-grained quantitative layer AST10 does not currently have per-record."
+    }
+  ],
+  "coverage": {
+    "ast_categories_with_ave_mapping": 8,
+    "ast_categories_without_ave_mapping": 2,
+    "ave_records_referenced": 32,
+    "ave_records_unmapped": 16,
+    "note_on_unmapped": "The 16 unmapped AVE records are mostly data-exfiltration, information-disclosure, and standalone prompt-injection classes (PII theft, covert channels, credential theft via instruction, system prompt leak, vision injection, MCP App UI injection) that sit closer to OWASP LLM Top 10 / Agentic AI Top 10 territory, or that AST10's current 10 categories do not yet have a dedicated slot for."
+  }
+}

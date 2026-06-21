@@ -5,7 +5,7 @@
 <br/>
 <br/>
 
-**The open behavioral vulnerability standard for agentic AI components.**
+**The behavioral vulnerability enumeration standard for agentic AI components.**
 
 Every record defines a distinct attack class affecting MCP servers, skill files,
 system prompts, and agent plugins — scored with OWASP AIVSS v0.8, mapped to

@@ -27,7 +27,7 @@ graph TB
     EXISTING["Existing standards<br>CVE · CVSS · OSV<br>Map to package + version<br>Blind to agent behavior"]
     THREAT["Agent component threats<br>Prompt injection, toxic flows,<br>rug pulls, tool poisoning<br>No package. No version."]
 
-    AVE["AVE — Agentic Vulnerability Enumeration<br>Open, neutral, behavioral standard — the CVE for AI agents<br>Stable IDs · AIVSS v0.8 scored · behavioral fingerprints"]
+    AVE["AVE — Agentic Vulnerability Enumeration<br>The behavioral vulnerability enumeration standard for agentic AI components<br>Stable IDs · AIVSS v0.8 scored · behavioral fingerprints"]
 
     P1["Trusted frameworks<br>OWASP MCP Top 10<br>MITRE ATLAS<br>OWASP AIVSS v0.8"]
     P2["Scanner interop<br>Bawbel · SkillSpector<br>ClawScan · others<br>one shared vocabulary"]

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://ave.bawbel.io/schema/ave-record-1.0.0.schema.json",
   "title": "AVE Record",
-  "description": "Agentic Vulnerability Enumeration \u2014 static definition of one behavioral vulnerability class for agentic AI components. Schema v1.0.0.",
+  "description": "AVE (the behavioral vulnerability enumeration standard for agentic AI components) \u2014 static definition of one behavioral vulnerability class. Schema v1.0.0.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -397,7 +397,7 @@
         "runtime",
         "transport"
       ],
-      "description": "Scanner hint \u2014 where in the ecosystem this class surfaces. Optional. content: inside the skill/tool file. server_card: MCP server manifest. registry_metadata: registry listing. runtime: during agent execution. transport: network layer."
+      "description": "Where in the agent ecosystem this vulnerability class surfaces. Determines what kind of scanner or monitoring is needed to detect it. content: evidence is in the text body of the skill file, prompt file, or tool description \u2014 detectable by a static scanner before the agent runs. server_card: evidence is in the MCP server manifest (.well-known/mcp.json, tool schemas, parameter descriptions) \u2014 detectable when the server-card is fetched, before any tool call. registry_metadata: evidence is in the registry listing (server name, publisher description) \u2014 detectable by auditing the registry. runtime: evidence only appears during live agent execution (injected via tool results, memory writes, A2A messages, image pixels, async task payloads) \u2014 requires behavioral sandbox or runtime monitoring. transport: evidence is in the network layer (HTTP headers, OAuth discovery endpoints, webhook destinations) \u2014 requires a proxy or network monitor."
     },
     "confidence_baseline": {
       "type": "number",

@@ -6,10 +6,12 @@ Internal product context for Claude Code sessions. Not published.
 
 ## What AVE is
 
-The Agentic Vulnerability Enumeration standard — the CVE for AI agent
-components. An open standard that bawbel-scanner implements as its reference
-implementation. Not a feature of the scanner; an independent asset with its
-own schema, registry, and community.
+The behavioral vulnerability enumeration standard for agentic AI components.
+Relates to AST10/ASI the way CVE relates to OWASP Top 10 — a Top 10 names the
+categories that matter; AVE supplies the individually-scored, individually-
+detectable records underneath them. An open standard that bawbel-scanner
+implements as its reference implementation. Not a feature of the scanner; an
+independent asset with its own schema, registry, and community.
 
 AVE is Layer 1 of the Bawbel five-layer architecture. The open layers
 (AVE standard + scanner) drive adoption and community trust. The proprietary
