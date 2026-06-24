@@ -6,7 +6,7 @@ Internal product context for Claude Code sessions. Not published.
 
 ## What AVE is
 
-The behavioral vulnerability enumeration standard for agentic AI components.
+The behavioral classification standard for agentic AI components.
 Relates to AST10/ASI the way CVE relates to OWASP Top 10 — a Top 10 names the
 categories that matter; AVE supplies the individually-scored, individually-
 detectable records underneath them. An open standard that bawbel-scanner
