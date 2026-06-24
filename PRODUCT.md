@@ -6,8 +6,8 @@ Internal product context for Claude Code sessions. Not published.
 
 ## What AVE is
 
-The behavioral vulnerability enumeration standard for agentic AI components.
-Relates to AST10/ASI the way CVE relates to OWASP Top 10 — a Top 10 names the
+The behavioral classification standard for agentic AI components.
+Relates to AST10/ASI the way CWE relates to OWASP Top 10 — a Top 10 names the
 categories that matter; AVE supplies the individually-scored, individually-
 detectable records underneath them. An open standard that bawbel-scanner
 implements as its reference implementation. Not a feature of the scanner; an
@@ -21,6 +21,7 @@ layers (PiranhaDB, registry, web platform) are the commercial moat.
 
 ## Why it exists
 
+Existing vulnerability standards were built for conventional software.
 CVE maps to CPE. OSV maps to package and version range. Neither can describe
 a prompt injection hidden in an MCP tool description — there is no package,
 no version, no vulnerable dependency. The threat is behavioral. The same
@@ -30,18 +31,23 @@ AVE fills that gap: stable IDs, behavioral fingerprints, AIVSS scoring,
 framework mappings, and detection rules — for the attack surface that the
 package world cannot see.
 
+Do not frame AVE as "the CVE for AI agents" or "the CWE for AI agents."
+Use own-terms framing: "the behavioral classification standard for agentic
+AI components." The comparison to CWE is useful as an explanation, not as
+an identity.
+
 ---
 
 ## Current status
 
 | | |
 |---|---|
-| Records published | 48 (schema_version 0.2.0, migrating to 1.0.0 in v1.1) |
+| Records published | 51 (schema_version 1.0.0) |
 | Schema version | 1.0.0 (canonical, published) |
 | Registry | ave.bawbel.io (live) |
 | Threat intel API | api.piranha.bawbel.io |
 | Site repo | github.com/bawbel/ave-site |
-| Release | v1.0.0 tagged |
+| Latest release | v1.1.0 |
 
 ---
 
@@ -50,8 +56,8 @@ package world cannot see.
 | Standard | Field | Status |
 |---|---|---|
 | OWASP AIVSS v0.8 | `aivss` object | required in every record |
-| OWASP MCP Top 10 | `owasp_mcp` | required, MCP01–MCP10 |
-| OWASP Agentic AI Top 10 | `owasp_mapping` | optional, ASI01–ASI10 |
+| OWASP MCP Top 10 | `owasp_mcp` | required, MCP01-MCP10 |
+| OWASP Agentic AI Top 10 | `owasp_mapping` | optional, ASI01-ASI10 |
 | MITRE ATLAS | `mitre_atlas_mapping` | optional, AML.Txxxx |
 | NIST AI RMF | `nist_ai_rmf_mapping` | optional |
 | OWASP AIBOM | planned via `bawbel abom` CycloneDX command | future |
@@ -61,12 +67,13 @@ package world cannot see.
 ## Relationship to OSV.dev
 
 Complementary, not competing. OSV answers "does this package version have
-a known CVE?" AVE answers "does this agent component behave dangerously?"
-A full scan runs both: OSV for dependencies, AVE for agent components.
-AVE originates net-new vulnerability classes; OSV aggregates existing ones.
+a known vulnerability?" AVE answers "does this agent component behave
+dangerously?" A full scan runs both: OSV for dependencies, AVE for agent
+components. AVE originates net-new behavioral classes; OSV aggregates
+existing package-level findings.
 
 Do not frame AVE as "OSV for AI agents" — OSV is an aggregator. AVE
-originates. Different problem, different mechanism.
+is a classification standard. Different problem, different mechanism.
 
 ---
 
@@ -82,47 +89,50 @@ The adoption path:
 1. Crosswalks — map SkillSpector and ClawScan finding types to AVE ids
    (unilateral, no ask required, positions AVE as neutral reference)
 2. AVE-in-SARIF — AVE ids travel inside SARIF into GitHub Security tab
-   and CI for free
+   and CI for free (docs/specs/ave-in-sarif.md, shipped in v1.1.0)
 3. Open data dump — full record set downloadable as one JSON file
-4. OWASP project proposal — neutral governance kills the lock-in objection
-5. Second implementer — a non-Bawbel tool emitting or mapping AVE ids
+   (ave-records-v1.1.0.json, attached to the v1.1.0 GitHub release)
+4. Second implementer — a non-Bawbel tool emitting or mapping AVE ids
+   (this is the most urgent gate; pursue before OWASP proposal)
+5. Institutional backing — MITRE CWE AI Working Group contribution,
+   OWASP AST10 crosswalk PR, OWASP project proposal
+   (proposal only after second implementer is confirmed)
 
 ---
 
 ## Roadmap
 
-**v1.1 (next)**
-- Migrate all 48 records from schema 0.2.0 → 1.0.0 (one-line batch script)
-- Backfill evidence declaration fields on 5 priority records:
-  00001, 00002, 00042, 00045, 00048
-- Publish crosswalk files: skillspector-to-ave.json, clawscan-to-ave.json,
-  ave-to-frameworks.md
-- AVE-in-SARIF convention: docs/specs/ave-in-sarif.md
-- First research-new-attack-classes benchmark report
-- OWASP project proposal: docs/governance/owasp-proposal.md
-- New records: header injection (BadHost), parasitic toolchain,
-  OAuth discovery rebinding (CVE-2025-6514 class)
+**v1.2 (next)**
+- GOVERNANCE.md — decision process, record proposal workflow, governance path
+- CODE_OF_CONDUCT.md — Contributor Covenant v2.1
+- docs/specs/ave-implementer-guide.md — three consumption patterns:
+  runtime API, bundled offline (air-gapped), ID-only emission
+- Offline release artifact: ave-records-v1.1.0.json attached to v1.1.0 release
+- AST10 crosswalk PR — contribute crosswalks/ave-to-ast10.json to OWASP AST10 repo
+- CWE AI Working Group outreach — gap-mapping issue on CWE-CAPEC/AI-Working-Group
+- Second implementer outreach — contact scanner maintainers with crosswalk packages
+- Resource exhaustion / agentic DoS record — one confirmed gap from benchmark-2026-06
 
 **Trust-building (parallel)**
-- CVE-vs-AVE showdown post on one real MCP CVE (dev.to, seeds Reddit threads)
-- 10 technical write-ups before Product Hunt
-- Priority records for content: 00042 (rug-pull), 00045 (cross-app),
-  00048 (unsafe delegation), 00002 (tool description injection),
-  00001 (external instruction fetch)
+- Technical write-ups on priority records: 00001, 00002, 00042, 00045, 00048
+- Target 10 write-ups before Product Hunt
+- Respond to the Reddit framing discussion — acknowledge behavioral classification
+  framing, link to updated docs
 
 **Later**
+- OWASP project proposal — after second implementer is confirmed and
+  a second project leader candidate is identified
 - OWASP AIBOM integration via `bawbel abom` CycloneDX command
 - Advisory board (only when real reviewers exist — not decoration)
-- Second implementer outreach (after OWASP governance, not before)
 
 ---
 
 ## Record count discipline
 
-Target: ~60–65 high-quality records by Product Hunt, reached deliberately.
-Do not push to 100. Research shows ~25–35 genuinely distinct behavioral
+Target: ~60-65 high-quality records by Product Hunt, reached deliberately.
+Do not push to 100. Research shows ~25-35 genuinely distinct behavioral
 classes exist (MCPSecBench 17, Formal Security Framework 23, Hou et al 16,
-MCP-SafetyBench 20, MCPTox 11 — heavy overlap). At 48 records we are likely
+MCP-SafetyBench 20, MCPTox 11 — heavy overlap). At 51 records we are likely
 past the count of distinct classes already.
 
 Growth path: audit and merge variants, fill genuine gaps from the
@@ -134,6 +144,6 @@ classes, no padding.
 ## How to work on AVE
 
 See CLAUDE.md for session rules and the current task queue.
-See HOW-TO-USE.md for the session start/end sequence.
+<!-- See HOW-TO-USE.md for the session start/end sequence. -->
 See ARCHITECTURE.md for the record/rule/fixture model.
 See CONTRIBUTING.md for the contributor-facing process.

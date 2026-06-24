@@ -6,11 +6,11 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 
 ---
 
-## [1.1.0] — 2026-06-21
+## [1.1.0] - 2026-06-21
 
 ### Summary
 
-- All 48 records migrated from schema_version 0.2.0 → 1.0.0
+- All 48 original records migrated from schema_version 0.2.0 to 1.0.0
 - Schema v1.0.0 is now the active schema for all published records
 - Evidence declaration fields backfilled on all 48 records (canonical values from evidence-declarations-all-48.json)
 - Detection rules and test fixtures added for all 48 original records — 96 tests passing
@@ -20,14 +20,14 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 - First research-new-attack-classes benchmark report: `docs/agents/research/benchmark-2026-06.md`
 - `--skip-validation` flag can now be removed from ave-site builds
 
-### All 48 records — fields added or corrected
+### All 48 original records — fields added or corrected
 
-- `schema_version`: `"0.2.0"` → `"1.0.0"`
+- `schema_version`: `"0.2.0"` to `"1.0.0"`
 - `severity` promoted to top level (was at `aivss.aivss_severity`)
 - `aivss_score` promoted to top level (was only at `aivss.aivss_score`)
 - `references` converted from URI strings to `{tag, text, url}` objects
 - `status`, `published`, `researcher`, `researcher_url` backfilled where missing
-- `component_type` normalised: `mcp` → `mcp_server`, `mcp-server-card` → `mcp_server`, `rag` → `other`
+- `component_type` normalised: `mcp` to `mcp_server`, `mcp-server-card` to `mcp_server`, `rag` to `other`
 - `"prompt"` added to the `component_type` enum in schema v1.0.0
 
 ### Evidence declarations — all 48 records
@@ -47,11 +47,11 @@ Priority records (authoritative `derivable_into` chains set):
 ### Detection rules and fixtures — all 51 records
 
 Pattern rules and positive/negative fixtures written for all 51 records.
-`pytest tests/ -v` → **102 passed** (51 records × 2 fixtures). Zero failures.
+`pytest tests/ -v` -> **102 passed** (51 records x 2 fixtures). Zero failures.
 
 Coverage scripts:
-- `python3 scripts/check_rule_coverage.py` → All 51 records have detection rules.
-- `python3 scripts/check_fixtures.py` → All 51 rules have positive and negative fixtures.
+- `python3 scripts/check_rule_coverage.py` -> All 51 records have detection rules.
+- `python3 scripts/check_fixtures.py` -> All 51 rules have positive and negative fixtures.
 
 ### New records
 
@@ -66,16 +66,16 @@ Identified from the research-new-attack-classes benchmark (Task 11): these were 
 
 ### AIVSS score corrections
 
-Six records had incorrect scores — formula `((cvss_base + AARS) / 2) × ThM` was not applied, and ThM values outside the valid set {0.75, 0.90, 1.0} were used.
+Six records had incorrect scores — formula `((cvss_base + AARS) / 2) x ThM` was not applied, and ThM values outside the valid set {0.75, 0.90, 1.0} were used.
 
-| Record | Old score | New score | ThM fix |
+| Record | Old score | New score | Change |
 |---|---|---|---|
-| AVE-2026-00046 | 9.1 | 9.2 | 0.9 → 1.0 (in-the-wild) |
-| AVE-2026-00047 | 7.8 | 7.6 | 0.85 → 1.0 (invalid → in-the-wild) |
-| AVE-2026-00048 | 8.2 | 7.7 | 0.85 → 0.90 (invalid → PoC exists) |
-| AVE-2026-00049 | 7.5 | 7.2 | 0.85 → 1.0 (invalid → in-the-wild) |
-| AVE-2026-00050 | 7.8 | 7.2 | 0.88 → 0.90 (invalid → PoC exists) |
-| AVE-2026-00051 | 8.1 | 7.2 | corrected; cvss_base raised to 9.5 to match token-theft vector |
+| AVE-2026-00046 | 9.1 | 9.2 | ThM 0.9 to 1.0 (in-the-wild) |
+| AVE-2026-00047 | 7.8 | 7.6 | ThM 0.85 to 1.0 (invalid to in-the-wild) |
+| AVE-2026-00048 | 8.2 | 7.7 | ThM 0.85 to 0.90 (invalid to PoC exists) |
+| AVE-2026-00049 | 7.5 | 7.2 | ThM 0.85 to 1.0 (invalid to in-the-wild) |
+| AVE-2026-00050 | 7.8 | 7.2 | ThM 0.88 to 0.90 (invalid to PoC exists) |
+| AVE-2026-00051 | 8.1 | 7.2 | ThM corrected; cvss_base raised to 9.5 to match token-theft vector |
 
 All 51 records now pass formula verification. Severity bands unchanged.
 
@@ -101,11 +101,11 @@ All 51 records now pass formula verification. Severity bands unchanged.
 
 ---
 
-## [1.0.0] — 2026-06-18
+## [1.0.0] - 2026-06-18
 
 ### The first stable release of the AVE standard.
 
-This release establishes AVE as a production-ready open standard for enumerating behavioral vulnerability classes in agentic AI components — skill files, MCP servers, plugins, and agent tools. It defines the canonical schema, the record/rule/fixture validation model, the framework alignment layer, and the scanner evidence contract.
+This release establishes AVE as a production-ready open standard for behavioral classification of agentic AI components — skill files, MCP servers, plugins, and agent tools. It defines the canonical schema, the record/rule/fixture validation model, the framework alignment layer, and the scanner evidence contract.
 
 ---
 
@@ -133,7 +133,7 @@ references · researcher
 - `indicators_of_compromise` required with `minItems: 1` — defenders need something actionable
 - `references` required with `minItems: 1` — every record must trace to a citable primary source
 - `researcher` required — records must be attributable
-- `severity` and `aivss.aivss_score` must agree (CRITICAL implies score ≥ 9.0)
+- `severity` and `aivss.aivss_score` must agree (CRITICAL implies score >= 9.0)
 
 **Full AIVSS v0.8 object** — including the optional `aarf` block with 10 named agentic amplification factors:
 autonomy, tool_use, multi_agent, non_determinism, self_modification, dynamic_identity, persistent_memory, natural_language_input, data_access, external_dependencies.
@@ -166,14 +166,14 @@ Every AVE record maps to the frameworks the security field already trusts:
 
 Initial record published: **AVE-2026-00001** — Metamorphic payload via external config fetch.
 
-The full 48-record set is under active migration to schema v1.0.0. Records that have not yet been migrated remain in the repository at schema version 0.2.0 and will be updated in v1.1.
+The full 48-record set shipped at schema version 0.2.0 and was migrated to v1.0.0 in v1.1.0.
 
 ---
 
 ### Tooling
 
 **`ave.bawbel.io`** — the public registry website launched alongside this release.
-Five pages: landing, searchable registry, crosswalks, architecture guide, schema reference.
+Six pages: landing, searchable registry, crosswalks, architecture guide, scoring reference, schema reference.
 Features: live search across ids/titles/attack classes/IOCs/frameworks, severity/class/layer filters, sortable table, detail drawer with provenance-first display, AIVSS matrix, MITRE ATLAS and OWASP chips, capability chain, per-record canonical citation with copy button, deep-link permalinks (`#AVE-YYYY-NNNNN`), SEO meta + Open Graph + JSON-LD structured data, PWA manifest, responsive down to 375px.
 
 **`bawbel/ave-site`** — separate repository for the website.
@@ -205,10 +205,11 @@ Three ADRs are locked and documented in `docs/adr/`:
 
 ## Planned for v1.2
 
-- Detection rules and fixtures for all 48 records (96 tests)
-- New records for confirmed gaps: header injection (BadHost), parasitic toolchain, OAuth discovery rebinding
-- Toxic-flow chain derivation (`derivable_into`) research and completion
-- Publish crosswalk files: `crosswalks/skillspector-to-ave.json`, `crosswalks/clawscan-to-ave.json`, `crosswalks/ave-to-ast10.json`
-- AVE-in-SARIF convention: `docs/specs/ave-in-sarif.md`
-- Research-new-attack-classes benchmark report
-- OWASP project proposal: `docs/governance/owasp-proposal.md`
+- `GOVERNANCE.md` — decision-making process, record proposal and review workflow, path toward neutral governance
+- `CODE_OF_CONDUCT.md` — Contributor Covenant v2.1
+- `docs/specs/ave-implementer-guide.md` — consumption patterns for scanner implementers: runtime API, bundled offline (air-gapped), and ID-only emission with downstream resolution
+- Offline release artifact: `ave-records-v1.1.0.json` — single downloadable JSON array of all 51 records, published as a GitHub Release asset for air-gapped and bundled-install use cases
+- AST10 crosswalk PR — submit `crosswalks/ave-to-ast10.json` as a contribution to the OWASP AST10 project repo
+- CWE AI Working Group outreach — open a contribution issue on `github.com/CWE-CAPEC/AI-Working-Group` with a gap-mapping document covering how AVE records address the agentic behavioral classes missing from CWE-1446
+- Second implementer outreach — contact scanner maintainers with crosswalk packages to enable `ave_id` emission in their finding output
+- Resource exhaustion / agentic DoS record — the one confirmed genuine gap from the benchmark-2026-06 research report

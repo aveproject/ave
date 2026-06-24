@@ -7,11 +7,10 @@ Single source of truth for how work happens in this repo.
 
 ## Project
 
-bawbel/ave — the behavioral vulnerability enumeration standard for
-agentic AI components. An independent standard that bawbel-scanner
-implements. NOT a feature of the scanner.
+bawbel/ave — the behavioral classification standard for agentic AI components.
+An independent standard that bawbel-scanner implements. NOT a feature of the scanner.
 
-- Records: 48 published (schema_version 0.2.0, migrating to 1.0.0 in v1.1)
+- Records: 51 published (schema_version 1.0.0)
 - Schema: schema/ave-record-1.0.0.schema.json
 - Scoring: OWASP AIVSS v0.8
 - Registry: ave.bawbel.io
@@ -19,7 +18,7 @@ implements. NOT a feature of the scanner.
 - Scanner: github.com/bawbel/scanner (reference implementation)
 
 This repo contains DEFINITIONS, not detections.
-An AVE record defines a vulnerability class. A scanner Finding is one
+An AVE record defines a behavioral class. A scanner Finding is one
 detection that references an AVE record by ave_id.
 
 ---
@@ -29,9 +28,9 @@ detection that references an AVE record by ave_id.
 ```
 AVE Record (this repo)              Finding (scanner repo)
 ──────────────────────              ──────────────────────
-static vulnerability definition     runtime detection instance
+static behavioral class definition  runtime detection instance
 authored once by a human            produced by every scan
-one per vulnerability class         one per detection
+one per behavioral class            one per detection
 NO confidence field                 HAS confidence field
 NO evidence_stage field             HAS evidence_stage field
 declares confidence_baseline        assigns actual confidence
@@ -104,10 +103,10 @@ def validate_record(record: dict) -> tuple[bool, list[str]]:
 
 ```
 1. Write the failing test (record validation, rule match, fixture)
-2. Run → MUST FAIL
+2. Run -> MUST FAIL
 3. Add the record / rule / fixture
-4. Run → MUST PASS
-5. Run full suite → green before commit
+4. Run -> MUST PASS
+5. Run full suite -> green before commit
 ```
 
 ---
@@ -164,6 +163,6 @@ python scripts/check_fixtures.py      # every rule has +/- fixtures
 Read PRODUCT.md. AVE is a standalone standard, Layer 1 of the Bawbel
 five-layer architecture. Treat it as its own product.
 
-The records grow with research, not with quotas. Target ~60–65 high-quality
+The records grow with research, not with quotas. Target ~60-65 high-quality
 records by Product Hunt, reached deliberately. A new ave_id requires a
 distinct behavioral class and a citable primary source. No padding.
