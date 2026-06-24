@@ -9,7 +9,7 @@ contribution makes AI agents safer for everyone.
 
 | Type | Description |
 |---|---|
-| New AVE record | Research and document a new agentic vulnerability class |
+| New AVE record | Research and document a new agentic behavioral class |
 | Schema improvement | Propose field additions or clarifications |
 | Detection rule | Add a YARA, Semgrep, or pattern rule to bawbel/scanner |
 | AIVSS scoring review | Review or improve AARF scores on existing records |
@@ -44,7 +44,7 @@ contribution makes AI agents safer for everyone.
 
 ## Submitting a new AVE record
 
-### Step 1 — Open an issue
+### Step 1 -- Open an issue
 
 Use the **New AVE Record** issue template. Include:
 
@@ -56,7 +56,7 @@ Use the **New AVE Record** issue template. Include:
 The maintainer will confirm the next `ave_id` and whether it is net-new
 or a variant update before you write any JSON.
 
-### Step 2 — Fork and create the record
+### Step 2 -- Fork and create the record
 
 ```bash
 git clone https://github.com/bawbel/ave
@@ -113,14 +113,14 @@ Score each AARF factor 0.0 (not applicable) to 1.0 (fully applicable):
 | external_dependencies | component loads remote code or content |
 
 ThM values:
-- `0.75` — theoretical, no known PoC
-- `0.90` — PoC exists
-- `1.0` — exploited in the wild or weaponised
+- `0.75` -- theoretical, no known PoC
+- `0.90` -- PoC exists
+- `1.0` -- exploited in the wild or weaponised
 
 Write a one-line rationale for each non-zero AARF factor in the PR
 description. Reviewers will ask for this if it is missing.
 
-### Step 3 — Validate locally
+### Step 3 -- Validate locally
 
 ```bash
 npm install ajv ajv-formats
@@ -140,7 +140,7 @@ else console.log('valid');
 The record must validate clean before opening a PR. A PR with a
 schema-invalid record will not be reviewed.
 
-### Step 4 — Open a coordinated scanner PR
+### Step 4 -- Open a coordinated scanner PR
 
 Every AVE record needs at least one detection rule in
 [bawbel/scanner](https://github.com/bawbel/scanner) with:
@@ -151,15 +151,15 @@ Every AVE record needs at least one detection rule in
 Open the scanner PR alongside the record PR. Reference each from the other.
 A record without a detection rule will not be merged.
 
-### Step 5 — Open the record PR
+### Step 5 -- Open the record PR
 
 Target `main`. Title format:
 
 ```
-feat: AVE-2026-NNNNN — <attack class>
+feat: AVE-2026-NNNNN -- <attack class>
 ```
 
-Example: `feat: AVE-2026-00049 — header injection (BadHost)`
+Example: `feat: AVE-2026-00049 -- header injection (BadHost)`
 
 PR description must include:
 
@@ -193,7 +193,7 @@ To update an existing record:
 git checkout -b fix/AVE-2026-NNNNN-description
 # edit records/AVE-2026-NNNNN.json
 # update last_updated to today: "2026-MM-DDTHH:MM:SSZ"
-git commit -m "fix: AVE-2026-NNNNN — <what changed>"
+git commit -m "fix: AVE-2026-NNNNN -- <what changed>"
 ```
 
 AIVSS score changes require written rationale for each AARF factor that
@@ -210,7 +210,10 @@ or obsolete, set `status: "deprecated"` — never delete.
 If you maintain a scanner with its own taxonomy, mapping your finding types
 to AVE ids makes your results interoperable with every other AVE
 implementation. Add a JSON crosswalk file to `crosswalks/` following the
-format in [`crosswalks/skillspector-to-ave.json`](crosswalks/).
+format in [`crosswalks/skillspector-to-ave.json`](crosswalks/skillspector-to-ave.json).
+
+See [docs/specs/ave-implementer-guide.md](docs/specs/ave-implementer-guide.md)
+for the full guide on adding AVE ID emission to your scanner output.
 
 ---
 
