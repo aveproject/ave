@@ -7,4 +7,3 @@ docs/agents/handoffs/
 .env
 .DS_Store
 node_modules/
-ave-records-v1.1.0.json
