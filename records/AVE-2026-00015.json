@@ -1,7 +1,7 @@
 {
   "ave_id": "AVE-2026-00015",
   "schema_version": "1.0.0",
-  "component_type": "prompt",
+  "component_type": "skill",
   "title": "System prompt extraction via direct interrogation instruction in agentic component",
   "attack_class": "Information Disclosure - System Prompt Leak",
   "description": "An agentic component instructs the agent to reveal, print, or repeat its system prompt, configuration, or internal instructions. System prompts often contain proprietary business logic, security policies, tool access configurations, and sensitive operational context. Extraction enables competitive intelligence theft and reveals attack surface for follow-on exploitation.",
