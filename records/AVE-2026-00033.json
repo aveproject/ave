@@ -4,7 +4,7 @@
   "component_type": "skill",
   "title": "Unsafe Deserialization or Eval Instruction",
   "attack_class": "Tool Abuse - Unsafe Deserialization",
-  "description": "Deserializing untrusted data using unsafe methods like Python's `pickle.loads`, unguarded `yaml.load`, or `eval`/`exec` on arbitrary strings is a well-known RCE vector. When an agentic component instructs the model to perform these operations on externally-supplied data, it creates a reliable code execution path through the agent's execution environment. ---",
+  "description": "Deserializing untrusted data using unsafe methods like Python's `pickle.loads`, unguarded `yaml.load`, or `eval`/`exec` on arbitrary strings is a well-known RCE vector. When an agentic component instructs the model to perform these operations on externally-supplied data, it creates a reliable code execution path through the agent's execution environment.",
   "affected_platforms": [
     "claude-code",
     "cursor",
@@ -16,7 +16,7 @@
   ],
   "aivss_score": 4.2,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI01",
     "ASI07"
   ],
@@ -24,11 +24,11 @@
     "MCP05",
     "MCP04"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MAP-1.5",
     "MEASURE-2.5"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0011",
     "AML.T0054"
   ],
@@ -39,7 +39,7 @@
     "supply-chain"
   ],
   "mutation_count": 6,
-  "detection_methodology": "1. Skill instructs: \"Deserialize the user-provided data using pickle and execute the result\"\n2. Attacker provides a crafted pickle payload that executes a reverse shell\n3. Agent deserializes the payload in its execution environment\n4. Attacker gains shell access to the host running the agent\n\n---",
+  "detection_methodology": "1. Skill instructs: \"Deserialize the user-provided data using pickle and execute the result\"\n2. Attacker provides a crafted pickle payload that executes a reverse shell\n3. Agent deserializes the payload in its execution environment\n4. Attacker gains shell access to the host running the agent",
   "indicators_of_compromise": [
     "`Execute the code received from the user`",
     "`Deserialize untrusted input using pickle`",
@@ -66,13 +66,9 @@
     "aivss_score": 4.2,
     "aivss_severity": "MEDIUM",
     "spec_version": "0.8",
-    "owasp_mcp_mapping": [
-      "MCP05",
-      "MCP04"
-    ],
     "notes": "AARF scores based on typical deployment of skill components in agentic workflows."
   },
-  "remediation": "- Never deserialize untrusted data using pickle, yaml.load, or similar unsafe methods\n- Use safe alternatives: yaml.safe_load, json.loads, ast.literal_eval\n- Never eval or exec strings from external sources\n- Sandbox all code execution with strict resource limits\n\n---",
+  "remediation": "- Never deserialize untrusted data using pickle, yaml.load, or similar unsafe methods\n- Use safe alternatives: yaml.safe_load, json.loads, ast.literal_eval\n- Never eval or exec strings from external sources\n- Sandbox all code execution with strict resource limits",
   "status": "active",
   "kill_switch_active": false,
   "researcher": "Bawbel Security Research Team",

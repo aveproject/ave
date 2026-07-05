@@ -18,17 +18,17 @@
   ],
   "aivss_score": 9.2,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI04",
     "ASI09"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MAP-1.5",
     "MEASURE-2.5",
     "MANAGE-2.2",
     "GOVERN-1.7"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0043",
     "AML.T0048",
     "AML.T0052"
@@ -108,10 +108,6 @@
     "aivss_score": 9.2,
     "aivss_severity": "CRITICAL",
     "spec_version": "0.8",
-    "owasp_mcp_mapping": [
-      "MCP03",
-      "MCP06"
-    ],
     "notes": "AARF scores reflect full tool interception capability with external exfiltration."
   },
   "severity": "CRITICAL",

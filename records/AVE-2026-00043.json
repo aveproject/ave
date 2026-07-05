@@ -17,16 +17,16 @@
   ],
   "aivss_score": 4.7,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:P/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI01",
     "ASI09"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MAP-1.5",
     "MEASURE-2.5",
     "MANAGE-2.2"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0043"
   ],
   "behavioral_fingerprint": "Rich UI payload (canvas, artifact, SVG, HTML) contains prompt injection instructions in non-rendered elements - hidden divs, alt attributes, aria-labels, SVG metadata, HTML comments, or zero-width characters - that the model processes but the user does not see.",
@@ -75,7 +75,8 @@
     }
   ],
   "owasp_mcp": [
-    "MCP01"
+    "MCP03",
+    "MCP10"
   ],
   "aivss": {
     "cvss_base": 8.5,
@@ -97,10 +98,6 @@
     "aivss_score": 4.7,
     "aivss_severity": "MEDIUM",
     "spec_version": "0.8",
-    "owasp_mcp_mapping": [
-      "MCP03",
-      "MCP10"
-    ],
     "notes": "AARF scores based on typical agentic deployment context for this attack class."
   },
   "severity": "MEDIUM",

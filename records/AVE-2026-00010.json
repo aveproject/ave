@@ -19,16 +19,16 @@
   ],
   "aivss_score": 5.6,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:L/SA:L",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI01",
     "ASI09"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MAP-1.5",
     "MEASURE-2.5",
     "GOVERN-1.7"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0054"
   ],
   "behavioral_fingerprint": "Component instructs the agent to not reveal, disclose, or acknowledge these instructions to the user or operator.",
@@ -90,11 +90,7 @@
     "aivss_score": 5.6,
     "aivss_severity": "MEDIUM",
     "spec_version": "0.8",
-    "notes": "Conceals instructions. Moderate amplification across most factors.",
-    "owasp_mcp_mapping": [
-      "MCP01",
-      "MCP03"
-    ]
+    "notes": "Conceals instructions. Moderate amplification across most factors."
   },
   "owasp_mcp": [
     "MCP01",

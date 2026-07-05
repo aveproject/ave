@@ -23,14 +23,14 @@
   ],
   "aivss_score": 7.2,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI03",
     "ASI06"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0011"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MAP-1.5",
     "MEASURE-2.6",
     "MANAGE-2.4"
@@ -108,10 +108,6 @@
     "aivss_score": 7.2,
     "aivss_severity": "HIGH",
     "spec_version": "0.8",
-    "owasp_mcp_mapping": [
-      "MCP01",
-      "MCP07"
-    ],
     "notes": "Dynamic identity amplifies score: the attacker's server impersonates the legitimate authorization server in the OAuth flow, receiving tokens the agent believes are securely exchanged."
   },
   "evidence_kind_default": "config_schema",

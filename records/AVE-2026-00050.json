@@ -25,15 +25,15 @@
   ],
   "aivss_score": 7.2,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI04",
     "ASI07"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0010",
     "AML.T0043"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MAP-1.5",
     "MANAGE-2.4"
   ],
@@ -109,10 +109,6 @@
     "aivss_score": 7.2,
     "aivss_severity": "HIGH",
     "spec_version": "0.8",
-    "owasp_mcp_mapping": [
-      "MCP04",
-      "MCP07"
-    ],
     "notes": "AARF elevated by self_modification and persistent_memory: the parasite modifies the agent's tool dispatch layer and survives session resets."
   },
   "evidence_kind_default": "behavioral_pattern",

@@ -20,17 +20,17 @@
   ],
   "aivss_score": 7.6,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:L/VA:N/SC:H/SI:H/SA:H",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI02",
     "ASI06"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MAP-1.5",
     "MEASURE-2.6",
     "MANAGE-2.4",
     "GOVERN-1.2"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0037",
     "AML.T0044"
   ],
@@ -109,10 +109,6 @@
     "aivss_score": 7.6,
     "aivss_severity": "HIGH",
     "spec_version": "0.8",
-    "owasp_mcp_mapping": [
-      "MCP02",
-      "MCP09"
-    ],
     "notes": "AARF scores reflect credential exposure amplified by agent context window accessibility and prompt injection risk."
   },
   "severity": "HIGH",

@@ -19,15 +19,15 @@
   ],
   "aivss_score": 3.7,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:L/VI:H/VA:N/SC:L/SI:H/SA:N",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI01",
     "ASI08"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MAP-1.5",
     "MEASURE-2.5"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0054",
     "AML.T0051"
   ],
@@ -90,11 +90,7 @@
     "aivss_score": 3.7,
     "aivss_severity": "LOW",
     "spec_version": "0.8",
-    "notes": "Social engineering. Multi-agent + dynamic identity amplify.",
-    "owasp_mcp_mapping": [
-      "MCP09",
-      "MCP10"
-    ]
+    "notes": "Social engineering. Multi-agent + dynamic identity amplify."
   },
   "owasp_mcp": [
     "MCP09",

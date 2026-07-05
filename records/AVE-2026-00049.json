@@ -24,14 +24,14 @@
   ],
   "aivss_score": 7.2,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:L/VA:N/SC:H/SI:L/SA:N",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI03",
     "ASI06"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0011"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MAP-1.5",
     "MEASURE-2.6"
   ],
@@ -107,10 +107,6 @@
     "aivss_score": 7.2,
     "aivss_severity": "HIGH",
     "spec_version": "0.8",
-    "owasp_mcp_mapping": [
-      "MCP04",
-      "MCP05"
-    ],
     "notes": "AARF elevated by autonomy and external dependency factors. Agent-initiated requests carrying credentials to attacker host amplifies impact."
   },
   "evidence_kind_default": "tool_description_pattern",

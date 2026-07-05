@@ -18,7 +18,7 @@
   ],
   "aivss_score": 7.3,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:L/VI:H/VA:N/SC:L/SI:H/SA:N",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI01",
     "ASI03"
   ],
@@ -26,11 +26,11 @@
     "MCP03",
     "MCP10"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MAP-1.5",
     "MEASURE-2.5"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0054"
   ],
   "behavioral_fingerprint": "MCP tool description field contains directives targeting agent behavior rather than describing tool functionality.",
@@ -67,10 +67,6 @@
     "aivss_score": 7.3,
     "aivss_severity": "HIGH",
     "spec_version": "0.8",
-    "owasp_mcp_mapping": [
-      "MCP03",
-      "MCP10"
-    ],
     "notes": "AARF scores reflect typical mcp deployment in agentic workflows. See SPEC.md for factor definitions."
   },
   "remediation": "1. Remove or replace the MCP server.\n2. Review all tool calls made while the server was connected.\n3. Audit agent output for signs of behavioral changes matching the injected instructions.\n4. Report the server to the registry operator.",

@@ -19,16 +19,16 @@
   ],
   "aivss_score": 6.5,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:N/VA:N/SC:H/SI:H/SA:L",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI01",
     "ASI06"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MAP-1.5",
     "MEASURE-2.5",
     "MANAGE-1.3"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0054",
     "AML.T0048"
   ],
@@ -91,11 +91,7 @@
     "aivss_score": 6.5,
     "aivss_severity": "MEDIUM",
     "spec_version": "0.8",
-    "notes": "PII collection + exfil. Confirmed in Smithery sbb-mcp and strale findings.",
-    "owasp_mcp_mapping": [
-      "MCP05",
-      "MCP06"
-    ]
+    "notes": "PII collection + exfil. Confirmed in Smithery sbb-mcp and strale findings."
   },
   "owasp_mcp": [
     "MCP05",

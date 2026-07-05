@@ -17,15 +17,15 @@
   ],
   "aivss_score": 7.5,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI07"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MAP-1.5",
     "MEASURE-2.6",
     "MANAGE-1.3"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0048"
   ],
   "behavioral_fingerprint": "Component instructs agent to transfer all funds, approve unlimited token allowance, or sign a transaction to an externally supplied address.",
@@ -87,10 +87,7 @@
     "aivss_score": 7.5,
     "aivss_severity": "HIGH",
     "spec_version": "0.8",
-    "notes": "Financial loss. Irreversible. Highest CVSS base in the set.",
-    "owasp_mcp_mapping": [
-      "MCP01"
-    ]
+    "notes": "Financial loss. Irreversible. Highest CVSS base in the set."
   },
   "owasp_mcp": [
     "MCP01"
