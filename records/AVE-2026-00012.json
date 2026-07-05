@@ -33,7 +33,11 @@
     "AML.T0051"
   ],
   "behavioral_fingerprint": "Component asserts that elevated permissions have been granted to the agent, claiming authority to override normal operational boundaries.",
-  "behavioral_vector": [],
+  "behavioral_vector": [
+    "false-permission-grant",
+    "privilege-escalation",
+    "authority-claim"
+  ],
   "mutation_count": 92,
   "detection_methodology": "1. Static scan: search for false permission grants (you now have permission, you are now allowed to, your restrictions have been lifted, you have been granted access). 2. Semantic analysis: detect instructions claiming to grant the agent elevated capabilities or override existing restrictions.",
   "indicators_of_compromise": [

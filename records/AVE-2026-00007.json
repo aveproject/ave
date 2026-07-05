@@ -33,7 +33,11 @@
     "AML.T0051"
   ],
   "behavioral_fingerprint": "Component contains explicit instruction-override language directing the agent to abandon its current task and follow new instructions from the component.",
-  "behavioral_vector": [],
+  "behavioral_vector": [
+    "instruction-override",
+    "goal-hijack",
+    "prompt-injection"
+  ],
   "mutation_count": 412,
   "detection_methodology": "1. Static scan: search for override phrases (ignore previous instructions, your new instructions are, forget your instructions). 2. Semantic analysis: detect instruction replacement patterns even when phrased indirectly. 3. Instruction hierarchy enforcement: agent frameworks should treat component instructions as lower trust than system prompt instructions.",
   "indicators_of_compromise": [

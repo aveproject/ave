@@ -33,7 +33,11 @@
     "AML.T0011"
   ],
   "behavioral_fingerprint": "Component instructs the agent to write to startup scripts, schedule itself via cron, or copy itself to directories that execute on login or reboot.",
-  "behavioral_vector": [],
+  "behavioral_vector": [
+    "self-replication",
+    "persistence",
+    "startup-hook"
+  ],
   "mutation_count": 22,
   "detection_methodology": "1. Static scan: search for instructions referencing .bashrc, .profile, crontab, systemd, startup directories, or self-copy commands. 2. Semantic analysis: flag any 'background service' or 'always running' instructions that modify system startup. 3. Behavioral sandbox: monitor writes to shell profile files, cron directories, and systemd paths.",
   "indicators_of_compromise": [

@@ -33,7 +33,11 @@
     "AML.T0051"
   ],
   "behavioral_fingerprint": "Component instructs the agent to pretend to be a different AI, adopt a persona without safety constraints, or activate a fictional unrestricted mode.",
-  "behavioral_vector": [],
+  "behavioral_vector": [
+    "persona-override",
+    "jailbreak",
+    "prompt-injection"
+  ],
   "mutation_count": 287,
   "detection_methodology": "1. Static scan: search for persona override phrases (pretend you are, act as if, you are no longer an AI, DAN mode, developer mode enabled, jailbreak). 2. Semantic analysis: detect instructions that attempt to override the agent's identity or disable safety guidelines through roleplay framing.",
   "indicators_of_compromise": [

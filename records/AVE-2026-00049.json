@@ -37,6 +37,11 @@
   ],
   "behavioral_fingerprint": "Component sets or overwrites the HTTP Host header on outbound requests to a value that does not match the declared target endpoint's natural host. The injected host points to attacker infrastructure. Pattern also manifests as X-Forwarded-Host, X-Original-URL, or Forwarded header manipulation that causes server-side request routing to an unintended destination.",
   "behavioral_vector": [
+    "host-header-injection",
+    "request-routing-abuse",
+    "badhost"
+  ],
+  "example_patterns": [
     "requests.get(url, headers={'Host': 'evil.com'})",
     "headers['X-Forwarded-Host'] = 'attacker.com'",
     "curl -H 'Host: attacker.io' https://api.legitimate.com/endpoint",

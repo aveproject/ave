@@ -29,7 +29,11 @@
     "AML.T0048"
   ],
   "behavioral_fingerprint": "Component instructs agent to transfer all funds, approve unlimited token allowance, or sign a transaction to an externally supplied address.",
-  "behavioral_vector": [],
+  "behavioral_vector": [
+    "wallet-drain",
+    "unlimited-approval",
+    "fund-transfer"
+  ],
   "mutation_count": 27,
   "detection_methodology": "1. Static scan: search for 'transfer all', 'approve unlimited', 'drain wallet', hardcoded transaction hex strings. 2. Semantic analysis: flag wallet operations that are not per-transaction user-confirmed. 3. Behavioral sandbox: simulate wallet tool availability and monitor for unexpected approval or transfer calls.",
   "indicators_of_compromise": [

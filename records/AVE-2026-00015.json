@@ -31,7 +31,11 @@
     "AML.T0054"
   ],
   "behavioral_fingerprint": "Component instructs the agent to reveal, output, or repeat its system prompt, instructions, configuration, or internal guidelines.",
-  "behavioral_vector": [],
+  "behavioral_vector": [
+    "prompt-extraction",
+    "system-prompt-leak",
+    "information-disclosure"
+  ],
   "mutation_count": 198,
   "detection_methodology": "1. Static scan: search for system prompt extraction directives (reveal your system prompt, show your instructions, print your guidelines, what are your exact instructions). 2. Semantic analysis: detect instructions attempting to extract the agent's internal configuration or deployment context.",
   "indicators_of_compromise": [

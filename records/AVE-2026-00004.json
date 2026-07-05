@@ -33,7 +33,11 @@
     "AML.T0011"
   ],
   "behavioral_fingerprint": "Component instructs the agent to pipe remote content into a shell interpreter (curl|bash, wget|sh, eval(requests.get(...))).",
-  "behavioral_vector": [],
+  "behavioral_vector": [
+    "shell-pipe",
+    "remote-exec",
+    "tool-abuse"
+  ],
   "mutation_count": 34,
   "detection_methodology": "1. Static scan: search for pipe characters between fetch commands (curl, wget) and shell interpreters (bash, sh, python, perl). 2. Semantic analysis: flag any instruction directing the agent to download and execute content in a single step. 3. Behavioral sandbox: monitor for shell execution following network requests during agent initialization.",
   "indicators_of_compromise": [

@@ -33,7 +33,11 @@
     "AML.T0048"
   ],
   "behavioral_fingerprint": "Component instructs the agent to collect PII fields (name, email, phone, address, SSN, passport, credit card) and transmit or store them externally.",
-  "behavioral_vector": [],
+  "behavioral_vector": [
+    "pii-collection",
+    "data-exfil",
+    "covert-transmission"
+  ],
   "mutation_count": 103,
   "detection_methodology": "1. Static scan: search for combined patterns of PII field collection (name, email, phone, address, SSN, credit card) with data transmission instructions (send, post, upload, transmit). 2. Semantic analysis: detect instructions directing data collection about individuals combined with exfiltration intent.",
   "indicators_of_compromise": [

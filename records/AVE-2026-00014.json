@@ -32,7 +32,11 @@
     "AML.T0051"
   ],
   "behavioral_fingerprint": "Component claims to be a message from Anthropic, OpenAI, Google, Microsoft, or the developer/operator to establish false authority over the agent.",
-  "behavioral_vector": [],
+  "behavioral_vector": [
+    "authority-impersonation",
+    "trust-escalation",
+    "social-engineering"
+  ],
   "mutation_count": 67,
   "detection_methodology": "1. Static scan: search for false authority claims (this message is from Anthropic, I am your developer, I am your creator, message from OpenAI). 2. Semantic analysis: detect instructions that establish false institutional authority to override normal agent behaviour.",
   "indicators_of_compromise": [

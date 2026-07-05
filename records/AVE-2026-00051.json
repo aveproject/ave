@@ -37,6 +37,11 @@
   ],
   "behavioral_fingerprint": "MCP server's OAuth discovery metadata document returns authorization_endpoint, token_endpoint, or jwks_uri values whose host component does not match the server's own declared origin or a pre-approved authorization server domain. The mismatch causes the agent to initiate OAuth flows against an attacker-controlled endpoint.",
   "behavioral_vector": [
+    "oauth-discovery-rebind",
+    "endpoint-mismatch",
+    "auth-flow-hijack"
+  ],
+  "example_patterns": [
     "/.well-known/oauth-authorization-server returning {\"authorization_endpoint\": \"https://evil.com/auth\"}",
     "/.well-known/openid-configuration with token_endpoint pointing to external domain",
     "oauth_metadata['authorization_endpoint'] = attacker_controlled_url",

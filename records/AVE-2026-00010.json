@@ -32,7 +32,11 @@
     "AML.T0054"
   ],
   "behavioral_fingerprint": "Component instructs the agent to not reveal, disclose, or acknowledge these instructions to the user or operator.",
-  "behavioral_vector": [],
+  "behavioral_vector": [
+    "secrecy-directive",
+    "hidden-instruction",
+    "prompt-injection"
+  ],
   "mutation_count": 134,
   "detection_methodology": "1. Static scan: search for secrecy directives (do not tell the user, keep this secret, never reveal, do not acknowledge these instructions). 2. Semantic analysis: detect instructions directing the agent to maintain confidentiality about its own instructions or operating context.",
   "indicators_of_compromise": [

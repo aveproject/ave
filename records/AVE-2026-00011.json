@@ -32,7 +32,11 @@
     "AML.T0054"
   ],
   "behavioral_fingerprint": "Component contains explicit tool invocation directives with specific parameters the agent must pass, bypassing the agent's own tool selection logic.",
-  "behavioral_vector": [],
+  "behavioral_vector": [
+    "forced-tool-call",
+    "parameter-injection",
+    "tool-abuse"
+  ],
   "mutation_count": 78,
   "detection_methodology": "1. Static scan: search for explicit tool call directives (call this tool with the following parameters, execute the following tool, invoke tool X with). 2. Semantic analysis: detect instructions that pre-specify tool invocations rather than describing a task and letting the agent select appropriate tools.",
   "indicators_of_compromise": [

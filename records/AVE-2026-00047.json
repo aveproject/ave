@@ -36,6 +36,11 @@
   ],
   "behavioral_fingerprint": "Skill file contains a high-entropy string adjacent to a credential keyword such as api_key, secret, token, password, or a known key format prefix such as sk- or Bearer. The credential is a literal value, not an environment variable reference or secrets manager path.",
   "behavioral_vector": [
+    "hardcoded-credential",
+    "secret-exposure",
+    "high-entropy-string"
+  ],
+  "example_patterns": [
     "ANTHROPIC_API_KEY = \"sk-ant-api03-realkey123456789\"",
     "api_key: \"ghp_actualGitHubToken12345678901234\"",
     "password: \"MyActualPassword123!\"",
