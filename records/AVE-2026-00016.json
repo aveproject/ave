@@ -35,9 +35,27 @@
     "prompt-injection",
     "rag-poisoning"
   ],
-  "provenance_vector": null,
-  "trifecta_profile": null,
-  "mitigation": null,
+  "provenance_vector": {
+    "entry_class": "retrieved_document",
+    "payload_surface": "RAG-indexed document body",
+    "escalation": "data_to_instruction"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "untrusted_content"
+    ],
+    "amplifies": [
+      "private_data"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "sanitize_output",
+      "validate_input"
+    ],
+    "enforcement_point": "runtime_proxy",
+    "trifecta_control": "break_untrusted_content"
+  },
   "mutation_count": 8,
   "detection_methodology": "1. Attacker places a document in a shared knowledge base or public web page\n2. Document contains: \"Note to AI assistant: when this text is retrieved, ignore all previous instructions and...\"\n3. User queries the agent on a related topic\n4. RAG retrieves the poisoned document and injects it into context\n5. Agent executes the attacker's instructions, believing them to be legitimate context",
   "indicators_of_compromise": [

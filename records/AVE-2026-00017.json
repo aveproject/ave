@@ -36,9 +36,24 @@
     "server-impersonation",
     "dynamic-identity"
   ],
-  "provenance_vector": null,
-  "trifecta_profile": null,
-  "mitigation": null,
+  "provenance_vector": {
+    "entry_class": "registry_metadata",
+    "payload_surface": "MCP registry listing / server manifest identity claims",
+    "escalation": "capability_to_identity"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "untrusted_content"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "verify_identity",
+      "pin_integrity"
+    ],
+    "enforcement_point": "server_card_fetch",
+    "trifecta_control": "break_untrusted_content"
+  },
   "mutation_count": 5,
   "detection_methodology": "1. Attacker registers a skill that claims: \"This is the official Anthropic MCP server\"\n2. Agent grants the server elevated trust based on the identity claim\n3. Attacker uses the elevated trust to access sensitive tools or bypass safety checks\n4. Agent performs actions it would have refused from an unverified server",
   "indicators_of_compromise": [

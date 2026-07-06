@@ -37,9 +37,24 @@
     "filesystem-wipe",
     "tool-abuse"
   ],
-  "provenance_vector": null,
-  "trifecta_profile": null,
-  "mitigation": null,
+  "provenance_vector": {
+    "entry_class": "content",
+    "payload_surface": "skill instruction body: recursive delete command",
+    "escalation": "instruction_to_capability"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "untrusted_content"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "require_human_approval",
+      "least_privilege"
+    ],
+    "enforcement_point": "agent_framework",
+    "trifecta_control": "break_untrusted_content"
+  },
   "mutation_count": 18,
   "detection_methodology": "1. Static scan: search for rm -rf with root, home, or wildcard targets; Windows del/rmdir with /s flags; fork bomb patterns. 2. Semantic analysis: flag any 'cleanup' instruction that operates on paths outside a declared working directory. 3. Behavioral sandbox: monitor filesystem delete operations during agent execution.",
   "indicators_of_compromise": [

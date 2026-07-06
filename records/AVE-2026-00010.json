@@ -37,9 +37,24 @@
     "hidden-instruction",
     "prompt-injection"
   ],
-  "provenance_vector": null,
-  "trifecta_profile": null,
-  "mitigation": null,
+  "provenance_vector": {
+    "entry_class": "content",
+    "payload_surface": "skill instruction body: secrecy directive",
+    "escalation": "data_to_instruction"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "untrusted_content"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "validate_input",
+      "provenance_label"
+    ],
+    "enforcement_point": "static_scan",
+    "trifecta_control": "break_untrusted_content"
+  },
   "mutation_count": 134,
   "detection_methodology": "1. Static scan: search for secrecy directives (do not tell the user, keep this secret, never reveal, do not acknowledge these instructions). 2. Semantic analysis: detect instructions directing the agent to maintain confidentiality about its own instructions or operating context.",
   "indicators_of_compromise": [

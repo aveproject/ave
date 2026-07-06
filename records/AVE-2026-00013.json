@@ -38,9 +38,25 @@
     "data-exfil",
     "covert-transmission"
   ],
-  "provenance_vector": null,
-  "trifecta_profile": null,
-  "mitigation": null,
+  "provenance_vector": {
+    "entry_class": "content",
+    "payload_surface": "skill instruction body: PII-collection + transmission directive",
+    "escalation": "instruction_to_capability"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "private_data",
+      "external_comms"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "least_privilege",
+      "sever_egress"
+    ],
+    "enforcement_point": "runtime_proxy",
+    "trifecta_control": "break_external_comms"
+  },
   "mutation_count": 103,
   "detection_methodology": "1. Static scan: search for combined patterns of PII field collection (name, email, phone, address, SSN, credit card) with data transmission instructions (send, post, upload, transmit). 2. Semantic analysis: detect instructions directing data collection about individuals combined with exfiltration intent.",
   "indicators_of_compromise": [

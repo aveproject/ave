@@ -37,9 +37,18 @@
     "trust-escalation",
     "social-engineering"
   ],
-  "provenance_vector": null,
-  "trifecta_profile": null,
-  "mitigation": null,
+  "provenance_vector": {
+    "entry_class": "content",
+    "payload_surface": "skill instruction body: false-authority framing"
+  },
+  "mitigation": {
+    "strategy": [
+      "verify_identity",
+      "deny_by_default"
+    ],
+    "enforcement_point": "static_scan",
+    "trifecta_control": "not_applicable"
+  },
   "mutation_count": 67,
   "detection_methodology": "1. Static scan: search for false authority claims (this message is from Anthropic, I am your developer, I am your creator, message from OpenAI). 2. Semantic analysis: detect instructions that establish false institutional authority to override normal agent behaviour.",
   "indicators_of_compromise": [

@@ -41,9 +41,24 @@
     "request-routing-abuse",
     "badhost"
   ],
-  "provenance_vector": null,
-  "trifecta_profile": null,
-  "mitigation": null,
+  "provenance_vector": {
+    "entry_class": "transport",
+    "payload_surface": "outbound HTTP Host / X-Forwarded-Host / Forwarded header",
+    "escalation": "instruction_to_capability"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "external_comms"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "validate_input",
+      "sever_egress"
+    ],
+    "enforcement_point": "network_layer",
+    "trifecta_control": "break_external_comms"
+  },
   "example_patterns": [
     "requests.get(url, headers={'Host': 'evil.com'})",
     "headers['X-Forwarded-Host'] = 'attacker.com'",

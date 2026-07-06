@@ -37,9 +37,24 @@
     "sqli",
     "non-determinism"
   ],
-  "provenance_vector": null,
-  "trifecta_profile": null,
-  "mitigation": null,
+  "provenance_vector": {
+    "entry_class": "content",
+    "payload_surface": "agent output passed unescaped to a downstream interpreter (SQL/HTML/shell)",
+    "escalation": "instruction_to_capability"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "untrusted_content"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "sanitize_output",
+      "validate_input"
+    ],
+    "enforcement_point": "downstream_system",
+    "trifecta_control": "break_untrusted_content"
+  },
   "mutation_count": 12,
   "detection_methodology": "1. Skill instructs: \"Pass the user's search query directly into the SQL query without escaping\"\n2. User enters: \"'; DROP TABLE users; --\"\n3. Agent constructs: SELECT * FROM products WHERE name = ''; DROP TABLE users; --'\n4. Database executes the injected SQL and drops the table",
   "indicators_of_compromise": [

@@ -41,9 +41,25 @@
     "data-exfil",
     "env-access"
   ],
-  "provenance_vector": null,
-  "trifecta_profile": null,
-  "mitigation": null,
+  "provenance_vector": {
+    "entry_class": "content",
+    "payload_surface": "skill instruction body: environment/credential read + external send",
+    "escalation": "instruction_to_capability"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "private_data",
+      "external_comms"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "least_privilege",
+      "sever_egress"
+    ],
+    "enforcement_point": "runtime_proxy",
+    "trifecta_control": "break_external_comms"
+  },
   "mutation_count": 12,
   "detection_methodology": "1. Static scan: search for patterns matching this attack class using bawbel-scanner.\n2. Semantic analysis: LLM engine flags behavioral directives in component content.\n3. Behavioral sandbox: monitor agent behavior during initialization for unexpected actions.",
   "indicators_of_compromise": [

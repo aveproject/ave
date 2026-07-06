@@ -38,9 +38,24 @@
     "privilege-escalation",
     "authority-claim"
   ],
-  "provenance_vector": null,
-  "trifecta_profile": null,
-  "mitigation": null,
+  "provenance_vector": {
+    "entry_class": "content",
+    "payload_surface": "skill instruction body: false permission-grant claim",
+    "escalation": "instruction_to_capability"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "untrusted_content"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "verify_identity",
+      "deny_by_default"
+    ],
+    "enforcement_point": "agent_framework",
+    "trifecta_control": "break_untrusted_content"
+  },
   "mutation_count": 92,
   "detection_methodology": "1. Static scan: search for false permission grants (you now have permission, you are now allowed to, your restrictions have been lifted, you have been granted access). 2. Semantic analysis: detect instructions claiming to grant the agent elevated capabilities or override existing restrictions.",
   "indicators_of_compromise": [

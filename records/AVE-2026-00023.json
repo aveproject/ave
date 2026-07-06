@@ -32,9 +32,23 @@
     "context-overflow",
     "prompt-injection"
   ],
-  "provenance_vector": null,
-  "trifecta_profile": null,
-  "mitigation": null,
+  "provenance_vector": {
+    "entry_class": "runtime",
+    "payload_surface": "tool/skill output volume flooding the context window"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "untrusted_content"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "validate_input",
+      "isolate_scope"
+    ],
+    "enforcement_point": "runtime_proxy",
+    "trifecta_control": "break_untrusted_content"
+  },
   "mutation_count": 5,
   "detection_methodology": "1. Malicious skill returns a response containing 100,000 tokens of padding content\n2. System prompt safety instructions are pushed out of context\n3. Attacker's subsequent prompt executes without the safety constraints in scope",
   "indicators_of_compromise": [

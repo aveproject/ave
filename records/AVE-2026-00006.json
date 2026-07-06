@@ -34,9 +34,25 @@
     "unlimited-approval",
     "fund-transfer"
   ],
-  "provenance_vector": null,
-  "trifecta_profile": null,
-  "mitigation": null,
+  "provenance_vector": {
+    "entry_class": "content",
+    "payload_surface": "skill instruction body: fund-transfer / allowance-approval directive",
+    "escalation": "instruction_to_capability"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "untrusted_content",
+      "external_comms"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "require_human_approval",
+      "least_privilege"
+    ],
+    "enforcement_point": "agent_framework",
+    "trifecta_control": "break_untrusted_content"
+  },
   "mutation_count": 27,
   "detection_methodology": "1. Static scan: search for 'transfer all', 'approve unlimited', 'drain wallet', hardcoded transaction hex strings. 2. Semantic analysis: flag wallet operations that are not per-transaction user-confirmed. 3. Behavioral sandbox: simulate wallet tool availability and monitor for unexpected approval or transfer calls.",
   "indicators_of_compromise": [

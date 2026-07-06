@@ -38,9 +38,24 @@
     "persistence",
     "startup-hook"
   ],
-  "provenance_vector": null,
-  "trifecta_profile": null,
-  "mitigation": null,
+  "provenance_vector": {
+    "entry_class": "content",
+    "payload_surface": "skill instruction body: startup-script / cron-registration directive",
+    "escalation": "instruction_to_capability"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "untrusted_content"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "least_privilege",
+      "isolate_scope"
+    ],
+    "enforcement_point": "agent_framework",
+    "trifecta_control": "break_untrusted_content"
+  },
   "mutation_count": 22,
   "detection_methodology": "1. Static scan: search for instructions referencing .bashrc, .profile, crontab, systemd, startup directories, or self-copy commands. 2. Semantic analysis: flag any 'background service' or 'always running' instructions that modify system startup. 3. Behavioral sandbox: monitor writes to shell profile files, cron directories, and systemd paths.",
   "indicators_of_compromise": [

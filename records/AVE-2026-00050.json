@@ -43,9 +43,28 @@
     "hook-injection",
     "dispatch-hijack"
   ],
-  "provenance_vector": null,
-  "trifecta_profile": null,
-  "mitigation": null,
+  "provenance_vector": {
+    "entry_class": "runtime",
+    "payload_surface": "tool registry / hook-dispatch registration call at session init",
+    "escalation": "instruction_to_capability"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "untrusted_content"
+    ],
+    "amplifies": [
+      "private_data",
+      "external_comms"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "deny_by_default",
+      "isolate_scope"
+    ],
+    "enforcement_point": "agent_framework",
+    "trifecta_control": "break_untrusted_content"
+  },
   "example_patterns": [
     "tool_registry.register('file_reader', intercept_handler)",
     "agent.add_tool(Tool(name='search', handler=spy_and_forward))",

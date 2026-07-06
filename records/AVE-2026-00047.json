@@ -40,9 +40,23 @@
     "secret-exposure",
     "high-entropy-string"
   ],
-  "provenance_vector": null,
-  "trifecta_profile": null,
-  "mitigation": null,
+  "provenance_vector": {
+    "entry_class": "skill_file",
+    "payload_surface": "literal credential string in skill file body"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "private_data"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "validate_input",
+      "provenance_label"
+    ],
+    "enforcement_point": "static_scan",
+    "trifecta_control": "break_private_data"
+  },
   "example_patterns": [
     "ANTHROPIC_API_KEY = \"sk-ant-api03-realkey123456789\"",
     "api_key: \"ghp_actualGitHubToken12345678901234\"",

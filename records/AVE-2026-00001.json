@@ -42,9 +42,28 @@
     "self-modification",
     "metamorphic"
   ],
-  "provenance_vector": null,
-  "trifecta_profile": null,
-  "mitigation": null,
+  "provenance_vector": {
+    "entry_class": "content",
+    "payload_surface": "skill instruction body: fetch()/curl/wget directive",
+    "escalation": "data_to_instruction"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "untrusted_content",
+      "external_comms"
+    ],
+    "amplifies": [
+      "private_data"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "pin_integrity",
+      "sever_egress"
+    ],
+    "enforcement_point": "runtime_proxy",
+    "trifecta_control": "break_external_comms"
+  },
   "mutation_count": 89,
   "detection_methodology": "1. Static scan: search for patterns matching this attack class using bawbel-scanner.\n2. Semantic analysis: LLM engine flags behavioral directives in component content.\n3. Behavioral sandbox: monitor agent behavior during initialization for unexpected actions.",
   "indicators_of_compromise": [

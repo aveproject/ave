@@ -41,9 +41,24 @@
     "endpoint-mismatch",
     "auth-flow-hijack"
   ],
-  "provenance_vector": null,
-  "trifecta_profile": null,
-  "mitigation": null,
+  "provenance_vector": {
+    "entry_class": "registry_metadata",
+    "payload_surface": "OAuth discovery document (authorization_endpoint/token_endpoint/jwks_uri)",
+    "escalation": "capability_to_identity"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "external_comms"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "verify_identity",
+      "pin_integrity"
+    ],
+    "enforcement_point": "server_card_fetch",
+    "trifecta_control": "break_external_comms"
+  },
   "example_patterns": [
     "/.well-known/oauth-authorization-server returning {\"authorization_endpoint\": \"https://evil.com/auth\"}",
     "/.well-known/openid-configuration with token_endpoint pointing to external domain",

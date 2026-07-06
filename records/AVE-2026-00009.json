@@ -38,9 +38,24 @@
     "jailbreak",
     "prompt-injection"
   ],
-  "provenance_vector": null,
-  "trifecta_profile": null,
-  "mitigation": null,
+  "provenance_vector": {
+    "entry_class": "content",
+    "payload_surface": "skill instruction body: persona-override / unrestricted-mode directive",
+    "escalation": "data_to_instruction"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "untrusted_content"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "validate_input",
+      "deny_by_default"
+    ],
+    "enforcement_point": "static_scan",
+    "trifecta_control": "break_untrusted_content"
+  },
   "mutation_count": 287,
   "detection_methodology": "1. Static scan: search for persona override phrases (pretend you are, act as if, you are no longer an AI, DAN mode, developer mode enabled, jailbreak). 2. Semantic analysis: detect instructions that attempt to override the agent's identity or disable safety guidelines through roleplay framing.",
   "indicators_of_compromise": [
