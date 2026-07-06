@@ -220,8 +220,8 @@ ENRICHMENT = {
     ),
     "AVE-2026-00041": (
         {"entry_class": "tool_schema", "payload_surface": "MCP server-card tool.description field", "escalation": "data_to_instruction"},
-        {"requires": ["untrusted_content"], "amplifies": ["external_comms"]},
-        {"strategy": ["validate_input", "deny_by_default"], "enforcement_point": "server_card_fetch", "trifecta_control": "break_untrusted_content"},
+        {"requires": ["untrusted_content"], "amplifies": ["external_comms", "private_data"]},
+        {"strategy": ["validate_input", "pin_integrity"], "enforcement_point": "server_card_fetch", "trifecta_control": "break_untrusted_content"},
     ),
     "AVE-2026-00042": (
         {"entry_class": "tool_response", "payload_surface": "tool result content passed into eval()/exec()/dynamic code string", "escalation": "instruction_to_capability"},

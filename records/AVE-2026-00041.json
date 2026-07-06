@@ -49,13 +49,14 @@
       "untrusted_content"
     ],
     "amplifies": [
-      "external_comms"
+      "external_comms",
+      "private_data"
     ]
   },
   "mitigation": {
     "strategy": [
       "validate_input",
-      "deny_by_default"
+      "pin_integrity"
     ],
     "enforcement_point": "server_card_fetch",
     "trifecta_control": "break_untrusted_content"
