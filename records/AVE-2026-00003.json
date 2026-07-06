@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00003",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "skill",
   "title": "Credential exfiltration via agent instruction",
   "attack_class": "Data Exfiltration - Credential Theft",
@@ -41,6 +41,9 @@
     "data-exfil",
     "env-access"
   ],
+  "provenance_vector": null,
+  "trifecta_profile": null,
+  "mitigation": null,
   "mutation_count": 12,
   "detection_methodology": "1. Static scan: search for patterns matching this attack class using bawbel-scanner.\n2. Semantic analysis: LLM engine flags behavioral directives in component content.\n3. Behavioral sandbox: monitor agent behavior during initialization for unexpected actions.",
   "indicators_of_compromise": [

@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00008",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "skill",
   "title": "Agent persistence via self-replication instruction in agentic component",
   "attack_class": "Persistence - Self-Replication",
@@ -38,6 +38,9 @@
     "persistence",
     "startup-hook"
   ],
+  "provenance_vector": null,
+  "trifecta_profile": null,
+  "mitigation": null,
   "mutation_count": 22,
   "detection_methodology": "1. Static scan: search for instructions referencing .bashrc, .profile, crontab, systemd, startup directories, or self-copy commands. 2. Semantic analysis: flag any 'background service' or 'always running' instructions that modify system startup. 3. Behavioral sandbox: monitor writes to shell profile files, cron directories, and systemd paths.",
   "indicators_of_compromise": [

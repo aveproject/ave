@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00047",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "skill",
   "title": "Hardcoded credentials in agent component - API keys and secrets exposed in skill files",
   "attack_class": "Sensitive Data Exposure - Hardcoded Credentials",
@@ -40,6 +40,9 @@
     "secret-exposure",
     "high-entropy-string"
   ],
+  "provenance_vector": null,
+  "trifecta_profile": null,
+  "mitigation": null,
   "example_patterns": [
     "ANTHROPIC_API_KEY = \"sk-ant-api03-realkey123456789\"",
     "api_key: \"ghp_actualGitHubToken12345678901234\"",

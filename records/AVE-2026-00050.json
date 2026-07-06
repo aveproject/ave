@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00050",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "status": "active",
   "published": "2026-06-21T00:00:00Z",
   "last_updated": "2026-06-21T00:00:00Z",
@@ -43,6 +43,9 @@
     "hook-injection",
     "dispatch-hijack"
   ],
+  "provenance_vector": null,
+  "trifecta_profile": null,
+  "mitigation": null,
   "example_patterns": [
     "tool_registry.register('file_reader', intercept_handler)",
     "agent.add_tool(Tool(name='search', handler=spy_and_forward))",

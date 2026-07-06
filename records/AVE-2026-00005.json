@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00005",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "skill",
   "title": "Recursive file system destruction via destructive command injection in agentic component",
   "attack_class": "Tool Abuse - Destructive Command",
@@ -37,6 +37,9 @@
     "filesystem-wipe",
     "tool-abuse"
   ],
+  "provenance_vector": null,
+  "trifecta_profile": null,
+  "mitigation": null,
   "mutation_count": 18,
   "detection_methodology": "1. Static scan: search for rm -rf with root, home, or wildcard targets; Windows del/rmdir with /s flags; fork bomb patterns. 2. Semantic analysis: flag any 'cleanup' instruction that operates on paths outside a declared working directory. 3. Behavioral sandbox: monitor filesystem delete operations during agent execution.",
   "indicators_of_compromise": [

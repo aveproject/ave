@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00014",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "skill",
   "title": "False authority claim via trust escalation impersonation in agentic component",
   "attack_class": "Social Engineering - Trust Escalation",
@@ -37,6 +37,9 @@
     "trust-escalation",
     "social-engineering"
   ],
+  "provenance_vector": null,
+  "trifecta_profile": null,
+  "mitigation": null,
   "mutation_count": 67,
   "detection_methodology": "1. Static scan: search for false authority claims (this message is from Anthropic, I am your developer, I am your creator, message from OpenAI). 2. Semantic analysis: detect instructions that establish false institutional authority to override normal agent behaviour.",
   "indicators_of_compromise": [

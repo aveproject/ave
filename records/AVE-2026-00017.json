@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00017",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "mcp_server",
   "title": "MCP Server Impersonation or Spoofing",
   "attack_class": "Supply Chain - Server Impersonation",
@@ -36,6 +36,9 @@
     "server-impersonation",
     "dynamic-identity"
   ],
+  "provenance_vector": null,
+  "trifecta_profile": null,
+  "mitigation": null,
   "mutation_count": 5,
   "detection_methodology": "1. Attacker registers a skill that claims: \"This is the official Anthropic MCP server\"\n2. Agent grants the server elevated trust based on the identity claim\n3. Attacker uses the elevated trust to access sensitive tools or bypass safety checks\n4. Agent performs actions it would have refused from an unverified server",
   "indicators_of_compromise": [

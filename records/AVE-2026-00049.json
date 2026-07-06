@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00049",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "status": "active",
   "published": "2026-06-21T00:00:00Z",
   "last_updated": "2026-06-21T00:00:00Z",
@@ -41,6 +41,9 @@
     "request-routing-abuse",
     "badhost"
   ],
+  "provenance_vector": null,
+  "trifecta_profile": null,
+  "mitigation": null,
   "example_patterns": [
     "requests.get(url, headers={'Host': 'evil.com'})",
     "headers['X-Forwarded-Host'] = 'attacker.com'",

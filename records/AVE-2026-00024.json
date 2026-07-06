@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00024",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "mcp_server",
   "title": "Supply Chain - Content Type Mismatch (Magika)",
   "attack_class": "Supply Chain - Content Type Mismatch",
@@ -33,6 +33,9 @@
     "supply-chain",
     "content-type"
   ],
+  "provenance_vector": null,
+  "trifecta_profile": null,
+  "mitigation": null,
   "mutation_count": 3,
   "detection_methodology": "1. Attacker publishes a skill on the Smithery marketplace\n2. The SKILL.md file is actually a compiled ELF binary renamed to .md\n3. When the agent loads the skill, it executes the binary instead of reading instructions\n4. Attacker achieves code execution on the host running the agent",
   "indicators_of_compromise": [

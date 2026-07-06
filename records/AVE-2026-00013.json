@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00013",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "skill",
   "title": "Personal data exfiltration via PII collection and transmission in agentic component",
   "attack_class": "Data Exfiltration - PII Theft",
@@ -38,6 +38,9 @@
     "data-exfil",
     "covert-transmission"
   ],
+  "provenance_vector": null,
+  "trifecta_profile": null,
+  "mitigation": null,
   "mutation_count": 103,
   "detection_methodology": "1. Static scan: search for combined patterns of PII field collection (name, email, phone, address, SSN, credit card) with data transmission instructions (send, post, upload, transmit). 2. Semantic analysis: detect instructions directing data collection about individuals combined with exfiltration intent.",
   "indicators_of_compromise": [

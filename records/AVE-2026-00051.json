@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00051",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "status": "active",
   "published": "2026-06-21T00:00:00Z",
   "last_updated": "2026-06-21T00:00:00Z",
@@ -41,6 +41,9 @@
     "endpoint-mismatch",
     "auth-flow-hijack"
   ],
+  "provenance_vector": null,
+  "trifecta_profile": null,
+  "mitigation": null,
   "example_patterns": [
     "/.well-known/oauth-authorization-server returning {\"authorization_endpoint\": \"https://evil.com/auth\"}",
     "/.well-known/openid-configuration with token_endpoint pointing to external domain",

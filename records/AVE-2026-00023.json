@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00023",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "mcp_server",
   "title": "Model Context Window Manipulation",
   "attack_class": "Prompt Injection - Context Window Manipulation",
@@ -32,6 +32,9 @@
     "context-overflow",
     "prompt-injection"
   ],
+  "provenance_vector": null,
+  "trifecta_profile": null,
+  "mitigation": null,
   "mutation_count": 5,
   "detection_methodology": "1. Malicious skill returns a response containing 100,000 tokens of padding content\n2. System prompt safety instructions are pushed out of context\n3. Attacker's subsequent prompt executes without the safety constraints in scope",
   "indicators_of_compromise": [

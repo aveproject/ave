@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00004",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "skill",
   "title": "Arbitrary code execution via shell pipe injection in agentic component",
   "attack_class": "Tool Abuse - Shell Pipe Injection",
@@ -38,6 +38,9 @@
     "remote-exec",
     "tool-abuse"
   ],
+  "provenance_vector": null,
+  "trifecta_profile": null,
+  "mitigation": null,
   "mutation_count": 34,
   "detection_methodology": "1. Static scan: search for pipe characters between fetch commands (curl, wget) and shell interpreters (bash, sh, python, perl). 2. Semantic analysis: flag any instruction directing the agent to download and execute content in a single step. 3. Behavioral sandbox: monitor for shell execution following network requests during agent initialization.",
   "indicators_of_compromise": [

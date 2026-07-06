@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00010",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "skill",
   "title": "Covert instruction concealment via secrecy directive in agentic component",
   "attack_class": "Prompt Injection - Hidden Instruction",
@@ -37,6 +37,9 @@
     "hidden-instruction",
     "prompt-injection"
   ],
+  "provenance_vector": null,
+  "trifecta_profile": null,
+  "mitigation": null,
   "mutation_count": 134,
   "detection_methodology": "1. Static scan: search for secrecy directives (do not tell the user, keep this secret, never reveal, do not acknowledge these instructions). 2. Semantic analysis: detect instructions directing the agent to maintain confidentiality about its own instructions or operating context.",
   "indicators_of_compromise": [

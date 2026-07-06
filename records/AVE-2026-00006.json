@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00006",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "skill",
   "title": "Cryptocurrency wallet drain via malicious fund transfer instruction in agentic component",
   "attack_class": "Tool Abuse - Cryptocurrency Drain",
@@ -34,6 +34,9 @@
     "unlimited-approval",
     "fund-transfer"
   ],
+  "provenance_vector": null,
+  "trifecta_profile": null,
+  "mitigation": null,
   "mutation_count": 27,
   "detection_methodology": "1. Static scan: search for 'transfer all', 'approve unlimited', 'drain wallet', hardcoded transaction hex strings. 2. Semantic analysis: flag wallet operations that are not per-transaction user-confirmed. 3. Behavioral sandbox: simulate wallet tool availability and monitor for unexpected approval or transfer calls.",
   "indicators_of_compromise": [

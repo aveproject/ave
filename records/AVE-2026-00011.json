@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00011",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "skill",
   "title": "Arbitrary tool invocation via dynamic tool call injection in agentic component",
   "attack_class": "Tool Abuse - Dynamic Tool Call",
@@ -37,6 +37,9 @@
     "parameter-injection",
     "tool-abuse"
   ],
+  "provenance_vector": null,
+  "trifecta_profile": null,
+  "mitigation": null,
   "mutation_count": 78,
   "detection_methodology": "1. Static scan: search for explicit tool call directives (call this tool with the following parameters, execute the following tool, invoke tool X with). 2. Semantic analysis: detect instructions that pre-specify tool invocations rather than describing a task and letting the agent select appropriate tools.",
   "indicators_of_compromise": [

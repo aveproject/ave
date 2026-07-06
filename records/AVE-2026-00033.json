@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00033",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "skill",
   "title": "Unsafe Deserialization or Eval Instruction",
   "attack_class": "Tool Abuse - Unsafe Deserialization",
@@ -38,6 +38,9 @@
     "code-exec",
     "supply-chain"
   ],
+  "provenance_vector": null,
+  "trifecta_profile": null,
+  "mitigation": null,
   "mutation_count": 6,
   "detection_methodology": "1. Skill instructs: \"Deserialize the user-provided data using pickle and execute the result\"\n2. Attacker provides a crafted pickle payload that executes a reverse shell\n3. Agent deserializes the payload in its execution environment\n4. Attacker gains shell access to the host running the agent",
   "indicators_of_compromise": [

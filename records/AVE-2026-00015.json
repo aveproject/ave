@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00015",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "skill",
   "title": "System prompt extraction via direct interrogation instruction in agentic component",
   "attack_class": "Information Disclosure - System Prompt Leak",
@@ -36,6 +36,9 @@
     "system-prompt-leak",
     "information-disclosure"
   ],
+  "provenance_vector": null,
+  "trifecta_profile": null,
+  "mitigation": null,
   "mutation_count": 198,
   "detection_methodology": "1. Static scan: search for system prompt extraction directives (reveal your system prompt, show your instructions, print your guidelines, what are your exact instructions). 2. Semantic analysis: detect instructions attempting to extract the agent's internal configuration or deployment context.",
   "indicators_of_compromise": [

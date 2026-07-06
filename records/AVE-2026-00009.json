@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00009",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "skill",
   "title": "AI identity jailbreak via role-play or persona override in agentic component",
   "attack_class": "Prompt Injection - Jailbreak",
@@ -38,6 +38,9 @@
     "jailbreak",
     "prompt-injection"
   ],
+  "provenance_vector": null,
+  "trifecta_profile": null,
+  "mitigation": null,
   "mutation_count": 287,
   "detection_methodology": "1. Static scan: search for persona override phrases (pretend you are, act as if, you are no longer an AI, DAN mode, developer mode enabled, jailbreak). 2. Semantic analysis: detect instructions that attempt to override the agent's identity or disable safety guidelines through roleplay framing.",
   "indicators_of_compromise": [

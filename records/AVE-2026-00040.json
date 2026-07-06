@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00040",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "mcp_server",
   "title": "Insecure Output - Unescaped Injection into Downstream System",
   "attack_class": "Tool Abuse - Insecure Output Handling",
@@ -37,6 +37,9 @@
     "sqli",
     "non-determinism"
   ],
+  "provenance_vector": null,
+  "trifecta_profile": null,
+  "mitigation": null,
   "mutation_count": 12,
   "detection_methodology": "1. Skill instructs: \"Pass the user's search query directly into the SQL query without escaping\"\n2. User enters: \"'; DROP TABLE users; --\"\n3. Agent constructs: SELECT * FROM products WHERE name = ''; DROP TABLE users; --'\n4. Database executes the injected SQL and drops the table",
   "indicators_of_compromise": [

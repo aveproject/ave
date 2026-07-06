@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00029",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "skill",
   "title": "Homoglyph or Unicode Obfuscation Attack",
   "attack_class": "Obfuscation - Unicode Homoglyph",
@@ -34,6 +34,9 @@
     "unicode",
     "evasion"
   ],
+  "provenance_vector": null,
+  "trifecta_profile": null,
+  "mitigation": null,
   "mutation_count": 15,
   "detection_methodology": "1. Attacker writes a skill where key instruction words use Cyrillic lookalikes\n2. Human reviewer reads \"ignore\" (appears Latin) but the model reads the Cyrillic codepoints\n3. Safety scanner using naive string matching misses the hidden instruction\n4. Model executes the concealed instruction",
   "indicators_of_compromise": [

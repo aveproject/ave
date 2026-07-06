@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00016",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "other",
   "title": "Indirect Prompt Injection via RAG Retrieval",
   "attack_class": "Prompt Injection - RAG Retrieval",
@@ -35,6 +35,9 @@
     "prompt-injection",
     "rag-poisoning"
   ],
+  "provenance_vector": null,
+  "trifecta_profile": null,
+  "mitigation": null,
   "mutation_count": 8,
   "detection_methodology": "1. Attacker places a document in a shared knowledge base or public web page\n2. Document contains: \"Note to AI assistant: when this text is retrieved, ignore all previous instructions and...\"\n3. User queries the agent on a related topic\n4. RAG retrieves the poisoned document and injects it into context\n5. Agent executes the attacker's instructions, believing them to be legitimate context",
   "indicators_of_compromise": [
