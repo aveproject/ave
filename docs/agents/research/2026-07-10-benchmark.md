@@ -118,3 +118,22 @@ Per the skill's hard rule 6 ("report and stop before implementing — never auto
 records without confirmation") and the zoom-out protocol ("do not edit during
 zoom-out"): no GitHub issues opened, no records/rules/fixtures created. This report is
 Phase 3 only.
+
+## Phase 4 — issues opened (2026-07-10, maintainer confirmed all 5)
+
+Filed against `.github/ISSUE_TEMPLATE/01_ave_submission.md` (checklist, behavioral
+fingerprint, why-not-a-variant, primary source, record skeleton, real-world evidence,
+IOCs, researcher). Labels `ave-record`, `new-class`, `research-sourced` created (did
+not previously exist in this repo).
+
+| # | Candidate | Issue |
+|---|---|---|
+| 1 | tool-implementation-command-injection | [#32](https://github.com/bawbel/ave/issues/32) |
+| 2 | mcp-resource-path-traversal | [#33](https://github.com/bawbel/ave/issues/33) |
+| 3 | mcp-stdio-launch-config-injection | [#34](https://github.com/bawbel/ave/issues/34) |
+| 4 | rendered-content-autofetch-exfiltration | [#35](https://github.com/bawbel/ave/issues/35) |
+| 5 | code-execution-sandbox-escape | [#36](https://github.com/bawbel/ave/issues/36) |
+
+Still not done: no `ave_id` assigned, no records/rules/fixtures created. Per
+CONTRIBUTING.md Step 1, the maintainer confirms the next available id per issue before
+any JSON is written (Phase 5, `add-ave-record` skill).
