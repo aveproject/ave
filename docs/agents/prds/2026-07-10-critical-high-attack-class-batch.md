@@ -95,6 +95,10 @@ research pass — one overloaded bucket is a documentation note, three is a patt
 earns its own enum value. This keeps the batch un-blocked and defers the schema question
 until there's enough evidence to answer it well.
 
+**RESOLVED 2026-07-10:** adopted as written — `detection_layer: content` for #32 and
+#33, `behavioral_fingerprint` states the implementation-code surface explicitly, no
+schema change opened. Applied starting with #32.
+
 ### Decision 2 — `attack_class` category for #32
 
 #32 proposes `Tool Abuse - Implementation Command Injection`, flagged in the issue as
