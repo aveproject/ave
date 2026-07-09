@@ -10,8 +10,8 @@ Single source of truth for how work happens in this repo.
 bawbel/ave — the behavioral classification standard for agentic AI components.
 An independent standard that bawbel-scanner implements. NOT a feature of the scanner.
 
-- Records: 51 published (schema_version 1.0.0)
-- Schema: schema/ave-record-1.0.0.schema.json
+- Records: 51 published (schema_version 1.1.0)
+- Schema: schema/ave-record-1.1.0.schema.json
 - Scoring: OWASP AIVSS v0.8
 - Registry: ave.bawbel.io
 - Public API: api.piranha.bawbel.io
@@ -43,19 +43,27 @@ The record declares the BASELINE; the scanner assigns the ACTUAL value.
 
 ---
 
-## Record schema v1.0.0
+## Record schema v1.1.0
 
-Every record validates against schema/ave-record-1.0.0.schema.json.
+Every record validates against schema/ave-record-1.1.0.schema.json.
 
-**15 required fields:**
+**15 required fields** (once `status` is `active` or `deprecated`):
 ave_id · schema_version · status · published
 title · description · attack_class · severity · behavioral_fingerprint
 aivss · owasp_mcp
 indicators_of_compromise · remediation
 references · researcher
 
+**Draft submit-required core** (`status: "draft"` only needs these 8):
+ave_id · schema_version · status · title · description · attack_class ·
+behavioral_fingerprint · references
+
 **Optional framework fields** (add when applicable, omit rather than force):
-owasp_mapping · mitre_atlas_mapping · nist_ai_rmf_mapping
+owasp_asi · mitre_atlas · nist_ai_rmf
+
+**Optional runtime/mitigation classification fields** (vendor-neutral only —
+no enforcement-tool config ever belongs here):
+provenance_vector · trifecta_profile · mitigation · example_patterns
 
 **Optional scanner evidence declarations** (declare defaults the scanner uses):
 evidence_kind_default · detection_stage · detection_layer
@@ -92,7 +100,7 @@ Every function in validation scripts gets a What/Why/How comment.
 ```python
 # What: validates one AVE record against the JSON schema
 # Why:  a malformed record breaks every downstream scanner that loads it
-# How:  jsonschema.validate against schema/ave-record-1.0.0.schema.json
+# How:  jsonschema.validate against schema/ave-record-1.1.0.schema.json
 def validate_record(record: dict) -> tuple[bool, list[str]]:
     ...
 ```
@@ -129,14 +137,14 @@ python scripts/check_fixtures.py      # every rule has +/- fixtures
 
 ## Hard rules
 
-1. Every record validates against schema/ave-record-1.0.0.schema.json.
+1. Every record validates against schema/ave-record-1.1.0.schema.json.
 2. confidence NEVER appears in an AVE record — it is per-detection.
 3. Behavioral fingerprints over signatures — describe what it DOES.
 4. Every record has at least one rule and a positive + negative fixture.
 5. ave_id is immutable once published. Never renumber. Deprecate, never delete.
 6. severity and aivss.aivss_score must agree (CRITICAL implies >= 9.0).
 7. All names from LANGUAGE.md.
-8. owasp_mcp is required. owasp_mapping, mitre_atlas_mapping, nist_ai_rmf_mapping
+8. owasp_mcp is required. owasp_asi, mitre_atlas, nist_ai_rmf
    are optional — add when they apply, omit rather than force a poor fit.
 9. references must have at least one citable primary source.
 10. Never commit records/INDEX.md — it is removed. The README is the index.

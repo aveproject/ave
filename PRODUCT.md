@@ -42,8 +42,8 @@ an identity.
 
 | | |
 |---|---|
-| Records published | 51 (schema_version 1.0.0) |
-| Schema version | 1.0.0 (canonical, published) |
+| Records published | 51 (schema_version 1.1.0) |
+| Schema version | 1.1.0 (canonical, published) |
 | Registry | ave.bawbel.io (live) |
 | Threat intel API | api.piranha.bawbel.io |
 | Site repo | github.com/bawbel/ave-site |
@@ -57,9 +57,9 @@ an identity.
 |---|---|---|
 | OWASP AIVSS v0.8 | `aivss` object | required in every record |
 | OWASP MCP Top 10 | `owasp_mcp` | required, MCP01-MCP10 |
-| OWASP Agentic AI Top 10 | `owasp_mapping` | optional, ASI01-ASI10 |
-| MITRE ATLAS | `mitre_atlas_mapping` | optional, AML.Txxxx |
-| NIST AI RMF | `nist_ai_rmf_mapping` | optional |
+| OWASP Agentic Security Initiative Top 10 | `owasp_asi` | optional, ASI01-ASI10 |
+| MITRE ATLAS | `mitre_atlas` | optional, AML.Txxxx |
+| NIST AI RMF | `nist_ai_rmf` | optional |
 | OWASP AIBOM | planned via `bawbel abom` CycloneDX command | future |
 
 ---

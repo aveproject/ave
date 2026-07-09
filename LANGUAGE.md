@@ -168,5 +168,5 @@ PiranhaDB, confidence, evidence_stage — defined in scanner LANGUAGE.md.
 | rule_definition | rule |
 | CVE record | AVE record — AVE is not CVE |
 | confidence (in a record) | confidence_baseline |
-| owasp (field name) | owasp_mapping |
-| mitre_atlas (field name) | mitre_atlas_mapping |
+| owasp (field name) | owasp_asi |
+| mitre_atlas_mapping (field name) | mitre_atlas |

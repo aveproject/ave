@@ -1,6 +1,6 @@
 ---
 name: Schema change proposal
-about: Propose a change to ave-record-1.0.0.schema.json
+about: Propose a change to ave-record-1.1.0.schema.json
 title: "[SCHEMA] <brief description>"
 labels: schema
 assignees: ''
@@ -21,7 +21,7 @@ assignees: ''
 
 ## Migration path for existing records
 
-<!-- How will the 48 existing records be updated? Can this be done with an automated script? -->
+<!-- How will the 51 existing records be updated? Can this be done with an automated script? -->
 
 ## Impact on consumers
 
