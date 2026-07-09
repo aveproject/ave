@@ -225,8 +225,8 @@ ENRICHMENT = {
     ),
     "AVE-2026-00042": (
         {"entry_class": "tool_response", "payload_surface": "tool result content passed into eval()/exec()/dynamic code string", "escalation": "instruction_to_capability"},
-        {"requires": ["untrusted_content"]},
-        {"strategy": ["validate_input", "isolate_scope"], "enforcement_point": "runtime_proxy", "trifecta_control": "break_untrusted_content"},
+        {"requires": ["untrusted_content"], "amplifies": ["external_comms"]},
+        {"strategy": ["deny_by_default", "validate_input", "isolate_scope"], "enforcement_point": "agent_framework", "trifecta_control": "break_untrusted_content"},
     ),
     "AVE-2026-00043": (
         {"entry_class": "tool_response", "payload_surface": "rich UI payload (canvas/artifact/SVG/HTML) non-rendered elements", "escalation": "data_to_instruction"},

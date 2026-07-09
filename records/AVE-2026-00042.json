@@ -46,14 +46,18 @@
   "trifecta_profile": {
     "requires": [
       "untrusted_content"
+    ],
+    "amplifies": [
+      "external_comms"
     ]
   },
   "mitigation": {
     "strategy": [
+      "deny_by_default",
       "validate_input",
       "isolate_scope"
     ],
-    "enforcement_point": "runtime_proxy",
+    "enforcement_point": "agent_framework",
     "trifecta_control": "break_untrusted_content"
   },
   "example_patterns": [
