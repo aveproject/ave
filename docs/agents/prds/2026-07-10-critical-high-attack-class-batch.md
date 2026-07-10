@@ -1,8 +1,9 @@
 # PRD — Critical/High attack class batch (5 new AVE records)
 
 **Date:** 2026-07-10
-**Status:** In progress — Decision 1 resolved, #32 implemented (AVE-2026-00052, on
-`vendor-neutral`, not yet on `main`), #33/#34/#35/#36 not started
+**Status:** In progress — Decision 1 resolved, #32 (AVE-2026-00052) and #33
+(AVE-2026-00053) implemented on `vendor-neutral`, not yet on `main`; #34/#35/#36 not
+started
 **Source:** `docs/agents/research/2026-07-10-benchmark.md` (research-new-attack-classes
 skill, Phases 1-4), issues [#32](https://github.com/bawbel/ave/issues/32)-[#36](https://github.com/bawbel/ave/issues/36)
 **Scanner coordination required: yes** — every record in this batch needs a coordinated
@@ -130,7 +131,7 @@ the *next* multi-assessor CVE too, not just this record.
 | Issue | attack_class (draft) | detection_layer | Rule engine(s) | Sequencing rationale |
 |---|---|---|---|---|
 | [#32](https://github.com/bawbel/ave/issues/32) tool-implementation-command-injection | `Tool Abuse - Implementation Command Injection` | `content` (Decision 1) | semgrep, pattern | **Done: AVE-2026-00052.** AIVSS computed 7.5 HIGH (not the CRITICAL estimate); rationale in aivss.notes. `rules/pattern/` reference rule written in this repo (matches the corpus-wide convention — `rules/semgrep/`/`rules/yara/` are empty scaffolding for all 51 prior records too; the real semgrep implementation is the `bawbel/scanner` coordinated PR, still outstanding). |
-| [#33](https://github.com/bawbel/ave/issues/33) mcp-resource-path-traversal | `Tool Abuse - Resource Path Traversal` | `content` (Decision 1) | semgrep, pattern | Same rule shape as #32 (SAST path-validation pattern), ship second |
+| [#33](https://github.com/bawbel/ave/issues/33) mcp-resource-path-traversal | `Tool Abuse - Resource Path Traversal` | `content` (Decision 1) | semgrep, pattern | **Done: AVE-2026-00053.** AIVSS computed 6.3 MEDIUM (general-class score; notes explain a scanner may score an individual finding higher when the traversal target is known). `bawbel/scanner` PR outstanding, same as #32. |
 | [#36](https://github.com/bawbel/ave/issues/36) code-execution-sandbox-escape | `Execution Hijack - Code Execution Sandbox Escape` | `runtime` | sandbox, llm | Single canonical CVE (2026-5752), but needs a runtime/sandbox fixture harness — more setup than #32/#33 |
 | [#34](https://github.com/bawbel/ave/issues/34) mcp-stdio-launch-config-injection | `Supply Chain - MCP STDIO Launch Configuration Injection` | `registry_metadata` | pattern, llm | No single canonical CVE for the architecture pattern itself (per-platform instances); confidence_baseline drafted low (0.55) — needs the most detection-rule design work |
 | [#35](https://github.com/bawbel/ave/issues/35) rendered-content-autofetch-exfiltration | `Data Exfiltration - Rendered Content Auto-Fetch` | `runtime` | pattern, llm, sandbox | Closest-call classification of the five (see benchmark report Phase 2 detail) — ship last, after the other four establish the batch's conventions, in case review pushes it toward VARIANT instead |
