@@ -1,11 +1,15 @@
 # PRD — Critical/High attack class batch (5 new AVE records)
 
 **Date:** 2026-07-10
-**Status:** In progress — Decision 1 resolved, #32 (AVE-2026-00052), #33
-(AVE-2026-00053), and #36 (AVE-2026-00054) implemented on `vendor-neutral`, not yet on
-`main`; #34/#35 not started. All three implemented so far scored below their
-pre-implementation CRITICAL estimate once AIVSS was actually computed (HIGH 7.5, MEDIUM
-6.3, MEDIUM 6.7) — see each record's `aivss.notes` for why.
+**Status:** All 5 records implemented on `vendor-neutral`, not yet merged to `main` or
+coordinated with `bawbel/scanner`. AVE-2026-00052 (#32, HIGH 7.5), AVE-2026-00053 (#33,
+MEDIUM 6.3), AVE-2026-00054 (#36, MEDIUM 6.7), AVE-2026-00055 (#34, HIGH 7.7),
+AVE-2026-00056 (#35, MEDIUM 5.8). Four of five scored below their pre-implementation
+CRITICAL/HIGH estimate once AIVSS was actually computed — the exception, #34, has a real
+reason (persists across sessions, unlike the other four's single-call flaws). See each
+record's `aivss.notes` for full rationale. Remaining work: merge to `main`, coordinate
+detection rules in `bawbel/scanner`, update crosswalks/README/PRODUCT.md per the Rollout
+section below.
 **Source:** `docs/agents/research/2026-07-10-benchmark.md` (research-new-attack-classes
 skill, Phases 1-4), issues [#32](https://github.com/bawbel/ave/issues/32)-[#36](https://github.com/bawbel/ave/issues/36)
 **Scanner coordination required: yes** — every record in this batch needs a coordinated
@@ -135,8 +139,8 @@ the *next* multi-assessor CVE too, not just this record.
 | [#32](https://github.com/bawbel/ave/issues/32) tool-implementation-command-injection | `Tool Abuse - Implementation Command Injection` | `content` (Decision 1) | semgrep, pattern | **Done: AVE-2026-00052.** AIVSS computed 7.5 HIGH (not the CRITICAL estimate); rationale in aivss.notes. `rules/pattern/` reference rule written in this repo (matches the corpus-wide convention — `rules/semgrep/`/`rules/yara/` are empty scaffolding for all 51 prior records too; the real semgrep implementation is the `bawbel/scanner` coordinated PR, still outstanding). |
 | [#33](https://github.com/bawbel/ave/issues/33) mcp-resource-path-traversal | `Tool Abuse - Resource Path Traversal` | `content` (Decision 1) | semgrep, pattern | **Done: AVE-2026-00053.** AIVSS computed 6.3 MEDIUM (general-class score; notes explain a scanner may score an individual finding higher when the traversal target is known). `bawbel/scanner` PR outstanding, same as #32. |
 | [#36](https://github.com/bawbel/ave/issues/36) code-execution-sandbox-escape | `Execution Hijack - Code Execution Sandbox Escape` | `runtime` | pattern, sandbox, llm | **Done: AVE-2026-00054.** AIVSS computed 6.7 MEDIUM. `component_type: tool` (not `mcp_server`). Pattern rule (pre-execution payload signature) turned out sufficient for the fixture pair; sandbox/llm remain declared capable engines for the `bawbel/scanner` coordinated PR, same outstanding status as #32/#33. |
-| [#34](https://github.com/bawbel/ave/issues/34) mcp-stdio-launch-config-injection | `Supply Chain - MCP STDIO Launch Configuration Injection` | `registry_metadata` | pattern, llm | No single canonical CVE for the architecture pattern itself (per-platform instances); confidence_baseline drafted low (0.55) — needs the most detection-rule design work |
-| [#35](https://github.com/bawbel/ave/issues/35) rendered-content-autofetch-exfiltration | `Data Exfiltration - Rendered Content Auto-Fetch` | `runtime` | pattern, llm, sandbox | Closest-call classification of the five (see benchmark report Phase 2 detail) — ship last, after the other four establish the batch's conventions, in case review pushes it toward VARIANT instead |
+| [#34](https://github.com/bawbel/ave/issues/34) mcp-stdio-launch-config-injection | `Supply Chain - MCP STDIO Launch Configuration Injection` | `registry_metadata` | pattern, llm | **Done: AVE-2026-00055.** AIVSS computed 7.7 HIGH — highest of the batch so far, since self_modification/persistent_memory are genuinely elevated (poisoned config persists across sessions, unlike 00052/53/54's single-call flaws). mitre_atlas: AML.T0104. |
+| [#35](https://github.com/bawbel/ave/issues/35) rendered-content-autofetch-exfiltration | `Data Exfiltration - Rendered Content Auto-Fetch` | `runtime` | pattern, llm, sandbox | **Done: AVE-2026-00056.** AIVSS computed 5.8 MEDIUM (Decision 3 applied: cvss_base uses NIST's 7.5, not Microsoft's 9.3). Closest-call classification held up under implementation. Detection needed a cross-reference check (URL query vs. surrounding text), not a fixed regex — first record in the batch to depart from pure pattern matching. |
 
 Per-record requirements (all five, per CONTRIBUTING.md Step 2):
 
