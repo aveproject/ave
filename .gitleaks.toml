@@ -1,0 +1,11 @@
+title = "gitleaks config for bawbel/ave"
+
+# Extend the default gitleaks ruleset rather than replace it.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "AVE test fixtures intentionally contain credential-shaped strings as positive-detection test data (e.g. AVE-2026-00047, hardcoded-credential detection). These are fake values, not real secrets."
+paths = [
+  '''tests/fixtures/.*''',
+]
