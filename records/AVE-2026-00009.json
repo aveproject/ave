@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00009",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "skill",
   "title": "AI identity jailbreak via role-play or persona override in agentic component",
   "attack_class": "Prompt Injection - Jailbreak",
@@ -19,21 +19,43 @@
   ],
   "aivss_score": 5.5,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI01",
     "ASI08"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MAP-1.5",
     "MEASURE-2.5",
     "MANAGE-1.3"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0054",
     "AML.T0051"
   ],
   "behavioral_fingerprint": "Component instructs the agent to pretend to be a different AI, adopt a persona without safety constraints, or activate a fictional unrestricted mode.",
-  "behavioral_vector": [],
+  "behavioral_vector": [
+    "persona-override",
+    "jailbreak",
+    "prompt-injection"
+  ],
+  "provenance_vector": {
+    "entry_class": "content",
+    "payload_surface": "skill instruction body: persona-override / unrestricted-mode directive",
+    "escalation": "data_to_instruction"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "untrusted_content"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "validate_input",
+      "deny_by_default"
+    ],
+    "enforcement_point": "static_scan",
+    "trifecta_control": "break_untrusted_content"
+  },
   "mutation_count": 287,
   "detection_methodology": "1. Static scan: search for persona override phrases (pretend you are, act as if, you are no longer an AI, DAN mode, developer mode enabled, jailbreak). 2. Semantic analysis: detect instructions that attempt to override the agent's identity or disable safety guidelines through roleplay framing.",
   "indicators_of_compromise": [
@@ -91,11 +113,7 @@
     "aivss_score": 5.5,
     "aivss_severity": "MEDIUM",
     "spec_version": "0.8",
-    "notes": "Safety bypass. Very high non-determinism. NL-only attack surface.",
-    "owasp_mcp_mapping": [
-      "MCP01",
-      "MCP03"
-    ]
+    "notes": "Safety bypass. Very high non-determinism. NL-only attack surface."
   },
   "owasp_mcp": [
     "MCP01",

@@ -1,10 +1,10 @@
 {
   "ave_id": "AVE-2026-00016",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "other",
   "title": "Indirect Prompt Injection via RAG Retrieval",
   "attack_class": "Prompt Injection - RAG Retrieval",
-  "description": "A Retrieval-Augmented Generation (RAG) pipeline indexes external documents and injects their content into the agent's context at query time. An attacker who controls any document in the indexed corpus can embed instructions that will be treated as trusted context when retrieved, effectively injecting into the agent's reasoning without direct access to the system prompt. ---",
+  "description": "A Retrieval-Augmented Generation (RAG) pipeline indexes external documents and injects their content into the agent's context at query time. An attacker who controls any document in the indexed corpus can embed instructions that will be treated as trusted context when retrieved, effectively injecting into the agent's reasoning without direct access to the system prompt.",
   "affected_platforms": [
     "claude-code",
     "cursor",
@@ -15,7 +15,7 @@
   ],
   "aivss_score": 6.4,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI01",
     "ASI10"
   ],
@@ -23,25 +23,45 @@
     "MCP10",
     "MCP03"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MAP-1.5",
     "MEASURE-2.5"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0051.000"
   ],
-  "behavioral_fingerprint": "Component embeds malicious instructions in content indexed by a RAG pipeline, causing the agent to execute attacker-controlled instructions when that content is retrieved.\n\n---",
+  "behavioral_fingerprint": "Component embeds malicious instructions in content indexed by a RAG pipeline, causing the agent to execute attacker-controlled instructions when that content is retrieved.",
   "behavioral_vector": [
     "prompt-injection",
     "rag-poisoning"
   ],
+  "provenance_vector": {
+    "entry_class": "retrieved_document",
+    "payload_surface": "RAG-indexed document body",
+    "escalation": "data_to_instruction"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "untrusted_content"
+    ],
+    "amplifies": [
+      "private_data"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "sanitize_output",
+      "validate_input"
+    ],
+    "enforcement_point": "runtime_proxy",
+    "trifecta_control": "break_untrusted_content"
+  },
   "mutation_count": 8,
-  "detection_methodology": "1. Attacker places a document in a shared knowledge base or public web page\n2. Document contains: \"Note to AI assistant: when this text is retrieved, ignore all previous instructions and...\"\n3. User queries the agent on a related topic\n4. RAG retrieves the poisoned document and injects it into context\n5. Agent executes the attacker's instructions, believing them to be legitimate context\n\n---",
+  "detection_methodology": "1. Attacker places a document in a shared knowledge base or public web page\n2. Document contains: \"Note to AI assistant: when this text is retrieved, ignore all previous instructions and...\"\n3. User queries the agent on a related topic\n4. RAG retrieves the poisoned document and injects it into context\n5. Agent executes the attacker's instructions, believing them to be legitimate context",
   "indicators_of_compromise": [
     "Phrases like `when retrieved`, `upon retrieval`, `if this document is read`",
     "Instructions addressed to `the AI`, `the LLM`, `the assistant` inside document content",
-    "Wrapped instructions in `<system>`, `<instructions>`, or `<context>` tags within body text",
-    ""
+    "Wrapped instructions in `<system>`, `<instructions>`, or `<context>` tags within body text"
   ],
   "aivss": {
     "cvss_base": 8,
@@ -63,13 +83,9 @@
     "aivss_score": 6.4,
     "aivss_severity": "MEDIUM",
     "spec_version": "0.8",
-    "owasp_mcp_mapping": [
-      "MCP10",
-      "MCP03"
-    ],
     "notes": "AARF scores based on typical deployment of rag components in agentic workflows."
   },
-  "remediation": "- Sanitise all RAG-retrieved content before injecting into context\n- Apply a secondary safety pass over retrieved documents before use\n- Implement RAG content provenance tracking - flag documents with instruction-like content\n- Use a separate model pass to detect embedded instructions in retrieved chunks\n\n---",
+  "remediation": "- Sanitise all RAG-retrieved content before injecting into context\n- Apply a secondary safety pass over retrieved documents before use\n- Implement RAG content provenance tracking - flag documents with instruction-like content\n- Use a separate model pass to detect embedded instructions in retrieved chunks",
   "status": "active",
   "kill_switch_active": false,
   "researcher": "Bawbel Security Research Team",

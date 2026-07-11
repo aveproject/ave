@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00007",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "skill",
   "title": "Agent goal hijack via direct instruction override in agentic component",
   "attack_class": "Prompt Injection - Goal Hijack",
@@ -19,21 +19,43 @@
   ],
   "aivss_score": 6.1,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI01",
     "ASI08"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MAP-1.5",
     "MEASURE-2.5",
     "MANAGE-1.3"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0054",
     "AML.T0051"
   ],
   "behavioral_fingerprint": "Component contains explicit instruction-override language directing the agent to abandon its current task and follow new instructions from the component.",
-  "behavioral_vector": [],
+  "behavioral_vector": [
+    "instruction-override",
+    "goal-hijack",
+    "prompt-injection"
+  ],
+  "provenance_vector": {
+    "entry_class": "content",
+    "payload_surface": "skill instruction body: instruction-override language",
+    "escalation": "data_to_instruction"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "untrusted_content"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "validate_input",
+      "deny_by_default"
+    ],
+    "enforcement_point": "static_scan",
+    "trifecta_control": "break_untrusted_content"
+  },
   "mutation_count": 412,
   "detection_methodology": "1. Static scan: search for override phrases (ignore previous instructions, your new instructions are, forget your instructions). 2. Semantic analysis: detect instruction replacement patterns even when phrased indirectly. 3. Instruction hierarchy enforcement: agent frameworks should treat component instructions as lower trust than system prompt instructions.",
   "indicators_of_compromise": [
@@ -91,11 +113,7 @@
     "aivss_score": 6.1,
     "aivss_severity": "MEDIUM",
     "spec_version": "0.8",
-    "notes": "Core goal override. Non-determinism makes detection hard.",
-    "owasp_mcp_mapping": [
-      "MCP01",
-      "MCP03"
-    ]
+    "notes": "Core goal override. Non-determinism makes detection hard."
   },
   "owasp_mcp": [
     "MCP01",

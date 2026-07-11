@@ -1,0 +1,117 @@
+{
+  "ave_id": "AVE-2026-00054",
+  "schema_version": "1.1.0",
+  "component_type": "tool",
+  "title": "Code-execution sandbox escape via JavaScript prototype-chain traversal",
+  "attack_class": "Execution Hijack - Code Execution Sandbox Escape",
+  "description": "A code-execution tool intended to confine agent-submitted or agent-generated code within a sandboxed boundary fails to enforce that boundary. A payload using JavaScript prototype-chain traversal (walking from an ordinary object through its constructor and prototype chain to reach the host language runtime's global scope) breaks out of the intended isolation to achieve code execution with host-level, potentially root, privileges. This is distinct from AVE-2026-00042 (REPL Code Mode Payload Injection), which is about how malicious code gets INTO an agent's generated code via poisoned tool results; this class is about what happens AFTER code is already executing inside an intended sandbox -- a flaw in the sandbox's own containment, exploitable even by code the agent was authorized to run. Sandboxes built on shared-kernel containers or in-language execution contexts (e.g. Node.js vm.Script) that share the host runtime's object model are especially exposed, since they do not provide a true security boundary between sandboxed and host code.",
+  "affected_platforms": [
+    "claude-code",
+    "cursor",
+    "codex",
+    "any-agent-with-code-execution-tool"
+  ],
+  "affected_registries": [
+    "npm",
+    "pypi"
+  ],
+  "aivss_score": 6.7,
+  "cvss_base_vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
+  "behavioral_fingerprint": "A code-execution tool's sandbox fails to contain a submitted payload that uses prototype-chain traversal to reach the host JavaScript or Python runtime, achieving code execution with host-level privileges outside the tool's declared execution boundary.",
+  "behavioral_vector": [
+    "sandbox-escape",
+    "prototype-chain-traversal",
+    "implementation-flaw"
+  ],
+  "provenance_vector": {
+    "entry_class": "runtime",
+    "payload_surface": "code submitted to a code-execution/sandbox tool, containing a prototype-chain-traversal payload targeting the host language runtime"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "untrusted_content"
+    ],
+    "amplifies": [
+      "private_data",
+      "external_comms"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "isolate_scope",
+      "least_privilege"
+    ],
+    "enforcement_point": "agent_framework",
+    "trifecta_control": "break_untrusted_content"
+  },
+  "example_patterns": [
+    "({}).constructor.constructor(\"return process\")().mainModule.require(\"child_process\").execSync(\"id\")",
+    "Object.getPrototypeOf(Object.getPrototypeOf([])).constructor.constructor(\"return this\")()",
+    "this.__proto__.__proto__.constructor.constructor(\"return globalThis\")()"
+  ],
+  "detection_methodology": "1. Pre-execution pattern scan: flag code submitted to a code-execution tool containing prototype-chain manipulation idioms (__proto__, constructor.constructor, Object.getPrototypeOf chained toward global/host scope) as a heuristic signal, not confirmation of an actual escape. 2. Runtime/sandbox observation: monitor the sandboxed process for filesystem, network, or process-table access outside its declared execution boundary -- this confirms an actual escape rather than a mere attempt. 3. Semantic review: an LLM-based reviewer can recognize novel or obfuscated escape techniques that a fixed pattern signature misses.",
+  "indicators_of_compromise": [
+    "Executed code contains prototype-chain manipulation patterns (e.g. __proto__, constructor.constructor) targeting the host JavaScript or Python runtime rather than objects within the sandboxed execution context",
+    "Sandbox/code-execution process observed accessing host-level resources (filesystem paths outside the declared working directory, network interfaces, process list, environment variables) outside its declared execution boundary",
+    "Code-execution tool process running with root or unrestricted host privileges rather than a scoped service account or dedicated microVM/container identity"
+  ],
+  "remediation": "1. Use strong isolation primitives for untrusted code execution -- a dedicated microVM (e.g. Firecracker) or gVisor-class sandbox with its own kernel, not a shared-kernel container or in-process VM context. 2. Never expose Node.js vm.Script, Python exec()/eval() run in-process, or similar in-language sandboxing as the sole isolation boundary for untrusted code -- these share the host language runtime's prototype/object model and are not designed as a security boundary. 3. Run the code-execution process with the minimum host privileges necessary, never as root. 4. Monitor sandboxed process behavior for filesystem, network, or process-table access outside the declared execution boundary. 5. Apply defense-in-depth: scan submitted code for known escape-technique signatures before execution as an additional signal, not a sole control.",
+  "status": "active",
+  "kill_switch_active": false,
+  "researcher": "Bawbel Security Research Team",
+  "researcher_url": "https://bawbel.io",
+  "published": "2026-07-10T00:00:00Z",
+  "last_updated": "2026-07-10T00:00:00Z",
+  "references": [
+    {
+      "tag": "CVE",
+      "text": "CVE-2026-5752 -- Cohere Terrarium sandbox escape via JavaScript prototype-chain traversal, CVSS 9.3, CERT/CC-reported",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-5752"
+    },
+    {
+      "tag": "CWE-693",
+      "text": "CWE-693: Protection Mechanism Failure",
+      "url": "https://cwe.mitre.org/data/definitions/693.html"
+    }
+  ],
+  "owasp_mcp": [
+    "MCP05",
+    "MCP07"
+  ],
+  "aivss": {
+    "cvss_base": 9.3,
+    "aarf": {
+      "autonomy": 1,
+      "tool_use": 1,
+      "multi_agent": 0.2,
+      "non_determinism": 0.2,
+      "self_modification": 0,
+      "dynamic_identity": 0,
+      "persistent_memory": 0,
+      "natural_language_input": 0.5,
+      "data_access": 1,
+      "external_dependencies": 0.2
+    },
+    "aars": 4.1,
+    "thm": 1.0,
+    "mitigation_factor": 1.0,
+    "aivss_score": 6.7,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "notes": "cvss_base (9.3) directly reflects CVE-2026-5752's own NVD score; AV:L in the cvss_base_vector matches the original CVE's local attack vector -- the caller must already be able to submit code for execution, which in an agentic deployment typically means a prior step (e.g. indirect prompt injection) got the agent to submit the payload. AARF is the same shape as AVE-2026-00052/00053 (self_modification, dynamic_identity both 0 -- single-call flaw, not persistent/identity-assuming); external_dependencies is lower (0.2) than both since the exploit payload is typically self-contained and does not require fetching remote content. thm=1.0: real, disclosed, CERT/CC-reported, NVD-confirmed CVE with a working documented exploit technique. mitigation_factor=1.0: the originating CVE is a single instance; the general class of weak in-language sandboxing (shared prototype/object model with the host runtime) remains widespread and largely unaudited across custom code-execution tools in the agentic tooling ecosystem."
+  },
+  "severity": "MEDIUM",
+  "evidence_kind_default": "behavioral_pattern",
+  "detection_stage": "runtime_observed",
+  "detection_layer": "runtime",
+  "confidence_baseline": 0.55,
+  "evidence_basis_engines": [
+    "pattern",
+    "sandbox",
+    "llm"
+  ],
+  "derivable_into": [
+    "remote-control-chain",
+    "credential-exfiltration"
+  ]
+}

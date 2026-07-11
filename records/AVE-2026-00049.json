@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00049",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "status": "active",
   "published": "2026-06-21T00:00:00Z",
   "last_updated": "2026-06-21T00:00:00Z",
@@ -24,19 +24,42 @@
   ],
   "aivss_score": 7.2,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:L/VA:N/SC:H/SI:L/SA:N",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI03",
     "ASI06"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0011"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MAP-1.5",
     "MEASURE-2.6"
   ],
   "behavioral_fingerprint": "Component sets or overwrites the HTTP Host header on outbound requests to a value that does not match the declared target endpoint's natural host. The injected host points to attacker infrastructure. Pattern also manifests as X-Forwarded-Host, X-Original-URL, or Forwarded header manipulation that causes server-side request routing to an unintended destination.",
   "behavioral_vector": [
+    "host-header-injection",
+    "request-routing-abuse",
+    "badhost"
+  ],
+  "provenance_vector": {
+    "entry_class": "transport",
+    "payload_surface": "outbound HTTP Host / X-Forwarded-Host / Forwarded header",
+    "escalation": "instruction_to_capability"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "external_comms"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "validate_input",
+      "sever_egress"
+    ],
+    "enforcement_point": "network_layer",
+    "trifecta_control": "break_external_comms"
+  },
+  "example_patterns": [
     "requests.get(url, headers={'Host': 'evil.com'})",
     "headers['X-Forwarded-Host'] = 'attacker.com'",
     "curl -H 'Host: attacker.io' https://api.legitimate.com/endpoint",
@@ -107,10 +130,6 @@
     "aivss_score": 7.2,
     "aivss_severity": "HIGH",
     "spec_version": "0.8",
-    "owasp_mcp_mapping": [
-      "MCP04",
-      "MCP05"
-    ],
     "notes": "AARF elevated by autonomy and external dependency factors. Agent-initiated requests carrying credentials to attacker host amplifies impact."
   },
   "evidence_kind_default": "tool_description_pattern",

@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00050",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "status": "active",
   "published": "2026-06-21T00:00:00Z",
   "last_updated": "2026-06-21T00:00:00Z",
@@ -25,20 +25,47 @@
   ],
   "aivss_score": 7.2,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI04",
     "ASI07"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0010",
     "AML.T0043"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MAP-1.5",
     "MANAGE-2.4"
   ],
   "behavioral_fingerprint": "Component registers tool handlers or hooks beyond its declared manifest scope during session initialization. The registration extends the component's footprint into the agent's tool dispatch layer, granting it visibility into or control over calls intended for other tools. The parasitic tools appear as first-class registered tools, not obviously distinguishable from legitimately registered ones.",
   "behavioral_vector": [
+    "parasitic-tool-registration",
+    "hook-injection",
+    "dispatch-hijack"
+  ],
+  "provenance_vector": {
+    "entry_class": "runtime",
+    "payload_surface": "tool registry / hook-dispatch registration call at session init",
+    "escalation": "instruction_to_capability"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "untrusted_content"
+    ],
+    "amplifies": [
+      "private_data",
+      "external_comms"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "deny_by_default",
+      "isolate_scope"
+    ],
+    "enforcement_point": "agent_framework",
+    "trifecta_control": "break_untrusted_content"
+  },
+  "example_patterns": [
     "tool_registry.register('file_reader', intercept_handler)",
     "agent.add_tool(Tool(name='search', handler=spy_and_forward))",
     "hooks.register('before_tool_call', capture_all_tool_args)",
@@ -109,10 +136,6 @@
     "aivss_score": 7.2,
     "aivss_severity": "HIGH",
     "spec_version": "0.8",
-    "owasp_mcp_mapping": [
-      "MCP04",
-      "MCP07"
-    ],
     "notes": "AARF elevated by self_modification and persistent_memory: the parasite modifies the agent's tool dispatch layer and survives session resets."
   },
   "evidence_kind_default": "behavioral_pattern",

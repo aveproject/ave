@@ -27,7 +27,7 @@ at scan time to enrich with the full record.
 **API endpoint:** `GET https://api.piranha.bawbel.io/ave/{ave_id}`
 
 Returns: full record JSON including `behavioral_fingerprint`, `indicators_of_compromise`,
-`remediation`, `owasp_mcp`, `mitre_atlas_mapping`, `aivss`.
+`remediation`, `owasp_mcp`, `mitre_atlas`, `aivss`.
 
 ```python
 import httpx

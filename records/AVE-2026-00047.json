@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00047",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "skill",
   "title": "Hardcoded credentials in agent component - API keys and secrets exposed in skill files",
   "attack_class": "Sensitive Data Exposure - Hardcoded Credentials",
@@ -20,22 +20,44 @@
   ],
   "aivss_score": 7.6,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:L/VA:N/SC:H/SI:H/SA:H",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI02",
     "ASI06"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MAP-1.5",
     "MEASURE-2.6",
     "MANAGE-2.4",
     "GOVERN-1.2"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0037",
     "AML.T0044"
   ],
   "behavioral_fingerprint": "Skill file contains a high-entropy string adjacent to a credential keyword such as api_key, secret, token, password, or a known key format prefix such as sk- or Bearer. The credential is a literal value, not an environment variable reference or secrets manager path.",
   "behavioral_vector": [
+    "hardcoded-credential",
+    "secret-exposure",
+    "high-entropy-string"
+  ],
+  "provenance_vector": {
+    "entry_class": "skill_file",
+    "payload_surface": "literal credential string in skill file body"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "private_data"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "validate_input",
+      "provenance_label"
+    ],
+    "enforcement_point": "static_scan",
+    "trifecta_control": "break_private_data"
+  },
+  "example_patterns": [
     "ANTHROPIC_API_KEY = \"sk-ant-api03-realkey123456789\"",
     "api_key: \"ghp_actualGitHubToken12345678901234\"",
     "password: \"MyActualPassword123!\"",
@@ -109,10 +131,6 @@
     "aivss_score": 7.6,
     "aivss_severity": "HIGH",
     "spec_version": "0.8",
-    "owasp_mcp_mapping": [
-      "MCP02",
-      "MCP09"
-    ],
     "notes": "AARF scores reflect credential exposure amplified by agent context window accessibility and prompt injection risk."
   },
   "severity": "HIGH",

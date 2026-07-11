@@ -1,10 +1,10 @@
 {
   "ave_id": "AVE-2026-00024",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "mcp_server",
   "title": "Supply Chain - Content Type Mismatch (Magika)",
   "attack_class": "Supply Chain - Content Type Mismatch",
-  "description": "This record covers supply chain attacks where an executable payload is disguised as a skill file (`.md`, `.yaml`, `.json`, `.txt`). Unlike all other AVE records which are detected by text pattern matching, this record is detected exclusively by the **Magika engine (Stage 0)** - Google's ML-based file type classifier - because the file contains no readable text instructions to match against. Detection requires: `pip install \"bawbel-scanner[magika]\"` ---",
+  "description": "This record covers supply chain attacks where an executable payload is disguised as a skill file (`.md`, `.yaml`, `.json`, `.txt`). Unlike all other AVE records which are detected by text pattern matching, this record is detected exclusively by the **Magika engine (Stage 0)** - Google's ML-based file type classifier - because the file contains no readable text instructions to match against. Detection requires: `pip install \"bawbel-scanner[magika]\"`",
   "affected_platforms": [
     "any-mcp-client",
     "claude-desktop"
@@ -15,26 +15,44 @@
   ],
   "aivss_score": 6.8,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:L/VI:H/VA:N/SC:L/SI:H/SA:N",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI07"
   ],
   "owasp_mcp": [
     "MCP04"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MAP-1.5",
     "MANAGE-2.2"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0011"
   ],
-  "behavioral_fingerprint": "A file's actual content type does not match its declared extension. An ELF binary, Windows executable, Python pickle, PHP script, or other executable content is disguised as a benign skill file.\n\n---",
+  "behavioral_fingerprint": "A file's actual content type does not match its declared extension. An ELF binary, Windows executable, Python pickle, PHP script, or other executable content is disguised as a benign skill file.",
   "behavioral_vector": [
     "supply-chain",
     "content-type"
   ],
+  "provenance_vector": {
+    "entry_class": "skill_file",
+    "payload_surface": "skill file bytes vs. declared extension",
+    "escalation": "instruction_to_capability"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "untrusted_content"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "validate_input",
+      "deny_by_default"
+    ],
+    "enforcement_point": "static_scan",
+    "trifecta_control": "break_untrusted_content"
+  },
   "mutation_count": 3,
-  "detection_methodology": "1. Attacker publishes a skill on the Smithery marketplace\n2. The SKILL.md file is actually a compiled ELF binary renamed to .md\n3. When the agent loads the skill, it executes the binary instead of reading instructions\n4. Attacker achieves code execution on the host running the agent\n\n---",
+  "detection_methodology": "1. Attacker publishes a skill on the Smithery marketplace\n2. The SKILL.md file is actually a compiled ELF binary renamed to .md\n3. When the agent loads the skill, it executes the binary instead of reading instructions\n4. Attacker achieves code execution on the host running the agent",
   "indicators_of_compromise": [
     "ELF binary with .md, .yaml, .json, or .txt extension",
     "Windows PE32/PE64 executable with skill file extension",
@@ -61,12 +79,9 @@
     "aivss_score": 6.8,
     "aivss_severity": "MEDIUM",
     "spec_version": "0.8",
-    "owasp_mcp_mapping": [
-      "MCP04"
-    ],
     "notes": "AARF scores based on typical deployment of mcp components in agentic workflows."
   },
-  "remediation": "- Install Magika engine: `pip install \"bawbel-scanner[magika]\"`\n- Verify content type of all skill files before loading\n- Reject any file where content type does not match declared extension\n- Use a file type allowlist for skill loading - only accept known-safe types\n\n---",
+  "remediation": "- Install Magika engine: `pip install \"bawbel-scanner[magika]\"`\n- Verify content type of all skill files before loading\n- Reject any file where content type does not match declared extension\n- Use a file type allowlist for skill loading - only accept known-safe types",
   "status": "active",
   "kill_switch_active": false,
   "researcher": "Bawbel Security Research Team",

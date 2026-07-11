@@ -12,7 +12,7 @@ MCP server, system prompt, or agent plugin can be weaponized — scored consiste
 mapped to the frameworks security teams already report against.
 
 [![Records](https://img.shields.io/badge/records-51-0f6e56?style=flat-square)](records/)
-[![Schema](https://img.shields.io/badge/schema-v1.0.0-0a3024?style=flat-square)](schema/ave-record-1.0.0.schema.json)
+[![Schema](https://img.shields.io/badge/schema-v1.1.0-0a3024?style=flat-square)](schema/ave-record-1.1.0.schema.json)
 [![AIVSS](https://img.shields.io/badge/AIVSS-v0.8-d4a017?style=flat-square)](https://aivss.owasp.org)
 [![OWASP MCP](https://img.shields.io/badge/OWASP-MCP%20Top%2010-0a3024?style=flat-square)](https://owasp.org)
 [![MITRE ATLAS](https://img.shields.io/badge/MITRE-ATLAS-4a3f9e?style=flat-square)](https://atlas.mitre.org)
@@ -276,13 +276,13 @@ request a crosswalk for your scanner's rule IDs.
 
 ---
 
-## Schema v1.0.0
+## Schema v1.1.0
 
 Records validate against
-[`schema/ave-record-1.0.0.schema.json`](schema/ave-record-1.0.0.schema.json).
+[`schema/ave-record-1.1.0.schema.json`](schema/ave-record-1.1.0.schema.json).
 
 Canonical `$id`:
-`https://ave.bawbel.io/schema/ave-record-1.0.0.schema.json`
+`https://ave.bawbel.io/schema/ave-record-1.1.0.schema.json`
 
 **15 required fields:**
 
@@ -299,7 +299,7 @@ references · researcher
 ```json
 {
   "ave_id": "AVE-2026-00001",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "status": "active",
   "published": "2026-04-01T09:00:00Z",
   "title": "Metamorphic payload via external config fetch",
@@ -320,14 +320,21 @@ references · researcher
 ```
 
 **All optional fields:**
-`component_type` · `last_updated` · `behavioral_vector` · `aivss_score` ·
-`cvss_base_vector` · `owasp_mapping` · `mitre_atlas_mapping` ·
-`nist_ai_rmf_mapping` · `affected_platforms` · `affected_registries` ·
+`component_type` · `last_updated` · `behavioral_vector` · `example_patterns` ·
+`aivss_score` · `cvss_base_vector` · `owasp_asi` · `mitre_atlas` ·
+`nist_ai_rmf` · `provenance_vector` · `trifecta_profile` · `mitigation` ·
+`affected_platforms` · `affected_registries` ·
 `mutation_count` · `detection_methodology` · `kill_switch_active` ·
 `researcher_url` · `aivss.aarf` · `aivss.aivss_severity` ·
-`aivss.owasp_mcp_mapping` · `aivss.notes` · `evidence_kind_default` ·
+`aivss.notes` · `evidence_kind_default` ·
 `detection_stage` · `detection_layer` · `confidence_baseline` ·
 `evidence_basis_engines` · `derivable_into`
+
+`status: "draft"` records need only a reduced eight-field core (`ave_id`,
+`schema_version`, `status`, `title`, `description`, `attack_class`,
+`behavioral_fingerprint`, `references`) — the full 15-field required set
+above applies once `status` is `active` or `deprecated`. See
+[CONTRIBUTING.md](CONTRIBUTING.md) for the thin-submission path.
 
 Full schema reference: [ave.bawbel.io/schema.html](https://ave.bawbel.io/schema.html)
 
@@ -379,7 +386,7 @@ const Ajv = require('ajv/dist/2020');
 const addFormats = require('ajv-formats');
 const ajv = new Ajv({ strict: false });
 addFormats(ajv);
-const schema = require('./schema/ave-record-1.0.0.schema.json');
+const schema = require('./schema/ave-record-1.1.0.schema.json');
 const record = require('./records/AVE-2026-NNNNN.json');
 const ok = ajv.validate(schema, record);
 if (!ok) console.error(ajv.errors); else console.log('valid');
@@ -412,10 +419,11 @@ at [ave.bawbel.io/crosswalks.html](https://ave.bawbel.io/crosswalks.html).
 
 | Framework | Field | Crosswalk |
 |---|---|---|
-| [OWASP AST10](https://owasp.org/www-project-agentic-ai-security/) | `owasp_mapping` (ASI01-ASI10) | [`crosswalks/ave-to-ast10.json`](crosswalks/ave-to-ast10.json) |
+| OWASP Agentic Security Initiative Top 10 | `owasp_asi` (ASI01-ASI10) | schema field, all applicable records |
+| [OWASP Agentic Skills Top 10 (AST10)](https://owasp.org/www-project-agentic-skills-top-10/) | no dedicated schema field yet (`owasp_ast` planned) | [`crosswalks/ave-to-ast10.json`](crosswalks/ave-to-ast10.json) |
 | OWASP MCP Top 10 | `owasp_mcp` | all records |
-| MITRE ATLAS | `mitre_atlas_mapping` | where applicable |
-| NIST AI RMF | `nist_ai_rmf_mapping` | where applicable |
+| MITRE ATLAS | `mitre_atlas` | where applicable |
+| NIST AI RMF | `nist_ai_rmf` | where applicable |
 
 | This scanner | Maps to AVE via |
 |---|---|

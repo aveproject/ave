@@ -1,0 +1,128 @@
+{
+  "ave_id": "AVE-2026-00053",
+  "schema_version": "1.1.0",
+  "component_type": "mcp_server",
+  "title": "Path traversal via unsanitized path parameter in MCP resource/file-handler implementation",
+  "attack_class": "Tool Abuse - Resource Path Traversal",
+  "description": "An MCP resource or file-handler tool's own path-validation logic fails to canonicalize a caller-supplied path or URL parameter and check it against a configured root before use, allowing directory-traversal sequences (../, encoded variants, or URL dot-segment normalization) to escape the tool's declared scope. Like AVE-2026-00052, this is a code-level flaw in the tool's implementation, not a prompt-driven instruction: the vulnerable path-validation function fires on a raw parameter value regardless of how it was supplied. A common anti-pattern is exact string-match blacklisting (checking a path against a denylist of forbidden substrings) instead of resolving to a canonical absolute path and verifying containment within an allowed root -- the former is trivially bypassed by subdirectory traversal or alternate encodings. Depending on what the traversal reaches, impact ranges from reading unrelated configuration or credential files to accessing entirely unrelated API endpoints under the tool's own configured credentials.",
+  "affected_platforms": [
+    "claude-desktop",
+    "claude-code",
+    "cursor",
+    "windsurf",
+    "any-mcp-client"
+  ],
+  "affected_registries": [
+    "npm",
+    "pypi",
+    "smithery.ai",
+    "registry.modelcontextprotocol.io"
+  ],
+  "aivss_score": 6.3,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:L/VA:N/SC:H/SI:L/SA:N",
+  "behavioral_fingerprint": "MCP resource or file-handler tool's own path-validation code fails to canonicalize and contain a caller-supplied path or URL parameter, allowing directory-traversal sequences to read or write files and resources outside the tool's declared scope.",
+  "behavioral_vector": [
+    "path-traversal",
+    "unsanitized-path-parameter",
+    "implementation-flaw"
+  ],
+  "provenance_vector": {
+    "entry_class": "content",
+    "payload_surface": "MCP resource/file-handler tool-call path or URL parameter reaching an unsanitized path-resolution function in the server's own handler code"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "external_comms"
+    ],
+    "amplifies": [
+      "untrusted_content",
+      "private_data"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "validate_input",
+      "isolate_scope"
+    ],
+    "enforcement_point": "static_scan",
+    "trifecta_control": "break_external_comms"
+  },
+  "example_patterns": [
+    "if path.startswith('/etc') or path.startswith('/root'): raise ValueError()  # blacklist, not containment",
+    "open(base_dir + '/' + user_path)  # no normalization before use",
+    "fetch(`${apiBase}${userSuppliedPath}`)  // dot-segments normalized during URL resolution, escaping apiBase"
+  ],
+  "detection_methodology": "1. Static/SAST scan: flag path-validation functions using substring/prefix blacklist checks (e.g. startswith() against a denylist) instead of canonical-path resolution plus containment verification against a configured root. 2. Pattern scan: flag file-open/read/write calls or URL builders where a tool-call parameter reaches the call without a preceding path-resolution or containment-check function. 3. Code review: confirm URL-based resource builders apply the same canonicalization as filesystem path handlers -- dot-segment normalization during URL resolution is a common blind spot.",
+  "indicators_of_compromise": [
+    "Path-validation function uses exact string-match blacklisting instead of canonical-path resolution and containment checking (e.g. checking startswith() against a denylist rather than resolving to a real path and verifying it stays under a configured root)",
+    "A file-path or resource-URI parameter is passed to a file-open/read/write call or URL builder without prior normalization against a configured root directory",
+    "`../` or URL-encoded traversal sequences (`%2e%2e%2f`) accepted unmodified in a resource URI or file-path parameter"
+  ],
+  "remediation": "1. Resolve the caller-supplied path to its canonical absolute form (e.g. os.path.realpath, path.resolve) before any file operation. 2. Verify the resolved path is contained within a configured root directory using a proper prefix/containment check on the canonical path, not a blacklist of forbidden substrings. 3. Reject requests containing raw or encoded traversal sequences (../, ..\\, %2e%2e%2f) before resolution, as defense in depth. 4. Apply the same canonicalization and containment check to URL-based resource builders, not just filesystem path parameters -- dot-segment normalization during URL resolution is a common gap. 5. Run the MCP server process with read/write access limited to only the directories it actually needs.",
+  "status": "active",
+  "kill_switch_active": false,
+  "researcher": "Bawbel Security Research Team",
+  "researcher_url": "https://bawbel.io",
+  "published": "2026-07-10T00:00:00Z",
+  "last_updated": "2026-07-10T00:00:00Z",
+  "references": [
+    {
+      "tag": "CVE",
+      "text": "CVE-2026-11720 -- Google MCP Toolbox for Databases, HTTP tool URL builder path traversal, CVSS 9.3",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-11720"
+    },
+    {
+      "tag": "CVE",
+      "text": "CVE-2025-66689 -- Zen MCP Server path traversal via is_dangerous_path() blacklist bypass, CVSS 6.5",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-66689"
+    },
+    {
+      "tag": "CVE",
+      "text": "CVE-2026-15138 -- tumf mcp-text-editor path traversal via _validate_file_path",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-15138"
+    },
+    {
+      "tag": "CWE-22",
+      "text": "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')",
+      "url": "https://cwe.mitre.org/data/definitions/22.html"
+    }
+  ],
+  "owasp_mcp": [
+    "MCP02",
+    "MCP07"
+  ],
+  "aivss": {
+    "cvss_base": 8.5,
+    "aarf": {
+      "autonomy": 1,
+      "tool_use": 1,
+      "multi_agent": 0.2,
+      "non_determinism": 0,
+      "self_modification": 0,
+      "dynamic_identity": 0,
+      "persistent_memory": 0,
+      "natural_language_input": 0.5,
+      "data_access": 1,
+      "external_dependencies": 0.4
+    },
+    "aars": 4.1,
+    "thm": 1.0,
+    "mitigation_factor": 1.0,
+    "aivss_score": 6.3,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "notes": "cvss_base (8.5) reflects a general-class vector authored fresh rather than copying any single cited CVE's score verbatim, since the three primary sources span CVSS 6.5-9.3: high confidentiality impact (arbitrary file/resource read) is the dominant, consistently-demonstrated effect across all three; integrity/availability impact is scored lower (VI:L, VA:N) since none of the three cited CVEs demonstrate a write-capable instance, though the general CWE-22 class can include one. AARF is similar in shape to AVE-2026-00052 (self_modification, dynamic_identity both 0 -- single-call flaw, not persistent/identity-assuming) but slightly lower overall (aars 4.1 vs 5.2), reflecting that arbitrary file read is a narrower worst case than arbitrary command execution. thm=1.0: three independent, NVD-confirmed CVEs across three different MCP server implementations, one from Google's own MCP Toolbox -- strong evidence the underlying anti-pattern (blacklist validation instead of canonical containment) recurs across the ecosystem. mitigation_factor=1.0: individual CVEs are patched, but the general implementation-vulnerability class remains unaudited across most MCP file/resource-handler tool packages. This MEDIUM classification is for the general behavioral class; a scanner may reasonably score an individual finding higher when the specific traversal target is known to reach credentials or an admin endpoint, matching how CVE-2026-11720 itself scored 9.3 for that specific reachability."
+  },
+  "severity": "MEDIUM",
+  "evidence_kind_default": "multi_engine",
+  "detection_stage": "static_detection",
+  "detection_layer": "content",
+  "confidence_baseline": 0.7,
+  "evidence_basis_engines": [
+    "semgrep",
+    "pattern"
+  ],
+  "derivable_into": [
+    "credential-exfiltration"
+  ]
+}

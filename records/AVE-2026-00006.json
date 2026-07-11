@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00006",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "skill",
   "title": "Cryptocurrency wallet drain via malicious fund transfer instruction in agentic component",
   "attack_class": "Tool Abuse - Cryptocurrency Drain",
@@ -17,19 +17,42 @@
   ],
   "aivss_score": 7.5,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI07"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MAP-1.5",
     "MEASURE-2.6",
     "MANAGE-1.3"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0048"
   ],
   "behavioral_fingerprint": "Component instructs agent to transfer all funds, approve unlimited token allowance, or sign a transaction to an externally supplied address.",
-  "behavioral_vector": [],
+  "behavioral_vector": [
+    "wallet-drain",
+    "unlimited-approval",
+    "fund-transfer"
+  ],
+  "provenance_vector": {
+    "entry_class": "content",
+    "payload_surface": "skill instruction body: fund-transfer / allowance-approval directive",
+    "escalation": "instruction_to_capability"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "untrusted_content",
+      "external_comms"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "require_human_approval",
+      "least_privilege"
+    ],
+    "enforcement_point": "agent_framework",
+    "trifecta_control": "break_untrusted_content"
+  },
   "mutation_count": 27,
   "detection_methodology": "1. Static scan: search for 'transfer all', 'approve unlimited', 'drain wallet', hardcoded transaction hex strings. 2. Semantic analysis: flag wallet operations that are not per-transaction user-confirmed. 3. Behavioral sandbox: simulate wallet tool availability and monitor for unexpected approval or transfer calls.",
   "indicators_of_compromise": [
@@ -87,10 +110,7 @@
     "aivss_score": 7.5,
     "aivss_severity": "HIGH",
     "spec_version": "0.8",
-    "notes": "Financial loss. Irreversible. Highest CVSS base in the set.",
-    "owasp_mcp_mapping": [
-      "MCP01"
-    ]
+    "notes": "Financial loss. Irreversible. Highest CVSS base in the set."
   },
   "owasp_mcp": [
     "MCP01"

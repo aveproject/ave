@@ -34,8 +34,8 @@ assignees: ''
 attack_class:
 severity:           (estimate — CRITICAL / HIGH / MEDIUM / LOW)
 owasp_mcp:          [MCPxx]
-owasp_mapping:      [ASIxx]   (if applicable)
-mitre_atlas_mapping: [AML.Txxxx]  (if applicable)
+owasp_asi:          [ASIxx]   (if applicable)
+mitre_atlas:        [AML.Txxxx]  (if applicable)
 detection_layer:    content | server_card | registry_metadata | runtime | transport
 detection_stage:    static_detection | runtime_observed
 evidence_basis_engines: [pattern | yara | semgrep | llm | sandbox]
