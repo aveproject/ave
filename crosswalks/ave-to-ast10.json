@@ -2,9 +2,9 @@
   "$schema": "https://ave.bawbel.io/schema/crosswalk-1.0.0.schema.json",
   "source": {
     "standard": "AVE",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "url": "https://ave.bawbel.io",
-    "record_count": 51
+    "record_count": 56
   },
   "target": {
     "tool": "OWASP Agentic Skills Top 10 (AST10)",
@@ -14,9 +14,9 @@
     "status": "OWASP Incubator project, incubated at OWASP Project Summit Oslo 2026",
     "checked_against_live_site": "2026-06-21"
   },
-  "generated": "2026-06-21",
-  "note": "Crosswalk from AVE behavioral vulnerability records to OWASP AST10 risk categories. Updated for the 51-record set (v1.1 migration added AVE-2026-00049, 00050, 00051). AST10 documents 10 categories of skill-layer risk at the principle level, each with a Critical/High/Medium severity rating; AVE provides 51 records at the level of individual behavioral classes with AIVSS v0.8 scores, detection layers, and indicators of compromise. This crosswalk is offered as a basis for collaboration, not as a competing taxonomy.",
-  "revision_note": "AST05 was retitled from 'Prompt Injection' to 'Unsafe Deserialization' between an earlier draft of this crosswalk and verification against the live site. Prompt-injection-as-mechanism is distributed across AST01 (prose instructions that hijack the agent) and AST03 (excess access weaponised by injection). This revision adds the 3 records from the v1.1 migration: AVE-2026-00049 (HTTP Host Header Injection / BadHost) maps to AST01 with a secondary AST06 angle; AVE-2026-00050 (Parasitic Toolchain) maps to AST06, extending the same weak-isolation reasoning already applied to AVE-2026-00046; AVE-2026-00051 (OAuth Discovery Rebinding) maps to AST04, since the vulnerability is in the server's own discovery metadata document.",
+  "generated": "2026-07-11",
+  "note": "Crosswalk from AVE behavioral vulnerability records to OWASP AST10 risk categories. Updated for the 56-record set (a 2026-07-10 research batch added AVE-2026-00052 through 00056). AST10 documents 10 categories of skill-layer risk at the principle level, each with a Critical/High/Medium severity rating; AVE provides 56 records at the level of individual behavioral classes with AIVSS v0.8 scores, detection layers, and indicators of compromise. This crosswalk is offered as a basis for collaboration, not as a competing taxonomy. Note: checked_against_live_site is unchanged from 2026-06-21 -- this update maps new AVE records against the previously-verified category descriptions, it does not re-verify AST10's site content.",
+  "revision_note": "AST05 was retitled from 'Prompt Injection' to 'Unsafe Deserialization' between an earlier draft of this crosswalk and verification against the live site. Prompt-injection-as-mechanism is distributed across AST01 (prose instructions that hijack the agent) and AST03 (excess access weaponised by injection). The 2026-06-21 revision added AVE-2026-00049/00050/00051 from the v1.1 migration. This revision adds AVE-2026-00054 (Code-Execution Sandbox Escape) to AST06 and AVE-2026-00055 (MCP STDIO Launch Configuration Injection) to AST02. AVE-2026-00052 and AVE-2026-00053 (tool/server implementation vulnerabilities -- CWE-78 and CWE-22 code bugs, not intentional malice or parse-time deserialization) and AVE-2026-00056 (zero-click rendered-content exfiltration) do not fit any existing AST10 category cleanly and are recorded in gaps_in_ast10 instead of forced into one.",
   "mappings": [
     {
       "ast_id": "AST01",
@@ -32,9 +32,9 @@
       "ast_title": "Supply Chain Compromise",
       "ast_severity": "Critical",
       "ast_description": "Registries without provenance let attackers mass-upload, take over accounts, and poison distribution channels.",
-      "ave_ids": ["AVE-2026-00001", "AVE-2026-00017", "AVE-2026-00024", "AVE-2026-00034"],
+      "ave_ids": ["AVE-2026-00001", "AVE-2026-00017", "AVE-2026-00024", "AVE-2026-00034", "AVE-2026-00055"],
       "primary_ave_id": "AVE-2026-00001",
-      "notes": "AVE-2026-00001 (metamorphic payload via external fetch) and AVE-2026-00034 (dynamic third-party skill import) map directly. AVE-2026-00024 adds a detection mechanism (Magika file-type mismatch) not currently specified in AST02."
+      "notes": "AVE-2026-00001 (metamorphic payload via external fetch) and AVE-2026-00034 (dynamic third-party skill import) map directly. AVE-2026-00024 adds a detection mechanism (Magika file-type mismatch) not currently specified in AST02. AVE-2026-00055 (MCP STDIO Launch Configuration Injection) added here: OX Security's own disclosure found 9 of 11 tested MCP registries accepted a malicious proof-of-concept submission with no review -- almost exactly AST02's 'registries without provenance let attackers mass-upload' framing, applied to the STDIO process-launch mechanism specifically rather than skill content."
     },
     {
       "ast_id": "AST03",
@@ -68,9 +68,9 @@
       "ast_title": "Weak Isolation",
       "ast_severity": "High",
       "ast_description": "Skills run in the agent's full security context -- with no sandbox, every skill is a potential full-system compromise.",
-      "ave_ids": ["AVE-2026-00036", "AVE-2026-00046", "AVE-2026-00050"],
+      "ave_ids": ["AVE-2026-00036", "AVE-2026-00046", "AVE-2026-00050", "AVE-2026-00054"],
       "primary_ave_id": "AVE-2026-00046",
-      "notes": "AVE-2026-00046 (MCP tool hook hijacking) is AVE's only CRITICAL-severity record and is a direct example of full-security-context abuse with no isolation boundary. AVE-2026-00036 (lateral movement) covers the consequence of weak isolation across systems. AVE-2026-00050 (Parasitic Toolchain) added here: the record's own description explicitly distinguishes it from AVE-2026-00046 by registration mechanism (local runtime registration vs external callback) but both share the same root cause -- the agent's tool dispatch layer has no boundary preventing a component from registering capabilities beyond its declared manifest scope. detection_layer=runtime and detection_stage=runtime_observed for both."
+      "notes": "AVE-2026-00046 (MCP tool hook hijacking) is AVE's only CRITICAL-severity record and is a direct example of full-security-context abuse with no isolation boundary. AVE-2026-00036 (lateral movement) covers the consequence of weak isolation across systems. AVE-2026-00050 (Parasitic Toolchain) added here: the record's own description explicitly distinguishes it from AVE-2026-00046 by registration mechanism (local runtime registration vs external callback) but both share the same root cause -- the agent's tool dispatch layer has no boundary preventing a component from registering capabilities beyond its declared manifest scope. detection_layer=runtime and detection_stage=runtime_observed for both. AVE-2026-00054 (Code-Execution Sandbox Escape) added here: AST06's description assumes no sandbox exists at all, whereas AVE-2026-00054 is a sandbox whose isolation boundary fails under a specific payload (JavaScript prototype-chain traversal) -- the starting architecture differs but the outcome (full-system compromise, no effective isolation) is identical, the same reasoning already applied to AVE-2026-00046 and AVE-2026-00050."
     },
     {
       "ast_id": "AST07",
@@ -152,15 +152,25 @@
     },
     {
       "topic": "AIVSS v0.8 quantitative scoring",
-      "ave_id": "all 51 records",
+      "ave_id": "all 56 records",
       "reason": "AST10 risks carry a qualitative severity label (Critical/High/Medium) per category. Every AVE record carries a full AIVSS v0.8 score (cvss_base, AARF ten-factor breakdown, aars, thm, mitigation_factor) at the individual-class level -- a finer-grained quantitative layer AST10 does not currently have per-record."
+    },
+    {
+      "topic": "Tool/server implementation vulnerabilities (code-level bugs in a tool's own handler)",
+      "ave_id": "AVE-2026-00052, AVE-2026-00053",
+      "reason": "AST01 assumes intentional malice ('skills that... hide credential stealers'); AST05 assumes parse-time payload execution ('at skill-load time -- before any user action'). Neither matches a legitimate, otherwise-useful tool whose own runtime parameter-handling code has an accidental CWE-78 (AVE-2026-00052, command injection) or CWE-22 (AVE-2026-00053, path traversal) bug, triggered by a tool-call parameter after the tool is already loaded and running. Both records trace to real, disclosed CVEs in legitimate MCP tool packages (gemini-mcp-tool, Zen MCP Server, tumf mcp-text-editor, Google's own MCP Toolbox for Databases), none malicious by design. This is a distinct mechanism AST10's current 10 categories do not yet name."
+    },
+    {
+      "topic": "Zero-click exfiltration via rendered-content auto-fetch",
+      "ave_id": "AVE-2026-00056",
+      "reason": "None of AST10's current 10 categories address data exfiltration specifically, the same reason 16 of AVE's original 51 records were already unmapped (exfiltration/disclosure classes sit closer to OWASP LLM/Agentic AI Top 10 territory). AVE-2026-00056's mechanism -- a markdown image reference whose client-side auto-fetch is itself the exfiltration channel, no tool call or obfuscation required -- traces to CVE-2025-32711 (EchoLeak), the first documented real-world zero-click prompt injection exploit in a production system."
     }
   ],
   "coverage": {
     "ast_categories_with_ave_mapping": 8,
     "ast_categories_without_ave_mapping": 2,
-    "ave_records_referenced": 35,
-    "ave_records_unmapped": 16,
-    "note_on_unmapped": "The 16 unmapped AVE records are mostly data-exfiltration, information-disclosure, and standalone prompt-injection classes (PII theft, covert channels, credential theft via instruction, system prompt leak, vision injection, MCP App UI injection) that sit closer to OWASP LLM Top 10 / Agentic AI Top 10 territory, or that AST10's current 10 categories do not yet have a dedicated slot for."
+    "ave_records_referenced": 37,
+    "ave_records_unmapped": 19,
+    "note_on_unmapped": "The 19 unmapped AVE records are mostly data-exfiltration, information-disclosure, and standalone prompt-injection classes (PII theft, covert channels, credential theft via instruction, system prompt leak, vision injection, MCP App UI injection, rendered-content auto-fetch exfiltration), plus the two new tool-implementation-vulnerability records (AVE-2026-00052, AVE-2026-00053) that don't cleanly fit any existing AST10 category -- see gaps_in_ast10."
   }
 }

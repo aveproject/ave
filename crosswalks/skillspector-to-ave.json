@@ -11,12 +11,12 @@
   },
   "target": {
     "standard": "AVE",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "url": "https://ave.bawbel.io",
-    "record_count": 51
+    "record_count": 56
   },
-  "generated": "2026-06-21",
-  "note": "Crosswalk from SkillSpector's 16 scanner categories to AVE behavioral class ids. Updated for the 51-record set (v1.1 migration added AVE-2026-00049, 00050, 00051). SkillSpector organises detection as an internal scanner taxonomy; AVE is a behavioral standard. Some SkillSpector categories are scanner mechanics (YARA signatures, taint tracking, AST analysis) rather than vulnerability classes -- these are marked as no_ave_class with an explanation. Gaps indicate behavioral classes that AVE does not yet enumerate.",
+  "generated": "2026-07-12",
+  "note": "Crosswalk from SkillSpector's 16 scanner categories to AVE behavioral class ids. Rule-level mappings below were last checked against SkillSpector 2.0.0's category/pattern documentation on 2026-06-21 and reflect the 51-record set current at that time. AVE-2026-00052 through 00056 (added 2026-07-10) are not yet reflected in the mappings or gaps below -- that requires re-checking SkillSpector's actual category catalog, which this repo does not have live access to; the AVE side of that recheck (target.record_count) is updated, the SkillSpector side is not. SkillSpector organises detection as an internal scanner taxonomy; AVE is a behavioral standard. Some SkillSpector categories are scanner mechanics (YARA signatures, taint tracking, AST analysis) rather than vulnerability classes -- these are marked as no_ave_class with an explanation. Gaps indicate behavioral classes that AVE does not yet enumerate.",
   "mappings": [
     {
       "skillspector_category": "prompt_injection",

@@ -11,13 +11,22 @@ Stable IDs, AIVSS scores, and behavioral fingerprints for every way a skill file
 MCP server, system prompt, or agent plugin can be weaponized — scored consistently,
 mapped to the frameworks security teams already report against.
 
-[![Records](https://img.shields.io/badge/records-51-0f6e56?style=flat-square)](records/)
+[![Records](https://img.shields.io/badge/records-56-0f6e56?style=flat-square)](records/)
 [![Schema](https://img.shields.io/badge/schema-v1.1.0-0a3024?style=flat-square)](schema/ave-record-1.1.0.schema.json)
 [![AIVSS](https://img.shields.io/badge/AIVSS-v0.8-d4a017?style=flat-square)](https://aivss.owasp.org)
 [![OWASP MCP](https://img.shields.io/badge/OWASP-MCP%20Top%2010-0a3024?style=flat-square)](https://owasp.org)
 [![MITRE ATLAS](https://img.shields.io/badge/MITRE-ATLAS-4a3f9e?style=flat-square)](https://atlas.mitre.org)
 [![SARIF](https://img.shields.io/badge/SARIF-v2.1.0-0057b7?style=flat-square)](docs/specs/ave-in-sarif.md)
 [![License](https://img.shields.io/badge/license-Apache%202.0-green?style=flat-square)](LICENSE)
+
+[![Tests](https://github.com/bawbel/ave/actions/workflows/tests.yml/badge.svg)](https://github.com/bawbel/ave/actions/workflows/tests.yml)
+[![Coverage](https://img.shields.io/badge/coverage-100%25%20(rules%2F)-0f6e56?style=flat-square)](.github/workflows/tests.yml)
+[![CodeQL](https://github.com/bawbel/ave/actions/workflows/codeql.yml/badge.svg)](https://github.com/bawbel/ave/actions/workflows/codeql.yml)
+[![Dependency Review](https://github.com/bawbel/ave/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/bawbel/ave/actions/workflows/dependency-review.yml)
+[![Secret Scan](https://github.com/bawbel/ave/actions/workflows/secret-scan.yml/badge.svg)](https://github.com/bawbel/ave/actions/workflows/secret-scan.yml)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/bawbel/ave/badge)](https://scorecard.dev/viewer/?uri=github.com/bawbel/ave)
+[![Security Policy](https://img.shields.io/badge/security-policy-blue?style=flat-square)](SECURITY.md)
+[![Code of Conduct](https://img.shields.io/badge/code%20of%20conduct-Contributor%20Covenant-blueviolet?style=flat-square)](CODE_OF_CONDUCT.md)
 
 [Registry](https://ave.bawbel.io/registry.html) · [Schema](https://ave.bawbel.io/schema.html) · [Crosswalks](https://ave.bawbel.io/crosswalks.html) · [Architecture](https://ave.bawbel.io/architecture.html) · [Scoring](https://ave.bawbel.io/scoring.html) · [Scanner](https://github.com/bawbel/scanner)
 
