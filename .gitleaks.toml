@@ -5,7 +5,8 @@ title = "gitleaks config for bawbel/ave"
 useDefault = true
 
 [allowlist]
-description = "AVE test fixtures intentionally contain credential-shaped strings as positive-detection test data (e.g. AVE-2026-00047, hardcoded-credential detection). These are fake values, not real secrets."
+description = "AVE test fixtures intentionally contain credential-shaped strings as positive-detection test data (e.g. AVE-2026-00047, hardcoded-credential detection). These are fake values, not real secrets. Covers both the generated fixture files and scripts/generate-rules-and-fixtures.js, the generator script that embeds the same synthetic values as a template."
 paths = [
   '''tests/fixtures/.*''',
+  '''scripts/generate-rules-and-fixtures\.js''',
 ]
