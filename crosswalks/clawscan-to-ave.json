@@ -10,12 +10,12 @@
   },
   "target": {
     "standard": "AVE",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "url": "https://ave.bawbel.io",
-    "record_count": 51
+    "record_count": 56
   },
-  "generated": "2026-06-21",
-  "note": "Crosswalk from ClawScan's 7 analyzer modules and their rule IDs to AVE behavioral class ids. Updated for the 51-record set (v1.1 migration added AVE-2026-00049, 00050, 00051). Rule IDs sourced from ClawScan live scan output and documentation at clawscan.dev. Gaps indicate behavioral classes covered by ClawScan that AVE does not yet enumerate.",
+  "generated": "2026-07-12",
+  "note": "Crosswalk from ClawScan's 7 analyzer modules and their rule IDs to AVE behavioral class ids. Rule-level mappings below were last checked against ClawScan's live scan output and documentation on 2026-06-21 and reflect the 51-record set current at that time. AVE-2026-00052 through 00056 (added 2026-07-10) are not yet reflected in the mappings or gaps below -- that requires re-checking ClawScan's actual rule catalog, which this repo does not have live access to; the AVE side of that recheck (target.record_count) is updated, the ClawScan side is not. Gaps indicate behavioral classes covered by ClawScan that AVE does not yet enumerate.",
   "mappings": [
     {
       "clawscan_module": "prompt-injection",
