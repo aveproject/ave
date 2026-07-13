@@ -95,12 +95,12 @@ skill file          ->   in CI / pre-commit   ->  before deploy
 
 | | |
 |---|---|
-| Total records | 51 |
-| Schema version | 1.0.0 |
+| Total records | 56 |
+| Schema version | 1.1.0 |
 | AIVSS spec | v0.8 |
 | CRITICAL (>= 9.0) | 1 |
-| HIGH (7.0-8.9) | 9 |
-| MEDIUM (4.0-6.9) | 40 |
+| HIGH (7.0-8.9) | 11 |
+| MEDIUM (4.0-6.9) | 43 |
 | LOW (< 4.0) | 1 |
 | Framework: OWASP MCP Top 10 | all records |
 | Framework: MITRE ATLAS | where applicable |
@@ -215,6 +215,11 @@ AIVSS = ((8.5 + 7.5) / 2) x 1.0 x 1 = 8.0  ->  HIGH
 | [AVE-2026-00049](records/AVE-2026-00049.json) | HTTP Host Header Injection (BadHost) | 7.2 | HIGH |
 | [AVE-2026-00050](records/AVE-2026-00050.json) | Parasitic Toolchain — Silent Tool Registration | 7.2 | HIGH |
 | [AVE-2026-00051](records/AVE-2026-00051.json) | OAuth Discovery Rebinding | 7.2 | HIGH |
+| [AVE-2026-00052](records/AVE-2026-00052.json) | MCP Tool Implementation Command Injection | 7.5 | HIGH |
+| [AVE-2026-00053](records/AVE-2026-00053.json) | MCP Resource Path Traversal | 6.3 | MEDIUM |
+| [AVE-2026-00054](records/AVE-2026-00054.json) | Code-Execution Sandbox Escape | 6.7 | MEDIUM |
+| [AVE-2026-00055](records/AVE-2026-00055.json) | MCP STDIO Launch Configuration Injection | 7.7 | HIGH |
+| [AVE-2026-00056](records/AVE-2026-00056.json) | Zero-Click Exfiltration via Rendered Content Auto-Fetch | 5.8 | MEDIUM |
 
 ---
 
