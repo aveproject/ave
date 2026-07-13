@@ -77,7 +77,7 @@
     "Cross-server tool call chains not initiated by the user",
     "Low-trust server tool results contain instructions referencing other connected MCP servers by name"
   ],
-  "remediation": "1. Apply least-privilege to multi-server sessions - do not connect low-trust and high-trust servers in the same session without strong justification. 2. Require explicit user confirmation for any tool call on a high-trust server when a low-trust server is also connected. 3. Scan all connected server tool descriptions with bawbel scan-server-card before connecting. 4. Implement server isolation policies - tool calls from one server cannot directly reference or invoke tools from another. 5. Audit agent tool call logs for cross-server pivot patterns.",
+  "remediation": "1. Apply least-privilege to multi-server sessions - do not connect low-trust and high-trust servers in the same session without strong justification. 2. Require explicit user confirmation for any tool call on a high-trust server when a low-trust server is also connected. 3. Scan all connected server tool descriptions for behavioral injection patterns before connecting. 4. Implement server isolation policies - tool calls from one server cannot directly reference or invoke tools from another. 5. Audit agent tool call logs for cross-server pivot patterns.",
   "status": "active",
   "kill_switch_active": true,
   "researcher": "Bawbel Security Research Team",

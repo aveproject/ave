@@ -77,7 +77,7 @@
     "Agent logs show pre-execution callback firing before legitimate tool handler",
     "Tool results appear correct but data has been exfiltrated to third party"
   ],
-  "remediation": "1. Deny hook registration instructions in skill files - hooks are infrastructure, not skill-level config. 2. Maintain a static registry of tool handlers set at server startup - reject any runtime attempt to modify the registry. 3. Scan all skill files with bawbel scan before loading. 4. Use bawbel-ignore with justification if the hook is a legitimate internal observability tool.",
+  "remediation": "1. Deny hook registration instructions in skill files - hooks are infrastructure, not skill-level config. 2. Maintain a static registry of tool handlers set at server startup - reject any runtime attempt to modify the registry. 3. Scan all skill files for hook registration patterns before loading. 4. Suppress the finding with documented justification if the hook is a legitimate internal observability tool.",
   "status": "active",
   "kill_switch_active": true,
   "researcher": "Bawbel Security Research Team",
