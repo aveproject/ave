@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00012",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "skill",
   "title": "Capability escalation via false permission grant in agentic component",
   "attack_class": "Privilege Escalation - Permission Grant",
@@ -19,21 +19,43 @@
   ],
   "aivss_score": 4.5,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI01",
     "ASI08"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MAP-1.5",
     "MEASURE-2.5",
     "MANAGE-1.3"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0054",
     "AML.T0051"
   ],
   "behavioral_fingerprint": "Component asserts that elevated permissions have been granted to the agent, claiming authority to override normal operational boundaries.",
-  "behavioral_vector": [],
+  "behavioral_vector": [
+    "false-permission-grant",
+    "privilege-escalation",
+    "authority-claim"
+  ],
+  "provenance_vector": {
+    "entry_class": "content",
+    "payload_surface": "skill instruction body: false permission-grant claim",
+    "escalation": "instruction_to_capability"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "untrusted_content"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "verify_identity",
+      "deny_by_default"
+    ],
+    "enforcement_point": "agent_framework",
+    "trifecta_control": "break_untrusted_content"
+  },
   "mutation_count": 92,
   "detection_methodology": "1. Static scan: search for false permission grants (you now have permission, you are now allowed to, your restrictions have been lifted, you have been granted access). 2. Semantic analysis: detect instructions claiming to grant the agent elevated capabilities or override existing restrictions.",
   "indicators_of_compromise": [
@@ -91,11 +113,7 @@
     "aivss_score": 4.5,
     "aivss_severity": "MEDIUM",
     "spec_version": "0.8",
-    "notes": "Claims elevated permissions. Dynamic identity is primary vector.",
-    "owasp_mcp_mapping": [
-      "MCP09",
-      "MCP10"
-    ]
+    "notes": "Claims elevated permissions. Dynamic identity is primary vector."
   },
   "owasp_mcp": [
     "MCP09",

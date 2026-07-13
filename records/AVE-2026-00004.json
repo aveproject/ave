@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00004",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "skill",
   "title": "Arbitrary code execution via shell pipe injection in agentic component",
   "attack_class": "Tool Abuse - Shell Pipe Injection",
@@ -19,21 +19,44 @@
   ],
   "aivss_score": 5.9,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI01",
     "ASI07"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MAP-1.5",
     "MEASURE-2.5",
     "MANAGE-1.3"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0054",
     "AML.T0011"
   ],
   "behavioral_fingerprint": "Component instructs the agent to pipe remote content into a shell interpreter (curl|bash, wget|sh, eval(requests.get(...))).",
-  "behavioral_vector": [],
+  "behavioral_vector": [
+    "shell-pipe",
+    "remote-exec",
+    "tool-abuse"
+  ],
+  "provenance_vector": {
+    "entry_class": "content",
+    "payload_surface": "skill instruction body: curl|bash / wget|sh directive",
+    "escalation": "instruction_to_capability"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "untrusted_content",
+      "external_comms"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "deny_by_default",
+      "isolate_scope"
+    ],
+    "enforcement_point": "agent_framework",
+    "trifecta_control": "break_external_comms"
+  },
   "mutation_count": 34,
   "detection_methodology": "1. Static scan: search for pipe characters between fetch commands (curl, wget) and shell interpreters (bash, sh, python, perl). 2. Semantic analysis: flag any instruction directing the agent to download and execute content in a single step. 3. Behavioral sandbox: monitor for shell execution following network requests during agent initialization.",
   "indicators_of_compromise": [
@@ -91,11 +114,7 @@
     "aivss_score": 5.9,
     "aivss_severity": "MEDIUM",
     "spec_version": "0.8",
-    "notes": "curl|bash pattern. Active in wild. NL delivery invisible to SAST.",
-    "owasp_mcp_mapping": [
-      "MCP01",
-      "MCP03"
-    ]
+    "notes": "curl|bash pattern. Active in wild. NL delivery invisible to SAST."
   },
   "owasp_mcp": [
     "MCP01",

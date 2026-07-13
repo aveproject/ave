@@ -1,10 +1,10 @@
 {
   "ave_id": "AVE-2026-00029",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "skill",
   "title": "Homoglyph or Unicode Obfuscation Attack",
   "attack_class": "Obfuscation - Unicode Homoglyph",
-  "description": "Human security reviewers read text visually, but LLMs process Unicode codepoints. An attacker can use Cyrillic characters that look identical to Latin letters, zero-width joiners/spaces, or Unicode bidirectional override codes to embed instructions that appear innocuous to a human reviewer but are processed as instructions by the model. **Detection:** This record is best detected by Unicode character analysis (YARA) and Magika file inspection. The pattern engine covers text-based indicators. ---",
+  "description": "Human security reviewers read text visually, but LLMs process Unicode codepoints. An attacker can use Cyrillic characters that look identical to Latin letters, zero-width joiners/spaces, or Unicode bidirectional override codes to embed instructions that appear innocuous to a human reviewer but are processed as instructions by the model. **Detection:** This record is best detected by Unicode character analysis (YARA) and Magika file inspection. The pattern engine covers text-based indicators.",
   "affected_platforms": [
     "any-agent"
   ],
@@ -14,7 +14,7 @@
   ],
   "aivss_score": 4.8,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:L/VI:H/VA:N/SC:L/SI:H/SA:N",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI01",
     "ASI03"
   ],
@@ -22,10 +22,10 @@
     "MCP03",
     "MCP04"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MEASURE-2.5"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0054"
   ],
   "behavioral_fingerprint": "Component uses visually similar Unicode characters (homoglyphs), zero-width characters, or bidirectional text control codes to hide malicious instructions from human reviewers while remaining fully re",
@@ -34,8 +34,25 @@
     "unicode",
     "evasion"
   ],
+  "provenance_vector": {
+    "entry_class": "content",
+    "payload_surface": "text content containing homoglyph, zero-width, or bidi control characters"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "untrusted_content"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "validate_input",
+      "sanitize_output"
+    ],
+    "enforcement_point": "static_scan",
+    "trifecta_control": "break_untrusted_content"
+  },
   "mutation_count": 15,
-  "detection_methodology": "1. Attacker writes a skill where key instruction words use Cyrillic lookalikes\n2. Human reviewer reads \"ignore\" (appears Latin) but the model reads the Cyrillic codepoints\n3. Safety scanner using naive string matching misses the hidden instruction\n4. Model executes the concealed instruction\n\n---",
+  "detection_methodology": "1. Attacker writes a skill where key instruction words use Cyrillic lookalikes\n2. Human reviewer reads \"ignore\" (appears Latin) but the model reads the Cyrillic codepoints\n3. Safety scanner using naive string matching misses the hidden instruction\n4. Model executes the concealed instruction",
   "indicators_of_compromise": [
     "Zero-width characters (U+200B, U+200C, U+200D, U+2060, U+FEFF) in text",
     "Bidirectional control characters (U+202A\u2013U+202E, U+2066\u2013U+2069)",
@@ -62,13 +79,9 @@
     "aivss_score": 4.8,
     "aivss_severity": "MEDIUM",
     "spec_version": "0.8",
-    "owasp_mcp_mapping": [
-      "MCP03",
-      "MCP04"
-    ],
     "notes": "AARF scores based on typical deployment of skill components in agentic workflows."
   },
-  "remediation": "- Normalise all Unicode input to NFC before processing\n- Reject files containing zero-width or bidirectional override characters\n- Use Unicode-aware security scanning - check for homoglyph substitution\n- Display files in a hex/unicode viewer before manual security review\n\n---",
+  "remediation": "- Normalise all Unicode input to NFC before processing\n- Reject files containing zero-width or bidirectional override characters\n- Use Unicode-aware security scanning - check for homoglyph substitution\n- Display files in a hex/unicode viewer before manual security review",
   "status": "active",
   "kill_switch_active": false,
   "researcher": "Bawbel Security Research Team",

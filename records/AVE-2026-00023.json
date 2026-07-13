@@ -1,10 +1,10 @@
 {
   "ave_id": "AVE-2026-00023",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "mcp_server",
   "title": "Model Context Window Manipulation",
   "attack_class": "Prompt Injection - Context Window Manipulation",
-  "description": "LLMs have a finite context window. An attacker who can inject large volumes of content can cause earlier content - including system prompt safety constraints, user instructions, and relevant conversation history - to be pushed beyond the context limit. With those constraints no longer in scope, the model may become more susceptible to subsequent malicious instructions. ---",
+  "description": "LLMs have a finite context window. An attacker who can inject large volumes of content can cause earlier content - including system prompt safety constraints, user instructions, and relevant conversation history - to be pushed beyond the context limit. With those constraints no longer in scope, the model may become more susceptible to subsequent malicious instructions.",
   "affected_platforms": [
     "any-mcp-client"
   ],
@@ -13,18 +13,18 @@
   ],
   "aivss_score": 5.8,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI01"
   ],
   "owasp_mcp": [
     "MCP10",
     "MCP06"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MEASURE-2.5",
     "MANAGE-1.3"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0054"
   ],
   "behavioral_fingerprint": "Component floods the agent's context window with large amounts of repetitive or irrelevant content to push safety instructions, system prompt constraints, or prior conversation context out of the acti",
@@ -32,13 +32,29 @@
     "context-overflow",
     "prompt-injection"
   ],
+  "provenance_vector": {
+    "entry_class": "runtime",
+    "payload_surface": "tool/skill output volume flooding the context window"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "untrusted_content"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "validate_input",
+      "isolate_scope"
+    ],
+    "enforcement_point": "runtime_proxy",
+    "trifecta_control": "break_untrusted_content"
+  },
   "mutation_count": 5,
-  "detection_methodology": "1. Malicious skill returns a response containing 100,000 tokens of padding content\n2. System prompt safety instructions are pushed out of context\n3. Attacker's subsequent prompt executes without the safety constraints in scope\n\n---",
+  "detection_methodology": "1. Malicious skill returns a response containing 100,000 tokens of padding content\n2. System prompt safety instructions are pushed out of context\n3. Attacker's subsequent prompt executes without the safety constraints in scope",
   "indicators_of_compromise": [
     "Unusually large output volumes from a skill",
     "Repeated padding content designed to fill context",
-    "Instructions to `repeat`, `expand`, or `pad` output extensively",
-    ""
+    "Instructions to `repeat`, `expand`, or `pad` output extensively"
   ],
   "aivss": {
     "cvss_base": 8,
@@ -60,13 +76,9 @@
     "aivss_score": 5.8,
     "aivss_severity": "MEDIUM",
     "spec_version": "0.8",
-    "owasp_mcp_mapping": [
-      "MCP10",
-      "MCP06"
-    ],
     "notes": "AARF scores based on typical deployment of mcp components in agentic workflows."
   },
-  "remediation": "- Implement context window budget limits per skill - reject responses exceeding the budget\n- Pin system prompt and safety instructions at a fixed context position\n- Monitor token usage per skill call for anomalies\n\n---",
+  "remediation": "- Implement context window budget limits per skill - reject responses exceeding the budget\n- Pin system prompt and safety instructions at a fixed context position\n- Monitor token usage per skill call for anomalies",
   "status": "active",
   "kill_switch_active": false,
   "researcher": "Bawbel Security Research Team",

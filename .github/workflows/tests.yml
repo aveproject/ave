@@ -1,0 +1,37 @@
+name: Tests
+
+on:
+  push:
+    branches: ["main", "develop"]
+  pull_request:
+    branches: ["main", "develop"]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+
+      - name: Validate all records against the schema
+        run: python scripts/validate_records.py
+
+      - name: Check every rule has positive and negative fixtures
+        run: python scripts/check_fixtures.py
+
+      - name: Check every record has a detection rule
+        run: python scripts/check_rule_coverage.py
+
+      - name: Run tests with coverage (rules/)
+        run: pytest tests/ -x -q --cov=rules --cov-report=term-missing --cov-fail-under=95

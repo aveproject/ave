@@ -35,7 +35,7 @@ Each AVE record that produced at least one detection must appear in `run.tool.dr
 | `rules[].properties.severity` | `severity` | `"CRITICAL"`, `"HIGH"`, `"MEDIUM"`, `"LOW"` |
 | `rules[].properties.aivss_score` | `aivss.aivss_score` | float, e.g. `9.3` |
 | `rules[].properties.owasp_mcp` | `owasp_mcp` | array of MCPNN strings |
-| `rules[].properties.mitre_atlas` | `mitre_atlas_mapping` | array of AML.Txxxx strings (if present) |
+| `rules[].properties.mitre_atlas` | `mitre_atlas` | array of AML.Txxxx strings (if present) |
 
 ### results block — per-detection data (one entry per finding)
 
@@ -51,7 +51,7 @@ Each detection instance is a SARIF `result`:
 | `result.properties.evidence_kind` | `evidence_kind_default` | scanner may override per-detection |
 | `result.properties.evidence_stage` | runtime-determined | `"static_detection"`, `"runtime_observed"`, etc. |
 | `result.properties.owasp_mcp` | `owasp_mcp` | repeated on result for tooling that ignores the rules block |
-| `result.properties.mitre_atlas` | `mitre_atlas_mapping` | repeated if present |
+| `result.properties.mitre_atlas` | `mitre_atlas` | repeated if present |
 
 ---
 
@@ -210,7 +210,7 @@ One finding for AVE-2026-00001 (external instruction fetch) against a hypothetic
 | `confidence` | **never** | `result.properties.confidence` |
 | `evidence_kind_default` | — | `result.properties.evidence_kind` |
 | `owasp_mcp` | `rules[].properties.owasp_mcp` | `result.properties.owasp_mcp` |
-| `mitre_atlas_mapping` | `rules[].properties.mitre_atlas` | `result.properties.mitre_atlas` |
+| `mitre_atlas` | `rules[].properties.mitre_atlas` | `result.properties.mitre_atlas` |
 
 ---
 

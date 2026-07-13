@@ -1,18 +1,33 @@
 [build-system]
 requires = ["setuptools>=68"]
-build-backend = "setuptools.backends.legacy:build"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "bawbel-ave"
-version = "1.1.0"
+version = "1.2.0"
 description = "AVE — Agentic Vulnerability Enumeration standard"
 requires-python = ">=3.11"
 
 [project.optional-dependencies]
 dev = [
     "pytest>=8.0",
+    "pytest-cov>=5.0",
     "jsonschema>=4.23",
 ]
 
+# Not a Python library -- nothing here imports "bawbel_ave" as a package.
+# scripts/ are run directly (python scripts/foo.py) and tests/ load rule
+# files dynamically. This pyproject.toml exists for dependency and pytest
+# config only, so tell setuptools there's no package to discover/build.
+[tool.setuptools]
+packages = []
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.coverage.run]
+# Scoped to rules/ deliberately: that's the code pytest's fixture-driven tests
+# actually exercise (CLAUDE.md's TDD loop). scripts/ holds one-time migration
+# and validation tooling that isn't meant to carry unit-test coverage in the
+# same sense -- validate_records.py's "test" is that it validates every record.
+source = ["rules"]

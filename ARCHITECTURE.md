@@ -14,7 +14,8 @@ the rules that implement detection, and the validation tooling.
 records/              AVE record JSON files — the standard's data
 schema/               JSON schema the records validate against
   ave-record.schema.json             alias — always points to current
-  ave-record-1.0.0.schema.json       versioned canonical — permanent
+  ave-record-1.1.0.schema.json       versioned canonical — current, permanent
+  ave-record-1.0.0.schema.json       versioned canonical — frozen, permanent
 rules/                Detection rule implementations
   ├── pattern/        Regex pattern rules (Python)
   ├── yara/           YARA rules (.yar)

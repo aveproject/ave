@@ -28,7 +28,7 @@
 ### For new AVE record submissions
 
 - [ ] Linked issue confirms the id and that this is a new class, not a variant
-- [ ] Record validates against `schema/ave-record-1.0.0.schema.json`
+- [ ] Record validates against `schema/ave-record-1.1.0.schema.json`
 - [ ] All 15 required fields are present and non-empty
 - [ ] `behavioral_fingerprint` is one clear sentence describing what the component DOES
 - [ ] `indicators_of_compromise` has at least one entry a defender can actually search for
@@ -51,8 +51,8 @@
 ### For schema changes
 
 - [ ] Issue opened first with 30-day comment period completed (structural changes only)
-- [ ] `schema/ave-record-1.0.0.schema.json` updated
-- [ ] New versioned schema file added (e.g. `schema/ave-record-1.1.0.schema.json`)
+- [ ] `schema/ave-record.schema.json` (alias) updated to mirror the new canonical
+- [ ] New versioned schema file added (e.g. `schema/ave-record-1.2.0.schema.json`) — prior versioned files stay frozen, never edited
 - [ ] CHANGELOG.md updated
 - [ ] Migration path for existing records documented
 

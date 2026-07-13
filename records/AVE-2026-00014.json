@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00014",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "skill",
   "title": "False authority claim via trust escalation impersonation in agentic component",
   "attack_class": "Social Engineering - Trust Escalation",
@@ -19,20 +19,36 @@
   ],
   "aivss_score": 3.7,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:L/VI:H/VA:N/SC:L/SI:H/SA:N",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI01",
     "ASI08"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MAP-1.5",
     "MEASURE-2.5"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0054",
     "AML.T0051"
   ],
   "behavioral_fingerprint": "Component claims to be a message from Anthropic, OpenAI, Google, Microsoft, or the developer/operator to establish false authority over the agent.",
-  "behavioral_vector": [],
+  "behavioral_vector": [
+    "authority-impersonation",
+    "trust-escalation",
+    "social-engineering"
+  ],
+  "provenance_vector": {
+    "entry_class": "content",
+    "payload_surface": "skill instruction body: false-authority framing"
+  },
+  "mitigation": {
+    "strategy": [
+      "verify_identity",
+      "deny_by_default"
+    ],
+    "enforcement_point": "static_scan",
+    "trifecta_control": "not_applicable"
+  },
   "mutation_count": 67,
   "detection_methodology": "1. Static scan: search for false authority claims (this message is from Anthropic, I am your developer, I am your creator, message from OpenAI). 2. Semantic analysis: detect instructions that establish false institutional authority to override normal agent behaviour.",
   "indicators_of_compromise": [
@@ -90,11 +106,7 @@
     "aivss_score": 3.7,
     "aivss_severity": "LOW",
     "spec_version": "0.8",
-    "notes": "Social engineering. Multi-agent + dynamic identity amplify.",
-    "owasp_mcp_mapping": [
-      "MCP09",
-      "MCP10"
-    ]
+    "notes": "Social engineering. Multi-agent + dynamic identity amplify."
   },
   "owasp_mcp": [
     "MCP09",

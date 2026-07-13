@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00015",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "skill",
   "title": "System prompt extraction via direct interrogation instruction in agentic component",
   "attack_class": "Information Disclosure - System Prompt Leak",
@@ -19,19 +19,40 @@
   ],
   "aivss_score": 4.9,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:N/VA:N/SC:H/SI:N/SA:N",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI01",
     "ASI09"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MAP-1.5",
     "MEASURE-2.5"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0054"
   ],
   "behavioral_fingerprint": "Component instructs the agent to reveal, output, or repeat its system prompt, instructions, configuration, or internal guidelines.",
-  "behavioral_vector": [],
+  "behavioral_vector": [
+    "prompt-extraction",
+    "system-prompt-leak",
+    "information-disclosure"
+  ],
+  "provenance_vector": {
+    "entry_class": "content",
+    "payload_surface": "skill instruction body: system-prompt interrogation directive"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "untrusted_content"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "validate_input",
+      "sanitize_output"
+    ],
+    "enforcement_point": "static_scan",
+    "trifecta_control": "break_untrusted_content"
+  },
   "mutation_count": 198,
   "detection_methodology": "1. Static scan: search for system prompt extraction directives (reveal your system prompt, show your instructions, print your guidelines, what are your exact instructions). 2. Semantic analysis: detect instructions attempting to extract the agent's internal configuration or deployment context.",
   "indicators_of_compromise": [
@@ -89,10 +110,7 @@
     "aivss_score": 4.9,
     "aivss_severity": "MEDIUM",
     "spec_version": "0.8",
-    "notes": "Reveals system prompt. Data access + NL input primary.",
-    "owasp_mcp_mapping": [
-      "MCP06"
-    ]
+    "notes": "Reveals system prompt. Data access + NL input primary."
   },
   "owasp_mcp": [
     "MCP06"

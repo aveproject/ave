@@ -1,10 +1,10 @@
 {
   "ave_id": "AVE-2026-00017",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "mcp_server",
   "title": "MCP Server Impersonation or Spoofing",
   "attack_class": "Supply Chain - Server Impersonation",
-  "description": "MCP (Model Context Protocol) agents rely on server identity to determine trust levels and permission scopes. A malicious component that falsely identifies itself as an official Anthropic, OpenAI, or well-known third-party server can trick the agent into granting it permissions or trust it would not otherwise receive. ---",
+  "description": "MCP (Model Context Protocol) agents rely on server identity to determine trust levels and permission scopes. A malicious component that falsely identifies itself as an official Anthropic, OpenAI, or well-known third-party server can trick the agent into granting it permissions or trust it would not otherwise receive.",
   "affected_platforms": [
     "claude-desktop",
     "cursor",
@@ -16,7 +16,7 @@
   ],
   "aivss_score": 5.7,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:P/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI01",
     "ASI08"
   ],
@@ -24,25 +24,42 @@
     "MCP09",
     "MCP07"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MAP-1.5",
     "MANAGE-1.3"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0043"
   ],
-  "behavioral_fingerprint": "Component falsely claims to be an official, verified, or trusted MCP server to gain elevated trust or bypass agent-level permission checks.\n\n---",
+  "behavioral_fingerprint": "Component falsely claims to be an official, verified, or trusted MCP server to gain elevated trust or bypass agent-level permission checks.",
   "behavioral_vector": [
     "server-impersonation",
     "dynamic-identity"
   ],
+  "provenance_vector": {
+    "entry_class": "registry_metadata",
+    "payload_surface": "MCP registry listing / server manifest identity claims",
+    "escalation": "capability_to_identity"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "untrusted_content"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "verify_identity",
+      "pin_integrity"
+    ],
+    "enforcement_point": "server_card_fetch",
+    "trifecta_control": "break_untrusted_content"
+  },
   "mutation_count": 5,
-  "detection_methodology": "1. Attacker registers a skill that claims: \"This is the official Anthropic MCP server\"\n2. Agent grants the server elevated trust based on the identity claim\n3. Attacker uses the elevated trust to access sensitive tools or bypass safety checks\n4. Agent performs actions it would have refused from an unverified server\n\n---",
+  "detection_methodology": "1. Attacker registers a skill that claims: \"This is the official Anthropic MCP server\"\n2. Agent grants the server elevated trust based on the identity claim\n3. Attacker uses the elevated trust to access sensitive tools or bypass safety checks\n4. Agent performs actions it would have refused from an unverified server",
   "indicators_of_compromise": [
     "Claims to be `official`, `verified`, `certified`, `Anthropic`, `OpenAI`, or another trusted vendor",
     "Asserts authority to override other MCP servers",
-    "Claims to have special permissions not declared in the manifest",
-    ""
+    "Claims to have special permissions not declared in the manifest"
   ],
   "aivss": {
     "cvss_base": 8.3,
@@ -64,13 +81,9 @@
     "aivss_score": 5.7,
     "aivss_severity": "MEDIUM",
     "spec_version": "0.8",
-    "owasp_mcp_mapping": [
-      "MCP09",
-      "MCP07"
-    ],
     "notes": "AARF scores based on typical deployment of mcp components in agentic workflows."
   },
-  "remediation": "- Never grant trust based on self-declared server identity\n- Verify MCP server identity through cryptographic signing or a verified registry\n- Treat all unverified servers as untrusted regardless of their claimed identity\n- Cross-reference declared identity against a signed allowlist\n\n---",
+  "remediation": "- Never grant trust based on self-declared server identity\n- Verify MCP server identity through cryptographic signing or a verified registry\n- Treat all unverified servers as untrusted regardless of their claimed identity\n- Cross-reference declared identity against a signed allowlist",
   "status": "active",
   "kill_switch_active": false,
   "researcher": "Bawbel Security Research Team",

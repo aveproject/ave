@@ -1,0 +1,132 @@
+{
+  "ave_id": "AVE-2026-00052",
+  "schema_version": "1.1.0",
+  "component_type": "mcp_server",
+  "title": "Command injection via unsanitized tool-call parameter in MCP server implementation",
+  "attack_class": "Tool Abuse - Implementation Command Injection",
+  "description": "An MCP tool's own server-side handler code takes a caller-supplied tool-call parameter value and passes it into a shell or system-command execution function without sanitization, argument-array separation, or allowlisting. Unlike prompt-driven tool abuse, this is a code-level flaw in the tool's implementation: no LLM reasoning or natural-language instruction is required to trigger it. A caller who can reach the tool at all -- a compromised agent, a malicious upstream tool result shaping the parameter value, or a direct unauthenticated JSON-RPC request -- can execute arbitrary OS commands under the privileges of the MCP server process. Conventional prompt-injection scanners miss this class entirely because there is no suspicious instruction text to find; the vulnerability lives in the tool's source code, not in any content the agent processes.",
+  "affected_platforms": [
+    "claude-desktop",
+    "claude-code",
+    "cursor",
+    "windsurf",
+    "any-mcp-client"
+  ],
+  "affected_registries": [
+    "npm",
+    "smithery.ai",
+    "registry.modelcontextprotocol.io"
+  ],
+  "aivss_score": 7.5,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
+  "behavioral_fingerprint": "MCP tool handler code passes a caller-supplied tool-call parameter value directly into a shell or system-command execution function without sanitization, executing arbitrary OS commands under the server process's privileges -- independent of any agent instruction or prompt content.",
+  "behavioral_vector": [
+    "command-injection",
+    "unsanitized-parameter",
+    "implementation-flaw"
+  ],
+  "provenance_vector": {
+    "entry_class": "content",
+    "payload_surface": "MCP tool-call parameter value reaching an unsanitized shell/system-command execution call in the server's own handler code"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "external_comms"
+    ],
+    "amplifies": [
+      "untrusted_content",
+      "private_data"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "validate_input",
+      "deny_by_default"
+    ],
+    "enforcement_point": "static_scan",
+    "trifecta_control": "break_external_comms"
+  },
+  "example_patterns": [
+    "execAsync(`some-cli ${userSuppliedParam}`)",
+    "child_process.exec(`convert ${filePath} output.png`, { shell: true })",
+    "os.system(f\"ffmpeg -i {tool_param} out.mp4\")"
+  ],
+  "detection_methodology": "1. Static/SAST scan: flag process-execution calls (exec, execSync, execAsync, spawn/child_process with shell:true, os.system, subprocess with shell=True) where an argument traces back to a tool-call parameter without an intervening sanitization, escaping, or allowlist function. 2. Pattern scan: flag known-vulnerable shell-invocation idioms (string concatenation or template interpolation into a shell command string) as a lower-confidence secondary signal. 3. Code review: confirm the parameter's declared schema does not itself constrain the value to a safe, non-shell-meaningful format (e.g. a closed enum).",
+  "indicators_of_compromise": [
+    "Tool handler code passes a raw, caller-supplied string parameter directly into exec() / execSync() / child_process.exec() / execAsync() with no argument-array separation or shell-metacharacter escaping",
+    "Process-execution call uses { shell: true } (or equivalent) with a caller-controlled argument string, rather than passing arguments as a separate array",
+    "Absence of an allowlist or sanitization step between a tool's declared parameter schema and its shell/system-call invocation"
+  ],
+  "remediation": "1. Never pass caller-supplied parameter values into a shell command string; use an argument-array invocation form (execFile, spawn without shell:true) that does not invoke a shell interpreter. 2. Validate and allowlist parameter values against an expected format before any process-execution call. 3. If a local file reference is accepted as a parameter, resolve and canonicalize the path, then verify it stays within an expected working directory before use. 4. Run the MCP server process with the minimum OS privileges necessary, never as an administrator/root account or the interactive user's full session. 5. If using a known-vulnerable third-party tool package, upgrade to a patched version.",
+  "status": "active",
+  "kill_switch_active": false,
+  "researcher": "Bawbel Security Research Team",
+  "researcher_url": "https://bawbel.io",
+  "published": "2026-07-10T00:00:00Z",
+  "last_updated": "2026-07-10T00:00:00Z",
+  "references": [
+    {
+      "tag": "CVE",
+      "text": "CVE-2026-0755 -- gemini-mcp-tool OS command injection (CWE-78), CVSS 9.8",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-0755"
+    },
+    {
+      "tag": "Snyk",
+      "text": "Command Injection in gemini-mcp-tool (SNYK-JS-GEMINIMCPTOOL-15091895)",
+      "url": "https://security.snyk.io/vuln/SNYK-JS-GEMINIMCPTOOL-15091895"
+    },
+    {
+      "tag": "GitLab Advisory Database",
+      "text": "gemini-mcp-tool vulnerable to OS command injection and @file exfiltration via prompt quoting (CVE-2026-0755)",
+      "url": "https://advisories.gitlab.com/npm/gemini-mcp-tool/CVE-2026-0755/"
+    },
+    {
+      "tag": "CWE-78",
+      "text": "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')",
+      "url": "https://cwe.mitre.org/data/definitions/78.html"
+    }
+  ],
+  "owasp_mcp": [
+    "MCP05",
+    "MCP04"
+  ],
+  "owasp_asi": [
+    "ASI05",
+    "ASI02"
+  ],
+  "aivss": {
+    "cvss_base": 9.8,
+    "aarf": {
+      "autonomy": 1,
+      "tool_use": 1,
+      "multi_agent": 0.3,
+      "non_determinism": 0.3,
+      "self_modification": 0,
+      "dynamic_identity": 0,
+      "persistent_memory": 0.2,
+      "natural_language_input": 0.7,
+      "data_access": 1,
+      "external_dependencies": 0.7
+    },
+    "aars": 5.2,
+    "thm": 1.0,
+    "mitigation_factor": 1.0,
+    "aivss_score": 7.5,
+    "aivss_severity": "HIGH",
+    "spec_version": "0.8",
+    "notes": "cvss_base reflects the originating CVE-2026-0755 (unauthenticated network RCE, full C/I/A impact). AARF is scored lower than comparable execution-hijack records (e.g. AVE-2026-00046) because this class is a single-call injection, not a persistent self-modifying or identity-assuming mechanism -- self_modification and dynamic_identity are both 0. natural_language_input (0.7) and external_dependencies (0.7) reflect that the malicious parameter value is commonly shaped by upstream agent reasoning or untrusted content, though the raw vulnerability itself fires independent of any LLM involvement. thm=1.0: real, disclosed, patched CVE with multiple independent corroborating technical writeups (NVD, Snyk, GitLab Advisory Database) describing a fully working exploit chain. mitigation_factor=1.0: the originating CVE is patched, but this AVE record represents the general implementation-vulnerability class, which remains unaudited across most MCP tool packages ecosystem-wide."
+  },
+  "severity": "HIGH",
+  "evidence_kind_default": "multi_engine",
+  "detection_stage": "static_detection",
+  "detection_layer": "content",
+  "confidence_baseline": 0.75,
+  "evidence_basis_engines": [
+    "semgrep",
+    "pattern"
+  ],
+  "derivable_into": [
+    "remote-control-chain",
+    "credential-exfiltration"
+  ]
+}

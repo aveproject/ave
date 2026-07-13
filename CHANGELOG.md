@@ -6,6 +6,105 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 
 ---
 
+## [1.2.0] - 2026-07-12
+
+### Summary
+
+- Schema v1.1.0: 3 field renames, 1 field removal, 4 new optional fields, draft-vs-active
+  conditional required set. `schema/ave-record-1.1.0.schema.json` is now canonical;
+  `ave-record-1.0.0.schema.json` stays frozen permanently. Merged via PR #37.
+- All 51 original records migrated to `schema_version: "1.1.0"` and enriched with the 3
+  new classification objects
+- 5 new records: AVE-2026-00052 through AVE-2026-00056 — record set now at 56, 112 tests
+  passing. Merged via PR #37.
+- Phase 0 repo hygiene: CI code/dependency/secret scanning, OpenSSF Scorecard, 8 new
+  README badges, two pre-existing packaging bugs fixed. On PR #38 (open, pending review
+  at time of writing).
+- `crosswalks/ave-to-owasp-mcp.md` regenerated from source-of-truth record data (found
+  pre-existing drift, not just missing rows). `crosswalks/ave-to-ast10.json`/`.md`
+  extended for the 5 new records. `clawscan-to-ave.json` / `skillspector-to-ave.json`
+  target metadata synced to v1.1.0/56 records; their rule-level mappings are unchanged,
+  since re-checking them requires each external tool's own current rule catalog.
+
+### Schema v1.1.0
+
+Field renames (owasp_mapping -> owasp_asi, mitre_atlas_mapping -> mitre_atlas,
+nist_ai_rmf_mapping -> nist_ai_rmf) and removal (`aivss.owasp_mcp_mapping`, redundant
+with top-level `owasp_mcp` and had drifted out of sync on 5 records) applied across all
+51 records. Four new optional fields added: `provenance_vector`, `trifecta_profile`,
+`mitigation` (vendor-neutral only — no enforcement-tool config, per the standard-vs-tool
+boundary in `AVE_V1.1.0_MIGRATION_BRIEF.md` Section 0), and `example_patterns`.
+`status: "draft"` records now need only an 8-field submit-required core; the full
+15-field set still applies once `status` is `active` or `deprecated`.
+
+`behavioral_vector` misuse corrected: 12 records (AVE-2026-00004 through 00015) had it
+empty and got fresh tags; 11 records (AVE-2026-00041 through 00051) had repurposed it to
+hold full example payloads — moved to the new `example_patterns` field, fresh tags
+drafted. (Corrected scope from the migration brief's original claim of records
+00016-00051; verification found 00016-00040 already had correct tags.)
+
+`provenance_vector`/`trifecta_profile`/`mitigation` drafted for all 51 records by an LLM
+pass, per the migration brief's Section 6.2 workflow. Two drift bugs found via human
+spot-check and fixed: AVE-2026-00041 and AVE-2026-00042 both had `mitigation.strategy`
+values that didn't match what each record's own `remediation` field actually
+recommended (missing `pin_integrity` and `deny_by_default` respectively, both explicitly
+named in the prose remediation text). Priority-1 records 00045/00046/00050/00051 remain
+unreviewed LLM drafts as of this release.
+
+### New records
+
+| AVE ID | Attack class | Severity | AIVSS |
+|---|---|---|---|
+| AVE-2026-00052 | Tool Abuse - Implementation Command Injection | HIGH | 7.5 |
+| AVE-2026-00053 | Tool Abuse - Resource Path Traversal | MEDIUM | 6.3 |
+| AVE-2026-00054 | Execution Hijack - Code Execution Sandbox Escape | MEDIUM | 6.7 |
+| AVE-2026-00055 | Supply Chain - MCP STDIO Launch Configuration Injection | HIGH | 7.7 |
+| AVE-2026-00056 | Data Exfiltration - Rendered Content Auto-Fetch | MEDIUM | 5.8 |
+
+Identified from the 2026-07-10 research-new-attack-classes benchmark
+(`docs/agents/research/2026-07-10-benchmark.md`); each traces to an NVD-confirmed CVE or
+a named trusted-vendor disclosure (OX Security), verified by direct fetch against
+nvd.nist.gov rather than search-summary text. Implementation plan and three
+cross-cutting decisions (detection_layer for code-implementation vulnerabilities,
+attack_class category, dual-CVSS-assessor handling) recorded in
+`docs/agents/prds/2026-07-10-critical-high-attack-class-batch.md`. Four of the five
+scored below their pre-implementation severity estimate once AIVSS was actually
+computed — see each record's `aivss.notes` for why.
+
+### Repo hygiene (Phase 0, `TRUST_STRATEGY.md`)
+
+- `.github/workflows/tests.yml`, `codeql.yml`, `dependency-review.yml` (+
+  `.github/dependabot.yml`), `secret-scan.yml` (+ `.gitleaks.toml`), `scorecard.yml` —
+  none of this CI existed before this release
+- Enabled natively via repo settings: secret scanning, secret scanning push protection,
+  Dependabot security updates, dependency graph — all were disabled
+- Two pre-existing `pyproject.toml` packaging bugs fixed, found while building the tests
+  workflow and verified against a clean virtualenv: an invalid `build-backend`, and
+  missing `[tool.setuptools] packages = []` (this repo isn't a Python library — nothing
+  imports it as a package). Both meant `pip install -e ".[dev]"`, the exact command
+  CONTRIBUTING.md and CLAUDE.md document, was already broken on a clean machine.
+- `gitleaks/gitleaks-action@v2` requires a paid license for GitHub Organization accounts
+  as of a breaking change in the wrapper action; switched to running the gitleaks Docker
+  image directly (the underlying AGPL-3.0 tool has no such restriction)
+- 8 new README badges: Tests, Coverage, CodeQL, Dependency Review, Secret Scan, OpenSSF
+  Scorecard, Security Policy, Code of Conduct
+
+### Crosswalks
+
+- `ave-to-owasp-mcp.md` regenerated programmatically from every record's own `owasp_mcp`
+  field rather than patched — found the previous hand-maintained version had drifted for
+  several existing entries (e.g. AVE-2026-00004 was listed under the wrong categories),
+  not just missing the newest records
+- `ave-to-ast10.json`/`.md`: AVE-2026-00054 -> AST06, AVE-2026-00055 -> AST02.
+  AVE-2026-00052/00053/00056 recorded as new gaps rather than forced into an existing
+  category — see the crosswalk files for the reasoning
+- `clawscan-to-ave.json`, `skillspector-to-ave.json`: `target.version`/`record_count`
+  updated to 1.1.0/56; the rule-level mappings and gaps sections are unchanged, since
+  updating them requires each external tool's current rule catalog, which this repo
+  does not have
+
+---
+
 ## [1.1.0] - 2026-06-21
 
 ### Summary
@@ -203,13 +302,31 @@ Three ADRs are locked and documented in `docs/adr/`:
 
 ---
 
-## Planned for v1.2
+## Done since the original "Planned for v1.2" list
 
-- `GOVERNANCE.md` — decision-making process, record proposal and review workflow, path toward neutral governance
-- `CODE_OF_CONDUCT.md` — Contributor Covenant v2.1
-- `docs/specs/ave-implementer-guide.md` — consumption patterns for scanner implementers: runtime API, bundled offline (air-gapped), and ID-only emission with downstream resolution
-- Offline release artifact: `ave-records-v1.1.0.json` — single downloadable JSON array of all 51 records, published as a GitHub Release asset for air-gapped and bundled-install use cases
-- AST10 crosswalk PR — submit `crosswalks/ave-to-ast10.json` as a contribution to the OWASP AST10 project repo
-- CWE AI Working Group outreach — open a contribution issue on `github.com/CWE-CAPEC/AI-Working-Group` with a gap-mapping document covering how AVE records address the agentic behavioral classes missing from CWE-1446
-- Second implementer outreach — contact scanner maintainers with crosswalk packages to enable `ave_id` emission in their finding output
-- Resource exhaustion / agentic DoS record — the one confirmed genuine gap from the benchmark-2026-06 research report
+- `GOVERNANCE.md` — shipped
+- `CODE_OF_CONDUCT.md` — shipped (Contributor Covenant v2.1)
+- `docs/specs/ave-implementer-guide.md` — shipped
+- Offline release artifact — shipped as the `v1.1.0` GitHub Release
+  (`ave-records-v1.1.0.json`); a `v1.2.0` release with the 56-record set has not been cut
+  yet, see below
+
+## Planned for v1.3
+
+- Cut a `v1.2.0` GitHub Release with the 56-record offline artifact (`ave-records-v1.2.0.json`)
+- AST10 crosswalk PR — submit `crosswalks/ave-to-ast10.json` as a contribution to the
+  OWASP AST10 project repo; the crosswalk file itself is current, the external
+  submission has not happened
+- Re-check `clawscan-to-ave.json` / `skillspector-to-ave.json` rule-level mappings
+  against each tool's current rule catalog for AVE-2026-00052 through 00056 — this
+  release only updated their AVE-side target metadata (see 1.2.0 above)
+- CWE AI Working Group outreach — open a contribution issue on
+  `github.com/CWE-CAPEC/AI-Working-Group` with a gap-mapping document covering how AVE
+  records address the agentic behavioral classes missing from CWE-1446
+- Second implementer outreach — contact scanner maintainers with crosswalk packages to
+  enable `ave_id` emission in their finding output
+- Resource exhaustion / agentic DoS record — the one confirmed genuine gap from the
+  benchmark-2026-06 research report
+- Section 6.2 review priorities 2-4 from `AVE_V1.1.0_MIGRATION_BRIEF.md` — only 2 of the
+  6 priority-1 records got a human spot-check in 1.2.0 (both had real bugs, since fixed);
+  00045/00046/00050/00051 remain unreviewed LLM drafts, and priorities 2-4 haven't started

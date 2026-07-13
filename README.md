@@ -11,13 +11,22 @@ Stable IDs, AIVSS scores, and behavioral fingerprints for every way a skill file
 MCP server, system prompt, or agent plugin can be weaponized — scored consistently,
 mapped to the frameworks security teams already report against.
 
-[![Records](https://img.shields.io/badge/records-51-0f6e56?style=flat-square)](records/)
-[![Schema](https://img.shields.io/badge/schema-v1.0.0-0a3024?style=flat-square)](schema/ave-record-1.0.0.schema.json)
+[![Records](https://img.shields.io/badge/records-56-0f6e56?style=flat-square)](records/)
+[![Schema](https://img.shields.io/badge/schema-v1.1.0-0a3024?style=flat-square)](schema/ave-record-1.1.0.schema.json)
 [![AIVSS](https://img.shields.io/badge/AIVSS-v0.8-d4a017?style=flat-square)](https://aivss.owasp.org)
 [![OWASP MCP](https://img.shields.io/badge/OWASP-MCP%20Top%2010-0a3024?style=flat-square)](https://owasp.org)
 [![MITRE ATLAS](https://img.shields.io/badge/MITRE-ATLAS-4a3f9e?style=flat-square)](https://atlas.mitre.org)
 [![SARIF](https://img.shields.io/badge/SARIF-v2.1.0-0057b7?style=flat-square)](docs/specs/ave-in-sarif.md)
 [![License](https://img.shields.io/badge/license-Apache%202.0-green?style=flat-square)](LICENSE)
+
+[![Tests](https://github.com/bawbel/ave/actions/workflows/tests.yml/badge.svg)](https://github.com/bawbel/ave/actions/workflows/tests.yml)
+[![Coverage](https://img.shields.io/badge/coverage-100%25%20(rules%2F)-0f6e56?style=flat-square)](.github/workflows/tests.yml)
+[![CodeQL](https://github.com/bawbel/ave/actions/workflows/codeql.yml/badge.svg)](https://github.com/bawbel/ave/actions/workflows/codeql.yml)
+[![Dependency Review](https://github.com/bawbel/ave/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/bawbel/ave/actions/workflows/dependency-review.yml)
+[![Secret Scan](https://github.com/bawbel/ave/actions/workflows/secret-scan.yml/badge.svg)](https://github.com/bawbel/ave/actions/workflows/secret-scan.yml)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/bawbel/ave/badge)](https://scorecard.dev/viewer/?uri=github.com/bawbel/ave)
+[![Security Policy](https://img.shields.io/badge/security-policy-blue?style=flat-square)](SECURITY.md)
+[![Code of Conduct](https://img.shields.io/badge/code%20of%20conduct-Contributor%20Covenant-blueviolet?style=flat-square)](CODE_OF_CONDUCT.md)
 
 [Registry](https://ave.bawbel.io/registry.html) · [Schema](https://ave.bawbel.io/schema.html) · [Crosswalks](https://ave.bawbel.io/crosswalks.html) · [Architecture](https://ave.bawbel.io/architecture.html) · [Scoring](https://ave.bawbel.io/scoring.html) · [Scanner](https://github.com/bawbel/scanner)
 
@@ -86,12 +95,12 @@ skill file          ->   in CI / pre-commit   ->  before deploy
 
 | | |
 |---|---|
-| Total records | 51 |
-| Schema version | 1.0.0 |
+| Total records | 56 |
+| Schema version | 1.1.0 |
 | AIVSS spec | v0.8 |
 | CRITICAL (>= 9.0) | 1 |
-| HIGH (7.0-8.9) | 9 |
-| MEDIUM (4.0-6.9) | 40 |
+| HIGH (7.0-8.9) | 11 |
+| MEDIUM (4.0-6.9) | 43 |
 | LOW (< 4.0) | 1 |
 | Framework: OWASP MCP Top 10 | all records |
 | Framework: MITRE ATLAS | where applicable |
@@ -206,6 +215,11 @@ AIVSS = ((8.5 + 7.5) / 2) x 1.0 x 1 = 8.0  ->  HIGH
 | [AVE-2026-00049](records/AVE-2026-00049.json) | HTTP Host Header Injection (BadHost) | 7.2 | HIGH |
 | [AVE-2026-00050](records/AVE-2026-00050.json) | Parasitic Toolchain — Silent Tool Registration | 7.2 | HIGH |
 | [AVE-2026-00051](records/AVE-2026-00051.json) | OAuth Discovery Rebinding | 7.2 | HIGH |
+| [AVE-2026-00052](records/AVE-2026-00052.json) | MCP Tool Implementation Command Injection | 7.5 | HIGH |
+| [AVE-2026-00053](records/AVE-2026-00053.json) | MCP Resource Path Traversal | 6.3 | MEDIUM |
+| [AVE-2026-00054](records/AVE-2026-00054.json) | Code-Execution Sandbox Escape | 6.7 | MEDIUM |
+| [AVE-2026-00055](records/AVE-2026-00055.json) | MCP STDIO Launch Configuration Injection | 7.7 | HIGH |
+| [AVE-2026-00056](records/AVE-2026-00056.json) | Zero-Click Exfiltration via Rendered Content Auto-Fetch | 5.8 | MEDIUM |
 
 ---
 
@@ -276,13 +290,13 @@ request a crosswalk for your scanner's rule IDs.
 
 ---
 
-## Schema v1.0.0
+## Schema v1.1.0
 
 Records validate against
-[`schema/ave-record-1.0.0.schema.json`](schema/ave-record-1.0.0.schema.json).
+[`schema/ave-record-1.1.0.schema.json`](schema/ave-record-1.1.0.schema.json).
 
 Canonical `$id`:
-`https://ave.bawbel.io/schema/ave-record-1.0.0.schema.json`
+`https://ave.bawbel.io/schema/ave-record-1.1.0.schema.json`
 
 **15 required fields:**
 
@@ -299,7 +313,7 @@ references · researcher
 ```json
 {
   "ave_id": "AVE-2026-00001",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "status": "active",
   "published": "2026-04-01T09:00:00Z",
   "title": "Metamorphic payload via external config fetch",
@@ -320,14 +334,21 @@ references · researcher
 ```
 
 **All optional fields:**
-`component_type` · `last_updated` · `behavioral_vector` · `aivss_score` ·
-`cvss_base_vector` · `owasp_mapping` · `mitre_atlas_mapping` ·
-`nist_ai_rmf_mapping` · `affected_platforms` · `affected_registries` ·
+`component_type` · `last_updated` · `behavioral_vector` · `example_patterns` ·
+`aivss_score` · `cvss_base_vector` · `owasp_asi` · `mitre_atlas` ·
+`nist_ai_rmf` · `provenance_vector` · `trifecta_profile` · `mitigation` ·
+`affected_platforms` · `affected_registries` ·
 `mutation_count` · `detection_methodology` · `kill_switch_active` ·
 `researcher_url` · `aivss.aarf` · `aivss.aivss_severity` ·
-`aivss.owasp_mcp_mapping` · `aivss.notes` · `evidence_kind_default` ·
+`aivss.notes` · `evidence_kind_default` ·
 `detection_stage` · `detection_layer` · `confidence_baseline` ·
 `evidence_basis_engines` · `derivable_into`
+
+`status: "draft"` records need only a reduced eight-field core (`ave_id`,
+`schema_version`, `status`, `title`, `description`, `attack_class`,
+`behavioral_fingerprint`, `references`) — the full 15-field required set
+above applies once `status` is `active` or `deprecated`. See
+[CONTRIBUTING.md](CONTRIBUTING.md) for the thin-submission path.
 
 Full schema reference: [ave.bawbel.io/schema.html](https://ave.bawbel.io/schema.html)
 
@@ -379,7 +400,7 @@ const Ajv = require('ajv/dist/2020');
 const addFormats = require('ajv-formats');
 const ajv = new Ajv({ strict: false });
 addFormats(ajv);
-const schema = require('./schema/ave-record-1.0.0.schema.json');
+const schema = require('./schema/ave-record-1.1.0.schema.json');
 const record = require('./records/AVE-2026-NNNNN.json');
 const ok = ajv.validate(schema, record);
 if (!ok) console.error(ajv.errors); else console.log('valid');
@@ -412,10 +433,11 @@ at [ave.bawbel.io/crosswalks.html](https://ave.bawbel.io/crosswalks.html).
 
 | Framework | Field | Crosswalk |
 |---|---|---|
-| [OWASP AST10](https://owasp.org/www-project-agentic-ai-security/) | `owasp_mapping` (ASI01-ASI10) | [`crosswalks/ave-to-ast10.json`](crosswalks/ave-to-ast10.json) |
+| OWASP Agentic Security Initiative Top 10 | `owasp_asi` (ASI01-ASI10) | schema field, all applicable records |
+| [OWASP Agentic Skills Top 10 (AST10)](https://owasp.org/www-project-agentic-skills-top-10/) | no dedicated schema field yet (`owasp_ast` planned) | [`crosswalks/ave-to-ast10.json`](crosswalks/ave-to-ast10.json) |
 | OWASP MCP Top 10 | `owasp_mcp` | all records |
-| MITRE ATLAS | `mitre_atlas_mapping` | where applicable |
-| NIST AI RMF | `nist_ai_rmf_mapping` | where applicable |
+| MITRE ATLAS | `mitre_atlas` | where applicable |
+| NIST AI RMF | `nist_ai_rmf` | where applicable |
 
 | This scanner | Maps to AVE via |
 |---|---|

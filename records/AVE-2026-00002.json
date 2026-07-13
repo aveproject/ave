@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00002",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "mcp_server",
   "title": "MCP tool description behavioral injection",
   "attack_class": "Prompt Injection - Tool Description",
@@ -18,7 +18,7 @@
   ],
   "aivss_score": 7.3,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:L/VI:H/VA:N/SC:L/SI:H/SA:N",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI01",
     "ASI03"
   ],
@@ -26,11 +26,11 @@
     "MCP03",
     "MCP10"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MAP-1.5",
     "MEASURE-2.5"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0054"
   ],
   "behavioral_fingerprint": "MCP tool description field contains directives targeting agent behavior rather than describing tool functionality.",
@@ -39,8 +39,26 @@
     "prompt-injection",
     "mcp-description"
   ],
+  "provenance_vector": {
+    "entry_class": "tool_schema",
+    "payload_surface": "MCP tool.description field",
+    "escalation": "data_to_instruction"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "untrusted_content"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "validate_input",
+      "sanitize_output"
+    ],
+    "enforcement_point": "server_card_fetch",
+    "trifecta_control": "break_untrusted_content"
+  },
   "mutation_count": 23,
-  "detection_methodology": "1. Static scan: search for patterns matching this attack class using bawbel-scanner.\n2. Semantic analysis: LLM engine flags behavioral directives in component content.\n3. Behavioral sandbox: monitor agent behavior during initialization for unexpected actions.",
+  "detection_methodology": "1. Static scan: search for patterns matching this attack class in component content.\n2. Semantic analysis: an LLM-based reviewer flags behavioral directives in component content.\n3. Behavioral sandbox: monitor agent behavior during initialization for unexpected actions.",
   "indicators_of_compromise": [
     "Tool description contains directives like IMPORTANT, WARNING, NOTE targeting the agent",
     "Tool description contains \"before using this tool\", \"before calling this tool\", or similar",
@@ -67,10 +85,6 @@
     "aivss_score": 7.3,
     "aivss_severity": "HIGH",
     "spec_version": "0.8",
-    "owasp_mcp_mapping": [
-      "MCP03",
-      "MCP10"
-    ],
     "notes": "AARF scores reflect typical mcp deployment in agentic workflows. See SPEC.md for factor definitions."
   },
   "remediation": "1. Remove or replace the MCP server.\n2. Review all tool calls made while the server was connected.\n3. Audit agent output for signs of behavioral changes matching the injected instructions.\n4. Report the server to the registry operator.",

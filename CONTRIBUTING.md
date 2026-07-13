@@ -36,7 +36,7 @@ contribution makes AI agents safer for everyone.
    before writing JSON. The maintainer will confirm the next available id.
 
 4. **Read the schema** at
-   [`schema/ave-record-1.0.0.schema.json`](schema/ave-record-1.0.0.schema.json)
+   [`schema/ave-record-1.1.0.schema.json`](schema/ave-record-1.1.0.schema.json)
    for field definitions, types, and required/optional status. The schema
    reference page is at [ave.bawbel.io/schema.html](https://ave.bawbel.io/schema.html).
 
@@ -80,8 +80,8 @@ Key rules:
 - `behavioral_fingerprint` describes what the component *does*, not a string
   it contains. "Component fetches remote content and executes it as
   instructions" not "contains the word fetch."
-- `owasp_mcp` is required with at least one entry. `owasp_mapping`,
-  `mitre_atlas_mapping`, and `nist_ai_rmf_mapping` are optional — add
+- `owasp_mcp` is required with at least one entry. `owasp_asi`,
+  `mitre_atlas`, and `nist_ai_rmf` are optional — add
   them when they apply, omit rather than force a poor fit.
 - `indicators_of_compromise` must have at least one entry that a defender
   can actually search for in a real file.
@@ -129,7 +129,7 @@ const Ajv = require('ajv/dist/2020');
 const addFormats = require('ajv-formats');
 const ajv = new Ajv({ strict: false });
 addFormats(ajv);
-const schema = require('./schema/ave-record-1.0.0.schema.json');
+const schema = require('./schema/ave-record-1.1.0.schema.json');
 const record = require('./records/AVE-2026-NNNNN.json');
 const ok = ajv.validate(schema, record);
 if (!ok) { console.error(ajv.errors); process.exit(1); }
@@ -180,8 +180,9 @@ changed validation rules): open an issue first. These require a schema
 version bump, a migration path for existing records, and a 30-day comment
 period before merging.
 
-Current schema: **v1.0.0**.
-Canonical file: `schema/ave-record-1.0.0.schema.json`.
+Current schema: **v1.1.0**.
+Canonical file: `schema/ave-record-1.1.0.schema.json`.
+(`schema/ave-record-1.0.0.schema.json` remains, permanently, as the frozen v1.0.0 canonical.)
 
 ---
 
@@ -197,7 +198,7 @@ git commit -m "fix: AVE-2026-NNNNN -- <what changed>"
 ```
 
 AIVSS score changes require written rationale for each AARF factor that
-changes. Framework mapping additions (`owasp_mapping`, `mitre_atlas_mapping`)
+changes. Framework mapping additions (`owasp_asi`, `mitre_atlas`)
 are welcome without prior issue if the mapping is clear.
 
 `ave_id` values are immutable. Never renumber a record. If a record is wrong

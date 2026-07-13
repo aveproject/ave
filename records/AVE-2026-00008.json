@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00008",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "component_type": "skill",
   "title": "Agent persistence via self-replication instruction in agentic component",
   "attack_class": "Persistence - Self-Replication",
@@ -19,21 +19,43 @@
   ],
   "aivss_score": 6.3,
   "cvss_base_vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
-  "owasp_mapping": [
+  "owasp_asi": [
     "ASI07"
   ],
-  "nist_ai_rmf_mapping": [
+  "nist_ai_rmf": [
     "MAP-1.5",
     "MEASURE-2.5",
     "MANAGE-1.3",
     "GOVERN-1.7"
   ],
-  "mitre_atlas_mapping": [
+  "mitre_atlas": [
     "AML.T0048",
     "AML.T0011"
   ],
   "behavioral_fingerprint": "Component instructs the agent to write to startup scripts, schedule itself via cron, or copy itself to directories that execute on login or reboot.",
-  "behavioral_vector": [],
+  "behavioral_vector": [
+    "self-replication",
+    "persistence",
+    "startup-hook"
+  ],
+  "provenance_vector": {
+    "entry_class": "content",
+    "payload_surface": "skill instruction body: startup-script / cron-registration directive",
+    "escalation": "instruction_to_capability"
+  },
+  "trifecta_profile": {
+    "requires": [
+      "untrusted_content"
+    ]
+  },
+  "mitigation": {
+    "strategy": [
+      "least_privilege",
+      "isolate_scope"
+    ],
+    "enforcement_point": "agent_framework",
+    "trifecta_control": "break_untrusted_content"
+  },
   "mutation_count": 22,
   "detection_methodology": "1. Static scan: search for instructions referencing .bashrc, .profile, crontab, systemd, startup directories, or self-copy commands. 2. Semantic analysis: flag any 'background service' or 'always running' instructions that modify system startup. 3. Behavioral sandbox: monitor writes to shell profile files, cron directories, and systemd paths.",
   "indicators_of_compromise": [
@@ -91,11 +113,7 @@
     "aivss_score": 6.3,
     "aivss_severity": "MEDIUM",
     "spec_version": "0.8",
-    "notes": "Spreads via git/skills. Self-mod + memory + multi-agent = highest factor sum.",
-    "owasp_mcp_mapping": [
-      "MCP04",
-      "MCP08"
-    ]
+    "notes": "Spreads via git/skills. Self-mod + memory + multi-agent = highest factor sum."
   },
   "owasp_mcp": [
     "MCP04",
