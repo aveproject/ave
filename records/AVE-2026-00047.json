@@ -73,7 +73,7 @@
     "Bearer token literal in skill file header or tool description",
     "Credential value unchanged across multiple skill file versions in git history"
   ],
-  "remediation": "1. Replace hardcoded credentials with environment variable references: use DATABASE_URL from environment. 2. Use a secrets manager path instead of the secret value: vault://secret/db/prod. 3. Rotate any credential that has been committed immediately - assume it is compromised. 4. Add credential patterns to pre-commit hooks using bawbel scan --fail-on-severity high. 5. Use bawbel-ignore with justification only for documented placeholder values.",
+  "remediation": "1. Replace hardcoded credentials with environment variable references: use DATABASE_URL from environment. 2. Use a secrets manager path instead of the secret value: vault://secret/db/prod. 3. Rotate any credential that has been committed immediately - assume it is compromised. 4. Add credential-pattern scanning to pre-commit hooks, failing on high-severity findings. 5. Suppress the finding with documented justification only for documented placeholder values.",
   "status": "active",
   "kill_switch_active": true,
   "researcher": "Bawbel Security Research Team",

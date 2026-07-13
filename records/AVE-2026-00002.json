@@ -58,7 +58,7 @@
     "trifecta_control": "break_untrusted_content"
   },
   "mutation_count": 23,
-  "detection_methodology": "1. Static scan: search for patterns matching this attack class using bawbel-scanner.\n2. Semantic analysis: LLM engine flags behavioral directives in component content.\n3. Behavioral sandbox: monitor agent behavior during initialization for unexpected actions.",
+  "detection_methodology": "1. Static scan: search for patterns matching this attack class in component content.\n2. Semantic analysis: an LLM-based reviewer flags behavioral directives in component content.\n3. Behavioral sandbox: monitor agent behavior during initialization for unexpected actions.",
   "indicators_of_compromise": [
     "Tool description contains directives like IMPORTANT, WARNING, NOTE targeting the agent",
     "Tool description contains \"before using this tool\", \"before calling this tool\", or similar",

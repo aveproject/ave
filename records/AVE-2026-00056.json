@@ -76,6 +76,12 @@
     "MCP10",
     "MCP08"
   ],
+  "owasp_asi": [
+    "ASI01"
+  ],
+  "mitre_atlas": [
+    "AML.T0051"
+  ],
   "aivss": {
     "cvss_base": 7.5,
     "aarf": {

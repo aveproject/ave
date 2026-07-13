@@ -61,7 +61,7 @@
     "trifecta_control": "break_external_comms"
   },
   "mutation_count": 12,
-  "detection_methodology": "1. Static scan: search for patterns matching this attack class using bawbel-scanner.\n2. Semantic analysis: LLM engine flags behavioral directives in component content.\n3. Behavioral sandbox: monitor agent behavior during initialization for unexpected actions.",
+  "detection_methodology": "1. Static scan: search for patterns matching this attack class in component content.\n2. Semantic analysis: an LLM-based reviewer flags behavioral directives in component content.\n3. Behavioral sandbox: monitor agent behavior during initialization for unexpected actions.",
   "indicators_of_compromise": [
     "Component references os.environ, process.env, or similar environment access APIs",
     "Component instructs agent to read .env files, config files, or credential stores",

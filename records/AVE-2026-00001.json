@@ -65,7 +65,7 @@
     "trifecta_control": "break_external_comms"
   },
   "mutation_count": 89,
-  "detection_methodology": "1. Static scan: search for patterns matching this attack class using bawbel-scanner.\n2. Semantic analysis: LLM engine flags behavioral directives in component content.\n3. Behavioral sandbox: monitor agent behavior during initialization for unexpected actions.",
+  "detection_methodology": "1. Static scan: search for patterns matching this attack class in component content.\n2. Semantic analysis: an LLM-based reviewer flags behavioral directives in component content.\n3. Behavioral sandbox: monitor agent behavior during initialization for unexpected actions.",
   "indicators_of_compromise": [
     "Component contains fetch(), requests.get(), curl, or wget pointing to an external URL",
     "Component instructs agent to load and follow instructions from a remote source",

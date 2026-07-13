@@ -70,7 +70,7 @@
     "Result content contains imperative language, system-role markers, or instruction prefixes",
     "Unexpected network calls or file operations following task result consumption"
   ],
-  "remediation": "1. Define and enforce strict output schemas for all async task results - reject anything that doesn't conform. 2. Treat all task results as untrusted data - scan with bawbel scan before injecting into agent context. 3. Sign task results at dispatch with an HMAC or asymmetric signature - verify before consuming. 4. Log all async task results for post-hoc audit. 5. Sandbox task result processing - do not allow result content to directly influence the agent's next goal.",
+  "remediation": "1. Define and enforce strict output schemas for all async task results - reject anything that doesn't conform. 2. Treat all task results as untrusted data - scan for injection patterns before injecting into agent context. 3. Sign task results at dispatch with an HMAC or asymmetric signature - verify before consuming. 4. Log all async task results for post-hoc audit. 5. Sandbox task result processing - do not allow result content to directly influence the agent's next goal.",
   "status": "active",
   "kill_switch_active": false,
   "researcher": "Bawbel Security Research Team",

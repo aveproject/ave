@@ -92,6 +92,10 @@
     "MCP05",
     "MCP04"
   ],
+  "owasp_asi": [
+    "ASI04",
+    "ASI05"
+  ],
   "mitre_atlas": [
     "AML.T0104"
   ],
