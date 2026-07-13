@@ -91,6 +91,13 @@
     "MCP02",
     "MCP07"
   ],
+  "owasp_asi": [
+    "ASI02",
+    "ASI04"
+  ],
+  "mitre_atlas": [
+    "AML.T0086"
+  ],
   "aivss": {
     "cvss_base": 8.5,
     "aarf": {

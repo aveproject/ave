@@ -90,6 +90,10 @@
     "MCP05",
     "MCP04"
   ],
+  "owasp_asi": [
+    "ASI05",
+    "ASI02"
+  ],
   "aivss": {
     "cvss_base": 9.8,
     "aarf": {
