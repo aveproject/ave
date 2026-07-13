@@ -4,7 +4,7 @@
   "component_type": "mcp_server",
   "title": "Supply Chain - Content Type Mismatch (Magika)",
   "attack_class": "Supply Chain - Content Type Mismatch",
-  "description": "This record covers supply chain attacks where an executable payload is disguised as a skill file (`.md`, `.yaml`, `.json`, `.txt`). Unlike all other AVE records which are detected by text pattern matching, this record is detected exclusively by the **Magika engine (Stage 0)** - Google's ML-based file type classifier - because the file contains no readable text instructions to match against. Detection requires: `pip install \"bawbel-scanner[magika]\"`",
+  "description": "This record covers supply chain attacks where an executable payload is disguised as a skill file (`.md`, `.yaml`, `.json`, `.txt`). Unlike all other AVE records which are detected by text pattern matching, this record is detected exclusively by the **Magika engine (Stage 0)** - Google's ML-based file type classifier - because the file contains no readable text instructions to match against. Detection requires a Magika-integrated scanning tool (bawbel-scanner is one implementation: `pip install \"bawbel-scanner[magika]\"`).",
   "affected_platforms": [
     "any-mcp-client",
     "claude-desktop"
@@ -81,7 +81,7 @@
     "spec_version": "0.8",
     "notes": "AARF scores based on typical deployment of mcp components in agentic workflows."
   },
-  "remediation": "- Install Magika engine: `pip install \"bawbel-scanner[magika]\"`\n- Verify content type of all skill files before loading\n- Reject any file where content type does not match declared extension\n- Use a file type allowlist for skill loading - only accept known-safe types",
+  "remediation": "- Install a Magika-integrated scanning tool (bawbel-scanner is one implementation: `pip install \"bawbel-scanner[magika]\"`).\n- Verify content type of all skill files before loading\n- Reject any file where content type does not match declared extension\n- Use a file type allowlist for skill loading - only accept known-safe types",
   "status": "active",
   "kill_switch_active": false,
   "researcher": "Bawbel Security Research Team",
