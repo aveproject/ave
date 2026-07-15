@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://ave.bawbel.io/ave-logo-full.svg" alt="AVE — Agentic Vulnerability Enumeration" width="280" />
+<img src="https://aveproject.org/ave-logo-full.svg" alt="AVE — Agentic Vulnerability Enumeration" width="280" />
 
 <br/>
 <br/>
