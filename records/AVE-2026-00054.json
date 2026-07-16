@@ -72,6 +72,11 @@
       "tag": "CWE-693",
       "text": "CWE-693: Protection Mechanism Failure",
       "url": "https://cwe.mitre.org/data/definitions/693.html"
+    },
+    {
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00054 — AVE behavioral vulnerability registry",
+      "url": "https://github.com/aveproject/ave/blob/main/records/AVE-2026-00054.json"
     }
   ],
   "owasp_mcp": [

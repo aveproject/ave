@@ -115,7 +115,7 @@
     {
       "tag": "AVE Registry",
       "text": "AVE-2026-00034 \u2014 AVE behavioral vulnerability registry",
-      "url": "https://api.piranha.bawbel.io/records/AVE-2026-00034"
+      "url": "https://github.com/aveproject/ave/blob/main/records/AVE-2026-00034.json"
     }
   ],
   "severity": "MEDIUM",

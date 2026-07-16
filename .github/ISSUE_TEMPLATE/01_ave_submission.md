@@ -8,7 +8,7 @@ assignees: ''
 
 ## Before you open this issue
 
-- [ ] I have searched the registry at ave.bawbel.io and the `records/` directory
+- [ ] I have searched the registry at aveproject.org and the `records/` directory
 - [ ] This is a genuinely distinct behavioral class, not a variant of an existing record
 - [ ] I have a citable primary source (CVE, paper, disclosure, or working PoC)
 

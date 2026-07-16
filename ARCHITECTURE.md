@@ -1,4 +1,4 @@
-# ARCHITECTURE.md — bawbel/ave
+# ARCHITECTURE.md — aveproject/ave
 
 Update this file before closing any PR that changes the record structure,
 adds a new rule engine category, or changes how records and rules relate.
@@ -52,7 +52,7 @@ false-positive risk with no guard.
 ## How the scanner consumes this repo
 
 ```
-bawbel/ave (this repo)              bawbel/scanner (consumer)
+aveproject/ave (this repo)              bawbel/scanner (consumer)
 ──────────────────────              ─────────────────────────
 records/*.json          ──load──▶   AVE record lookup
 rules/pattern/*.py       ──load──▶   PatternEngine

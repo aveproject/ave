@@ -1,4 +1,4 @@
-# LANGUAGE.md — bawbel/ave Domain Language
+# LANGUAGE.md — aveproject/ave Domain Language
 
 All names in this repo must come from this file.
 Terms shared with bawbel/scanner are marked (shared).

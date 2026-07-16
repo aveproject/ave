@@ -1,4 +1,4 @@
-# GOVERNANCE.md — bawbel/ave
+# GOVERNANCE.md — aveproject/ave
 
 ## Project lead
 
