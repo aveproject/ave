@@ -1,4 +1,4 @@
-# CLAUDE.md — bawbel/ave
+# CLAUDE.md — aveproject/ave
 
 Read this file completely before touching anything.
 Single source of truth for how work happens in this repo.
@@ -7,13 +7,13 @@ Single source of truth for how work happens in this repo.
 
 ## Project
 
-bawbel/ave — the behavioral classification standard for agentic AI components.
+aveproject/ave — the behavioral classification standard for agentic AI components.
 An independent standard that bawbel-scanner implements. NOT a feature of the scanner.
 
-- Records: 51 published (schema_version 1.1.0)
+- Records: 56 published (schema_version 1.1.0)
 - Schema: schema/ave-record-1.1.0.schema.json
 - Scoring: OWASP AIVSS v0.8
-- Registry: ave.bawbel.io
+- Registry: aveproject.org
 - Public API: api.piranha.bawbel.io
 - Scanner: github.com/bawbel/scanner (reference implementation)
 
@@ -75,7 +75,7 @@ behavioral_vector · mutation_count · detection_methodology
 kill_switch_active · aivss_score · cvss_base_vector
 researcher_url · last_updated
 
-Full reference: ave.bawbel.io/schema.html
+Full reference: aveproject.org/schema.html
 
 ---
 

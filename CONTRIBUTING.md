@@ -22,7 +22,7 @@ contribution makes AI agents safer for everyone.
 
 ## Before you start
 
-1. **Search the registry** at [ave.bawbel.io/registry.html](https://ave.bawbel.io/registry.html)
+1. **Search the registry** at [aveproject.org/registry.html](https://aveproject.org/registry.html)
    and the `records/` directory for existing coverage of the attack class
    you have in mind. Check `behavioral_fingerprint` values, not just titles —
    the same class appears under many names across different tools.
@@ -38,7 +38,7 @@ contribution makes AI agents safer for everyone.
 4. **Read the schema** at
    [`schema/ave-record-1.1.0.schema.json`](schema/ave-record-1.1.0.schema.json)
    for field definitions, types, and required/optional status. The schema
-   reference page is at [ave.bawbel.io/schema.html](https://ave.bawbel.io/schema.html).
+   reference page is at [aveproject.org/schema.html](https://aveproject.org/schema.html).
 
 ---
 
@@ -59,7 +59,7 @@ or a variant update before you write any JSON.
 ### Step 2 -- Fork and create the record
 
 ```bash
-git clone https://github.com/bawbel/ave
+git clone https://github.com/aveproject/ave
 cd ave
 git checkout -b feat/AVE-2026-NNNNN-attack-class
 cp records/AVE-2026-00001.json records/AVE-2026-NNNNN.json
@@ -235,5 +235,5 @@ name. Records are immutable once published — your attribution stays forever.
 
 ## Questions
 
-Open a [GitHub Discussion](https://github.com/bawbel/ave/discussions) or
+Open a [GitHub Discussion](https://github.com/aveproject/ave/discussions) or
 email [bawbel.io@gmail.com](mailto:bawbel.io@gmail.com).

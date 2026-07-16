@@ -1,4 +1,4 @@
-# PRODUCT.md — bawbel/ave
+# PRODUCT.md — aveproject/ave
 
 Internal product context for Claude Code sessions. Not published.
 
@@ -42,11 +42,11 @@ an identity.
 
 | | |
 |---|---|
-| Records published | 51 (schema_version 1.1.0) |
+| Records published | 56 (schema_version 1.1.0) |
 | Schema version | 1.1.0 (canonical, published) |
-| Registry | ave.bawbel.io (live) |
+| Registry | aveproject.org (live) |
 | Threat intel API | api.piranha.bawbel.io |
-| Site repo | github.com/bawbel/ave-site |
+| Site repo | github.com/aveproject/ave-site |
 | Latest release | v1.1.0 |
 
 ---
@@ -132,7 +132,7 @@ The adoption path:
 Target: ~60-65 high-quality records by Product Hunt, reached deliberately.
 Do not push to 100. Research shows ~25-35 genuinely distinct behavioral
 classes exist (MCPSecBench 17, Formal Security Framework 23, Hou et al 16,
-MCP-SafetyBench 20, MCPTox 11 — heavy overlap). At 51 records we are likely
+MCP-SafetyBench 20, MCPTox 11 — heavy overlap). At 56 records we are likely
 past the count of distinct classes already.
 
 Growth path: audit and merge variants, fill genuine gaps from the

@@ -19,16 +19,16 @@ mapped to the frameworks security teams already report against.
 [![SARIF](https://img.shields.io/badge/SARIF-v2.1.0-0057b7?style=flat-square)](docs/specs/ave-in-sarif.md)
 [![License](https://img.shields.io/badge/license-Apache%202.0-green?style=flat-square)](LICENSE)
 
-[![Tests](https://github.com/bawbel/ave/actions/workflows/tests.yml/badge.svg)](https://github.com/bawbel/ave/actions/workflows/tests.yml)
+[![Tests](https://github.com/aveproject/ave/actions/workflows/tests.yml/badge.svg)](https://github.com/aveproject/ave/actions/workflows/tests.yml)
 [![Coverage](https://img.shields.io/badge/coverage-100%25%20(rules%2F)-0f6e56?style=flat-square)](.github/workflows/tests.yml)
-[![CodeQL](https://github.com/bawbel/ave/actions/workflows/codeql.yml/badge.svg)](https://github.com/bawbel/ave/actions/workflows/codeql.yml)
-[![Dependency Review](https://github.com/bawbel/ave/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/bawbel/ave/actions/workflows/dependency-review.yml)
-[![Secret Scan](https://github.com/bawbel/ave/actions/workflows/secret-scan.yml/badge.svg)](https://github.com/bawbel/ave/actions/workflows/secret-scan.yml)
-[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/bawbel/ave/badge)](https://scorecard.dev/viewer/?uri=github.com/bawbel/ave)
+[![CodeQL](https://github.com/aveproject/ave/actions/workflows/codeql.yml/badge.svg)](https://github.com/aveproject/ave/actions/workflows/codeql.yml)
+[![Dependency Review](https://github.com/aveproject/ave/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/aveproject/ave/actions/workflows/dependency-review.yml)
+[![Secret Scan](https://github.com/aveproject/ave/actions/workflows/secret-scan.yml/badge.svg)](https://github.com/aveproject/ave/actions/workflows/secret-scan.yml)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/aveproject/ave/badge)](https://scorecard.dev/viewer/?uri=github.com/aveproject/ave)
 [![Security Policy](https://img.shields.io/badge/security-policy-blue?style=flat-square)](SECURITY.md)
 [![Code of Conduct](https://img.shields.io/badge/code%20of%20conduct-Contributor%20Covenant-blueviolet?style=flat-square)](CODE_OF_CONDUCT.md)
 
-[Registry](https://ave.bawbel.io/registry.html) · [Schema](https://ave.bawbel.io/schema.html) · [Crosswalks](https://ave.bawbel.io/crosswalks.html) · [Architecture](https://ave.bawbel.io/architecture.html) · [Scoring](https://ave.bawbel.io/scoring.html) · [Scanner](https://github.com/bawbel/scanner)
+[Registry](https://aveproject.org/registry.html) · [Schema](https://aveproject.org/schema.html) · [Crosswalks](https://aveproject.org/crosswalks.html) · [Architecture](https://aveproject.org/architecture.html) · [Scoring](https://aveproject.org/scoring.html) · [Scanner](https://github.com/bawbel/scanner)
 
 </div>
 
@@ -254,7 +254,7 @@ HIGH      bawbel-hardcoded-credential  AVE-2026-00047  line 5   AIVSS 7.6
 ```
 
 Any tool can implement AVE — the records, schema, and rules are open.
-See the [architecture guide](https://ave.bawbel.io/architecture.html) and
+See the [architecture guide](https://aveproject.org/architecture.html) and
 the [implementer guide](docs/specs/ave-implementer-guide.md) for the
 full consumption patterns including air-gapped environments.
 
@@ -274,7 +274,7 @@ record = resp.json()  # full record: fingerprint, IOCs, remediation, frameworks
 **Pattern 2 — Bundled offline** (air-gapped, regulated environments)
 ```bash
 # Download the full record set at build time and bundle with your scanner
-curl -L https://github.com/bawbel/ave/releases/download/v1.1.0/ave-records-v1.1.0.json \
+curl -L https://github.com/aveproject/ave/releases/download/v1.1.0/ave-records-v1.1.0.json \
   -o ave-records.json
 ```
 
@@ -296,7 +296,7 @@ Records validate against
 [`schema/ave-record-1.1.0.schema.json`](schema/ave-record-1.1.0.schema.json).
 
 Canonical `$id`:
-`https://ave.bawbel.io/schema/ave-record-1.1.0.schema.json`
+`https://aveproject.org/schema/ave-record-1.1.0.schema.json`
 
 **15 required fields:**
 
@@ -350,7 +350,7 @@ references · researcher
 above applies once `status` is `active` or `deprecated`. See
 [CONTRIBUTING.md](CONTRIBUTING.md) for the thin-submission path.
 
-Full schema reference: [ave.bawbel.io/schema.html](https://ave.bawbel.io/schema.html)
+Full schema reference: [aveproject.org/schema.html](https://aveproject.org/schema.html)
 
 ---
 
@@ -429,7 +429,7 @@ The PR description must include:
 ## Framework crosswalks
 
 AVE records map to four external frameworks. Full crosswalk tables are
-at [ave.bawbel.io/crosswalks.html](https://ave.bawbel.io/crosswalks.html).
+at [aveproject.org/crosswalks.html](https://aveproject.org/crosswalks.html).
 
 | Framework | Field | Crosswalk |
 |---|---|---|
@@ -466,10 +466,9 @@ See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for community standards.
 
 | | |
 |---|---|
-| [ave.bawbel.io](https://ave.bawbel.io) | Public registry and documentation |
+| [aveproject.org](https://aveproject.org) | Public registry and documentation |
 | [bawbel/scanner](https://github.com/bawbel/scanner) | Reference implementation |
-| [bawbel/ave-site](https://github.com/bawbel/ave-site) | Website source |
-| [api.piranha.bawbel.io](https://api.piranha.bawbel.io) | Threat intel API |
+| [aveproject/ave-site](https://github.com/aveproject/ave-site) | Website source |
 | [OWASP AIVSS v0.8](https://aivss.owasp.org) | Scoring specification |
 | [MITRE ATLAS](https://atlas.mitre.org) | AI threat technique catalog |
 | [OWASP MCP Top 10](https://owasp.org) | MCP attack surface framework |

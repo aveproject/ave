@@ -1,5 +1,5 @@
 {
-  "$schema": "https://ave.bawbel.io/schema/crosswalk-1.0.0.schema.json",
+  "$schema": "https://aveproject.org/schema/crosswalk-1.0.0.schema.json",
   "source": {
     "tool": "ClawScan",
     "vendor": "Community (nickoc / sggolakiya)",
@@ -11,7 +11,7 @@
   "target": {
     "standard": "AVE",
     "version": "1.1.0",
-    "url": "https://ave.bawbel.io",
+    "url": "https://aveproject.org",
     "record_count": 56
   },
   "generated": "2026-07-12",

@@ -85,6 +85,11 @@
       "tag": "CWE-22",
       "text": "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')",
       "url": "https://cwe.mitre.org/data/definitions/22.html"
+    },
+    {
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00053 — AVE behavioral vulnerability registry",
+      "url": "https://github.com/aveproject/ave/blob/main/records/AVE-2026-00053.json"
     }
   ],
   "owasp_mcp": [

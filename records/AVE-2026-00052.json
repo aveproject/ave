@@ -84,6 +84,11 @@
       "tag": "CWE-78",
       "text": "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')",
       "url": "https://cwe.mitre.org/data/definitions/78.html"
+    },
+    {
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00052 — AVE behavioral vulnerability registry",
+      "url": "https://github.com/aveproject/ave/blob/main/records/AVE-2026-00052.json"
     }
   ],
   "owasp_mcp": [

@@ -70,6 +70,11 @@
       "tag": "CWE-74",
       "text": "CWE-74: Improper Neutralization of Special Elements in Output Used by a Downstream Component ('Injection')",
       "url": "https://cwe.mitre.org/data/definitions/74.html"
+    },
+    {
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00056 — AVE behavioral vulnerability registry",
+      "url": "https://github.com/aveproject/ave/blob/main/records/AVE-2026-00056.json"
     }
   ],
   "owasp_mcp": [
