@@ -8,3 +8,8 @@ docs/agents/handoffs/
 .DS_Store
 node_modules/
 .coverage
+
+# local planning/scratch docs, not for the repo
+AVE_ORG_MOVE_CHECKLIST.md
+AVE_PROJECT_CLEANUP_TASKS.md
+AVE_V1.1.0_MIGRATION_BRIEF.md
