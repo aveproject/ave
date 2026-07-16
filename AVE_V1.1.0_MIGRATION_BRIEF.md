@@ -35,10 +35,16 @@ AVE-2026-00028 as it exists in the live repo today, field by field:
   short tags, not a raw payload dump. Section 4.2's retagging has reached this
   record.
 
-**Still confirmed pending, by the same record:** the `references` "AVE
-Registry" entry still points at `https://api.piranha.bawbel.io/records/...`.
-Section 4.6 has not run yet, correctly, since it is gated on the org move
-landing first (`AVE_ORG_MOVE_CHECKLIST.md` Section 7).
+**[DONE, confirmed]** Section 4.6, the "AVE Registry" reference repoint, has
+now run. Every record's `references` entry (all 56 -- the corpus grew past 51
+with the 2026-07-10 batch, AVE-2026-00052 through 00056, added after this
+brief was first drafted) points at
+`https://github.com/aveproject/ave/blob/main/records/AVE-2026-XXXXX.json`.
+The five newer records had no "AVE Registry" entry at all prior to this pass;
+one was added to each, same URL convention, for corpus consistency.
+`grep -rl "api.piranha.bawbel.io/records" records/AVE-2026-*.json` returns
+zero results. Landed and pushed to `org-move-checklist`
+(commit `1b640d9`, "fix: complete aveproject/ave org-move cleanup").
 
 **Not yet confirmed either way:** whether every record has reached this same
 enriched state, or only some. AVE-2026-00028 was not in the original Section
@@ -636,9 +642,8 @@ the Status section at the top of this document for the evidence behind each.
     bawbel-gate M0.
 12. **[NO ACTION, unchanged]** Section 7's `reversibility`/`action_class` field
     remains unscheduled by design.
-13. **[UNBLOCKED, ready to run]** Section 4.6, repoint the "AVE Registry"
-    reference URL. AVE-2026-00028's reference pointed at
-    `api.piranha.bawbel.io` as of its last check, before the gating condition
-    was met. `AVE_ORG_MOVE_CHECKLIST.md` Sections 3 and 7 have since landed;
-    the gate is open. Re-check a live record before assuming this has already
-    run on its own.
+13. **[DONE, confirmed]** Section 4.6, repoint the "AVE Registry" reference
+    URL. Ran across all 56 records (51 repointed from `api.piranha.bawbel.io`,
+    5 newer records that had no "AVE Registry" entry got one added); zero
+    remaining `api.piranha.bawbel.io/records` matches in `records/`. Landed
+    and pushed, commit `1b640d9`.
