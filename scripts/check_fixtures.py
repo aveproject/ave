@@ -1,23 +1,21 @@
-# What: checks every rule in rules/pattern/ has positive and negative fixtures
-# Why:  a rule without a negative fixture has no false-positive guard
-# How:  checks tests/fixtures/ for AVE-YYYY-NNNNN_positive.* and _negative.*
+# What: checks every AVE record has positive and negative conformance fixtures
+# Why:  a record with no negative fixture has no false-positive guard for any
+#       implementation that tests its own detection logic against these fixtures
+# How:  checks tests/fixtures/ for AVE-YYYY-NNNNN_positive.* and _negative.*,
+#       keyed off records/ directly -- detection rule implementations live in
+#       whichever tool implements against this standard, not in this repo
 
-import os, re, sys
+import os, sys
 
-rules_dir   = "rules/pattern"
+records_dir = "records"
 fixture_dir = "tests/fixtures"
 
-rule_ids = []
-for f in os.listdir(rules_dir):
-    if not f.endswith(".py") or f.startswith("_"):
-        continue
-    content = open(f"{rules_dir}/{f}").read()
-    m = re.search(r'"ave_id"\s*:\s*"(AVE-\d{4}-\d{5})"', content)
-    if m:
-        rule_ids.append(m.group(1))
+ave_ids = sorted(
+    f[:-len(".json")] for f in os.listdir(records_dir) if f.endswith(".json")
+)
 
 errors = []
-for ave_id in sorted(rule_ids):
+for ave_id in ave_ids:
     pos = any(f.startswith(f"{ave_id}_positive") for f in os.listdir(fixture_dir))
     neg = any(f.startswith(f"{ave_id}_negative") for f in os.listdir(fixture_dir))
     if not pos:
@@ -29,4 +27,4 @@ if errors:
     for e in errors: print(e)
     sys.exit(1)
 else:
-    print(f"All {len(rule_ids)} rules have positive and negative fixtures.")
+    print(f"All {len(ave_ids)} records have positive and negative conformance fixtures.")

@@ -27,11 +27,8 @@ jobs:
       - name: Validate all records against the schema
         run: python scripts/validate_records.py
 
-      - name: Check every rule has positive and negative fixtures
+      - name: Check every record has positive and negative conformance fixtures
         run: python scripts/check_fixtures.py
 
-      - name: Check every record has a detection rule
-        run: python scripts/check_rule_coverage.py
-
-      - name: Run tests with coverage (rules/)
-        run: pytest tests/ -x -q --cov=rules --cov-report=term-missing --cov-fail-under=95
+      - name: Run tests
+        run: pytest tests/ -x -q

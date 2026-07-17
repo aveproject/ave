@@ -60,15 +60,16 @@ Optional. The kind of agent component this class primarily affects.
 
 ## Rules and fixtures
 
-**Rule** — a detection implementation for an AVE class. One class may have
-rules across multiple engines. Lives in rules/pattern/, rules/yara/,
-rules/semgrep/.
+**Rule** — a detection implementation for an AVE class. An implementation
+artifact, not a standard artifact; lives in whichever tool implements
+against this standard, not in this repo.
 
-**PositiveFixture** — a test file that MUST trigger the rule.
-Lives in tests/fixtures/.
+**PositiveFixture** — a test file that a conforming implementation MUST
+flag. Lives in tests/fixtures/.
 
-**NegativeFixture** — a benign test file that MUST NOT trigger the rule.
-The false-positive guard. A rule without a negative fixture is incomplete.
+**NegativeFixture** — a benign test file that a conforming implementation
+MUST NOT flag. The false-positive guard. A record without a negative
+fixture is incomplete.
 
 ---
 
