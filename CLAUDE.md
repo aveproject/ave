@@ -168,9 +168,10 @@ python scripts/check_fixtures.py      # every rule has +/- fixtures
 
 ## Product context
 
-Read PRODUCT.md. AVE is a standalone standard, Layer 1 of the Bawbel
-five-layer architecture. Treat it as its own product.
+Read CONTEXT.md. AVE is a standalone standard implemented by more than one
+tool; no implementer, Bawbel's own tools included, owns it.
 
-The records grow with research, not with quotas. Target ~60-65 high-quality
-records by Product Hunt, reached deliberately. A new ave_id requires a
-distinct behavioral class and a citable primary source. No padding.
+The records grow with research, not with quotas. Growth is bounded by
+distinct behavioral classes, not by any external target or event. A new
+ave_id requires a distinct behavioral class and a citable primary source.
+No padding.
