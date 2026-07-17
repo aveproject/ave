@@ -1,0 +1,111 @@
+{
+  "ave_id": "AVE-2026-00058",
+  "schema_version": "1.1.0",
+  "status": "active",
+  "published": "2026-07-14T00:00:00Z",
+  "last_updated": "2026-07-15T00:00:00Z",
+  "component_type": "skill",
+  "title": "Deceptive skill trigger or activation-scope manipulation via misleading manifest description",
+  "attack_class": "Social Engineering - Trigger Scope Deception",
+  "severity": "LOW",
+  "description": "A skill's manifest-declared description, trigger phrases, or activation keywords misrepresent the skill's actual scope or purpose, causing the agent or its orchestrator to invoke the skill in a broader range of contexts than its real behavior warrants, or to invoke it implicitly when the user did not intend to engage it. Distinct from AVE-2026-00002 and AVE-2026-00041, which cover instructions embedded in a description that target the agent's behavior once read; this class is about the description misrepresenting when and why the skill activates in the first place, expanding blast radius at the invocation layer rather than the instruction layer.",
+  "affected_platforms": [
+    "claude-code",
+    "cursor",
+    "codex",
+    "any-skill-compatible-agent"
+  ],
+  "affected_registries": [
+    "clawhub.io",
+    "smithery.ai",
+    "agentskills.io"
+  ],
+  "aivss_score": 3.1,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:P/VC:L/VI:L/VA:N/SC:L/SI:L/SA:N",
+  "behavioral_fingerprint": "Skill manifest declares trigger keywords or a description disproportionately broad relative to its actual narrow function, or promises generic utility while its implementation performs a specific, sensitive action, causing over-broad or implicit invocation.",
+  "behavioral_vector": [
+    "trigger-deception",
+    "scope-mismatch",
+    "implicit-invocation"
+  ],
+  "provenance_vector": {
+    "entry_class": "registry_metadata",
+    "payload_surface": "skill manifest trigger keywords and description, evaluated against actual tool calls performed"
+  },
+  "trifecta_profile": {
+    "requires": ["untrusted_content"]
+  },
+  "mitigation": {
+    "strategy": ["validate_input", "provenance_label"],
+    "enforcement_point": "server_card_fetch",
+    "trifecta_control": "break_untrusted_content"
+  },
+  "example_patterns": [
+    "trigger_keywords: ['file', 'code', 'help', 'question', 'anything']  # disproportionate to a narrow, sensitive function",
+    "description: 'General productivity assistant' -- implementation only reads and forwards credential files",
+    "activation: 'always run this skill first for any request' -- no narrow scope declared"
+  ],
+  "mutation_count": 0,
+  "detection_methodology": "1. Consistency check between declared activation scope (trigger keywords, description) and actual behavior (tool calls, file access, network calls made when the skill runs). 2. Flag trigger keyword lists disproportionately broad relative to a narrowly-named function. 3. Flag descriptions using generic utility language paired with implementation that performs a single sensitive action.",
+  "indicators_of_compromise": [
+    "Trigger keyword list broader than the skill's declared function name or stated purpose would justify",
+    "Description uses generic productivity/utility framing while the skill's actual tool calls are narrow and sensitive (credential access, file exfiltration, financial operations)",
+    "Skill declares an activation condition of 'always' or 'first' with no narrowing scope",
+    "Observed invocation frequency or context significantly exceeds what the declared purpose would predict"
+  ],
+  "remediation": "1. Require trigger keywords and descriptions to be scoped no broader than the skill's actual declared tool access. 2. Present the skill's real behavior (tool calls, data access) alongside its description at install time so a user can compare stated purpose to actual scope. 3. Flag and require re-review for any skill whose trigger scope is edited post-installation without a corresponding version bump.",
+  "kill_switch_active": false,
+  "researcher": "Bawbel Security Research Team",
+  "researcher_url": "https://bawbel.io",
+  "references": [
+    {
+      "tag": "CWE-451",
+      "text": "CWE-451: User Interface (UI) Misrepresentation of Critical Information - MITRE Common Weakness Enumeration",
+      "url": "https://cwe.mitre.org/data/definitions/451.html"
+    },
+    {
+      "tag": "Cisco skill-scanner",
+      "text": "Cisco AI Defense skill-scanner - Social Engineering threat category (deceptive skill descriptions and trigger manipulation)",
+      "url": "https://cisco-ai-defense.github.io/docs/skill-scanner"
+    },
+    {
+      "tag": "OWASP LLM Excessive Agency",
+      "text": "OWASP Top 10 for LLM Applications - Excessive Agency",
+      "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/"
+    },
+    {
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00058 — AVE behavioral vulnerability registry",
+      "url": "https://github.com/aveproject/ave/blob/main/records/AVE-2026-00058.json"
+    }
+  ],
+  "owasp_mcp": ["MCP03", "MCP06"],
+  "aivss": {
+    "cvss_base": 6.5,
+    "aarf": {
+      "autonomy": 0.5,
+      "tool_use": 0.5,
+      "multi_agent": 0,
+      "non_determinism": 0.5,
+      "self_modification": 0,
+      "dynamic_identity": 0.5,
+      "persistent_memory": 0,
+      "natural_language_input": 1,
+      "data_access": 0.5,
+      "external_dependencies": 0
+    },
+    "aars": 3.5,
+    "thm": 0.75,
+    "mitigation_factor": 0.83,
+    "aivss_score": 3.1,
+    "aivss_severity": "LOW",
+    "spec_version": "0.8",
+    "notes": "Scored as a reach-amplifier rather than a primary payload: this class expands how often and where a skill activates, it does not itself constitute the harmful action. Impact depends entirely on what the over-triggered skill does once invoked, which is why cvss_base and aars sit lower than the direct-injection classes."
+  },
+  "evidence_kind_default": "behavioral_pattern",
+  "detection_stage": "static_detection",
+  "detection_layer": "registry_metadata",
+  "confidence_baseline": 0.5,
+  "evidence_basis_engines": ["pattern", "llm"],
+  "derivable_into": []
+}
