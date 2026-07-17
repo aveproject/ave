@@ -1,63 +1,70 @@
 # ARCHITECTURE.md — aveproject/ave
 
-Update this file before closing any PR that changes the record structure,
-adds a new rule engine category, or changes how records and rules relate.
+Update this file before closing any PR that changes the record structure
+or changes how records and conformance fixtures relate.
 
 ---
 
 ## What this repo is
 
 A standard, not software. The architecture is the schema, the record store,
-the rules that implement detection, and the validation tooling.
+the conformance fixtures, and the validation tooling.
 
 ```
-records/              AVE record JSON files — the standard's data
+records/              AVE record JSON files, the standard's data
 schema/               JSON schema the records validate against
-  ave-record.schema.json             alias — always points to current
-  ave-record-1.1.0.schema.json       versioned canonical — current, permanent
-  ave-record-1.0.0.schema.json       versioned canonical — frozen, permanent
-rules/                Detection rule implementations
-  ├── pattern/        Regex pattern rules (Python)
-  ├── yara/           YARA rules (.yar)
-  └── semgrep/        Semgrep rules (.yaml)
-tests/fixtures/       Positive and negative test files per rule
-scripts/              Validation and coverage tooling
-crosswalks/           Mappings from other scanners and frameworks to AVE ids
-docs/                 ADRs, guides, research reports
+  ave-record.schema.json             alias, always points to current
+  ave-record-1.1.0.schema.json       versioned canonical, current, permanent
+  ave-record-1.0.0.schema.json       versioned canonical, frozen, permanent
+tests/fixtures/       Positive and negative conformance fixtures per record.
+                       Any implementation's own detection logic is tested
+                       against these; the logic itself lives in that
+                       implementation's own repo, not here. See "record and
+                       conformance fixture" below.
+scripts/               Validation and coverage tooling
+crosswalks/            Mappings from other scanners and frameworks to AVE ids
+docs/                  ADRs, guides, research reports
 ```
+
+There is no `rules/` directory in this repo. Detection rule implementations
+(pattern matching, YARA, semgrep, or anything else) are implementation
+artifacts, not standard artifacts, and live in whichever tool implements
+against this standard, `bawbel-scanner` included. Shipping one
+implementation's rules here would make this repo describe one product
+instead of a standard any product can implement against; see `CONTEXT.md`'s
+framing discipline.
 
 ---
 
-## The record → rule → fixture triangle
+## The record and conformance fixture relationship
 
 ```mermaid
 flowchart LR
     RECORD[AVE Record\nrecords/AVE-YYYY-NNNNN.json\nthe definition]
-    RULE[Detection Rule\nrules/pattern\nyara\nsemgrep\nthe implementation]
-    POS[Positive Fixture\ntests/fixtures/\nMUST trigger]
-    NEG[Negative Fixture\ntests/fixtures/\nMUST NOT trigger]
+    POS[Positive Fixture\ntests/fixtures/\nany conforming implementation MUST flag this]
+    NEG[Negative Fixture\ntests/fixtures/\nany conforming implementation MUST NOT flag this]
+    IMPL[An implementation's own detection logic\nlives in that implementation's own repo]
 
-    RECORD -->|references by ave_id| RULE
-    RULE -->|detects| POS
-    RULE -->|does not detect| NEG
-    RECORD -->|evidence_basis_engines\ndeclares which engines| RULE
+    RECORD -->|behavioral_fingerprint, indicators_of_compromise,\nexample_patterns describe what to detect| IMPL
+    IMPL -.->|tested against, external to this repo| POS
+    IMPL -.->|tested against, external to this repo| NEG
 ```
 
-Every record must have all four corners. A record with no rule is a
-definition nobody can detect. A rule with no negative fixture is a
-false-positive risk with no guard.
+Every record should have fixtures. A record with no fixtures is a definition
+nobody has a shared, neutral way to verify detection against. The dotted
+lines are deliberate: this repo owns the record and the fixtures an
+implementation is measured against, not the implementation itself. A second
+implementer proves conformance by passing these fixtures with their own
+rules, not by adopting `bawbel-scanner`'s.
 
 ---
 
-## How the scanner consumes this repo
+## How an implementation consumes this repo
 
 ```
-aveproject/ave (this repo)              bawbel/scanner (consumer)
+aveproject/ave (this repo)              a conforming implementation
 ──────────────────────              ─────────────────────────
 records/*.json          ──load──▶   AVE record lookup
-rules/pattern/*.py       ──load──▶   PatternEngine
-rules/yara/*.yar         ──load──▶   YARAEngine
-rules/semgrep/*.yaml     ──load──▶   SemgrepEngine
 
 record.confidence_baseline  ──────▶  starting confidence for a Finding
 record.evidence_kind_default ─────▶  Finding.evidence_kind default
@@ -65,8 +72,11 @@ record.detection_stage       ─────▶  Finding.evidence_stage floor
 record.derivable_into        ─────▶  ToxicFlow chain candidates
 ```
 
-PiranhaDB also ingests records/ and serves them at api.piranha.bawbel.io.
-The ave-site build script reads records/ to generate the public registry.
+The `ave-site` build script reads `records/` to generate the public registry;
+that is standard infrastructure, not a third-party consumer. Any other
+service consuming these records, including any Bawbel-operated one, is an
+implementation of the standard and is documented in its own repo, not here,
+per `CONTEXT.md`.
 
 ---
 
@@ -76,18 +86,18 @@ Every AVE record declares a `detection_layer` — where in the agent ecosystem t
 class surfaces. This determines what kind of scanner or monitoring reaches it.
 
 ```
-Ecosystem location          Layer              Scanner that reaches it
+Ecosystem location          Layer              What reaches it
 ─────────────────────────   ─────────────────  ──────────────────────────────────
-Skill / prompt file body    content            Static file scanner (bawbel scan)
-MCP server manifest         server_card        Server-card scanner (bawbel scan-server-card)
-Registry listing            registry_metadata  Registry audit
-Live agent execution        runtime            Behavioral sandbox / runtime monitor
-Network layer               transport          Proxy / network monitor
+Skill / prompt file body    content            A static file scanner, pre-execution
+MCP server manifest         server_card        A server-card fetcher, before first tool call
+Registry listing            registry_metadata  A registry audit process
+Live agent execution        runtime            A behavioral sandbox or runtime monitor
+Network layer               transport          A proxy or network monitor
 ```
 
-**content** is the most common layer (33 of 48 records). The payload is text in the file body.
-A static scanner catches it before the agent ever runs. This is the layer bawbel-scanner covers
-primarily.
+**content** is the most common layer (37 of 59 records). The payload is text in the file body.
+A static scanner catches it before the agent ever runs, no live execution required, which is why
+this layer is the easiest for any implementation to cover first.
 
 **server_card** means the injection is in the MCP server manifest — `.well-known/mcp.json`, tool
 description fields, or parameter schemas. The agent reads this before making its first tool call.
@@ -100,7 +110,7 @@ installation.
 **runtime** means the evidence only exists during a live agent session. The injected payload
 arrives as a tool result, a memory write, an A2A message, a rendered UI artifact, or an async
 task payload. No static scanner sees this. Requires a behavioral sandbox or runtime monitoring.
-12 records are at this layer — they are the hardest to defend against because they bypass
+15 records are at this layer — they are the hardest to defend against because they bypass
 pre-deployment scanning entirely.
 
 **transport** means the attack is in the network layer — a redirected OAuth endpoint, a manipulated
