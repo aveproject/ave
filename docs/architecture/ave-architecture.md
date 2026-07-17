@@ -132,7 +132,7 @@ graph TB
     CONSUME["Consumption — the record DECLARES, the scanner ASSIGNS<br>───────────────<br>confidence_baseline → confidence (FP-adjusted)<br>evidence_kind_default → evidence_kind<br>detection_stage → evidence_stage (floor)<br>evidence_basis_engines → evidence_basis<br>derivable_into → ToxicFlow.derived_from_findings<br>───────────────<br>Finding: confidence ≠ aivss_score — separate fields, always"]
 
     SARIF["Finding → SARIF<br>ave_id in ruleId + taxonomies<br>→ GitHub Security tab / CI"]
-    PIRANHA["Record set → PiranhaDB<br>→ api.piranha.bawbel.io<br>→ ave.bawbel.io"]
+    PIRANHA["Record set → PiranhaDB<br>→ api.piranha.bawbel.io<br>→ aveproject.org"]
     CROSS["Crosswalks<br>SkillSpector & ClawScan finding types map to AVE ids"]
 
     RECORD -->|has a| RULE
@@ -254,7 +254,7 @@ Finding, never in an AVE record: `confidence`, `confidence_band`, the actual
   into those surfaces for free.
 - **PiranhaDB and the public site.** The record set is ingested by PiranhaDB
   (the deploy-time `sync_records.py` export) and served at
-  `api.piranha.bawbel.io` and the public registry at `ave.bawbel.io`.
+  `api.piranha.bawbel.io` and the public registry at `aveproject.org`.
 - **Crosswalks.** Published mappings let other scanners' finding types
   (SkillSpector's categories, ClawScan's types) resolve to AVE ids, so
   findings from different tools become comparable through the AVE layer.

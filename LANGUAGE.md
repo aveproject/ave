@@ -1,4 +1,4 @@
-# LANGUAGE.md — bawbel/ave Domain Language
+# LANGUAGE.md — aveproject/ave Domain Language
 
 All names in this repo must come from this file.
 Terms shared with bawbel/scanner are marked (shared).
@@ -60,15 +60,16 @@ Optional. The kind of agent component this class primarily affects.
 
 ## Rules and fixtures
 
-**Rule** — a detection implementation for an AVE class. One class may have
-rules across multiple engines. Lives in rules/pattern/, rules/yara/,
-rules/semgrep/.
+**Rule** — a detection implementation for an AVE class. An implementation
+artifact, not a standard artifact; lives in whichever tool implements
+against this standard, not in this repo.
 
-**PositiveFixture** — a test file that MUST trigger the rule.
-Lives in tests/fixtures/.
+**PositiveFixture** — a test file that a conforming implementation MUST
+flag. Lives in tests/fixtures/.
 
-**NegativeFixture** — a benign test file that MUST NOT trigger the rule.
-The false-positive guard. A rule without a negative fixture is incomplete.
+**NegativeFixture** — a benign test file that a conforming implementation
+MUST NOT flag. The false-positive guard. A record without a negative
+fixture is incomplete.
 
 ---
 
@@ -77,7 +78,7 @@ The false-positive guard. A rule without a negative fixture is incomplete.
 The five values of `detection_layer` define where evidence surfaces and what scanner reaches it.
 
 **content** — Evidence is in the text body of the skill file, prompt file, or MCP tool description
-field. Detectable by a static scanner reading the file before the agent runs. 33 of the 48 records
+field. Detectable by a static scanner reading the file before the agent runs. 37 of the 59 records
 are at this layer.
 
 **server_card** — Evidence is in the MCP server manifest: `.well-known/mcp.json`, tool schemas, or
@@ -89,7 +90,7 @@ registry before installation.
 
 **runtime** — Evidence only appears during live agent execution: injected via tool results, memory
 writes, A2A messages, rendered UI payloads, image pixels, or async task payloads. A static scanner
-cannot catch these. Requires a behavioral sandbox or runtime monitoring. 12 of the 48 records are
+cannot catch these. Requires a behavioral sandbox or runtime monitoring. 15 of the 59 records are
 at this layer.
 
 **transport** — Evidence is in the network layer: HTTP headers, OAuth discovery endpoints, webhook
@@ -99,8 +100,8 @@ The layer determines what detection stage is reachable:
 
 | detection_layer | detection_stage | Scanner type needed |
 |---|---|---|
-| content | static_detection | File-level static scanner (bawbel scan) |
-| server_card | static_detection | Server-card scanner (bawbel scan-server-card) |
+| content | static_detection | File-level static scanner |
+| server_card | static_detection | Server-card scanner |
 | registry_metadata | static_detection | Registry audit tool |
 | runtime | runtime_observed | Behavioral sandbox or runtime monitor |
 | transport | runtime_observed | Network proxy or monitor |

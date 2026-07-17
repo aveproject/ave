@@ -9,8 +9,8 @@ Start: read most recent, run python scripts/validate_records.py.
 
 ## Completed
 - records/AVE-2026-00049.json — header injection (BadHost) record added
-- rules/semgrep/ave-2026-00049.yaml — detection rule
 - tests/fixtures/AVE-2026-00049_positive.md + _negative.md
+- Coordinated detection-rule PR opened in bawbel/scanner, referencing AVE-2026-00049
 
 ## Status
 python scripts/validate_records.py → all valid

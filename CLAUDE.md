@@ -1,4 +1,4 @@
-# CLAUDE.md — bawbel/ave
+# CLAUDE.md — aveproject/ave
 
 Read this file completely before touching anything.
 Single source of truth for how work happens in this repo.
@@ -7,13 +7,13 @@ Single source of truth for how work happens in this repo.
 
 ## Project
 
-bawbel/ave — the behavioral classification standard for agentic AI components.
+aveproject/ave — the behavioral classification standard for agentic AI components.
 An independent standard that bawbel-scanner implements. NOT a feature of the scanner.
 
-- Records: 51 published (schema_version 1.1.0)
+- Records: 56 published (schema_version 1.1.0)
 - Schema: schema/ave-record-1.1.0.schema.json
 - Scoring: OWASP AIVSS v0.8
-- Registry: ave.bawbel.io
+- Registry: aveproject.org
 - Public API: api.piranha.bawbel.io
 - Scanner: github.com/bawbel/scanner (reference implementation)
 
@@ -75,7 +75,7 @@ behavioral_vector · mutation_count · detection_methodology
 kill_switch_active · aivss_score · cvss_base_vector
 researcher_url · last_updated
 
-Full reference: ave.bawbel.io/schema.html
+Full reference: aveproject.org/schema.html
 
 ---
 
@@ -83,9 +83,15 @@ Full reference: ave.bawbel.io/schema.html
 
 Use the add-ave-record skill. Every record requires:
 1. A JSON record in records/ validating against the schema
-2. At least one detection rule (pattern, yara, or semgrep)
-3. A positive fixture in tests/fixtures/ that must trigger
-4. A negative fixture in tests/fixtures/ that must NOT trigger
+2. A positive fixture in tests/fixtures/ that a conforming implementation
+   must flag
+3. A negative fixture in tests/fixtures/ that a conforming implementation
+   must not flag
+
+Detection rule implementations (pattern, YARA, semgrep, or anything else)
+are implementation artifacts, not standard artifacts. They live in whichever
+tool implements against this standard — open a coordinated PR in that
+tool's own repo (see CONTRIBUTING.md Step 4).
 
 Open an issue first to confirm the id. A new ave_id is only for a
 genuinely distinct behavioral class — variants go as sub-case notes
@@ -127,10 +133,9 @@ npm run build:local                   # build records.js for ave-site
 
 # Python validation
 pip install -e ".[dev]"
-pytest tests/ -x -q                   # validate all records + rules
+pytest tests/ -x -q                   # validate records + fixtures
 python scripts/validate_records.py    # schema-check every record
-python scripts/check_rule_coverage.py # every record has >= 1 rule
-python scripts/check_fixtures.py      # every rule has +/- fixtures
+python scripts/check_fixtures.py      # every record has +/- fixtures
 ```
 
 ---
@@ -140,7 +145,8 @@ python scripts/check_fixtures.py      # every rule has +/- fixtures
 1. Every record validates against schema/ave-record-1.1.0.schema.json.
 2. confidence NEVER appears in an AVE record — it is per-detection.
 3. Behavioral fingerprints over signatures — describe what it DOES.
-4. Every record has at least one rule and a positive + negative fixture.
+4. Every record has a positive + negative conformance fixture. Detection
+   rule implementations live in the implementing tool's own repo, not here.
 5. ave_id is immutable once published. Never renumber. Deprecate, never delete.
 6. severity and aivss.aivss_score must agree (CRITICAL implies >= 9.0).
 7. All names from LANGUAGE.md.
@@ -168,9 +174,10 @@ python scripts/check_fixtures.py      # every rule has +/- fixtures
 
 ## Product context
 
-Read PRODUCT.md. AVE is a standalone standard, Layer 1 of the Bawbel
-five-layer architecture. Treat it as its own product.
+Read CONTEXT.md. AVE is a standalone standard implemented by more than one
+tool; no implementer, Bawbel's own tools included, owns it.
 
-The records grow with research, not with quotas. Target ~60-65 high-quality
-records by Product Hunt, reached deliberately. A new ave_id requires a
-distinct behavioral class and a citable primary source. No padding.
+The records grow with research, not with quotas. Growth is bounded by
+distinct behavioral classes, not by any external target or event. A new
+ave_id requires a distinct behavioral class and a citable primary source.
+No padding.

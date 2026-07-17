@@ -60,7 +60,7 @@ Download the full AVE record set at build/install time. Bundle it with your scan
 At scan time, look up records locally.
 
 **Offline artifact:**
-`https://github.com/bawbel/ave/releases/download/v1.1.0/ave-records-v1.1.0.json`
+`https://github.com/aveproject/ave/releases/download/v1.1.0/ave-records-v1.1.0.json`
 
 Format: JSON array of all 51 records.
 
@@ -104,7 +104,7 @@ network calls related to AVE.
       "ruleId": "your-rule-id",
       "properties": {
         "ave_id": "AVE-2026-00002",
-        "ave_url": "https://ave.bawbel.io/registry.html#AVE-2026-00002",
+        "ave_url": "https://aveproject.org/registry.html#AVE-2026-00002",
         "ave_api": "https://api.piranha.bawbel.io/ave/AVE-2026-00002"
       }
     }]
@@ -157,7 +157,7 @@ cross-tool deduplication and links to the full behavioral record.
 
 ## Contact
 
-Open an issue at [github.com/bawbel/ave](https://github.com/bawbel/ave) or email
+Open an issue at [github.com/aveproject/ave](https://github.com/aveproject/ave) or email
 bawbel.io@gmail.com.
 
 Maintaining a scanner? Submit a crosswalk PR — we will help with the mapping.

@@ -86,6 +86,11 @@
       "tag": "MITRE ATLAS",
       "text": "AML.T0104: Publish Poisoned AI Agent Tool",
       "url": "https://atlas.mitre.org/techniques/AML.T0104"
+    },
+    {
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00055 — AVE behavioral vulnerability registry",
+      "url": "https://github.com/aveproject/ave/blob/main/records/AVE-2026-00055.json"
     }
   ],
   "owasp_mcp": [

@@ -31,7 +31,7 @@ Each AVE record that produced at least one detection must appear in `run.tool.dr
 | `rules[].name` | `attack_class` | e.g. `"external_instruction_fetch"` |
 | `rules[].shortDescription.text` | `title` | human-readable title |
 | `rules[].fullDescription.text` | `description` | full paragraph description |
-| `rules[].helpUri` | `"https://ave.bawbel.io/registry.html#<ave_id>"` | deep link to registry |
+| `rules[].helpUri` | `"https://aveproject.org/registry.html#<ave_id>"` | deep link to registry |
 | `rules[].properties.severity` | `severity` | `"CRITICAL"`, `"HIGH"`, `"MEDIUM"`, `"LOW"` |
 | `rules[].properties.aivss_score` | `aivss.aivss_score` | float, e.g. `9.3` |
 | `rules[].properties.owasp_mcp` | `owasp_mcp` | array of MCPNN strings |
@@ -88,7 +88,7 @@ Include an AVE taxonomy entry alongside the `runs` array so that tools can cross
     "name": "AVE",
     "version": "1.0.0",
     "releaseDateUtc": "2026-06-18",
-    "informationUri": "https://ave.bawbel.io",
+    "informationUri": "https://aveproject.org",
     "downloadUri": "https://api.piranha.bawbel.io/records",
     "organization": "Bawbel Security Research",
     "shortDescription": {
@@ -98,7 +98,7 @@ Include an AVE taxonomy entry alongside the `runs` array so that tools can cross
       {
         "id": "AVE-2026-00001",
         "name": "Supply Chain - Metamorphic Payload via External Config Fetch",
-        "helpUri": "https://ave.bawbel.io/registry.html#AVE-2026-00001"
+        "helpUri": "https://aveproject.org/registry.html#AVE-2026-00001"
       }
     ]
   }
@@ -134,7 +134,7 @@ One finding for AVE-2026-00001 (external instruction fetch) against a hypothetic
               "fullDescription": {
                 "text": "A skill or MCP component fetches instructions or configuration from an external URL at runtime, allowing an attacker who controls that URL to inject arbitrary directives into the agent's execution context."
               },
-              "helpUri": "https://ave.bawbel.io/registry.html#AVE-2026-00001",
+              "helpUri": "https://aveproject.org/registry.html#AVE-2026-00001",
               "properties": {
                 "severity": "CRITICAL",
                 "aivss_score": 9.3,
@@ -149,7 +149,7 @@ One finding for AVE-2026-00001 (external instruction fetch) against a hypothetic
         {
           "name": "AVE",
           "version": "1.0.0",
-          "informationUri": "https://ave.bawbel.io",
+          "informationUri": "https://aveproject.org",
           "taxa": [
             {
               "id": "AVE-2026-00001",

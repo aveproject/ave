@@ -6,14 +6,14 @@ The to_dict() you pasted is the SCANNER FINDING output — produced at scan time
 one per detection, references an AVE record by ave_id.
 
 The AVE RECORD is the static vulnerability DEFINITION — authored once, lives in
-bawbel/ave, many findings point to it. Different schema, different lifecycle.
+aveproject/ave, many findings point to it. Different schema, different lifecycle.
 
 ```
 AVE Record (static definition)          Finding (runtime instance)
 ─────────────────────────────          ──────────────────────────
 authored by a human                     produced by a scan
 one per vulnerability class             one per detection
-lives in bawbel/ave/records/            lives in scan output JSON
+lives in aveproject/ave/records/            lives in scan output JSON
 referenced by ave_id                    references an AVE record
 changes rarely (new research)           changes every scan
 ```

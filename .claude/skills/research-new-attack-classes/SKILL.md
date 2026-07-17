@@ -18,7 +18,7 @@ AVE already covers, it is logged as a variant, not a new record.
 - Monthly cadence (the field moves fast — set a recurring reminder)
 - After a major disclosure (a new CVE, a new OX/Invariant/HiddenLayer report)
 - After a new academic taxonomy or benchmark paper drops
-- Before a release or Product Hunt push (close the gap deliberately)
+- Before a release (close the gap deliberately)
 
 Do NOT run this to hit a record-count target. Run it to stay current.
 There is no quota. The right number of records equals the number of

@@ -38,7 +38,7 @@ AVE follows coordinated disclosure for all records.
 | Registry operators | Notified simultaneously with publishers; encouraged to quarantine affected components during the window |
 
 All published AVE records are freely accessible in this repository,
-at [ave.bawbel.io](https://ave.bawbel.io), and via the PiranhaDB API.
+at [aveproject.org](https://aveproject.org), and via the PiranhaDB API.
 No redacted or partial disclosures.
 
 ---
@@ -47,8 +47,8 @@ No redacted or partial disclosures.
 
 | | |
 |---|---|
-| [bawbel/ave](https://github.com/bawbel/ave) | AVE standard — records and schema |
-| [bawbel/ave-site](https://github.com/bawbel/ave-site) | ave.bawbel.io website |
+| [aveproject/ave](https://github.com/aveproject/ave) | AVE standard — records and schema |
+| [aveproject/ave-site](https://github.com/aveproject/ave-site) | aveproject.org website |
 | [bawbel/scanner](https://github.com/bawbel/scanner) | CLI scanner (reference implementation) |
 | [api.piranha.bawbel.io](https://api.piranha.bawbel.io) | PiranhaDB threat intel API |
 | [bawbel.io](https://bawbel.io) | Bawbel website |

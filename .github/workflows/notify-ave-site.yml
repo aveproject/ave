@@ -1,16 +1,16 @@
 name: Notify ave-site on records update
 
-# This workflow lives in bawbel/ave.
+# This workflow lives in aveproject/ave.
 # Place it at: .github/workflows/notify-ave-site.yml
 #
-# When records, schema, or rules change on main, it fires a
-# repository_dispatch to bawbel/ave-site so the site rebuilds automatically.
+# When records or schema change on main, it fires a
+# repository_dispatch to aveproject/ave-site so the site rebuilds automatically.
 #
 # Required secret: AVE_SITE_DEPLOY_TOKEN
 # Create a fine-grained PAT with:
-#   - Repository: bawbel/ave-site
+#   - Repository: aveproject/ave-site
 #   - Permissions: Contents (read), Actions (write)
-# Add it as a secret named AVE_SITE_DEPLOY_TOKEN in bawbel/ave settings.
+# Add it as a secret named AVE_SITE_DEPLOY_TOKEN in aveproject/ave settings.
 
 on:
   push:
@@ -18,7 +18,6 @@ on:
     paths:
       - "records/**"
       - "schema/**"
-      - "rules/**"
 
 jobs:
   notify:
@@ -26,11 +25,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Dispatch to bawbel/ave-site
+      - name: Dispatch to aveproject/ave-site
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.AVE_SITE_DEPLOY_TOKEN }}
-          repository: bawbel/ave-site
+          repository: aveproject/ave-site
           event-type: ave-records-updated
           client-payload: |
             {
