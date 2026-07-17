@@ -1,18 +1,14 @@
+import json
 import pytest
 from pathlib import Path
-import importlib.util
 
+RECORDS  = Path("records")
 FIXTURES = Path("tests/fixtures")
-RULES    = Path("rules/pattern")
 
-def load_rule(ave_id):
-    for f in RULES.glob("*.py"):
-        spec = importlib.util.spec_from_file_location(f.stem, f)
-        mod  = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(mod)
-        if mod.RULE.get("ave_id") == ave_id:
-            return mod
-    return None
+
+def ave_ids():
+    return sorted(f.stem for f in RECORDS.glob("AVE-*.json"))
+
 
 def fixture_pairs():
     for pos in sorted(FIXTURES.glob("*_positive.*")):
@@ -21,18 +17,28 @@ def fixture_pairs():
         if neg.exists():
             yield ave_id, pos, neg
 
-@pytest.mark.parametrize("ave_id,pos,neg", list(fixture_pairs()))
-def test_positive(ave_id, pos, neg):
-    mod = load_rule(ave_id)
-    if mod is None:
-        pytest.skip(f"no rule for {ave_id}")
-    assert mod.matches(pos.read_text()), \
-        f"{ave_id}: positive fixture did not trigger"
+
+@pytest.mark.parametrize("ave_id", ave_ids())
+def test_record_has_fixture_pair(ave_id):
+    pos = any(FIXTURES.glob(f"{ave_id}_positive.*"))
+    neg = any(FIXTURES.glob(f"{ave_id}_negative.*"))
+    assert pos, f"{ave_id}: missing positive fixture"
+    assert neg, f"{ave_id}: missing negative fixture"
+
 
 @pytest.mark.parametrize("ave_id,pos,neg", list(fixture_pairs()))
-def test_negative(ave_id, pos, neg):
-    mod = load_rule(ave_id)
-    if mod is None:
-        pytest.skip(f"no rule for {ave_id}")
-    assert not mod.matches(neg.read_text()), \
-        f"{ave_id}: negative fixture triggered (false positive)"
+def test_positive_fixture_nonempty(ave_id, pos, neg):
+    assert pos.read_text().strip(), f"{ave_id}: positive fixture is empty"
+
+
+@pytest.mark.parametrize("ave_id,pos,neg", list(fixture_pairs()))
+def test_negative_fixture_nonempty(ave_id, pos, neg):
+    assert neg.read_text().strip(), f"{ave_id}: negative fixture is empty"
+
+
+@pytest.mark.parametrize("ave_id,pos,neg", list(fixture_pairs()))
+def test_fixture_pair_has_matching_record(ave_id, pos, neg):
+    record_path = RECORDS / f"{ave_id}.json"
+    assert record_path.exists(), f"{ave_id}: fixture pair has no matching record"
+    record = json.loads(record_path.read_text())
+    assert record["ave_id"] == ave_id

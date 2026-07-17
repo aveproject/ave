@@ -26,15 +26,18 @@ Include the evidence fields:
 - evidence_basis_engines
 - derivable_into
 
-### 4. Write the detection rule
-One of: rules/pattern/, rules/yara/, rules/semgrep/.
-Must reference the ave_id.
-
-### 5. Write fixtures (TDD — fixtures first)
-tests/fixtures/AVE-YYYY-NNNNN_positive.md — MUST trigger
-tests/fixtures/AVE-YYYY-NNNNN_negative.md — MUST NOT trigger
+### 4. Write conformance fixtures (TDD — fixtures first)
+tests/fixtures/AVE-YYYY-NNNNN_positive.md — a conforming implementation MUST flag this
+tests/fixtures/AVE-YYYY-NNNNN_negative.md — a conforming implementation MUST NOT flag this
 The negative fixture is the false-positive guard. Make it realistic —
 a benign file that looks similar to the malicious one.
+
+### 5. Open a coordinated detection-rule PR
+Detection rule implementations (pattern, YARA, semgrep, or anything else)
+are implementation artifacts, not standard artifacts — they live in
+whichever tool implements against this standard, not in this repo. Open a
+PR in that tool's own repo (e.g. bawbel/scanner) referencing the ave_id and
+the fixtures above; see CONTRIBUTING.md Step 4.
 
 ### 6. Validate
 ```bash
