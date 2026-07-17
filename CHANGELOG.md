@@ -6,6 +6,29 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 
 ---
 
+## [1.3.0] - 2026-07-17
+
+### Summary
+
+- 3 new records: AVE-2026-00057 through AVE-2026-00059 — record set now at 59,
+  118 tests passing.
+  - AVE-2026-00057: obfuscated/encoded skill payload designed to evade static
+    scanners (base64/hex/marshal decode fed directly into eval/exec)
+  - AVE-2026-00058: deceptive skill trigger or activation-scope manipulation
+    via misleading manifest description
+  - AVE-2026-00059: fragmented cross-tool-description prompt injection
+    reassembled at a planted trigger (ShareLock-class), citing the original
+    research plus Microsoft's 2026 MCP security checkpoint
+- `owasp_mcp` corrected against `crosswalks/ave-to-owasp-mcp.md` during review,
+  not just pattern-validated against the schema: AVE-2026-00057 was missing
+  `MCP03` (Tool Poisoning) alongside `MCP04`; AVE-2026-00058's draft `MCP09`
+  (Shadow MCP Servers) was a flat mismatch, corrected to `MCP03` + `MCP06`
+  (Tool Poisoning, Intent Flow Subversion). `mitre_atlas: AML.T0051` on
+  AVE-2026-00059 verified against MITRE's own published technique name (LLM
+  Prompt Injection), not assumed from existing corpus convention.
+
+---
+
 ## [1.2.0] - 2026-07-12
 
 ### Summary

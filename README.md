@@ -11,7 +11,7 @@ Stable IDs, AIVSS scores, and behavioral fingerprints for every way a skill file
 MCP server, system prompt, or agent plugin can be weaponized — scored consistently,
 mapped to the frameworks security teams already report against.
 
-[![Records](https://img.shields.io/badge/records-56-0f6e56?style=flat-square)](records/)
+[![Records](https://img.shields.io/badge/records-59-0f6e56?style=flat-square)](records/)
 [![Schema](https://img.shields.io/badge/schema-v1.1.0-0a3024?style=flat-square)](schema/ave-record-1.1.0.schema.json)
 [![AIVSS](https://img.shields.io/badge/AIVSS-v0.8-d4a017?style=flat-square)](https://aivss.owasp.org)
 [![OWASP MCP](https://img.shields.io/badge/OWASP-MCP%20Top%2010-0a3024?style=flat-square)](https://owasp.org)
@@ -95,13 +95,13 @@ skill file          ->   in CI / pre-commit   ->  before deploy
 
 | | |
 |---|---|
-| Total records | 56 |
+| Total records | 59 |
 | Schema version | 1.1.0 |
 | AIVSS spec | v0.8 |
 | CRITICAL (>= 9.0) | 1 |
-| HIGH (7.0-8.9) | 11 |
-| MEDIUM (4.0-6.9) | 43 |
-| LOW (< 4.0) | 1 |
+| HIGH (7.0-8.9) | 12 |
+| MEDIUM (4.0-6.9) | 44 |
+| LOW (< 4.0) | 2 |
 | Framework: OWASP MCP Top 10 | all records |
 | Framework: MITRE ATLAS | where applicable |
 | Framework: OWASP Agentic AI Top 10 | where applicable |
@@ -220,6 +220,9 @@ AIVSS = ((8.5 + 7.5) / 2) x 1.0 x 1 = 8.0  ->  HIGH
 | [AVE-2026-00054](records/AVE-2026-00054.json) | Code-Execution Sandbox Escape | 6.7 | MEDIUM |
 | [AVE-2026-00055](records/AVE-2026-00055.json) | MCP STDIO Launch Configuration Injection | 7.7 | HIGH |
 | [AVE-2026-00056](records/AVE-2026-00056.json) | Zero-Click Exfiltration via Rendered Content Auto-Fetch | 5.8 | MEDIUM |
+| [AVE-2026-00057](records/AVE-2026-00057.json) | Obfuscated Payload — Static Scanner Evasion | 4.4 | MEDIUM |
+| [AVE-2026-00058](records/AVE-2026-00058.json) | Deceptive Trigger — Activation-Scope Manipulation | 3.1 | LOW |
+| [AVE-2026-00059](records/AVE-2026-00059.json) | Fragmented Cross-Description Reassembly (ShareLock) | 7.1 | HIGH |
 
 ---
 
