@@ -1,4 +1,4 @@
-# AVE Implementer Guide — Adding AVE IDs to Your Scanner
+# AVE Implementer Guide: Adding AVE IDs to Your Scanner
 
 AVE assigns stable behavioral classification IDs to agentic AI component flaws.
 Adding an `ave_id` field to your scanner's finding output lets security teams
@@ -19,12 +19,12 @@ depending on your environment.
 
 ---
 
-## Pattern 1 — Runtime API lookup
+## Pattern 1: Runtime API lookup
 
 Scanner emits `ave_id` in its finding output and optionally calls the PiranhaDB API
 at scan time to enrich with the full record.
 
-**API endpoint:** `GET https://api.piranha.bawbel.io/ave/{ave_id}`
+**API endpoint:** `GET https://api.aveproject.org/records/{ave_id}`
 
 Returns: full record JSON including `behavioral_fingerprint`, `indicators_of_compromise`,
 `remediation`, `owasp_mcp`, `mitre_atlas`, `aivss`.
@@ -33,7 +33,7 @@ Returns: full record JSON including `behavioral_fingerprint`, `indicators_of_com
 import httpx
 
 def enrich_finding(ave_id: str) -> dict:
-    resp = httpx.get(f"https://api.piranha.bawbel.io/ave/{ave_id}", timeout=5)
+    resp = httpx.get(f"https://api.aveproject.org/records/{ave_id}", timeout=5)
     resp.raise_for_status()
     return resp.json()
 
@@ -54,7 +54,7 @@ calls to third-party APIs are blocked.
 
 ---
 
-## Pattern 2 — Bundled offline record set
+## Pattern 2: Bundled offline record set
 
 Download the full AVE record set at build/install time. Bundle it with your scanner.
 At scan time, look up records locally.
@@ -101,7 +101,7 @@ make outbound calls, offline-first scanners.
 
 ---
 
-## Pattern 3 — ID-only emission
+## Pattern 3: ID-only emission
 
 Scanner emits `ave_id` in its finding output. No enrichment at scan time. The
 consuming system (SIEM, dashboard, ticket system, SARIF viewer) resolves the ID when
@@ -120,7 +120,7 @@ network calls related to AVE.
       "properties": {
         "ave_id": "AVE-2026-00002",
         "ave_url": "https://aveproject.org/registry.html#AVE-2026-00002",
-        "ave_api": "https://api.piranha.bawbel.io/ave/AVE-2026-00002"
+        "ave_api": "https://api.aveproject.org/records/AVE-2026-00002"
       }
     }]
   }]
@@ -142,8 +142,8 @@ options:
 **Option A: Build your own mapping table.** Use the crosswalk files in this repo as
 reference:
 
-- `crosswalks/skillspector-to-ave.json` — maps NVIDIA SkillSpector categories to AVE IDs
-- `crosswalks/clawscan-to-ave.json` — maps ClawScan rule IDs to AVE IDs
+- `crosswalks/skillspector-to-ave.json`: maps NVIDIA SkillSpector categories to AVE IDs
+- `crosswalks/clawscan-to-ave.json`: maps ClawScan rule IDs to AVE IDs
 
 These show the mapping format and rationale. Build an equivalent for your own rule IDs.
 
@@ -175,4 +175,4 @@ cross-tool deduplication and links to the full behavioral record.
 Open an issue at [github.com/aveproject/ave](https://github.com/aveproject/ave) or email
 aveproject.org@gmail.com.
 
-Maintaining a scanner? Submit a crosswalk PR — we will help with the mapping.
+Maintaining a scanner? Submit a crosswalk PR, we will help with the mapping.
