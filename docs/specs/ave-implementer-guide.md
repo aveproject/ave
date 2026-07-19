@@ -59,10 +59,22 @@ calls to third-party APIs are blocked.
 Download the full AVE record set at build/install time. Bundle it with your scanner.
 At scan time, look up records locally.
 
-**Offline artifact:**
-`https://github.com/aveproject/ave/releases/download/v1.1.0/ave-records-v1.1.0.json`
+**Offline artifact, always current, no release tag required:**
+`https://raw.githubusercontent.com/aveproject/ave/main/dist/ave-records-latest.json`
 
-Format: JSON array of all 51 records.
+Regenerated automatically on every `records/` change on `develop`; see
+`scripts/build-records.js`. A companion manifest at
+`dist/ave-records-latest.manifest.json` carries `schema_version`,
+`record_count`, and `generated_at` for a cheap sanity check before parsing
+the full array. A versioned, frozen snapshot is also committed at each
+schema transition (`dist/ave-records-v1.1.0.json`, later
+`dist/ave-records-v1.2.0.json`, and so on) for anyone who deliberately
+wants to pin to one point in time rather than track current; a
+[GitHub Release](https://github.com/aveproject/ave/releases) attaches the
+matching frozen file as a second distribution point when one is cut, not
+the only one.
+
+Format: JSON array of all active records (59 as of schema v1.1.0).
 
 ```python
 import json
@@ -71,15 +83,18 @@ from pathlib import Path
 # Load at startup
 AVE_RECORDS = {
     r["ave_id"]: r
-    for r in json.loads(Path("ave-records-v1.1.0.json").read_text())
+    for r in json.loads(Path("ave-records-latest.json").read_text())
 }
 
 def lookup_ave(ave_id: str) -> dict | None:
     return AVE_RECORDS.get(ave_id)
 ```
 
-**Sync strategy:** pin to a specific release version. Check for new releases on each
-scanner release. Do not auto-update at runtime.
+**Sync strategy:** track `ave-records-latest.json` if you always want current
+data, or pin to a specific `ave-records-v<version>.json` snapshot if you want
+stability -- that file is frozen once written and never changes underneath
+you. Either way, do not auto-update at runtime; re-fetch on your own release
+cadence.
 
 **When to use:** air-gapped environments, regulated environments, tools that cannot
 make outbound calls, offline-first scanners.
