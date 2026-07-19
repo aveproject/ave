@@ -236,4 +236,4 @@ name. Records are immutable once published — your attribution stays forever.
 ## Questions
 
 Open a [GitHub Discussion](https://github.com/aveproject/ave/discussions) or
-email [bawbel.io@gmail.com](mailto:bawbel.io@gmail.com).
+email [aveproject.org@gmail.com](mailto:aveproject.org@gmail.com).

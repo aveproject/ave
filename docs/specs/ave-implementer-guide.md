@@ -158,6 +158,6 @@ cross-tool deduplication and links to the full behavioral record.
 ## Contact
 
 Open an issue at [github.com/aveproject/ave](https://github.com/aveproject/ave) or email
-bawbel.io@gmail.com.
+aveproject.org@gmail.com.
 
 Maintaining a scanner? Submit a crosswalk PR — we will help with the mapping.
