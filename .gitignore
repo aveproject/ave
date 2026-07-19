@@ -1,7 +1,6 @@
 __pycache__/
 *.pyc
 .venv/
-dist/
 *.egg-info/
 docs/agents/handoffs/
 .env
