@@ -277,11 +277,15 @@ record = resp.json()  # full record: fingerprint, IOCs, remediation, frameworks
 **Pattern 2 — Bundled offline** (air-gapped, regulated environments)
 ```bash
 # Always current, no release tag required -- regenerated on every records/ change
+curl -L https://raw.githubusercontent.com/aveproject/ave/main/dist/ave-records-latest.json \
+  -o ave-records.json
+
+# Or pin to a frozen, point-in-time snapshot instead of tracking current:
 curl -L https://raw.githubusercontent.com/aveproject/ave/main/dist/ave-records-v1.1.0.json \
   -o ave-records.json
 ```
-A versioned copy is also attached to each [GitHub Release](https://github.com/aveproject/ave/releases)
-once one is cut; the raw path above does not wait on that.
+A versioned snapshot is also attached to each [GitHub Release](https://github.com/aveproject/ave/releases)
+once one is cut; the raw paths above do not wait on that.
 
 **Pattern 3 — ID-only emission** (SIEM resolves downstream, scanner makes no network calls)
 ```json

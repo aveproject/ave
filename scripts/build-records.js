@@ -5,15 +5,38 @@
  * Reads every AVE record from records/*.json, validates each against the
  * canonical schema, and writes a consolidated JSON array plus a companion
  * manifest. This is the one, canonical consolidation path for AVE's record
- * set -- aveproject/ave owns the data; anything mirroring it (ave-site
- * included) should pull the generated output here, not run independent
- * consolidation logic against a second copy of records/.
+ * set -- aveproject/ave owns the data; anything mirroring it (ave-site,
+ * ave-api included) should pull the generated output here, not run
+ * independent consolidation logic against a second copy of records/.
+ *
+ * Two output artifacts, the same alias/versioned split schema/ already
+ * uses (ave-record.schema.json vs ave-record-1.1.0.schema.json):
+ *
+ *   dist/ave-records-latest.json       always-current alias, overwritten
+ *                                       on every run regardless of schema
+ *                                       version. Anything that wants
+ *                                       "current" and never wants to touch
+ *                                       its own URL again points here.
+ *   dist/ave-records-v<version>.json   frozen snapshot, written once per
+ *                                       schema version and never rewritten
+ *                                       after that -- if the file already
+ *                                       exists on disk, this run leaves it
+ *                                       alone. The first run after a schema
+ *                                       bump creates the new version's
+ *                                       snapshot; every run after that is a
+ *                                       no-op for that specific file.
+ *
+ * Each gets its own companion manifest (same basename, .manifest.json).
  *
  * Usage:
  *   node scripts/build-records.js
- *   node scripts/build-records.js --json-out dist/ave-records-v1.1.0.json
  *   node scripts/build-records.js --include-drafts
  *   node scripts/build-records.js --dry-run
+ *   node scripts/build-records.js --json-out custom.json --manifest-out custom.manifest.json
+ *
+ * --json-out/--manifest-out override the automatic latest+versioned pair
+ * with a single explicit output location (dry-run/testing/custom pipelines);
+ * when passed, only that one file is written, not the dual set above.
  *
  * Output shape: a bare JSON array, not wrapped in a window.RECORDS
  * assignment or any other JS-specific framing -- meant for curl/fetch
@@ -164,39 +187,60 @@ if (schemaVersions.length > 1) {
 }
 const schemaVersion = schemaVersions[0] || "unknown";
 
-// ── output paths (default filenames embed the schema version) ────────────────
+// ── build one (json, manifest) output pair ────────────────────────────────────
 
-const jsonOutPath     = path.resolve(JSON_OUT_ARG     || path.join(REPO_ROOT, "dist", `ave-records-v${schemaVersion}.json`));
-const manifestOutPath = path.resolve(MANIFEST_OUT_ARG || path.join(REPO_ROOT, "dist", `ave-records-v${schemaVersion}.manifest.json`));
+function buildOutput() {
+  const generatedAt = new Date().toISOString();
+  const jsonOutput = JSON.stringify(records, null, 2) + "\n";
+  const manifest = {
+    schema_version: schemaVersion,
+    record_count: records.length,
+    generated_at: generatedAt,
+    source: "https://github.com/aveproject/ave",
+  };
+  return { jsonOutput, manifestOutput: JSON.stringify(manifest, null, 2) + "\n" };
+}
 
-// ── generate output ───────────────────────────────────────────────────────────
-
-const generatedAt = new Date().toISOString();
-
-const jsonOutput = JSON.stringify(records, null, 2) + "\n";
-
-const manifest = {
-  schema_version: schemaVersion,
-  record_count: records.length,
-  generated_at: generatedAt,
-  source: "https://github.com/aveproject/ave",
-};
-const manifestOutput = JSON.stringify(manifest, null, 2) + "\n";
-
-// ── write ─────────────────────────────────────────────────────────────────────
-
-if (DRY_RUN) {
-  log(`Dry run — would write ${records.length} records to ${jsonOutPath}`);
-  log(`Dry run — would write manifest to ${manifestOutPath}`);
-  log(`Output size: ${(jsonOutput.length / 1024).toFixed(1)} KB`);
-} else {
-  for (const outPath of [jsonOutPath, manifestOutPath]) {
+function writePair(jsonPath, manifestPath, { jsonOutput, manifestOutput }) {
+  if (DRY_RUN) {
+    log(`Dry run — would write ${records.length} records to ${jsonPath}`);
+    log(`Dry run — would write manifest to ${manifestPath}`);
+    log(`Output size: ${(jsonOutput.length / 1024).toFixed(1)} KB`);
+    return;
+  }
+  for (const outPath of [jsonPath, manifestPath]) {
     const outDir = path.dirname(outPath);
     if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
   }
-  fs.writeFileSync(jsonOutPath, jsonOutput, "utf8");
-  fs.writeFileSync(manifestOutPath, manifestOutput, "utf8");
-  log(`Written: ${jsonOutPath}`);
-  log(`Written: ${manifestOutPath}`);
-  log(`Records: ${records.length}  |  Skipped drafts: ${skipped}  |  Size: ${(jsonOutput.length / 1024).toFixed(1)} KB`);
+  fs.writeFileSync(jsonPath, jsonOutput, "utf8");
+  fs.writeFileSync(manifestPath, manifestOutput, "utf8");
+  log(`Written: ${jsonPath}`);
+  log(`Written: ${manifestPath}`);
 }
+
+// ── write ─────────────────────────────────────────────────────────────────────
+
+if (JSON_OUT_ARG || MANIFEST_OUT_ARG) {
+  // explicit override: single output pair, no latest/versioned split
+  const jsonOutPath     = path.resolve(JSON_OUT_ARG     || path.join(REPO_ROOT, "dist", `ave-records-v${schemaVersion}.json`));
+  const manifestOutPath = path.resolve(MANIFEST_OUT_ARG || path.join(REPO_ROOT, "dist", `ave-records-v${schemaVersion}.manifest.json`));
+  writePair(jsonOutPath, manifestOutPath, buildOutput());
+} else {
+  const distDir = path.join(REPO_ROOT, "dist");
+
+  // always-current alias: overwritten every run
+  const latestJsonPath     = path.join(distDir, "ave-records-latest.json");
+  const latestManifestPath = path.join(distDir, "ave-records-latest.manifest.json");
+  writePair(latestJsonPath, latestManifestPath, buildOutput());
+
+  // frozen versioned snapshot: written once per schema version, never again
+  const versionedJsonPath     = path.join(distDir, `ave-records-v${schemaVersion}.json`);
+  const versionedManifestPath = path.join(distDir, `ave-records-v${schemaVersion}.manifest.json`);
+  if (fs.existsSync(versionedJsonPath)) {
+    log(`Frozen snapshot already exists, left untouched: ${versionedJsonPath}`);
+  } else {
+    writePair(versionedJsonPath, versionedManifestPath, buildOutput());
+  }
+}
+
+log(`Records: ${records.length}  |  Skipped drafts: ${skipped}`);
