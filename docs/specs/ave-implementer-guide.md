@@ -59,10 +59,18 @@ calls to third-party APIs are blocked.
 Download the full AVE record set at build/install time. Bundle it with your scanner.
 At scan time, look up records locally.
 
-**Offline artifact:**
-`https://github.com/aveproject/ave/releases/download/v1.1.0/ave-records-v1.1.0.json`
+**Offline artifact, always current, no release tag required:**
+`https://raw.githubusercontent.com/aveproject/ave/main/dist/ave-records-v1.1.0.json`
 
-Format: JSON array of all 51 records.
+Regenerated automatically on every `records/` change on `develop`; see
+`scripts/build-records.js`. A companion manifest at
+`dist/ave-records-v1.1.0.manifest.json` carries `schema_version`,
+`record_count`, and `generated_at` for a cheap sanity check before parsing
+the full array. A versioned copy is also attached to each
+[GitHub Release](https://github.com/aveproject/ave/releases) once one is
+cut, as a second distribution point, not the only one.
+
+Format: JSON array of all active records (59 as of schema v1.1.0).
 
 ```python
 import json
