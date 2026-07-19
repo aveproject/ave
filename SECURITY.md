@@ -5,7 +5,7 @@
 **Do not open a public GitHub issue for security vulnerabilities in Bawbel
 software (scanner, PiranhaDB, ave-site).**
 
-Email: **bawbel.io@gmail.com**
+Email: **aveproject.org@gmail.com**
 Subject: `SECURITY: [component] [brief description]`
 
 We will acknowledge within 48 hours and work with you on coordinated
@@ -22,7 +22,7 @@ record, not a Bawbel security report.
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full submission process.
 
 For critical or pre-disclosure submissions:
-Email **bawbel.io@gmail.com** subject: `AVE CRITICAL: [brief description]`
+Email **aveproject.org@gmail.com** subject: `AVE CRITICAL: [brief description]`
 
 ---
 
