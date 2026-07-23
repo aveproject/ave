@@ -1,0 +1,272 @@
+{
+  "$schema": "https://aveproject.org/schema/crosswalk-1.0.0.schema.json",
+  "source": {
+    "tool": "cfgaudit",
+    "vendor": "cfgaudit",
+    "version": "1.9.0",
+    "url": "https://github.com/cfgaudit/cfgaudit",
+    "license": "Apache-2.0",
+    "tool_class": "static configuration auditor",
+    "rules_total": 90,
+    "rules_mapped": 33
+  },
+  "target": {
+    "standard": "AVE",
+    "version": "1.1.0",
+    "url": "https://aveproject.org",
+    "record_count": 59,
+    "static_record_count": 44
+  },
+  "generated": "2026-07-22",
+  "note": "cfgaudit is a static auditor of committable AI-agent CONFIGURATION files. It does not connect to running servers or observe runtime, so it maps only to AVE's static_detection records. Each cfgaudit rule emits its primary AVE id in JSON/SARIF output (see github.com/cfgaudit/cfgaudit/blob/main/docs/cfgaudit-to-ave.md). Mappings are class-level behavioral equivalence, not asserted identity. cfgaudit maps 33 config-surface rules onto 19 AVE behavioral classes (many-to-one: several rules per class, since cfgaudit slices threats by config surface where AVE slices by behavior). AVE-2026-00036 (lateral movement) was implemented and then reverted after a false-positive analysis; see gaps.",
+  "mappings": [
+    {
+      "ave_id": "AVE-2026-00003",
+      "title": "credential exfiltration",
+      "cfgaudit_rules": [
+        "CFG031",
+        "CFG036",
+        "CFG037",
+        "CFG038"
+      ]
+    },
+    {
+      "ave_id": "AVE-2026-00004",
+      "title": "shell-pipe code execution",
+      "cfgaudit_rules": [
+        "CFG008",
+        "CFG014"
+      ]
+    },
+    {
+      "ave_id": "AVE-2026-00005",
+      "title": "recursive filesystem destruction",
+      "cfgaudit_rules": [
+        "CFG039"
+      ]
+    },
+    {
+      "ave_id": "AVE-2026-00007",
+      "title": "prompt-injection goal hijack",
+      "cfgaudit_rules": [
+        "CFG026"
+      ]
+    },
+    {
+      "ave_id": "AVE-2026-00008",
+      "title": "persistence / self-replication",
+      "cfgaudit_rules": [
+        "CFG027",
+        "CFG028"
+      ]
+    },
+    {
+      "ave_id": "AVE-2026-00010",
+      "title": "covert instruction concealment",
+      "cfgaudit_rules": [
+        "CFG030"
+      ]
+    },
+    {
+      "ave_id": "AVE-2026-00011",
+      "title": "dynamic tool-call injection",
+      "cfgaudit_rules": [
+        "CFG035"
+      ]
+    },
+    {
+      "ave_id": "AVE-2026-00017",
+      "title": "server impersonation / spoofing",
+      "cfgaudit_rules": [
+        "CFG052",
+        "CFG059"
+      ]
+    },
+    {
+      "ave_id": "AVE-2026-00021",
+      "title": "autonomous action without confirmation",
+      "cfgaudit_rules": [
+        "CFG029"
+      ]
+    },
+    {
+      "ave_id": "AVE-2026-00025",
+      "title": "conversation-history / role injection",
+      "cfgaudit_rules": [
+        "CFG032"
+      ]
+    },
+    {
+      "ave_id": "AVE-2026-00027",
+      "title": "multi-turn instruction persistence",
+      "cfgaudit_rules": [
+        "CFG081"
+      ]
+    },
+    {
+      "ave_id": "AVE-2026-00029",
+      "title": "homoglyph / Unicode obfuscation",
+      "cfgaudit_rules": [
+        "CFG024"
+      ]
+    },
+    {
+      "ave_id": "AVE-2026-00032",
+      "title": "network reconnaissance instruction",
+      "cfgaudit_rules": [
+        "CFG090"
+      ]
+    },
+    {
+      "ave_id": "AVE-2026-00039",
+      "title": "covert-channel exfiltration",
+      "cfgaudit_rules": [
+        "CFG033",
+        "CFG072"
+      ]
+    },
+    {
+      "ave_id": "AVE-2026-00047",
+      "title": "hardcoded credentials in component",
+      "cfgaudit_rules": [
+        "CFG007",
+        "CFG050",
+        "CFG054",
+        "CFG065",
+        "CFG073"
+      ]
+    },
+    {
+      "ave_id": "AVE-2026-00048",
+      "title": "unsafe agent delegation chain",
+      "cfgaudit_rules": [
+        "CFG051",
+        "CFG085"
+      ]
+    },
+    {
+      "ave_id": "AVE-2026-00055",
+      "title": "command exec via untrusted MCP launch config",
+      "cfgaudit_rules": [
+        "CFG019",
+        "CFG020",
+        "CFG070"
+      ]
+    },
+    {
+      "ave_id": "AVE-2026-00057",
+      "title": "obfuscated/encoded payload",
+      "cfgaudit_rules": [
+        "CFG057"
+      ]
+    },
+    {
+      "ave_id": "AVE-2026-00058",
+      "title": "deceptive trigger / activation-scope",
+      "cfgaudit_rules": [
+        "CFG056"
+      ]
+    }
+  ],
+  "gaps": [
+    {
+      "ave_id": "AVE-2026-00015",
+      "note": "system-prompt extraction. Maps to OWASP LLM07, which cfgaudit treats as runtime; the instruction is static, but the scope boundary is undecided."
+    },
+    {
+      "ave_id": "AVE-2026-00036",
+      "note": "lateral movement. cfgaudit implemented and then reverted this rule. The vocabulary ('lateral movement', 'pivot to other systems') is intent-ambiguous, appearing in security-tool self-description and defensive contexts a static linter cannot distinguish from a directive."
+    },
+    {
+      "ave_id": "AVE-2026-00059",
+      "note": "fragmented cross-description injection. Needs multi-source correlation; cfgaudit checks each file in isolation."
+    }
+  ],
+  "coverage": {
+    "ave_static_records": 44,
+    "cfgaudit_rules_total": 90,
+    "cfgaudit_rules_mapped": 33,
+    "ave_classes_covered": 19,
+    "cfgaudit_rules_unmapped": 57
+  },
+  "validation": {
+    "against": {
+      "tool": "Bawbel Scanner",
+      "version": "1.3.0"
+    },
+    "method": "same SKILL.md per rule, cfgaudit canonical triggers unmodified, static engines only (pattern+yara+semgrep, no LLM), both reading ave_id from JSON",
+    "shared_surface_rules": 10,
+    "agreements": 5,
+    "note": "5 of the 10 instruction-content rules that share a scan surface with Bawbel: both scanners independently emit the same ave_id. The 5 divergences are detection-pattern differences, not mapping errors."
+  },
+  "config_surfaces_beyond_ave": [
+    {
+      "surface": "permission / approval config",
+      "example_rules": [
+        "CFG001",
+        "CFG003",
+        "CFG004",
+        "CFG048",
+        "CFG079"
+      ]
+    },
+    {
+      "surface": "zero-click IDE / workspace auto-run",
+      "example_rules": [
+        "CFG047",
+        "CFG067",
+        "CFG086",
+        "CFG087"
+      ]
+    },
+    {
+      "surface": "telemetry / endpoint redirect",
+      "example_rules": [
+        "CFG005",
+        "CFG046",
+        "CFG071"
+      ]
+    },
+    {
+      "surface": "sandbox weakening in config",
+      "example_rules": [
+        "CFG022",
+        "CFG061",
+        "CFG064"
+      ]
+    },
+    {
+      "surface": "TLS verification disabled",
+      "example_rules": [
+        "CFG075"
+      ]
+    },
+    {
+      "surface": "container / daemon posture",
+      "example_rules": [
+        "CFG082",
+        "CFG083",
+        "CFG084"
+      ]
+    },
+    {
+      "surface": "MCP network / transport posture",
+      "example_rules": [
+        "CFG018",
+        "CFG066",
+        "CFG058",
+        "CFG021",
+        "CFG069"
+      ]
+    },
+    {
+      "surface": "supply-chain pinning / plugin auto-install",
+      "example_rules": [
+        "CFG010",
+        "CFG055",
+        "CFG074",
+        "CFG089"
+      ]
+    }
+  ]
+}
