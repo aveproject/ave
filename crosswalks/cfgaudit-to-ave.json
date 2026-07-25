@@ -3,12 +3,12 @@
   "source": {
     "tool": "cfgaudit",
     "vendor": "cfgaudit",
-    "version": "1.9.0",
+    "version": "1.10.0",
     "url": "https://github.com/cfgaudit/cfgaudit",
     "license": "Apache-2.0",
     "tool_class": "static configuration auditor",
-    "rules_total": 90,
-    "rules_mapped": 33
+    "rules_total": 92,
+    "rules_mapped": 35
   },
   "target": {
     "standard": "AVE",
@@ -17,8 +17,8 @@
     "record_count": 59,
     "static_record_count": 44
   },
-  "generated": "2026-07-22",
-  "note": "cfgaudit is a static auditor of committable AI-agent CONFIGURATION files. It does not connect to running servers or observe runtime, so it maps only to AVE's static_detection records. Each cfgaudit rule emits its primary AVE id in JSON/SARIF output (see github.com/cfgaudit/cfgaudit/blob/main/docs/cfgaudit-to-ave.md). Mappings are class-level behavioral equivalence, not asserted identity. cfgaudit maps 33 config-surface rules onto 19 AVE behavioral classes (many-to-one: several rules per class, since cfgaudit slices threats by config surface where AVE slices by behavior). AVE-2026-00036 (lateral movement) was implemented and then reverted after a false-positive analysis; see gaps.",
+  "generated": "2026-07-25",
+  "note": "cfgaudit is a static auditor of committable AI-agent CONFIGURATION files. It does not connect to running servers or observe runtime, so it maps only to AVE's static_detection records. Each cfgaudit rule emits its primary AVE id in JSON/SARIF output (see github.com/cfgaudit/cfgaudit/blob/main/docs/cfgaudit-to-ave.md). Mappings are class-level behavioral equivalence, not asserted identity. cfgaudit maps 35 config-surface rules onto 19 AVE behavioral classes (many-to-one: several rules per class, since cfgaudit slices threats by config surface where AVE slices by behavior). AVE-2026-00036 (lateral movement) was implemented and then reverted after a false-positive analysis; see gaps.",
   "mappings": [
     {
       "ave_id": "AVE-2026-00003",
@@ -49,7 +49,8 @@
       "ave_id": "AVE-2026-00007",
       "title": "prompt-injection goal hijack",
       "cfgaudit_rules": [
-        "CFG026"
+        "CFG026",
+        "CFG092"
       ]
     },
     {
@@ -86,7 +87,8 @@
       "ave_id": "AVE-2026-00021",
       "title": "autonomous action without confirmation",
       "cfgaudit_rules": [
-        "CFG029"
+        "CFG029",
+        "CFG091"
       ]
     },
     {
@@ -175,7 +177,7 @@
     },
     {
       "ave_id": "AVE-2026-00036",
-      "note": "lateral movement. cfgaudit implemented and then reverted this rule. The vocabulary ('lateral movement', 'pivot to other systems') is intent-ambiguous, appearing in security-tool self-description and defensive contexts a static linter cannot distinguish from a directive."
+      "note": "lateral movement. cfgaudit implemented and then reverted this rule. The vocabulary ('lateral movement', 'pivot to other systems') is intent-ambiguous, appearing in security-tool self-description and defensive contexts a static linter cannot distinguish from a directive. The reverted rule used the CFG091 id, which cfgaudit has since reused for the qwen approval-mode rule (mapped to AVE-2026-00021)."
     },
     {
       "ave_id": "AVE-2026-00059",
@@ -184,8 +186,8 @@
   ],
   "coverage": {
     "ave_static_records": 44,
-    "cfgaudit_rules_total": 90,
-    "cfgaudit_rules_mapped": 33,
+    "cfgaudit_rules_total": 92,
+    "cfgaudit_rules_mapped": 35,
     "ave_classes_covered": 19,
     "cfgaudit_rules_unmapped": 57
   },

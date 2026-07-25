@@ -8,13 +8,13 @@ cfgaudit emits each rule's primary AVE id in its JSON and SARIF output (`AVEID` 
 
 | | Version |
 |---|---|
-| cfgaudit | 1.9.0 |
+| cfgaudit | 1.10.0 |
 | AVE record set | 1.1.0 |
 | Bawbel Scanner (validation, below) | 1.3.0 |
 
 ## Coverage
 
-cfgaudit has **90 rules** in total. **33 of them map onto 19 AVE behavioral classes.** It is a many-to-one mapping: several cfgaudit rules land on the same AVE class, because cfgaudit slices threats by config surface where AVE slices by behavior. For example, cfgaudit has five distinct secret-detection rules (a secret in `settings.json` env, in an MCP `env`/`headers` block, an entropy fallback, a Continue inline `apiKey`, a crypto signing key), and all five map to the single AVE class `AVE-2026-00047` (hardcoded credentials in component).
+cfgaudit has **92 rules** in total. **35 of them map onto 19 AVE behavioral classes.** It is a many-to-one mapping: several cfgaudit rules land on the same AVE class, because cfgaudit slices threats by config surface where AVE slices by behavior. For example, cfgaudit has five distinct secret-detection rules (a secret in `settings.json` env, in an MCP `env`/`headers` block, an entropy fallback, a Continue inline `apiKey`, a crypto signing key), and all five map to the single AVE class `AVE-2026-00047` (hardcoded credentials in component).
 
 The other 57 rules have no AVE class: they check config surfaces AVE's skill and MCP-server records do not enumerate (see "Config surfaces beyond AVE's model" below).
 
@@ -24,7 +24,9 @@ The other 57 rules have no AVE class: they check config surfaces AVE's skill and
 |---|---|---|---|
 | CFG024 | AVE-2026-00029 | homoglyph / Unicode obfuscation | hidden Unicode control chars in instruction text |
 | CFG026 | AVE-2026-00007 | goal hijack | override / persona / authority instruction |
+| CFG092 | AVE-2026-00007 | goal hijack | Kimi agent file `override: true` replaces the whole system prompt |
 | CFG029 | AVE-2026-00021 | autonomous action without confirmation | instruction to bypass permission prompts |
+| CFG091 | AVE-2026-00021 | autonomous action without confirmation | qwen `approvalMode: yolo` auto-approves every tool call |
 | CFG030 | AVE-2026-00010 | covert instruction concealment | "don't tell the user" / secrecy directive |
 | CFG032 | AVE-2026-00025 | conversation-history / role injection | pseudo-system tags, turn-boundary injection |
 | CFG035 | AVE-2026-00011 | dynamic tool-call injection | instruction to configure or trust an MCP server |
@@ -91,5 +93,5 @@ Static `static_detection` classes cfgaudit does not map, with the reason:
 | AVE id | Gap |
 |---|---|
 | AVE-2026-00015 | system-prompt extraction. Maps to OWASP LLM07, which cfgaudit treats as runtime; the instruction is static, but the scope boundary is undecided. |
-| AVE-2026-00036 | lateral movement. cfgaudit implemented and then reverted this rule after a false-positive analysis over 422 real instruction files: the vocabulary (`lateral movement`, `pivot to other systems`) is statically indistinguishable from security-tool self-description and defensive contexts. |
+| AVE-2026-00036 | lateral movement. cfgaudit implemented and then reverted this rule after a false-positive analysis over 422 real instruction files: the vocabulary (`lateral movement`, `pivot to other systems`) is statically indistinguishable from security-tool self-description and defensive contexts. The reverted rule used the CFG091 id, which cfgaudit has since reused for the qwen approval-mode rule (mapped to AVE-2026-00021). |
 | AVE-2026-00059 | fragmented cross-description injection. Needs multi-source correlation; cfgaudit checks each file in isolation, which is the exact property this attack defeats. |
