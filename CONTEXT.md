@@ -102,6 +102,8 @@ See CLAUDE.md for session rules and the current task queue.
 See ARCHITECTURE.md for the record/rule/fixture model.
 See CONTRIBUTING.md for the contributor-facing process.
 See GOVERNANCE.md for decision process and the record proposal workflow.
+See docs/specs/scaling-and-governance.md for record-growth discipline,
+schema versioning, and deprecation policy.
 
 **Roadmap, launch planning, adoption tactics, and anything with a marketing or
 fundraising deadline attached does not belong in this repo, including as an
