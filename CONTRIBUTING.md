@@ -44,6 +44,13 @@ contribution makes AI agents safer for everyone.
 
 ## Submitting a new AVE record
 
+Before opening a PR that adds a new record, read
+`docs/specs/scaling-and-governance.md` Section 1. A record needs a
+genuinely distinct behavioral mechanism; PRs that mirror another
+framework's category without describing a real, evidenced mechanism will
+be asked to either strengthen the evidence or fold into an existing
+record's `mutation_count` instead.
+
 ### Step 1 -- Open an issue
 
 Use the **New AVE Record** issue template. Include:
