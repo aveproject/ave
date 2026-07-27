@@ -22,6 +22,9 @@ Minor additions (new optional fields) are non-breaking and can ship in a patch r
 **Crosswalk updates:** maintainer or contributors may update crosswalk JSON files to
 add new tool mappings. No record changes required.
 
+Record-growth, schema-versioning, and deprecation policy specifically are
+covered in `docs/specs/scaling-and-governance.md`, not restated here.
+
 ---
 
 ## Contribution process
