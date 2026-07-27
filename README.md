@@ -465,6 +465,9 @@ the mapping.
 See [GOVERNANCE.md](GOVERNANCE.md) for the decision-making process, how records
 are proposed and reviewed, and the path toward neutral governance.
 
+See [docs/specs/scaling-and-governance.md](docs/specs/scaling-and-governance.md)
+for record-growth discipline, schema versioning, and deprecation policy.
+
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the contributor-facing process.
 
 See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for community standards.
