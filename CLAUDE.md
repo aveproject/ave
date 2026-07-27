@@ -157,6 +157,23 @@ python scripts/check_fixtures.py      # every record has +/- fixtures
 
 ---
 
+## Scaling and governance rules
+
+- Before proposing a new record, check `docs/specs/scaling-and-governance.md`
+  Section 1. A record needs a genuinely distinct behavioral mechanism, not
+  a category wrapper around existing coverage. If it looks like "framework
+  X's category, applied to agentic AI," it's not a record, flag this
+  rather than draft it.
+- Never delete or reuse a published `ave_id`, ever, no exceptions. If a
+  record turns out wrong or redundant, that's a `status` change
+  (`deprecated`/`merged`/`rejected`), not a deletion. See Section 3.
+- Frozen versioned schema and dist files
+  (`ave-record-X.Y.Z.schema.json`, `ave-records-vX.Y.Z.json`) are never
+  edited retroactively, including typo fixes. A correction ships in the
+  next version.
+
+---
+
 ## Agent skills
 
 | Skill | When |
