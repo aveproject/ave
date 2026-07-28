@@ -83,27 +83,27 @@
   "references": [
     {
       "tag": "CWE-269",
-      "text": "CWE-269: Improper Privilege Management \u2014 MITRE Common Weakness Enumeration",
+      "text": "CWE-269: Improper Privilege Management — MITRE Common Weakness Enumeration",
       "url": "https://cwe.mitre.org/data/definitions/269.html"
     },
     {
       "tag": "OWASP LLM Excessive Agency",
-      "text": "OWASP Top 10 for LLM Applications \u2014 Excessive Agency",
+      "text": "OWASP Top 10 for LLM Applications — Excessive Agency",
       "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/"
     },
     {
       "tag": "Cohen 2024",
-      "text": "Cohen et al. \u2014 Here Comes The AI Worm: Unleashing Zero-click Worms that Target GenAI-Powered Applications (arXiv 2403.02817)",
+      "text": "Cohen et al. — Here Comes The AI Worm: Unleashing Zero-click Worms that Target GenAI-Powered Applications (arXiv 2403.02817)",
       "url": "https://arxiv.org/abs/2403.02817"
     },
     {
       "tag": "CWE-284",
-      "text": "CWE-284: Improper Access Control \u2014 MITRE Common Weakness Enumeration",
+      "text": "CWE-284: Improper Access Control — MITRE Common Weakness Enumeration",
       "url": "https://cwe.mitre.org/data/definitions/284.html"
     },
     {
       "tag": "AVE Registry",
-      "text": "AVE-2026-00048 \u2014 AVE behavioral vulnerability registry",
+      "text": "AVE-2026-00048 — AVE behavioral vulnerability registry",
       "url": "https://github.com/aveproject/ave/blob/main/records/AVE-2026-00048.json"
     }
   ],
@@ -125,7 +125,7 @@
       "data_access": 1,
       "external_dependencies": 0.5
     },
-    "aars": 7.5,
+    "aars": 8.0,
     "thm": 0.9,
     "mitigation_factor": 1,
     "aivss_score": 7.7,
