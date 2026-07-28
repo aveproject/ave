@@ -26,6 +26,10 @@ crosswalks/            Mappings from other scanners and frameworks to AVE ids
 docs/                  ADRs, guides, research reports
 ```
 
+The alias/versioned-snapshot pattern shown above is described informally
+here; `docs/specs/scaling-and-governance.md` Section 2 is the canonical
+policy (bump rules, freeze guarantees) this file tree implements.
+
 There is no `rules/` directory in this repo. Detection rule implementations
 (pattern matching, YARA, semgrep, or anything else) are implementation
 artifacts, not standard artifacts, and live in whichever tool implements
