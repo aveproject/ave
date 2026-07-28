@@ -1,14 +1,23 @@
 # What: validates every AVE record against the current schema plus the Section 8
 #       invariants from the v1.1.0 migration (no stale field names, no leaked
-#       enforcement config, no dual-empty behavioral_vector/example_patterns)
+#       enforcement config, no dual-empty behavioral_vector/example_patterns),
+#       plus AIVSS score arithmetic, em dash house style, and vendor-neutral
+#       language, added after a hand-drafted batch of records caught real
+#       instances of exactly these three problems that nothing here checked
 # Why:  a malformed or drifted record breaks every downstream scanner that loads it,
 #       and a free-text value in `mitigation` would let vendor-specific config
-#       leak back into a standard that is supposed to stay vendor-neutral
+#       leak back into a standard that is supposed to stay vendor-neutral.
+#       A stated aivss_score that doesn't match the record's own aarf/cvss_base/
+#       thm/mitigation_factor is silently wrong severity data shipped to every
+#       consumer of the corpus. An em dash or a stray vendor product name is a
+#       house-style and neutrality violation this project enforces everywhere
+#       else; records shouldn't be the one place it's unchecked.
 # How:  jsonschema.Draft202012Validator against schema/ave-record-1.1.0.schema.json
 #       (handles the draft-vs-active conditional required set natively), plus a
 #       handful of checks the schema's additionalProperties:false already implies
 #       but which deserve a readable, named failure message of their own
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -32,6 +41,15 @@ MITIGATION_ENUMS = {
         "break_private_data", "break_untrusted_content", "break_external_comms", "not_applicable",
     },
 }
+
+EM_DASH = "\u2014"
+EM_DASH_ESCAPED = "\\u2014"
+VENDOR_BOILERPLATE_PATTERNS = [
+    r"bawbel-scanner",
+    r"bawbel-gate",
+    r"bawbel\s+scan\b",
+    r"piranha",
+]
 
 
 def check_schema(record: dict, validator: jsonschema.Draft202012Validator) -> list[str]:
@@ -74,6 +92,61 @@ def check_mitigation_enums_only(record: dict) -> list[str]:
     return errors
 
 
+def check_aivss_arithmetic(record: dict) -> list[str]:
+    """Recomputes aars and aivss_score from the record's own aarf, cvss_base,
+    thm, and mitigation_factor fields, and confirms both the nested
+    aivss.aivss_score and the top-level aivss_score field agree with it.
+    A record that drifts here is shipping a severity number nobody
+    actually derived from its own stated inputs."""
+    aivss = record.get("aivss")
+    if not isinstance(aivss, dict):
+        return []
+    aarf = aivss.get("aarf")
+    if not isinstance(aarf, dict) or not aarf:
+        return []
+
+    errors = []
+    aars = round(sum(aarf.values()), 4)
+    stated_aars = aivss.get("aars")
+    if aars != stated_aars:
+        errors.append(f"aivss.aars mismatch: computed {aars}, record states {stated_aars}")
+
+    required = ("cvss_base", "thm", "mitigation_factor")
+    missing = [f for f in required if f not in aivss]
+    if missing:
+        errors.append(f"aivss missing scoring field(s): {', '.join(missing)}")
+        return errors
+
+    computed_score = round(((aivss["cvss_base"] + aars) / 2) * aivss["thm"] * aivss["mitigation_factor"], 1)
+    stated_score = aivss.get("aivss_score")
+    if computed_score != stated_score:
+        errors.append(f"aivss.aivss_score mismatch: computed {computed_score}, record states {stated_score}")
+
+    top_level_score = record.get("aivss_score")
+    if top_level_score != stated_score:
+        errors.append(f"top-level aivss_score ({top_level_score}) does not match aivss.aivss_score ({stated_score})")
+
+    return errors
+
+
+def check_no_em_dash(raw_text: str) -> list[str]:
+    """Checks the raw file text, not the parsed dict, since json.dump with
+    default settings escapes a real em dash into a literal \\u2014 sequence
+    that a check against the parsed string values would miss entirely."""
+    errors = []
+    if EM_DASH in raw_text:
+        errors.append(f"em dash found (literal character), {raw_text.count(EM_DASH)} occurrence(s)")
+    if EM_DASH_ESCAPED in raw_text:
+        errors.append(f"em dash found (escaped \\u2014 sequence), {raw_text.count(EM_DASH_ESCAPED)} occurrence(s)")
+    return errors
+
+
+def check_no_vendor_boilerplate(raw_text: str) -> list[str]:
+    lower = raw_text.lower()
+    return [f"vendor-specific reference found: '{pattern}'"
+            for pattern in VENDOR_BOILERPLATE_PATTERNS if re.search(pattern, lower)]
+
+
 def main() -> int:
     schema = json.loads(SCHEMA_PATH.read_text())
     jsonschema.Draft202012Validator.check_schema(schema)
@@ -86,7 +159,8 @@ def main() -> int:
 
     total_errors = 0
     for path in paths:
-        record = json.loads(path.read_text())
+        raw_text = path.read_text()
+        record = json.loads(raw_text)
         rid = record.get("ave_id", path.name)
         errors = (
             check_schema(record, validator)
@@ -94,6 +168,9 @@ def main() -> int:
             + check_no_nested_owasp_mcp_mapping(record)
             + check_behavioral_vector_or_example_patterns(record)
             + check_mitigation_enums_only(record)
+            + check_aivss_arithmetic(record)
+            + check_no_em_dash(raw_text)
+            + check_no_vendor_boilerplate(raw_text)
         )
         for e in errors:
             print(f"{rid}: {e}")
