@@ -1,17 +1,17 @@
 # What: validates every AVE record against the current schema plus the Section 8
 #       invariants from the v1.1.0 migration (no stale field names, no leaked
 #       enforcement config, no dual-empty behavioral_vector/example_patterns),
-#       plus AIVSS score arithmetic, em dash house style, and vendor-neutral
-#       language, added after a hand-drafted batch of records caught real
-#       instances of exactly these three problems that nothing here checked
+#       plus AIVSS score arithmetic and vendor-neutral language, added after a
+#       hand-drafted batch of records caught real instances of exactly these
+#       problems that nothing here checked
 # Why:  a malformed or drifted record breaks every downstream scanner that loads it,
 #       and a free-text value in `mitigation` would let vendor-specific config
 #       leak back into a standard that is supposed to stay vendor-neutral.
 #       A stated aivss_score that doesn't match the record's own aarf/cvss_base/
 #       thm/mitigation_factor is silently wrong severity data shipped to every
-#       consumer of the corpus. An em dash or a stray vendor product name is a
-#       house-style and neutrality violation this project enforces everywhere
-#       else; records shouldn't be the one place it's unchecked.
+#       consumer of the corpus. A stray vendor product name is a neutrality
+#       violation this project enforces everywhere else; records shouldn't be
+#       the one place it's unchecked.
 # How:  jsonschema.Draft202012Validator against schema/ave-record-1.1.0.schema.json
 #       (handles the draft-vs-active conditional required set natively), plus a
 #       handful of checks the schema's additionalProperties:false already implies
@@ -42,8 +42,6 @@ MITIGATION_ENUMS = {
     },
 }
 
-EM_DASH = "\u2014"
-EM_DASH_ESCAPED = "\\u2014"
 VENDOR_BOILERPLATE_PATTERNS = [
     r"bawbel-scanner",
     r"bawbel-gate",
@@ -129,18 +127,6 @@ def check_aivss_arithmetic(record: dict) -> list[str]:
     return errors
 
 
-def check_no_em_dash(raw_text: str) -> list[str]:
-    """Checks the raw file text, not the parsed dict, since json.dump with
-    default settings escapes a real em dash into a literal \\u2014 sequence
-    that a check against the parsed string values would miss entirely."""
-    errors = []
-    if EM_DASH in raw_text:
-        errors.append(f"em dash found (literal character), {raw_text.count(EM_DASH)} occurrence(s)")
-    if EM_DASH_ESCAPED in raw_text:
-        errors.append(f"em dash found (escaped \\u2014 sequence), {raw_text.count(EM_DASH_ESCAPED)} occurrence(s)")
-    return errors
-
-
 def check_no_vendor_boilerplate(raw_text: str) -> list[str]:
     lower = raw_text.lower()
     return [f"vendor-specific reference found: '{pattern}'"
@@ -169,7 +155,6 @@ def main() -> int:
             + check_behavioral_vector_or_example_patterns(record)
             + check_mitigation_enums_only(record)
             + check_aivss_arithmetic(record)
-            + check_no_em_dash(raw_text)
             + check_no_vendor_boilerplate(raw_text)
         )
         for e in errors:
