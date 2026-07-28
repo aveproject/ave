@@ -6,6 +6,19 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 
 ---
 
+## [Unreleased]
+
+### Added
+- `docs/specs/scaling-and-governance.md`: record-growth discipline
+  (citing MITRE CWE 4.19 as a documented cautionary precedent), schema
+  versioning policy (formalizing the existing alias/frozen-snapshot
+  pattern), and deprecation policy (modeled on CVE's rejected-but-permanent
+  approach). The deprecation policy's schema implementation
+  (`merged_into`, `rejection_reason` fields) is tracked separately for a
+  future version bump, not yet implemented.
+
+---
+
 ## [1.3.0] - 2026-07-17
 
 ### Summary
