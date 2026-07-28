@@ -1,0 +1,88 @@
+{
+  "ave_id": "AVE-2026-00062",
+  "schema_version": "1.1.0",
+  "status": "active",
+  "component_type": "skill",
+  "title": "Unpinned dependency version allowing supply chain substitution",
+  "attack_class": "Supply Chain - Unpinned Dependency Substitution",
+  "severity": "MEDIUM",
+  "description": "A skill file or agent component declares a dependency without pinning it to a specific, verified version or content hash, referencing a mutable tag, a version range, or an unpinned package name instead. Because the referenced dependency can change after the component was reviewed and approved, without the component's own declared configuration changing at all, this allows a supply chain substitution: the reviewed and the executed artifact silently diverge.",
+  "affected_platforms": [
+    "any-agent-with-declared-dependencies"
+  ],
+  "affected_registries": [
+    "clawhub.io", "smithery.ai", "agentskills.io", "npm", "pypi"
+  ],
+  "aivss_score": 4.4,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:L/SI:L/SA:N",
+  "owasp_mcp": ["MCP04"],
+  "owasp_asi": ["ASI04"],
+  "behavioral_fingerprint": "A component's declared dependency references a mutable version specifier (a floating tag, a version range with no upper bound, an unpinned package name with no hash or lockfile entry) rather than a specific, content-addressed or exact-version reference.",
+  "behavioral_vector": [
+    "unpinned-dependency",
+    "supply-chain-drift",
+    "review-execution-divergence"
+  ],
+  "provenance_vector": {
+    "entry_class": "registry_metadata",
+    "payload_surface": "a declared dependency reference lacking version pinning or a content hash"
+  },
+  "trifecta_profile": {
+    "requires": ["untrusted_content"]
+  },
+  "mitigation": {
+    "strategy": ["pin_integrity"],
+    "enforcement_point": "server_card_fetch",
+    "trifecta_control": "break_untrusted_content"
+  },
+  "example_patterns": [
+    "\"dependencies\": {\"some-helper-lib\": \"latest\"}",
+    "\"dependencies\": {\"some-helper-lib\": \"^2.0.0\"}"
+  ],
+  "mutation_count": 0,
+  "detection_methodology": "Static scan of declared dependency manifests for version specifiers that are not an exact version pin or content hash. Flag floating tags (latest, main), unbounded ranges, and any reference resolvable to more than one artifact over time.",
+  "indicators_of_compromise": [
+    "Dependency manifest entries using range operators or floating tags rather than exact versions",
+    "Absence of a lockfile or hash-pinning mechanism for a component with external dependencies",
+    "The resolved artifact for a given dependency reference differing between two points in time with no corresponding manifest change"
+  ],
+  "remediation": "Pin every dependency to an exact version and, where the ecosystem supports it, a content hash. Use a lockfile mechanism and commit it. Treat any dependency update as a reviewable change to the manifest itself, not something that happens silently underneath an unchanged reference.",
+  "kill_switch_active": false,
+  "researcher": "Bawbel Security Research Team",
+  "researcher_url": "https://bawbel.io",
+  "published": "2026-07-27T00:00:00Z",
+  "last_updated": "2026-07-27T00:00:00Z",
+  "references": [
+    {
+      "tag": "CWE-1357",
+      "text": "CWE-1357: Reliance on Insufficiently Trustworthy Component - MITRE Common Weakness Enumeration",
+      "url": "https://cwe.mitre.org/data/definitions/1357.html"
+    },
+    {
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00062 - AVE behavioral vulnerability registry",
+      "url": "https://github.com/aveproject/ave/blob/main/records/AVE-2026-00062.json"
+    }
+  ],
+  "aivss": {
+    "cvss_base": 7.0,
+    "aarf": {
+      "autonomy": 0.5, "tool_use": 0.5, "multi_agent": 0, "non_determinism": 0.5,
+      "self_modification": 0, "dynamic_identity": 0, "persistent_memory": 0.5,
+      "natural_language_input": 0, "data_access": 0.5, "external_dependencies": 1
+    },
+    "aars": 3.5,
+    "thm": 1,
+    "mitigation_factor": 0.83,
+    "aivss_score": 4.4,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "notes": "external_dependencies scored at maximum (1.0), appropriately, this class is definitionally about dependency behavior. mitigation_factor discounted to 0.83: pinning is a simple, well-established, fully effective mitigation already standard practice in most mature ecosystems, this class describes its absence, not a novel unmitigated threat."
+  },
+  "evidence_kind_default": "behavioral_pattern",
+  "detection_stage": "static_detection",
+  "detection_layer": "registry_metadata",
+  "confidence_baseline": 0.65,
+  "evidence_basis_engines": ["pattern"],
+  "derivable_into": []
+}

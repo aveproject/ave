@@ -16,6 +16,21 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   approach). The deprecation policy's schema implementation
   (`merged_into`, `rejection_reason` fields) is tracked separately for a
   future version bump, not yet implemented.
+- 5 new records: AVE-2026-00060 through AVE-2026-00064 — record set now at 64,
+  256 tests passing. Coordinated batch from one policy/config-surface audit
+  pass, not five independent additions.
+  - AVE-2026-00060: STDIO transport shell injection via unsanitized tool call
+    parameters (HIGH, AIVSS 7.2)
+  - AVE-2026-00061: TLS certificate verification disabled in agent component
+    configuration (MEDIUM, AIVSS 4.1)
+  - AVE-2026-00062: unpinned dependency version allowing supply chain
+    substitution (MEDIUM, AIVSS 4.4)
+  - AVE-2026-00063: human approval gate bypassed via declarative
+    configuration, kept distinct from AVE-2026-00048's instruction-driven
+    delegation mechanism after applying the record-growth discipline's
+    mechanical test (MEDIUM, AIVSS 4.8)
+  - AVE-2026-00064: zero-click code execution via project-load auto-run
+    configuration (MEDIUM, AIVSS 5.2)
 
 ---
 

@@ -1,0 +1,88 @@
+{
+  "ave_id": "AVE-2026-00063",
+  "schema_version": "1.1.0",
+  "status": "active",
+  "component_type": "skill",
+  "title": "Human approval gate bypassed via declarative configuration, distinct from AVE-2026-00048",
+  "attack_class": "Privilege Escalation - Approval Gate Bypass Configuration",
+  "severity": "MEDIUM",
+  "description": "A component's configuration declares a flag or setting that disables or bypasses a required human-approval step for high-risk actions, independent of any instruction text or runtime delegation behavior. This is a static configuration weakness, not the instruction-driven delegation mechanism covered by AVE-2026-00048: a config file can set 'auto_approve: true' or an equivalent flag with no accompanying instruction text at all, silently removing a safety control that a reviewer inspecting only the component's declared instructions would never see.",
+  "affected_platforms": [
+    "any-agent-with-configurable-approval-gates"
+  ],
+  "affected_registries": [
+    "clawhub.io", "smithery.ai", "agentskills.io"
+  ],
+  "aivss_score": 4.8,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:L/SC:L/SI:L/SA:N",
+  "owasp_mcp": ["MCP09"],
+  "owasp_asi": ["ASI01"],
+  "behavioral_fingerprint": "Configuration sets a declarative flag (auto_approve, skip_confirmation, require_approval: false, or equivalent) that removes a human-in-the-loop check for high-risk actions, present in config rather than in instruction text, and therefore invisible to a review process that only inspects a component's stated instructions.",
+  "behavioral_vector": [
+    "approval-bypass-config",
+    "static-privilege-escalation",
+    "instruction-invisible-weakness"
+  ],
+  "provenance_vector": {
+    "entry_class": "registry_metadata",
+    "payload_surface": "a declared configuration flag disabling a required human-approval step for high-risk actions"
+  },
+  "trifecta_profile": {
+    "requires": ["untrusted_content"],
+    "amplifies": ["external_comms", "private_data"]
+  },
+  "mitigation": {
+    "strategy": ["deny_by_default", "validate_input"],
+    "enforcement_point": "server_card_fetch",
+    "trifecta_control": "break_untrusted_content"
+  },
+  "example_patterns": [
+    "{\"approval\": {\"auto_approve\": true, \"scope\": \"all\"}}",
+    "{\"safety\": {\"require_confirmation\": false}}"
+  ],
+  "mutation_count": 0,
+  "detection_methodology": "Static scan of configuration files for approval-bypass flags, independent of any content or instruction-text review, since this class is specifically defined by its absence from instruction text. Cross-reference declared configuration against the component's actual runtime approval behavior where observable.",
+  "indicators_of_compromise": [
+    "Declared configuration containing an approval-bypass or auto-confirm flag scoped broadly (all actions, all tools) rather than narrowly to a specific, low-risk action",
+    "High-risk actions observed executing without any corresponding approval-gate event in the audit trail"
+  ],
+  "remediation": "Do not expose a configuration-level bypass for approval gates on high-risk actions at all; if a narrower, explicitly-scoped auto-approval is a genuine product requirement, scope it to specific, named, low-risk actions rather than a blanket flag, and log every use of the bypass distinctly from a human-confirmed approval.",
+  "kill_switch_active": false,
+  "researcher": "Bawbel Security Research Team",
+  "researcher_url": "https://bawbel.io",
+  "published": "2026-07-27T00:00:00Z",
+  "last_updated": "2026-07-27T00:00:00Z",
+  "references": [
+    {
+      "tag": "cfgaudit crosswalk",
+      "text": "Gap identified during the cfgaudit-to-AVE crosswalk (PR #67); config-level approval bypass distinct from the instruction-level delegation mechanism in AVE-2026-00048",
+      "url": "https://github.com/aveproject/ave/pull/67"
+    },
+    {
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00063 - AVE behavioral vulnerability registry",
+      "url": "https://github.com/aveproject/ave/blob/main/records/AVE-2026-00063.json"
+    }
+  ],
+  "aivss": {
+    "cvss_base": 8.5,
+    "aarf": {
+      "autonomy": 1, "tool_use": 1, "multi_agent": 0, "non_determinism": 0,
+      "self_modification": 0, "dynamic_identity": 0, "persistent_memory": 0.5,
+      "natural_language_input": 0, "data_access": 0.5, "external_dependencies": 0
+    },
+    "aars": 3.0,
+    "thm": 1,
+    "mitigation_factor": 0.83,
+    "aivss_score": 4.8,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "notes": "Deliberately kept as a separate record from AVE-2026-00048 rather than merged into it, per the record-growth discipline's mechanical test: different entry_class (registry_metadata versus content), different payload_surface (a declarative config flag versus instruction text), confirmed by direct comparison of the two records' provenance_vector fields before drafting, not assumed. Credit note carried in references rather than a full tracking-issue citation, since this record itself is the resolution of that gap, not a proposal awaiting one."
+  },
+  "evidence_kind_default": "behavioral_pattern",
+  "detection_stage": "static_detection",
+  "detection_layer": "registry_metadata",
+  "confidence_baseline": 0.6,
+  "evidence_basis_engines": ["pattern"],
+  "derivable_into": ["remote-control-chain"]
+}

@@ -1,0 +1,86 @@
+{
+  "ave_id": "AVE-2026-00061",
+  "schema_version": "1.1.0",
+  "status": "active",
+  "component_type": "skill",
+  "title": "TLS certificate verification disabled in agent component configuration",
+  "attack_class": "Insecure Configuration - TLS Verification Disabled",
+  "severity": "MEDIUM",
+  "description": "A skill file, MCP server configuration, or agent plugin sets a flag that disables TLS certificate verification for its own outbound connections, commonly present as a development convenience left in place, or introduced deliberately by a malicious component. With verification disabled, any network position capable of intercepting the connection can perform a machine-in-the-middle attack against the component's traffic without detection, exposing credentials, tool call content, and responses to interception or tampering.",
+  "affected_platforms": [
+    "any-agent-with-configurable-tls-verification"
+  ],
+  "affected_registries": [
+    "clawhub.io", "smithery.ai", "agentskills.io"
+  ],
+  "aivss_score": 4.1,
+  "cvss_base_vector": "CVSS:4.0/AV:A/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
+  "owasp_mcp": ["MCP05"],
+  "behavioral_fingerprint": "Configuration explicitly sets a TLS verification bypass flag (verify=False, rejectUnauthorized: false, or equivalent) for the component's own outbound network calls, rather than relying on default, enforced certificate validation.",
+  "behavioral_vector": [
+    "tls-verification-bypass",
+    "config-level-weakening",
+    "mitm-enabling"
+  ],
+  "provenance_vector": {
+    "entry_class": "registry_metadata",
+    "payload_surface": "a declared configuration flag disabling TLS certificate verification for the component's outbound connections"
+  },
+  "trifecta_profile": {
+    "requires": ["external_comms"]
+  },
+  "mitigation": {
+    "strategy": ["validate_input"],
+    "enforcement_point": "static_scan",
+    "trifecta_control": "break_external_comms"
+  },
+  "example_patterns": [
+    "requests.get(url, verify=False)",
+    "{\"tls\": {\"rejectUnauthorized\": false}}"
+  ],
+  "mutation_count": 0,
+  "detection_methodology": "Static scan of configuration files and source for known TLS-bypass flags and patterns specific to common HTTP client libraries. No dynamic component required; this is a declarative configuration weakness, detectable by static inspection alone.",
+  "indicators_of_compromise": [
+    "A declared TLS-bypass flag present in committed configuration, not just local development overrides excluded from version control",
+    "Outbound connections to expected endpoints succeeding despite an invalid or self-signed certificate at the network layer"
+  ],
+  "remediation": "Remove the verification-bypass flag; if a specific, known certificate authority genuinely needs custom trust (an internal CA, for instance), configure that CA explicitly rather than disabling verification entirely.",
+  "kill_switch_active": false,
+  "researcher": "Bawbel Security Research Team",
+  "researcher_url": "https://bawbel.io",
+  "published": "2026-07-27T00:00:00Z",
+  "last_updated": "2026-07-27T00:00:00Z",
+  "references": [
+    {
+      "tag": "CWE-295",
+      "text": "CWE-295: Improper Certificate Validation - MITRE Common Weakness Enumeration",
+      "url": "https://cwe.mitre.org/data/definitions/295.html"
+    },
+    {
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00061 - AVE behavioral vulnerability registry",
+      "url": "https://github.com/aveproject/ave/blob/main/records/AVE-2026-00061.json"
+    }
+  ],
+  "aivss": {
+    "cvss_base": 7.5,
+    "aarf": {
+      "autonomy": 0.5, "tool_use": 0.5, "multi_agent": 0, "non_determinism": 0,
+      "self_modification": 0, "dynamic_identity": 0, "persistent_memory": 0,
+      "natural_language_input": 0, "data_access": 1, "external_dependencies": 0.5
+    },
+    "aars": 2.5,
+    "thm": 1,
+    "mitigation_factor": 0.83,
+    "aivss_score": 4.1,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "notes": "mitigation_factor discounted to 0.83: unlike the STDIO transport class, this has a simple, well-known, fully effective mitigation (re-enable verification, or configure explicit CA trust), justifying the discount. Requires network position as a precondition (AV:A in the CVSS vector), which is reflected in a lower external_dependencies score than a remotely-triggerable class would carry."
+  },
+  "evidence_kind_default": "behavioral_pattern",
+  "detection_stage": "static_detection",
+  "detection_layer": "content",
+  "confidence_baseline": 0.7,
+  "evidence_basis_engines": ["pattern"],
+  "derivable_into": []
+}
