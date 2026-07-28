@@ -29,6 +29,13 @@ Authored once. Immutable ave_id. Lives in records/AVE-YYYY-NNNNN.json.
 **ave_id** — unique identifier. Format AVE-YYYY-NNNNN. Never renumbered.
 Immutable once published. Deprecated via status, never deleted.
 
+**status** — `active` is the default. The only valid non-`active` values
+are `deprecated`, `merged`, `rejected`, per
+`docs/specs/scaling-and-governance.md` Section 3. Don't use synonyms
+("retired," "duplicate," "invalid") in prose describing a record's
+status, even informally. These names mean something specific and
+consistent everywhere they appear.
+
 **attack_class** — the behavioral category. NOT "vulnerability type".
 Examples: external_instruction_fetch, tool_description_injection,
 rug_pull, cross_app_escalation. Use snake_case.
