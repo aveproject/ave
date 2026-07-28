@@ -31,6 +31,14 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
     mechanical test (MEDIUM, AIVSS 4.8)
   - AVE-2026-00064: zero-click code execution via project-load auto-run
     configuration (MEDIUM, AIVSS 5.2)
+- AVE-2026-00065: A2A agent card poisoning via embedded adversarial
+  instructions (HIGH, AIVSS 7.1). Sixth and final record of the same
+  config/protocol-surface audit as AVE-2026-00060 through 00064, the
+  only one involving a genuinely multi-agent mechanism. Confirmed
+  distinct from AVE-2026-00041 (MCP server-card injection) by direct
+  comparison: different protocol (A2A, not MCP), no `.well-known` path
+  or `tool.description` field, payload surface is the agent's own
+  self-declared identity/capabilities in a peer discovery exchange.
 
 ---
 
