@@ -1,0 +1,65 @@
+<svg width="1200" height="740" viewBox="0 0 1200 740" xmlns="http://www.w3.org/2000/svg" font-family="'Georgia', 'Times New Roman', serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#4A4A4A"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="740" fill="#F5F0E8"/>
+
+  <text x="600" y="50" text-anchor="middle" font-size="28" font-weight="bold" fill="#1B5E3F">The standard at a glance</text>
+  <text x="600" y="78" text-anchor="middle" font-size="15" fill="#5A5A52" font-family="'Helvetica Neue', Arial, sans-serif">How AVE fills the gap between existing vulnerability standards and agentic AI's actual attack surface</text>
+
+  <!-- Existing standards box -->
+  <rect x="70" y="120" width="420" height="160" rx="10" fill="#FBF3DE" stroke="#D4A017" stroke-width="1.5"/>
+  <text x="90" y="150" font-size="17" font-weight="bold" fill="#3A3A32" font-family="'Helvetica Neue', Arial, sans-serif">Existing standards</text>
+  <text x="90" y="178" font-size="14" fill="#4A4A42" font-family="'Helvetica Neue', Arial, sans-serif">CVE &#183; CVSS &#183; OSV</text>
+  <text x="90" y="200" font-size="14" fill="#4A4A42" font-family="'Helvetica Neue', Arial, sans-serif">Maps to package + version</text>
+  <text x="90" y="222" font-size="14" fill="#8A5A2A" font-family="'Helvetica Neue', Arial, sans-serif" font-style="italic">Blind to agent behavior</text>
+
+  <!-- Agent component threats box -->
+  <rect x="710" y="120" width="420" height="160" rx="10" fill="#FBF3DE" stroke="#D4A017" stroke-width="1.5"/>
+  <text x="730" y="150" font-size="17" font-weight="bold" fill="#3A3A32" font-family="'Helvetica Neue', Arial, sans-serif">Agent component threats</text>
+  <text x="730" y="178" font-size="14" fill="#4A4A42" font-family="'Helvetica Neue', Arial, sans-serif">Prompt injection, toxic flows,</text>
+  <text x="730" y="200" font-size="14" fill="#4A4A42" font-family="'Helvetica Neue', Arial, sans-serif">rug pulls, tool poisoning</text>
+  <text x="730" y="222" font-size="14" fill="#8A5A2A" font-family="'Helvetica Neue', Arial, sans-serif" font-style="italic">No package. No version.</text>
+
+  <!-- Connector lines to AVE box -->
+  <path d="M280,280 L500,360" stroke="#4A4A4A" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+  <path d="M920,280 L700,360" stroke="#4A4A4A" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+  <text x="600" y="330" text-anchor="middle" font-size="13" fill="#5A5A52" font-family="'Helvetica Neue', Arial, sans-serif" font-style="italic">AVE fills the gap</text>
+
+  <!-- AVE core box -->
+  <rect x="330" y="365" width="540" height="120" rx="10" fill="#1B5E3F" stroke="#164C33" stroke-width="1.5"/>
+  <text x="600" y="405" text-anchor="middle" font-size="20" font-weight="bold" fill="#F5F0E8">AVE, Agentic Vulnerability Enumeration</text>
+  <text x="600" y="432" text-anchor="middle" font-size="14" fill="#D4A017" font-family="'Helvetica Neue', Arial, sans-serif">The behavioral classification standard for agentic AI components</text>
+  <text x="600" y="458" text-anchor="middle" font-size="13" fill="#C8DDD0" font-family="'Helvetica Neue', Arial, sans-serif">Stable IDs &#183; AIVSS scored &#183; behavioral fingerprints</text>
+
+  <!-- Connector lines down to three outputs -->
+  <path d="M470,485 L280,560" stroke="#4A4A4A" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+  <path d="M600,485 L600,560" stroke="#4A4A4A" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+  <path d="M730,485 L920,560" stroke="#4A4A4A" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- Trusted frameworks -->
+  <rect x="70" y="565" width="320" height="130" rx="10" fill="#EAF2ED" stroke="#1B5E3F" stroke-width="1.5"/>
+  <text x="90" y="596" font-size="15" font-weight="bold" fill="#1B5E3F" font-family="'Helvetica Neue', Arial, sans-serif">Trusted frameworks</text>
+  <text x="90" y="620" font-size="13" fill="#3A3A32" font-family="'Helvetica Neue', Arial, sans-serif">OWASP MCP Top 10</text>
+  <text x="90" y="640" font-size="13" fill="#3A3A32" font-family="'Helvetica Neue', Arial, sans-serif">MITRE ATLAS</text>
+  <text x="90" y="660" font-size="13" fill="#3A3A32" font-family="'Helvetica Neue', Arial, sans-serif">OWASP AIVSS v0.8</text>
+
+  <!-- Scanner interop -->
+  <rect x="440" y="565" width="320" height="130" rx="10" fill="#EAF2ED" stroke="#1B5E3F" stroke-width="1.5"/>
+  <text x="460" y="596" font-size="15" font-weight="bold" fill="#1B5E3F" font-family="'Helvetica Neue', Arial, sans-serif">Scanner interop</text>
+  <text x="460" y="620" font-size="13" fill="#3A3A32" font-family="'Helvetica Neue', Arial, sans-serif">Independent implementations</text>
+  <text x="460" y="640" font-size="13" fill="#3A3A32" font-family="'Helvetica Neue', Arial, sans-serif">converge on the same IDs,</text>
+  <text x="460" y="660" font-size="13" fill="#3A3A32" font-family="'Helvetica Neue', Arial, sans-serif">no shared code required</text>
+
+  <!-- Open governance -->
+  <rect x="810" y="565" width="320" height="130" rx="10" fill="#EAF2ED" stroke="#1B5E3F" stroke-width="1.5"/>
+  <text x="830" y="596" font-size="15" font-weight="bold" fill="#1B5E3F" font-family="'Helvetica Neue', Arial, sans-serif">Open governance</text>
+  <text x="830" y="620" font-size="13" fill="#3A3A32" font-family="'Helvetica Neue', Arial, sans-serif">Apache 2.0</text>
+  <text x="830" y="640" font-size="13" fill="#3A3A32" font-family="'Helvetica Neue', Arial, sans-serif">Independently governed</text>
+  <text x="830" y="660" font-size="13" fill="#3A3A32" font-family="'Helvetica Neue', Arial, sans-serif">No vendor lock-in</text>
+
+  <text x="600" y="722" text-anchor="middle" font-size="12" fill="#8A8A82" font-family="'Helvetica Neue', Arial, sans-serif">aveproject.org &#183; github.com/aveproject/ave</text>
+</svg>
