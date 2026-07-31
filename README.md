@@ -28,7 +28,7 @@ mapped to the frameworks security teams already report against.
 [![Security Policy](https://img.shields.io/badge/security-policy-blue?style=flat-square)](SECURITY.md)
 [![Code of Conduct](https://img.shields.io/badge/code%20of%20conduct-Contributor%20Covenant-blueviolet?style=flat-square)](CODE_OF_CONDUCT.md)
 
-[Registry](https://aveproject.org/registry.html) · [Schema](https://aveproject.org/schema.html) · [Crosswalks](https://aveproject.org/crosswalks.html) · [Architecture](https://aveproject.org/architecture.html) · [Scoring](https://aveproject.org/scoring.html) · [Scanner](https://github.com/bawbel/scanner)
+[Registry](https://aveproject.org/registry.html) · [Schema](https://aveproject.org/schema.html) · [Crosswalks](https://aveproject.org/crosswalks.html) · [Architecture](https://aveproject.org/architecture.html) · [Scoring](https://aveproject.org/scoring.html) · [API](https://api.aveproject.org) · [Scanner](https://github.com/bawbel/scanner)
 
 </div>
 
@@ -61,6 +61,10 @@ Your CI pipeline scans dependencies for known package vulnerabilities.
 It does not scan your SKILL.md for prompt injection.
 AVE + Bawbel fixes that.
 ```
+
+<p align="center">
+  <img src="docs/images/ave-gap-diagram.svg" alt="Two independent scanners flag the same behavioral pattern under different names, with no shared identifier; AVE fills that gap" width="640" />
+</p>
 
 ---
 
@@ -491,6 +495,7 @@ See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for community standards.
 | [aveproject.org](https://aveproject.org) | Public registry and documentation |
 | [bawbel/scanner](https://github.com/bawbel/scanner) | Reference implementation |
 | [aveproject/ave-site](https://github.com/aveproject/ave-site) | Website source |
+| [api.aveproject.org](https://api.aveproject.org) | Reference API, live lookup by AVE ID (Pattern 1 above) |
 | [OWASP AIVSS v0.8](https://aivss.owasp.org) | Scoring specification |
 | [MITRE ATLAS](https://atlas.mitre.org) | AI threat technique catalog |
 | [OWASP MCP Top 10](https://owasp.org) | MCP attack surface framework |
