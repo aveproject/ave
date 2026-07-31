@@ -276,7 +276,7 @@ Three patterns depending on your environment:
 **Pattern 1 — Runtime API** (cloud CI/CD, always-on internet)
 ```python
 import httpx
-resp = httpx.get("https://api.piranha.bawbel.io/ave/AVE-2026-00002")
+resp = httpx.get("https://api.aveproject.org/records/AVE-2026-00002")
 record = resp.json()  # full record: fingerprint, IOCs, remediation, frameworks
 ```
 
