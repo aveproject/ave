@@ -16,8 +16,8 @@ and having positive + negative detection fixtures.
 removal, required field addition) require a new schema version and a migration script.
 Minor additions (new optional fields) are non-breaking and can ship in a patch release.
 
-**Deprecation:** a record is deprecated by setting `status` to `"deprecated"` with a
-`deprecation_reason`. `ave_id` values are never reused or deleted.
+**Deprecation:** a record is deprecated by setting `status` to `"deprecated"`, with a
+note explaining why. `ave_id` values are never reused or deleted.
 
 **Crosswalk updates:** maintainer or contributors may update crosswalk JSON files to
 add new tool mappings. No record changes required.
