@@ -474,6 +474,10 @@ are proposed and reviewed, and the path toward neutral governance.
 See [docs/specs/scaling-and-governance.md](docs/specs/scaling-and-governance.md)
 for record-growth discipline, schema versioning, and deprecation policy.
 
+See [docs/specs/researcher-process.md](docs/specs/researcher-process.md)
+for the practical, step-by-step process a contributor actually follows
+when adding a new record, including a full worked example.
+
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the contributor-facing process.
 
 See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for community standards.
