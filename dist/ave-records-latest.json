@@ -8249,6 +8249,13 @@
     "owasp_asi": [
       "ASI04"
     ],
+    "mitre_atlas": [
+      "AML.T0010",
+      "AML.T0011.001"
+    ],
+    "nist_ai_rmf": [
+      "GOVERN-6.1"
+    ],
     "behavioral_fingerprint": "Agent resolves a user's request referencing a well-known or trending resource to a package, repository, or skill name absent from any verified registry the request could plausibly resolve to, then fetches or installs content from that unverified name without a registry-existence or publisher-identity check.",
     "behavioral_vector": [
       "hallucination-driven-supply-chain",
@@ -8331,7 +8338,7 @@
       "aivss_score": 6.2,
       "aivss_severity": "MEDIUM",
       "spec_version": "0.8",
-      "notes": "non_determinism scored low (0.25), not high, deliberately: the defining property of this class per its own source research is that the hallucination is unusually predictable and transferable across models and phrasings, the opposite of high run-to-run variance, which is what makes precomputing a fixed squatting list viable for an attacker in the first place. thm set to 0.90 (PoC exists) rather than 1.0: demonstrated against real production LLM applications and named platforms with high success rates, but no disclosed real-world exploitation campaign yet, distinct from an in-the-wild incident like ClawHavoc. cvss_base held at 9.0 to match the demonstrated RCE/botnet-formation impact once a squatted name is installed; MEDIUM severity reflects AARF's narrower amplification profile (single-agent, no persistent memory or identity manipulation required) rather than an inflated attempt to force a HIGH/CRITICAL label onto a real but single-vector entry mechanism."
+      "notes": "non_determinism scored low (0.25), not high, deliberately: the defining property of this class per its own source research is that the hallucination is unusually predictable and transferable across models and phrasings, the opposite of high run-to-run variance, which is what makes precomputing a fixed squatting list viable for an attacker in the first place. thm set to 0.90 (PoC exists) rather than 1.0: demonstrated against real production LLM applications and named platforms with high success rates, but no disclosed real-world exploitation campaign yet, distinct from an in-the-wild incident like ClawHavoc. cvss_base held at 9.0 to match the demonstrated RCE/botnet-formation impact once a squatted name is installed; MEDIUM severity reflects AARF's narrower amplification profile (single-agent, no persistent memory or identity manipulation required) rather than an inflated attempt to force a HIGH/CRITICAL label onto a real but single-vector entry mechanism. mitre_atlas and nist_ai_rmf researched directly against primary/near-primary sources, not corpus pattern-matching: AML.T0010 (AI Supply Chain Compromise) and its sub-technique AML.T0011.001 (Malicious Package -- 'software packages that when imported by a user have a deleterious effect') both confirmed via MITRE's own ATLAS data repository. GOVERN-6.1 ('policies and procedures address AI risks associated with third-party entities') confirmed as the matching NIST AI RMF subcategory for third-party/supply-chain risk."
     },
     "evidence_kind_default": "behavioral_pattern",
     "detection_stage": "runtime_observed",
