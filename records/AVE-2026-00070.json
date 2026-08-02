@@ -1,0 +1,81 @@
+{
+  "ave_id": "AVE-2026-00070",
+  "schema_version": "1.1.0",
+  "status": "active",
+  "component_type": "agent",
+  "title": "Distributed cross-agent backdoor fragments reassembled externally after execution",
+  "attack_class": "Persistence - Distributed Cross-Agent Backdoor Fragments",
+  "severity": "MEDIUM",
+  "description": "A poisoned tool embeds encrypted attack primitives within its observations, which spread across the memories and context of multiple distinct agents as they use that tool during a multi-agent collaborative task. Each individual primitive remains dormant and inert on its own; no single agent's session, memory, or tool output contains anything a local security check would flag as malicious, and the collaborative task itself completes with no observable degradation to benign performance. Only when an attacker later scans the execution trace or the individual agents' memories, decrypts the primitives using a key established in the original poisoning step, and reassembles them, does the full backdoor payload exist and become executable, entirely after the multi-agent run has already finished. This is distinct from a single-session, single-model reassembly of static tool-description fragments (AVE-2026-00059): the fragments here live in multiple agents' own runtime observations and memories, not one client's static tool schema, and the reassembly is external, offline, and attacker-driven, not performed by any agent's own inference process during the session.",
+  "aivss_score": 6.4,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:N",
+  "owasp_mcp": ["MCP03"],
+  "owasp_asi": ["ASI06", "ASI07"],
+  "mitre_atlas": [],
+  "nist_ai_rmf": [],
+  "behavioral_fingerprint": "A tool's observation or return value delivered to an agent contains an encrypted or encoded fragment inconsistent with the tool's stated function, persisting in that agent's memory or context after the call, with no single agent's session containing enough fragments to reconstruct a complete instruction on its own.",
+  "behavioral_vector": [
+    "distributed-backdoor",
+    "multi-agent-fragment-spread",
+    "external-post-execution-reassembly"
+  ],
+  "provenance_vector": {
+    "entry_class": "memory",
+    "payload_surface": "encrypted attack-primitive fragments embedded in tool observations, persisting across multiple distinct agents' own memories and context after a collaborative task",
+    "escalation": "data_to_instruction"
+  },
+  "trifecta_profile": {
+    "requires": ["untrusted_content"],
+    "amplifies": ["private_data", "external_comms"]
+  },
+  "mitigation": {
+    "strategy": ["provenance_label", "isolate_scope"],
+    "enforcement_point": "runtime_proxy",
+    "trifecta_control": "break_untrusted_content"
+  },
+  "example_patterns": [
+    "A shared research tool returns results containing an innocuous-looking trailing string to every agent that calls it; individually the strings look like malformed formatting artifacts, but concatenated and decrypted across all agents that touched the tool in one task, they form a complete exfiltration script",
+    "An orchestrator agent's memory retains a fragment from one sub-agent's tool call and a second, unrelated fragment from another sub-agent's tool call in the same run; neither sub-agent's own session ever holds both fragments together"
+  ],
+  "mutation_count": 0,
+  "detection_methodology": "1. Do not evaluate tool-call security in isolation per agent or per session; trace and correlate tool observations across every agent participating in the same multi-agent task. 2. Flag tool outputs containing high-entropy or encoded substrings inconsistent with the tool's declared return schema, even when individually below a suspicion threshold. 3. Post-task memory audit: scan each participating agent's retained memory and context for fragments that share structural or statistical properties with fragments retained by other agents from the same task, a signal of coordinated distribution. 4. Because reassembly happens externally and after execution, runtime monitoring during the task will not catch the completed payload; detection must include post-execution memory/trace analysis, not just live monitoring.",
+  "indicators_of_compromise": [
+    "Multiple distinct agents in the same collaborative task retaining structurally similar high-entropy or encoded fragments in memory or context from the same shared tool",
+    "A tool's observed output containing content inconsistent with its declared return schema, present identically or near-identically across calls from different agents",
+    "Post-task memory content that individually appears benign or malformed but is statistically consistent with an encrypted fragment of a larger payload"
+  ],
+  "remediation": "Treat tool outputs shared across multiple agents in a collaborative task as a cross-agent attack surface, not just a per-call one; correlate observations across the full task's agent roster, not each agent in isolation. Apply provenance labeling to tool outputs so downstream memory retention can be audited against its source. Where feasible, isolate or sanitize tool observations before they persist into an agent's longer-term memory, rather than retaining raw tool output unmodified.",
+  "kill_switch_active": false,
+  "researcher": "Saray Chak",
+  "researcher_url": "https://bawbel.io",
+  "published": "2026-08-02T00:00:00Z",
+  "last_updated": "2026-08-02T00:00:00Z",
+  "references": [
+    {
+      "tag": "Collaborative Shadows (arXiv 2510.11246)",
+      "text": "Zhu, Li, Lyu, Sun, Su, Shao. 'Collaborative Shadows: Distributed Backdoor Attacks in LLM-Based Multi-Agent Systems.' Attack success rate exceeding 95% with no degradation to benign task performance, evaluated on a custom multi-role collaborative-task benchmark in a sandboxed framework. Code and benchmark published.",
+      "url": "https://arxiv.org/abs/2510.11246"
+    }
+  ],
+  "aivss": {
+    "cvss_base": 9.0,
+    "aarf": {
+      "autonomy": 1, "tool_use": 1, "multi_agent": 1, "non_determinism": 0.25,
+      "self_modification": 0, "dynamic_identity": 0, "persistent_memory": 1,
+      "natural_language_input": 0, "data_access": 0.5, "external_dependencies": 0.5
+    },
+    "aars": 5.25,
+    "thm": 0.9,
+    "mitigation_factor": 1,
+    "aivss_score": 6.4,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "notes": "multi_agent and persistent_memory both scored at maximum, correctly: this mechanism is definitionally multi-agent (fragments spread across distinct agents' own sessions) and definitionally dependent on memory persistence (fragments must survive in agent memory between the poisoning call and the external reassembly step). non_determinism scored low (0.25): source research reports over 95% attack success, closer to reliable than unpredictable. mitre_atlas and nist_ai_rmf left as researched empty arrays: a candidate ATLAS technique (AI Agent Context Poisoning: Memory) could not be verified against MITRE's own data repository despite genuine effort, and independent research explicitly confirms 'agent-to-agent lateral movement' and 'cross-session memory persistence' as documented gaps in current ATLAS coverage, consistent with finding nothing to cite with confidence rather than a research shortfall."
+  },
+  "evidence_kind_default": "behavioral_pattern",
+  "detection_stage": "runtime_drift_detected",
+  "detection_layer": "runtime",
+  "confidence_baseline": 0.45,
+  "evidence_basis_engines": ["sandbox", "llm"],
+  "derivable_into": ["remote-control-chain", "credential-exfiltration"]
+}

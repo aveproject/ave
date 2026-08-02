@@ -9,6 +9,12 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 ## [Unreleased]
 
 ### Added
+- AVE-2026-00070: distributed cross-agent backdoor fragments
+  (Collaborative Shadows) — a poisoned tool spreads encrypted, dormant
+  attack primitives across multiple distinct agents' own memories
+  during a collaborative task; an attacker reassembles them externally,
+  offline, after execution. Fifth and final record of the eight-
+  candidate audit's genuine gaps (MEDIUM, AIVSS 6.4)
 - `docs/specs/scaling-and-governance.md`: record-growth discipline
   (citing MITRE CWE 4.19 as a documented cautionary precedent), schema
   versioning policy (formalizing the existing alias/frozen-snapshot
