@@ -109,6 +109,11 @@
       "tag": "AVE Registry",
       "text": "AVE-2026-00046 \u2014 AVE behavioral vulnerability registry",
       "url": "https://github.com/aveproject/ave/blob/main/records/AVE-2026-00046.json"
+    },
+    {
+      "tag": "AVE Technical Writeup",
+      "text": "Full technical breakdown of this record: the mechanism, why detection is genuinely hard, and what a real defense looks like",
+      "url": "https://aveproject.org/writeups/AVE-2026-00046.html"
     }
   ],
   "owasp_mcp": [
