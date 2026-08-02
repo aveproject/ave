@@ -9,6 +9,11 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 ## [Unreleased]
 
 ### Added
+- AVE-2026-00068: CLI command composition risk (MOSAIC) — individually
+  benign CLI commands compose through shared OS/shell state (env vars,
+  file descriptors, working directory, temp files) into an
+  unauthorized capability; no single command in the sequence is
+  independently dangerous (MEDIUM, AIVSS 5.1)
 - `docs/specs/scaling-and-governance.md`: record-growth discipline
   (citing MITRE CWE 4.19 as a documented cautionary precedent), schema
   versioning policy (formalizing the existing alias/frozen-snapshot

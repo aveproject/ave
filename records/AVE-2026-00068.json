@@ -1,0 +1,77 @@
+{
+  "ave_id": "AVE-2026-00068",
+  "schema_version": "1.1.0",
+  "status": "active",
+  "component_type": "skill",
+  "title": "CLI command composition risk: benign commands compose through shared shell state into unauthorized capability",
+  "attack_class": "Tool Abuse - CLI Command Composition",
+  "severity": "MEDIUM",
+  "description": "An agent issues a sequence of CLI commands where no single command is independently dangerous and none would be flagged by single-command analysis tools such as ShellCheck, GTFOBins, or LOLBAS, but the commands compose through operating-system state shared between them, environment variables, file descriptors, the working directory, or temporary files, into a capability beyond what the user's task authorized. Commands cooperate through shared state by design; the same property that makes a shell useful for legitimate multi-step work is what makes the composition exploitable. An earlier command's output or side effect becomes a later command's exploitable input, forming a producer-consumer relationship across the command trace that no single-command security check observes, because each command's own visible effect remains benign throughout. Published research demonstrates this composition achieving a 96.59% attack success rate across 2,525 trials, spanning five real-world CLI coding agents and five backend models, entirely within ordinary, benign-looking developer task scenarios.",
+  "aivss_score": 5.1,
+  "cvss_base_vector": "CVSS:4.0/AV:L/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:N",
+  "owasp_mcp": ["MCP05"],
+  "owasp_asi": ["ASI02"],
+  "mitre_atlas": [],
+  "nist_ai_rmf": [],
+  "behavioral_fingerprint": "A command sequence issued by an agent contains no single command that is independently dangerous, but an earlier command's output, environment modification, or file artifact is consumed by a later command in the same sequence to produce a capability or effect the task did not authorize.",
+  "behavioral_vector": [
+    "cli-command-composition",
+    "shared-shell-state",
+    "producer-consumer-command-chain"
+  ],
+  "provenance_vector": {
+    "entry_class": "runtime",
+    "payload_surface": "shared OS/shell state (environment variables, file descriptors, working directory, temp files) connecting sequential CLI command executions within one agent session",
+    "escalation": "instruction_to_capability"
+  },
+  "mitigation": {
+    "strategy": ["isolate_scope", "least_privilege"],
+    "enforcement_point": "runtime_proxy",
+    "trifecta_control": "not_applicable"
+  },
+  "example_patterns": [
+    "Command 1: write a value to an environment variable for a legitimate build step. Command 2 (later, unrelated task): a tool reads that same environment variable and uses it in a context the first command's author never intended",
+    "Command 1: create a temp file with permissive permissions for a benign local task. Command 2: a different tool later reads or overwrites that same temp file path to escalate its own effective access"
+  ],
+  "mutation_count": 0,
+  "detection_methodology": "1. Trace command sequences within a single agent session, not just each command's own arguments, and record what operating-system state (env vars, file descriptors, working directory, temp files) each command reads or writes. 2. Flag sequences where a later command consumes state written by an earlier, unrelated command in a way that produces a capability neither command individually possessed. 3. Differential testing: compare the effective capability of the full sequence against the union of each command's individually-declared or individually-observed capability; a gap indicates emergent, composition-driven escalation. 4. Existing single-command tools (ShellCheck, GTFOBins, LOLBAS) will not catch this class by design; a composition-aware trace analysis is required.",
+  "indicators_of_compromise": [
+    "A command sequence where a later command's behavior or output depends on operating-system state (env var, file, working directory) written by an earlier, functionally unrelated command in the same session",
+    "Environment variables, temp files, or file descriptors created for one apparent purpose being read by a subsequent command serving a different purpose",
+    "A capability or effect present in the combined output of a command sequence that is absent from any single command's own declared or typical behavior"
+  ],
+  "remediation": "Scope each command's access to shared OS state as narrowly as the individual task requires, rather than allowing an entire session's commands to share an unrestricted environment, working directory, and file descriptor space. Where feasible, isolate command executions that serve unrelated sub-tasks into separate scopes or sandboxes so that one command's artifacts cannot become another's input. Treat command-sequence review as a distinct security check from single-command review, since the two catch different classes of risk.",
+  "kill_switch_active": false,
+  "researcher": "Saray Chak",
+  "researcher_url": "https://bawbel.io",
+  "published": "2026-08-02T00:00:00Z",
+  "last_updated": "2026-08-02T00:00:00Z",
+  "references": [
+    {
+      "tag": "MOSAIC (arXiv 2607.02857)",
+      "text": "Wu, Wang, Zhang, Nan, Wang. 'MOSAIC: Knowledge-Guided CLI Command Composition Attack in LLM Coding Agents.' Demonstrates 96.59% attack success across 2,525 trials spanning 5 real-world CLI coding agents and 5 backend LLMs, all within benign developer task scenarios, by chaining individually-benign commands through shared producer-consumer OS state.",
+      "url": "https://arxiv.org/abs/2607.02857"
+    }
+  ],
+  "aivss": {
+    "cvss_base": 8.0,
+    "aarf": {
+      "autonomy": 1, "tool_use": 1, "multi_agent": 0, "non_determinism": 0.25,
+      "self_modification": 0, "dynamic_identity": 0, "persistent_memory": 0,
+      "natural_language_input": 0.5, "data_access": 0.5, "external_dependencies": 0
+    },
+    "aars": 3.25,
+    "thm": 0.9,
+    "mitigation_factor": 1,
+    "aivss_score": 5.1,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "notes": "non_determinism scored low (0.25), matching the same reasoning as AVE-2026-00066: the source research demonstrates a 96.59% success rate, closer to reliable than to unpredictable. external_dependencies scored 0: the mechanism is entirely local OS-state composition, requiring no external content or remote resource. mitre_atlas and nist_ai_rmf researched, not assumed, and left as deliberate empty arrays: ATLAS's existing agent-tool techniques (e.g. AML.T0086, Exfiltration via AI Agent Tool Invocation, already used on AVE-2026-00053) describe a different mechanism, single-tool-call exfiltration, not multi-command OS-state composition, so it was not force-fit. NIST AI RMF's MAP function has a documented, independently-corroborated gap for evaluating emergent risk from tool/action combinations, the same gap noted on AVE-2026-00067, and no MEASURE subcategory was found precise enough to cite with confidence rather than guess."
+  },
+  "evidence_kind_default": "behavioral_pattern",
+  "detection_stage": "runtime_observed",
+  "detection_layer": "runtime",
+  "confidence_baseline": 0.55,
+  "evidence_basis_engines": ["sandbox"],
+  "derivable_into": ["remote-control-chain"]
+}
