@@ -1,0 +1,76 @@
+{
+  "ave_id": "AVE-2026-00067",
+  "schema_version": "1.1.0",
+  "status": "active",
+  "component_type": "skill",
+  "title": "Skill composition trust transfer: an upstream skill's output silently becomes a downstream skill's trust signal",
+  "attack_class": "Privilege Escalation - Skill Composition Trust Transfer",
+  "severity": "MEDIUM",
+  "description": "A skill that is entirely benign when reviewed or executed in isolation produces an output, such as an audit finding, an endorsement, a validation result, or another benign-looking artifact, that a separate, later-invoked skill treats as a trust or authorization signal without independently re-verifying the underlying claim. Neither skill individually does anything dangerous; the vulnerability exists only in the composition, when both are invoked along the same task path in a shared execution context. Because per-skill security review evaluates each skill's own behavior in isolation, it structurally cannot see this class of risk: an upstream skill's legitimate, correct output becomes a spoofable trust credential the moment a downstream skill treats it as authoritative rather than re-verifying the claim itself. Published research demonstrates this mechanism accepting harmful software installation at over 96% success across four of five tested model backends when preceded by an approval-like output from an unrelated upstream skill, versus near-zero success when the same downstream skill is invoked in isolation.",
+  "aivss_score": 5.0,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:L/SI:H/SA:N",
+  "owasp_mcp": ["MCP02"],
+  "owasp_asi": ["ASI03", "ASI08"],
+  "mitre_atlas": [],
+  "nist_ai_rmf": [],
+  "behavioral_fingerprint": "A downstream skill accepts an upstream skill's output (an endorsement, an audit result, a validation finding, or similar artifact) as sufficient authorization or trust justification for a sensitive action, without independently re-verifying the claim the upstream output represents.",
+  "behavioral_vector": [
+    "skill-composition-risk",
+    "trust-signal-propagation",
+    "cross-invocation-authorization-confusion"
+  ],
+  "provenance_vector": {
+    "entry_class": "tool_response",
+    "payload_surface": "a benign, correct upstream skill's output (endorsement, audit finding, validation result) consumed by a downstream skill as an implicit trust or authorization signal"
+  },
+  "mitigation": {
+    "strategy": ["verify_identity", "isolate_scope"],
+    "enforcement_point": "agent_framework",
+    "trifecta_control": "not_applicable"
+  },
+  "example_patterns": [
+    "A security-review skill outputs 'no issues found' for a candidate package; a separate installation skill, invoked later in the same task, treats that output as sufficient approval to install the package without independently checking its provenance",
+    "A file-audit skill flags a directory as 'clean'; an access-manager skill invoked afterward grants broader permissions to that directory on the strength of the audit output alone, without its own independent verification"
+  ],
+  "mutation_count": 0,
+  "detection_methodology": "1. Trace multi-skill task executions and record which skill outputs are consumed as inputs, conditions, or justifications by subsequently invoked skills, not just each skill's own isolated behavior. 2. Flag any downstream skill invocation whose sensitive action is gated primarily on an upstream skill's output without an independent, direct verification of the same underlying claim. 3. Sandbox-based differential testing: run the downstream skill's decision logic both with and without the upstream skill's output present; a large swing in acceptance rate for the same underlying request is the defining signal (published research measured this as attack success in composition versus near-zero in isolation).",
+  "indicators_of_compromise": [
+    "A sensitive action (install, grant permission, execute) immediately following a separate skill's benign-looking endorsement, audit result, or validation output within the same task path",
+    "Sensitive-action acceptance rate that differs sharply depending on whether a preceding, unrelated skill's output is present in context, for what is otherwise the identical underlying request",
+    "Downstream skill logic that branches on the presence or content of another skill's prior output rather than performing its own independent check"
+  ],
+  "remediation": "Design each skill's authorization and trust decisions to be self-contained: require independent verification of any claim a sensitive action depends on, rather than accepting another skill's prior output as sufficient justification. At the orchestration layer, scope each skill invocation's effective authority independently of what preceded it in the same task, so an upstream skill's output can inform a downstream skill but cannot substitute for that skill's own required checks.",
+  "kill_switch_active": false,
+  "researcher": "Saray Chak",
+  "researcher_url": "https://bawbel.io",
+  "published": "2026-08-02T00:00:00Z",
+  "last_updated": "2026-08-02T00:00:00Z",
+  "references": [
+    {
+      "tag": "Benign in Isolation, Harmful in Composition (arXiv 2606.15242)",
+      "text": "Xie, Du, Cheng, Zhou, Yin. 'Benign in Isolation, Harmful in Composition: Security Risks in Agent Skill Ecosystems.' Introduces Skill Composition Risk (SCR) and SCR-Bench across three sub-types (SCR-CapFlow, SCR-TrustLift, SCR-AuthBlur). SCR-TrustLift (this record's scope) measured over 96.5% attack success across four of five backends when a downstream decision is preceded by an upstream endorsement-like output, versus near-zero in isolation.",
+      "url": "https://arxiv.org/abs/2606.15242"
+    }
+  ],
+  "aivss": {
+    "cvss_base": 7.5,
+    "aarf": {
+      "autonomy": 1, "tool_use": 1, "multi_agent": 0, "non_determinism": 0.5,
+      "self_modification": 0, "dynamic_identity": 0.5, "persistent_memory": 0,
+      "natural_language_input": 0, "data_access": 0.5, "external_dependencies": 0
+    },
+    "aars": 3.5,
+    "thm": 0.9,
+    "mitigation_factor": 1,
+    "aivss_score": 5.0,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "notes": "multi_agent scored 0, not partial: this is a single-agent, multi-skill composition risk, not a multi-agent one -- the composition happens across sequential skill invocations within one agent's own session, not across distinct agents. natural_language_input scored 0: the vulnerable signal is a skill's structured output/return value, not natural-language instruction text. Scoped specifically to the SCR-TrustLift sub-mechanism (trust-signal propagation) rather than all three SCR sub-types the source paper covers, since SCR-CapFlow (capability-flow composition) and SCR-AuthBlur (authorization-confusion composition) are related but structurally distinct mechanisms worth their own records if drafted, not folded into one record broad enough to blur the fingerprint. mitre_atlas and nist_ai_rmf left as empty arrays deliberately, not omitted: researched directly against primary/near-primary sources rather than corpus pattern-matching. The closest ATLAS candidate, AML.T0053 (AI Agent Tool Invocation), describes an agent exploiting its own access to invoke connected tools for elevated privilege, a different mechanism from a downstream skill trusting an upstream skill's benign output, so it was not force-fit. For NIST AI RMF, independent research corroborates a documented gap: the current MAP function has no subcategory evaluating emergent risk from AI system component/tool combinations, matching this record's own finding that no clean mapping exists yet."
+  },
+  "evidence_kind_default": "semantic_inference",
+  "detection_stage": "runtime_observed",
+  "detection_layer": "runtime",
+  "confidence_baseline": 0.55,
+  "evidence_basis_engines": ["sandbox", "llm"],
+  "derivable_into": []
+}
