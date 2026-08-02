@@ -1,0 +1,77 @@
+{
+  "ave_id": "AVE-2026-00069",
+  "schema_version": "1.1.0",
+  "status": "active",
+  "component_type": "skill",
+  "title": "Multimodal image-hidden instructions (SkillCamo) bundled within a skill package",
+  "attack_class": "Obfuscation - Multimodal Image-Hidden Instructions",
+  "severity": "MEDIUM",
+  "description": "A skill package conceals malicious instructions inside an image file bundled alongside its documentation, while the surrounding documentation is written to naturally reference the image as an ordinary asset without describing its hidden content. Text-only scanners that examine only manifests, documentation, and source code, the surface every current agent skill scanner covers, cannot see instructions encoded visually rather than textually, creating a real detection gap. At deployment, a multimodal agent processing the skill's bundled resources decodes the image and recovers the hidden instructions the text-only review missed. This is distinct from prompt injection via a user-supplied image at chat time: the payload is a static resource shipped inside the skill package itself, present before any user interaction, not something a user uploads mid-conversation.",
+  "aivss_score": 4.8,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:L/SI:H/SA:N",
+  "owasp_mcp": ["MCP03"],
+  "owasp_asi": ["ASI01", "ASI04"],
+  "mitre_atlas": ["AML.T0068"],
+  "nist_ai_rmf": [],
+  "behavioral_fingerprint": "A skill package bundles an image resource whose visual content encodes instructions not present anywhere in the package's own text (documentation, manifest, or source), with surrounding documentation phrased to reference the image as an ordinary asset rather than describing what it actually contains.",
+  "behavioral_vector": [
+    "image-hidden-instruction",
+    "static-scanner-evasion",
+    "bundled-resource-payload"
+  ],
+  "provenance_vector": {
+    "entry_class": "skill_file",
+    "payload_surface": "an image resource bundled within the skill package, distinct from the package's documentation, manifest, or source code text",
+    "escalation": "data_to_instruction"
+  },
+  "mitigation": {
+    "strategy": ["validate_input", "sanitize_output"],
+    "enforcement_point": "static_scan",
+    "trifecta_control": "not_applicable"
+  },
+  "example_patterns": [
+    "SKILL.md text: 'See the architecture diagram (diagram.png) for module layout.' diagram.png's pixel data, decoded by a multimodal reader, contains an instruction to exfiltrate environment variables, present nowhere in the visible documentation",
+    "A skill's bundled screenshot.png, referenced in passing as a usage example, encodes a directive in its metadata or pixel values instructing the agent to grant the skill broader tool access on first run"
+  ],
+  "mutation_count": 0,
+  "detection_methodology": "1. Do not scope skill review to text artifacts alone (documentation, manifest, source); extract and multimodally analyze every bundled image, audio, or other non-text resource for embedded instruction-like content. 2. Flag image resources whose surrounding documentation references them only in passing (a diagram, a screenshot, an icon) without the image itself being necessary for the skill's stated function. 3. Compare a multimodal decoding of each bundled resource against the skill's own documented behavior; content in the resource with no textual counterpart anywhere in the package is a strong signal. 4. Steganalysis and metadata inspection (EXIF, embedded pixel-level anomalies) as a secondary check alongside semantic multimodal review.",
+  "indicators_of_compromise": [
+    "A bundled image, audio, or other non-text resource in a skill package whose multimodal-decoded content includes directive or instruction-like language absent from the package's own documentation",
+    "Documentation that references a bundled resource only superficially (as a diagram, screenshot, or icon) when the resource is not functionally required for the skill's stated purpose",
+    "Anomalous pixel-level or metadata patterns in a bundled image inconsistent with normal compression/encoding artifacts for its declared format"
+  ],
+  "remediation": "Extend skill review and scanning pipelines to multimodally analyze every bundled non-text resource, not just documentation, manifest, and source code. Treat an image, audio file, or other binary resource bundled with a skill as untrusted content requiring the same scrutiny as instruction text, since a multimodal agent will read it the same way it reads the skill's prose. Where feasible, strip or re-encode bundled images to remove non-essential metadata and reduce steganographic capacity before a skill is published to a registry.",
+  "kill_switch_active": false,
+  "researcher": "Saray Chak",
+  "researcher_url": "https://bawbel.io",
+  "published": "2026-08-02T00:00:00Z",
+  "last_updated": "2026-08-02T00:00:00Z",
+  "references": [
+    {
+      "tag": "SkillCamo (arXiv 2606.18198)",
+      "text": "Jia, Liao, Qin, Ma, Guo, Feng, Liu, Liu. 'Seeing Is Not Screening: Multimodal Hidden Instruction Attacks on Agent Skill Scanners.' Introduces SkillCamo, which conceals malicious instructions within images bundled with a skill while rewriting surrounding documentation to naturally reference those images, and ExecScan, a proposed defense performing joint intent/behavior analysis across documentation, code, and visual content. Confirms image-hidden instructions challenge existing skill scanners (evaluated against tools including Cisco, Snyk, and SkillVetter).",
+      "url": "https://arxiv.org/abs/2606.18198"
+    }
+  ],
+  "aivss": {
+    "cvss_base": 8.0,
+    "aarf": {
+      "autonomy": 1, "tool_use": 0.5, "multi_agent": 0, "non_determinism": 0.25,
+      "self_modification": 0, "dynamic_identity": 0, "persistent_memory": 0,
+      "natural_language_input": 0, "data_access": 0.5, "external_dependencies": 0.5
+    },
+    "aars": 2.75,
+    "thm": 0.9,
+    "mitigation_factor": 1,
+    "aivss_score": 4.8,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "notes": "natural_language_input scored 0: the hidden payload is decoded from image pixel/metadata content, not natural-language text the agent reads directly. mitre_atlas researched and confirmed precisely, not assumed: AML.T0068 (LLM Prompt Obfuscation) explicitly names hiding instructions 'in the pixels of an image' for multimodal inputs as an in-scope example, verified against MITRE's own ATLAS data repository. nist_ai_rmf left as a researched empty array: no subcategory specific enough to bundled-resource multimodal scanning was found with confidence; NIST AI 600-1 (the Generative AI Profile) extends AI RMF to multimodal systems generally but a precise subcategory citation was not locatable without guessing."
+  },
+  "evidence_kind_default": "multi_engine",
+  "detection_stage": "static_detection",
+  "detection_layer": "content",
+  "confidence_baseline": 0.5,
+  "evidence_basis_engines": ["llm", "magika"],
+  "derivable_into": ["remote-control-chain"]
+}

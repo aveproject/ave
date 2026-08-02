@@ -9,6 +9,11 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 ## [Unreleased]
 
 ### Added
+- AVE-2026-00069: multimodal image-hidden instructions (SkillCamo) —
+  malicious instructions concealed in an image bundled with a skill
+  package, invisible to text-only scanners, recovered by a multimodal
+  agent at deployment; distinct from user-supplied image injection at
+  chat time (MEDIUM, AIVSS 4.8)
 - `docs/specs/scaling-and-governance.md`: record-growth discipline
   (citing MITRE CWE 4.19 as a documented cautionary precedent), schema
   versioning policy (formalizing the existing alias/frozen-snapshot
