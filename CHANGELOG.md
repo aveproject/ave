@@ -9,6 +9,10 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 ## [Unreleased]
 
 ### Added
+- AVE-2026-00066: hallucinated skill-name squatting (HalluSquatting) —
+  agent hallucinates a plausible-but-nonexistent package/repo/skill
+  name, attacker pre-registers it with malicious content, no injected
+  instruction anywhere in the chain (MEDIUM, AIVSS 6.2)
 - `docs/specs/scaling-and-governance.md`: record-growth discipline
   (citing MITRE CWE 4.19 as a documented cautionary precedent), schema
   versioning policy (formalizing the existing alias/frozen-snapshot

@@ -11,7 +11,7 @@ Stable IDs, AIVSS scores, and behavioral fingerprints for every way a skill file
 MCP server, system prompt, or agent plugin can be weaponized — scored consistently,
 mapped to the frameworks security teams already report against.
 
-[![Records](https://img.shields.io/badge/records-65-0f6e56?style=flat-square)](records/)
+[![Records](https://img.shields.io/badge/records-66-0f6e56?style=flat-square)](records/)
 [![Schema](https://img.shields.io/badge/schema-v1.1.0-0a3024?style=flat-square)](schema/ave-record-1.1.0.schema.json)
 [![AIVSS](https://img.shields.io/badge/AIVSS-v0.8-d4a017?style=flat-square)](https://aivss.owasp.org)
 [![OWASP MCP](https://img.shields.io/badge/OWASP-MCP%20Top%2010-0a3024?style=flat-square)](https://owasp.org)
@@ -99,12 +99,12 @@ skill file          ->   in CI / pre-commit   ->  before deploy
 
 | | |
 |---|---|
-| Total records | 65 |
+| Total records | 66 |
 | Schema version | 1.1.0 |
 | AIVSS spec | v0.8 |
 | CRITICAL (>= 9.0) | 1 |
 | HIGH (7.0-8.9) | 14 |
-| MEDIUM (4.0-6.9) | 48 |
+| MEDIUM (4.0-6.9) | 49 |
 | LOW (< 4.0) | 2 |
 | Framework: OWASP MCP Top 10 | all records |
 | Framework: MITRE ATLAS | where applicable |
@@ -233,6 +233,7 @@ AIVSS = ((8.5 + 7.5) / 2) x 1.0 x 1 = 8.0  ->  HIGH
 | [AVE-2026-00063](records/AVE-2026-00063.json) | Approval Gate Bypass via Configuration | 4.8 | MEDIUM |
 | [AVE-2026-00064](records/AVE-2026-00064.json) | Zero-Click Code Execution via Auto-Run Configuration | 5.2 | MEDIUM |
 | [AVE-2026-00065](records/AVE-2026-00065.json) | A2A Agent Card Poisoning | 7.1 | HIGH |
+| [AVE-2026-00066](records/AVE-2026-00066.json) | Hallucinated Skill-Name Squatting (HalluSquatting) | 6.2 | MEDIUM |
 
 ---
 
