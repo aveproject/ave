@@ -166,6 +166,9 @@ AIVSS = ((8.5 + 7.5) / 2) x 1.0 x 1 = 8.0  ->  HIGH
 
 ## Record index
 
+<details>
+<summary><strong>70 records, click to expand</strong></summary>
+
 | AVE ID | Title | AIVSS | Severity |
 |---|---|---|---|
 | [AVE-2026-00001](records/AVE-2026-00001.json) | Metamorphic Payload via External Config Fetch | 8.0 | HIGH |
@@ -238,6 +241,8 @@ AIVSS = ((8.5 + 7.5) / 2) x 1.0 x 1 = 8.0  ->  HIGH
 | [AVE-2026-00068](records/AVE-2026-00068.json) | CLI Command Composition Risk (MOSAIC) | 5.1 | MEDIUM |
 | [AVE-2026-00069](records/AVE-2026-00069.json) | Multimodal Image-Hidden Instructions (SkillCamo) | 4.8 | MEDIUM |
 | [AVE-2026-00070](records/AVE-2026-00070.json) | Distributed Cross-Agent Backdoor Fragments | 6.4 | MEDIUM |
+
+</details>
 
 ---
 
