@@ -233,6 +233,7 @@ AIVSS = ((8.5 + 7.5) / 2) x 1.0 x 1 = 8.0  ->  HIGH
 | [AVE-2026-00063](records/AVE-2026-00063.json) | Approval Gate Bypass via Configuration | 4.8 | MEDIUM |
 | [AVE-2026-00064](records/AVE-2026-00064.json) | Zero-Click Code Execution via Auto-Run Configuration | 5.2 | MEDIUM |
 | [AVE-2026-00065](records/AVE-2026-00065.json) | A2A Agent Card Poisoning | 7.1 | HIGH |
+| [AVE-2026-00066](records/AVE-2026-00066.json) | Hallucinated Skill-Name Squatting (HalluSquatting) | 6.2 | MEDIUM |
 | [AVE-2026-00067](records/AVE-2026-00067.json) | Skill Composition Trust Transfer (SCR-TrustLift) | 5.0 | MEDIUM |
 
 ---
