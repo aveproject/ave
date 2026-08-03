@@ -181,9 +181,12 @@ guard and deserves real effort, an easy negative fixture tests nothing.
 - `dist/ave-records-latest.json`: add or replace this record's entry,
   keep the array sorted by `ave_id`.
 - `CHANGELOG.md`: one line under Unreleased/Added.
-- `README.md`: update the record count if it references one, find the
-  actual line first (`grep -n "[0-9]\+ records" README.md`), don't
-  assume its current wording.
+- `README.md`: the record count lives in three separate places that
+  don't share a common text pattern, a single grep won't catch all of
+  them, update each explicitly:
+  - the badge (`grep -n "records-[0-9]\+-" README.md`)
+  - the Stats table (`grep -n "Total records" README.md`)
+  - the collapsible record index's summary label (`grep -n "records, click to expand" README.md`)
 
 Don't bump `schema_version` or create a new versioned dist snapshot as a
 side effect of adding one record, that's a separate, deliberate decision.
