@@ -1,0 +1,100 @@
+{
+  "ave_id": "AVE-2026-00066",
+  "schema_version": "1.1.0",
+  "status": "active",
+  "component_type": "skill",
+  "title": "Hallucinated skill-name squatting (HalluSquatting)",
+  "attack_class": "Supply Chain - Hallucinated Resource Squatting",
+  "severity": "MEDIUM",
+  "description": "An attacker precomputes which plausible-but-nonexistent package, repository, or skill names large language models are statistically likely to generate when asked about a well-known or trending resource, then preemptively registers those exact names on a public registry with malicious content. When an agent hallucinates one of these names in response to an ordinary user request and proceeds to fetch, clone, or install it, no attacker-controlled instruction or injected content is present anywhere in the interaction; the entry point is the model's own hallucinated belief that the resource exists, not a component-level compromise reached through prompt injection or tampering of a real package. Published research demonstrates the hallucination is reliably predictable and transferable across different foundation models and prompt phrasings, letting an attacker precompute a fixed, reusable set of squatted names that yield a scalable, low-cost distribution channel for malware across heterogeneous platforms.",
+  "affected_platforms": [
+    "cursor", "windsurf", "github-copilot", "cline", "gemini-cli", "openclaw"
+  ],
+  "affected_registries": [
+    "npm", "pypi", "github", "clawhub.io", "skillsmp"
+  ],
+  "aivss_score": 6.2,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:R/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
+  "owasp_mcp": ["MCP04"],
+  "owasp_asi": ["ASI04"],
+  "mitre_atlas": ["AML.T0010", "AML.T0011.001"],
+  "nist_ai_rmf": ["GOVERN-6.1"],
+  "behavioral_fingerprint": "Agent resolves a user's request referencing a well-known or trending resource to a package, repository, or skill name absent from any verified registry the request could plausibly resolve to, then fetches or installs content from that unverified name without a registry-existence or publisher-identity check.",
+  "behavioral_vector": [
+    "hallucination-driven-supply-chain",
+    "predictable-name-squatting",
+    "no-injected-instruction-required"
+  ],
+  "provenance_vector": {
+    "entry_class": "model_generated",
+    "payload_surface": "a model-generated (hallucinated) skill, package, or repository name that the agent subsequently uses to search, fetch, or install content"
+  },
+  "trifecta_profile": {
+    "requires": ["external_comms"]
+  },
+  "mitigation": {
+    "strategy": ["verify_identity", "pin_integrity"],
+    "enforcement_point": "runtime_proxy",
+    "trifecta_control": "break_external_comms"
+  },
+  "example_patterns": [
+    "User: 'clone the popular X library for me' -> agent generates a plausible but non-existent repo URL under a common naming pattern and clones it without checking it against the real, verified project",
+    "User: 'install the skill that does Y' -> agent installs a skill name it produced from pattern-matching on Y's description, never cross-checked against the actual skill registry entry for Y"
+  ],
+  "mutation_count": 0,
+  "detection_methodology": "1. Maintain or consume a corpus of resource names LLMs are statistically likely to hallucinate for popular or trending packages, repositories, and skills, drawn from published research corpora. 2. Flag any agent-initiated fetch, clone, or install action targeting a name in that corpus that does not resolve in the canonical registry for the ecosystem it claims to belong to. 3. At the registry level, flag newly registered names with high similarity to well-known resources, especially those registered during periods of increased attention to the resource they resemble. 4. Runtime observation: an install or fetch action preceded by a user request for a well-known resource by description rather than an explicit, verified identifier is a behavioral signal distinguishing this class from an intentional install of an actually-obscure, legitimate package.",
+  "indicators_of_compromise": [
+    "Installed or fetched package, skill, or repository name absent from the verified registry it claims to belong to (npm, PyPI, ClawHub, SkillsMP, GitHub) despite closely resembling a well-known resource's name",
+    "The same non-existent resource name resolved repeatedly across independent sessions or models, consistent with a statistically predictable hallucination rather than a one-off typo",
+    "A newly registered publisher or account behind a resource name matching a documented LLM hallucination pattern for a popular or trending resource"
+  ],
+  "remediation": "Verify any package, repository, or skill name an agent proposes to install or clone against the canonical registry before execution, rather than trusting the agent's own name resolution. Pin agents to an allowlist of previously verified resource names for repeated tasks. Registries should monitor for and flag newly registered names with high similarity to documented LLM hallucination patterns for popular resources, a leading indicator distinguishable from organic naming collisions.",
+  "kill_switch_active": false,
+  "researcher": "Saray Chak",
+  "researcher_url": "https://bawbel.io",
+  "published": "2026-08-02T00:00:00Z",
+  "last_updated": "2026-08-02T00:00:00Z",
+  "references": [
+    {
+      "tag": "Beware of Agentic Botnets (arXiv 2607.07433)",
+      "text": "Spira, Cohen, Feldman, Bitton, Wool, Nassi (Tel Aviv University, Technion, Intuit). 'Beware of Agentic Botnets: Scalable Untargeted Promptware Attacks via Universal and Transferable Adversarial HalluSquatting.' Demonstrates up to 85% success in repo-cloning scenarios and up to 100% in skill installation, transferable across foundation models and production LLM applications.",
+      "url": "https://arxiv.org/abs/2607.07433"
+    },
+    {
+      "tag": "Skills That Don't Exist (arXiv 2607.12340)",
+      "text": "Yuan, Guo, Dong, Wang, Liu. 'Skills That Don't Exist: A Large-Scale Study of Hallucinated Skill Recommendation in LLM Agents.' 15,000 prompts across 12 model/agent configurations; average hallucination rate 36-37%, up to 62% in some configurations; 5,669 distinct hallucinated names generated, individual names repeated up to 7.8 times per 10 queries.",
+      "url": "https://arxiv.org/abs/2607.12340"
+    },
+    {
+      "tag": "SecurityWeek coverage",
+      "text": "'HalluSquatting Turns AI Hallucinations Into Botnet Delivery Mechanism' — independent security-press summary naming Cursor, Windsurf, GitHub Copilot, Cline, Gemini CLI, and OpenClaw as affected AI coding tools.",
+      "url": "https://www.securityweek.com/hallusquatting-turns-ai-hallucinations-into-botnet-delivery-mechanism/"
+    },
+    {
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00066 - AVE behavioral vulnerability registry",
+      "url": "https://github.com/aveproject/ave/blob/main/records/AVE-2026-00066.json"
+    }
+  ],
+  "aivss": {
+    "cvss_base": 9.0,
+    "aarf": {
+      "autonomy": 1, "tool_use": 1, "multi_agent": 0, "non_determinism": 0.25,
+      "self_modification": 0, "dynamic_identity": 0, "persistent_memory": 0,
+      "natural_language_input": 1, "data_access": 0.5, "external_dependencies": 1
+    },
+    "aars": 4.75,
+    "thm": 0.9,
+    "mitigation_factor": 1,
+    "aivss_score": 6.2,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "notes": "non_determinism scored low (0.25), not high, deliberately: the defining property of this class per its own source research is that the hallucination is unusually predictable and transferable across models and phrasings, the opposite of high run-to-run variance, which is what makes precomputing a fixed squatting list viable for an attacker in the first place. thm set to 0.90 (PoC exists) rather than 1.0: demonstrated against real production LLM applications and named platforms with high success rates, but no disclosed real-world exploitation campaign yet, distinct from an in-the-wild incident like ClawHavoc. cvss_base held at 9.0 to match the demonstrated RCE/botnet-formation impact once a squatted name is installed; MEDIUM severity reflects AARF's narrower amplification profile (single-agent, no persistent memory or identity manipulation required) rather than an inflated attempt to force a HIGH/CRITICAL label onto a real but single-vector entry mechanism. mitre_atlas and nist_ai_rmf researched directly against primary/near-primary sources, not corpus pattern-matching: AML.T0010 (AI Supply Chain Compromise) and its sub-technique AML.T0011.001 (Malicious Package -- 'software packages that when imported by a user have a deleterious effect') both confirmed via MITRE's own ATLAS data repository. GOVERN-6.1 ('policies and procedures address AI risks associated with third-party entities') confirmed as the matching NIST AI RMF subcategory for third-party/supply-chain risk."
+  },
+  "evidence_kind_default": "behavioral_pattern",
+  "detection_stage": "runtime_observed",
+  "detection_layer": "runtime",
+  "confidence_baseline": 0.6,
+  "evidence_basis_engines": ["sandbox", "llm"],
+  "derivable_into": ["remote-control-chain"]
+}
