@@ -17,6 +17,20 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   AVE-2026-00002 by predictor2718. Third and final record drafted from
   the cfgaudit gap breakdown on issue #68 for this pass (MEDIUM, AIVSS
   4.1)
+- AVE-2026-00072: MCP server bound to all interfaces with no
+  authentication (NeighborJack) — a wildcard bind address (0.0.0.0 or
+  [::]) makes an MCP server reachable by anyone on the local network
+  with no credential required; the config difference from a safe
+  deployment is a single token. Second of three records drafted from
+  predictor2718's detailed cfgaudit gap breakdown on issue #68 (MEDIUM,
+  AIVSS 5.0)
+- AVE-2026-00071: MCP daemon redirect (container posture) — DOCKER_HOST
+  or a -H/--host flag pointing the container daemon at remote
+  infrastructure, so every build/run/pull silently targets an
+  attacker-controlled host with nothing in the compose file or image
+  reference looking unusual. First of three records drafted from
+  predictor2718's detailed cfgaudit gap breakdown on issue #68 (MEDIUM,
+  AIVSS 5.6)
 - AVE-2026-00070: distributed cross-agent backdoor fragments
   (Collaborative Shadows) — a poisoned tool spreads encrypted, dormant
   attack primitives across multiple distinct agents' own memories
