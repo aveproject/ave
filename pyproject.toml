@@ -19,6 +19,8 @@ dev = [
     # GPL, and over the [format-nongpl] extra, which pulls in thirteen
     # distributions to reach the same two checkers.
     "rfc3986-validator>=0.1.1",
+    # Registers the "date-time" format checker used by AVE record metadata.
+    "rfc3339-validator>=0.1.4",
 ]
 
 # Not a Python library -- nothing here imports "bawbel_ave" as a package.

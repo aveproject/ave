@@ -12,10 +12,11 @@
 #       consumer of the corpus. A stray vendor product name is a neutrality
 #       violation this project enforces everywhere else; records shouldn't be
 #       the one place it's unchecked.
-# How:  jsonschema.Draft202012Validator against schema/ave-record-1.1.0.schema.json
-#       (handles the draft-vs-active conditional required set natively), plus a
-#       handful of checks the schema's additionalProperties:false already implies
-#       but which deserve a readable, named failure message of their own
+# How:  jsonschema.Draft202012Validator with format checking enabled against
+#       schema/ave-record-1.1.0.schema.json (handles the draft-vs-active
+#       conditional required set natively and enforces date-time / uri metadata),
+#       plus a handful of checks the schema's additionalProperties:false already
+#       implies but which deserve a readable, named failure message of their own
 import json
 import re
 import sys
@@ -53,6 +54,12 @@ VENDOR_BOILERPLATE_PATTERNS = [
 def check_schema(record: dict, validator: jsonschema.Draft202012Validator) -> list[str]:
     return [f"schema: {e.message} (at {'/'.join(str(p) for p in e.path) or '<root>'})"
             for e in validator.iter_errors(record)]
+
+
+def build_validator(schema: dict) -> jsonschema.Draft202012Validator:
+    return jsonschema.Draft202012Validator(
+        schema, format_checker=jsonschema.Draft202012Validator.FORMAT_CHECKER
+    )
 
 
 def check_no_old_field_names(record: dict) -> list[str]:
@@ -136,7 +143,7 @@ def check_no_vendor_boilerplate(raw_text: str) -> list[str]:
 def main() -> int:
     schema = json.loads(SCHEMA_PATH.read_text())
     jsonschema.Draft202012Validator.check_schema(schema)
-    validator = jsonschema.Draft202012Validator(schema)
+    validator = build_validator(schema)
 
     paths = sorted(RECORDS_DIR.glob("AVE-*.json"))
     if not paths:
