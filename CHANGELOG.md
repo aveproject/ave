@@ -9,6 +9,15 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 ## [Unreleased]
 
 ### Added
+- AVE-2026-00074: reclaimable dead external anchor (SkillJacking) — a
+  skill references a GitHub owner, package, domain, or cloud subdomain
+  that was live when authored and has since been deleted or expired,
+  making it re-registerable by an attacker with no change to the
+  skill's own content; distinct from AVE-2026-00062 (absence of pinning
+  at declaration time), this is a previously-valid reference decaying
+  after the fact. Sourced from repo-forensics' scan_dead_anchors.py and
+  AIR's SkillJacking disclosure (925 skills / ~134,000 agents on
+  hijackable dependencies) (HIGH, AIVSS 7.1)
 - AVE-2026-00073: telemetry/endpoint redirect via static configuration —
   a committed config value (OTEL_EXPORTER_OTLP_ENDPOINT,
   ANTHROPIC_BASE_URL/CVE-2026-21852, or a cleartext model/provider base
