@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aveproject.org/schema/crosswalk-1.0.0.schema.json",
+  "title": "AVE Crosswalk",
+  "description": "AVE (the behavioral vulnerability enumeration standard for agentic AI components) — a mapping between AVE and one other taxonomy, scanner, or standard. Schema v1.0.0. Derived from the crosswalk files already in crosswalks/: the required set is what every one of them carries, and the shared vocabulary below is typed where every file that uses a name uses it the same way. A crosswalk is a bespoke document about one pair of taxonomies, so per-pair keys are permitted throughout and are not enumerated here.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "$schema",
+    "source",
+    "target",
+    "generated",
+    "note",
+    "mappings",
+    "coverage"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "pattern": "^https://aveproject\\.org/schema/crosswalk-[0-9]+\\.[0-9]+\\.[0-9]+\\.schema\\.json$",
+      "description": "The versioned crosswalk schema this file was authored against.",
+      "examples": [
+        "https://aveproject.org/schema/crosswalk-1.0.0.schema.json"
+      ]
+    },
+    "source": {
+      "$ref": "#/$defs/endpoint",
+      "description": "The side the mapping reads from. For a crosswalk named X-to-AVE this is X; for AVE-to-X it is AVE."
+    },
+    "target": {
+      "$ref": "#/$defs/endpoint",
+      "description": "The side the mapping reads into."
+    },
+    "generated": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "description": "ISO 8601 date this crosswalk's contents were last derived, e.g. 2026-07-25. The pattern is stated alongside the format keyword deliberately: format is an annotation a validator may ignore, and a date that does not parse is the failure this field exists to prevent."
+    },
+    "note": {
+      "type": "string",
+      "description": "What this crosswalk maps, what it deliberately does not, and the reading of the other taxonomy it assumes. This is the field a reader consults before trusting a row."
+    },
+    "revision_note": {
+      "type": "string",
+      "description": "What changed since the previous revision of this file, including any category the other side renamed or retitled. Optional."
+    },
+    "mappings": {
+      "type": "array",
+      "minItems": 1,
+      "description": "One entry per correspondence. The entry shape is per-crosswalk — a scanner crosswalk keys on its rule ids, a taxonomy crosswalk keys on category ids — so only the names shared across existing files are typed below.",
+      "items": {
+        "$ref": "#/$defs/mapping"
+      }
+    },
+    "gaps": {
+      "type": "array",
+      "description": "Correspondences that do not exist, each with the reason. A crosswalk that lists only what matched overstates its own coverage. Optional.",
+      "items": {
+        "$ref": "#/$defs/gap"
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "minProperties": 1,
+      "description": "How much of each side the mappings account for. The counter names are per-crosswalk because the countable units differ (categories, rules, patterns, records), so this is an open object of counts, with room for one prose value explaining what the counts leave out.",
+      "additionalProperties": {
+        "type": [
+          "integer",
+          "string"
+        ],
+        "minimum": 0
+      }
+    }
+  },
+  "$defs": {
+    "ave_id": {
+      "type": "string",
+      "pattern": "^AVE-[0-9]{4}-[0-9]{5}$",
+      "description": "An AVE record identifier, in the format AVE-YYYY-NNNNN defined by the record schema."
+    },
+    "endpoint": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "url"
+      ],
+      "description": "One side of the mapping. Only url is universal across existing crosswalks; the rest of an endpoint's description depends on what the side is — a standard has a version and a record count, a scanner has a vendor, a licence, and a rule total.",
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https?://",
+          "description": "Canonical URL for this side: its project site, specification, or repository. As with generated, the pattern sits beside the format keyword because format is an annotation unless the validator is run with format checking on, and jsonschema's uri checker additionally needs the rfc3986-validator package installed. The pattern holds either way."
+        },
+        "standard": {
+          "type": "string",
+          "description": "Name of the standard, when this side is one. Optional."
+        },
+        "tool": {
+          "type": "string",
+          "description": "Name of the tool, when this side is one. Optional."
+        },
+        "vendor": {
+          "type": "string",
+          "description": "Who publishes the tool. Optional."
+        },
+        "license": {
+          "type": "string",
+          "description": "SPDX identifier for the tool's licence, e.g. Apache-2.0. Optional."
+        },
+        "version": {
+          "type": "string",
+          "description": "Version of the standard or tool this crosswalk was read against. Optional."
+        },
+        "record_count": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of AVE records this side carried when the crosswalk was derived. Meaningful only alongside commit: a count on its own cannot be re-derived, because the corpus it counts keeps moving. Optional."
+        },
+        "commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$",
+          "description": "Full 40-character commit sha of the repository this side was read at. Optional, and the field a stale count is diagnosed with: a crosswalk stating a record count and a read date, with no commit, cannot be checked by a reader without re-counting the upstream tree by hand. Full rather than abbreviated, because an abbreviation that is unique today is not guaranteed to stay unique in a growing repository."
+        },
+        "checked_against_live_site": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+          "description": "ISO 8601 date the other side's published site content was last verified, where that side has no repository to pin. Distinct from generated: this crosswalk's rows may have been re-derived more recently than the descriptions they were matched against. Optional."
+        }
+      }
+    },
+    "mapping": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": true,
+      "description": "One correspondence. Per-crosswalk keys naming the other side's unit (a rule id, a category, a module) are expected and unconstrained; the names below are shared across existing crosswalks and are typed so that a malformed AVE identifier fails here rather than downstream.",
+      "properties": {
+        "ave_id": {
+          "$ref": "#/$defs/ave_id",
+          "description": "The AVE record this entry maps to, when exactly one does."
+        },
+        "ave_ids": {
+          "type": "array",
+          "description": "Every AVE record this entry maps to, when more than one does.",
+          "items": {
+            "$ref": "#/$defs/ave_id"
+          }
+        },
+        "primary_ave_id": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ave_id"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The closest single AVE record, where ave_ids lists several. Explicitly null when no one record is closest, which is a different statement from omitting the field."
+        },
+        "description": {
+          "type": "string",
+          "description": "What the other side's unit covers, in its own terms."
+        },
+        "notes": {
+          "type": "string",
+          "description": "How the correspondence was judged, and what it does not carry across."
+        },
+        "gap": {
+          "type": "string",
+          "description": "What this entry maps only partially, and what is left uncovered."
+        }
+      }
+    },
+    "gap": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": true,
+      "description": "One correspondence that does not exist. The key naming the other side's unmapped unit is per-crosswalk; ave_id and the reason are shared.",
+      "properties": {
+        "ave_id": {
+          "$ref": "#/$defs/ave_id",
+          "description": "The AVE record that has no counterpart on the other side."
+        },
+        "reason": {
+          "type": "string",
+          "description": "Why no correspondence exists. A gap without a reason is indistinguishable from an omission."
+        },
+        "note": {
+          "type": "string",
+          "description": "Further detail on the gap."
+        }
+      }
+    }
+  }
+}

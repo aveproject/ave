@@ -27,6 +27,9 @@ jobs:
       - name: Validate all records against the schema
         run: python scripts/validate_records.py
 
+      - name: Validate all crosswalks against the crosswalk schema
+        run: python scripts/validate_crosswalks.py
+
       - name: Check every record has positive and negative conformance fixtures
         run: python scripts/check_fixtures.py
 

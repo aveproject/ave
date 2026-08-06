@@ -13,6 +13,12 @@ dev = [
     "pytest>=8.0",
     "pytest-cov>=5.0",
     "jsonschema>=4.23",
+    # Registers the "uri" and "uri-reference" format checkers. Without it,
+    # jsonschema parses "format": "uri" and then does nothing with it, so the
+    # constraint reads as enforced and is not. Chosen over rfc3987, which is
+    # GPL, and over the [format-nongpl] extra, which pulls in thirteen
+    # distributions to reach the same two checkers.
+    "rfc3986-validator>=0.1.1",
 ]
 
 # Not a Python library -- nothing here imports "bawbel_ave" as a package.
