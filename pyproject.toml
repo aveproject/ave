@@ -33,3 +33,10 @@ packages = []
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# tests/test_validate_data.py imports "from scripts import validate_records".
+# scripts/ has no __init__.py (deliberately, per the packages = [] note above),
+# and bare `pytest` (CI's actual invocation, see .github/workflows/tests.yml)
+# does not insert the repo root onto sys.path the way `python -m pytest` does.
+# Without this, the import resolves under `python -m pytest` locally but
+# fails collection under CI's plain `pytest` invocation.
+pythonpath = ["."]
