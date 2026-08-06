@@ -59,7 +59,7 @@ reference implementation. Any tool can map to it — see the
 ```
 Your CI pipeline scans dependencies for known package vulnerabilities.
 It does not scan your SKILL.md for prompt injection.
-AVE + Bawbel fixes that.
+AVE fixes that.
 ```
 
 <p align="center">
