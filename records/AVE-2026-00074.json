@@ -1,0 +1,108 @@
+{
+  "ave_id": "AVE-2026-00074",
+  "schema_version": "1.1.0",
+  "status": "active",
+  "component_type": "skill",
+  "title": "Reclaimable dead external anchor (GitHub owner, package, domain, or cloud subdomain) referenced by a skill",
+  "attack_class": "Supply Chain - Dead Anchor Reclamation (SkillJacking)",
+  "severity": "HIGH",
+  "description": "A skill references an external anchor -- a GitHub owner/repo, a package name in an install instruction, a bare domain, or a free-tier cloud subdomain -- that was live and under its original owner's control at the time the skill was authored, but has since been deleted, renamed, or allowed to expire. Because the anchor is now unclaimed, an attacker can register the exact same name and take control of everything the skill points at, without a single byte of the skill's own committed content changing. Distinct from AVE-2026-00062 (unpinned dependency substitution): that record's mechanism is the absence of a pin from the moment a reference was declared, a mutable specifier resolvable to more than one artifact by design. Here the reference may have been fully precise and stable when written -- a specific GitHub username, an exact package name, a specific domain -- pinning it would not have helped, because the vulnerability is not an unresolved reference, it is a previously-resolved one whose target identity changed out from under it after publication. AIR's disclosed SkillJacking research found 925 skills serving roughly 134,000 agents sitting on this exact class of hijackable dependency, including a real takeover: the seedance2-api video-generation skill (11,483 installs, top ~3% of its marketplace) was fully hijacked by re-registering its deleted GitHub owner account, handing the attacker control over what every installing agent would execute with no change to the skill itself.",
+  "affected_platforms": [
+    "claude-code",
+    "cursor",
+    "codex",
+    "any-agent-or-skill-referencing-external-github-package-domain-or-cloud-targets"
+  ],
+  "affected_registries": [
+    "clawhub.io", "smithery.ai", "agentskills.io", "skills.sh"
+  ],
+  "aivss_score": 7.1,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
+  "owasp_mcp": ["MCP04"],
+  "owasp_asi": ["ASI04"],
+  "mitre_atlas": [],
+  "nist_ai_rmf": [],
+  "behavioral_fingerprint": "A skill's committed content (documentation, manifest, or install instructions) references an external GitHub owner/repo, installable package name, bare domain, or cloud subdomain that currently returns a not-found, unregistered, or deleted-account state from the relevant authority (GitHub's own user API, a package registry, domain RDAP, or a cloud provider's app-slug check), meaning the anchor is presently re-registerable by any third party even though it was a legitimate, resolvable target when the skill was authored.",
+  "behavioral_vector": [
+    "dead-anchor-reclamation",
+    "repojacking",
+    "trust-anchor-confusion",
+    "claimable-external-identity"
+  ],
+  "provenance_vector": {
+    "entry_class": "content",
+    "payload_surface": "a GitHub owner/repo, install-command package name, bare domain, or cloud subdomain referenced in the skill's documentation, manifest, or install instructions, naming an external identity that is presently unclaimed"
+  },
+  "trifecta_profile": {
+    "requires": ["external_comms"]
+  },
+  "mitigation": {
+    "strategy": ["verify_identity", "pin_integrity"],
+    "enforcement_point": "static_scan",
+    "trifecta_control": "break_external_comms"
+  },
+  "example_patterns": [
+    "SKILL.md: 'Install with: pip install totally-real-helper-lib' -- totally-real-helper-lib returns 404 on PyPI, never published or since removed",
+    "README.md: 'Maintained by github.com/former-owner, see the full source there' -- github.com/users/former-owner returns 404 (deleted or renamed), the username is free to re-register",
+    "manifest.json: {\"docs\": \"https://old-project-name.example.com\"} -- old-project-name.example.com is unregistered/expired per RDAP",
+    "SKILL.md: 'Live demo: https://my-old-app.vercel.app' -- the Vercel app was deleted, the subdomain slug is free to reclaim"
+  ],
+  "mutation_count": 0,
+  "detection_methodology": "1. Extract every external anchor referenced anywhere in the skill's committed content: GitHub owner/repo mentions, package names in prose install commands, bare domains, and free-tier cloud subdomains. 2. Probe each anchor's live current state against its authoritative source: GitHub's users API for owners, the relevant package registry (npm, PyPI) for packages, RDAP for domains, and provider-specific fingerprints for cloud subdomains (NXDOMAIN or a 'deleted app' landing page). 3. Classify each anchor as confirmed-claimable (the authoritative check returns not-found/deleted/unregistered), live-and-owned (the anchor resolves normally), or couldn't-check (network failure or ambiguous response) -- only the first tier produces a finding, and a failed check must degrade to silence, never to a false claim of compromise. 4. Re-verify anchors periodically rather than once, since the target class is defined by anchors that were valid when last checked and may decay at any later point.",
+  "indicators_of_compromise": [
+    "A referenced GitHub username or organization returning HTTP 404 from api.github.com/users, indicating deletion or rename and re-registerability",
+    "A package name referenced only in prose install instructions returning a registry 404 (never published, or removed after publication)",
+    "A referenced bare domain returning an unregistered or expired state via RDAP lookup",
+    "A referenced cloud-provider subdomain returning NXDOMAIN or a provider's own 'this app has been deleted' landing page",
+    "The resolved target of a previously-stable external reference differing from what it resolved to at the skill's original publication, with no corresponding change to the skill's own committed content"
+  ],
+  "remediation": "Do not treat a specific, well-formed external reference as permanently safe once reviewed; periodically re-verify that referenced GitHub owners, packages, domains, and cloud subdomains still resolve to their original, reviewed owner before trusting content fetched or installed from them. Where feasible, pin to a content hash or commit SHA rather than a mutable owner/name, and treat any pre-install or pre-fetch step that resolves an external anchor as a point requiring a fresh trust check, not a one-time review at publication time. Registries hosting skills should periodically re-scan published skills for anchor decay rather than only screening at submission.",
+  "kill_switch_active": false,
+  "researcher": "Saray Chak",
+  "researcher_url": "https://bawbel.io",
+  "published": "2026-08-07T00:00:00Z",
+  "last_updated": "2026-08-07T00:00:00Z",
+  "references": [
+    {
+      "tag": "repo-forensics dead-anchor scanner",
+      "text": "alexgreensh/repo-forensics, skills/repo-forensics/scripts/scan_dead_anchors.py -- extracts every external anchor a skill/repo points at (GitHub owner/repo, prose package-install target, bare domain, free-tier cloud subdomain) and probes whether it is currently confirmed-claimable, live-and-owned, or unverifiable, emitting a CRITICAL/MEDIUM/HIGH finding per anchor type only on a confirmed-claimable verdict (see _handle_github, _handle_anchor).",
+      "url": "https://github.com/alexgreensh/repo-forensics/blob/main/skills/repo-forensics/scripts/scan_dead_anchors.py"
+    },
+    {
+      "tag": "AIR SkillJacking disclosure",
+      "text": "Or Nevo, Dor Granat, Eliad Mualem, AIR Security, 'SkillJacking' (2026-07-02). Discloses 925 skills serving ~134,000 agents sitting on instantly hijackable dependencies (deleted GitHub accounts, unregistered packages, expired domains, freed cloud-app slots), including a confirmed takeover of the seedance2-api skill (11,483 installs) via re-registering its deleted GitHub owner account.",
+      "url": "https://www.air.security/blog-posts/skilljacking"
+    },
+    {
+      "tag": "CWE-829",
+      "text": "CWE-829: Inclusion of Functionality from Untrusted Control Sphere - MITRE Common Weakness Enumeration",
+      "url": "https://cwe.mitre.org/data/definitions/829.html"
+    },
+    {
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00074 - AVE behavioral vulnerability registry",
+      "url": "https://github.com/aveproject/ave/blob/main/records/AVE-2026-00074.json"
+    }
+  ],
+  "aivss": {
+    "cvss_base": 8.7,
+    "aarf": {
+      "autonomy": 1, "tool_use": 1, "multi_agent": 0, "non_determinism": 0.5,
+      "self_modification": 0, "dynamic_identity": 1, "persistent_memory": 0,
+      "natural_language_input": 0, "data_access": 1, "external_dependencies": 1
+    },
+    "aars": 5.5,
+    "thm": 1,
+    "mitigation_factor": 1,
+    "aivss_score": 7.1,
+    "aivss_severity": "HIGH",
+    "spec_version": "0.8",
+    "notes": "dynamic_identity scored at genuine maximum (1.0): this class is definitionally trust-anchor confusion, an attacker assumes the exact external identity (GitHub owner, package name, domain, cloud slug) the skill's original review trusted. natural_language_input scored 0: detection and exploitation both turn on live registry/DNS/RDAP state, not on persuading a reader or a model. mitigation_factor left at 1 (no discount): unlike AVE-2026-00062's pinning fix, there is no simple one-time mitigation here, closing this class requires ongoing re-verification of external anchors over time, not a fix applied once at review. mitre_atlas researched and left as an empty array rather than force-fit: AML.T0010.001 (AI Software) names compromising a legitimate package's build/maintainer access, namesquatting, and hallucinated package names as its supply-chain sub-cases, and AML.T0109 (AI Supply Chain Rug Pull) names an original owner deliberately turning malicious; none of these name an attacker legitimately re-registering an identity the original owner abandoned, a genuine, confirmed gap in ATLAS's own taxonomy, not a research shortfall. owasp_asi ASI04 (Supply chain risks) verified against OWASP's own 2026 Top 10 for Agentic Applications list rather than inferred from corpus usage."
+  },
+  "evidence_kind_default": "behavioral_pattern",
+  "detection_stage": "static_detection",
+  "detection_layer": "content",
+  "confidence_baseline": 0.85,
+  "evidence_basis_engines": ["pattern"],
+  "derivable_into": ["remote-control-chain"]
+}
