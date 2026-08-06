@@ -1,0 +1,95 @@
+{
+  "ave_id": "AVE-2026-00072",
+  "schema_version": "1.1.0",
+  "status": "active",
+  "component_type": "mcp_server",
+  "title": "MCP server bound to all network interfaces with no authentication step (NeighborJack)",
+  "attack_class": "Insecure Configuration - Network Bind Exposure",
+  "severity": "MEDIUM",
+  "description": "An MCP server's declared args or env set its bind address to 0.0.0.0 or [::], the wildcard address, rather than a loopback or explicitly scoped interface. Once bound this way, the server is reachable by anyone on the local network, not just the local machine, and no authentication step separates a local, trusted caller from a remote, untrusted one on the same LAN. The configuration difference from a safe deployment is a single token in the server's args or env; nothing about the server's declared tools or capabilities changes, only who can reach them. predictor2718's own name for this pattern is NeighborJack: a server bound this way grants any device on the same network segment the same tool access a legitimate local client would have, with no credential, token, or prompt required.",
+  "affected_platforms": [
+    "any-mcp-server-with-configurable-bind-address"
+  ],
+  "affected_registries": [
+    "clawhub.io", "smithery.ai", "agentskills.io"
+  ],
+  "aivss_score": 5.0,
+  "cvss_base_vector": "CVSS:4.0/AV:A/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
+  "owasp_mcp": ["MCP07"],
+  "mitre_atlas": [],
+  "nist_ai_rmf": [],
+  "behavioral_fingerprint": "An MCP server's declared args or env set its bind address to the wildcard 0.0.0.0 or [::] rather than a loopback address or an explicitly scoped, narrower interface, with no accompanying authentication requirement for incoming connections.",
+  "behavioral_vector": [
+    "network-bind-exposure",
+    "neighborjack",
+    "unauthenticated-lan-reachability"
+  ],
+  "provenance_vector": {
+    "entry_class": "registry_metadata",
+    "payload_surface": "MCP server args or env declaring a bind address of 0.0.0.0 or [::]",
+    "escalation": "instruction_to_capability"
+  },
+  "trifecta_profile": {
+    "requires": ["external_comms"]
+  },
+  "mitigation": {
+    "strategy": ["deny_by_default", "verify_identity"],
+    "enforcement_point": "static_scan",
+    "trifecta_control": "break_external_comms"
+  },
+  "example_patterns": [
+    "{\"args\": [\"--host\", \"0.0.0.0\", \"--port\", \"8080\"]}",
+    "{\"env\": {\"BIND_ADDRESS\": \"[::]\"}}"
+  ],
+  "mutation_count": 0,
+  "detection_methodology": "1. Static scan of MCP server args and env for a declared bind address. 2. Flag any value that is the IPv4 wildcard (0.0.0.0) or IPv6 wildcard ([::]) rather than a loopback address (127.0.0.1, ::1) or an explicitly scoped, non-wildcard interface. 3. Cross-reference against any declared authentication configuration for the same server; a wildcard bind with no authentication requirement is the maximal-severity form of this class, though the bind address alone is sufficient to flag regardless of auth state, since auth configuration can itself be misconfigured or absent by default.",
+  "indicators_of_compromise": [
+    "MCP server args or env declaring a bind address of 0.0.0.0 or [::]",
+    "Successful connections to the server's port originating from hosts other than localhost",
+    "Tool invocations against the server with no accompanying authentication credential, token, or session establishment step"
+  ],
+  "remediation": "Bind MCP servers to a loopback address (127.0.0.1 or ::1) by default; require an explicit, separately-reviewed opt-in before binding to a wildcard or LAN-reachable address. Where LAN or remote reachability is genuinely required, pair it with a mandatory authentication step, never rely on network position alone as an implicit trust boundary.",
+  "kill_switch_active": false,
+  "researcher": "Saray Chak",
+  "researcher_url": "https://bawbel.io",
+  "published": "2026-08-06T00:00:00Z",
+  "last_updated": "2026-08-06T00:00:00Z",
+  "references": [
+    {
+      "tag": "cfgaudit crosswalk gap detail",
+      "text": "predictor2718 (cfgaudit maintainer), detailed mechanism breakdown on issue #68: MCP server wildcard bind exposure (CFG018), the NeighborJack pattern, his own recommendation for the single highest-value record if one is drawn from the broader network-posture group.",
+      "url": "https://github.com/aveproject/ave/issues/68"
+    },
+    {
+      "tag": "CWE-1327",
+      "text": "CWE-1327: Binding to an Unrestricted IP Address - MITRE Common Weakness Enumeration",
+      "url": "https://cwe.mitre.org/data/definitions/1327.html"
+    },
+    {
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00072 - AVE behavioral vulnerability registry",
+      "url": "https://github.com/aveproject/ave/blob/main/records/AVE-2026-00072.json"
+    }
+  ],
+  "aivss": {
+    "cvss_base": 8.7,
+    "aarf": {
+      "autonomy": 1, "tool_use": 1, "multi_agent": 0, "non_determinism": 0,
+      "self_modification": 0, "dynamic_identity": 0, "persistent_memory": 0,
+      "natural_language_input": 0, "data_access": 0.5, "external_dependencies": 0
+    },
+    "aars": 2.5,
+    "thm": 0.9,
+    "mitigation_factor": 1.0,
+    "aivss_score": 5.0,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "notes": "AV:A (adjacent network) rather than AV:N in the CVSS vector: exploitation requires LAN adjacency, not full internet reachability, reflected in a lower external_dependencies AARF score than a remotely-triggerable class would carry. thm set to 0.90 (PoC exists) rather than 1.0: predictor2718 did not cite a specific CVE for CFG018 the way he did for the CORS/logging rules in the same network-posture bucket (CFG066/CFG069), but cfgaudit actively detects this pattern in real deployed configs. MEDIUM severity despite a near-maximum cvss_base (8.7, full unauthenticated tool access to any LAN party) reflects AARF's narrow amplification profile: single-component, no multi-agent, no natural-language surface. owasp_asi intentionally omitted rather than force-fit: this is a network access-control gap, not a match for any of the ten agent-behavior-focused ASI categories, same omission discipline already applied to AVE-2026-00061. Scoped specifically to the wildcard-bind mechanism (CFG018) per predictor2718's own recommendation; CORS wildcard (CFG066, escalates to CVE-2026-33010 combined with disabled auth), deprecated SSE transport (CFG058), non-local proxy routing (CFG021), and unredacted HTTP logging (CFG069, CVE-2026-42282/CVE-2026-41495) are real, separate mechanisms he documented individually, deliberately not folded in here."
+  },
+  "evidence_kind_default": "config_schema",
+  "detection_stage": "static_detection",
+  "detection_layer": "registry_metadata",
+  "confidence_baseline": 0.8,
+  "evidence_basis_engines": ["pattern"],
+  "derivable_into": ["remote-control-chain"]
+}
