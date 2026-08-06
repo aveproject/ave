@@ -9,6 +9,14 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 ## [Unreleased]
 
 ### Added
+- AVE-2026-00073: telemetry/endpoint redirect via static configuration —
+  a committed config value (OTEL_EXPORTER_OTLP_ENDPOINT,
+  ANTHROPIC_BASE_URL/CVE-2026-21852, or a cleartext model/provider base
+  URL) redirects where a process sends traffic, no content injected
+  into the model's context at all; confirmed distinct from
+  AVE-2026-00002 by predictor2718. Third and final record drafted from
+  the cfgaudit gap breakdown on issue #68 for this pass (MEDIUM, AIVSS
+  4.1)
 - AVE-2026-00072: MCP server bound to all interfaces with no
   authentication (NeighborJack) — a wildcard bind address (0.0.0.0 or
   [::]) makes an MCP server reachable by anyone on the local network
