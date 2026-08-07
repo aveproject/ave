@@ -40,6 +40,13 @@ jobs:
       - name: Open PR if dist/ changed
         uses: peter-evans/create-pull-request@v8
         with:
+          # The default GITHUB_TOKEN can't open PRs unless "Allow GitHub
+          # Actions to create and approve pull requests" is on repo-wide --
+          # off by default, and left off here deliberately so no other
+          # workflow in this repo picks up that ability. DIST_SYNC_PR_TOKEN
+          # is a fine-grained PAT scoped to this repo only (contents +
+          # pull-requests: read/write, nothing else), used only by this step.
+          token: ${{ secrets.DIST_SYNC_PR_TOKEN }}
           commit-message: "chore: regenerate consolidated records JSON"
           title: "chore: regenerate consolidated records JSON"
           body: |
