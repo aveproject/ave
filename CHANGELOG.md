@@ -9,6 +9,15 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 ## [Unreleased]
 
 ### Added
+- AVE-2026-00076: natural-language steering of an approval classifier
+  subagent — Cursor's Auto-review mode gates unattended shell/MCP/Fetch
+  calls behind a separate classifier subagent that a committed
+  per-repo permissions.json can steer via free-form natural-language
+  allow_instructions/block_instructions text ("steering, not
+  enforcement" per Cursor's own docs); confirmed distinct from
+  AVE-2026-00021 (instruction read by the primary agent itself) and
+  AVE-2026-00063 (a deterministic boolean flag, no NL involved).
+  Flagged by predictor2718 in PR #123 (MEDIUM, AIVSS 4.5)
 - AVE-2026-00075: bytecode poisoning (compiled .pyc cache diverges from
   its own reviewed .py source) — CPython prefers a valid cached .pyc
   over its own source, so a compiled artifact can contain dangerous
