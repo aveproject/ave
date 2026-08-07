@@ -1,0 +1,111 @@
+{
+  "ave_id": "AVE-2026-00075",
+  "schema_version": "1.1.0",
+  "status": "active",
+  "component_type": "skill",
+  "title": "Bytecode poisoning: compiled .pyc cache diverges from its own reviewed .py source",
+  "attack_class": "Supply Chain - Compiled Bytecode / Source Divergence (Bytecode Poisoning)",
+  "severity": "MEDIUM",
+  "description": "A skill ships a precompiled Python bytecode file (.pyc) alongside its own .py source, and the compiled bytecode contains dangerous primitives (process execution, network calls, credential-path access) that are absent from the visible source text. Because CPython prefers a valid cached .pyc over recompiling its source whenever the file's magic bytes and header validate, whatever the .pyc actually contains is what runs, regardless of what the .py source says. A reviewer or a source-only static scanner sees only the benign .py file; the interpreter executes the bytecode. Distinct from AVE-2026-00057 (obfuscated or encoded skill payload): that class is a single artifact whose own content is encoded (base64, hex, split strings) so that a decode-then-rescan step is needed to see the same payload the scanner already has in hand. This class is a two-artifact divergence between a compiled cache and its own sibling source -- the payload the interpreter runs is not present, encoded or otherwise, anywhere in the file a scanner or reviewer actually reads. A 2026-06-10 CSA AI Safety Initiative research note, with research by Trail of Bits, demonstrated this exact technique: env-var-exfiltration logic embedded in precompiled bytecode shipped next to a benign-looking text-formatting skill, bypassing scanners built to inspect source, and explicitly citing NVIDIA's own SkillSpector documentation acknowledging it cannot analyze binary or encrypted code.",
+  "affected_platforms": [
+    "claude-code",
+    "cursor",
+    "codex",
+    "any-agent-with-skill-loader"
+  ],
+  "affected_registries": [
+    "clawhub.io", "smithery.ai", "agentskills.io"
+  ],
+  "aivss_score": 4.4,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
+  "owasp_mcp": ["MCP04"],
+  "owasp_asi": ["ASI04"],
+  "mitre_atlas": [],
+  "nist_ai_rmf": [],
+  "behavioral_fingerprint": "A skill package contains a .pyc (or .pyo) file whose disassembled bytecode references dangerous primitives (os.system, subprocess, eval, exec, socket, urlopen, credential file paths such as .aws/credentials or .ssh/id_) that do not appear anywhere in its sibling .py source's own text, meaning the compiled artifact the interpreter will actually load and execute contains capability its reviewed source does not show.",
+  "behavioral_vector": [
+    "bytecode-poisoning",
+    "compiled-cache-source-divergence",
+    "pyc-cache-precedence-exploitation"
+  ],
+  "provenance_vector": {
+    "entry_class": "skill_file",
+    "payload_surface": "a compiled .pyc/.pyo bytecode file bundled within the skill package, distinct from and diverging in content from its own sibling .py source text",
+    "escalation": "data_to_instruction"
+  },
+  "trifecta_profile": {
+    "requires": ["untrusted_content"]
+  },
+  "mitigation": {
+    "strategy": ["validate_input", "deny_by_default"],
+    "enforcement_point": "static_scan",
+    "trifecta_control": "break_untrusted_content"
+  },
+  "example_patterns": [
+    "format_helper.py: a short, benign string-formatting function. format_helper.cpython-312.pyc (bundled alongside it): disassembles to reveal os.environ access and a socket.socket/connect call absent from format_helper.py's own text",
+    "utils.py: contains no reference to subprocess. The sibling __pycache__/utils.cpython-311.pyc marshal-unmarshals to co_names including 'subprocess' and 'Popen'",
+    "getattr(os, chr(115)+chr(121)+chr(115)+chr(116)+chr(101)+chr(109)) constructed dynamically inside a .pyc's disassembly to build the string 'system' and dodge a static co_names check for the literal name"
+  ],
+  "mutation_count": 0,
+  "detection_methodology": "1. Do not skip .pyc/.pyo files as opaque binary content; locate the magic-byte header (PEP 552: 16 bytes for CPython 3.7+, 12 for 3.3-3.6, 8 for older) to determine the correct offset and unmarshal the code object, ideally in an isolated subprocess since a hostile bytecode file can crash the unmarshaler. 2. Diff a fixed list of dangerous name markers (environ, getenv, system, popen, Popen, subprocess, eval, exec, compile, __import__, marshal, socket, urlopen, b64decode) and dangerous substring markers (credential paths, raw IP/URL literals) present in the compiled bytecode's co_names/co_consts against a word-boundary-anchored scan of the sibling .py source text. 3. Flag any marker present in the compiled artifact but absent from the visible source as bytecode poisoning; treat this as unconditional regardless of how innocuous the source looks, since the entire point of the class is that the source is not what executes. 4. Flag orphan .pyc files with no sibling .py at all only when a dangerous primitive is also present, to avoid false-positiving on ordinary compiled caches or vendored/stripped wheels.",
+  "indicators_of_compromise": [
+    "A .pyc/.pyo file's disassembled co_names or co_consts containing process-execution, network, or credential-path primitives absent from its sibling .py source's own visible text",
+    "A dynamically constructed attribute access (e.g. getattr(os, chr(...)+chr(...)) building a dangerous call name from character codes) inside compiled bytecode, present to dodge a static co_names scan",
+    "An orphan .pyc/.pyo file with no corresponding .py source anywhere in the package, containing a dangerous primitive",
+    "A __pycache__ directory or standalone .pyc shipped as part of a skill package where the ecosystem's normal build process would not have produced or distributed one"
+  ],
+  "remediation": "Never trust a precompiled .pyc/.pyo file at face value; unmarshal and disassemble every bytecode artifact a skill ships and compare its actual referenced primitives against its own visible source before trusting the package. Reject skill packages that bundle precompiled bytecode with no legitimate build-pipeline reason to do so, and strip or refuse to load any .pyc/__pycache__ content from an unreviewed or third-party skill source, forcing recompilation from source instead. Static scanners that currently skip binary/.pyc content by design, the exact gap the 2026-06 CSA/Trail of Bits audit identified across multiple production skill scanners, should treat that skip as an explicit, documented blind spot rather than a silent pass.",
+  "kill_switch_active": false,
+  "researcher": "Saray Chak",
+  "researcher_url": "https://bawbel.io",
+  "published": "2026-08-07T00:00:00Z",
+  "last_updated": "2026-08-07T00:00:00Z",
+  "references": [
+    {
+      "tag": "repo-forensics bytecode scanner",
+      "text": "alexgreensh/repo-forensics, skills/repo-forensics/scripts/scan_bytecode.py -- unmarshals and disassembles .pyc/.pyo files in an isolated subprocess and diffs a fixed danger-primitive marker list against the disassembly against the sibling .py source's own text, flagging 'Bytecode poisoning (compiled code exceeds its source)' when a marker is present only in the compiled artifact (see _poison_markers_vs_source).",
+      "url": "https://github.com/alexgreensh/repo-forensics/blob/main/skills/repo-forensics/scripts/scan_bytecode.py"
+    },
+    {
+      "tag": "CSA / Trail of Bits research note",
+      "text": "Cloud Security Alliance AI Safety Initiative, research by Trail of Bits, 'AI Agent Skill Scanners: Bypassed Across the Board' (2026-06-10). Demonstrates embedding environment-variable-exfiltration logic in precompiled bytecode shipped alongside a benign-looking text-formatting skill, bypassing scanners including NVIDIA SkillSpector, whose own documentation acknowledges it cannot analyze encrypted or binary code.",
+      "url": "https://labs.cloudsecurityalliance.org/research/csa-research-note-ai-agent-skill-scanner-bypass-20260610-csa/"
+    },
+    {
+      "tag": "Trail of Bits blog",
+      "text": "Trail of Bits, 'The sorry state of skill distribution' (2026-06-03). Companion writeup covering the .pyc bytecode-hiding bypass technique alongside three other scanner-bypass methods against ClawHub, Cisco, and skills.sh detectors.",
+      "url": "https://blog.trailofbits.com/2026/06/03/the-sorry-state-of-skill-distribution/"
+    },
+    {
+      "tag": "CWE-506",
+      "text": "CWE-506: Embedded Malicious Code - MITRE Common Weakness Enumeration",
+      "url": "https://cwe.mitre.org/data/definitions/506.html"
+    },
+    {
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00075 - AVE behavioral vulnerability registry",
+      "url": "https://github.com/aveproject/ave/blob/main/records/AVE-2026-00075.json"
+    }
+  ],
+  "aivss": {
+    "cvss_base": 7.5,
+    "aarf": {
+      "autonomy": 1, "tool_use": 0.5, "multi_agent": 0, "non_determinism": 0,
+      "self_modification": 0, "dynamic_identity": 0, "persistent_memory": 0,
+      "natural_language_input": 0, "data_access": 1, "external_dependencies": 0.5
+    },
+    "aars": 3.0,
+    "thm": 1,
+    "mitigation_factor": 0.83,
+    "aivss_score": 4.4,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "notes": "non_determinism scored 0, deliberately distinct from AVE-2026-00074's 0.5: once a poisoned .pyc with a matching header sits next to its source, CPython's cache-precedence behavior loads it every time, deterministically, unlike a dead-anchor class whose exploitability depends on external registry state that varies over time. dynamic_identity scored 0: this is a content divergence between two artifacts, not an identity or trust-anchor impersonation, the property that earned AVE-2026-00074 its maximum score on that factor. mitigation_factor discounted to 0.83: refusing to trust bundled .pyc/__pycache__ content from unreviewed sources and forcing recompilation from source is a known, practical, already-documented mitigation, the same discount reasoning applied to AVE-2026-00057. mitre_atlas researched and left as an empty array rather than force-fit: AML.T0010.001 (AI Software) covers AI-software dependency-chain compromise and AML.T0010.003 (Model) covers malicious code in a loaded model file, but neither names a compiled-bytecode-cache-diverging-from-its-own-visible-source mechanism specifically; a real, confirmed gap. owasp_asi ASI04 (Supply chain risks) and owasp_mcp MCP04 (Software Supply Chain Attacks & Dependency Tampering) verified against their respective 2026 primary sources rather than reused by pattern-matching to AVE-2026-00057's mapping."
+  },
+  "evidence_kind_default": "multi_engine",
+  "detection_stage": "static_detection",
+  "detection_layer": "content",
+  "confidence_baseline": 0.7,
+  "evidence_basis_engines": ["pattern"],
+  "derivable_into": ["credential-exfiltration"]
+}

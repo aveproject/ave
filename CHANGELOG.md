@@ -9,6 +9,15 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 ## [Unreleased]
 
 ### Added
+- AVE-2026-00075: bytecode poisoning (compiled .pyc cache diverges from
+  its own reviewed .py source) — CPython prefers a valid cached .pyc
+  over its own source, so a compiled artifact can contain dangerous
+  primitives (process execution, network calls, credential-path access)
+  present nowhere in the visible source text a scanner or reviewer
+  reads; distinct from AVE-2026-00057, a single-artifact encoding class,
+  this is a two-artifact divergence. Sourced from repo-forensics'
+  scan_bytecode.py and the 2026-06-10 CSA/Trail of Bits scanner-bypass
+  research note (MEDIUM, AIVSS 4.4)
 - AVE-2026-00074: reclaimable dead external anchor (SkillJacking) — a
   skill references a GitHub owner, package, domain, or cloud subdomain
   that was live when authored and has since been deleted or expired,
