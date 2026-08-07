@@ -24,31 +24,32 @@ The other 44 rules have no AVE class: they check config surfaces AVE's skill and
 
 ## Rule mapping
 
-| cfgaudit rule(s) | AVE id | AVE class | what cfgaudit reads |
+| cfgaudit rule(s) | AVE id | Class | Notes |
 |---|---|---|---|
-| CFG031, CFG036, CFG037, CFG038 | AVE-2026-00003 | Credential exfiltration via agent instruction |  |
-| CFG008, CFG014 | AVE-2026-00004 | Arbitrary code execution via shell pipe injection in agentic component |  |
-| CFG039 | AVE-2026-00005 | Recursive file system destruction via destructive command injection in agentic component |  |
-| CFG026, CFG092 | AVE-2026-00007 | Agent goal hijack via direct instruction override in agentic component |  |
-| CFG027, CFG028 | AVE-2026-00008 | Agent persistence via self-replication instruction in agentic component |  |
-| CFG030 | AVE-2026-00010 | Covert instruction concealment via secrecy directive in agentic component |  |
-| CFG035 | AVE-2026-00011 | Arbitrary tool invocation via dynamic tool call injection in agentic component |  |
-| CFG052, CFG059 | AVE-2026-00017 | MCP Server Impersonation or Spoofing |  |
-| CFG029 | AVE-2026-00021 | Autonomous Action Without User Confirmation |  |
-| CFG032 | AVE-2026-00025 | Conversation History Injection |  |
-| CFG081 | AVE-2026-00027 | Multi-Turn Attack - Instruction Persistence Across Conversations |  |
-| CFG024 | AVE-2026-00029 | Homoglyph or Unicode Obfuscation Attack |  |
-| CFG090 | AVE-2026-00032 | Network Reconnaissance Instruction |  |
-| CFG033, CFG072 | AVE-2026-00039 | Covert Channel - Steganographic Data Exfiltration |  |
-| CFG007, CFG050, CFG054, CFG065, CFG073, CFG097 | AVE-2026-00047 | Hardcoded credentials in agent component - API keys and secrets exposed in skill files |  |
-| CFG051, CFG085 | AVE-2026-00048 | Unsafe agent delegation chain - sub-agent spawned with inherited permissions and no trust boundary |  |
-| CFG019, CFG020, CFG070 | AVE-2026-00055 | Command execution via untrusted MCP server launch configuration (STDIO) |  |
-| CFG057 | AVE-2026-00057 | Obfuscated or encoded skill payload designed to evade static scanners |  |
-| CFG056 | AVE-2026-00058 | Deceptive skill trigger or activation-scope manipulation via misleading manifest description |  |
-| CFG075 | AVE-2026-00061 | TLS certificate verification disabled in agent component configuration | MCP `env`/`args` TLS-verify killswitch |
-| CFG010, CFG055, CFG074, CFG089 | AVE-2026-00062 | Unpinned dependency version allowing supply chain substitution | unpinned `@latest`/`:latest`, lock file with no integrity pin, unpinned marketplace source |
-| CFG003, CFG004, CFG048, CFG053, CFG063, CFG079, CFG087, CFG091, CFG093, CFG096 | AVE-2026-00063 | Human approval gate bypassed via declarative configuration, distinct from AVE-2026-00048 | a config flag that removes the approval step, across seven agents |
-| CFG047, CFG067, CFG086 | AVE-2026-00064 | Zero-click code execution via project-load auto-run configuration | `.vscode/tasks.json` `folderOpen`, Zed `create_worktree` hook task, zero-click hook events |
+| CFG024 | AVE-2026-00029 | homoglyph / Unicode obfuscation | hidden Unicode control chars in instruction text |
+| CFG026 | AVE-2026-00007 | goal hijack | override / persona / authority instruction |
+| CFG092 | AVE-2026-00007 | goal hijack | Kimi agent file `override: true` replaces the whole system prompt |
+| CFG029 | AVE-2026-00021 | autonomous action without confirmation | instruction to bypass permission prompts |
+| CFG030 | AVE-2026-00010 | covert instruction concealment | "don't tell the user" / secrecy directive |
+| CFG032 | AVE-2026-00025 | conversation-history / role injection | pseudo-system tags, turn-boundary injection |
+| CFG035 | AVE-2026-00011 | dynamic tool-call injection | instruction to configure or trust an MCP server |
+| CFG031, CFG036, CFG037, CFG038 | AVE-2026-00003 | credential exfiltration | sensitive-path read, env dump, embedded exfil shell |
+| CFG033, CFG072 | AVE-2026-00039 | covert-channel exfiltration | markdown-image sink, DNS-name exfil |
+| CFG056 | AVE-2026-00058 | deceptive trigger / activation-scope | broad always-on skill trigger |
+| CFG057 | AVE-2026-00057 | obfuscated / encoded payload | base64 or data-URI encoded injection |
+| CFG081 | AVE-2026-00027 | multi-turn instruction persistence | "survive context compaction" directive |
+| CFG051, CFG085 | AVE-2026-00048 | unsafe agent delegation chain | over-broad tool grant in agent frontmatter |
+| CFG090 | AVE-2026-00032 | network reconnaissance instruction | scan or enumerate an internal network (see gaps re: precision) |
+| CFG008, CFG014 | AVE-2026-00004 | shell-pipe code execution | reverse shell, `curl \| sh` |
+| CFG039 | AVE-2026-00005 | recursive filesystem destruction | `rm -rf` |
+| CFG027, CFG028 | AVE-2026-00008 | persistence / self-replication | cron/startup persistence, writing trust files |
+| CFG007, CFG050, CFG054, CFG065, CFG073, CFG097 | AVE-2026-00047 | hardcoded credentials in component | secrets in settings or MCP env/headers; CFG097 adds a literal in a Gemini remote agent's `auth` block |
+| CFG052, CFG059 | AVE-2026-00017 | server impersonation / spoofing | MCP name shadowing, typosquat |
+| CFG019, CFG020, CFG070 | AVE-2026-00055 | command exec via untrusted MCP launch config | inline-script, env-code, repo-relative launcher |
+| CFG075 | AVE-2026-00061 | TLS verification disabled in config | `NODE_TLS_REJECT_UNAUTHORIZED=0`, `GIT_SSL_NO_VERIFY`, `--insecure` in MCP `env`/`args` |
+| CFG010, CFG055, CFG074, CFG089 | AVE-2026-00062 | unpinned dependency / supply-chain substitution | unpinned `@latest`/`:latest`, `skills-lock.json` with no integrity pin, marketplace source without a full-SHA pin |
+| CFG003, CFG004, CFG048, CFG053, CFG063, CFG079, CFG087, CFG091, CFG093, CFG096 | AVE-2026-00063 | approval gate bypassed by declarative config | `enableAllProjectMcpServers`, `defaultMode: bypassPermissions`, VS Code `chat.permissions.default`, blanket MCP-trust keys, Codex `approval_policy`/`approvals_reviewer`, `autoMode` classifier, a hook answering a permission gate, qwen `approvalMode: yolo`, Cursor allowlists, Gemini MCP `trust` |
+| CFG047, CFG067, CFG086 | AVE-2026-00064 | zero-click project-load auto-run | `.vscode/tasks.json` `runOn: folderOpen` and Zed `create_worktree` hook tasks, committed project hooks, zero-click hook events |
 
 Mappings are class-level behavioral equivalence, not asserted identity. Where a cfgaudit rule covers more than one AVE class, only the canonical primary is emitted (matching AVE's one-`ruleId`-per-class SARIF model); the full multi-mapping is in cfgaudit's own crosswalk doc.
 
