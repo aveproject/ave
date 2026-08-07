@@ -8,6 +8,15 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 
 ## [Unreleased]
 
+### Changed
+- AVE-2026-00073: scope clarification, no score change — payload_surface,
+  behavioral_fingerprint, example_patterns, and detection_methodology
+  now name MCP server URLs and A2A agent_card_url explicitly (rather
+  than leaving them implicit under "an equivalent traffic-destination
+  value"), after a related candidate surfaced from predictor2718's PR
+  #123 turned out to already be in scope here rather than warranting a
+  new record.
+
 ### Added
 - AVE-2026-00076: natural-language steering of an approval classifier
   subagent — Cursor's Auto-review mode gates unattended shell/MCP/Fetch
