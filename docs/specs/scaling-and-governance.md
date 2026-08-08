@@ -85,3 +85,23 @@ separately as part of a future version bump (alongside `owasp_ast`, see
 `AVE_V1.1.0_MIGRATION_BRIEF.md` Section 7.0), not implied to already exist
 by this policy document. This section states the policy the schema change
 will implement, it does not implement it.
+
+## 4. Crosswalk numbering caution
+
+External frameworks still being drafted (OWASP's MCP Top 10 has not
+been formally ratified as of this writing) get independently
+interpreted by every project that adopts them early. Two projects can
+both number their own categories MCP01 through MCP10 and mean entirely
+different things by the same number, confirmed directly during the
+Ramparts crosswalk (issue #138): Ramparts' MCP03 is Excessive Agency,
+AVE's MCP03 is Tool Poisoning, unrelated categories sharing a number by
+coincidence, not agreement.
+
+**Any crosswalk to an external tool's own OWASP MCP Top 10 tagging
+must match by category meaning, not by tag number.** Matching by number
+alone will silently produce wrong pairings whenever the external
+project drafted its own reading independently, which is the common
+case for an unratified standard, not the exception. This applies
+symmetrically: if another project ever crosswalks to AVE's own
+`owasp_mcp` field by number rather than meaning, the same risk runs the
+other way.
