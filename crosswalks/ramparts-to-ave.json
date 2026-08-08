@@ -1,0 +1,86 @@
+{
+  "$schema": "https://aveproject.org/schema/crosswalk-1.0.0.schema.json",
+  "source": {
+    "tool": "Ramparts",
+    "vendor": "Highflame Inc.",
+    "url": "https://github.com/highflame-ai/ramparts",
+    "license": "Apache-2.0",
+    "commit": "a62b320ae1f59da9937e721715bec54c9a5bc5c0"
+  },
+  "target": {
+    "standard": "AVE",
+    "version": "1.1.0",
+    "url": "https://aveproject.org",
+    "record_count": 76,
+    "static_record_count": 57
+  },
+  "generated": "2026-08-08",
+  "note": "Ramparts and AVE both draft their own reading of the still-unratified OWASP MCP Top 10, independently, and their MCP01-MCP10 numbering does not align category-for-category; Ramparts' MCP03 (Excessive Agency) and AVE's MCP03 (Tool Poisoning) are unrelated despite sharing a number. This crosswalk matches by verified mechanism, not by shared tag number, see AVE issue #138 for the full verification. One Ramparts rule, EnvironmentVariableLeakage, splits into two distinct AVE mappings depending on which internal condition fires, a literal-value branch and a theft-language branch, not one-to-one. Near-miss not included in mappings: Ramparts' CommandInjection is a signature match over dangerous syntax anywhere in content; AVE-2026-00052 specifically requires a taint path from a caller-supplied parameter to shell exec. Same subject, different rigor, the exact distinction between signature-based scanning and reachability analysis. Real gaps in both directions: Ramparts' cross-origin tool confusion detection and its MCPConfigChanged baseline-diff check (a previously-approved server's fingerprint changing after the fact) have no AVE analog today; AVE has nothing for session-memory or cross-agent-state poisoning, which Ramparts does not currently touch either.",
+  "mappings": [
+    {
+      "ramparts_finding": "SecretsLeakage",
+      "ave_id": "AVE-2026-00047",
+      "title": "Hardcoded credentials in agent component - API keys and secrets exposed in skill files",
+      "notes": "Both require a literal high-entropy credential value adjacent to a credential keyword. AVE's fingerprint explicitly excludes env-var references, matching Ramparts' literal-value requirement."
+    },
+    {
+      "ramparts_finding": "EnvironmentVariableLeakage ($named_assignment_with_value branch)",
+      "ave_id": "AVE-2026-00047",
+      "title": "Hardcoded credentials in agent component - API keys and secrets exposed in skill files",
+      "notes": "Same literal-value mechanism as SecretsLeakage, anchored to env-var-shaped names specifically."
+    },
+    {
+      "ramparts_finding": "EnvironmentVariableLeakage ($theft_language + $env_access branch)",
+      "ave_id": "AVE-2026-00003",
+      "title": "Credential exfiltration via agent instruction",
+      "notes": "The other half of the same Ramparts rule. Matches AVE's instructed-exfiltration mechanism, not the hardcoded-literal one. One rule name, two distinct AVE mechanisms depending on which internal condition fires."
+    },
+    {
+      "ramparts_finding": "MCPConfigRisk",
+      "ave_id": "AVE-2026-00055",
+      "title": "Command execution via untrusted MCP server launch configuration (STDIO)",
+      "notes": "Both: STDIO launch config (command/args) executes without a validation gate."
+    },
+    {
+      "ramparts_finding": "PathTraversalVulnerability",
+      "ave_id": "AVE-2026-00053",
+      "title": "Path traversal via unsanitized path parameter in MCP resource/file-handler implementation",
+      "notes": "Direct mechanism match."
+    },
+    {
+      "ramparts_finding": "SkillEmbeddedPayload",
+      "ave_id": "AVE-2026-00057",
+      "title": "Obfuscated or encoded skill payload designed to evade static scanners",
+      "notes": "Near-identical fingerprints: base64/hex blob decoding to executable content at runtime, evading static scanners."
+    },
+    {
+      "ramparts_finding": "OverbroadAllowedTools",
+      "ave_id": "AVE-2026-00038",
+      "title": "Excessive Agency - Unbounded Tool Use or Sub-Agent Spawning",
+      "notes": "Both: unrestricted grant of code-execution tool capability."
+    },
+    {
+      "ramparts_finding": "GenericSkillTrigger",
+      "ave_id": "AVE-2026-00058",
+      "title": "Deceptive skill trigger or activation-scope manipulation via misleading manifest description",
+      "notes": "Both: description misrepresents scope, causing over-broad or implicit invocation."
+    },
+    {
+      "ramparts_finding": "AutonomyAbuse ($skip_confirmation branch)",
+      "ave_id": "AVE-2026-00021",
+      "title": "Autonomous Action Without User Confirmation",
+      "notes": "Both: instruction to bypass human confirmation on a consequential action."
+    },
+    {
+      "ramparts_finding": "Jailbreak (SecurityIssueType)",
+      "ave_id": "AVE-2026-00009",
+      "title": "AI identity jailbreak via role-play or persona override in agentic component",
+      "notes": "Both: coercing an unrestricted persona or mode."
+    }
+  ],
+  "coverage": {
+    "ramparts_findings_mapped": 10,
+    "ave_classes_covered": 9,
+    "note_on_unmapped": "Ramparts' full finding list is broader than what's mapped here; only mechanism-verified matches are included. See note field for near-misses and known gaps in both directions."
+  }
+}
