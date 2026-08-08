@@ -1,0 +1,117 @@
+{
+  "$schema": "https://aveproject.org/schema/crosswalk-1.0.0.schema.json",
+  "source": {
+    "tool": "nova-proximity",
+    "vendor": "Nova-Hunting",
+    "url": "https://github.com/Nova-Hunting/nova-proximity",
+    "license": "GPL-3.0",
+    "commit": "d7521742dd8d25efee9b75f9fff2e7c8e8774cdb"
+  },
+  "target": {
+    "standard": "AVE",
+    "version": "1.1.0",
+    "url": "https://aveproject.org",
+    "record_count": 76,
+    "static_record_count": 57
+  },
+  "generated": "2026-08-08",
+  "note": "No shared external taxonomy exists between NOVA's rule format and AVE (unlike the Ramparts crosswalk, which anchored on OWASP MCP Top 10 tagging both projects already carried), so this crosswalk matches by direct comparison of each Nova rule's real trigger logic against AVE's behavioral fingerprints, not by a shared tag. Several Nova rules split into multiple sub-cases with different AVE mappings, DetectMaliciousToolPermissions alone covers three distinct AVE classes depending on which pattern fires. One AVE class (AVE-2026-00004, curl|bash execution) is independently caught by two separate Nova rules, DetectMaliciousToolPermissions and DetectSuspiciousScriptPatterns, both correctly converging on the same mechanism. Four confirmed gaps, each a genuinely distinct mechanism from any existing AVE record: sudo/chmod/netcat/reverse-shell keyword detection, backdoor-library detection (paramiko, fabric, pexpect, socket.connect), plain bracket-tag concealment ([hidden], [SYSTEM], [ASSISTANT]) as distinct from AVE-2026-00029's Unicode-based concealment mechanism, and known exfil-channel domain detection (webhook.site, ngrok, pastebin) as a materially different mechanism from AVE's closest label. One partial miss: fake-certification impersonation language does not cleanly fit any existing AVE record. Also worth noting, unrelated to AVE itself: Nova's own DetectHiddenInstructions and DetectSkillPromptInjection rules appear to independently detect the same bracket-marker concealment pattern, surfaced as a byproduct of this comparison, not confirmed as intentional redundancy or worth consolidating.",
+  "mappings": [
+    {
+      "nova_rule": "DetectMaliciousToolPermissions",
+      "sub_case": "wildcard grants (Bash(*), Write(*), Execute(*))",
+      "ave_id": "AVE-2026-00038",
+      "title": "Excessive Agency - Unbounded Tool Use or Sub-Agent Spawning",
+      "notes": "Both: unrestricted grant of code-execution tool capability."
+    },
+    {
+      "nova_rule": "DetectMaliciousToolPermissions",
+      "sub_case": "rm -rf",
+      "ave_id": "AVE-2026-00005",
+      "title": "Recursive file system destruction via destructive command injection in agentic component",
+      "notes": "Direct mechanism match, destructive command execution."
+    },
+    {
+      "nova_rule": "DetectMaliciousToolPermissions",
+      "sub_case": "curl | bash / wget | sh",
+      "ave_id": "AVE-2026-00004",
+      "title": "Arbitrary code execution via shell pipe injection in agentic component",
+      "notes": "Direct mechanism match. Independently also caught by DetectSuspiciousScriptPatterns below."
+    },
+    {
+      "nova_rule": "DetectSuspiciousScriptPatterns",
+      "sub_case": "obfuscation (base64.b64decode, atob(, bytes.fromhex, rot13)",
+      "ave_id": "AVE-2026-00057",
+      "title": "Obfuscated or encoded skill payload designed to evade static scanners",
+      "notes": "Near-verbatim fingerprint match: encoded content decoding to executable form at runtime, evading static scanners."
+    },
+    {
+      "nova_rule": "DetectSuspiciousScriptPatterns",
+      "sub_case": "deserialization (pickle.load, marshal.load, yaml.load())",
+      "ave_id": "AVE-2026-00033",
+      "title": "Unsafe Deserialization or Eval Instruction",
+      "notes": "AVE's own fingerprint literally names pickle, yaml.load, and eval as the mechanism."
+    },
+    {
+      "nova_rule": "DetectSuspiciousScriptPatterns",
+      "sub_case": "curl | bash",
+      "ave_id": "AVE-2026-00004",
+      "title": "Arbitrary code execution via shell pipe injection in agentic component",
+      "notes": "Same mechanism and same AVE target as DetectMaliciousToolPermissions' curl|bash sub-case above, two Nova rules independently converging on one AVE class."
+    },
+    {
+      "nova_rule": "DetectHiddenInstructions",
+      "sub_case": "zero-width / invisible unicode characters",
+      "ave_id": "AVE-2026-00029",
+      "title": "Homoglyph or Unicode Obfuscation Attack",
+      "notes": "Direct mechanism match, Unicode-based concealment specifically."
+    },
+    {
+      "nova_rule": "DetectImpersonationAttempts",
+      "sub_case": "organization impersonation (\"Anthropic Official\", \"[VERIFIED]\")",
+      "ave_id": "AVE-2026-00014",
+      "title": "False authority claim via trust escalation impersonation in agentic component",
+      "notes": "Direct mechanism match."
+    },
+    {
+      "nova_rule": "DetectImpersonationAttempts",
+      "sub_case": "authority claims (\"administrator\", \"root access\", \"privileged mode\")",
+      "ave_id": "AVE-2026-00012",
+      "title": "Capability escalation via false permission grant in agentic component",
+      "notes": "Direct mechanism match."
+    },
+    {
+      "nova_rule": "DetectDataExfiltration",
+      "sub_case": "credential file paths with external-send framing",
+      "ave_id": "AVE-2026-00003",
+      "title": "Credential exfiltration via agent instruction",
+      "notes": "Direct mechanism match, instructed read-and-transmit."
+    },
+    {
+      "nova_rule": "DetectDataExfiltration",
+      "sub_case": "literal key-prefix patterns (sk-, ghp_, Bearer )",
+      "ave_id": "AVE-2026-00047",
+      "title": "Hardcoded credentials in agent component - API keys and secrets exposed in skill files",
+      "notes": "Direct mechanism match, literal hardcoded credential value."
+    },
+    {
+      "nova_rule": "DetectSkillPromptInjection",
+      "sub_case": "instruction-override phrases",
+      "ave_id": "AVE-2026-00007",
+      "title": "Agent goal hijack via direct instruction override in agentic component",
+      "notes": "Direct mechanism match."
+    },
+    {
+      "nova_rule": "DetectSkillPromptInjection",
+      "sub_case": "persona / jailbreak phrases",
+      "ave_id": "AVE-2026-00009",
+      "title": "AI identity jailbreak via role-play or persona override in agentic component",
+      "notes": "Direct mechanism match, coercing an unrestricted persona or mode."
+    }
+  ],
+  "coverage": {
+    "nova_rules_mapped": 13,
+    "ave_classes_covered": 12,
+    "note_on_unmapped": "Nova's full rule set is broader than what's mapped here; only mechanism-verified matches are included. See note field for confirmed gaps and the one partial miss."
+  }
+}
