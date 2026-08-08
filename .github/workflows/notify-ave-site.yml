@@ -35,5 +35,5 @@ jobs:
             {
               "ave_ref": "${{ github.sha }}",
               "pusher": "${{ github.actor }}",
-              "message": "${{ github.event.head_commit.message }}"
+              "message": ${{ toJSON(github.event.head_commit.message) }}
             }
