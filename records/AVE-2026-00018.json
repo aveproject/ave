@@ -27,7 +27,7 @@
     "MANAGE-1.3"
   ],
   "mitre_atlas": [
-    "AML.T0048"
+    "AML.T0067"
   ],
   "behavioral_fingerprint": "Component instructs the agent to modify, fabricate, or suppress tool call results before reporting them to the user or passing them to downstream components.",
   "behavioral_vector": [
@@ -87,7 +87,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",
