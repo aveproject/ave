@@ -36,6 +36,18 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   new record.
 
 ### Added
+- AVE-2026-00077: cross-origin tool and resource declaration within a
+  single MCP server manifest — a server's own manifest declares tools
+  and/or resources spanning multiple unrelated root domains (or mixed
+  http/https schemes), so a minority-domain tool can inject, override,
+  or hijack context intended for the trusted majority origin within
+  the same session, with no false identity claim involved. Distinct
+  from AVE-2026-00001 (fetched content changing at read time) and
+  AVE-2026-00017 (false identity claim); here every origin is honestly
+  declared, the risk is structural domain diversity. Sourced from
+  Ramparts' cross_origin_scanner.rs / cross_origin_escalation.yar,
+  surfaced via the ramparts-to-ave crosswalk (issue #149) (MEDIUM,
+  AIVSS 4.8)
 - AVE-2026-00076: natural-language steering of an approval classifier
   subagent — Cursor's Auto-review mode gates unattended shell/MCP/Fetch
   calls behind a separate classifier subagent that a committed

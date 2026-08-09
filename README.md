@@ -11,7 +11,7 @@ Stable IDs, AIVSS scores, and behavioral fingerprints for every way a skill file
 MCP server, system prompt, or agent plugin can be weaponized — scored consistently,
 mapped to the frameworks security teams already report against.
 
-[![Records](https://img.shields.io/badge/records-76-0f6e56?style=flat-square)](records/)
+[![Records](https://img.shields.io/badge/records-77-0f6e56?style=flat-square)](records/)
 [![Schema](https://img.shields.io/badge/schema-v1.1.0-0a3024?style=flat-square)](schema/ave-record-1.1.0.schema.json)
 [![AIVSS](https://img.shields.io/badge/AIVSS-v0.8-d4a017?style=flat-square)](https://aivss.owasp.org)
 [![OWASP MCP](https://img.shields.io/badge/OWASP-MCP%20Top%2010-0a3024?style=flat-square)](https://owasp.org)
@@ -99,7 +99,7 @@ skill file          ->   in CI / pre-commit   ->  before deploy
 
 | | |
 |---|---|
-| Total records | 76 |
+| Total records | 77 |
 | Schema version | 1.1.0 |
 | AIVSS spec | v0.8 |
 | CRITICAL (>= 9.0) | 1 |
@@ -167,7 +167,7 @@ AIVSS = ((8.5 + 7.5) / 2) x 1.0 x 1 = 8.0  ->  HIGH
 ## Record index
 
 <details>
-<summary><strong>76 records, click to expand</strong></summary>
+<summary><strong>77 records, click to expand</strong></summary>
 
 | AVE ID | Title | AIVSS | Severity |
 |---|---|---|---|
@@ -247,6 +247,7 @@ AIVSS = ((8.5 + 7.5) / 2) x 1.0 x 1 = 8.0  ->  HIGH
 | [AVE-2026-00074](records/AVE-2026-00074.json) | Reclaimable Dead External Anchor (SkillJacking) | 7.1 | HIGH |
 | [AVE-2026-00075](records/AVE-2026-00075.json) | Bytecode Poisoning (Compiled Cache/Source Divergence) | 4.4 | MEDIUM |
 | [AVE-2026-00076](records/AVE-2026-00076.json) | Natural-Language Steering of an Approval Classifier Subagent | 4.5 | MEDIUM |
+| [AVE-2026-00077](records/AVE-2026-00077.json) | Cross-Origin Tool and Resource Declaration in a Single MCP Server Manifest | 4.8 | MEDIUM |
 
 </details>
 
