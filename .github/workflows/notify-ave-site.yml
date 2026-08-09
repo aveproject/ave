@@ -1,10 +1,16 @@
-name: Notify ave-site on records update
+name: Notify ave-site on data update
 
 # This workflow lives in aveproject/ave.
 # Place it at: .github/workflows/notify-ave-site.yml
 #
-# When records or schema change on main, it fires a
-# repository_dispatch to aveproject/ave-site so the site rebuilds automatically.
+# When records, schema, crosswalks, or the consolidated dist/ JSON change
+# on main, it fires a repository_dispatch to aveproject/ave-site so the
+# site rebuilds automatically. crosswalks/** and dist/** were added
+# alongside records/** and schema/** because ave-site's registry and
+# crosswalks pages both read from this repo's data and neither is any
+# less "live" than the other -- crosswalks/** previously firing nothing
+# is why ave-site's crosswalks/ was able to drift out of sync silently
+# in the first place.
 #
 # Required secret: AVE_SITE_DEPLOY_TOKEN
 # Create a fine-grained PAT with:
@@ -18,6 +24,8 @@ on:
     paths:
       - "records/**"
       - "schema/**"
+      - "crosswalks/**"
+      - "dist/**"
 
 jobs:
   notify:
