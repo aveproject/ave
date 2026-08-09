@@ -1,0 +1,108 @@
+{
+  "ave_id": "AVE-2026-00077",
+  "schema_version": "1.1.0",
+  "status": "active",
+  "component_type": "mcp_server",
+  "title": "Cross-origin tool and resource declaration within a single MCP server manifest",
+  "attack_class": "Trust Boundary - Cross-Origin Tool and Resource Declaration",
+  "severity": "MEDIUM",
+  "description": "A single MCP server's own manifest declares tools and/or resources whose URLs (in parameters, input/output schemas, descriptions, or metadata) resolve to more than one unrelated root domain, or mix http:// and https:// schemes across those declared endpoints. Because every tool and resource in one server's manifest is typically treated as sharing a single trust boundary once the server itself is trusted, a minority-domain tool or resource declared alongside a majority-domain cluster can inject, override, or hijack context intended for the trusted majority origin, within the same session, with no identity claim required. Distinct from AVE-2026-00001 (metamorphic payload via external config fetch): that record's mechanism is a single external source's fetched content changing at read time. Distinct from AVE-2026-00017 (MCP server impersonation or spoofing): that record requires a false identity claim -- lying about who the server is. Here every declared origin is honestly identified; the vulnerability is structural domain diversity within one server's own declared surface, not deception about identity.",
+  "affected_platforms": [
+    "claude-desktop", "claude-code", "cursor", "windsurf", "any-mcp-client"
+  ],
+  "affected_registries": [
+    "clawhub.io", "smithery.ai", "registry.modelcontextprotocol.io"
+  ],
+  "aivss_score": 4.8,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
+  "owasp_mcp": ["MCP07", "MCP10"],
+  "owasp_asi": ["ASI02"],
+  "mitre_atlas": [],
+  "nist_ai_rmf": ["MAP-4.2"],
+  "behavioral_fingerprint": "A single MCP server's manifest declares tool and/or resource URL fields (parameters, input/output schemas, descriptions, metadata, or resource URIs) that resolve to two or more unique root domains, or that mix http:// and https:// schemes across those declared endpoints, with no false identity claim present -- honest, structural domain diversity within one server's own declared tool/resource surface.",
+  "behavioral_vector": [
+    "cross-origin-declaration",
+    "trust-boundary-diffusion",
+    "structural-domain-diversity"
+  ],
+  "provenance_vector": {
+    "entry_class": "registry_metadata",
+    "payload_surface": "declared tool and resource URL fields (parameters, input/output schemas, descriptions, metadata, resource URIs) within a single MCP server's own manifest, spanning multiple unique root domains or mixed http/https schemes",
+    "escalation": "data_to_instruction"
+  },
+  "trifecta_profile": {
+    "requires": ["external_comms"]
+  },
+  "mitigation": {
+    "strategy": ["isolate_scope", "deny_by_default"],
+    "enforcement_point": "static_scan",
+    "trifecta_control": "break_untrusted_content"
+  },
+  "example_patterns": [
+    "manifest declaring ToolA -> https://api.service1.com/data, ToolB -> https://auth.service1.com/token, ToolC -> https://api.service2.com/info (three declared tools, two unique root domains)",
+    "manifest mixing https://api.service1.com/data (ToolA) and http://api.service1.com/insecure (ToolB) -- mixed scheme within one declared set",
+    "manifest mixing https://internal-tool.local/status and https://api.external-vendor.com/v1 -- mixed local/external origin within one server's declared surface"
+  ],
+  "mutation_count": 0,
+  "detection_methodology": "1. Extract every URL from all declared tools' parameters, input/output schemas, descriptions, and raw manifest content, and from all declared resources' URI, metadata, and description fields, within a single MCP server's own manifest. 2. Parse each URL to its root domain (last two domain labels, special-casing bare IP addresses and localhost) and its scheme. 3. Flag the manifest if the declared tool/resource set resolves to more than one unique root domain (cross-domain contamination), or if both http:// and https:// schemes appear across the declared set (mixed-scheme risk). 4. Where contamination is flagged, identify which specific tools/resources sit on the minority domain(s) relative to the most common declared domain, for targeted review.",
+  "indicators_of_compromise": [
+    "A single MCP server's own declared tool/resource URLs resolving to two or more unique root domains",
+    "Mixed http:// and https:// schemes declared across one server's tool/resource set",
+    "Mixed localhost/127.0.0.1/0.0.0.0 alongside an external domain within one server's declared surface",
+    "A minority-domain tool or resource declared alongside a majority-domain cluster with no stated reason for the split"
+  ],
+  "remediation": "Require each MCP server's declared tools and resources to resolve to a single trust origin by default; treat any manifest whose declared endpoints span multiple root domains as requiring explicit, separately-reviewed approval before the server is trusted, not a silent pass. Reject mixed http://https:// declarations outright, since credential and session material can traverse the cleartext leg regardless of the other tools' scheme. Where genuine multi-origin aggregation is a real product need, isolate each origin's returned content and capabilities from the others rather than treating the full declared set as one shared trust boundary.",
+  "kill_switch_active": false,
+  "researcher": "Akash Krishna (akashjavelin)",
+  "researcher_url": "https://github.com/akashjavelin",
+  "published": "2026-08-10T00:00:00Z",
+  "last_updated": "2026-08-10T00:00:00Z",
+  "references": [
+    {
+      "tag": "Ramparts cross-origin scanner",
+      "text": "highflame-ai/ramparts, src/security/cross_origin_scanner.rs -- extracts every URL from all declared tools' and resources' fields within a single MCP server's manifest, groups by root domain, and flags cross-domain contamination (unique_root_domains.len() > 1) and mixed http/https schemes.",
+      "url": "https://github.com/highflame-ai/ramparts/blob/main/src/security/cross_origin_scanner.rs"
+    },
+    {
+      "tag": "Ramparts YARA rule",
+      "text": "highflame-ai/ramparts, rules/pre/cross_origin_escalation.yar. Rule's own doc comment: 'detects Cross-Origin Escalation vulnerabilities where an LLM agent accesses tools hosted on multiple origins (domains), and one of those origins can inject, override, or hijack context from another.'",
+      "url": "https://github.com/highflame-ai/ramparts/blob/main/rules/pre/cross_origin_escalation.yar"
+    },
+    {
+      "tag": "AVE issue #149",
+      "text": "Surfaced via the ramparts-to-ave crosswalk verification pass (10 confirmed matches), this among the genuine gaps found in both directions.",
+      "url": "https://github.com/aveproject/ave/issues/149"
+    },
+    {
+      "tag": "CWE-668",
+      "text": "CWE-668: Exposure of Resource to Wrong Sphere - MITRE Common Weakness Enumeration",
+      "url": "https://cwe.mitre.org/data/definitions/668.html"
+    },
+    {
+      "tag": "AVE Registry",
+      "text": "AVE-2026-00077 - AVE behavioral vulnerability registry",
+      "url": "https://github.com/aveproject/ave/blob/main/records/AVE-2026-00077.json"
+    }
+  ],
+  "aivss": {
+    "cvss_base": 8.3,
+    "aarf": {
+      "autonomy": 1, "tool_use": 1, "multi_agent": 0, "non_determinism": 0.5,
+      "self_modification": 0, "dynamic_identity": 0, "persistent_memory": 0,
+      "natural_language_input": 0, "data_access": 1, "external_dependencies": 1
+    },
+    "aars": 4.5,
+    "thm": 0.75,
+    "mitigation_factor": 1,
+    "aivss_score": 4.8,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "notes": "thm set to 0.75 (theoretical/architectural) rather than 1.0: ramparts' own scanner cites no disclosed CVE or documented in-the-wild exploitation of this specific mechanism, only a shipped, real detection rule implying deployed defensive value -- a working detection implementation, not a confirmed incident. natural_language_input scored 0: detection and exploitation both turn on declared URL/domain analysis, not instruction text, mirroring the same reasoning already applied to AVE-2026-00073 and AVE-2026-00074. dynamic_identity scored 0, deliberately distinct from AVE-2026-00017's maximum score on that factor: every origin here is honestly, non-deceptively declared; the risk is structural domain diversity, not an identity claim. owasp_mcp corrected from the originating issue's own MCP03 (Tool Poisoning) proposal to MCP07 (Insufficient Authentication and Authorization) + MCP10 (Context Injection and Over-Sharing), verified against OWASP's real 2025 MCP Top 10 list: MCP03 describes malicious content inside a single tool's own description manipulating the model, which is not this mechanism; MCP10's own name (context sharing across boundaries) and MCP07 (no authorization boundary enforced between declared origins) are the precise fits. mitre_atlas confirmed empty, independently re-verified against the full current ATLAS.yaml technique set (170 techniques) via keyword search for cross-origin/multi-domain/trust-boundary concepts, not just accepting the originating issue's own 'checked, no fit' claim at face value -- a genuine, confirmed gap, not a research shortfall. nist_ai_rmf: MAP-4.2 ('Internal risk controls for components of the AI system including third-party AI technologies are identified and documented') verified against NIST's own AIRC playbook text -- each declared origin in a multi-domain MCP manifest is effectively a distinct third-party integration point this control would require risk controls for."
+  },
+  "evidence_kind_default": "config_schema",
+  "detection_stage": "static_detection",
+  "detection_layer": "registry_metadata",
+  "confidence_baseline": 0.8,
+  "evidence_basis_engines": ["pattern"],
+  "derivable_into": ["credential-exfiltration"]
+}
