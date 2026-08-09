@@ -28,9 +28,7 @@
     "GOVERN-1.1",
     "MAP-1.5"
   ],
-  "mitre_atlas": [
-    "AML.T0054"
-  ],
+  "mitre_atlas": [],
   "behavioral_fingerprint": "Component instructs the agent to take irreversible or high-impact actions without requesting user confirmation, removing the human from the decision loop.",
   "behavioral_vector": [
     "autonomy-bypass",
@@ -88,7 +86,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",

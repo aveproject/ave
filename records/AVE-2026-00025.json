@@ -28,9 +28,7 @@
     "MAP-1.5",
     "MEASURE-2.5"
   ],
-  "mitre_atlas": [
-    "AML.T0054"
-  ],
+  "mitre_atlas": [],
   "behavioral_fingerprint": "Component embeds fake prior conversation history to manipulate the agent's understanding of what the user previously said, consented to, or approved.",
   "behavioral_vector": [
     "history-inject",
@@ -90,7 +88,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",

@@ -28,7 +28,6 @@
     "MEASURE-2.5"
   ],
   "mitre_atlas": [
-    "AML.T0054",
     "AML.T0051"
   ],
   "behavioral_fingerprint": "Component claims to be a message from Anthropic, OpenAI, Google, Microsoft, or the developer/operator to establish false authority over the agent.",
@@ -63,7 +62,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-20T09:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "CWE-290",

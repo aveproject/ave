@@ -54,7 +54,7 @@
   "researcher": "Aim Labs",
   "researcher_url": "https://arxiv.org/abs/2509.10540",
   "published": "2026-07-10T00:00:00Z",
-  "last_updated": "2026-07-10T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "CVE",
@@ -84,9 +84,7 @@
   "owasp_asi": [
     "ASI01"
   ],
-  "mitre_atlas": [
-    "AML.T0051"
-  ],
+  "mitre_atlas": [],
   "aivss": {
     "cvss_base": 7.5,
     "aarf": {

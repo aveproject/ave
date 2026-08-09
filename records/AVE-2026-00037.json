@@ -28,7 +28,7 @@
     "MEASURE-2.5"
   ],
   "mitre_atlas": [
-    "AML.T0054"
+    "AML.T0051.001"
   ],
   "behavioral_fingerprint": "Component instructs the agent to execute instructions found in images, screenshots, or visual content, enabling prompt injection through multimodal inputs that bypass text-level security filters.",
   "behavioral_vector": [
@@ -90,7 +90,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "Qi 2023",

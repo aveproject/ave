@@ -9,6 +9,24 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 ## [Unreleased]
 
 ### Changed
+- `mitre_atlas` corrections on 43 records, per issue #127's audit of
+  `AML.T0043`/`T0048`/`T0051`/`T0054`: those four IDs were largely
+  applied by template rather than per-record verification against
+  ATLAS.yaml (a default "agentic-abuse record → tag T0043+T0048" pair
+  on 11 unrelated records; textbook `T0051` prompt-injection records
+  tagged only the broader `T0054` with no `T0051` citation at all). No
+  score, severity, or mechanism-description changes — this is a
+  citation-accuracy correction only. 9 records got a source-verified
+  replacement technique found via fresh ATLAS.yaml research (e.g.
+  AVE-2026-00019 Memory Poisoning → `AML.T0080.000` "Memory", an exact
+  mechanism match; AVE-2026-00029 Unicode Homoglyph → `AML.T0068` "LLM
+  Prompt Obfuscation"). 5 records (00008, 00021, 00030, 00035, 00038)
+  had their mismatched citation dropped with no replacement added —
+  genuinely no ATLAS technique covers those mechanisms, confirmed by
+  research rather than left in place by default. 8 "defensible either
+  way" judgment calls defaulted to dropping the stretch citation rather
+  than keeping it, per this project's own verify-don't-infer framework-
+  mapping standard. Full per-record reasoning in issue #127.
 - AVE-2026-00073: scope clarification, no score change — payload_surface,
   behavioral_fingerprint, example_patterns, and detection_methodology
   now name MCP server URLs and A2A agent_card_url explicitly (rather

@@ -29,7 +29,6 @@
     "MANAGE-1.3"
   ],
   "mitre_atlas": [
-    "AML.T0054",
     "AML.T0048"
   ],
   "behavioral_fingerprint": "Component instructs the agent to collect PII fields (name, email, phone, address, SSN, passport, credit card) and transmit or store them externally.",
@@ -71,7 +70,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-20T09:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "CWE-359",

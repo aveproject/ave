@@ -29,8 +29,7 @@
     "MANAGE-1.3"
   ],
   "mitre_atlas": [
-    "AML.T0043",
-    "AML.T0048"
+    "AML.T0051.001"
   ],
   "behavioral_fingerprint": "Skill instructs agent to pass tool results directly into eval(), exec(), or dynamically constructed code strings. Tool result content contains code fragments, escape sequences, or string terminators designed to break out of data context into code context.",
   "behavioral_vector": [
@@ -81,7 +80,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-05-01T00:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "CWE-94",

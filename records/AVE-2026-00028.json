@@ -29,8 +29,7 @@
     "MEASURE-2.5"
   ],
   "mitre_atlas": [
-    "AML.T0054",
-    "AML.T0048"
+    "AML.T0051.001"
   ],
   "behavioral_fingerprint": "Component instructs the agent to execute instructions embedded in user-supplied files, documents, or images, enabling indirect prompt injection through untrusted content.",
   "behavioral_vector": [
@@ -92,7 +91,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",

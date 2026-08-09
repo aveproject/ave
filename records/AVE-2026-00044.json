@@ -28,8 +28,7 @@
     "MANAGE-1.3"
   ],
   "mitre_atlas": [
-    "AML.T0043",
-    "AML.T0048"
+    "AML.T0051.001"
   ],
   "behavioral_fingerprint": "Agent reads async task results from an external queue, webhook, or polling endpoint without validating that result content is data - not instructions. Result payload contains imperative language or structured injection patterns targeting the agent's next action.",
   "behavioral_vector": [
@@ -76,7 +75,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-05-01T00:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",

@@ -29,7 +29,6 @@
     "MANAGE-1.3"
   ],
   "mitre_atlas": [
-    "AML.T0054",
     "AML.T0051"
   ],
   "behavioral_fingerprint": "Component contains explicit instruction-override language directing the agent to abandon its current task and follow new instructions from the component.",
@@ -70,7 +69,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "Perez 2022",

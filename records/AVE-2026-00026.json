@@ -26,7 +26,6 @@
     "MEASURE-2.5"
   ],
   "mitre_atlas": [
-    "AML.T0043",
     "AML.T0048"
   ],
   "behavioral_fingerprint": "Component instructs the agent to encode sensitive data (credentials, API keys, PII, system prompt) inside tool call parameters or return values for covert exfiltration through a legitimate-looking too",
@@ -89,7 +88,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "CWE-116",

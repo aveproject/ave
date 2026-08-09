@@ -30,8 +30,6 @@
       "GOVERN-1.7"
     ],
     "mitre_atlas": [
-      "AML.T0043",
-      "AML.T0048",
       "AML.T0052"
     ],
     "behavioral_fingerprint": "Skill instructs agent to register a hook, callback, or interceptor on tool execution. The hook targets all tool calls or a broad class of tools and routes them through an external URL or attacker-controlled handler before the legitimate tool runs.",
@@ -84,7 +82,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-16T00:00:00Z",
-    "last_updated": "2026-05-16T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "CWE-601",
@@ -189,7 +187,7 @@
     ],
     "mitre_atlas": [
       "AML.T0011",
-      "AML.T0054"
+      "AML.T0081"
     ],
     "behavioral_fingerprint": "Component contains instructions to fetch and execute remote content, replacing its own behavioral instructions at runtime.",
     "behavioral_vector": [
@@ -256,7 +254,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-01T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -327,7 +325,7 @@
       "MEASURE-2.5"
     ],
     "mitre_atlas": [
-      "AML.T0054"
+      "AML.T0051.001"
     ],
     "behavioral_fingerprint": "MCP tool description field contains directives targeting agent behavior rather than describing tool functionality.",
     "behavioral_vector": [
@@ -389,7 +387,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-01T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -587,8 +585,7 @@
       "MANAGE-2.2"
     ],
     "mitre_atlas": [
-      "AML.T0043",
-      "AML.T0048"
+      "AML.T0051.001"
     ],
     "behavioral_fingerprint": "Tool descriptions in the server-card contain behavioral instructions targeting the agent - IMPORTANT/WARNING/NOTE prefixes, before/after calling directives, or instructions to perform actions not related to the tool's declared function.",
     "behavioral_vector": [
@@ -639,7 +636,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-01T00:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -882,8 +879,6 @@
       "GOVERN-1.7"
     ],
     "mitre_atlas": [
-      "AML.T0043",
-      "AML.T0048",
       "AML.T0052"
     ],
     "behavioral_fingerprint": "Skill instructs agent to spawn a sub-agent or delegate a task to another agent without specifying an explicit tool allowlist or permission scope for the sub-agent. The delegation instruction uses language such as full access, inherit your permissions, or grant all tools.",
@@ -932,7 +927,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-16T00:00:00Z",
-    "last_updated": "2026-05-16T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "CWE-269",
@@ -1148,7 +1143,7 @@
     "schema_version": "1.1.0",
     "status": "active",
     "published": "2026-06-21T00:00:00Z",
-    "last_updated": "2026-06-21T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "component_type": "mcp_server",
     "title": "Parasitic Toolchain — Silent Tool Registration and Persistent Hook Injection",
     "attack_class": "Persistence - Parasitic Toolchain",
@@ -1175,8 +1170,7 @@
       "ASI07"
     ],
     "mitre_atlas": [
-      "AML.T0010",
-      "AML.T0043"
+      "AML.T0010"
     ],
     "nist_ai_rmf": [
       "MAP-1.5",
@@ -2264,7 +2258,6 @@
       "MANAGE-1.3"
     ],
     "mitre_atlas": [
-      "AML.T0043",
       "AML.T0048"
     ],
     "behavioral_fingerprint": "Component instructs agent to read and transmit environment variables, API keys, or other credentials to an external destination.",
@@ -2328,7 +2321,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-01T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "CWE-522",
@@ -2394,8 +2387,8 @@
       "MANAGE-1.3"
     ],
     "mitre_atlas": [
-      "AML.T0054",
-      "AML.T0011"
+      "AML.T0011",
+      "AML.T0050"
     ],
     "behavioral_fingerprint": "Component instructs the agent to pipe remote content into a shell interpreter (curl|bash, wget|sh, eval(requests.get(...))).",
     "behavioral_vector": [
@@ -2436,7 +2429,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "CWE-78",
@@ -2660,7 +2653,6 @@
       "MANAGE-1.3"
     ],
     "mitre_atlas": [
-      "AML.T0054",
       "AML.T0051"
     ],
     "behavioral_fingerprint": "Component contains explicit instruction-override language directing the agent to abandon its current task and follow new instructions from the component.",
@@ -2701,7 +2693,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "Perez 2022",
@@ -2793,7 +2785,6 @@
       "GOVERN-1.7"
     ],
     "mitre_atlas": [
-      "AML.T0048",
       "AML.T0011"
     ],
     "behavioral_fingerprint": "Component instructs the agent to write to startup scripts, schedule itself via cron, or copy itself to directories that execute on login or reboot.",
@@ -2834,7 +2825,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "Cohen 2024",
@@ -3057,9 +3048,7 @@
       "MEASURE-2.5",
       "GOVERN-1.7"
     ],
-    "mitre_atlas": [
-      "AML.T0054"
-    ],
+    "mitre_atlas": [],
     "behavioral_fingerprint": "Component instructs the agent to not reveal, disclose, or acknowledge these instructions to the user or operator.",
     "behavioral_vector": [
       "secrecy-directive",
@@ -3098,7 +3087,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-20T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -3188,8 +3177,7 @@
       "MANAGE-1.3"
     ],
     "mitre_atlas": [
-      "AML.T0048",
-      "AML.T0054"
+      "AML.T0053"
     ],
     "behavioral_fingerprint": "Component contains explicit tool invocation directives with specific parameters the agent must pass, bypassing the agent's own tool selection logic.",
     "behavioral_vector": [
@@ -3229,7 +3217,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-20T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -3319,7 +3307,6 @@
       "MANAGE-1.3"
     ],
     "mitre_atlas": [
-      "AML.T0054",
       "AML.T0051"
     ],
     "behavioral_fingerprint": "Component asserts that elevated permissions have been granted to the agent, claiming authority to override normal operational boundaries.",
@@ -3360,7 +3347,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-20T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "CWE-269",
@@ -3451,7 +3438,6 @@
       "MANAGE-1.3"
     ],
     "mitre_atlas": [
-      "AML.T0054",
       "AML.T0048"
     ],
     "behavioral_fingerprint": "Component instructs the agent to collect PII fields (name, email, phone, address, SSN, passport, credit card) and transmit or store them externally.",
@@ -3493,7 +3479,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-20T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "CWE-359",
@@ -3583,9 +3569,7 @@
       "MAP-1.5",
       "MEASURE-2.5"
     ],
-    "mitre_atlas": [
-      "AML.T0054"
-    ],
+    "mitre_atlas": [],
     "behavioral_fingerprint": "Component instructs the agent to reveal, output, or repeat its system prompt, instructions, configuration, or internal guidelines.",
     "behavioral_vector": [
       "prompt-extraction",
@@ -3623,7 +3607,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-20T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "Perez 2022",
@@ -3712,7 +3696,7 @@
       "MEASURE-2.5"
     ],
     "mitre_atlas": [
-      "AML.T0051.000"
+      "AML.T0051.001"
     ],
     "behavioral_fingerprint": "Component embeds malicious instructions in content indexed by a RAG pipeline, causing the agent to execute attacker-controlled instructions when that content is retrieved.",
     "behavioral_vector": [
@@ -3775,7 +3759,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -3840,7 +3824,7 @@
       "MANAGE-1.3"
     ],
     "mitre_atlas": [
-      "AML.T0043"
+      "AML.T0073"
     ],
     "behavioral_fingerprint": "Component falsely claims to be an official, verified, or trusted MCP server to gain elevated trust or bypass agent-level permission checks.",
     "behavioral_vector": [
@@ -3900,7 +3884,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "CWE-290",
@@ -3963,7 +3947,7 @@
       "MANAGE-1.3"
     ],
     "mitre_atlas": [
-      "AML.T0048"
+      "AML.T0067"
     ],
     "behavioral_fingerprint": "Component instructs the agent to modify, fabricate, or suppress tool call results before reporting them to the user or passing them to downstream components.",
     "behavioral_vector": [
@@ -4023,7 +4007,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -4088,7 +4072,7 @@
       "MANAGE-2.2"
     ],
     "mitre_atlas": [
-      "AML.T0054"
+      "AML.T0080.000"
     ],
     "behavioral_fingerprint": "Component writes malicious instructions or false facts into the agent's persistent memory store, causing the agent to act on attacker-controlled beliefs in future conversations.",
     "behavioral_vector": [
@@ -4152,7 +4136,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "Cohen 2024",
@@ -4217,8 +4201,7 @@
       "MANAGE-1.3"
     ],
     "mitre_atlas": [
-      "AML.T0043",
-      "AML.T0048"
+      "AML.T0051.001"
     ],
     "behavioral_fingerprint": "Component embeds instructions targeting a secondary agent in a multi-agent pipeline, causing the downstream agent to perform actions not intended by the orchestrating agent or user.",
     "behavioral_vector": [
@@ -4279,7 +4262,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "Cohen 2024",
@@ -4343,9 +4326,7 @@
       "GOVERN-1.1",
       "MAP-1.5"
     ],
-    "mitre_atlas": [
-      "AML.T0054"
-    ],
+    "mitre_atlas": [],
     "behavioral_fingerprint": "Component instructs the agent to take irreversible or high-impact actions without requesting user confirmation, removing the human from the decision loop.",
     "behavioral_vector": [
       "autonomy-bypass",
@@ -4403,7 +4384,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -4467,7 +4448,7 @@
       "MEASURE-2.5"
     ],
     "mitre_atlas": [
-      "AML.T0043"
+      "AML.T0053"
     ],
     "behavioral_fingerprint": "Component instructs the agent to access files, APIs, databases, or systems that were not declared in the component's manifest or authorised by the user.",
     "behavioral_vector": [
@@ -4528,7 +4509,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "CWE-269",
@@ -4836,9 +4817,7 @@
       "MAP-1.5",
       "MEASURE-2.5"
     ],
-    "mitre_atlas": [
-      "AML.T0054"
-    ],
+    "mitre_atlas": [],
     "behavioral_fingerprint": "Component embeds fake prior conversation history to manipulate the agent's understanding of what the user previously said, consented to, or approved.",
     "behavioral_vector": [
       "history-inject",
@@ -4898,7 +4877,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -4960,7 +4939,6 @@
       "MEASURE-2.5"
     ],
     "mitre_atlas": [
-      "AML.T0043",
       "AML.T0048"
     ],
     "behavioral_fingerprint": "Component instructs the agent to encode sensitive data (credentials, API keys, PII, system prompt) inside tool call parameters or return values for covert exfiltration through a legitimate-looking too",
@@ -5023,7 +5001,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "CWE-116",
@@ -5089,7 +5067,7 @@
       "MANAGE-2.2"
     ],
     "mitre_atlas": [
-      "AML.T0054"
+      "AML.T0080.001"
     ],
     "behavioral_fingerprint": "Component instructs the agent to retain and re-apply malicious instructions across multiple conversation turns, surviving memory resets or context window rollovers.",
     "behavioral_vector": [
@@ -5152,7 +5130,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -5217,8 +5195,7 @@
       "MEASURE-2.5"
     ],
     "mitre_atlas": [
-      "AML.T0054",
-      "AML.T0048"
+      "AML.T0051.001"
     ],
     "behavioral_fingerprint": "Component instructs the agent to execute instructions embedded in user-supplied files, documents, or images, enabling indirect prompt injection through untrusted content.",
     "behavioral_vector": [
@@ -5280,7 +5257,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -5342,7 +5319,7 @@
       "MEASURE-2.5"
     ],
     "mitre_atlas": [
-      "AML.T0054"
+      "AML.T0068"
     ],
     "behavioral_fingerprint": "Component uses visually similar Unicode characters (homoglyphs), zero-width characters, or bidirectional text control codes to hide malicious instructions from human reviewers while remaining fully re",
     "behavioral_vector": [
@@ -5403,7 +5380,7 @@
     "researcher": "Boucher & Anderson",
     "researcher_url": "https://arxiv.org/abs/2111.00169",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "Boucher 2021",
@@ -5467,9 +5444,7 @@
       "MAP-1.5",
       "MANAGE-1.3"
     ],
-    "mitre_atlas": [
-      "AML.T0043"
-    ],
+    "mitre_atlas": [],
     "behavioral_fingerprint": "Component instructs the agent to grant elevated privileges when a user or external party falsely claims a privileged role (admin, root, operator), effectively implementing a privilege escalation backd",
     "behavioral_vector": [
       "role-claim",
@@ -5530,7 +5505,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "CWE-290",
@@ -5594,8 +5569,8 @@
       "GOVERN-1.1"
     ],
     "mitre_atlas": [
-      "AML.T0054",
-      "AML.T0011"
+      "AML.T0011",
+      "AML.T0020"
     ],
     "behavioral_fingerprint": "Component instructs the agent to generate outputs designed to corrupt training pipelines, feedback loops, or RLHF reward signals to manipulate future model behaviour.",
     "behavioral_vector": [
@@ -5657,7 +5632,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "Wan 2023",
@@ -5721,8 +5696,7 @@
       "MEASURE-2.5"
     ],
     "mitre_atlas": [
-      "AML.T0043",
-      "AML.T0048"
+      "AML.T0006"
     ],
     "behavioral_fingerprint": "Component instructs the agent to probe internal network topology, scan ports, enumerate services, or map infrastructure beyond the declared scope of the skill.",
     "behavioral_vector": [
@@ -5784,7 +5758,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "CWE-918",
@@ -5850,8 +5824,7 @@
       "MEASURE-2.5"
     ],
     "mitre_atlas": [
-      "AML.T0011",
-      "AML.T0054"
+      "AML.T0011"
     ],
     "behavioral_fingerprint": "Component instructs the agent to deserialize untrusted data using insecure methods (pickle, yaml.load, eval) or to evaluate dynamic code strings received from external or user-controlled sources, enab",
     "behavioral_vector": [
@@ -5913,7 +5886,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "CWE-502",
@@ -5981,7 +5954,7 @@
     ],
     "mitre_atlas": [
       "AML.T0011",
-      "AML.T0054"
+      "AML.T0010"
     ],
     "behavioral_fingerprint": "Component instructs the agent to dynamically load, import, or install a third-party skill, plugin, or tool from an unverified external URL or source at runtime, enabling supply chain compromise.",
     "behavioral_vector": [
@@ -6045,7 +6018,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "CWE-829",
@@ -6107,9 +6080,7 @@
       "MAP-1.5",
       "MEASURE-2.5"
     ],
-    "mitre_atlas": [
-      "AML.T0054"
-    ],
+    "mitre_atlas": [],
     "behavioral_fingerprint": "Component instructs the agent to fabricate, alter, or suppress sensor readings, environment observations, or system state reports to deceive operators or downstream agents.",
     "behavioral_vector": [
       "sensor-poison",
@@ -6170,7 +6141,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "MITRE ATLAS AML.T0020",
@@ -6236,8 +6207,7 @@
       "MANAGE-1.3"
     ],
     "mitre_atlas": [
-      "AML.T0043",
-      "AML.T0048"
+      "AML.T0091"
     ],
     "behavioral_fingerprint": "Component instructs the agent to use access gained in the current context to connect to, enumerate, or attack other systems, services, or agents not within the original authorised scope.",
     "behavioral_vector": [
@@ -6300,7 +6270,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "MITRE ATT&CK T1021",
@@ -6364,7 +6334,7 @@
       "MEASURE-2.5"
     ],
     "mitre_atlas": [
-      "AML.T0054"
+      "AML.T0051.001"
     ],
     "behavioral_fingerprint": "Component instructs the agent to execute instructions found in images, screenshots, or visual content, enabling prompt injection through multimodal inputs that bypass text-level security filters.",
     "behavioral_vector": [
@@ -6426,7 +6396,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "Qi 2023",
@@ -6490,9 +6460,7 @@
       "MAP-1.5",
       "GOVERN-1.1"
     ],
-    "mitre_atlas": [
-      "AML.T0043"
-    ],
+    "mitre_atlas": [],
     "behavioral_fingerprint": "Component grants the agent unlimited authority to use any available tool, spawn sub-agents without limits, or recursively expand its own capabilities without scope boundaries or human oversight checkp",
     "behavioral_vector": [
       "scope-creep",
@@ -6553,7 +6521,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "CWE-400",
@@ -6744,9 +6712,7 @@
       "MAP-1.5",
       "MEASURE-2.5"
     ],
-    "mitre_atlas": [
-      "AML.T0048"
-    ],
+    "mitre_atlas": [],
     "behavioral_fingerprint": "Component instructs the agent to produce output that will be directly interpreted by a downstream system (SQL database, HTML renderer, shell) without escaping or sanitisation, enabling classic injecti",
     "behavioral_vector": [
       "output-inject",
@@ -6808,7 +6774,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "OWASP LLM Insecure Output",
@@ -6873,8 +6839,7 @@
       "MANAGE-1.3"
     ],
     "mitre_atlas": [
-      "AML.T0043",
-      "AML.T0048"
+      "AML.T0051.001"
     ],
     "behavioral_fingerprint": "Skill instructs agent to pass tool results directly into eval(), exec(), or dynamically constructed code strings. Tool result content contains code fragments, escape sequences, or string terminators designed to break out of data context into code context.",
     "behavioral_vector": [
@@ -6925,7 +6890,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-01T00:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "CWE-94",
@@ -7016,7 +6981,7 @@
       "MANAGE-2.2"
     ],
     "mitre_atlas": [
-      "AML.T0043"
+      "AML.T0051.001"
     ],
     "behavioral_fingerprint": "Rich UI payload (canvas, artifact, SVG, HTML) contains prompt injection instructions in non-rendered elements - hidden divs, alt attributes, aria-labels, SVG metadata, HTML comments, or zero-width characters - that the model processes but the user does not see.",
     "behavioral_vector": [
@@ -7063,7 +7028,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-01T00:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -7153,8 +7118,7 @@
       "MANAGE-1.3"
     ],
     "mitre_atlas": [
-      "AML.T0043",
-      "AML.T0048"
+      "AML.T0051.001"
     ],
     "behavioral_fingerprint": "Agent reads async task results from an external queue, webhook, or polling endpoint without validating that result content is data - not instructions. Result payload contains imperative language or structured injection patterns targeting the agent's next action.",
     "behavioral_vector": [
@@ -7201,7 +7165,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-01T00:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -7292,8 +7256,6 @@
       "GOVERN-1.7"
     ],
     "mitre_atlas": [
-      "AML.T0043",
-      "AML.T0048",
       "AML.T0052"
     ],
     "behavioral_fingerprint": "A tool description or result from a low-trust MCP server instructs the agent to use tools from a different, higher-trust MCP server connected in the same session. The instruction crosses server trust boundaries using the agent as a confused deputy.",
@@ -7346,7 +7308,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-01T00:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "CWE-269",
@@ -7740,7 +7702,7 @@
     "researcher": "Aim Labs",
     "researcher_url": "https://arxiv.org/abs/2509.10540",
     "published": "2026-07-10T00:00:00Z",
-    "last_updated": "2026-07-10T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "CVE",
@@ -7770,9 +7732,7 @@
     "owasp_asi": [
       "ASI01"
     ],
-    "mitre_atlas": [
-      "AML.T0051"
-    ],
+    "mitre_atlas": [],
     "aivss": {
       "cvss_base": 7.5,
       "aarf": {
@@ -9541,7 +9501,6 @@
       "MEASURE-2.5"
     ],
     "mitre_atlas": [
-      "AML.T0054",
       "AML.T0051"
     ],
     "behavioral_fingerprint": "Component claims to be a message from Anthropic, OpenAI, Google, Microsoft, or the developer/operator to establish false authority over the agent.",
@@ -9576,7 +9535,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-20T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-09T00:00:00Z",
     "references": [
       {
         "tag": "CWE-290",

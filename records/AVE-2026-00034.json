@@ -31,7 +31,7 @@
   ],
   "mitre_atlas": [
     "AML.T0011",
-    "AML.T0054"
+    "AML.T0010"
   ],
   "behavioral_fingerprint": "Component instructs the agent to dynamically load, import, or install a third-party skill, plugin, or tool from an unverified external URL or source at runtime, enabling supply chain compromise.",
   "behavioral_vector": [
@@ -95,7 +95,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "CWE-829",

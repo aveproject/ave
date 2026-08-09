@@ -29,8 +29,7 @@
     "MANAGE-1.3"
   ],
   "mitre_atlas": [
-    "AML.T0043",
-    "AML.T0048"
+    "AML.T0051.001"
   ],
   "behavioral_fingerprint": "Component embeds instructions targeting a secondary agent in a multi-agent pipeline, causing the downstream agent to perform actions not intended by the orchestrating agent or user.",
   "behavioral_vector": [
@@ -91,7 +90,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "Cohen 2024",

@@ -29,8 +29,7 @@
     "MEASURE-2.5"
   ],
   "mitre_atlas": [
-    "AML.T0011",
-    "AML.T0054"
+    "AML.T0011"
   ],
   "behavioral_fingerprint": "Component instructs the agent to deserialize untrusted data using insecure methods (pickle, yaml.load, eval) or to evaluate dynamic code strings received from external or user-controlled sources, enab",
   "behavioral_vector": [
@@ -92,7 +91,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "CWE-502",

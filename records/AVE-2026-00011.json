@@ -28,8 +28,7 @@
     "MANAGE-1.3"
   ],
   "mitre_atlas": [
-    "AML.T0048",
-    "AML.T0054"
+    "AML.T0053"
   ],
   "behavioral_fingerprint": "Component contains explicit tool invocation directives with specific parameters the agent must pass, bypassing the agent's own tool selection logic.",
   "behavioral_vector": [
@@ -69,7 +68,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-20T09:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",

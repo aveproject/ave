@@ -29,7 +29,6 @@
     "MANAGE-1.3"
   ],
   "mitre_atlas": [
-    "AML.T0054",
     "AML.T0051"
   ],
   "behavioral_fingerprint": "Component asserts that elevated permissions have been granted to the agent, claiming authority to override normal operational boundaries.",
@@ -70,7 +69,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-20T09:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "CWE-269",

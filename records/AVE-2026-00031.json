@@ -28,8 +28,8 @@
     "GOVERN-1.1"
   ],
   "mitre_atlas": [
-    "AML.T0054",
-    "AML.T0011"
+    "AML.T0011",
+    "AML.T0020"
   ],
   "behavioral_fingerprint": "Component instructs the agent to generate outputs designed to corrupt training pipelines, feedback loops, or RLHF reward signals to manipulate future model behaviour.",
   "behavioral_vector": [
@@ -91,7 +91,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "Wan 2023",

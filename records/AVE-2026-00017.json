@@ -29,7 +29,7 @@
     "MANAGE-1.3"
   ],
   "mitre_atlas": [
-    "AML.T0043"
+    "AML.T0073"
   ],
   "behavioral_fingerprint": "Component falsely claims to be an official, verified, or trusted MCP server to gain elevated trust or bypass agent-level permission checks.",
   "behavioral_vector": [
@@ -89,7 +89,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "CWE-290",

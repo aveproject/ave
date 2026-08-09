@@ -25,9 +25,7 @@
     "MAP-1.5",
     "MEASURE-2.5"
   ],
-  "mitre_atlas": [
-    "AML.T0054"
-  ],
+  "mitre_atlas": [],
   "behavioral_fingerprint": "Component instructs the agent to fabricate, alter, or suppress sensor readings, environment observations, or system state reports to deceive operators or downstream agents.",
   "behavioral_vector": [
     "sensor-poison",
@@ -88,7 +86,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "MITRE ATLAS AML.T0020",

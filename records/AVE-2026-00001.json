@@ -33,7 +33,7 @@
   ],
   "mitre_atlas": [
     "AML.T0011",
-    "AML.T0054"
+    "AML.T0081"
   ],
   "behavioral_fingerprint": "Component contains instructions to fetch and execute remote content, replacing its own behavioral instructions at runtime.",
   "behavioral_vector": [
@@ -100,7 +100,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-01T09:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",

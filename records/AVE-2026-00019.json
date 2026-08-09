@@ -29,7 +29,7 @@
     "MANAGE-2.2"
   ],
   "mitre_atlas": [
-    "AML.T0054"
+    "AML.T0080.000"
   ],
   "behavioral_fingerprint": "Component writes malicious instructions or false facts into the agent's persistent memory store, causing the agent to act on attacker-controlled beliefs in future conversations.",
   "behavioral_vector": [
@@ -93,7 +93,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "Cohen 2024",

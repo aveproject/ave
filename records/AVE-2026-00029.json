@@ -26,7 +26,7 @@
     "MEASURE-2.5"
   ],
   "mitre_atlas": [
-    "AML.T0054"
+    "AML.T0068"
   ],
   "behavioral_fingerprint": "Component uses visually similar Unicode characters (homoglyphs), zero-width characters, or bidirectional text control codes to hide malicious instructions from human reviewers while remaining fully re",
   "behavioral_vector": [
@@ -87,7 +87,7 @@
   "researcher": "Boucher & Anderson",
   "researcher_url": "https://arxiv.org/abs/2111.00169",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "Boucher 2021",

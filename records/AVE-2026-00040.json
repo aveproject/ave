@@ -27,9 +27,7 @@
     "MAP-1.5",
     "MEASURE-2.5"
   ],
-  "mitre_atlas": [
-    "AML.T0048"
-  ],
+  "mitre_atlas": [],
   "behavioral_fingerprint": "Component instructs the agent to produce output that will be directly interpreted by a downstream system (SQL database, HTML renderer, shell) without escaping or sanitisation, enabling classic injecti",
   "behavioral_vector": [
     "output-inject",
@@ -91,7 +89,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "OWASP LLM Insecure Output",
