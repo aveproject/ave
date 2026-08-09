@@ -28,8 +28,7 @@
     "MEASURE-2.5"
   ],
   "mitre_atlas": [
-    "AML.T0043",
-    "AML.T0048"
+    "AML.T0006"
   ],
   "behavioral_fingerprint": "Component instructs the agent to probe internal network topology, scan ports, enumerate services, or map infrastructure beyond the declared scope of the skill.",
   "behavioral_vector": [
@@ -91,7 +90,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "CWE-918",
