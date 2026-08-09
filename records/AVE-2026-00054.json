@@ -58,11 +58,16 @@
   "remediation": "1. Use strong isolation primitives for untrusted code execution -- a dedicated microVM (e.g. Firecracker) or gVisor-class sandbox with its own kernel, not a shared-kernel container or in-process VM context. 2. Never expose Node.js vm.Script, Python exec()/eval() run in-process, or similar in-language sandboxing as the sole isolation boundary for untrusted code -- these share the host language runtime's prototype/object model and are not designed as a security boundary. 3. Run the code-execution process with the minimum host privileges necessary, never as root. 4. Monitor sandboxed process behavior for filesystem, network, or process-table access outside the declared execution boundary. 5. Apply defense-in-depth: scan submitted code for known escape-technique signatures before execution as an additional signal, not a sole control.",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
-  "researcher_url": "https://bawbel.io",
+  "researcher": "Jeremy Brown (CERT/CC)",
+  "researcher_url": "https://kb.cert.org/vuls/id/414811",
   "published": "2026-07-10T00:00:00Z",
   "last_updated": "2026-07-10T00:00:00Z",
   "references": [
+    {
+      "tag": "CERT/CC VU#414811",
+      "text": "Jeremy Brown -- original discovery (using AI-assisted vulnerability research) of the Cohere Terrarium sandbox escape, coordinated through CERT/CC. Cohere notified 2026-02-19; VU#414811 published 2026-04-21.",
+      "url": "https://kb.cert.org/vuls/id/414811"
+    },
     {
       "tag": "CVE",
       "text": "CVE-2026-5752 -- Cohere Terrarium sandbox escape via JavaScript prototype-chain traversal, CVSS 9.3, CERT/CC-reported",

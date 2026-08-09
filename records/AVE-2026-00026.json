@@ -86,7 +86,7 @@
   "remediation": "- Audit all tool parameters for encoded sensitive data before execution\n- Never allow credentials or PII to be passed as tool parameters\n- Implement output data loss prevention (DLP) on tool call parameters",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
   "last_updated": "2026-05-12T00:00:00Z",

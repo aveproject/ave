@@ -51,8 +51,8 @@
   "remediation": "1. Strip or proxy all externally-hosted images and auto-fetched links in agent-generated responses before rendering, or require explicit user confirmation before fetching. 2. Apply a content-security-policy-style allowlist restricting which domains a client may auto-fetch resources from. 3. Scan agent-generated responses for URLs containing conversation-derived data in query parameters before rendering. 4. Treat reference-style markdown links/images with the same scrutiny as inline ones -- redaction filters must resolve references, not just scan raw inline URLs. 5. Disable automatic image/resource loading in high-sensitivity deployments; render as a user-clickable link instead.",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
-  "researcher_url": "https://bawbel.io",
+  "researcher": "Aim Labs",
+  "researcher_url": "https://arxiv.org/abs/2509.10540",
   "published": "2026-07-10T00:00:00Z",
   "last_updated": "2026-07-10T00:00:00Z",
   "references": [

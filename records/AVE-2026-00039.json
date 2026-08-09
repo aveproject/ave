@@ -88,7 +88,7 @@
   "remediation": "- Scan outputs for known covert channel patterns\n- Randomise response formatting to prevent timing-based channels\n- Apply information-theoretic analysis to detect unexpected data in outputs\n- Monitor entropy of agent outputs for anomalies",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
   "last_updated": "2026-05-12T00:00:00Z",
