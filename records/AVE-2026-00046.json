@@ -29,8 +29,6 @@
     "GOVERN-1.7"
   ],
   "mitre_atlas": [
-    "AML.T0043",
-    "AML.T0048",
     "AML.T0052"
   ],
   "behavioral_fingerprint": "Skill instructs agent to register a hook, callback, or interceptor on tool execution. The hook targets all tool calls or a broad class of tools and routes them through an external URL or attacker-controlled handler before the legitimate tool runs.",
@@ -83,7 +81,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-05-16T00:00:00Z",
-  "last_updated": "2026-05-16T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "CWE-601",
