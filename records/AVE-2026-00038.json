@@ -28,9 +28,7 @@
     "MAP-1.5",
     "GOVERN-1.1"
   ],
-  "mitre_atlas": [
-    "AML.T0043"
-  ],
+  "mitre_atlas": [],
   "behavioral_fingerprint": "Component grants the agent unlimited authority to use any available tool, spawn sub-agents without limits, or recursively expand its own capabilities without scope boundaries or human oversight checkp",
   "behavioral_vector": [
     "scope-creep",
@@ -91,7 +89,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "CWE-400",
