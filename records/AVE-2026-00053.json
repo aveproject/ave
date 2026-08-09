@@ -61,7 +61,7 @@
   "remediation": "1. Resolve the caller-supplied path to its canonical absolute form (e.g. os.path.realpath, path.resolve) before any file operation. 2. Verify the resolved path is contained within a configured root directory using a proper prefix/containment check on the canonical path, not a blacklist of forbidden substrings. 3. Reject requests containing raw or encoded traversal sequences (../, ..\\, %2e%2e%2f) before resolution, as defense in depth. 4. Apply the same canonicalization and containment check to URL-based resource builders, not just filesystem path parameters -- dot-segment normalization during URL resolution is a common gap. 5. Run the MCP server process with read/write access limited to only the directories it actually needs.",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-07-10T00:00:00Z",
   "last_updated": "2026-07-10T00:00:00Z",

@@ -84,8 +84,8 @@
   "remediation": "- Normalise all Unicode input to NFC before processing\n- Reject files containing zero-width or bidirectional override characters\n- Use Unicode-aware security scanning - check for homoglyph substitution\n- Display files in a hex/unicode viewer before manual security review",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
-  "researcher_url": "https://bawbel.io",
+  "researcher": "Boucher & Anderson",
+  "researcher_url": "https://arxiv.org/abs/2111.00169",
   "published": "2026-04-19T09:00:00Z",
   "last_updated": "2026-05-12T00:00:00Z",
   "references": [

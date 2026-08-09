@@ -60,11 +60,16 @@
   "remediation": "1. Never pass caller-supplied parameter values into a shell command string; use an argument-array invocation form (execFile, spawn without shell:true) that does not invoke a shell interpreter. 2. Validate and allowlist parameter values against an expected format before any process-execution call. 3. If a local file reference is accepted as a parameter, resolve and canonicalize the path, then verify it stays within an expected working directory before use. 4. Run the MCP server process with the minimum OS privileges necessary, never as an administrator/root account or the interactive user's full session. 5. If using a known-vulnerable third-party tool package, upgrade to a patched version.",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
-  "researcher_url": "https://bawbel.io",
+  "researcher": "Peter Girnus (ZDI)",
+  "researcher_url": "https://www.zerodayinitiative.com/advisories/ZDI-26-021/",
   "published": "2026-07-10T00:00:00Z",
   "last_updated": "2026-07-10T00:00:00Z",
   "references": [
+    {
+      "tag": "ZDI-26-021",
+      "text": "Peter Girnus (@gothburz), Trend Research / Zero Day Initiative -- original discovery and coordinated disclosure of CVE-2026-0755, reported to the vendor 2025-07-25, published as a 0-day advisory 2026-01-09.",
+      "url": "https://www.zerodayinitiative.com/advisories/ZDI-26-021/"
+    },
     {
       "tag": "CVE",
       "text": "CVE-2026-0755 -- gemini-mcp-tool OS command injection (CWE-78), CVSS 9.8",

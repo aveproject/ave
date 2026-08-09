@@ -93,7 +93,7 @@
   "remediation": "1. Remove the component immediately.\n2. Rotate all environment variables and API keys accessible to the agent.\n3. Review outbound network logs for credential-shaped data.\n4. Audit all tool calls and external requests made during the exposure window.",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-01T09:00:00Z",
   "last_updated": "2026-05-12T00:00:00Z",
