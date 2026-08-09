@@ -30,8 +30,7 @@
     "MANAGE-2.2"
   ],
   "mitre_atlas": [
-    "AML.T0043",
-    "AML.T0048"
+    "AML.T0051.001"
   ],
   "behavioral_fingerprint": "Tool descriptions in the server-card contain behavioral instructions targeting the agent - IMPORTANT/WARNING/NOTE prefixes, before/after calling directives, or instructions to perform actions not related to the tool's declared function.",
   "behavioral_vector": [
@@ -82,7 +81,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-05-01T00:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",
