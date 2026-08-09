@@ -31,7 +31,7 @@
     "MEASURE-2.5"
   ],
   "mitre_atlas": [
-    "AML.T0054"
+    "AML.T0051.001"
   ],
   "behavioral_fingerprint": "MCP tool description field contains directives targeting agent behavior rather than describing tool functionality.",
   "behavioral_vector": [
@@ -93,7 +93,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-01T09:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",
