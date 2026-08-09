@@ -27,7 +27,7 @@
     "MANAGE-2.2"
   ],
   "mitre_atlas": [
-    "AML.T0043"
+    "AML.T0051.001"
   ],
   "behavioral_fingerprint": "Rich UI payload (canvas, artifact, SVG, HTML) contains prompt injection instructions in non-rendered elements - hidden divs, alt attributes, aria-labels, SVG metadata, HTML comments, or zero-width characters - that the model processes but the user does not see.",
   "behavioral_vector": [
@@ -74,7 +74,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-05-01T00:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",
