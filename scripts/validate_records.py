@@ -140,6 +140,49 @@ def check_no_vendor_boilerplate(raw_text: str) -> list[str]:
             for pattern in VENDOR_BOILERPLATE_PATTERNS if re.search(pattern, lower)]
 
 
+# Names that are AVE's own maintainers/cataloguers, not external
+# researchers. Kept as a real, explicit list, not a heuristic guess.
+INTERNAL_RESEARCHER_NAMES = {"saray chak", "bawbel security research team"}
+
+# Words in a reference's own tag/text that signal it IS the primary
+# external disclosure this record is based on, not just supporting
+# context or a detection-implementation link.
+DISCLOSURE_SIGNAL_WORDS = [
+    "disclosure", "advisory", "cve", "vulnerability report",
+    "responsible disclosure", "security research", "paper",
+]
+
+
+def check_researcher_matches_disclosure(record: dict) -> list[str]:
+    """Soft warning only: flags records where `researcher` is an AVE
+    maintainer name while `references` contains something that reads
+    like the actual external disclosure this record is based on.
+    Not a hard failure, some records are genuinely original AVE
+    cataloguing with no single external discloser, this needs a human
+    glance, not an auto-block. Caught the real AVE-2026-00060 /
+    repo-forensics-sourced misattribution mistakes; see
+    docs/specs/researcher-process.md for the full incident this check
+    exists because of.
+    """
+    researcher = (record.get("researcher") or "").strip().lower()
+    if researcher not in INTERNAL_RESEARCHER_NAMES:
+        return []
+
+    refs = record.get("references", [])
+    for ref in refs:
+        tag = (ref.get("tag") or "").lower()
+        text = (ref.get("text") or "").lower()
+        combined = tag + " " + text
+        if any(word in combined for word in DISCLOSURE_SIGNAL_WORDS):
+            return [
+                f"researcher is '{record.get('researcher')}' (an AVE maintainer name), "
+                f"but references includes an entry that reads as the primary external "
+                f"disclosure ('{ref.get('tag', ref.get('text', ''))}'). Confirm this is "
+                f"genuinely original AVE cataloguing, not a misattributed external source."
+            ]
+    return []
+
+
 def main() -> int:
     schema = json.loads(SCHEMA_PATH.read_text())
     jsonschema.Draft202012Validator.check_schema(schema)
@@ -167,6 +210,12 @@ def main() -> int:
         for e in errors:
             print(f"{rid}: {e}")
         total_errors += len(errors)
+
+        warnings = check_researcher_matches_disclosure(record)
+        if warnings:
+            for w in warnings:
+                print(f"WARNING [{record['ave_id']}]: {w}")
+            # do not increment the failure counter, do not affect exit code
 
     if total_errors:
         print(f"\n{total_errors} error(s) across {len(paths)} records.", file=sys.stderr)
