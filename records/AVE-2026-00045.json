@@ -29,8 +29,6 @@
     "GOVERN-1.7"
   ],
   "mitre_atlas": [
-    "AML.T0043",
-    "AML.T0048",
     "AML.T0052"
   ],
   "behavioral_fingerprint": "A tool description or result from a low-trust MCP server instructs the agent to use tools from a different, higher-trust MCP server connected in the same session. The instruction crosses server trust boundaries using the agent as a confused deputy.",
@@ -83,7 +81,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-05-01T00:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "CWE-269",
