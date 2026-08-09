@@ -27,9 +27,7 @@
     "MAP-1.5",
     "MEASURE-2.5"
   ],
-  "mitre_atlas": [
-    "AML.T0054"
-  ],
+  "mitre_atlas": [],
   "behavioral_fingerprint": "Component instructs the agent to reveal, output, or repeat its system prompt, instructions, configuration, or internal guidelines.",
   "behavioral_vector": [
     "prompt-extraction",
@@ -67,7 +65,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-20T09:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "Perez 2022",
