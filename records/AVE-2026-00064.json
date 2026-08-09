@@ -46,7 +46,7 @@
   ],
   "remediation": "Require explicit, un-bypassable user confirmation before any project-load auto-run executes, regardless of what the project's own configuration requests; treat auto-run configuration as a request the environment may deny, not an instruction the environment must honor.",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-07-27T00:00:00Z",
   "last_updated": "2026-07-27T00:00:00Z",

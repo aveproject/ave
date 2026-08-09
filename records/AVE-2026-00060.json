@@ -48,8 +48,8 @@
   ],
   "remediation": "1. Update to a patched SDK version that uses parameterized subprocess invocation rather than shell string construction. 2. Never construct shell commands via string concatenation or interpolation from tool call parameters; use an execution API that treats arguments as an array, not a single shell string. 3. If shell invocation is genuinely required, apply strict allowlisting and escaping specific to the shell in use, not generic sanitization.",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
-  "researcher_url": "https://bawbel.io",
+  "researcher": "OX Security",
+  "researcher_url": "https://www.ox.security",
   "published": "2026-07-27T00:00:00Z",
   "last_updated": "2026-07-27T00:00:00Z",
   "references": [
