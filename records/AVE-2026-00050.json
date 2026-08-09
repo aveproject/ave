@@ -3,7 +3,7 @@
   "schema_version": "1.1.0",
   "status": "active",
   "published": "2026-06-21T00:00:00Z",
-  "last_updated": "2026-06-21T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "component_type": "mcp_server",
   "title": "Parasitic Toolchain \u2014 Silent Tool Registration and Persistent Hook Injection",
   "attack_class": "Persistence - Parasitic Toolchain",
@@ -30,8 +30,7 @@
     "ASI07"
   ],
   "mitre_atlas": [
-    "AML.T0010",
-    "AML.T0043"
+    "AML.T0010"
   ],
   "nist_ai_rmf": [
     "MAP-1.5",
