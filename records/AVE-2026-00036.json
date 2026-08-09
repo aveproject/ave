@@ -30,8 +30,7 @@
     "MANAGE-1.3"
   ],
   "mitre_atlas": [
-    "AML.T0043",
-    "AML.T0048"
+    "AML.T0091"
   ],
   "behavioral_fingerprint": "Component instructs the agent to use access gained in the current context to connect to, enumerate, or attack other systems, services, or agents not within the original authorised scope.",
   "behavioral_vector": [
@@ -94,7 +93,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "MITRE ATT&CK T1021",
