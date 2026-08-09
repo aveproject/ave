@@ -50,8 +50,8 @@
   ],
   "remediation": "Bind MCP servers to a loopback address (127.0.0.1 or ::1) by default; require an explicit, separately-reviewed opt-in before binding to a wildcard or LAN-reachable address. Where LAN or remote reachability is genuinely required, pair it with a mandatory authentication step, never rely on network position alone as an implicit trust boundary.",
   "kill_switch_active": false,
-  "researcher": "Saray Chak",
-  "researcher_url": "https://bawbel.io",
+  "researcher": "Nicolai (predictor2718)",
+  "researcher_url": "https://github.com/predictor2718",
   "published": "2026-08-06T00:00:00Z",
   "last_updated": "2026-08-06T00:00:00Z",
   "references": [

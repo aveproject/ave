@@ -58,8 +58,8 @@
   ],
   "remediation": "Do not treat a specific, well-formed external reference as permanently safe once reviewed; periodically re-verify that referenced GitHub owners, packages, domains, and cloud subdomains still resolve to their original, reviewed owner before trusting content fetched or installed from them. Where feasible, pin to a content hash or commit SHA rather than a mutable owner/name, and treat any pre-install or pre-fetch step that resolves an external anchor as a point requiring a fresh trust check, not a one-time review at publication time. Registries hosting skills should periodically re-scan published skills for anchor decay rather than only screening at submission.",
   "kill_switch_active": false,
-  "researcher": "Saray Chak",
-  "researcher_url": "https://bawbel.io",
+  "researcher": "AIR Security",
+  "researcher_url": "https://www.air.security",
   "published": "2026-08-07T00:00:00Z",
   "last_updated": "2026-08-07T00:00:00Z",
   "references": [

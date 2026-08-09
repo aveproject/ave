@@ -48,7 +48,7 @@
   ],
   "remediation": "Do not expose a configuration-level bypass for approval gates on high-risk actions at all; if a narrower, explicitly-scoped auto-approval is a genuine product requirement, scope it to specific, named, low-risk actions rather than a blanket flag, and log every use of the bypass distinctly from a human-confirmed approval.",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-07-27T00:00:00Z",
   "last_updated": "2026-07-27T00:00:00Z",

@@ -51,8 +51,8 @@
   ],
   "remediation": "Remove any DOCKER_HOST override from committed configuration; if a remote build host is genuinely required, require it to be supplied out-of-band at invocation time rather than committed to a file an agent or its skills can read and silently rely on. Pin agent and MCP server configuration to the local daemon socket by default, and treat any remote daemon target as requiring explicit, separately-reviewed approval.",
   "kill_switch_active": false,
-  "researcher": "Saray Chak",
-  "researcher_url": "https://bawbel.io",
+  "researcher": "Nicolai (predictor2718)",
+  "researcher_url": "https://github.com/predictor2718",
   "published": "2026-08-06T00:00:00Z",
   "last_updated": "2026-08-06T00:00:00Z",
   "references": [

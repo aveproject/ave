@@ -53,8 +53,8 @@
   ],
   "remediation": "Validate telemetry, model, and provider endpoint configuration against an allowlist of known-legitimate hosts before the process starts, and refuse to proceed silently on a mismatch. Never accept an endpoint override from a repository's own committed configuration without an explicit trust confirmation step, the exact gap CVE-2026-21852 closed. Require TLS for any endpoint carrying an API key or bearer token; reject cleartext http:// destinations for such traffic outright.",
   "kill_switch_active": false,
-  "researcher": "Saray Chak",
-  "researcher_url": "https://bawbel.io",
+  "researcher": "Nicolai (predictor2718)",
+  "researcher_url": "https://github.com/predictor2718",
   "published": "2026-08-06T00:00:00Z",
   "last_updated": "2026-08-08T00:00:00Z",
   "references": [

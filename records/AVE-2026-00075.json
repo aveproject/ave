@@ -56,8 +56,8 @@
   ],
   "remediation": "Never trust a precompiled .pyc/.pyo file at face value; unmarshal and disassemble every bytecode artifact a skill ships and compare its actual referenced primitives against its own visible source before trusting the package. Reject skill packages that bundle precompiled bytecode with no legitimate build-pipeline reason to do so, and strip or refuse to load any .pyc/__pycache__ content from an unreviewed or third-party skill source, forcing recompilation from source instead. Static scanners that currently skip binary/.pyc content by design, the exact gap the 2026-06 CSA/Trail of Bits audit identified across multiple production skill scanners, should treat that skip as an explicit, documented blind spot rather than a silent pass.",
   "kill_switch_active": false,
-  "researcher": "Saray Chak",
-  "researcher_url": "https://bawbel.io",
+  "researcher": "CSA / Trail of Bits",
+  "researcher_url": "https://labs.cloudsecurityalliance.org/research/csa-research-note-ai-agent-skill-scanner-bypass-20260610-csa/",
   "published": "2026-08-07T00:00:00Z",
   "last_updated": "2026-08-07T00:00:00Z",
   "references": [

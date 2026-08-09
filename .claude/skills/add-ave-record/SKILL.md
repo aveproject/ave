@@ -26,6 +26,17 @@ Include the evidence fields:
 - evidence_basis_engines
 - derivable_into
 
+**The `researcher` field, a common, real mistake, not a hypothetical
+one**: defaulting to the AVE maintainer's own name because it's the
+name most readily at hand while drafting. Check first: does this
+record trace to a real external CVE, paper, vendor disclosure, or
+existing tool implementation? If yes, and it almost always is yes,
+that source's own name or organization belongs in `researcher`, not
+the person writing the AVE record. This exact mistake shipped on two
+published records before being caught by an external maintainer being
+credited incorrectly himself. See docs/specs/researcher-process.md's
+Accountability and sourcing section for the full rule.
+
 ### 4. Write conformance fixtures (TDD — fixtures first)
 tests/fixtures/AVE-YYYY-NNNNN_positive.md — a conforming implementation MUST flag this
 tests/fixtures/AVE-YYYY-NNNNN_negative.md — a conforming implementation MUST NOT flag this

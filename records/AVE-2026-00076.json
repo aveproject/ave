@@ -53,8 +53,8 @@
   ],
   "remediation": "Treat a repository's own committed permissions/auto-run configuration file as untrusted content requiring the same review as code, not as inert settings. Define a list of action types (credential file access, destructive filesystem operations, non-loopback network calls) that always require human confirmation regardless of any allow_instructions text, so no natural-language steering entry can widen approval for them. Log every classifier-subagent approval distinctly from a human-confirmed one, and treat a probabilistic classifier's decision as steerable, not authoritative, for genuinely high-risk action classes.",
   "kill_switch_active": false,
-  "researcher": "Saray Chak",
-  "researcher_url": "https://bawbel.io",
+  "researcher": "Nicolai (predictor2718)",
+  "researcher_url": "https://github.com/predictor2718",
   "published": "2026-08-08T00:00:00Z",
   "last_updated": "2026-08-08T00:00:00Z",
   "references": [

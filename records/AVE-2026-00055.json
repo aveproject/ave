@@ -62,8 +62,8 @@
   "remediation": "1. Never populate the command/args fields used to spawn an MCP server subprocess from unvalidated configuration, database, network, or model-generated data. 2. Restrict STDIO server launches to an explicit allowlist of known-safe executable paths or package names, not arbitrary caller-supplied commands. 3. Pin and verify the hash of a server's declared launch configuration at first audit; alert if it changes before the next explicit re-review. 4. Treat MCP config files as a privileged trust boundary -- require explicit human confirmation before an agent or any automated process modifies them. 5. Audit registry submission review processes; do not auto-install servers from registries with no review gate.",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
-  "researcher_url": "https://bawbel.io",
+  "researcher": "OX Security",
+  "researcher_url": "https://www.ox.security",
   "published": "2026-07-10T00:00:00Z",
   "last_updated": "2026-07-10T00:00:00Z",
   "references": [

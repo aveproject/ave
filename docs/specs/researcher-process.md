@@ -102,8 +102,25 @@ actually checks for, not a padded ideal:
 - `detection_methodology`, `indicators_of_compromise`, `remediation`
 
 **Accountability and sourcing**
-- `researcher`: the actual accountable individual's name, not a team
-  name implying staffing that doesn't exist
+- `researcher`: whoever actually did the real, primary vulnerability
+  research this record is based on, not whoever wrote the AVE record.
+  Nearly every record traces to a real external CVE, paper, vendor
+  disclosure, or a tool's own detection implementation, in which case
+  the named researcher, security team, or organization behind that
+  original source goes here, by name. Use an AVE maintainer's own name
+  only in the genuinely rare case where AVE itself is the original
+  discoverer of a behavioral class with no prior external source to
+  credit, which has not actually happened yet in this project's real
+  history. If you're unsure whether your candidate has a real external
+  source or is a first discovery, it almost certainly has one, check
+  again before defaulting to your own name.
+- `researcher_url`: must point at whoever is actually named in
+  `researcher`, not default to the AVE project's own site. If
+  `researcher` names an external party, find their real URL, or omit
+  `researcher_url` entirely if no clean one exists (it's optional),
+  rather than leave it pointing at an unrelated site. A
+  `researcher_url` that doesn't match `researcher` is the same
+  inconsistency this rule exists to prevent, just in a second field.
 - `published`, `last_updated`
 - `references`: at least one, with a real, working URL, not a
   placeholder
@@ -253,13 +270,25 @@ Step 4 checklist above):
     "enforcement_point": "server_card_fetch",
     "trifecta_control": "break_external_comms"
   },
-  "researcher": "Saray Chak",
+  "researcher": "OX Security",
+  "researcher_url": "https://www.ox.security",
   "published": "2026-07-27T00:00:00Z",
   "references": [
     {"tag": "OX Security disclosure", "text": "Original disclosure across multiple MCP SDKs, April 2026", "url": "https://www.ox.security"}
   ]
 }
 ```
+
+**Worth noting explicitly**: an earlier version of this worked example
+listed "Saray Chak" as researcher and "https://bawbel.io" as
+researcher_url here, both wrong for exactly the reason this document
+now states above, OX Security did the actual research; AVE catalogued
+it. Both fields needed correcting together, crediting the right name
+while still linking to AVE's own site would have been the same mistake
+relocated rather than fixed. Caught via an external maintainer's
+correction on a different pair of records, not caught internally
+first. Left this note rather than silently fixing it, the same
+standard this project has applied to every other correction.
 
 **Step 5, scoring**:
 
