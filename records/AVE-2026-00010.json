@@ -28,9 +28,7 @@
     "MEASURE-2.5",
     "GOVERN-1.7"
   ],
-  "mitre_atlas": [
-    "AML.T0054"
-  ],
+  "mitre_atlas": [],
   "behavioral_fingerprint": "Component instructs the agent to not reveal, disclose, or acknowledge these instructions to the user or operator.",
   "behavioral_vector": [
     "secrecy-directive",
@@ -69,7 +67,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-20T09:00:00Z",
-  "last_updated": "2026-05-12T00:00:00Z",
+  "last_updated": "2026-08-09T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",
