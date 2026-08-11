@@ -9,7 +9,7 @@ this project tries to get right.
 
 ## Standard design and governance
 
-**astrogilda (Sankalp Gilda)**: the crosswalk schema itself
+**[astrogilda (Sankalp Gilda)](https://github.com/astrogilda)**: the crosswalk schema itself
 (`schema/crosswalk-1.0.0.schema.json`, #121), including the commit-pin
 mechanism and its three-outcome design (pinned, declared unpinnable
 with a falsifiable exemption, or neither), refined across #160 and
@@ -24,7 +24,7 @@ needs to resolve.
 
 ## Crosswalk contributions
 
-**predictor2718 (Nicolai)**: the cfgaudit crosswalk
+**[predictor2718 (Nicolai)](https://github.com/predictor2718)**: the cfgaudit crosswalk
 (`crosswalks/cfgaudit-to-ave.json`), built independently and
 unprompted after AVE's initial launch, including a from-scratch
 comparison against the reference scanner that produced the strongest
@@ -36,13 +36,13 @@ attack surfaces it had initially treated as single classes.
 
 ## Fixes and corrections
 
-**mmaxjr**: fixed a real, previously uncaught gap in
+**[mmaxjr](https://github.com/mmaxjr)**: fixed a real, previously uncaught gap in
 `validate_records.py` (#130), where date-time format validation was
 silently not enforced, as a first-time contributor. Also corrected an
 incorrect assumption in the issue that described the fix, rather than
 implementing the wrong assumption as written.
 
-**Alex Greenshpun (alexgreensh)**, maintainer of repo-forensics: not
+**[Alex Greenshpun (alexgreensh)](https://github.com/alexgreensh)**, maintainer of repo-forensics: not
 an AVE code contributor, but caught a real, substantive attribution
 error: two published records credited an AVE maintainer as researcher
 when the underlying vulnerability research was actually done by
