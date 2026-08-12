@@ -499,6 +499,10 @@ See [docs/specs/researcher-process.md](docs/specs/researcher-process.md)
 for the practical, step-by-step process a contributor actually follows
 when adding a new record, including a full worked example.
 
+See [CONTRIBUTORS.md](CONTRIBUTORS.md) for what real external
+contributors have actually built and caught, credited specifically,
+not just listed by name.
+
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the contributor-facing process.
 
 See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for community standards.
