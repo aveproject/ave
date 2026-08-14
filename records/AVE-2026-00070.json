@@ -46,8 +46,8 @@
   ],
   "remediation": "Treat tool outputs shared across multiple agents in a collaborative task as a cross-agent attack surface, not just a per-call one; correlate observations across the full task's agent roster, not each agent in isolation. Apply provenance labeling to tool outputs so downstream memory retention can be audited against its source. Where feasible, isolate or sanitize tool observations before they persist into an agent's longer-term memory, rather than retaining raw tool output unmodified.",
   "kill_switch_active": false,
-  "researcher": "Saray Chak",
-  "researcher_url": "https://bawbel.io",
+  "researcher": "Pengyu Zhu, Lijun Li, Yaxing Lyu, Li Sun, Sen Su, Jing Shao",
+  "researcher_url": "https://arxiv.org/abs/2510.11246",
   "published": "2026-08-02T00:00:00Z",
   "last_updated": "2026-08-02T00:00:00Z",
   "references": [
