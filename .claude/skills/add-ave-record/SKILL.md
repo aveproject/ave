@@ -37,6 +37,46 @@ published records before being caught by an external maintainer being
 credited incorrectly himself. See docs/specs/researcher-process.md's
 Accountability and sourcing section for the full rule.
 
+**The four governance/framework fields — `owasp_mcp`, `owasp_asi`,
+`mitre_atlas`, `nist_ai_rmf` — always include the key, never let one go
+missing.** These are the fields a CISO reads first; a security team
+maps an AVE record onto their own reporting frameworks through these.
+An absent key silently reads as "nobody checked this framework." An
+empty array reads as "checked, no real fit was found." Only the second
+one is an honest, defensible state.
+
+- `owasp_mcp`: **required** once `status` is `active`/`deprecated`
+  (schema-enforced, `minItems: 1`) — needs at least one real mapping,
+  verified against the OWASP MCP Top 10's own primary-source category
+  text, not inferred from how a similar-sounding record in the corpus
+  happened to tag itself.
+- `owasp_asi`, `mitre_atlas`, `nist_ai_rmf`: not yet schema-required
+  (that's a tracked v1.2.0 change, see the roadmap issue), but always
+  write the key. Verify each against its own primary source (live
+  `ATLAS.yaml` for MITRE ATLAS, the actual NIST AI 100-1 text for NIST
+  AI RMF, the framework's own published category list for OWASP ASI)
+  before adding a value. Genuinely checked and found nothing that
+  fits? Set it to `[]` and say so in `aivss.notes` — don't just leave
+  the key out because the array would otherwise be empty. This exact
+  mistake (a silently-missing `owasp_asi` key, not an empty one)
+  shipped on AVE-2026-00078/00079/00080 and was caught reviewing that
+  same PR — see docs/specs/researcher-process.md's Common Mistakes
+  section.
+
+  **"Its own primary source" means fetch and read the actual document
+  — a repo's raw files, the framework's own published PDF — never a
+  search result, a summarized page, or a third-party blog's retelling
+  of it, and never corpus precedent no matter how many existing
+  records agree with each other.** Roughly 65 records in this corpus
+  and the schema's own `owasp_asi` regex all consistently use an
+  `ASI01`-`ASI10` numbering for OWASP's Agentic Security Initiative —
+  discovered, on fetching the real primary-source PDF directly and
+  grepping its full text, to not exist anywhere in that document at
+  all. The real taxonomy uses `T1`-`T17`. Sixty-five records agreeing
+  with each other was never evidence; it was sixty-five copies of the
+  same unverified pattern. See issue #179 for the full writeup before
+  citing `owasp_asi` on any new record.
+
 ### 4. Write conformance fixtures (TDD — fixtures first)
 tests/fixtures/AVE-YYYY-NNNNN_positive.md — a conforming implementation MUST flag this
 tests/fixtures/AVE-YYYY-NNNNN_negative.md — a conforming implementation MUST NOT flag this

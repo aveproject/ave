@@ -131,10 +131,60 @@ actually checks for, not a padded ideal:
   `aivss.thm`, `aivss.mitigation_factor`, `aivss.aivss_score`,
   `aivss.aivss_severity`, `aivss.spec_version`
 
-**Optional, omit rather than force a fit**
-- `owasp_asi`, `owasp_mcp`, `mitre_atlas`, `nist_ai_rmf`: only include a
-  mapping you can actually defend field by field, not because a record
-  feels like it should have one
+**Governance and framework mappings — the fields a CISO reads first**
+These four crosswalk fields are what lets a security team map an AVE
+record onto the frameworks they already report against. Get the key
+presence right even when you can't get a value: a missing key reads as
+"nobody checked," an empty array reads as "checked, no fit yet." Never
+let a record ship with the key silently absent.
+
+- `owasp_mcp`: **required** once `status` is `active` or `deprecated`
+  (enforced by the schema, `minItems: 1`) — every published record
+  needs at least one real, defensible mapping to a primary-source OWASP
+  MCP Top 10 category, verified against the category's own text (see
+  the researcher-process worked examples in this project's PRs for what
+  that verification looks like), not inferred from how a similarly-
+  labeled record in the corpus happened to tag itself.
+- `owasp_asi`, `mitre_atlas`, `nist_ai_rmf`: **always include the key**,
+  even when you find no defensible mapping — set it to `[]` rather than
+  omitting the field. Only include a real value in the array when you
+  can defend it field-by-field against the framework's own primary
+  source (the live `ATLAS.yaml` for MITRE ATLAS, the actual NIST AI
+  100-1 text for NIST AI RMF, the framework's own published category
+  list for OWASP ASI); never force a value onto a record because it
+  feels like it should have one, and never infer one from corpus usage
+  alone (see `feedback_verify_framework_mappings`). A record whose
+  `aivss.notes` explains "checked, no technique/category fits, left
+  empty" has done the work; a record with the key missing hasn't, even
+  if the reasoning happened somewhere in your own head while drafting.
+
+  **"Primary source" means the actual document, fetched and read, not
+  a summary of it.** A search engine result, a WebFetch-summarized
+  page, or a third-party blog's own restatement of a framework is not
+  the framework — go get the framework's own artifact (its GitHub
+  repo's raw files, its own published PDF, its own site) and read the
+  real thing before writing a value into any of these four fields.
+  This is not a hypothetical caution: issue #179 documents `owasp_asi`
+  values across roughly 65 records, and the schema's own
+  `owasp_asi.items.pattern` regex, all built around an `ASI01`-`ASI10`
+  numbering that does not exist anywhere in OWASP's actual Agentic
+  Security Initiative document (`genai.owasp.org`'s "Agentic AI –
+  Threats and Mitigations," v1.1) — confirmed by fetching the real PDF
+  and grepping it, zero matches for `ASI0` anywhere in 47 pages. The
+  document's own taxonomy uses `T1`-`T17` Threat IDs, seventeen of
+  them, not ten. The fabricated numbering traces to a third-party
+  blog's own reinterpretation of the initiative, which is presumably
+  how it entered this corpus and then kept propagating by each new
+  record copying the previous one's pattern rather than any record
+  ever going back to OWASP's own document. Comparing corpus precedent
+  against corpus precedent, no matter how many records agree, never
+  substitutes for comparing against the actual source once.
+
+  Schema currently only *requires the key to exist* as a matter of this
+  process document's convention, not (yet) as a schema-enforced
+  constraint for these three — enforcing it at the schema level is
+  tracked as a deliberate v1.2.0 change, not something to bump
+  `schema_version` for on an individual record's own PR.
 - `affected_platforms`, `affected_registries`, `kill_switch_active`,
   `mutation_count`
 
@@ -227,6 +277,26 @@ side effect of adding one record, that's a separate, deliberate decision.
   for duplicates.** Covered in Step 2, worth repeating here because it's
   the single most consequential mistake to make: it either creates a
   real duplicate record or wrongly discards a genuinely distinct one.
+- **Omitting `owasp_asi`, `mitre_atlas`, or `nist_ai_rmf` entirely when
+  no mapping was found, instead of including the key with `[]`.**
+  Shipped on AVE-2026-00078/00079/00080 (`owasp_asi` silently absent
+  from all three despite real research having ruled it out, not simply
+  skipped) and caught reviewing the same PR that drafted them. An
+  absent key and a documented empty array look identical in a diff at
+  a glance but mean opposite things to the CISO reading the record:
+  one says nobody checked, the other says checking happened and came
+  up empty. Fixed by adding the key with `[]` plus a one-line
+  `aivss.notes` explanation of what was checked and why nothing fit.
+- **Treating a framework's ID scheme as settled because the corpus
+  already uses it consistently.** Roughly 65 records and the schema's
+  own `owasp_asi` regex all independently agree on `ASI01`-`ASI10` —
+  consistent, and consistently wrong. OWASP's own Agentic Security
+  Initiative document uses `T1`-`T17`, confirmed by fetching the real
+  PDF directly and grepping the full text (see issue #179). Internal
+  agreement across many records is not the same evidence as one
+  primary-source document actually opened and read; sixty-five
+  records copying the same wrong pattern from each other produces
+  consensus, not correctness.
 
 ## Full worked example: AVE-2026-00060
 

@@ -1,0 +1,101 @@
+{
+  "ave_id": "AVE-2026-00080",
+  "schema_version": "1.1.0",
+  "status": "active",
+  "component_type": "agent",
+  "title": "Silent agent substitution: unverified process at a routing slot treated as the legitimate agent during retry (Sybil)",
+  "attack_class": "Trust Boundary - Runtime Agent Identity Substitution",
+  "severity": "MEDIUM",
+  "description": "In a multi-agent pipeline, an agent's identity is inferred from its position in the execution graph (which routing slot responds) rather than from any persistent, verifiable credential bound to that agent. When a tool call fails and the orchestrator retries by re-invoking the same routing slot, the retry re-establishes a connection to whatever process now responds at that position, with no check that it is the same agent instance, process, or credential-holder that occupied the slot before the failure. During this retry window, an adversary-controlled process (a Sybil) that responds at the correct routing position is indistinguishable from the legitimate agent and is silently accepted as it, allowing an adversarial payload carried in its response to propagate downstream with the full trust the legitimate agent would have received. This is a mid-session, runtime substitution exploited specifically during retry cycles, not a claim made at any fixed registration point. Distinct from AVE-2026-00017 (MCP Server Impersonation or Spoofing): that record's mechanism is a false identity claim made in registry or server-card manifest metadata, evaluated once at the point an MCP server is first connected to and trusted. This record involves no manifest, registry entry, or identity claim of any kind -- the substituted process asserts nothing about who it is; it is accepted purely because it responds at the position the orchestrator already expected an answer from, mid-session, after the original occupant's tool call failed. Distinct from AVE-2026-00030 (Privilege Escalation via False Role Claim): that record requires an explicit, user-supplied role assertion ('I am admin') that a component's own instructions are configured to trust. This record involves no assertion of any role or elevated status; the substitute simply occupies an already-trusted position and inherits that position's existing trust with no claim required at all.",
+  "affected_platforms": [
+    "autogen", "langgraph", "crewai", "any-multi-agent-orchestration-framework"
+  ],
+  "aivss_score": 6.8,
+  "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:L/VI:H/VA:L/SC:H/SI:H/SA:N",
+  "owasp_mcp": ["MCP07"],
+  "owasp_asi": [],
+  "mitre_atlas": [],
+  "nist_ai_rmf": ["MAP-4.2", "GOVERN-3.2"],
+  "behavioral_fingerprint": "A tool call or agent invocation fails and the orchestrator retries at the same routing position; the response that arrives after the retry is accepted and forwarded downstream with no cryptographic credential, session token, or attestation check confirming it originates from the same agent instance that occupied the position before the failure, and no such check exists anywhere in the retry path.",
+  "behavioral_vector": [
+    "multi-agent-orchestration",
+    "identity-boundary-violation",
+    "retry-window-substitution",
+    "sybil"
+  ],
+  "provenance_vector": {
+    "entry_class": "runtime",
+    "payload_surface": "a process responding at an agent's routing position during a tool-call or agent-invocation retry cycle, accepted with no persistent-credential or attestation check binding the response to the same agent instance that occupied the position before the retry",
+    "escalation": "capability_to_identity"
+  },
+  "trifecta_profile": {
+    "requires": ["untrusted_content"]
+  },
+  "mitigation": {
+    "strategy": ["verify_identity", "provenance_label"],
+    "enforcement_point": "agent_framework",
+    "trifecta_control": "break_untrusted_content"
+  },
+  "example_patterns": [
+    "orchestrator's tool call to agent at routing slot #3 times out; on retry, a different process responds at slot #3 with a correctly-formatted payload, orchestrator forwards it downstream with no identity check",
+    "repeated tool-call failures and retries at the same endpoint across 45 traces, with no verification anywhere in the retry path that the retry reached the same agent instance as the original call",
+    "a Sybil process escalated to occupy 2 of 3 parallel agent slots after triggering retries on the original occupants, then supplies coordinated payloads accepted as independent corroboration by a downstream aggregation step"
+  ],
+  "mutation_count": 0,
+  "detection_methodology": "1. Reconstruct the execution trace for a pipeline run, identifying every tool-call or agent-invocation failure followed by a retry at the same routing position. 2. For each retry, check whether any persistent credential, session token, or attestation artifact ties the post-retry response to the same agent identity as the pre-failure call. 3. Flag any retry where no such binding exists and the routing position is the sole basis for treating the post-retry response as originating from the same agent. 4. Where the pipeline uses parallel redundant agents for cross-verification (see AVE-2026-00078), additionally check whether a Sybil process occupying a retried slot was then used to satisfy that verification requirement, defeating it.",
+  "indicators_of_compromise": [
+    "Tool-call or agent-invocation retries with no session token, cryptographic credential, or attestation check re-verifying agent identity after the retry",
+    "Repeated failures and retries concentrated at the same routing position across multiple traces, with no anomaly investigation of why that position specifically is unreliable",
+    "A response accepted purely on the basis of arriving at the expected routing position, with no other identity signal present anywhere in the message",
+    "Elevated retry-failure rates in one architecture (per the source paper, substantially higher in SWE-Bench-style single-CodeAgent pipelines than in GAIA-style two-tier pipelines) without a corresponding investigation of the routing/retry layer"
+  ],
+  "remediation": "Bind every agent to a persistent, verifiable credential (a signed attestation, a session-scoped cryptographic token, or equivalent) independent of its routing position, and require that credential to be re-validated on every retry, not only on initial connection. Treat a retry that cannot re-verify the responding process's credential as a failure requiring escalation or human review, rather than as a transparent continuation of the original call. Where redundant parallel agents are used for cross-verification (as recommended for AVE-2026-00078), ensure retried slots cannot silently satisfy that redundancy requirement without passing the same identity check as any other slot.",
+  "kill_switch_active": false,
+  "researcher": "Faisal Haque Bappy, Tahrim Hossain, Tarannum Shaila Zaman, Raiful Hasan, Kamrul Hasan, Tariqul Islam",
+  "researcher_url": "https://arxiv.org/abs/2608.00718",
+  "published": "2026-08-14T00:00:00Z",
+  "last_updated": "2026-08-14T00:00:00Z",
+  "references": [
+    {
+      "tag": "arXiv:2608.00718",
+      "text": "Bappy, Hossain, Zaman, Hasan, Hasan, Islam. 'Adversarial Attacks in Multi-Agent LLM Pipelines: Unveiling Structural Vulnerabilities in Agentic AI Architectures.' Accepted, IEEE GLOBECOM 2026. Defines this mechanism as A4: Silent Agent Substitution / Sybil Attack, exploiting the identity boundary. Found in 77 of 147 annotated production traces from the TRAIL benchmark (52.4%, 131 instances, higher concentration in SWE-Bench at 83.9% than GAIA at 44.0%); controlled adversarial evaluation across GPT-5-mini, Claude Sonnet 4.5, and Kimi K2.5 measured 0.76-0.78 attack success rate. 45 traces showed agents repeating tool calls after errors with no verification the retry reached the same endpoint.",
+      "url": "https://arxiv.org/abs/2608.00718"
+    },
+    {
+      "tag": "Evaluation code",
+      "text": "SPaDeS-Lab/adversarial-llm-pipeline -- the paper's own controlled five-layer multi-agent pipeline implementation used to operationalize and measure this attack class.",
+      "url": "https://github.com/SPaDeS-Lab/adversarial-llm-pipeline"
+    },
+    {
+      "tag": "TRAIL benchmark",
+      "text": "Deshpande, Gangal, Mehta, Krishnan, Kannappan, Qian. 'TRAIL: Trace Reasoning and Agentic Issue Localization.' The annotated production-trace dataset (GAIA and SWE-Bench Lite traces) this mechanism was empirically derived from.",
+      "url": "https://arxiv.org/abs/2505.08638"
+    },
+    {
+      "tag": "AVE issue #176",
+      "text": "ave_id AVE-2026-00080 confirmed via the id-confirmation issue, including the distinctness comparison against AVE-2026-00017 and AVE-2026-00030 and the primary-source framework mappings.",
+      "url": "https://github.com/aveproject/ave/issues/176"
+    }
+  ],
+  "aivss": {
+    "cvss_base": 8.2,
+    "aarf": {
+      "autonomy": 1, "tool_use": 0.5, "multi_agent": 1, "non_determinism": 0.5,
+      "self_modification": 0, "dynamic_identity": 1, "persistent_memory": 0,
+      "natural_language_input": 0.5, "data_access": 0.5, "external_dependencies": 0.5
+    },
+    "aars": 5.5,
+    "thm": 1,
+    "mitigation_factor": 1,
+    "aivss_score": 6.8,
+    "aivss_severity": "MEDIUM",
+    "spec_version": "0.8",
+    "notes": "dynamic_identity scored at maximum (1), matching the reasoning already applied to AVE-2026-00017: this record's entire mechanism is identity substitution. multi_agent scored at maximum (1): substitution presupposes a pipeline with a routing position an agent normally occupies among others, definitionally a multi-agent property. natural_language_input scored at 0.5 rather than 0 or 1: the substitution mechanism itself (winning a retry window) is structural/timing-based, not natural-language, but the payload the Sybil then delivers to exploit its acquired trust is typically natural-language content, so neither extreme fit cleanly. external_dependencies scored 0.5: exploitability depends partly on how a given orchestration framework implements its retry logic (some bind sessions more tightly than others), unlike AVE-2026-00078/00079 which are architectural regardless of specific framework. This is the highest-scoring of the three records drafted from this source (6.8, closest to the HIGH boundary) despite having the lowest raw attack-success rate in the paper (0.76-0.78 vs 0.79-0.86 for the other two): the aars is higher because dynamic_identity and multi_agent both sit at maximum, reflecting AARF's amplification-breadth weighting rather than raw success-rate ordering -- worth noting explicitly since it is not the most 'successful' attack in the paper's own results. owasp_mcp mapped to MCP07 (Insufficient Authentication & Authorization) after reading the category's full primary-source text (github.com/OWASP/www-project-mcp-top-10, 2025/MCP07 document): its own 'Impact' list names 'Cross-agent impersonation, where one agent acts as another' verbatim, and its Scenario 3 ('Spoofed Identity in Unverified Agent': 'a malicious service registers as a fake MCP agent using an unprotected onboarding endpoint... it is treated as a legitimate internal agent') is the same mechanism shape, differing only in whether the substitution happens at initial registration (MCP07's own scenario) or mid-session during a retry (this record) -- both are absence of the same identity-verification control MCP07 defines. mitre_atlas confirmed empty: checked AML.T0074 (Masquerading) and AML.T0073 (Impersonation) directly against the current ATLAS.yaml (170 techniques, mitre-atlas/atlas-data); T0074 describes artifact/file-metadata deception and T0073 describes human-targeted social-engineering impersonation, neither covering runtime agent-process substitution at a routing position with no credential binding -- a genuine gap, not an unresearched omission. nist_ai_rmf verified against the primary NIST AI 100-1 text (Tables 1-4): MAP-4.2 ('Internal risk controls for components of the AI system, including third-party AI technologies, are identified and documented') fits because a routing-slot occupant is exactly an unidentified, uncontrolled 'component' the moment a retry lets it substitute silently; GOVERN-3.2 ('Policies and procedures are in place to define and differentiate roles and responsibilities for human-AI configurations and oversight of AI systems') fits because this failure is precisely an absence of differentiated, credential-bound role assignment across the pipeline's agent configuration. owasp_asi left as an empty array for the same reason stated in AVE-2026-00078's notes: no stable, independently-verifiable primary-source ASI01-ASI10 category list could be confirmed at drafting time; the field is kept present rather than omitted, per docs/specs/researcher-process.md."
+  },
+  "evidence_kind_default": "behavioral_pattern",
+  "detection_stage": "runtime_observed",
+  "detection_layer": "runtime",
+  "confidence_baseline": 0.55,
+  "evidence_basis_engines": ["llm", "sandbox"],
+  "derivable_into": ["privilege-escalation-chain"]
+}
