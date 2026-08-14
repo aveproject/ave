@@ -63,6 +63,20 @@ one is an honest, defensible state.
   same PR — see docs/specs/researcher-process.md's Common Mistakes
   section.
 
+  **"Its own primary source" means fetch and read the actual document
+  — a repo's raw files, the framework's own published PDF — never a
+  search result, a summarized page, or a third-party blog's retelling
+  of it, and never corpus precedent no matter how many existing
+  records agree with each other.** Roughly 65 records in this corpus
+  and the schema's own `owasp_asi` regex all consistently use an
+  `ASI01`-`ASI10` numbering for OWASP's Agentic Security Initiative —
+  discovered, on fetching the real primary-source PDF directly and
+  grepping its full text, to not exist anywhere in that document at
+  all. The real taxonomy uses `T1`-`T17`. Sixty-five records agreeing
+  with each other was never evidence; it was sixty-five copies of the
+  same unverified pattern. See issue #179 for the full writeup before
+  citing `owasp_asi` on any new record.
+
 ### 4. Write conformance fixtures (TDD — fixtures first)
 tests/fixtures/AVE-YYYY-NNNNN_positive.md — a conforming implementation MUST flag this
 tests/fixtures/AVE-YYYY-NNNNN_negative.md — a conforming implementation MUST NOT flag this

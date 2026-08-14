@@ -157,6 +157,29 @@ let a record ship with the key silently absent.
   `aivss.notes` explains "checked, no technique/category fits, left
   empty" has done the work; a record with the key missing hasn't, even
   if the reasoning happened somewhere in your own head while drafting.
+
+  **"Primary source" means the actual document, fetched and read, not
+  a summary of it.** A search engine result, a WebFetch-summarized
+  page, or a third-party blog's own restatement of a framework is not
+  the framework — go get the framework's own artifact (its GitHub
+  repo's raw files, its own published PDF, its own site) and read the
+  real thing before writing a value into any of these four fields.
+  This is not a hypothetical caution: issue #179 documents `owasp_asi`
+  values across roughly 65 records, and the schema's own
+  `owasp_asi.items.pattern` regex, all built around an `ASI01`-`ASI10`
+  numbering that does not exist anywhere in OWASP's actual Agentic
+  Security Initiative document (`genai.owasp.org`'s "Agentic AI –
+  Threats and Mitigations," v1.1) — confirmed by fetching the real PDF
+  and grepping it, zero matches for `ASI0` anywhere in 47 pages. The
+  document's own taxonomy uses `T1`-`T17` Threat IDs, seventeen of
+  them, not ten. The fabricated numbering traces to a third-party
+  blog's own reinterpretation of the initiative, which is presumably
+  how it entered this corpus and then kept propagating by each new
+  record copying the previous one's pattern rather than any record
+  ever going back to OWASP's own document. Comparing corpus precedent
+  against corpus precedent, no matter how many records agree, never
+  substitutes for comparing against the actual source once.
+
   Schema currently only *requires the key to exist* as a matter of this
   process document's convention, not (yet) as a schema-enforced
   constraint for these three — enforcing it at the schema level is
@@ -264,6 +287,16 @@ side effect of adding one record, that's a separate, deliberate decision.
   one says nobody checked, the other says checking happened and came
   up empty. Fixed by adding the key with `[]` plus a one-line
   `aivss.notes` explanation of what was checked and why nothing fit.
+- **Treating a framework's ID scheme as settled because the corpus
+  already uses it consistently.** Roughly 65 records and the schema's
+  own `owasp_asi` regex all independently agree on `ASI01`-`ASI10` —
+  consistent, and consistently wrong. OWASP's own Agentic Security
+  Initiative document uses `T1`-`T17`, confirmed by fetching the real
+  PDF directly and grepping the full text (see issue #179). Internal
+  agreement across many records is not the same evidence as one
+  primary-source document actually opened and read; sixty-five
+  records copying the same wrong pattern from each other produces
+  consensus, not correctness.
 
 ## Full worked example: AVE-2026-00060
 
