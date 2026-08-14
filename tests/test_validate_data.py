@@ -1,6 +1,8 @@
 import json
 
-from scripts import validate_records
+import pytest
+
+from scripts import validate_crosswalks, validate_records
 
 
 def test_record_validator_rejects_invalid_date_time_format():
@@ -21,3 +23,208 @@ def test_record_validator_rejects_invalid_date_time_format():
     errors = validate_records.check_schema(record, validator)
 
     assert any("not-a-date-time" in error for error in errors)
+
+
+# --- crosswalk pin declarations -------------------------------------------------
+#
+# The three states an endpoint can be in, and the checks that keep them apart:
+# pinned (carries commit), declared unpinnable (says so, with a reason and a date,
+# and is refutable), or neither, which is the blank the warning is about.
+
+
+def crosswalk_validator():
+    schema = json.loads(validate_crosswalks.SCHEMA_PATH.read_text(encoding="utf-8"))
+    return validate_crosswalks.build_validator(schema)
+
+
+def crosswalk_document(source: dict, target: dict | None = None) -> dict:
+    """A crosswalk carrying only what the schema requires, plus the endpoints
+    under test, so that a refusal can only have come from the endpoint."""
+    return {
+        "$schema": "https://aveproject.org/schema/crosswalk-1.0.0.schema.json",
+        "source": source,
+        "target": target or {"url": "https://aveproject.org"},
+        "generated": "2026-08-09",
+        "note": "Fixture crosswalk, endpoints only.",
+        "mappings": [{"ave_id": "AVE-2026-00001"}],
+        "coverage": {"mapped": 1},
+    }
+
+
+UNPINNABLE_SITE = {
+    "url": "https://owasp.org/www-project-agentic-skills-top-10/",
+    "pin_status": "unpinnable",
+    "unpinnable_reason": "published as a site with no repository behind it",
+    "checked_against_live_site": "2026-08-09",
+    "content_digest": "sha256:" + "0" * 64,
+}
+
+
+def test_every_crosswalk_in_the_repository_still_validates():
+    validator = crosswalk_validator()
+    paths = sorted(validate_crosswalks.CROSSWALKS_DIR.glob("*.json"))
+
+    assert paths, "no crosswalks found to validate"
+    for path in paths:
+        document = json.loads(path.read_text(encoding="utf-8"))
+        assert validate_crosswalks.check_schema(document, validator) == [], path
+
+
+def test_schema_accepts_a_declared_unpinnable_endpoint():
+    document = crosswalk_document({"url": "https://aveproject.org"}, dict(UNPINNABLE_SITE))
+
+    assert validate_crosswalks.check_schema(document, crosswalk_validator()) == []
+
+
+@pytest.mark.parametrize("dropped", ["unpinnable_reason", "checked_against_live_site", "content_digest"])
+def test_schema_rejects_an_unpinnable_declaration_missing_its_evidence(dropped):
+    endpoint = dict(UNPINNABLE_SITE)
+    del endpoint[dropped]
+    document = crosswalk_document({"url": "https://aveproject.org"}, endpoint)
+
+    errors = validate_crosswalks.check_schema(document, crosswalk_validator())
+
+    assert any(dropped in error for error in errors)
+
+
+def test_schema_rejects_an_endpoint_that_is_both_pinned_and_unpinnable():
+    endpoint = dict(UNPINNABLE_SITE, commit="a" * 40)
+    document = crosswalk_document({"url": "https://aveproject.org"}, endpoint)
+
+    assert validate_crosswalks.check_schema(document, crosswalk_validator()) != []
+
+
+def test_schema_rejects_a_pin_status_other_than_unpinnable():
+    endpoint = dict(UNPINNABLE_SITE, pin_status="pinned")
+    document = crosswalk_document({"url": "https://aveproject.org"}, endpoint)
+
+    assert validate_crosswalks.check_schema(document, crosswalk_validator()) != []
+
+
+def test_declaring_a_repository_unpinnable_fails():
+    endpoint = dict(UNPINNABLE_SITE, url="https://github.com/aveproject/ave")
+    document = crosswalk_document({"url": "https://aveproject.org"}, endpoint)
+
+    problems = validate_crosswalks.check_declared_unpinnable_has_no_repository(document)
+
+    assert len(problems) == 1
+    assert "which can be pinned" in problems[0]
+
+
+def test_declaring_a_site_with_no_repository_unpinnable_passes():
+    document = crosswalk_document({"url": "https://aveproject.org"}, dict(UNPINNABLE_SITE))
+
+    assert validate_crosswalks.check_declared_unpinnable_has_no_repository(document) == []
+
+
+def test_a_forge_url_with_no_repository_path_is_not_a_repository():
+    assert validate_crosswalks.is_repository_url("https://github.com/aveproject/ave")
+    assert not validate_crosswalks.is_repository_url("https://github.com/aveproject")
+    assert not validate_crosswalks.is_repository_url("https://aveproject.org/schema")
+
+
+def test_a_stated_record_count_with_no_commit_warns():
+    document = crosswalk_document({"url": "https://aveproject.org", "record_count": 76})
+
+    warnings = validate_crosswalks.warn_stated_count_without_pin(document)
+
+    assert len(warnings) == 1
+    assert "cannot be re-derived" in warnings[0]
+
+
+def test_a_stated_record_count_is_not_warned_about_when_pinned():
+    document = crosswalk_document(
+        {"url": "https://aveproject.org", "record_count": 76, "commit": "b" * 40}
+    )
+
+    assert validate_crosswalks.warn_stated_count_without_pin(document) == []
+
+
+def test_a_stated_record_count_is_not_warned_about_when_declared_unpinnable():
+    document = crosswalk_document(dict(UNPINNABLE_SITE, record_count=76))
+
+    assert validate_crosswalks.warn_stated_count_without_pin(document) == []
+
+
+def crosswalk_schema() -> dict:
+    return json.loads(validate_crosswalks.SCHEMA_PATH.read_text(encoding="utf-8"))
+
+
+def test_the_unpinned_count_check_is_a_warning_while_commit_is_optional():
+    """The escalation agreed in #94: warn while commit is optional, hard-fail once
+    it is promoted. This asserts which side of the promotion the shipped schema is
+    on, not a preference -- commit is optional in 1.0.x, so the check warns."""
+    assert validate_crosswalks.commit_is_required(crosswalk_schema()) is False
+
+
+def test_promoting_commit_to_required_escalates_the_check_with_no_code_change():
+    """The other side of the same switch. Requiring commit in the endpoint
+    definition is the whole of the escalation: no constant is flipped, no date is
+    read, and the validator cannot start failing before the field is promoted or
+    keep warning after it."""
+    schema = crosswalk_schema()
+    schema["$defs"]["endpoint"]["required"] = ["url", "commit"]
+
+    assert validate_crosswalks.commit_is_required(schema) is True
+
+
+def unpinned_count_tree(tmp_path, schema: dict) -> None:
+    """A whole repository in miniature: the given schema, one record, and one
+    crosswalk stating a count that nothing pins. Enough for main() to run against,
+    since it reads schema/, records/ and crosswalks/ relative to the directory it
+    is invoked from."""
+    (tmp_path / "schema").mkdir()
+    (tmp_path / "schema" / "crosswalk-1.0.0.schema.json").write_text(
+        json.dumps(schema), encoding="utf-8")
+    (tmp_path / "records").mkdir()
+    (tmp_path / "records" / "AVE-2026-00001.json").write_text(
+        json.dumps({"ave_id": "AVE-2026-00001"}), encoding="utf-8")
+    (tmp_path / "crosswalks").mkdir()
+    (tmp_path / "crosswalks" / "unpinned.json").write_text(
+        json.dumps(crosswalk_document({"url": "https://aveproject.org",
+                                       "record_count": 77})), encoding="utf-8")
+
+
+def test_an_unpinned_count_warns_and_exits_zero_while_commit_is_optional(
+        tmp_path, monkeypatch, capsys):
+    unpinned_count_tree(tmp_path, crosswalk_schema())
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr("sys.argv", ["validate_crosswalks.py"])
+
+    exit_code = validate_crosswalks.main()
+
+    assert exit_code == 0
+    assert "WARNING" in capsys.readouterr().out
+
+
+def test_an_unpinned_count_fails_once_the_schema_promotes_commit(
+        tmp_path, monkeypatch, capsys):
+    """The escalation, end to end and through main() rather than through the
+    predicate alone: the only thing that changed is the schema, and the same
+    finding that was printed as a warning above is now reported as a failure.
+
+    The exit code alone cannot show this, because a schema that requires commit
+    refuses the file on its own account too, so what is asserted is that the
+    unpinned-count finding has stopped being a warning."""
+    schema = crosswalk_schema()
+    schema["$defs"]["endpoint"]["required"] = ["url", "commit"]
+    unpinned_count_tree(tmp_path, schema)
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr("sys.argv", ["validate_crosswalks.py"])
+
+    exit_code = validate_crosswalks.main()
+
+    out = capsys.readouterr().out
+    assert exit_code == 1
+    assert "cannot be re-derived" in out
+    assert "WARNING" not in out
+
+
+def test_forbidding_commit_on_an_unpinnable_side_does_not_read_as_promoting_it():
+    """1.0.x already contains a required list naming commit, underneath a `not`,
+    to keep a declared-unpinnable endpoint from also carrying a pin. Reading that
+    as the promotion would hard-fail the whole repository the day this landed."""
+    schema = crosswalk_schema()
+
+    assert "commit" in json.dumps(schema["$defs"]["endpoint"]["then"]["not"])
+    assert validate_crosswalks.commit_is_required(schema) is False

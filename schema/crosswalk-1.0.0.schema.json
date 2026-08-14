@@ -85,7 +85,29 @@
       "required": [
         "url"
       ],
-      "description": "One side of the mapping. Only url is universal across existing crosswalks; the rest of an endpoint's description depends on what the side is — a standard has a version and a record count, a scanner has a vendor, a licence, and a rule total.",
+      "description": "One side of the mapping. Only url is universal across existing crosswalks; the rest of an endpoint's description depends on what the side is — a standard has a version and a record count, a scanner has a vendor, a licence, and a rule total. An endpoint is in exactly one of three states with respect to pinning: it carries commit, in which case a stated count can be re-derived; or it carries pin_status unpinnable, in which case it says so and carries what it has instead; or it carries neither, which is not a statement about the side at all, only that nobody has pinned it yet. The three are distinguishable because the second is a declaration a reader can audit and the third is a blank.",
+      "if": {
+        "properties": {
+          "pin_status": {
+            "const": "unpinnable"
+          }
+        },
+        "required": [
+          "pin_status"
+        ]
+      },
+      "then": {
+        "required": [
+          "unpinnable_reason",
+          "checked_against_live_site",
+          "content_digest"
+        ],
+        "not": {
+          "required": [
+            "commit"
+          ]
+        }
+      },
       "properties": {
         "url": {
           "type": "string",
@@ -116,18 +138,32 @@
         "record_count": {
           "type": "integer",
           "minimum": 0,
-          "description": "Number of AVE records this side carried when the crosswalk was derived. Meaningful only alongside commit: a count on its own cannot be re-derived, because the corpus it counts keeps moving. Optional."
+          "description": "Number of AVE records this side carried when the crosswalk was derived. Meaningful only alongside commit, or alongside a pin_status of unpinnable and the date and digest that go with it: a count on its own cannot be re-derived, because the corpus it counts keeps moving. Optional."
         },
         "commit": {
           "type": "string",
           "pattern": "^[0-9a-f]{40}$",
-          "description": "Full 40-character commit sha of the repository this side was read at. Optional, and the field a stale count is diagnosed with: a crosswalk stating a record count and a read date, with no commit, cannot be checked by a reader without re-counting the upstream tree by hand. Full rather than abbreviated, because an abbreviation that is unique today is not guaranteed to stay unique in a growing repository."
+          "description": "Full 40-character commit sha pinning the tree this side was read at, and therefore the tree any record_count or rule total stated here describes. It is whichever tree was actually read, not the tip of any particular branch: a pin naming a tree the count did not come from validates, reads as clean, and produces a different number for anyone who checks, which is worse than no pin at all. Optional, and the field a stale count is diagnosed with: a crosswalk stating a record count and a read date, with no commit, cannot be checked by a reader without re-counting the upstream tree by hand. Full rather than abbreviated, because an abbreviation that is unique today is not guaranteed to stay unique in a growing repository. A sha on a branch that is later rebased away stops resolving, and a pin that no longer resolves should fail; that is the validator's problem, not this schema's."
+        },
+        "pin_status": {
+          "const": "unpinnable",
+          "description": "Present only to declare that this side has no git history to pin, so that a reader can tell a stated exemption from a field nobody has filled in yet. unpinnable is the only permitted value: an endpoint carrying commit is already pinned and a second field restating that would be a second answer to one question. An endpoint declaring it must also carry unpinnable_reason and checked_against_live_site, must not carry commit, and is checked: a side that declares itself unpinnable and turns out to have a resolvable repository fails, because a declaration that can never be checked is not a declaration. Optional."
+        },
+        "unpinnable_reason": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Why this side cannot be pinned, in terms a reader can check — a published site with no repository behind it, a distribution with no public source, a vendor page. Required when pin_status is unpinnable. 'Difficult to find' is not one of these; the reason is what stops unpinnable becoming the box anything awkward gets put in."
+        },
+        "content_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "description": "Lowercase sha256, prefixed sha256:, of the bytes fetched from url on the date in checked_against_live_site. Required when pin_status is unpinnable, where it is the nearest thing an unpinnable side has to a pin: it does not let a reader re-derive a count, but it does let them tell whether the page has moved since it was read. Optional otherwise."
         },
         "checked_against_live_site": {
           "type": "string",
           "format": "date",
           "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
-          "description": "ISO 8601 date the other side's published site content was last verified, where that side has no repository to pin. Distinct from generated: this crosswalk's rows may have been re-derived more recently than the descriptions they were matched against. Optional."
+          "description": "ISO 8601 date the other side's published site content was last verified, where that side has no repository to pin. Distinct from generated: this crosswalk's rows may have been re-derived more recently than the descriptions they were matched against. Required when pin_status is unpinnable, where it is the date half of that declaration — this field already means the date a side with no repository was read, so no second fetch-date field is defined. Optional otherwise."
         }
       }
     },
