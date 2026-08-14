@@ -36,6 +36,43 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   new record.
 
 ### Added
+- AVE-2026-00078, 00079, 00080: three genuinely distinct multi-agent
+  pipeline mechanisms extracted from Bappy et al., "Adversarial Attacks
+  in Multi-Agent LLM Pipelines: Unveiling Structural Vulnerabilities in
+  Agentic AI Architectures" (arXiv:2608.00718, accepted IEEE GLOBECOM
+  2026), empirically derived from 147 annotated TRAIL-benchmark
+  production traces (GAIA + SWE-Bench Lite) plus a controlled
+  cross-model evaluation (GPT-5-mini, Claude Sonnet 4.5, Kimi K2.5).
+  The paper's own fourth mechanism (prompt injection via retrieved
+  content, its A1/content-boundary class) was confirmed already covered
+  by AVE-2026-00016 and related records — not drafted as new. All three
+  scored MEDIUM: AARF rewards amplification breadth, not raw impact,
+  and each of these is architectural rather than broad-vector.
+  - AVE-2026-00078: consensus poisoning — an orchestrator accepts a
+    single sub-agent's result as authoritative with no quorum or
+    cross-verification across redundant sources, so one compromised
+    sub-agent unilaterally determines the pipeline's output (delegation
+    boundary). Distinct from AVE-2026-00020 (injection direction is
+    orchestrator→sub-agent, not this record's sub-agent→orchestrator
+    aggregation-layer flaw) and AVE-2026-00018 (fabricating one result,
+    not failing to cross-check redundant ones). Id confirmed via issue
+    #174 (MEDIUM, AIVSS 6.4)
+  - AVE-2026-00079: plan hijacking via false completion signal — a
+    self-reported "task already completed" claim causes forced early
+    termination of a declared multi-step plan with no plan-to-execution
+    binding check (delegation boundary). Distinct from AVE-2026-00021
+    (bypasses human confirmation; this bypasses no human, it bypasses
+    the agent's own remaining planned steps) and AVE-2026-00063 (static
+    config flag, not a runtime natural-language claim). Id confirmed via
+    issue #175 (MEDIUM, AIVSS 6.2)
+  - AVE-2026-00080: silent agent substitution (Sybil) — during a
+    tool-call retry, an unverified process responding at an agent's
+    routing position is accepted as that agent with no credential or
+    attestation check (identity boundary). Distinct from AVE-2026-00017
+    (a registry/manifest identity claim at initial connection, not a
+    mid-session retry-window substitution asserting no claim at all)
+    and AVE-2026-00030 (requires an explicit role claim; this requires
+    none). Id confirmed via issue #176 (MEDIUM, AIVSS 6.8)
 - AVE-2026-00077: cross-origin tool and resource declaration within a
   single MCP server manifest — a server's own manifest declares tools
   and/or resources spanning multiple unrelated root domains (or mixed
