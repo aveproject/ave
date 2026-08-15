@@ -262,6 +262,17 @@ kept as the pilot's central finding, not edited away.**
   with an unrelated AVE record edit.
 - **Confidence: high on `307-507` specifically because it was found
   independently; still high but secondary on the other two.**
+- **Second-pass review note**: `307-507`'s own full link list (13 links;
+  the earlier fetch during drafting only printed the first 8) confirms
+  CWE-353 is its *only* linked CWE — no CWE-829/494 present anywhere on
+  it, so the "CWE-routing structurally could not have found this" claim
+  above holds on the complete data, not a truncated sample. It also
+  carries a `Related` (not `PartOf`) link to `613-285 Supply chain
+  management` — the same node that sits in `577-260`'s own parent chain.
+  OpenCRE's own graph already treats these two CREs as connected to each
+  other, independent confirmation that proposing both together for one
+  AVE record is coherent with the existing graph, not an arbitrary
+  combination assembled for this pilot.
 
 ### 5. AVE-2026-00033 (Unsafe Deserialization or Eval Instruction) → CWE-502 → CRE `736-554`
 
