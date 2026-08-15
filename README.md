@@ -68,6 +68,37 @@ AVE fixes that.
 
 ---
 
+## Independent validation
+
+AVE's ID scheme has been tested by people who didn't build it, not
+just used by people who did.
+
+Three independent tools, cfgaudit, Ramparts, and nova-proximity, none
+of them sharing code with AVE or with each other, built crosswalks
+against AVE's records on their own initiative, unprompted. In each
+case the comparison went beyond matching category labels: mechanism-
+level correspondence was checked field by field, real trigger
+conditions against real behavioral fingerprints, and dozens of
+findings converged on the identical AVE ID independently.
+
+One of those crosswalks (Ramparts) also surfaced a real methodological
+lesson: two independently-drafted readings of the same still-
+unratified OWASP MCP Top 10 numbered their own categories differently,
+confirmed and documented so future crosswalks match by category
+meaning, not by tag number.
+
+Separately, an external maintainer caught a real attribution error in
+two published AVE records, corrected the underlying process
+documentation, not just the two records, credited in
+[CONTRIBUTORS.md](CONTRIBUTORS.md).
+
+80 records. 3 independent crosswalks. See
+[crosswalks/](crosswalks/) for the full mappings, and
+[docs/writeups/](docs/writeups/) for full technical write-ups on
+individual records.
+
+---
+
 ## How it works
 
 **Without AVE:**
