@@ -1,0 +1,130 @@
+{
+  "$schema": "https://aveproject.org/schema/crosswalk-1.0.0.schema.json",
+  "source": {
+    "tool": "skillsentry",
+    "vendor": "vythanhtra",
+    "url": "https://github.com/vythanhtra/skillsentry",
+    "license": "MIT",
+    "tool_class": "static regex rule engine for SKILL.md / agent skill files",
+    "rules_total": 24,
+    "rules_mapped": 7,
+    "commit": "83080095768ecfb4644b4e0bda46281bf3294e38"
+  },
+  "target": {
+    "standard": "AVE",
+    "version": "1.1.0",
+    "url": "https://aveproject.org",
+    "record_count": 80,
+    "commit": "613db773921d71d5d00587ae39cbba95951a4199"
+  },
+  "generated": "2026-08-15",
+  "note": "Read against skillsentry's real, complete rule set (resources/rules.yaml, 24 rules across 11 categories), not inferred from its README or star count. 7 of 24 rules verify at the mechanism level; 5 more are partial matches (real subject-matter overlap, but the rule fires on a narrower or broader condition than AVE's fingerprint requires); 12 are genuine gaps, no current AVE record for that specific mechanism.\n\nTwo of the confirmed gap categories are worth naming directly since they are real, distinct, well-known techniques: cloud instance-metadata SSRF (169.254.169.254 / metadata.google.internal, IMDS credential theft) and clipboard-based credential harvesting. Neither has an AVE analog today. Also worth naming: skillsentry's four exfiltration rules (env_file_read, aws_credentials, ssh_private_key, gcp_credentials) fire on a credential-store *read* alone, without requiring the explicit *transmit* half AVE-2026-00003's own behavioral_fingerprint requires; they correspond to that record's indicators_of_compromise list (which names exactly these signals as partial evidence), not its full trigger condition, so they are listed as partial matches, not verified ones.",
+  "mappings": [
+    {
+      "skillsentry_rules": [
+        "rot13_obfuscation",
+        "hex_string_decode",
+        "chr_concat_bypass",
+        "xor_obfuscation"
+      ],
+      "ave_id": "AVE-2026-00057",
+      "title": "Obfuscated or encoded skill payload designed to evade static scanners",
+      "notes": "Direct match. AVE's own description names base64, hex, and fragmented/concatenated content as the mechanism; skillsentry's four rules are concrete instances of exactly that (ROT13, hex-decode, chr()-concatenation, XOR byte obfuscation)."
+    },
+    {
+      "skillsentry_rules": [
+        "unicode_rtlo"
+      ],
+      "ave_id": "AVE-2026-00029",
+      "title": "Malicious use of visually deceptive Unicode characters (homoglyphs, zero-width, bidirectional overrides)",
+      "notes": "Direct match. AVE's fingerprint names bidirectional text control codes explicitly; U+202E (RTLO) is one of those codes."
+    },
+    {
+      "skillsentry_rules": [
+        "cron_write",
+        "startup_write"
+      ],
+      "ave_id": "AVE-2026-00008",
+      "title": "Persistence via self-replication to startup locations",
+      "notes": "Direct match. AVE-2026-00008's own description names cron jobs and shell-profile modification (.bashrc/.profile/.zshrc) as the exact mechanism these two rules detect."
+    },
+    {
+      "skillsentry_rules": [
+        "env_file_read",
+        "aws_credentials",
+        "ssh_private_key",
+        "gcp_credentials"
+      ],
+      "ave_id": "AVE-2026-00003",
+      "title": "Credential exfiltration via agent instruction",
+      "notes": "Partial match. AVE-2026-00003's behavioral_fingerprint requires both a read of a credential source AND an instruction to transmit it externally; these four skillsentry rules detect the read half alone. They map cleanly onto the record's indicators_of_compromise (which lists env var/credential-store references as partial evidence), not its full trigger condition.",
+      "gap": "Fires on credential-store access alone; does not require evidence of an accompanying exfiltration instruction the way AVE's fingerprint does."
+    },
+    {
+      "skillsentry_rules": [
+        "hidden_html_instruction"
+      ],
+      "ave_id": "AVE-2026-00043",
+      "title": "MCP App UI payload injection via non-rendered elements",
+      "notes": "Partial match. AVE-2026-00043's fingerprint explicitly names HTML comments as one of the non-rendered elements a hidden instruction can live in, but the record's provenance_vector scopes this to rich UI payloads (canvas/artifact/SVG/HTML) rendered from a tool_response, not a skill's own general file content the way skillsentry's rule scans for.",
+      "gap": "No current AVE record covers an HTML-comment-concealed instruction in a skill's own documentation/content body outside the MCP App UI rendering surface specifically."
+    }
+  ],
+  "gaps": [
+    {
+      "skillsentry_rules": [
+        "aws_metadata_ssrf",
+        "gcp_metadata_ssrf",
+        "azure_metadata_ssrf"
+      ],
+      "reason": "Cloud instance-metadata endpoint SSRF (169.254.169.254 / metadata.google.internal, IMDS credential theft) has no AVE analog today. A real, distinct, well-known technique, not covered by any existing record's fingerprint."
+    },
+    {
+      "skillsentry_rules": [
+        "multipart_upload",
+        "websocket_exfil",
+        "dns_exfil"
+      ],
+      "reason": "Generic implementation-level exfil-channel code patterns (a multipart upload call, a websocket connection, a DNS lookup) with no instruction-driven or untrusted-source framing attached. Too broad to correspond to any single AVE fingerprint; these are building blocks many benign skills also use."
+    },
+    {
+      "skillsentry_rules": [
+        "git_hook_inject"
+      ],
+      "reason": "AVE-2026-00008 covers boot/login-triggered persistence (cron, startup scripts); a git hook is event-triggered (fires on commit/push), a distinct activation condition the record's fingerprint does not name."
+    },
+    {
+      "skillsentry_rules": [
+        "self_delete"
+      ],
+      "reason": "Self-deletion / anti-forensics after execution has no AVE analog today."
+    },
+    {
+      "skillsentry_rules": [
+        "time_conditional_exec"
+      ],
+      "reason": "Single-skill time-conditional / delayed-activation execution has no AVE analog today. AVE-2026-00070's dormant-payload concept is a different mechanism (cross-agent memory fragment reassembly, not a local time check)."
+    },
+    {
+      "skillsentry_rules": [
+        "custom_package_index",
+        "npm_custom_registry"
+      ],
+      "reason": "Dependency confusion via a non-default package registry/index is a distinct mechanism from AVE-2026-00062 (missing version pin); AVE-2026-00062 fires regardless of which registry a dependency resolves from, and these rules fire regardless of whether the dependency is pinned. No current AVE record for the registry-source axis specifically."
+    },
+    {
+      "skillsentry_rules": [
+        "clipboard_read"
+      ],
+      "reason": "OS clipboard-based credential harvesting has no AVE analog today."
+    }
+  ],
+  "coverage": {
+    "skillsentry_rules_total": 24,
+    "skillsentry_rules_verified": 7,
+    "skillsentry_rules_partial": 5,
+    "skillsentry_rules_gap": 12,
+    "ave_classes_covered": 5,
+    "note_on_unmapped": "See mappings for verified/partial matches and gaps for confirmed non-matches; every one of skillsentry's 24 rules is accounted for in one list or the other."
+  }
+}
