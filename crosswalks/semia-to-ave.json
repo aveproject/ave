@@ -1,0 +1,128 @@
+{
+  "$schema": "https://aveproject.org/schema/crosswalk-1.0.0.schema.json",
+  "source": {
+    "tool": "Semia",
+    "vendor": "RiemaLabs",
+    "url": "https://github.com/berabuddies/Semia",
+    "license": "Apache-2.0",
+    "version": "0.1.3",
+    "tool_class": "constraint-guided representation synthesis (SDL fact-base + Datalog detector rules)",
+    "commit": "379bc25fe99833eb185efe56a38fe15f0235799c"
+  },
+  "target": {
+    "standard": "AVE",
+    "version": "1.1.0",
+    "url": "https://aveproject.org",
+    "record_count": 80,
+    "static_record_count": 58,
+    "commit": "49e469156a8c535387310692b1feef5ad7510f0e"
+  },
+  "generated": "2026-08-15",
+  "note": "Built per berabuddies/Semia#36, permission confirmed by the maintainer (archidoge0), read against Semia's real source (not the paper's single act_sign/c_sign example): the schema at packages/semia-core/src/semia_core/schema.py defines Semia's complete SDL fact vocabulary (16 effects, 4 triggers, 5 gates, 5 doc claims, 7 value kinds, 6 call codes), and the Datalog rules in packages/semia-core/src/semia_core/rules/sdl/skill_dl_static_analysis.dl define 11 actual detector outputs (label_* .output relations, each a real finding type Semia's own detector.py reads back out as report.findings). This crosswalk matches against those 11 rules' real logic, not their names alone, since the two do not always agree (see the hardcoded_c2 gap below).\n\nThe open question from the outreach, whether constraint-guided representation synthesis generalizes onto AVE's behavioral classes or stays genuinely distinct from pattern-based classification, has a real, mixed answer: partial generalization, clean where a Semia rule terminates in a specific effect AVE also names explicitly, genuinely distinct where AVE's granularity is organized by attack narrative and Semia's is organized by dataflow destination. 16 mappings verified across 9 of Semia's 11 rules, field-checked against provenance_vector and behavioral_fingerprint, not category labels.\n\nThree concrete, citable examples of the real daylight: (1) label_unsanitized_context_ingestion (any untrusted value reaching one of five high-priv effects, ungated) keyword-sweeps against roughly two dozen of AVE's prompt-injection-flavored records, but only genuinely verifies against ones that name a specific privileged sink (AVE-2026-00006's crypto_sign, AVE-2026-00042's code_eval); most of AVE's prompt-injection catalog describes the injection vector itself (jailbreak, hidden instruction, context window manipulation, multi-turn persistence) without asserting a terminating privileged effect, so a keyword match is not a structural one. AVE splits by injection surface; Semia collapses by dataflow destination. (2) A rule's own name can promise a match its logic does not deliver: label_hardcoded_c2_communication reads like an obvious fit for AVE-2026-00073 (Static Endpoint Redirect), but the actual Datalog condition requires call_code=\"unresolved_target\", a destination static analysis cannot resolve at all, while AVE-2026-00073's mechanism is the opposite: a fully resolved, literal, committed bad destination. No AVE record currently satisfies this rule's real condition; left unmapped rather than forced. (3) A shape can sit a full abstraction level above what Semia's fact model can represent: AVE-2026-00070 (Distributed Cross-Agent Backdoor Fragments) shares label_dormant_malicious_payload's dormant-until-reassembled narrative, but the mechanism spans multiple agents' memories with an offline, external reassembly step, and Semia's CORE_SCHEMA models exactly one skill() per analysis pass with no multi-agent or cross-session concept in the schema at all. Not a missing rule, a missing dimension; left unmapped.\n\nTwo more things worth surfacing. First, AVE-2026-00003 (Credential exfiltration via agent instruction) is matched by two of Semia's own rules independently, label_implicit_egress_channels (an explicit dataflow edge from a secret value to an untrusted egress call) and label_shadow_credentials (co-presence of a secret-region read and an untrusted-egress-capable skill, checked without requiring an explicit edge), two differently-reasoned Datalog conditions inside one tool converging on the same AVE id. Combined with this record's existing cfgaudit, nova-proximity, and Ramparts matches (see those crosswalks), it is now the record with the broadest independent confirmation across AVE's whole crosswalk set, four separate tools, none sharing code, plus one tool's own two internal rules. Second, near-misses considered and rejected rather than forced: AVE-2026-00029 (Unicode Homoglyph) and AVE-2026-00069 (Multimodal Image-Hidden Instructions) share label_obfuscation's theme but not its substrate, Semia's call_code vocabulary (encoded_binary, obfuscated, script, shell, inline_code, unresolved_target) has no visual/text-rendering or image-modality category, matching only AVE-2026-00057's base64/hex/bytecode concealment cleanly; AVE-2026-00074 (Dead Anchor Reclamation) was considered for label_unverifiable_dependency_source but rejected, its \"unresolved\" is about an external identity becoming re-registerable after publication, not a static-analysis-time unresolved call target; AVE-2026-00030 (False Role Claim) was considered for label_behavior_claim_contradiction but rejected, it is about an external party's claim being trusted, not the component's own declared capability claim contradicting its own behavior, the direction Semia's rule actually checks.",
+  "mappings": [
+    {
+      "semia_label": "label_dangerous_execution_primitives",
+      "ave_id": "AVE-2026-00060",
+      "title": "STDIO transport shell injection via unsanitized tool call parameters",
+      "notes": "Direct match to the rule's call_effect(c,\"proc_exec\") + call_in_untrusted_region(c) clause: unsanitized shell metacharacters in transport-layer parameters reaching the host shell is exactly an untrusted-region proc_exec call."
+    },
+    {
+      "semia_label": "label_dangerous_execution_primitives",
+      "ave_id": "AVE-2026-00004",
+      "title": "Arbitrary code execution via shell pipe injection in agentic component",
+      "notes": "curl|bash / wget|sh instructed by skill content is a proc_exec call whose region is untrusted content, matching the rule's primary clause directly."
+    },
+    {
+      "semia_label": "label_dangerous_execution_primitives",
+      "ave_id": "AVE-2026-00052",
+      "title": "Command injection via unsanitized tool-call parameter in MCP server implementation",
+      "notes": "A caller-supplied parameter reaching a shell/system-command function with no sanitization is a literal taint path to proc_exec, not a keyword match; Semia's dataflow-tracked call_input/value_reaches chain verifies this the same way AVE's own fingerprint requires a caller-supplied-parameter-to-shell-exec path, not signature scanning over dangerous syntax."
+    },
+    {
+      "semia_label": "label_unverifiable_dependency_source",
+      "ave_id": "AVE-2026-00001",
+      "title": "Metamorphic payload via external config fetch",
+      "notes": "Fetching remote content that replaces the component's own instructions at runtime is the rule's net_read/agent_call-untrusted-region-feeding-exec clause almost exactly: an unverifiable source resolved only at execution time, after review."
+    },
+    {
+      "semia_label": "label_unverifiable_dependency_source",
+      "ave_id": "AVE-2026-00062",
+      "title": "Unpinned dependency version allowing supply chain substitution",
+      "notes": "Same underlying idea as the rule's unresolved_target clause, a reference that can resolve to different content after review, though at different granularity: AVE-2026-00062 covers the unpinned declaration itself; Semia's rule requires the chain actually be exercised into an exec/read sink. AVE's record is the broader precondition, Semia's rule the exploited instance."
+    },
+    {
+      "semia_label": "label_behavior_claim_contradiction",
+      "ave_id": "AVE-2026-00058",
+      "title": "Deceptive skill trigger or activation-scope manipulation via misleading manifest description",
+      "notes": "Same declared-vs-actual architecture as the rule (skill_doc_claim contradicted by a later call_effect), but a different claim axis: Semia's five doc claims (read_only, local_only, no_network, no_fs_write, credential_bound) are capability claims; AVE-2026-00058 is about invocation-scope claims (trigger keywords, when the skill activates), not what it does once active.",
+      "gap": "No current AVE record covers Semia's exact claim type: a manifest declaring read_only/no_network/no_fs_write contradicted by an actual write or network call at the capability level. Worth a real AVE record, flagged back on the issue."
+    },
+    {
+      "semia_label": "label_unsanitized_context_ingestion",
+      "ave_id": "AVE-2026-00006",
+      "title": "Cryptocurrency wallet drain via malicious fund transfer instruction in agentic component",
+      "notes": "An untrusted instruction (fund-transfer / allowance-approval directive) reaching a crypto_sign call is an exact match to the rule's high_priv_call clause, which names crypto_sign specifically."
+    },
+    {
+      "semia_label": "label_unsanitized_context_ingestion",
+      "ave_id": "AVE-2026-00042",
+      "title": "Payload injection into agent-generated orchestration code via poisoned tool results in REPL/Code Mode",
+      "notes": "Tool result content passed directly into eval()/exec() is exactly the rule's high_priv_call code_eval clause, with the untrusted source explicitly named as tool_response in AVE's own provenance_vector."
+    },
+    {
+      "semia_label": "label_implicit_egress_channels",
+      "ave_id": "AVE-2026-00003",
+      "title": "Credential exfiltration via agent instruction",
+      "notes": "A secret value (env var / credential store read) reaching an untrusted-region net_write/agent_call is the rule's core clause exactly. Already independently matched by cfgaudit, nova-proximity, and Ramparts; this is a fourth, independently-reasoned tool converging on the same id."
+    },
+    {
+      "semia_label": "label_implicit_egress_channels",
+      "ave_id": "AVE-2026-00013",
+      "title": "Personal data exfiltration via PII collection and transmission in agentic component",
+      "notes": "Same rule shape (sensitive value reaching an untrusted egress call), though Semia's literal value_secret_source keyword list (password, token, secret, api_key, apikey, mnemonic) does not itself include PII terms like SSN or passport; the structural match holds, the keyword coverage for this specific value type would need extending on Semia's side to catch every case AVE's fingerprint describes."
+    },
+    {
+      "semia_label": "label_sensitive_local_resource_overreach",
+      "ave_id": "AVE-2026-00006",
+      "title": "Cryptocurrency wallet drain via malicious fund transfer instruction in agentic component",
+      "notes": "Also matches this second, independent rule: wallet access used beyond its declared allowed action. One AVE record satisfying two separately-reasoned Semia rules simultaneously, the reverse of Ramparts' EnvironmentVariableLeakage splitting one rule across two AVE ids."
+    },
+    {
+      "semia_label": "label_ungated_irreversible_operation",
+      "ave_id": "AVE-2026-00005",
+      "title": "Recursive file system destruction via destructive command injection in agentic component",
+      "notes": "Recursive filesystem deletion with no confirmation step is a direct match to a high_priv_call (chain_write-equivalent destructive effect) with no gated_action present at all."
+    },
+    {
+      "semia_label": "label_ungated_irreversible_operation",
+      "ave_id": "AVE-2026-00064",
+      "title": "Zero-click code execution via project-load auto-run configuration",
+      "notes": "Auto-run on project load with explicitly no confirmation step is definitional for this rule: a high-priv call with zero declared gate."
+    },
+    {
+      "semia_label": "label_ungated_irreversible_operation",
+      "ave_id": "AVE-2026-00021",
+      "title": "Autonomous Action Without User Confirmation",
+      "notes": "Same external symptom (irreversible action, no human checkpoint), reached by a different mechanism: Semia's rule checks the structural absence of any declared gate; AVE-2026-00021 is an explicit instruction to bypass a gate that may otherwise be present. A component with no gate at all and one instructed to ignore its gate look identical from the outside but are different facts in Semia's own schema.",
+      "gap": "Semia's SDL has no fact for 'gate present but instructed to be skipped', only gate declared vs. not declared; the bypass-in-the-moment case AVE-2026-00021 describes is not structurally distinguishable from label_ungated_irreversible_operation's plain absence-of-gate case in the current schema."
+    },
+    {
+      "semia_label": "label_shadow_credentials",
+      "ave_id": "AVE-2026-00003",
+      "title": "Credential exfiltration via agent instruction",
+      "notes": "A second Semia rule reaching this same AVE id, via co-presence rather than an explicit dataflow edge: a secret-region read (env_read/fs_read) plus the skill having any untrusted egress call anywhere, checked independently of whether that specific read reaches that specific egress. Two of Semia's own rules (see label_implicit_egress_channels above) fire on this one AVE record for two structurally different reasons, overlapping coverage by design rather than a crosswalk artifact."
+    },
+    {
+      "semia_label": "label_obfuscation",
+      "ave_id": "AVE-2026-00057",
+      "title": "Obfuscated or encoded skill payload designed to evade static scanners",
+      "notes": "Near-definitional match: AVE's own description (base64, hex, bytecode, or fragmented keywords specifically to evade pattern-based scanners) is what Semia's obfuscated/encoded_binary call_code categories exist to catch."
+    }
+  ],
+  "coverage": {
+    "semia_rules_total": 11,
+    "semia_rules_mapped": 9,
+    "ave_classes_covered": 14,
+    "note_on_unmapped": "2 of Semia's 11 label_* detector rules (label_hardcoded_c2_communication, label_dormant_malicious_payload) have no verified AVE match; see note field for why each was left unmapped rather than forced."
+  }
+}
