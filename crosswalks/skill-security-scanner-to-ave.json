@@ -1,0 +1,192 @@
+{
+  "$schema": "https://aveproject.org/schema/crosswalk-1.0.0.schema.json",
+  "source": {
+    "tool": "skill-security-scanner",
+    "vendor": "honysyang",
+    "url": "https://github.com/honysyang/skill-security-scanner",
+    "license": "MIT",
+    "tool_class": "static regex rule engine + algorithmic detectors (entropy, hidden-char, base64, IOC lookup, LLM analysis) for AI agent skill code",
+    "rules_total": 54,
+    "static_record_count_note": "54 config-driven rules (config/rules.yaml) plus 5 algorithmic detector modules not driven by that config",
+    "commit": "92538dffecd940ebb7fb082057dc1ce8a955d59b"
+  },
+  "target": {
+    "standard": "AVE",
+    "version": "1.1.0",
+    "url": "https://aveproject.org",
+    "record_count": 80,
+    "commit": "613db773921d71d5d00587ae39cbba95951a4199"
+  },
+  "generated": "2026-08-15",
+  "note": "Read against skill-security-scanner's real, complete detection surface: 10 rule categories in config/rules.yaml (54 named rules, SEC001 etc.) plus 5 algorithmic Python detectors not driven by that config file (EntropyDetector, HiddenCharDetector, Base64Detector, IOCDetector, LLMAnalyzer). Substantially larger surface than skillsentry, closer in caliber to Ramparts/nova-proximity/Semia.\n\nThree findings worth stating directly rather than leaving implicit. First, the injection category (INJ001-006: eval()/exec() with a non-literal argument, os.system, subprocess shell=True) reads like an obvious match for AVE-2026-00052, but these are pure regex signature matches over dangerous syntax, not a traced dataflow from a caller-supplied parameter to the sink; AVE-2026-00052's own fingerprint specifically requires that taint path. This is the exact same signature-vs-reachability distinction the Ramparts crosswalk already documented for its own CommandInjection rule against this same AVE record, so it is treated the same way here: left as a gap, not forced. Second, IOCDetector matches against a curated malicious IP/domain/URL database, a reputation-list lookup, which is a structurally different approach from AVE's own stated design principle (behavioral fingerprints over signatures, CLAUDE.md hard rule 3); it has no AVE counterpart by design, not by gap. Third, LLMAnalyzer produces free-form findings from an LLM's own judgment with no fixed taxonomy of its own, so there is nothing stable to crosswalk against; left out entirely rather than mapped to a placeholder.\n\nThe persistence category (PER001-007) is close to exhaustive against AVE-2026-00008, which is itself the strongest single match found across either tool in this pass: six of seven rules verify directly against the record's own named examples (cron, systemd, shell-profile modification), and the seventh (a Windows registry Run key) verifies against the fingerprint's general 'executes on login or reboot' language even though the record's own examples are Unix-flavored. The privilege_escalation category (PRI001-005: sudo, chmod 777/+s, setuid/setgid) is a clean, complete miss: AVE's whole Privilege Escalation attack_class operates at the agent/permission-model level (scope creep, delegation, trust transfer), one abstraction level above OS-level Unix privilege primitives, which have no AVE analog at all today. Likewise supply_chain's postinstall/preinstall/setup.py lifecycle-hook rules (SUP001-003), a well-known, named, historically significant supply-chain technique with zero current AVE coverage.",
+  "mappings": [
+    {
+      "sss_rules": [
+        "SEC001",
+        "SEC002",
+        "SEC003",
+        "SEC004",
+        "SEC005",
+        "SEC006",
+        "SEC007",
+        "SEC008",
+        "SEC009",
+        "SEC010"
+      ],
+      "ave_id": "AVE-2026-00047",
+      "title": "Hardcoded credentials in agent component - API keys and secrets exposed in skill files",
+      "notes": "Direct, near-definitional match across all 10 rules. AVE's own example_patterns cite an sk-ant-... key and a ghp_... token almost verbatim; SEC005 (OpenAI sk- prefix), SEC006-8 (GitHub ghp_/gho_/github_pat_ prefixes), and SEC009 (Slack xox* prefix) are the same literal-value-adjacent-to-credential-keyword mechanism AVE's fingerprint requires, explicitly excluding env-var references the same way AVE's fingerprint does."
+    },
+    {
+      "sss_rules": [
+        "DEX001",
+        "DEX002",
+        "DEX003",
+        "DEX004",
+        "DEX005"
+      ],
+      "ave_id": "AVE-2026-00004",
+      "title": "Arbitrary code execution via shell pipe injection in agentic component",
+      "notes": "Direct match for DEX001/002/005 (curl|bash, wget|bash, curl|python, the exact pipe-to-interpreter shape AVE's fingerprint names). DEX003/004 (download-to-file via -o/-O then a separate && execution) are the same fetch-then-execute family rather than a literal pipe; still squarely within scope of the record's remote-fetch-and-execute mechanism."
+    },
+    {
+      "sss_rules": [
+        "OBF001",
+        "OBF002",
+        "OBF003",
+        "OBF004",
+        "Base64Detector",
+        "EntropyDetector"
+      ],
+      "ave_id": "AVE-2026-00057",
+      "title": "Obfuscated or encoded skill payload designed to evade static scanners",
+      "notes": "Direct match. Hex-encoded strings, chr()-chains, String.fromCharCode, and the dedicated Base64Detector and Shannon-entropy detector are all concrete instances of AVE's 'encoded content requiring a decode step to reveal intent' fingerprint. OBF003 (string reversal, [::-1]) is the tool's own lowest-confidence rule (45%) but the same concealment family."
+    },
+    {
+      "sss_rules": [
+        "HiddenCharDetector"
+      ],
+      "ave_id": "AVE-2026-00029",
+      "title": "Malicious use of visually deceptive Unicode characters (homoglyphs, zero-width, bidirectional overrides)",
+      "notes": "Direct match. Detects the same zero-width (U+200B/C/D, U+2060, U+FEFF) and bidirectional override (U+202A-E, U+2066-9) codepoints AVE's fingerprint names explicitly."
+    },
+    {
+      "sss_rules": [
+        "PER001",
+        "PER002",
+        "PER003",
+        "PER004",
+        "PER005",
+        "PER007"
+      ],
+      "ave_id": "AVE-2026-00008",
+      "title": "Persistence via self-replication to startup locations",
+      "notes": "Direct match, close to exhaustive. AVE-2026-00008's own description names cron jobs, systemd unit files, and shell-profile modification (.bashrc/.profile/.zshrc) as the exact mechanism; crontab/cron.d (PER001/002), launchd/launchctl (PER003/004, the macOS equivalent), systemctl enable (PER005), and shell-profile writes (PER007) all verify directly."
+    },
+    {
+      "sss_rules": [
+        "PER006"
+      ],
+      "ave_id": "AVE-2026-00008",
+      "title": "Persistence via self-replication to startup locations",
+      "notes": "A Windows registry Run key achieves the same login/boot persistence AVE-2026-00008's fingerprint describes in general terms ('write to startup scripts... execute on login or reboot'), even though the record's own worked examples are Unix-flavored (.bashrc/cron/systemd) and do not name the Windows registry specifically.",
+      "gap": "AVE-2026-00008's description text does not enumerate a Windows registry Run key among its examples; the fingerprint's general language covers it, but this is an inference, not a named case."
+    },
+    {
+      "sss_rules": [
+        "CTF002",
+        "CTF003",
+        "CTF004",
+        "CTF005"
+      ],
+      "ave_id": "AVE-2026-00003",
+      "title": "Credential exfiltration via agent instruction",
+      "notes": "Partial match, same treatment as skillsentry's equivalent rules: macOS Keychain extraction, SSH key reading, AWS credentials file access, and browser cookie/credential access all detect the read half of AVE-2026-00003's fingerprint without requiring the accompanying transmit instruction.",
+      "gap": "Fires on credential-store access alone; does not require evidence of an accompanying exfiltration instruction."
+    }
+  ],
+  "gaps": [
+    {
+      "sss_rules": [
+        "INJ001",
+        "INJ002",
+        "INJ003",
+        "INJ004",
+        "INJ005",
+        "INJ006"
+      ],
+      "reason": "Regex signature matches over dangerous syntax (eval/exec/os.system/subprocess shell=True), not a traced dataflow from a caller-supplied parameter to the sink. AVE-2026-00052 specifically requires that taint path; the same signature-vs-reachability distinction the Ramparts crosswalk already drew for its own CommandInjection rule against this exact AVE record."
+    },
+    {
+      "sss_rules": [
+        "NET001",
+        "NET002",
+        "NET003",
+        "NET004",
+        "NET005",
+        "NET006"
+      ],
+      "reason": "Generic network-API usage (socket, urllib, requests, fetch, curl, wget) with no untrusted-source or malicious-destination framing. The tool's own confidence scores for this category are its lowest (35-50%), agreeing that bare API usage alone is too broad to correspond to any specific AVE fingerprint."
+    },
+    {
+      "sss_rules": [
+        "PRI001",
+        "PRI002",
+        "PRI003",
+        "PRI004",
+        "PRI005"
+      ],
+      "reason": "OS-level Unix privilege primitives (sudo, chmod 777/+s, setuid/setgid, macOS admin-group modification) have no AVE analog. AVE's entire Privilege Escalation attack_class (permission grants, scope creep, delegation, trust transfer) operates at the agent/permission-model level, one abstraction level above OS syscalls."
+    },
+    {
+      "sss_rules": [
+        "SUP001",
+        "SUP002",
+        "SUP003"
+      ],
+      "reason": "npm postinstall/preinstall hooks and Python setup.py cmdclass abuse (malicious code executing automatically during package installation) is a well-known, named supply-chain technique with no current AVE record."
+    },
+    {
+      "sss_rules": [
+        "SOC001"
+      ],
+      "reason": "Crypto-wallet/airdrop/seed-phrase keyword matching (confidence 35%, the tool's lowest) is thematically adjacent to AVE-2026-00006 but does not require the actual fund-transfer/allowance-approval instruction AVE-2026-00006's fingerprint needs."
+    },
+    {
+      "sss_rules": [
+        "SOC002"
+      ],
+      "reason": "Fake security-update / urgent-fix language does not require the false-vendor-authority claim AVE-2026-00014's fingerprint specifically requires (Anthropic/OpenAI/Google/Microsoft/developer impersonation); urgency-bait alone is a different mechanism."
+    },
+    {
+      "sss_rules": [
+        "SOC003"
+      ],
+      "reason": "Reward/claim keyword matching has no AVE analog; closest is AVE-2026-00006 (crypto drain) but SOC003 does not require an actual fund-transfer instruction."
+    },
+    {
+      "sss_rules": [
+        "CTF001"
+      ],
+      "reason": "A fake macOS system password dialog (osascript display dialog) is a distinct social-engineering-plus-credential-harvest hybrid mechanism (tricking the user into typing a password into a spoofed OS prompt) with no current AVE record."
+    },
+    {
+      "sss_rules": [
+        "IOCDetector"
+      ],
+      "reason": "Matches against a curated malicious IP/domain/URL database, a reputation-list lookup, a structurally different approach from AVE's stated design principle of behavioral fingerprints over signatures (CLAUDE.md hard rule 3). No AVE counterpart by design, not by gap."
+    },
+    {
+      "sss_rules": [
+        "LLMAnalyzer"
+      ],
+      "reason": "Produces free-form findings from an LLM's own judgment with no fixed taxonomy of its own (no stable rule_id/category enum); nothing stable to crosswalk against."
+    }
+  ],
+  "coverage": {
+    "sss_rules_mapped": 27,
+    "sss_units_gapped": 27,
+    "ave_classes_covered": 5,
+    "note_on_unmapped": "Counts include both config-driven rules (SEC*/DEX*/OBF*/PER*/CTF*/INJ*/NET*/PRI*/SUP*/SOC*) and the 5 algorithmic detector modules as individual units. See note field for the three findings that don't reduce to a simple match/gap count: the injection-category rigor gap, IOCDetector's by-design non-correspondence, and LLMAnalyzer's lack of fixed taxonomy."
+  }
+}
