@@ -68,7 +68,7 @@ or a variant update before you write any JSON.
 ```bash
 git clone https://github.com/aveproject/ave
 cd ave
-git checkout -b feat/AVE-2026-NNNNN-attack-class
+git checkout -b feat/AVE-2026-NNNNN-attack-class origin/develop
 cp records/AVE-2026-00001.json records/AVE-2026-NNNNN.json
 ```
 
@@ -87,14 +87,35 @@ Key rules:
 - `behavioral_fingerprint` describes what the component *does*, not a string
   it contains. "Component fetches remote content and executes it as
   instructions" not "contains the word fetch."
-- `owasp_mcp` is required with at least one entry. `owasp_asi`,
-  `mitre_atlas`, and `nist_ai_rmf` are optional — add
-  them when they apply, omit rather than force a poor fit.
+- `owasp_mcp` is required with at least one entry, verified against the
+  category's own primary-source text — not inferred from how a
+  similar-sounding record in the corpus happened to tag itself.
+  `owasp_asi`, `mitre_atlas`, and `nist_ai_rmf` are not yet
+  schema-required (tracked for a future schema version, see issue
+  #178) but **always include the key**, even with no value: set it to
+  `[]` when you've genuinely checked and nothing fits, rather than
+  omitting the field. An absent key reads as "nobody checked"; an
+  empty array reads as "checked, no fit yet" — only the second is
+  honest. See `docs/specs/researcher-process.md`'s "Governance and
+  framework mappings" section for the full rule and the real
+  corpus-wide mistake (issue #179) this is written to prevent.
 - `indicators_of_compromise` must have at least one entry that a defender
   can actually search for in a real file.
 - `references` must have at least one citable primary source — a CVE, an
   arXiv paper, a vendor disclosure, or a scan report.
-- `researcher` is required. Use your name or handle.
+- `researcher` is required — **but it is almost never your own name.**
+  Nearly every record traces to a real external CVE, paper, vendor
+  disclosure, or existing tool's detection implementation; that
+  source's own name or organization goes in `researcher`, not the
+  person writing the AVE record. This exact mistake (defaulting to the
+  PR author because it's the name at hand while drafting) has shipped
+  on published records more than once and been caught and corrected
+  after the fact — see `docs/specs/researcher-process.md`'s
+  Accountability and sourcing section and its `AVE-2026-00060` worked
+  example for the full rule and a real corrected instance. Use your
+  own name only in the genuinely rare case where you are the original
+  discoverer of a behavioral class with no prior external source to
+  credit.
 - `severity` and `aivss.aivss_score` must agree:
   CRITICAL >= 9.0 · HIGH 7.0-8.9 · MEDIUM 4.0-6.9 · LOW < 4.0.
 
@@ -130,37 +151,55 @@ description. Reviewers will ask for this if it is missing.
 ### Step 3 -- Validate locally
 
 ```bash
-npm install ajv ajv-formats
-node -e "
-const Ajv = require('ajv/dist/2020');
-const addFormats = require('ajv-formats');
-const ajv = new Ajv({ strict: false });
-addFormats(ajv);
-const schema = require('./schema/ave-record-1.1.0.schema.json');
-const record = require('./records/AVE-2026-NNNNN.json');
-const ok = ajv.validate(schema, record);
-if (!ok) { console.error(ajv.errors); process.exit(1); }
-else console.log('valid');
-"
+pip install -e ".[dev]"
+python scripts/validate_records.py    # schema-checks every record, including yours
+python scripts/check_fixtures.py      # confirms every record has +/- fixtures
+pytest tests/ -x -q                   # full suite: schema, AIVSS arithmetic, mitigation enums
 ```
+
+These are the actual scripts this project runs, including in CI --
+`validate_records.py` also checks the AIVSS arithmetic against your
+record's own stated `aarf`/`cvss_base`/`thm`/`mitigation_factor`
+values (a common failure mode is drafting against one set of factors
+and writing down another), and `check_fixtures.py` confirms
+`tests/fixtures/AVE-YYYY-NNNNN_positive.md` and `_negative.md` both
+exist -- required for every record, see Step 4. If `npm`-based schema
+tooling (`ajv`) is more convenient for your own workflow, it's a valid
+supplementary check, but the record must pass the scripts above before
+a PR is reviewed, not just an ad-hoc schema validator.
 
 The record must validate clean before opening a PR. A PR with a
 schema-invalid record will not be reviewed.
 
-### Step 4 -- Open a coordinated scanner PR
+### Step 4 -- Write conformance fixtures (in this repo, required to merge)
 
-Every AVE record needs at least one detection rule in
-[bawbel/scanner](https://github.com/bawbel/scanner) with:
+**Corrected**: fixtures live in *this* repo, not in bawbel/scanner --
+`scripts/check_fixtures.py` (Step 3) enforces this on every PR, which
+is the actual, current gate. Add two files:
 
-- A **positive fixture** — a file that must trigger the rule
-- A **negative fixture** — a benign lookalike that must not trigger
+```
+tests/fixtures/AVE-2026-NNNNN_positive.md   # a conforming implementation MUST flag this
+tests/fixtures/AVE-2026-NNNNN_negative.md   # a conforming implementation MUST NOT flag this
+```
 
-Open the scanner PR alongside the record PR. Reference each from the other.
-A record without a detection rule will not be merged.
+The negative fixture is the false-positive guard and deserves real
+effort -- a realistic file that looks similar to the malicious one, not
+an easy case that tests nothing.
+
+**Separately**, once the record and its fixtures are merged here,
+detection *rule implementations* (the actual YARA/Semgrep/pattern code
+that uses these fixtures) are implementation artifacts, not standard
+artifacts -- they live in whichever tool implements against this
+standard, e.g. [bawbel/scanner](https://github.com/bawbel/scanner), not
+in this repo. Open a coordinated PR there referencing the `ave_id` and
+the fixtures above; it's a real, encouraged step for getting a class
+actually detected, but it is not what this repo's own PR is gated on.
 
 ### Step 5 -- Open the record PR
 
-Target `main`. Title format:
+Target `develop`, not `main` -- `main` is the GitHub default branch but
+not this project's actual integration branch; real record PRs merge
+into `develop` and get promoted to `main` separately. Title format:
 
 ```
 feat: AVE-2026-NNNNN -- <attack class>
@@ -173,7 +212,8 @@ PR description must include:
 - Link to the issue
 - Link to the primary source
 - AARF score table with one-line rationale per non-zero factor
-- Link to the coordinated scanner PR
+- Any coordinated scanner-repo PR, if one exists yet (not required to
+  open the record PR itself, see Step 4)
 
 ---
 
@@ -198,11 +238,13 @@ Canonical file: `schema/ave-record-1.1.0.schema.json`.
 To update an existing record:
 
 ```bash
-git checkout -b fix/AVE-2026-NNNNN-description
+git checkout -b fix/AVE-2026-NNNNN-description origin/develop
 # edit records/AVE-2026-NNNNN.json
 # update last_updated to today: "2026-MM-DDTHH:MM:SSZ"
 git commit -m "fix: AVE-2026-NNNNN -- <what changed>"
 ```
+
+Target `develop` for the PR, same as new records.
 
 AIVSS score changes require written rationale for each AARF factor that
 changes. Framework mapping additions (`owasp_asi`, `mitre_atlas`)
