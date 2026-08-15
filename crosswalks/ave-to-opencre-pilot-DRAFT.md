@@ -4,9 +4,18 @@
 `ave-to-opencre-pilot-mapping.csv` (the actual submittable rows, in
 OpenCRE's own `CRE 0`–`CRE 4` + `AVE|name`/`id`/`hyperlink`/`description`
 template column format) and `ave-to-opencre-pilot-mapping-READABLE.md`
-(the same 8 rows as a table, for review without opening a spreadsheet —
+(the same rows as a table, for review without opening a spreadsheet —
 mirroring Otto Sulin's own two-file convention in issue #1016). Both
 exist; **neither has been sent anywhere.**
+
+**Trimmed to 3 records for the first submission** (decision made after
+reviewing this draft): AVE-2026-00047, AVE-2026-00061, AVE-2026-00053 —
+the three single-CRE, no-caveat correspondences. AVE-2026-00034 and
+AVE-2026-00033 (candidates 4 and 5 below) are fully verified and held
+for a follow-up round rather than dropped: 00034's strongest match came
+with a 3-CRE proposal that adds real complexity for a first submission,
+and 00033's mapping is knowingly partial-scope. Both sections are kept
+in full below as the follow-up round's starting point, not removed.
 
 **Status: draft, unreviewed by a second person, not sent anywhere.** This
 document exists to be reviewed before any contact with OpenCRE, per the
@@ -215,7 +224,7 @@ names, not smoothed over.
 - **Confidence: high, after the deeper check** (would have been
   "plausible but unverified" without it).
 
-### 4. AVE-2026-00034 (Dynamic Third-Party Skill Import) → CRE `307-507` (primary), CRE `777-470` and CRE `577-260` (secondary)
+### 4. [HELD FOR FOLLOW-UP, not in this submission] AVE-2026-00034 (Dynamic Third-Party Skill Import) → CRE `307-507` (primary), CRE `777-470` and CRE `577-260` (secondary)
 
 **This is the candidate the independent-search pass actually changed —
 kept as the pilot's central finding, not edited away.**
@@ -274,7 +283,7 @@ kept as the pilot's central finding, not edited away.**
   AVE record is coherent with the existing graph, not an arbitrary
   combination assembled for this pilot.
 
-### 5. AVE-2026-00033 (Unsafe Deserialization or Eval Instruction) → CWE-502 → CRE `736-554`
+### 5. [HELD FOR FOLLOW-UP, not in this submission] AVE-2026-00033 (Unsafe Deserialization or Eval Instruction) → CWE-502 → CRE `736-554`
 
 - **AVE mechanism**: "Deserializing untrusted data using unsafe methods
   like Python's `pickle.loads`, unguarded `yaml.load`, **or `eval`/`exec`
@@ -356,12 +365,21 @@ than discovered midway through building the wrong artifact.
 ## Not yet done (deliberately — Step 5 gate)
 
 No contact has been made with OpenCRE, Otto Sulin, or Rob van der Veer.
-This document is the Step 3 deliverable: pilot mappings drafted, each
+This document is the Step 3 deliverable: 5 pilot mappings drafted, each
 independently re-verified against OpenCRE's own text search rather than
 only via CWE-routing (one real correction resulted — AVE-2026-00034),
 evidence attached per mapping, two scope caveats flagged rather than
 hidden (AVE-2026-00033's eval/exec gap; AVE-2026-00034's own missing
 CWE-353 citation, out of scope for this document), one process-format
-mismatch surfaced. Outreach (Step 5) needs an explicit go-ahead and, per
-the Step 4 finding above, an actual OpenCRE-template artifact built from
-this draft's five rows before anything is sent.
+mismatch surfaced, then trimmed to the 3 cleanest single-CRE
+correspondences (AVE-2026-00047, 00061, 00053) for the actual first
+submission after a second review pass, with 00034 and 00033 held for a
+deliberate follow-up round rather than dropped. The submission artifacts
+(`ave-to-opencre-pilot-mapping.csv` / `-READABLE.md`) now carry only the
+3-record trim; this document keeps all 5 candidates' full evidence,
+since the held-back two are the follow-up round's starting point, not
+discarded work.
+
+Outreach (Step 5) still needs an explicit go-ahead — trimming the
+record count is a decision about *what* to send, not a decision to
+send it.
