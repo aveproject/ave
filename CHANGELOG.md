@@ -9,6 +9,17 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 ## [Unreleased]
 
 ### Changed
+- AVE-2026-00070: `researcher`/`researcher_url` correction — was
+  listed as "Saray Chak" / bawbel.io despite the record's own
+  `references` entry already citing the actual external source (Zhu,
+  Li, Lyu, Sun, Su, Shao, "Collaborative Shadows: Distributed Backdoor
+  Attacks in LLM-Based Multi-Agent Systems," arXiv:2510.11246); the
+  exact misattribution pattern `docs/specs/researcher-process.md`
+  documents as previously caught and fixed on two other records
+  (see the AVE-2026-00060 worked example), recurring here uncaught
+  until now. Corrected to the paper's real six authors and the actual
+  arXiv abstract page. No score, severity, or mechanism-description
+  change.
 - `mitre_atlas` corrections on 43 records, per issue #127's audit of
   `AML.T0043`/`T0048`/`T0051`/`T0054`: those four IDs were largely
   applied by template rather than per-record verification against
