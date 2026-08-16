@@ -3,23 +3,24 @@
   "source": {
     "tool": "cfgaudit",
     "vendor": "cfgaudit",
-    "version": "1.11.0",
+    "version": "1.13.0",
     "url": "https://github.com/cfgaudit/cfgaudit",
     "license": "Apache-2.0",
     "tool_class": "static configuration auditor",
-    "rules_total": 97,
-    "rules_mapped": 53
+    "rules_total": 108,
+    "rules_mapped": 64,
+    "commit": "ac9f2a5314f7ae64242a10cade836d83f304987e"
   },
   "target": {
     "standard": "AVE",
     "version": "1.1.0",
     "url": "https://aveproject.org",
-    "record_count": 70,
-    "static_record_count": 51,
-    "commit": "71b3e53c2e3f1de94c8c98c9ba2a388e513606ce"
+    "record_count": 80,
+    "static_record_count": 58,
+    "commit": "cd1010e81ad608d0e066ccec387dd5dad7dd3056"
   },
-  "generated": "2026-08-05",
-  "note": "cfgaudit is a static auditor of committable AI-agent CONFIGURATION files. It does not connect to running servers or observe runtime, so it maps only to AVE's static_detection records. Each cfgaudit rule emits its primary AVE id in JSON/SARIF output (see github.com/cfgaudit/cfgaudit/blob/main/docs/cfgaudit-to-ave.md). Mappings are class-level behavioral equivalence, not asserted identity. cfgaudit now maps 53 config-surface rules onto 23 AVE behavioral classes, up from 35 onto 19 at v1.10.0. Most of that growth is not new cfgaudit rules: it is previously unmapped rules finding a home in AVE-2026-00061 through AVE-2026-00064, the four config classes AVE added from this crosswalk's own gap list (aveproject/ave#68). CFG091 moved from AVE-2026-00021 to AVE-2026-00063: 00021 describes a component that explicitly INSTRUCTS the agent to bypass confirmation, while qwen's tools.approvalMode is a setting, which is what 00063 covers 'independent of any instruction text'.",
+  "generated": "2026-08-16",
+  "note": "cfgaudit is a static auditor of committable AI-agent CONFIGURATION files. It does not connect to running servers or observe runtime, so it maps only to AVE's static_detection records. Each cfgaudit rule emits its primary AVE id in JSON/SARIF output (see github.com/cfgaudit/cfgaudit/blob/main/docs/cfgaudit-to-ave.md). Mappings are class-level behavioral equivalence, not asserted identity. cfgaudit now maps 61 config-surface rules onto 27 AVE behavioral classes, up from 53 onto 23 at v1.11.0. Only two of the eight new mappings are new cfgaudit rules; the other six are rules that existed all along and are mapped here for the first time, because AVE-2026-00071, 00072, 00073 and 00076 were published on 2026-08-06 and later, after the v1.11.0 crosswalk was generated on 2026-08-05. Three of those four came out of this crosswalk's own gap list (aveproject/ave#68), which is now down to one open surface. Three cfgaudit rules new in v1.12.0 are deliberately left unmapped rather than fitted to an approximate class; each is listed under config_surfaces_beyond_ave with the reason. Both sides are pinned by commit, so every count here can be re-derived. The cfgaudit tree read is two commits past the v1.12.0 tag, and the delta is stated rather than smoothed over: cfgaudit/cfgaudit#516 corrects CFG071 from unmapped to AVE-2026-00073, and cfgaudit/cfgaudit#518 collapses CFG101's findings to one per permission list. Neither adds or removes a rule, so rules_total holds for the tag as well; rules_mapped at the tag itself is 60, not 61.",
   "mappings": [
     {
       "ave_id": "AVE-2026-00003",
@@ -184,7 +185,8 @@
         "CFG010",
         "CFG055",
         "CFG074",
-        "CFG089"
+        "CFG089",
+        "CFG098"
       ]
     },
     {
@@ -200,7 +202,9 @@
         "CFG087",
         "CFG091",
         "CFG093",
-        "CFG096"
+        "CFG096",
+        "CFG104",
+        "CFG105"
       ]
     },
     {
@@ -211,6 +215,39 @@
         "CFG067",
         "CFG086"
       ]
+    },
+    {
+      "ave_id": "AVE-2026-00071",
+      "title": "Container daemon redirected off-host",
+      "cfgaudit_rules": [
+        "CFG082"
+      ]
+    },
+    {
+      "ave_id": "AVE-2026-00072",
+      "title": "MCP server bound to every interface with no authentication step",
+      "cfgaudit_rules": [
+        "CFG018"
+      ]
+    },
+    {
+      "ave_id": "AVE-2026-00073",
+      "title": "Endpoint redirect via a static configuration value",
+      "cfgaudit_rules": [
+        "CFG005",
+        "CFG046",
+        "CFG071",
+        "CFG099"
+      ]
+    },
+    {
+      "ave_id": "AVE-2026-00076",
+      "title": "Natural-language steering of an approval classifier",
+      "cfgaudit_rules": [
+        "CFG094",
+        "CFG103"
+      ],
+      "note": "CFG103 maps for one of its three findings only: features.guardianv2.classifier_instructions replaces the prompt of Codex's own reviewer, which is this record's mechanism, a committed file aiming natural language at a separate non-primary classifier. cfgaudit reports the stronger form, the whole prompt replaced, where the record describes steering."
     }
   ],
   "gaps": [
@@ -227,23 +264,27 @@
       "note": "fragmented cross-description injection. Needs multi-source correlation; cfgaudit checks each file independently."
     },
     {
-      "ave_id": "AVE-2026-00065",
-      "note": "A2A agent card poisoning. cfgaudit reaches the committed pointer but not the card. A .gemini/agents/*.md may carry an inline agent_card_json, which cfgaudit recognises well enough to classify the file as a remote agent, but it does not audit the card's contents. It does flag a cleartext agent_card_url and a credential literal in the same file's auth block (CFG097)."
-    },
-    {
       "ave_id": "AVE-2026-00060",
       "note": "STDIO transport shell injection. Server-side implementation flaw, requires SAST of the MCP server source rather than reading its launch configuration. Same layer as AVE-2026-00052 and AVE-2026-00053; see the static_detection note below."
     },
     {
+      "ave_id": "AVE-2026-00065",
+      "note": "A2A agent card poisoning. cfgaudit reaches the committed pointer but not the card. A .gemini/agents/*.md may carry an inline agent_card_json, which cfgaudit recognises well enough to classify the file as a remote agent, but it does not audit the card's contents. It does flag a cleartext agent_card_url and a credential literal in the same file's auth block (CFG097)."
+    },
+    {
       "ave_id": "AVE-2026-00069",
       "note": "image-hidden instructions in a skill package. Requires binary content analysis of a bundled image; cfgaudit reads text configuration only. Same layer as AVE-2026-00024."
+    },
+    {
+      "ave_id": "AVE-2026-00077",
+      "note": "cross-origin tool and resource declaration in one MCP manifest. New gap. cfgaudit reads MCP launch configuration (command, args, env, url, headers), not the manifest a server returns once it is running, so the two declarations this record correlates are never both in view."
     }
   ],
   "coverage": {
-    "ave_static_records": 51,
-    "cfgaudit_rules_total": 97,
-    "cfgaudit_rules_mapped": 53,
-    "ave_classes_covered": 23,
+    "ave_static_records": 58,
+    "cfgaudit_rules_total": 108,
+    "cfgaudit_rules_mapped": 64,
+    "ave_classes_covered": 27,
     "cfgaudit_rules_unmapped": 44
   },
   "validation": {
@@ -258,15 +299,6 @@
   },
   "config_surfaces_beyond_ave": [
     {
-      "surface": "telemetry / endpoint redirect",
-      "example_rules": [
-        "CFG005",
-        "CFG046",
-        "CFG071"
-      ],
-      "note": "Still open. Distinct from AVE-2026-00002: nothing is injected into the model's context. A committed key/value changes where the process sends data, and the model never sees it, so detection is a value comparison rather than content analysis. OTEL_EXPORTER_OTLP_*ENDPOINT to a non-local collector, ANTHROPIC_BASE_URL off Anthropic (CVE-2026-21852), a model or provider base URL over cleartext http."
-    },
-    {
       "surface": "sandbox weakening in config",
       "example_rules": [
         "CFG022",
@@ -275,43 +307,50 @@
         "CFG079",
         "CFG095"
       ],
-      "note": "Still open. sandbox.excludedCommands with a wildcard or shell, bwrapPath/socatPath helper substitution, network.allowUnixSockets naming docker.sock, filesystem.allowWrite on $PATH or a shell rc; Gemini tools.sandboxAllowedPaths exposing / or ~; Codex sandbox_mode danger-full-access and [sandbox_workspace_write] network_access; Cursor .cursor/sandbox.json type insecure_none and an inverted networkPolicy."
-    },
-    {
-      "surface": "container / daemon posture",
-      "example_rules": [
-        "CFG082",
-        "CFG084",
-        "CFG083"
-      ],
-      "note": "Still open, and it is THREE mechanisms with no shared detection logic, not one class. (1) daemon redirected off-host: DOCKER_HOST or a -H/--host flag pointing at a remote tcp:// or ssh:// daemon. (2) image trust verification disabled: DOCKER_CONTENT_TRUST=0, --disable-content-trust, --insecure-registry. (3) browser subprocess replaced: an MCP server's args carrying --utility-cmd-prefix, --renderer-cmd-prefix, --gpu-launcher or --browser-subprocess-path. The first is the highest-value single record."
-    },
-    {
-      "surface": "MCP network / transport posture",
-      "example_rules": [
-        "CFG018",
-        "CFG066",
-        "CFG058",
-        "CFG021",
-        "CFG069"
-      ],
-      "note": "Still open, and likewise a surface rather than a class: FIVE mechanisms. Bind address 0.0.0.0 or [::] (NeighborJack); a wildcard CORS origin in env, escalating when auth is disabled in the same env (CVE-2026-33010); type sse, the deprecated transport; HTTP_PROXY/HTTPS_PROXY/ALL_PROXY resolving off loopback; HTTP transport enabled without log redaction, so request bodies with bearer tokens reach the logs (CVE-2026-42282, CVE-2026-41495). The bind-all case is the highest-value single record."
+      "note": "Still open, and the only one of the eight surfaces from aveproject/ave#68 that is. The field list this record would enumerate has now settled, which was the stated reason for holding it: CFG064 reached its final shape in v1.12.0 and no further expansion is planned. Full field list, per agent, in the issue thread. Four mechanisms: (1) the sandbox switched off outright (Codex sandbox_mode danger-full-access, Cursor type insecure_none, Claude Code sandbox.filesystem.disabled). (2) The sandbox left on but widened (Codex [sandbox_workspace_write] network_access and outside-workspace writable_roots, Gemini tools.sandboxAllowedPaths reaching / or ~, tools.sandboxNetworkAccess). (3) The confinement helpers repointed (sandbox.bwrapPath, sandbox.socatPath, sandbox.excludedCommands with a wildcard or a shell, network.allowUnixSockets naming a privileged daemon socket). (4) The same posture reached without touching any sandbox key at all, through Codex's named permission profiles: default_permissions selects a [permissions.<name>] profile whose network block carries enabled, proxy_url, socks_url, dangerously_allow_all_unix_sockets and dangerously_allow_non_loopback_proxy, and whose filesystem block grants ':root' or a credential path. An indicator list keyed on sandbox_mode misses that fourth one entirely."
     },
     {
       "surface": "cleartext endpoint, distinct from TLS verification disabled",
       "example_rules": [
         "CFG049",
-        "CFG071",
         "CFG097"
       ],
-      "note": "New in this revision, and it has no class in either direction. AVE-2026-00061 covers verification being switched off; this is the case where there is no TLS at all. A committed http:// MCP server URL, model base URL, or A2A agent_card_url."
+      "note": "Mostly closed, and narrower than this row used to claim. AVE-2026-00073 names a cleartext model or provider base URL outright, which is why CFG071 now maps to it and no longer appears here. What is left is a committed http:// MCP server URL (CFG049) and an A2A agent_card_url (CFG097's second half), both reached only by that record's catch-all 'an equivalent traffic-destination value'. Whether to name them explicitly is the open question from aveproject/ave#123. AVE-2026-00061 stays a different failure: verification disabled, not no TLS at all."
     },
     {
-      "surface": "natural-language steering of an approval classifier",
+      "surface": "plugin auto-load from a committed manifest",
       "example_rules": [
-        "CFG094"
+        "CFG100"
       ],
-      "note": "New in this revision. Cursor's .cursor/permissions.json autoRun.allow_instructions is prose the repository feeds to the classifier that decides, in Auto-review mode, whether a tool call runs without asking. It falls between AVE-2026-00063, which is explicitly 'independent of any instruction text', and AVE-2026-00021, which is an instruction to the agent rather than to a gatekeeper."
+      "note": "New, and deliberately unmapped rather than forced. Grok's committed config carries a [plugins] table with enabled and paths, which points the agent at plugin code the repository ships. AVE-2026-00064 would be the class, but it requires that the loader runs that code at project load with no prompt, and cfgaudit has not verified that against the shipped Grok build. Mapping it on the strength of the shape alone would assert a mechanism nobody measured. Note the polarity: 'disabled' in that table hardens, so a record enumerating field names should not list it as an indicator."
+    },
+    {
+      "surface": "a guardrail that does not hold, as distinct from an attacker behaviour",
+      "example_rules": [
+        "CFG101"
+      ],
+      "note": "New, and probably outside AVE's model by construction rather than a gap to fill. Claude Code matches a Bash(...) permission pattern as a literal prefix, so a deny rule naming bundled short flags is walked past by writing the same flags in another order: Bash(rm -rf *) never covered rm -fr x. Measured against Claude Code 2.1.231, and roughly 44% of 22,016 indexed settings.json files carrying a deny block leave the gap open. AVE-2026-00063 is a flag that removes a gate and AVE-2026-00068 is composition through shell state; neither is 'the denylist misses an equivalent spelling'. Recorded here because a taxonomy of agent vulnerabilities may want a place for ineffective controls, not because cfgaudit is asking for a record."
+    },
+    {
+      "surface": "two committed skills claiming one name",
+      "example_rules": [
+        "CFG102"
+      ],
+      "note": "New. Name shadowing between two skill files in the same repository, where load order decides which body runs. AVE-2026-00017 is the closest class but is explicitly MCP server identity, and AVE-2026-00066 is registry squatting on hallucinated names; neither covers two local files. Reported as a gap rather than mapped to either."
+    },
+    {
+      "surface": "automated security reviewer switched off or blunted by config",
+      "example_rules": [
+        "CFG103"
+      ],
+      "note": "Codex's [features.guardianv2] decides whether its own reviewer runs (enabled), at what score it escalates to a blocking review (review_threshold, default 0.5), and what prompt it is given. The prompt half maps to AVE-2026-00076. Switching the reviewer off or raising the threshold does not: AVE-2026-00063 is explicitly a bypassed *human*-approval step, and Guardian v2 is automated. features is not on Codex's project-layer denylist, so a committed .codex/config.toml sets all three."
+    },
+    {
+      "surface": "repository grants the agent browser or desktop-application access",
+      "example_rules": [
+        "CFG106"
+      ],
+      "note": "Codex's [browser_use] grants per-origin access including full_cdp_access (script, cookie and storage access inside the browser session) and [computer_use] grants desktop application control. Deliberately not filed under AVE-2026-00063: whether a prompt is skipped is unverified, since the value is observable in the effective config but the tools live in the client app, so the class would assert more than the detection does."
     }
   ]
 }
