@@ -20,8 +20,7 @@
     "aivss_score": 9.2,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
     "owasp_asi": [
-      "ASI04",
-      "ASI09"
+      "ASI04"
     ],
     "nist_ai_rmf": [
       "MAP-1.5",
@@ -82,7 +81,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-16T00:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "CWE-601",
@@ -313,8 +312,7 @@
     "aivss_score": 7.3,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:L/VI:H/VA:N/SC:L/SI:H/SA:N",
     "owasp_asi": [
-      "ASI01",
-      "ASI03"
+      "ASI01"
     ],
     "owasp_mcp": [
       "MCP03",
@@ -387,7 +385,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-01T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -444,7 +442,7 @@
     "aivss_score": 7.5,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
     "owasp_asi": [
-      "ASI07"
+      "ASI02"
     ],
     "nist_ai_rmf": [
       "MAP-1.5",
@@ -493,7 +491,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "MITRE ATT&CK T1657",
@@ -575,9 +573,7 @@
     "aivss_score": 8.2,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
     "owasp_asi": [
-      "ASI01",
-      "ASI03",
-      "ASI08"
+      "ASI01"
     ],
     "nist_ai_rmf": [
       "MAP-1.5",
@@ -636,7 +632,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-01T00:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -869,8 +865,7 @@
     "aivss_score": 7.7,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
     "owasp_asi": [
-      "ASI04",
-      "ASI09"
+      "ASI03"
     ],
     "nist_ai_rmf": [
       "MAP-1.5",
@@ -927,7 +922,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-16T00:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "CWE-269",
@@ -999,7 +994,7 @@
     "schema_version": "1.1.0",
     "status": "active",
     "published": "2026-06-21T00:00:00Z",
-    "last_updated": "2026-06-21T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "component_type": "mcp_server",
     "title": "HTTP Host Header Injection via Agent-Initiated Request (BadHost)",
     "attack_class": "Supply Chain - HTTP Header Injection",
@@ -1021,8 +1016,7 @@
     "aivss_score": 7.2,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:L/VA:N/SC:H/SI:L/SA:N",
     "owasp_asi": [
-      "ASI03",
-      "ASI06"
+      "ASI04"
     ],
     "mitre_atlas": [
       "AML.T0011"
@@ -1143,7 +1137,7 @@
     "schema_version": "1.1.0",
     "status": "active",
     "published": "2026-06-21T00:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "component_type": "mcp_server",
     "title": "Parasitic Toolchain — Silent Tool Registration and Persistent Hook Injection",
     "attack_class": "Persistence - Parasitic Toolchain",
@@ -1166,8 +1160,7 @@
     "aivss_score": 7.2,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
     "owasp_asi": [
-      "ASI04",
-      "ASI07"
+      "ASI04"
     ],
     "mitre_atlas": [
       "AML.T0010"
@@ -1292,7 +1285,7 @@
     "schema_version": "1.1.0",
     "status": "active",
     "published": "2026-06-21T00:00:00Z",
-    "last_updated": "2026-06-21T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "component_type": "mcp_server",
     "title": "OAuth Discovery Rebinding — Authorization Endpoint Redirected to Attacker Server",
     "attack_class": "Supply Chain - OAuth Discovery Rebinding",
@@ -1314,7 +1307,7 @@
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
     "owasp_asi": [
       "ASI03",
-      "ASI06"
+      "ASI04"
     ],
     "mitre_atlas": [
       "AML.T0011"
@@ -1497,7 +1490,7 @@
     "researcher": "Peter Girnus (ZDI)",
     "researcher_url": "https://www.zerodayinitiative.com/advisories/ZDI-26-021/",
     "published": "2026-07-10T00:00:00Z",
-    "last_updated": "2026-07-10T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "ZDI-26-021",
@@ -1535,8 +1528,7 @@
       "MCP04"
     ],
     "owasp_asi": [
-      "ASI05",
-      "ASI02"
+      "ASI05"
     ],
     "aivss": {
       "cvss_base": 9.8,
@@ -2245,8 +2237,7 @@
     "aivss_score": 6.8,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:L/UI:N/VC:H/VI:N/VA:N/SC:H/SI:N/SA:N",
     "owasp_asi": [
-      "ASI01",
-      "ASI06"
+      "ASI01"
     ],
     "owasp_mcp": [
       "MCP01",
@@ -2321,7 +2312,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-01T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "CWE-522",
@@ -2379,7 +2370,7 @@
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
     "owasp_asi": [
       "ASI01",
-      "ASI07"
+      "ASI05"
     ],
     "nist_ai_rmf": [
       "MAP-1.5",
@@ -2429,7 +2420,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "CWE-78",
@@ -2512,7 +2503,7 @@
     "aivss_score": 5.6,
     "cvss_base_vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:N/VC:N/VI:H/VA:H/SC:N/SI:H/SA:H",
     "owasp_asi": [
-      "ASI07"
+      "ASI02"
     ],
     "nist_ai_rmf": [
       "MAP-1.5",
@@ -2561,7 +2552,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "CWE-78",
@@ -2644,8 +2635,7 @@
     "aivss_score": 6.1,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
     "owasp_asi": [
-      "ASI01",
-      "ASI08"
+      "ASI01"
     ],
     "nist_ai_rmf": [
       "MAP-1.5",
@@ -2693,7 +2683,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "Perez 2022",
@@ -2776,7 +2766,7 @@
     "aivss_score": 6.3,
     "cvss_base_vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
     "owasp_asi": [
-      "ASI07"
+      "ASI10"
     ],
     "nist_ai_rmf": [
       "MAP-1.5",
@@ -2825,7 +2815,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "Cohen 2024",
@@ -2907,8 +2897,7 @@
     "aivss_score": 5.5,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
     "owasp_asi": [
-      "ASI01",
-      "ASI08"
+      "ASI01"
     ],
     "nist_ai_rmf": [
       "MAP-1.5",
@@ -2957,7 +2946,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-20T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "Wei 2023",
@@ -3169,7 +3158,7 @@
     "aivss_score": 5.7,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
     "owasp_asi": [
-      "ASI07"
+      "ASI02"
     ],
     "nist_ai_rmf": [
       "MAP-1.5",
@@ -3217,7 +3206,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-20T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -3298,8 +3287,7 @@
     "aivss_score": 4.5,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
     "owasp_asi": [
-      "ASI01",
-      "ASI08"
+      "ASI01"
     ],
     "nist_ai_rmf": [
       "MAP-1.5",
@@ -3347,7 +3335,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-20T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "CWE-269",
@@ -3429,8 +3417,7 @@
     "aivss_score": 6.5,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:N/VA:N/SC:H/SI:H/SA:L",
     "owasp_asi": [
-      "ASI01",
-      "ASI06"
+      "ASI01"
     ],
     "nist_ai_rmf": [
       "MAP-1.5",
@@ -3479,7 +3466,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-20T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "CWE-359",
@@ -3562,8 +3549,7 @@
     "aivss_score": 4.9,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:N/VA:N/SC:H/SI:N/SA:N",
     "owasp_asi": [
-      "ASI01",
-      "ASI09"
+      "ASI01"
     ],
     "nist_ai_rmf": [
       "MAP-1.5",
@@ -3607,7 +3593,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-20T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "Perez 2022",
@@ -3685,7 +3671,7 @@
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
     "owasp_asi": [
       "ASI01",
-      "ASI10"
+      "ASI06"
     ],
     "owasp_mcp": [
       "MCP10",
@@ -3759,7 +3745,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -3812,8 +3798,7 @@
     "aivss_score": 5.7,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:P/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
     "owasp_asi": [
-      "ASI01",
-      "ASI08"
+      "ASI01"
     ],
     "owasp_mcp": [
       "MCP09",
@@ -3884,7 +3869,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "CWE-290",
@@ -3935,8 +3920,7 @@
     "aivss_score": 4.4,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:L/VI:H/VA:N/SC:L/SI:H/SA:N",
     "owasp_asi": [
-      "ASI01",
-      "ASI07"
+      "ASI01"
     ],
     "owasp_mcp": [
       "MCP03",
@@ -4007,7 +3991,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -4061,7 +4045,7 @@
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
     "owasp_asi": [
       "ASI01",
-      "ASI09"
+      "ASI06"
     ],
     "owasp_mcp": [
       "MCP10",
@@ -4136,7 +4120,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "Cohen 2024",
@@ -4315,8 +4299,7 @@
     "aivss_score": 4.5,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
     "owasp_asi": [
-      "ASI01",
-      "ASI04"
+      "ASI01"
     ],
     "owasp_mcp": [
       "MCP02",
@@ -4384,7 +4367,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -4438,7 +4421,7 @@
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:L/UI:N/VC:H/VI:L/VA:N/SC:H/SI:L/SA:N",
     "owasp_asi": [
       "ASI01",
-      "ASI07"
+      "ASI02"
     ],
     "owasp_mcp": [
       "MCP02"
@@ -4509,7 +4492,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "CWE-269",
@@ -4681,7 +4664,7 @@
     "aivss_score": 6.8,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:L/VI:H/VA:N/SC:L/SI:H/SA:N",
     "owasp_asi": [
-      "ASI07"
+      "ASI04"
     ],
     "owasp_mcp": [
       "MCP04"
@@ -4752,7 +4735,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-07-17T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "CWE-434",
@@ -4806,8 +4789,7 @@
     "aivss_score": 4.5,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
     "owasp_asi": [
-      "ASI01",
-      "ASI10"
+      "ASI01"
     ],
     "owasp_mcp": [
       "MCP10",
@@ -4877,7 +4859,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -4927,8 +4909,7 @@
     "aivss_score": 6.8,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:N/VA:N/SC:H/SI:N/SA:N",
     "owasp_asi": [
-      "ASI01",
-      "ASI06"
+      "ASI01"
     ],
     "owasp_mcp": [
       "MCP01",
@@ -5001,7 +4982,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "CWE-116",
@@ -5056,7 +5037,7 @@
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
     "owasp_asi": [
       "ASI01",
-      "ASI09"
+      "ASI06"
     ],
     "owasp_mcp": [
       "MCP06",
@@ -5130,7 +5111,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -5183,8 +5164,7 @@
     "aivss_score": 5.9,
     "cvss_base_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:P/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
     "owasp_asi": [
-      "ASI01",
-      "ASI06"
+      "ASI01"
     ],
     "owasp_mcp": [
       "MCP10",
@@ -5257,7 +5237,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -5308,8 +5288,7 @@
     "aivss_score": 4.8,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:L/VI:H/VA:N/SC:L/SI:H/SA:N",
     "owasp_asi": [
-      "ASI01",
-      "ASI03"
+      "ASI01"
     ],
     "owasp_mcp": [
       "MCP03",
@@ -5380,7 +5359,7 @@
     "researcher": "Boucher & Anderson",
     "researcher_url": "https://arxiv.org/abs/2111.00169",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "Boucher 2021",
@@ -5433,8 +5412,7 @@
     "aivss_score": 4.3,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:L/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
     "owasp_asi": [
-      "ASI01",
-      "ASI08"
+      "ASI01"
     ],
     "owasp_mcp": [
       "MCP07",
@@ -5505,7 +5483,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "CWE-290",
@@ -5556,8 +5534,7 @@
     "aivss_score": 5.4,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
     "owasp_asi": [
-      "ASI01",
-      "ASI09"
+      "ASI01"
     ],
     "owasp_mcp": [
       "MCP06",
@@ -5632,7 +5609,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "Wan 2023",
@@ -5684,8 +5661,7 @@
     "aivss_score": 4,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:L/UI:N/VC:H/VI:N/VA:N/SC:H/SI:N/SA:N",
     "owasp_asi": [
-      "ASI05",
-      "ASI06"
+      "ASI05"
     ],
     "owasp_mcp": [
       "MCP05",
@@ -5758,7 +5734,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "CWE-918",
@@ -5813,7 +5789,7 @@
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
     "owasp_asi": [
       "ASI01",
-      "ASI07"
+      "ASI05"
     ],
     "owasp_mcp": [
       "MCP05",
@@ -5886,7 +5862,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "CWE-502",
@@ -5942,7 +5918,7 @@
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
     "owasp_asi": [
       "ASI01",
-      "ASI07"
+      "ASI04"
     ],
     "owasp_mcp": [
       "MCP04",
@@ -6018,7 +5994,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "CWE-829",
@@ -6069,8 +6045,7 @@
     "aivss_score": 4.2,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:L/VI:H/VA:N/SC:L/SI:H/SA:N",
     "owasp_asi": [
-      "ASI01",
-      "ASI07"
+      "ASI01"
     ],
     "owasp_mcp": [
       "MCP03",
@@ -6141,7 +6116,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "MITRE ATLAS AML.T0020",
@@ -6194,8 +6169,7 @@
     "aivss_score": 5.9,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:L/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
     "owasp_asi": [
-      "ASI01",
-      "ASI05"
+      "ASI01"
     ],
     "owasp_mcp": [
       "MCP05",
@@ -6270,7 +6244,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "MITRE ATT&CK T1021",
@@ -6322,8 +6296,7 @@
     "aivss_score": 5.1,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:P/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
     "owasp_asi": [
-      "ASI01",
-      "ASI10"
+      "ASI01"
     ],
     "owasp_mcp": [
       "MCP10",
@@ -6396,7 +6369,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "Qi 2023",
@@ -6573,8 +6546,7 @@
     "aivss_score": 4.9,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:L/UI:N/VC:H/VI:N/VA:N/SC:H/SI:N/SA:N",
     "owasp_asi": [
-      "ASI01",
-      "ASI06"
+      "ASI01"
     ],
     "owasp_mcp": [
       "MCP01",
@@ -6648,7 +6620,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "CWE-514",
@@ -6702,7 +6674,7 @@
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:P/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
     "owasp_asi": [
       "ASI01",
-      "ASI07"
+      "ASI05"
     ],
     "owasp_mcp": [
       "MCP05",
@@ -6774,7 +6746,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "OWASP LLM Insecure Output",
@@ -6829,9 +6801,8 @@
     "aivss_score": 4.7,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
     "owasp_asi": [
-      "ASI04",
       "ASI01",
-      "ASI10"
+      "ASI05"
     ],
     "nist_ai_rmf": [
       "MAP-1.5",
@@ -6890,7 +6861,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-01T00:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "CWE-94",
@@ -7108,9 +7079,7 @@
     "aivss_score": 6.1,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:L/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
     "owasp_asi": [
-      "ASI01",
-      "ASI07",
-      "ASI08"
+      "ASI01"
     ],
     "nist_ai_rmf": [
       "MAP-1.5",
@@ -7165,7 +7134,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-01T00:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -7245,9 +7214,7 @@
     "aivss_score": 6.4,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
     "owasp_asi": [
-      "ASI05",
-      "ASI08",
-      "ASI10"
+      "ASI03"
     ],
     "nist_ai_rmf": [
       "MAP-1.5",
@@ -7308,7 +7275,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-01T00:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "CWE-269",
@@ -7442,7 +7409,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-07-10T00:00:00Z",
-    "last_updated": "2026-07-10T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "CVE",
@@ -7475,7 +7442,6 @@
       "MCP07"
     ],
     "owasp_asi": [
-      "ASI02",
       "ASI04"
     ],
     "mitre_atlas": [
@@ -8121,9 +8087,6 @@
     "owasp_mcp": [
       "MCP09"
     ],
-    "owasp_asi": [
-      "ASI01"
-    ],
     "behavioral_fingerprint": "Configuration sets a declarative flag (auto_approve, skip_confirmation, require_approval: false, or equivalent) that removes a human-in-the-loop check for high-risk actions, present in config rather than in instruction text, and therefore invisible to a review process that only inspects a component's stated instructions.",
     "behavioral_vector": [
       "approval-bypass-config",
@@ -8166,7 +8129,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-07-27T00:00:00Z",
-    "last_updated": "2026-07-27T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "cfgaudit crosswalk",
@@ -8756,8 +8719,7 @@
       "MCP03"
     ],
     "owasp_asi": [
-      "ASI06",
-      "ASI07"
+      "ASI06"
     ],
     "mitre_atlas": [],
     "nist_ai_rmf": [],
@@ -8805,7 +8767,7 @@
     "researcher": "Pengyu Zhu, Lijun Li, Yaxing Lyu, Li Sun, Sen Su, Jing Shao",
     "researcher_url": "https://arxiv.org/abs/2510.11246",
     "published": "2026-08-02T00:00:00Z",
-    "last_updated": "2026-08-02T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "Collaborative Shadows (arXiv 2510.11246)",
@@ -10006,8 +9968,7 @@
     "aivss_score": 3.7,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:L/VI:H/VA:N/SC:L/SI:H/SA:N",
     "owasp_asi": [
-      "ASI01",
-      "ASI08"
+      "ASI01"
     ],
     "nist_ai_rmf": [
       "MAP-1.5",
@@ -10048,7 +10009,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-20T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-23T00:00:00Z",
     "references": [
       {
         "tag": "CWE-290",
