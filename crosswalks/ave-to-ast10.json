@@ -4,7 +4,8 @@
     "standard": "AVE",
     "version": "1.1.0",
     "url": "https://aveproject.org",
-    "record_count": 56
+    "record_count": 56,
+    "commit": "38b6cf0c384eec42a1370f080ba976de6cae2700"
   },
   "target": {
     "tool": "OWASP Agentic Skills Top 10 (AST10)",

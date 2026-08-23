@@ -111,6 +111,34 @@ def test_declaring_a_repository_unpinnable_fails():
     assert "which can be pinned" in problems[0]
 
 
+def test_declaring_a_repository_unpinnable_fails_when_the_repository_is_not_under_url():
+    """The shape the check used to miss, taken from a real endpoint.
+
+    The AST10 side of ave-to-ast10.json carries its OWASP project page under url
+    and its repository under github. Reading only url leaves that endpoint free
+    to declare itself unpinnable and pass, and the network probe reaches the
+    same verdict for the same reason, because it probes the project page and
+    correctly finds no history behind it. Both halves would report clean on a
+    declaration that is false.
+    """
+    endpoint = dict(UNPINNABLE_SITE,
+                    github="https://github.com/OWASP/www-project-agentic-skills-top-10")
+    document = crosswalk_document({"url": "https://aveproject.org"}, endpoint)
+
+    problems = validate_crosswalks.check_declared_unpinnable_has_no_repository(document)
+
+    assert len(problems) == 1
+    assert "its github" in problems[0]
+    assert "which can be pinned" in problems[0]
+
+
+def test_a_site_with_no_repository_under_any_field_is_still_declarable():
+    """The widening must not swallow the case the declaration exists for."""
+    endpoint = dict(UNPINNABLE_SITE, site="https://owasp.org/projects/")
+
+    assert validate_crosswalks.repository_fields(endpoint) == []
+
+
 def test_declaring_a_site_with_no_repository_unpinnable_passes():
     document = crosswalk_document({"url": "https://aveproject.org"}, dict(UNPINNABLE_SITE))
 

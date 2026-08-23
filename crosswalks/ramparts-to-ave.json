@@ -12,7 +12,8 @@
     "version": "1.1.0",
     "url": "https://aveproject.org",
     "record_count": 76,
-    "static_record_count": 57
+    "static_record_count": 57,
+    "commit": "a97254dc18677bd6a2fcb76ae1bc7bf173158c31"
   },
   "generated": "2026-08-08",
   "note": "Ramparts and AVE both draft their own reading of the still-unratified OWASP MCP Top 10, independently, and their MCP01-MCP10 numbering does not align category-for-category; Ramparts' MCP03 (Excessive Agency) and AVE's MCP03 (Tool Poisoning) are unrelated despite sharing a number. This crosswalk matches by verified mechanism, not by shared tag number, see AVE issue #138 for the full verification. One Ramparts rule, EnvironmentVariableLeakage, splits into two distinct AVE mappings depending on which internal condition fires, a literal-value branch and a theft-language branch, not one-to-one. Near-miss not included in mappings: Ramparts' CommandInjection is a signature match over dangerous syntax anywhere in content; AVE-2026-00052 specifically requires a taint path from a caller-supplied parameter to shell exec. Same subject, different rigor, the exact distinction between signature-based scanning and reachability analysis. Real gaps in both directions: Ramparts' cross-origin tool confusion detection and its MCPConfigChanged baseline-diff check (a previously-approved server's fingerprint changing after the fact) have no AVE analog today; AVE has nothing for session-memory or cross-agent-state poisoning, which Ramparts does not currently touch either.",

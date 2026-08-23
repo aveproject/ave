@@ -12,7 +12,8 @@
     "version": "1.1.0",
     "url": "https://aveproject.org",
     "record_count": 76,
-    "static_record_count": 57
+    "static_record_count": 57,
+    "commit": "a97254dc18677bd6a2fcb76ae1bc7bf173158c31"
   },
   "generated": "2026-08-08",
   "note": "No shared external taxonomy exists between NOVA's rule format and AVE (unlike the Ramparts crosswalk, which anchored on OWASP MCP Top 10 tagging both projects already carried), so this crosswalk matches by direct comparison of each Nova rule's real trigger logic against AVE's behavioral fingerprints, not by a shared tag. Several Nova rules split into multiple sub-cases with different AVE mappings, DetectMaliciousToolPermissions alone covers three distinct AVE classes depending on which pattern fires. One AVE class (AVE-2026-00004, curl|bash execution) is independently caught by two separate Nova rules, DetectMaliciousToolPermissions and DetectSuspiciousScriptPatterns, both correctly converging on the same mechanism. Four confirmed gaps, each a genuinely distinct mechanism from any existing AVE record: sudo/chmod/netcat/reverse-shell keyword detection, backdoor-library detection (paramiko, fabric, pexpect, socket.connect), plain bracket-tag concealment ([hidden], [SYSTEM], [ASSISTANT]) as distinct from AVE-2026-00029's Unicode-based concealment mechanism, and known exfil-channel domain detection (webhook.site, ngrok, pastebin) as a materially different mechanism from AVE's closest label. One partial miss: fake-certification impersonation language does not cleanly fit any existing AVE record. Also worth noting, unrelated to AVE itself: Nova's own DetectHiddenInstructions and DetectSkillPromptInjection rules appear to independently detect the same bracket-marker concealment pattern, surfaced as a byproduct of this comparison, not confirmed as intentional redundancy or worth consolidating.",

@@ -164,19 +164,37 @@ def is_repository_url(url: object) -> bool:
     return len([segment for segment in parsed.path.split("/") if segment]) >= 2
 
 
+def repository_fields(endpoint: dict) -> list[tuple[str, str]]:
+    """Every field on this endpoint whose value is a repository URL, with its key.
+
+    Deliberately not just url. The endpoint definition sets additionalProperties
+    true, so a side may describe itself with as many URL-valued fields as it
+    needs, and two sides in this repository already do: the AST10 side of
+    ave-to-ast10.json carries its OWASP project page under url and its
+    repository under github, and the ClawScan side of clawscan-to-ave.json
+    carries the repository under url and the project site under site. Reading
+    only url therefore refutes a false unpinnable declaration when the
+    repository happens to sit under the one key the check looks at, and misses
+    it otherwise, which is a fact about where an author put a link rather than
+    anything about the declaration.
+    """
+    return [(key, value) for key, value in sorted(endpoint.items())
+            if is_repository_url(value)]
+
+
 def check_declared_unpinnable_has_no_repository(document: dict) -> list[str]:
-    """Refutes an unpinnable declaration that is contradicted by its own url.
+    """Refutes an unpinnable declaration that its own fields contradict.
 
     An endpoint saying it cannot be pinned is an exemption from the record-count
     warning below, and an exemption nobody can check is not a declaration: it is
     the box anything awkward gets put in. This is the offline half of checking
     it, and it only ever reports the case it has proved.
     """
-    return [f"{side} declares pin_status unpinnable, but its url {endpoint.get('url')} "
+    return [f"{side} declares pin_status unpinnable, but its {key} {url} "
             f"is a repository, which can be pinned"
             for side, endpoint in endpoints(document)
             if endpoint.get("pin_status") == "unpinnable"
-            and is_repository_url(endpoint.get("url"))]
+            for key, url in repository_fields(endpoint)]
 
 
 def probe_declared_unpinnable(document: dict) -> tuple[list[str], list[str]]:
@@ -194,7 +212,7 @@ def probe_declared_unpinnable(document: dict) -> tuple[list[str], list[str]]:
         url = endpoint.get("url")
         if endpoint.get("pin_status") != "unpinnable" or not isinstance(url, str):
             continue
-        if is_repository_url(url):
+        if repository_fields(endpoint):
             continue  # already refuted offline; do not report it twice
         try:
             completed = subprocess.run(

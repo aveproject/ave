@@ -15,7 +15,8 @@
     "version": "1.1.0",
     "url": "https://aveproject.org",
     "record_count": 70,
-    "static_record_count": 51
+    "static_record_count": 51,
+    "commit": "71b3e53c2e3f1de94c8c98c9ba2a388e513606ce"
   },
   "generated": "2026-08-05",
   "note": "cfgaudit is a static auditor of committable AI-agent CONFIGURATION files. It does not connect to running servers or observe runtime, so it maps only to AVE's static_detection records. Each cfgaudit rule emits its primary AVE id in JSON/SARIF output (see github.com/cfgaudit/cfgaudit/blob/main/docs/cfgaudit-to-ave.md). Mappings are class-level behavioral equivalence, not asserted identity. cfgaudit now maps 53 config-surface rules onto 23 AVE behavioral classes, up from 35 onto 19 at v1.10.0. Most of that growth is not new cfgaudit rules: it is previously unmapped rules finding a home in AVE-2026-00061 through AVE-2026-00064, the four config classes AVE added from this crosswalk's own gap list (aveproject/ave#68). CFG091 moved from AVE-2026-00021 to AVE-2026-00063: 00021 describes a component that explicitly INSTRUCTS the agent to bypass confirmation, while qwen's tools.approvalMode is a setting, which is what 00063 covers 'independent of any instruction text'.",
