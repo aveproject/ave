@@ -10,7 +10,7 @@
   "aivss_score": 6.4,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:N",
   "owasp_mcp": ["MCP03"],
-  "owasp_asi": ["ASI06", "ASI07"],
+  "owasp_asi": ["ASI06"],
   "mitre_atlas": [],
   "nist_ai_rmf": [],
   "behavioral_fingerprint": "A tool's observation or return value delivered to an agent contains an encrypted or encoded fragment inconsistent with the tool's stated function, persisting in that agent's memory or context after the call, with no single agent's session containing enough fragments to reconstruct a complete instruction on its own.",
@@ -49,7 +49,7 @@
   "researcher": "Pengyu Zhu, Lijun Li, Yaxing Lyu, Li Sun, Sen Su, Jing Shao",
   "researcher_url": "https://arxiv.org/abs/2510.11246",
   "published": "2026-08-02T00:00:00Z",
-  "last_updated": "2026-08-02T00:00:00Z",
+  "last_updated": "2026-08-23T00:00:00Z",
   "references": [
     {
       "tag": "Collaborative Shadows (arXiv 2510.11246)",

@@ -3,7 +3,7 @@
   "schema_version": "1.1.0",
   "status": "active",
   "published": "2026-06-21T00:00:00Z",
-  "last_updated": "2026-06-21T00:00:00Z",
+  "last_updated": "2026-08-23T00:00:00Z",
   "component_type": "mcp_server",
   "title": "HTTP Host Header Injection via Agent-Initiated Request (BadHost)",
   "attack_class": "Supply Chain - HTTP Header Injection",
@@ -24,10 +24,7 @@
   ],
   "aivss_score": 7.2,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:L/VA:N/SC:H/SI:L/SA:N",
-  "owasp_asi": [
-    "ASI03",
-    "ASI06"
-  ],
+  "owasp_asi": ["ASI04"],
   "mitre_atlas": [
     "AML.T0011"
   ],

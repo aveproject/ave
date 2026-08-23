@@ -18,10 +18,7 @@
   ],
   "aivss_score": 7.3,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:L/VI:H/VA:N/SC:L/SI:H/SA:N",
-  "owasp_asi": [
-    "ASI01",
-    "ASI03"
-  ],
+  "owasp_asi": ["ASI01"],
   "owasp_mcp": [
     "MCP03",
     "MCP10"
@@ -93,7 +90,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-01T09:00:00Z",
-  "last_updated": "2026-08-09T00:00:00Z",
+  "last_updated": "2026-08-23T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",

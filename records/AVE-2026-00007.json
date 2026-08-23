@@ -19,10 +19,7 @@
   ],
   "aivss_score": 6.1,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
-  "owasp_asi": [
-    "ASI01",
-    "ASI08"
-  ],
+  "owasp_asi": ["ASI01"],
   "nist_ai_rmf": [
     "MAP-1.5",
     "MEASURE-2.5",
@@ -69,7 +66,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-09T00:00:00Z",
+  "last_updated": "2026-08-23T00:00:00Z",
   "references": [
     {
       "tag": "Perez 2022",

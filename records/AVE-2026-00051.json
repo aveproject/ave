@@ -3,7 +3,7 @@
   "schema_version": "1.1.0",
   "status": "active",
   "published": "2026-06-21T00:00:00Z",
-  "last_updated": "2026-06-21T00:00:00Z",
+  "last_updated": "2026-08-23T00:00:00Z",
   "component_type": "mcp_server",
   "title": "OAuth Discovery Rebinding \u2014 Authorization Endpoint Redirected to Attacker Server",
   "attack_class": "Supply Chain - OAuth Discovery Rebinding",
@@ -23,10 +23,7 @@
   ],
   "aivss_score": 7.2,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
-  "owasp_asi": [
-    "ASI03",
-    "ASI06"
-  ],
+  "owasp_asi": ["ASI03", "ASI04"],
   "mitre_atlas": [
     "AML.T0011"
   ],

@@ -63,7 +63,7 @@
   "researcher": "Peter Girnus (ZDI)",
   "researcher_url": "https://www.zerodayinitiative.com/advisories/ZDI-26-021/",
   "published": "2026-07-10T00:00:00Z",
-  "last_updated": "2026-07-10T00:00:00Z",
+  "last_updated": "2026-08-23T00:00:00Z",
   "references": [
     {
       "tag": "ZDI-26-021",
@@ -100,10 +100,7 @@
     "MCP05",
     "MCP04"
   ],
-  "owasp_asi": [
-    "ASI05",
-    "ASI02"
-  ],
+  "owasp_asi": ["ASI05"],
   "aivss": {
     "cvss_base": 9.8,
     "aarf": {
