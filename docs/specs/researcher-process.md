@@ -287,16 +287,50 @@ side effect of adding one record, that's a separate, deliberate decision.
   one says nobody checked, the other says checking happened and came
   up empty. Fixed by adding the key with `[]` plus a one-line
   `aivss.notes` explanation of what was checked and why nothing fit.
-- **Treating a framework's ID scheme as settled because the corpus
-  already uses it consistently.** Roughly 65 records and the schema's
-  own `owasp_asi` regex all independently agree on `ASI01`-`ASI10` —
-  consistent, and consistently wrong. OWASP's own Agentic Security
-  Initiative document uses `T1`-`T17`, confirmed by fetching the real
-  PDF directly and grepping the full text (see issue #179). Internal
-  agreement across many records is not the same evidence as one
-  primary-source document actually opened and read; sixty-five
-  records copying the same wrong pattern from each other produces
-  consensus, not correctness.
+- **Assuming there's only one possible primary-source document for a
+  framework, and stopping once the first fetch confirms a hypothesis.**
+  Issue #179 fetched OWASP's "Agentic AI – Threats and Mitigations" PDF
+  (`T1`-`T17`), found zero `ASI0` matches in it, and concluded the
+  corpus's `ASI01`-`ASI10` values (used consistently across ~65
+  records, and by the schema's own `owasp_asi` regex) were fabricated.
+  They aren't: a separate, also-current OWASP document, "Top 10 for
+  Agentic Applications 2026," uses `ASI01`-`ASI10` as its own category
+  IDs, and its own Appendix A formally cross-maps the two, describing
+  `T1`-`T17` as the more granular, subordinate taxonomy the `ASI0X`
+  framework references — not a competing or replacement scheme.
+  Corrected in issue #179's own thread once found (during the docs
+  write-up for #196, a genuinely unrelated audit). The lesson isn't
+  "trust corpus consensus less than a fetched PDF" — it's that a
+  single fetched PDF isn't automatically *the* primary source either
+  when a framework's publisher maintains more than one document under
+  the same initiative; check that a fetched document is the *right*
+  one, specifically the one whose own ID format matches what's being
+  verified, before concluding the corpus is wrong.
+
+### owasp_asi tagging, common mistakes worth checking before assigning
+
+Found via a full-corpus audit (#196) that corrected 48 of 70 tagged
+records, most tracing to two specific, avoidable patterns. Check the
+real ASI category definition, not just the closest-sounding label,
+before assigning any of these three:
+
+- **ASI08 (Cascading Failures)** requires described, measurable
+  propagation across multiple agents or sessions. A severe but
+  single-instance failure with no actual fan-out doesn't qualify, no
+  matter how bad that one instance is.
+- **ASI07 (Insecure Inter-Agent Communication)** requires actual
+  messaging between agents as the mechanism. Tool misuse by a single
+  agent doesn't qualify on its own, a tool call isn't inter-agent
+  communication.
+- **ASI06 (Memory & Context Poisoning)** excludes one-time
+  exfiltration events by its own definition. Check both directions,
+  this tag was both over-applied to records that didn't qualify and
+  missing from records that were clean matches.
+
+The general rule underneath all three: verify against OWASP's actual,
+current category definitions before tagging, not against how similar
+the record's own title or attack_class sounds to a category name. That
+similarity is exactly what produced 48 wrong tags across this corpus.
 
 ## Full worked example: AVE-2026-00060
 

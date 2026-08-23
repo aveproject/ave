@@ -67,15 +67,28 @@ one is an honest, defensible state.
   — a repo's raw files, the framework's own published PDF — never a
   search result, a summarized page, or a third-party blog's retelling
   of it, and never corpus precedent no matter how many existing
-  records agree with each other.** Roughly 65 records in this corpus
-  and the schema's own `owasp_asi` regex all consistently use an
-  `ASI01`-`ASI10` numbering for OWASP's Agentic Security Initiative —
-  discovered, on fetching the real primary-source PDF directly and
-  grepping its full text, to not exist anywhere in that document at
-  all. The real taxonomy uses `T1`-`T17`. Sixty-five records agreeing
-  with each other was never evidence; it was sixty-five copies of the
-  same unverified pattern. See issue #179 for the full writeup before
-  citing `owasp_asi` on any new record.
+  records agree with each other.** `ASI01`-`ASI10`, the numbering this
+  corpus and the schema's own `owasp_asi` regex both use, is correct —
+  it's OWASP's own "Top 10 for Agentic Applications 2026" document's
+  category IDs. A separate OWASP document, "Agentic AI – Threats and
+  Mitigations," uses a different, `T1`-`T17` numbering; issue #179
+  fetched only that second document, found no `ASI0` matches in it,
+  and initially (wrongly) concluded the corpus's numbering was
+  fabricated — corrected in that issue's own thread once the first
+  document was found. Same underlying discipline either way: fetch and
+  read the actual primary source before trusting corpus precedent, and
+  when a framework's publisher maintains more than one document, check
+  that the one fetched is actually the one whose ID format is being
+  verified.
+
+  **Before assigning `owasp_asi`, also check the real category
+  definition, not just the label that sounds closest.** A full-corpus
+  audit (#196) found 48 of 70 tagged records wrong, mostly `ASI08`
+  applied to single-instance failures with no real cross-agent
+  propagation, and `ASI07` applied to single-agent tool misuse with no
+  actual inter-agent messaging involved. See
+  docs/specs/researcher-process.md's own note on this for the full
+  pattern.
 
 ### 4. Write conformance fixtures (TDD — fixtures first)
 tests/fixtures/AVE-YYYY-NNNNN_positive.md — a conforming implementation MUST flag this
