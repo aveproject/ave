@@ -14,10 +14,7 @@
   ],
   "aivss_score": 4.8,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:L/VI:H/VA:N/SC:L/SI:H/SA:N",
-  "owasp_asi": [
-    "ASI01",
-    "ASI03"
-  ],
+  "owasp_asi": ["ASI01"],
   "owasp_mcp": [
     "MCP03",
     "MCP04"
@@ -87,7 +84,7 @@
   "researcher": "Boucher & Anderson",
   "researcher_url": "https://arxiv.org/abs/2111.00169",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-09T00:00:00Z",
+  "last_updated": "2026-08-23T00:00:00Z",
   "references": [
     {
       "tag": "Boucher 2021",

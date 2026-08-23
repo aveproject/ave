@@ -64,7 +64,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-07-10T00:00:00Z",
-  "last_updated": "2026-07-10T00:00:00Z",
+  "last_updated": "2026-08-23T00:00:00Z",
   "references": [
     {
       "tag": "CVE",
@@ -96,10 +96,7 @@
     "MCP02",
     "MCP07"
   ],
-  "owasp_asi": [
-    "ASI02",
-    "ASI04"
-  ],
+  "owasp_asi": ["ASI04"],
   "mitre_atlas": [
     "AML.T0086"
   ],

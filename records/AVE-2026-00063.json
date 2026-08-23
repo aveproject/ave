@@ -16,7 +16,6 @@
   "aivss_score": 4.8,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:L/SC:L/SI:L/SA:N",
   "owasp_mcp": ["MCP09"],
-  "owasp_asi": ["ASI01"],
   "behavioral_fingerprint": "Configuration sets a declarative flag (auto_approve, skip_confirmation, require_approval: false, or equivalent) that removes a human-in-the-loop check for high-risk actions, present in config rather than in instruction text, and therefore invisible to a review process that only inspects a component's stated instructions.",
   "behavioral_vector": [
     "approval-bypass-config",
@@ -51,7 +50,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-07-27T00:00:00Z",
-  "last_updated": "2026-07-27T00:00:00Z",
+  "last_updated": "2026-08-23T00:00:00Z",
   "references": [
     {
       "tag": "cfgaudit crosswalk",

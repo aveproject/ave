@@ -16,10 +16,7 @@
   ],
   "aivss_score": 5.7,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:P/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
-  "owasp_asi": [
-    "ASI01",
-    "ASI08"
-  ],
+  "owasp_asi": ["ASI01"],
   "owasp_mcp": [
     "MCP09",
     "MCP07"
@@ -89,7 +86,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-09T00:00:00Z",
+  "last_updated": "2026-08-23T00:00:00Z",
   "references": [
     {
       "tag": "CWE-290",

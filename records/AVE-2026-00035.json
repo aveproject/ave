@@ -13,10 +13,7 @@
   ],
   "aivss_score": 4.2,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:L/VI:H/VA:N/SC:L/SI:H/SA:N",
-  "owasp_asi": [
-    "ASI01",
-    "ASI07"
-  ],
+  "owasp_asi": ["ASI01"],
   "owasp_mcp": [
     "MCP03",
     "MCP08"
@@ -86,7 +83,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-09T00:00:00Z",
+  "last_updated": "2026-08-23T00:00:00Z",
   "references": [
     {
       "tag": "MITRE ATLAS AML.T0020",
