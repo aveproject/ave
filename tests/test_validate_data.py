@@ -178,11 +178,14 @@ def crosswalk_schema() -> dict:
     return json.loads(validate_crosswalks.SCHEMA_PATH.read_text(encoding="utf-8"))
 
 
-def test_the_unpinned_count_check_is_a_warning_while_commit_is_optional():
-    """The escalation agreed in #94: warn while commit is optional, hard-fail once
-    it is promoted. This asserts which side of the promotion the shipped schema is
-    on, not a preference -- commit is optional in 1.0.x, so the check warns."""
-    assert validate_crosswalks.commit_is_required(crosswalk_schema()) is False
+def test_the_shipped_schema_has_promoted_commit_for_count_stating_endpoints():
+    """The escalation agreed in #94, now landed: warn while commit is optional,
+    hard-fail once it is promoted. This asserts which side of the promotion the
+    shipped schema is on, not a preference -- the promotion is in, so the check
+    fails rather than warns. The promotion is SCOPED to endpoints stating a
+    record_count, which is what #126 settled, so `commit_is_required` reads True
+    without every endpoint in the repository being obliged to carry a commit."""
+    assert validate_crosswalks.commit_is_required(crosswalk_schema()) is True
 
 
 def test_promoting_commit_to_required_escalates_the_check_with_no_code_change():
@@ -213,16 +216,22 @@ def unpinned_count_tree(tmp_path, schema: dict) -> None:
                                        "record_count": 77})), encoding="utf-8")
 
 
-def test_an_unpinned_count_warns_and_exits_zero_while_commit_is_optional(
+def test_an_unpinned_count_now_fails_against_the_shipped_schema(
         tmp_path, monkeypatch, capsys):
+    """The same tree that warned before the promotion, run against the schema as
+    it now ships. This is the half that would have gone unnoticed: the sibling
+    test below builds its own promoted schema, so it passed both before and after
+    and could never have told anyone whether the promotion had actually landed."""
     unpinned_count_tree(tmp_path, crosswalk_schema())
     monkeypatch.chdir(tmp_path)
     monkeypatch.setattr("sys.argv", ["validate_crosswalks.py"])
 
     exit_code = validate_crosswalks.main()
 
-    assert exit_code == 0
-    assert "WARNING" in capsys.readouterr().out
+    out = capsys.readouterr().out
+    assert exit_code == 1
+    assert "cannot be re-derived" in out
+    assert "WARNING" not in out
 
 
 def test_an_unpinned_count_fails_once_the_schema_promotes_commit(
@@ -249,10 +258,42 @@ def test_an_unpinned_count_fails_once_the_schema_promotes_commit(
 
 
 def test_forbidding_commit_on_an_unpinnable_side_does_not_read_as_promoting_it():
-    """1.0.x already contains a required list naming commit, underneath a `not`,
-    to keep a declared-unpinnable endpoint from also carrying a pin. Reading that
-    as the promotion would hard-fail the whole repository the day this landed."""
+    """The schema contains a required list naming commit underneath a `not`, to
+    keep a declared-unpinnable endpoint from also carrying a pin. Reading that as
+    the promotion would hard-fail the whole repository the day it landed.
+
+    This asserts against a schema with the promotion REMOVED rather than against
+    the shipped one. It used to read the shipped schema, which worked only while
+    nothing else promoted commit; now that something does, that form would pass
+    for the wrong reason and would keep passing if the `not` skip were deleted.
+    A test that cannot fail when the thing it describes breaks is not a test."""
     schema = crosswalk_schema()
+    schema["$defs"]["endpoint"].pop("allOf", None)
 
     assert "commit" in json.dumps(schema["$defs"]["endpoint"]["then"]["not"])
     assert validate_crosswalks.commit_is_required(schema) is False
+
+
+def test_an_unpinnable_side_may_still_state_a_count(tmp_path):
+    """The interaction the scoping exists for, and the reason the promotion is not
+    a bare entry in the endpoint's required list.
+
+    The endpoint description defines three pinning states, and one of them is a
+    side that declares itself unpinnable and carries a content digest instead. Such
+    a side may still state a record count. Requiring commit of every count-stating
+    endpoint without excluding that case would demand a field the unpinnable rule
+    directly above forbids, leaving no document that satisfies both and silently
+    deleting one of the three states."""
+    validator = validate_crosswalks.build_validator(crosswalk_schema())
+    endpoint = {
+        "url": "https://example.org/standard",
+        "record_count": 12,
+        "pin_status": "unpinnable",
+        "unpinnable_reason": "the endpoint publishes no repository to pin",
+        "checked_against_live_site": "2026-08-23",
+        "content_digest": "sha256:" + "a" * 64,
+    }
+
+    errors = list(validator.iter_errors(crosswalk_document(endpoint)))
+
+    assert errors == [], [error.message for error in errors]
