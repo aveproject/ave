@@ -46,10 +46,10 @@
   ],
   "remediation": "Remove the verification-bypass flag; if a specific, known certificate authority genuinely needs custom trust (an internal CA, for instance), configure that CA explicitly rather than disabling verification entirely.",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-07-27T00:00:00Z",
-  "last_updated": "2026-07-27T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "CWE-295",

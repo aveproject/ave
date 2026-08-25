@@ -87,10 +87,10 @@
   "remediation": "- Enforce strict scope isolation - agents should not be able to initiate connections outside declared endpoints\n- Use separate credentials for each scoped agent - no shared sessions\n- Monitor for unexpected outbound connections from agent processes\n- Implement network-level micro-segmentation for agent workloads",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "MITRE ATT&CK T1021",

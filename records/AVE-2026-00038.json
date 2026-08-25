@@ -86,10 +86,10 @@
   "remediation": "- Explicitly declare and enforce the tool scope for each skill\n- Implement hard limits on sub-agent spawning depth and count\n- Require human confirmation before expanding tool scope\n- Monitor tool usage against declared scope and alert on violations",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-09T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "CWE-400",

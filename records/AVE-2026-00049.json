@@ -3,7 +3,7 @@
   "schema_version": "1.1.0",
   "status": "active",
   "published": "2026-06-21T00:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "component_type": "mcp_server",
   "title": "HTTP Host Header Injection via Agent-Initiated Request (BadHost)",
   "attack_class": "Supply Chain - HTTP Header Injection",
@@ -74,7 +74,7 @@
   ],
   "remediation": "1. Never allow skill or tool code to override the Host header on outbound requests unless the target host is explicitly declared in the skill manifest. 2. Validate that the Host header in any HTTP client configuration matches the authority component of the declared endpoint URL. 3. Pin the Host header to the URL's own authority in any HTTP client wrapper. 4. Block outbound requests where Host header does not match the request URL host at the agent's HTTP transport layer.",
   "kill_switch_active": true,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "references": [
     {

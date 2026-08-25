@@ -84,10 +84,10 @@
   "remediation": "- Never execute instructions derived from visual content without explicit user confirmation\n- Apply text extraction to images and run safety scanning on extracted text before use\n- Treat all image-derived text as untrusted data, not instructions",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "Qi 2023",

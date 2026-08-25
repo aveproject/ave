@@ -71,10 +71,10 @@
   "remediation": "1. Sanitise all UI payloads before rendering - strip hidden elements, metadata, and non-visible attributes. 2. Validate that non-visible text (alt, aria, title, comments) does not contain injection patterns. 3. Treat all MCP App UI payloads as untrusted content. 4. Use a strict Content Security Policy for rendered artifacts. 5. Audit all MCP Apps with rich UI capabilities before deployment.",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-05-01T00:00:00Z",
-  "last_updated": "2026-08-09T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",

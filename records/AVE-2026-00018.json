@@ -81,10 +81,10 @@
   "remediation": "- Tool results must be passed through to the user unmodified\n- Log all tool calls and results for audit purposes\n- Use output integrity checks to detect result modification\n- Treat any instruction to alter tool results as a critical finding",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",

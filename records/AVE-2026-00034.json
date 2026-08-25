@@ -89,10 +89,10 @@
   "remediation": "- Disallow dynamic loading of skills from external sources\n- Maintain a signed allowlist of permitted skills\n- Verify cryptographic signatures on all skill files before loading\n- Sandbox skill execution regardless of source",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "CWE-829",

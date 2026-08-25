@@ -74,10 +74,10 @@
   "remediation": "1. Always scan server-cards for behavioral injection patterns before connecting. 2. Pin server-card hashes - detect if the card changes after initial audit. 3. Review tool descriptions manually - they should describe tool function only, not give the agent instructions. 4. Use an MCP client that shows tool descriptions to the user before connecting. 5. Prefer MCP servers listed on the official registry (registry.modelcontextprotocol.io) which applies submission review.",
   "status": "active",
   "kill_switch_active": true,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-05-01T00:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",

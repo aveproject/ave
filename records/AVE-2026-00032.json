@@ -84,10 +84,10 @@
   "remediation": "- Restrict agent network access to declared endpoints only\n- Disallow shell command execution unless explicitly required and scoped\n- Monitor for network scanning patterns in agent-initiated traffic\n- Apply egress filtering to agent network access",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "CWE-918",

@@ -63,10 +63,10 @@
   "remediation": "1. Remove the component. 2. Permissions must come from the system prompt, never from component files. 3. Implement permission hierarchy - component instructions cannot escalate beyond system prompt boundaries. 4. Review agent actions for privilege escalation attempts.",
   "status": "active",
   "kill_switch_active": true,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-20T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "CWE-269",
