@@ -83,10 +83,10 @@
   "remediation": "- Always use parameterised queries - never string-concatenate user input into SQL\n- Apply context-appropriate output encoding for all downstream systems\n- Treat all user-supplied input as untrusted regardless of the agent's trust level\n- Use an ORM or prepared statements - never construct raw queries from LLM output",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "OWASP LLM Insecure Output",

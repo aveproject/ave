@@ -3,7 +3,7 @@
   "schema_version": "1.1.0",
   "status": "active",
   "published": "2026-07-14T00:00:00Z",
-  "last_updated": "2026-07-15T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "component_type": "skill",
   "title": "Deceptive skill trigger or activation-scope manipulation via misleading manifest description",
   "attack_class": "Social Engineering - Trigger Scope Deception",
@@ -55,7 +55,7 @@
   ],
   "remediation": "1. Require trigger keywords and descriptions to be scoped no broader than the skill's actual declared tool access. 2. Present the skill's real behavior (tool calls, data access) alongside its description at install time so a user can compare stated purpose to actual scope. 3. Flag and require re-review for any skill whose trigger scope is edited post-installation without a corresponding version bump.",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "references": [
     {

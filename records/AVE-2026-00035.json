@@ -80,10 +80,10 @@
   "remediation": "- Treat all sensor data as read-only - skills should never be able to modify reported readings\n- Cross-validate sensor data against independent sources\n- Alert on any skill output that matches environment/sensor values but contradicts raw readings",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "MITRE ATLAS AML.T0020",

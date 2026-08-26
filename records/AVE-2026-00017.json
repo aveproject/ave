@@ -83,10 +83,10 @@
   "remediation": "- Never grant trust based on self-declared server identity\n- Verify MCP server identity through cryptographic signing or a verified registry\n- Treat all unverified servers as untrusted regardless of their claimed identity\n- Cross-reference declared identity against a signed allowlist",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "CWE-290",

@@ -63,10 +63,10 @@
   "remediation": "1. Remove the component. 2. Review agent action logs for unexpected tool calls made while the component was active. 3. Implement tool call approval workflows for sensitive tools. 4. Consider sandboxing agent tool access by component trust level.",
   "status": "active",
   "kill_switch_active": true,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-20T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",

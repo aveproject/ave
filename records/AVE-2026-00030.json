@@ -83,10 +83,10 @@
   "remediation": "- Never grant privileges based on self-declared identity claims\n- Verify all role and identity claims through a trusted authentication system\n- Implement the principle of least privilege regardless of claimed role\n- Log all privilege escalation attempts",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "CWE-290",

@@ -51,10 +51,10 @@
   ],
   "remediation": "Treat agent card content as untrusted, provenance-labeled data during context construction, never as instructions with standing equal to the receiving agent's own system prompt. Apply structural validation rejecting imperative or directive language in fields expected to be purely descriptive. Log and review delegation routing that diverges from the originally requested task scope.",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
-  "researcher_url": "https://bawbel.io",
+  "researcher": "Kumar Aditya",
+  "researcher_url": "https://www.keysight.com/blogs/en/tech/nwvs/2026/03/12/agent-card-poisoning",
   "published": "2026-07-27T00:00:00Z",
-  "last_updated": "2026-07-27T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "Keysight research",

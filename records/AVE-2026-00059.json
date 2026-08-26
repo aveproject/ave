@@ -59,10 +59,10 @@
   ],
   "remediation": "1. Pin the full tool manifest's hash at review time, not per-description; treat any post-pin change to tool descriptions as requiring re-review before new hashes are accepted. 2. Do not rely on per-description review as a sufficient control for this class; evaluate a server's full tool manifest as one document when screening for injection content. 3. Where feasible, flag and manually review any server update that modifies multiple tool descriptions in the same commit or release, since simultaneous multi-description changes are the delivery mechanism for this class specifically. 4. Monitor agent-generated actions for references to content not present in the current context's visible tool descriptions.",
   "kill_switch_active": true,
-  "researcher": "Bawbel Security Research Team",
-  "researcher_url": "https://bawbel.io",
+  "researcher": "Liu et al.",
+  "researcher_url": "https://arxiv.org/abs/2606.27027",
   "published": "2026-07-15T00:00:00Z",
-  "last_updated": "2026-07-15T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "ShareLock research",

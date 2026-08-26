@@ -64,10 +64,10 @@
   "remediation": "1. Remove the component. 2. Implement transparency requirements - agents should always be able to describe their instructions at a high level when asked. 3. Audit agent responses for signs of instruction concealment. 4. Consider requiring components to declare their instructions in a public manifest.",
   "status": "active",
   "kill_switch_active": true,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-20T09:00:00Z",
-  "last_updated": "2026-08-09T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",

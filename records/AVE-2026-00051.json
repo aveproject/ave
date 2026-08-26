@@ -3,7 +3,7 @@
   "schema_version": "1.1.0",
   "status": "active",
   "published": "2026-06-21T00:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "component_type": "mcp_server",
   "title": "OAuth Discovery Rebinding \u2014 Authorization Endpoint Redirected to Attacker Server",
   "attack_class": "Supply Chain - OAuth Discovery Rebinding",
@@ -75,7 +75,7 @@
   ],
   "remediation": "1. Validate that all endpoint URLs in the OAuth discovery document share the same origin as the MCP server's declared base URL. 2. Pin the authorization server to a pre-approved list in the agent's MCP client configuration; reject any discovery document that references a different authorization server. 3. Require HTTPS for all OAuth discovery documents and endpoint URLs \u2014 reject HTTP. 4. Treat the MCP manifest authorizationUrl as untrusted user input; validate it against the server's registered domain before initiating any OAuth flow. 5. Implement PKCE (RFC 7636) to limit the damage of intercepted authorization codes.",
   "kill_switch_active": true,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "references": [
     {

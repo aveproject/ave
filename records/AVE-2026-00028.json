@@ -85,10 +85,10 @@
   "remediation": "- Always treat file contents as untrusted data, never as instructions\n- Apply a safety pass to file contents before including in agent context\n- Use a separate sandboxed model pass to process user-uploaded documents",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",
