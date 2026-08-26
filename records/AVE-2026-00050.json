@@ -3,7 +3,7 @@
   "schema_version": "1.1.0",
   "status": "active",
   "published": "2026-06-21T00:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "component_type": "mcp_server",
   "title": "Parasitic Toolchain \u2014 Silent Tool Registration and Persistent Hook Injection",
   "attack_class": "Persistence - Parasitic Toolchain",
@@ -79,7 +79,7 @@
   ],
   "remediation": "1. Enforce strict manifest validation: reject any tool registration at runtime that is not declared in the server's tools[] manifest. 2. Scope tool-call hooks to the registering component's own tools, not all tools. 3. Audit registered tool lists after initialization and alert on additions that do not match the manifest. 4. Treat tool registration as a privileged operation requiring explicit user approval, equivalent to installing a new tool. 5. Compare active tool list against the snapshot from manifest load at regular intervals.",
   "kill_switch_active": true,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "references": [
     {

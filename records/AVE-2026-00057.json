@@ -3,7 +3,7 @@
   "schema_version": "1.1.0",
   "status": "active",
   "published": "2026-07-14T00:00:00Z",
-  "last_updated": "2026-07-15T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "component_type": "skill",
   "title": "Obfuscated or encoded skill payload designed to evade static scanners",
   "attack_class": "Obfuscation - Static Analysis Evasion",
@@ -56,7 +56,7 @@
   ],
   "remediation": "1. Add a decode-then-rescan pass to static analysis: known encoding functions (base64, hex, marshal) should have their arguments decoded and re-scanned before a clean verdict is given. 2. Flag any exec/eval of a decoded or deserialized runtime value as high severity regardless of the decoded content, since legitimate skills rarely need this pattern. 3. Reject string-concatenation-assembled trigger phrases as a lower-confidence secondary signal requiring review.",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "references": [
     {

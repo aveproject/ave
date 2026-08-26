@@ -85,10 +85,10 @@
   "remediation": "- Isolate feedback collection from skill execution context\n- Validate feedback signals before incorporating into training pipelines\n- Monitor feedback signal distributions for anomalies\n- Use human-in-the-loop review for feedback that will be used in fine-tuning",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "Wan 2023",

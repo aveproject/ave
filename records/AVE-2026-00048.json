@@ -68,10 +68,10 @@
     "Actions on sensitive systems traced back to sub-agent with no direct user trigger",
     "Parent agent audit trail ends before sub-agent actions begin"
   ],
-  "remediation": "1. Scope sub-agent permissions explicitly in the delegation instruction - list exactly which tools the sub-agent may use. 2. Never use full access or inherit all in delegation instructions. 3. Require explicit user confirmation before any sub-agent is spawned. 4. Ensure MCP infrastructure logs sub-agent tool calls under the parent session ID with a delegation trace. 5. Use bawbel-accept with expiry if orchestrator delegation is intentional and scoped.",
+  "remediation": "1. Scope sub-agent permissions explicitly in the delegation instruction - list exactly which tools the sub-agent may use. 2. Never use full access or inherit all in delegation instructions. 3. Require explicit user confirmation before any sub-agent is spawned. 4. Ensure MCP infrastructure logs sub-agent tool calls under the parent session ID with a delegation trace. 5. If intentional, scoped orchestrator delegation is required, implement a time-bounded, explicit grant mechanism rather than an open-ended permission inheritance, and log the grant's expiry alongside the delegation trace.",
   "status": "active",
   "kill_switch_active": true,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-05-16T00:00:00Z",
   "last_updated": "2026-08-26T00:00:00Z",

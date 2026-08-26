@@ -83,10 +83,10 @@
   "remediation": "- Enforce strict scope boundaries - agent should only access declared resources\n- Present a summary of resource accesses to the user before execution\n- Reject skill instructions that reference undeclared resources",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "CWE-269",

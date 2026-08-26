@@ -73,10 +73,10 @@
   "remediation": "1. Never eval() or exec() tool results directly - treat all external data as strings. 2. Use parameterised patterns for code generation - separate data from code at all times. 3. Validate and sanitise all tool results before interpolating into generated code. 4. Run agent-generated code in a sandboxed environment with restricted syscalls. 5. Log all code execution during agent sessions for post-hoc audit.",
   "status": "active",
   "kill_switch_active": true,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-05-01T00:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "CWE-94",

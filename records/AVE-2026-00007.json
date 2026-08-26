@@ -63,10 +63,10 @@
   "remediation": "1. Uninstall the component immediately. 2. Review agent action logs for unauthorized operations performed while the component was active. 3. Implement instruction hierarchy in your agent framework - system prompts should always take precedence over component instructions. 4. Scan all components from the same publisher.",
   "status": "active",
   "kill_switch_active": true,
-  "researcher": "Bawbel Security Research Team",
-  "researcher_url": "https://bawbel.io",
+  "researcher": "Perez & Ribeiro",
+  "researcher_url": "https://arxiv.org/abs/2211.09527",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "Perez 2022",

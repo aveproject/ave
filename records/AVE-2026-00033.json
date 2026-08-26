@@ -85,10 +85,10 @@
   "remediation": "- Never deserialize untrusted data using pickle, yaml.load, or similar unsafe methods\n- Use safe alternatives: yaml.safe_load, json.loads, ast.literal_eval\n- Never eval or exec strings from external sources\n- Sandbox all code execution with strict resource limits",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "CWE-502",

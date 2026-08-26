@@ -87,10 +87,10 @@
   "remediation": "1. Remove or replace the MCP server.\n2. Review all tool calls made while the server was connected.\n3. Audit agent output for signs of behavioral changes matching the injected instructions.\n4. Report the server to the registry operator.",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-01T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",

@@ -82,10 +82,10 @@
   "remediation": "- Install a scanning tool integrated with Magika or an equivalent ML-based file type classifier.\n- Verify content type of all skill files before loading\n- Reject any file where content type does not match declared extension\n- Use a file type allowlist for skill loading - only accept known-safe types",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "CWE-434",

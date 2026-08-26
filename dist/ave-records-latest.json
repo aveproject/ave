@@ -78,10 +78,10 @@
     "remediation": "1. Deny hook registration instructions in skill files - hooks are infrastructure, not skill-level config. 2. Maintain a static registry of tool handlers set at server startup - reject any runtime attempt to modify the registry. 3. Scan all skill files for hook registration patterns before loading. 4. Suppress the finding with documented justification if the hook is a legitimate internal observability tool.",
     "status": "active",
     "kill_switch_active": true,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-16T00:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "CWE-601",
@@ -250,10 +250,10 @@
     "remediation": "1. Remove the component immediately.\n2. Block all network egress from the agent runtime to unknown domains.\n3. Audit all actions taken by the agent during the exposure window.\n4. Rotate credentials accessible to the agent.",
     "status": "active",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-01T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -382,10 +382,10 @@
     "remediation": "1. Remove or replace the MCP server.\n2. Review all tool calls made while the server was connected.\n3. Audit agent output for signs of behavioral changes matching the injected instructions.\n4. Report the server to the registry operator.",
     "status": "active",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-01T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -488,10 +488,10 @@
     "remediation": "1. Revoke all token approvals granted during the period the component was active using a tool like revoke.cash. 2. Transfer remaining funds to a new wallet. 3. Report the attacker address to blockchain security services. 4. Require explicit per-transaction user confirmation for all future wallet operations.",
     "status": "active",
     "kill_switch_active": true,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "MITRE ATT&CK T1657",
@@ -629,10 +629,10 @@
     "remediation": "1. Always scan server-cards for behavioral injection patterns before connecting. 2. Pin server-card hashes - detect if the card changes after initial audit. 3. Review tool descriptions manually - they should describe tool function only, not give the agent instructions. 4. Use an MCP client that shows tool descriptions to the user before connecting. 5. Prefer MCP servers listed on the official registry (registry.modelcontextprotocol.io) which applies submission review.",
     "status": "active",
     "kill_switch_active": true,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-01T00:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -916,13 +916,13 @@
       "Actions on sensitive systems traced back to sub-agent with no direct user trigger",
       "Parent agent audit trail ends before sub-agent actions begin"
     ],
-    "remediation": "1. Scope sub-agent permissions explicitly in the delegation instruction - list exactly which tools the sub-agent may use. 2. Never use full access or inherit all in delegation instructions. 3. Require explicit user confirmation before any sub-agent is spawned. 4. Ensure MCP infrastructure logs sub-agent tool calls under the parent session ID with a delegation trace. 5. Use bawbel-accept with expiry if orchestrator delegation is intentional and scoped.",
+    "remediation": "1. Scope sub-agent permissions explicitly in the delegation instruction - list exactly which tools the sub-agent may use. 2. Never use full access or inherit all in delegation instructions. 3. Require explicit user confirmation before any sub-agent is spawned. 4. Ensure MCP infrastructure logs sub-agent tool calls under the parent session ID with a delegation trace. 5. If intentional, scoped orchestrator delegation is required, implement a time-bounded, explicit grant mechanism rather than an open-ended permission inheritance, and log the grant's expiry alongside the delegation trace.",
     "status": "active",
     "kill_switch_active": true,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-16T00:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "CWE-269",
@@ -994,7 +994,7 @@
     "schema_version": "1.1.0",
     "status": "active",
     "published": "2026-06-21T00:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "component_type": "mcp_server",
     "title": "HTTP Host Header Injection via Agent-Initiated Request (BadHost)",
     "attack_class": "Supply Chain - HTTP Header Injection",
@@ -1067,7 +1067,7 @@
     ],
     "remediation": "1. Never allow skill or tool code to override the Host header on outbound requests unless the target host is explicitly declared in the skill manifest. 2. Validate that the Host header in any HTTP client configuration matches the authority component of the declared endpoint URL. 3. Pin the Host header to the URL's own authority in any HTTP client wrapper. 4. Block outbound requests where Host header does not match the request URL host at the agent's HTTP transport layer.",
     "kill_switch_active": true,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "references": [
       {
@@ -1137,7 +1137,7 @@
     "schema_version": "1.1.0",
     "status": "active",
     "published": "2026-06-21T00:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "component_type": "mcp_server",
     "title": "Parasitic Toolchain — Silent Tool Registration and Persistent Hook Injection",
     "attack_class": "Persistence - Parasitic Toolchain",
@@ -1215,7 +1215,7 @@
     ],
     "remediation": "1. Enforce strict manifest validation: reject any tool registration at runtime that is not declared in the server's tools[] manifest. 2. Scope tool-call hooks to the registering component's own tools, not all tools. 3. Audit registered tool lists after initialization and alert on additions that do not match the manifest. 4. Treat tool registration as a privileged operation requiring explicit user approval, equivalent to installing a new tool. 5. Compare active tool list against the snapshot from manifest load at regular intervals.",
     "kill_switch_active": true,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "references": [
       {
@@ -1285,7 +1285,7 @@
     "schema_version": "1.1.0",
     "status": "active",
     "published": "2026-06-21T00:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "component_type": "mcp_server",
     "title": "OAuth Discovery Rebinding — Authorization Endpoint Redirected to Attacker Server",
     "attack_class": "Supply Chain - OAuth Discovery Rebinding",
@@ -1360,7 +1360,7 @@
     ],
     "remediation": "1. Validate that all endpoint URLs in the OAuth discovery document share the same origin as the MCP server's declared base URL. 2. Pin the authorization server to a pre-approved list in the agent's MCP client configuration; reject any discovery document that references a different authorization server. 3. Require HTTPS for all OAuth discovery documents and endpoint URLs — reject HTTP. 4. Treat the MCP manifest authorizationUrl as untrusted user input; validate it against the server's registered domain before initiating any OAuth flow. 5. Implement PKCE (RFC 7636) to limit the damage of intercepted authorization codes.",
     "kill_switch_active": true,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "references": [
       {
@@ -1784,10 +1784,10 @@
     ],
     "remediation": "1. Pin the full tool manifest's hash at review time, not per-description; treat any post-pin change to tool descriptions as requiring re-review before new hashes are accepted. 2. Do not rely on per-description review as a sufficient control for this class; evaluate a server's full tool manifest as one document when screening for injection content. 3. Where feasible, flag and manually review any server update that modifies multiple tool descriptions in the same commit or release, since simultaneous multi-description changes are the delivery mechanism for this class specifically. 4. Monitor agent-generated actions for references to content not present in the current context's visible tool descriptions.",
     "kill_switch_active": true,
-    "researcher": "Bawbel Security Research Team",
-    "researcher_url": "https://bawbel.io",
+    "researcher": "Liu et al.",
+    "researcher_url": "https://arxiv.org/abs/2606.27027",
     "published": "2026-07-15T00:00:00Z",
-    "last_updated": "2026-07-15T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "ShareLock research",
@@ -2029,10 +2029,10 @@
     ],
     "remediation": "Treat agent card content as untrusted, provenance-labeled data during context construction, never as instructions with standing equal to the receiving agent's own system prompt. Apply structural validation rejecting imperative or directive language in fields expected to be purely descriptive. Log and review delegation routing that diverges from the originally requested task scope.",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
-    "researcher_url": "https://bawbel.io",
+    "researcher": "Kumar Aditya",
+    "researcher_url": "https://www.keysight.com/blogs/en/tech/nwvs/2026/03/12/agent-card-poisoning",
     "published": "2026-07-27T00:00:00Z",
-    "last_updated": "2026-07-27T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "Keysight research",
@@ -2417,10 +2417,10 @@
     "remediation": "1. Remove the component immediately. 2. Audit agent action logs for shell executions and network requests during the period it was active. 3. Review all processes spawned by the agent for signs of persistence. 4. Rotate credentials on systems the agent had access to.",
     "status": "active",
     "kill_switch_active": true,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "CWE-78",
@@ -2549,10 +2549,10 @@
     "remediation": "1. Stop the agent immediately and disconnect from the host. 2. Restore from backup. 3. Audit all other components from the same source. 4. Review agent permission boundaries - agents should never have recursive delete access to system paths.",
     "status": "active",
     "kill_switch_active": true,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "CWE-78",
@@ -2680,10 +2680,10 @@
     "remediation": "1. Uninstall the component immediately. 2. Review agent action logs for unauthorized operations performed while the component was active. 3. Implement instruction hierarchy in your agent framework - system prompts should always take precedence over component instructions. 4. Scan all components from the same publisher.",
     "status": "active",
     "kill_switch_active": true,
-    "researcher": "Bawbel Security Research Team",
-    "researcher_url": "https://bawbel.io",
+    "researcher": "Perez & Ribeiro",
+    "researcher_url": "https://arxiv.org/abs/2211.09527",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "Perez 2022",
@@ -2812,10 +2812,10 @@
     "remediation": "1. Audit and clean shell profile files (.bashrc, .profile, .zshrc) for unauthorized additions. 2. Review cron jobs (`crontab -l`) and systemd services for entries created by the agent. 3. Remove all copies of the component. 4. Run a filesystem diff against a clean snapshot if available.",
     "status": "active",
     "kill_switch_active": true,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "Cohen 2024",
@@ -2943,10 +2943,10 @@
     "remediation": "1. Remove the component immediately. 2. Review all agent outputs produced while the component was active for policy violations. 3. Audit other components from the same source. 4. Implement identity-anchoring in your agent framework - the system prompt should assert the agent's identity with higher trust than component instructions.",
     "status": "active",
     "kill_switch_active": true,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-20T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "Wei 2023",
@@ -3073,10 +3073,10 @@
     "remediation": "1. Remove the component. 2. Implement transparency requirements - agents should always be able to describe their instructions at a high level when asked. 3. Audit agent responses for signs of instruction concealment. 4. Consider requiring components to declare their instructions in a public manifest.",
     "status": "active",
     "kill_switch_active": true,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-20T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -3203,10 +3203,10 @@
     "remediation": "1. Remove the component. 2. Review agent action logs for unexpected tool calls made while the component was active. 3. Implement tool call approval workflows for sensitive tools. 4. Consider sandboxing agent tool access by component trust level.",
     "status": "active",
     "kill_switch_active": true,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-20T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -3332,10 +3332,10 @@
     "remediation": "1. Remove the component. 2. Permissions must come from the system prompt, never from component files. 3. Implement permission hierarchy - component instructions cannot escalate beyond system prompt boundaries. 4. Review agent actions for privilege escalation attempts.",
     "status": "active",
     "kill_switch_active": true,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-20T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "CWE-269",
@@ -3590,10 +3590,10 @@
     "remediation": "1. Remove the component. 2. Review agent outputs for system prompt leakage. 3. Rotate or update any sensitive information that was in the system prompt. 4. Implement system prompt confidentiality - agents should describe their purpose without revealing verbatim instructions. 5. Consider prompt injection hardening in your system prompt.",
     "status": "active",
     "kill_switch_active": true,
-    "researcher": "Bawbel Security Research Team",
-    "researcher_url": "https://bawbel.io",
+    "researcher": "Perez & Ribeiro",
+    "researcher_url": "https://arxiv.org/abs/2211.09527",
     "published": "2026-04-20T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "Perez 2022",
@@ -3742,10 +3742,10 @@
     "remediation": "- Sanitise all RAG-retrieved content before injecting into context\n- Apply a secondary safety pass over retrieved documents before use\n- Implement RAG content provenance tracking - flag documents with instruction-like content\n- Use a separate model pass to detect embedded instructions in retrieved chunks",
     "status": "active",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
-    "researcher_url": "https://bawbel.io",
+    "researcher": "Zou et al.",
+    "researcher_url": "https://arxiv.org/abs/2402.07867",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -3866,10 +3866,10 @@
     "remediation": "- Never grant trust based on self-declared server identity\n- Verify MCP server identity through cryptographic signing or a verified registry\n- Treat all unverified servers as untrusted regardless of their claimed identity\n- Cross-reference declared identity against a signed allowlist",
     "status": "active",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "CWE-290",
@@ -3988,10 +3988,10 @@
     "remediation": "- Tool results must be passed through to the user unmodified\n- Log all tool calls and results for audit purposes\n- Use output integrity checks to detect result modification\n- Treat any instruction to alter tool results as a critical finding",
     "status": "active",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -4117,10 +4117,10 @@
     "remediation": "- Validate all content before writing to persistent memory\n- Apply a safety pass to memory writes - reject instruction-like content\n- Implement memory provenance - track which session wrote each memory entry\n- Periodically audit persistent memory for anomalous content",
     "status": "active",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "Cohen 2024",
@@ -4364,10 +4364,10 @@
     "remediation": "- Require explicit confirmation for all irreversible or high-impact actions\n- Define a list of action types that always require confirmation regardless of skill instructions\n- Log all autonomous actions for post-hoc audit",
     "status": "active",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -4489,10 +4489,10 @@
     "remediation": "- Enforce strict scope boundaries - agent should only access declared resources\n- Present a summary of resource accesses to the user before execution\n- Reject skill instructions that reference undeclared resources",
     "status": "active",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "CWE-269",
@@ -4609,10 +4609,10 @@
     "remediation": "- Implement context window budget limits per skill - reject responses exceeding the budget\n- Pin system prompt and safety instructions at a fixed context position\n- Monitor token usage per skill call for anomalies",
     "status": "active",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-05-12T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "Perez 2022",
@@ -4732,10 +4732,10 @@
     "remediation": "- Install a scanning tool integrated with Magika or an equivalent ML-based file type classifier.\n- Verify content type of all skill files before loading\n- Reject any file where content type does not match declared extension\n- Use a file type allowlist for skill loading - only accept known-safe types",
     "status": "active",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "CWE-434",
@@ -4856,10 +4856,10 @@
     "remediation": "- Treat all externally-supplied conversation history as untrusted\n- Use cryptographically signed conversation history to prevent tampering\n- Re-confirm consent for consequential actions regardless of claimed history",
     "status": "active",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -5108,10 +5108,10 @@
     "remediation": "- Apply a safety pass to all content written to persistent memory\n- Reject instruction-like content from being stored in long-term memory\n- Implement memory expiry - automatically expire unreviewed memories\n- Audit persistent memory on session start",
     "status": "active",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -5234,10 +5234,10 @@
     "remediation": "- Always treat file contents as untrusted data, never as instructions\n- Apply a safety pass to file contents before including in agent context\n- Use a separate sandboxed model pass to process user-uploaded documents",
     "status": "active",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -5480,10 +5480,10 @@
     "remediation": "- Never grant privileges based on self-declared identity claims\n- Verify all role and identity claims through a trusted authentication system\n- Implement the principle of least privilege regardless of claimed role\n- Log all privilege escalation attempts",
     "status": "active",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "CWE-290",
@@ -5606,10 +5606,10 @@
     "remediation": "- Isolate feedback collection from skill execution context\n- Validate feedback signals before incorporating into training pipelines\n- Monitor feedback signal distributions for anomalies\n- Use human-in-the-loop review for feedback that will be used in fine-tuning",
     "status": "active",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "Wan 2023",
@@ -5731,10 +5731,10 @@
     "remediation": "- Restrict agent network access to declared endpoints only\n- Disallow shell command execution unless explicitly required and scoped\n- Monitor for network scanning patterns in agent-initiated traffic\n- Apply egress filtering to agent network access",
     "status": "active",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "CWE-918",
@@ -5859,10 +5859,10 @@
     "remediation": "- Never deserialize untrusted data using pickle, yaml.load, or similar unsafe methods\n- Use safe alternatives: yaml.safe_load, json.loads, ast.literal_eval\n- Never eval or exec strings from external sources\n- Sandbox all code execution with strict resource limits",
     "status": "active",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "CWE-502",
@@ -5991,10 +5991,10 @@
     "remediation": "- Disallow dynamic loading of skills from external sources\n- Maintain a signed allowlist of permitted skills\n- Verify cryptographic signatures on all skill files before loading\n- Sandbox skill execution regardless of source",
     "status": "active",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "CWE-829",
@@ -6113,10 +6113,10 @@
     "remediation": "- Treat all sensor data as read-only - skills should never be able to modify reported readings\n- Cross-validate sensor data against independent sources\n- Alert on any skill output that matches environment/sensor values but contradicts raw readings",
     "status": "active",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "MITRE ATLAS AML.T0020",
@@ -6241,10 +6241,10 @@
     "remediation": "- Enforce strict scope isolation - agents should not be able to initiate connections outside declared endpoints\n- Use separate credentials for each scoped agent - no shared sessions\n- Monitor for unexpected outbound connections from agent processes\n- Implement network-level micro-segmentation for agent workloads",
     "status": "active",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "MITRE ATT&CK T1021",
@@ -6366,10 +6366,10 @@
     "remediation": "- Never execute instructions derived from visual content without explicit user confirmation\n- Apply text extraction to images and run safety scanning on extracted text before use\n- Treat all image-derived text as untrusted data, not instructions",
     "status": "active",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "Qi 2023",
@@ -6491,10 +6491,10 @@
     "remediation": "- Explicitly declare and enforce the tool scope for each skill\n- Implement hard limits on sub-agent spawning depth and count\n- Require human confirmation before expanding tool scope\n- Monitor tool usage against declared scope and alert on violations",
     "status": "active",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "CWE-400",
@@ -6743,10 +6743,10 @@
     "remediation": "- Always use parameterised queries - never string-concatenate user input into SQL\n- Apply context-appropriate output encoding for all downstream systems\n- Treat all user-supplied input as untrusted regardless of the agent's trust level\n- Use an ORM or prepared statements - never construct raw queries from LLM output",
     "status": "active",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "OWASP LLM Insecure Output",
@@ -6858,10 +6858,10 @@
     "remediation": "1. Never eval() or exec() tool results directly - treat all external data as strings. 2. Use parameterised patterns for code generation - separate data from code at all times. 3. Validate and sanitise all tool results before interpolating into generated code. 4. Run agent-generated code in a sandboxed environment with restricted syscalls. 5. Log all code execution during agent sessions for post-hoc audit.",
     "status": "active",
     "kill_switch_active": true,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-01T00:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "CWE-94",
@@ -6996,10 +6996,10 @@
     "remediation": "1. Sanitise all UI payloads before rendering - strip hidden elements, metadata, and non-visible attributes. 2. Validate that non-visible text (alt, aria, title, comments) does not contain injection patterns. 3. Treat all MCP App UI payloads as untrusted content. 4. Use a strict Content Security Policy for rendered artifacts. 5. Audit all MCP Apps with rich UI capabilities before deployment.",
     "status": "active",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-01T00:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -7131,10 +7131,10 @@
     "remediation": "1. Define and enforce strict output schemas for all async task results - reject anything that doesn't conform. 2. Treat all task results as untrusted data - scan for injection patterns before injecting into agent context. 3. Sign task results at dispatch with an HMAC or asymmetric signature - verify before consuming. 4. Log all async task results for post-hoc audit. 5. Sandbox task result processing - do not allow result content to directly influence the agent's next goal.",
     "status": "active",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-01T00:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -7272,10 +7272,10 @@
     "remediation": "1. Apply least-privilege to multi-server sessions - do not connect low-trust and high-trust servers in the same session without strong justification. 2. Require explicit user confirmation for any tool call on a high-trust server when a low-trust server is also connected. 3. Scan all connected server tool descriptions for behavioral injection patterns before connecting. 4. Implement server isolation policies - tool calls from one server cannot directly reference or invoke tools from another. 5. Audit agent tool call logs for cross-server pivot patterns.",
     "status": "active",
     "kill_switch_active": true,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-01T00:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "CWE-269",
@@ -7740,7 +7740,7 @@
     "schema_version": "1.1.0",
     "status": "active",
     "published": "2026-07-14T00:00:00Z",
-    "last_updated": "2026-07-15T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "component_type": "skill",
     "title": "Obfuscated or encoded skill payload designed to evade static scanners",
     "attack_class": "Obfuscation - Static Analysis Evasion",
@@ -7798,7 +7798,7 @@
     ],
     "remediation": "1. Add a decode-then-rescan pass to static analysis: known encoding functions (base64, hex, marshal) should have their arguments decoded and re-scanned before a clean verdict is given. 2. Flag any exec/eval of a decoded or deserialized runtime value as high severity regardless of the decoded content, since legitimate skills rarely need this pattern. 3. Reject string-concatenation-assembled trigger phrases as a lower-confidence secondary signal requiring review.",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "references": [
       {
@@ -7909,10 +7909,10 @@
     ],
     "remediation": "Remove the verification-bypass flag; if a specific, known certificate authority genuinely needs custom trust (an internal CA, for instance), configure that CA explicitly rather than disabling verification entirely.",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-07-27T00:00:00Z",
-    "last_updated": "2026-07-27T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "CWE-295",
@@ -8018,10 +8018,10 @@
     ],
     "remediation": "Pin every dependency to an exact version and, where the ecosystem supports it, a content hash. Use a lockfile mechanism and commit it. Treat any dependency update as a reviewable change to the manifest itself, not something that happens silently underneath an unchanged reference.",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-07-27T00:00:00Z",
-    "last_updated": "2026-07-27T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "CWE-1357",
@@ -10006,10 +10006,10 @@
     "remediation": "1. Remove the component. 2. Legitimate messages from AI providers never arrive through component files - they come through model updates or system configuration. 3. Implement authority verification - component files cannot claim higher trust than the system prompt. 4. Educate users: no real AI provider communicates via SKILL.md files.",
     "status": "active",
     "kill_switch_active": true,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-20T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "references": [
       {
         "tag": "CWE-290",
@@ -10074,7 +10074,7 @@
     "schema_version": "1.1.0",
     "status": "active",
     "published": "2026-07-14T00:00:00Z",
-    "last_updated": "2026-07-15T00:00:00Z",
+    "last_updated": "2026-08-26T00:00:00Z",
     "component_type": "skill",
     "title": "Deceptive skill trigger or activation-scope manipulation via misleading manifest description",
     "attack_class": "Social Engineering - Trigger Scope Deception",
@@ -10131,7 +10131,7 @@
     ],
     "remediation": "1. Require trigger keywords and descriptions to be scoped no broader than the skill's actual declared tool access. 2. Present the skill's real behavior (tool calls, data access) alongside its description at install time so a user can compare stated purpose to actual scope. 3. Flag and require re-review for any skill whose trigger scope is edited post-installation without a corresponding version bump.",
     "kill_switch_active": false,
-    "researcher": "Bawbel Security Research Team",
+    "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "references": [
       {

@@ -64,10 +64,10 @@
   "remediation": "1. Audit and clean shell profile files (.bashrc, .profile, .zshrc) for unauthorized additions. 2. Review cron jobs (`crontab -l`) and systemd services for entries created by the agent. 3. Remove all copies of the component. 4. Run a filesystem diff against a clean snapshot if available.",
   "status": "active",
   "kill_switch_active": true,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "Cohen 2024",

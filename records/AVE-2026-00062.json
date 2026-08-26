@@ -48,10 +48,10 @@
   ],
   "remediation": "Pin every dependency to an exact version and, where the ecosystem supports it, a content hash. Use a lockfile mechanism and commit it. Treat any dependency update as a reviewable change to the manifest itself, not something that happens silently underneath an unchanged reference.",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-07-27T00:00:00Z",
-  "last_updated": "2026-07-27T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "CWE-1357",

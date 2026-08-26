@@ -87,10 +87,10 @@
   "remediation": "- Validate all content before writing to persistent memory\n- Apply a safety pass to memory writes - reject instruction-like content\n- Implement memory provenance - track which session wrote each memory entry\n- Periodically audit persistent memory for anomalous content",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "Cohen 2024",

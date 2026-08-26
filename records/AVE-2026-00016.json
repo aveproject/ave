@@ -85,10 +85,10 @@
   "remediation": "- Sanitise all RAG-retrieved content before injecting into context\n- Apply a secondary safety pass over retrieved documents before use\n- Implement RAG content provenance tracking - flag documents with instruction-like content\n- Use a separate model pass to detect embedded instructions in retrieved chunks",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
-  "researcher_url": "https://bawbel.io",
+  "researcher": "Zou et al.",
+  "researcher_url": "https://arxiv.org/abs/2402.07867",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",

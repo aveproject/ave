@@ -86,10 +86,10 @@
   "remediation": "- Apply a safety pass to all content written to persistent memory\n- Reject instruction-like content from being stored in long-term memory\n- Implement memory expiry - automatically expire unreviewed memories\n- Audit persistent memory on session start",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",
