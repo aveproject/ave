@@ -108,6 +108,31 @@
           ]
         }
       },
+      "allOf": [
+        {
+          "$comment": "An endpoint that STATES a record count must say which commit the count was read at, so the number can be re-derived rather than taken on trust. Scoped to count-stating endpoints because an endpoint that states no count has nothing to re-derive. The `not` clause is load-bearing: without it this rule and the unpinnable rule above are jointly unsatisfiable for a side that declares itself unpinnable AND states a count, because one demands commit and the other forbids it, which would silently delete one of the three pinning states this endpoint's own description defines.",
+          "if": {
+            "required": [
+              "record_count"
+            ],
+            "not": {
+              "properties": {
+                "pin_status": {
+                  "const": "unpinnable"
+                }
+              },
+              "required": [
+                "pin_status"
+              ]
+            }
+          },
+          "then": {
+            "required": [
+              "commit"
+            ]
+          }
+        }
+      ],
       "properties": {
         "url": {
           "type": "string",
