@@ -38,14 +38,14 @@ FLOOR_KIND = "semantic_inference"
 
 # Substrings in a record's detection_methodology that identify an
 # external-authority probe: the case where the floor is an enum gap, not an
-# overclaim (AVE-2026-00074).
+# overclaim (AVE-2026-00074). Deliberately specific terms only: bare
+# "registry" or "domain" match ordinary static-scan prose (astrogilda's
+# attack test, 2026-08-26) and a false attach is worse than a false flag.
 AUTHORITY_PROBE_HINTS = (
     "api.github.com",
-    "registry",
     "rdap",
     "github's users api",
     "package registry",
-    "domain",
     "authoritative source",
     "provider fingerprint",
 )
@@ -53,10 +53,16 @@ AUTHORITY_PROBE_HINTS = (
 
 def is_floor_basis(record: dict) -> bool:
     """True when the record's evidence basis is at the floor: a single-engine
-    set (regardless of which engine) or semantic_inference as the kind."""
+    set (regardless of which) or semantic_inference as the kind.
+
+    The cardinality test is on the set, not the list: a duplicated member
+    (["pattern", "pattern"], ["pattern", "PATTERN"]) is a single-engine
+    basis wearing a list of length two, and must not dodge the floor
+    (astrogilda's attack test, 2026-08-26).
+    """
     engines = record.get("evidence_basis_engines") or []
     kind = record.get("evidence_kind_default") or ""
-    if len(engines) <= 1:
+    if len(set(engines)) <= 1:
         return True
     return kind == FLOOR_KIND
 

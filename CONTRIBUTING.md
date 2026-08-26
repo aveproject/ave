@@ -154,6 +154,7 @@ description. Reviewers will ask for this if it is missing.
 pip install -e ".[dev]"
 python scripts/validate_records.py    # schema-checks every record, including yours
 python scripts/check_fixtures.py      # confirms every record has +/- fixtures
+python scripts/check_confidence_signal.py  # soft-warns on #98 high-confidence floor-basis records
 pytest tests/ -x -q                   # full suite: schema, AIVSS arithmetic, mitigation enums
 ```
 

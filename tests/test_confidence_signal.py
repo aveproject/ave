@@ -76,6 +76,19 @@ def test_engine_list_ordering_is_normalized():
     assert check_confidence_signal.confidence_signal(a) == check_confidence_signal.confidence_signal(b)
 
 
+def test_duplicate_engine_members_are_still_a_floor_basis():
+    """astrogilda's attack test (2026-08-26): a duplicated member is a
+    single-engine basis wearing a list of length two and must not dodge
+    the floor. len(set(engines)) <= 1 pins the fixed behaviour."""
+    record = base_record(
+        confidence_baseline=0.95,
+        evidence_basis_engines=["pattern", "pattern"],
+    )
+    result = check_confidence_signal.confidence_signal(record)
+    assert result is not None
+    assert "floor" in result
+
+
 def test_authority_probe_note_is_appended_to_00074_shape():
     """AVE-2026-00074's detection methodology names authority probes; the
     floor there is an enum gap, not an overclaim, and the signal says so."""
@@ -88,6 +101,22 @@ def test_authority_probe_note_is_appended_to_00074_shape():
     assert result is not None
     assert "external-authority probe" in result
     assert "enum gap" in result
+
+
+def test_authority_probe_note_negative_control():
+    """astrogilda's attack test (2026-08-26): prose that merely mentions a
+    registry or domain is not an authority probe. The note is the only
+    exculpatory sentence in the output, so a false attach is worse than a
+    false flag; the negative case must stay quiet."""
+    for methodology in (
+        "Static pattern scan for hardcoded credentials in packages published to the npm registry.",
+        "Domain-specific heuristics over the tool description string.",
+        "Matches the Windows registry key path written by the installer.",
+    ):
+        record = base_record(detection_methodology=methodology)
+        result = check_confidence_signal.confidence_signal(record)
+        assert result is not None
+        assert "external-authority probe" not in result, methodology
 
 
 def test_main_is_soft_warning_exit_zero():
