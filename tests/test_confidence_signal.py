@@ -26,8 +26,9 @@ def base_record(**overrides):
 def test_high_confidence_on_floor_basis_is_flagged():
     """The issue #98 shape: a high float with no structural verification.
 
-    Mirrors AVE-2026-00074's actual shape: pattern-only engine set, high
-    confidence. The agreed design ships this record as the fixture.
+    Mirrors AVE-2026-00074's pre-#218 shape: pattern-only engine set, high
+    confidence. The record has since gained external_authority (issue #218);
+    this fixture pins the floor behavior the check is designed to catch.
     """
     record = base_record()
     result = check_confidence_signal.confidence_signal(record)
@@ -90,8 +91,10 @@ def test_duplicate_engine_members_are_still_a_floor_basis():
 
 
 def test_authority_probe_note_is_appended_to_00074_shape():
-    """AVE-2026-00074's detection methodology names authority probes; the
-    floor there is an enum gap, not an overclaim, and the signal says so."""
+    """AVE-2026-00074's pre-#218 detection methodology named authority probes
+    while its engine set still sat at the floor; the floor there was an enum
+    gap, not an overclaim, and the signal said so. Pins the note logic that
+    any pre-vocabulary record still gets."""
     record = base_record(
         detection_methodology="Queries GitHub's users API for owners, the package "
         "registry for names, RDAP for domains, provider fingerprints for cloud "
@@ -101,6 +104,19 @@ def test_authority_probe_note_is_appended_to_00074_shape():
     assert result is not None
     assert "external-authority probe" in result
     assert "enum gap" in result
+
+
+def test_external_authority_member_clears_the_00074_enum_gap():
+    """Post-#218 shape: AVE-2026-00074's engines now carry external_authority,
+    so the floor clears and the check stays quiet -- the escalation condition
+    named in #213/#214 is satisfied by the record's own vocabulary."""
+    record = base_record(
+        evidence_basis_engines=["pattern", "external_authority"],
+        detection_methodology="Queries GitHub's users API for owners, the package "
+        "registry for names, RDAP for domains, provider fingerprints for cloud "
+        "subdomains; a failed probe degrades to silence.",
+    )
+    assert check_confidence_signal.confidence_signal(record) is None
 
 
 def test_authority_probe_note_negative_control():

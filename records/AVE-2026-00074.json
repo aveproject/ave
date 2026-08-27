@@ -103,6 +103,6 @@
   "detection_stage": "static_detection",
   "detection_layer": "content",
   "confidence_baseline": 0.85,
-  "evidence_basis_engines": ["pattern"],
+  "evidence_basis_engines": ["pattern", "external_authority"],
   "derivable_into": ["remote-control-chain"]
 }
