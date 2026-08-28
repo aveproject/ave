@@ -134,6 +134,35 @@ restricted environment but findings are reviewed in a connected dashboard.
 
 ---
 
+## Pattern 4: runtime enforcement input, not just detection
+
+AVE records aren't only useful for scanning already-written skill
+files. Their `indicators_of_compromise` and `behavioral_fingerprint`
+fields are specific enough to drive a pre-execution policy check, not
+just a post-hoc finding.
+
+**Example, [AVE-2026-00048](https://aveproject.org/registry.html#AVE-2026-00048)
+(unsafe agent delegation chain)**: the record's own `indicators_of_compromise`
+names "skill contains delegation instruction with full access or
+inherit permissions language" and "sub-agent spawned without explicit
+tool allowlist in the delegation instruction." A gateway sitting
+between an agent and its sub-agent spawning capability could check for
+exactly those two conditions before allowing the spawn, and block or
+require confirmation before the action executes, rather than only
+flagging it after the fact in a static scan.
+
+This is enforcement built on top of AVE, using AVE's specificity as
+the input, not AVE performing enforcement itself — see
+[README.md's "What AVE is not"](../../README.md#what-ave-is-not) for
+why that distinction matters.
+
+**When to use:** any gating layer, policy engine, or runtime guard
+that sits in front of an agentic action and needs a concrete,
+citable condition to check against, rather than a general category
+name.
+
+---
+
 ## The mapping step
 
 To emit AVE IDs, you need a mapping from your internal rule IDs to AVE IDs. Two

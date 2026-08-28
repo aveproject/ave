@@ -105,3 +105,39 @@ case for an unratified standard, not the exception. This applies
 symmetrically: if another project ever crosswalks to AVE's own
 `owasp_mcp` field by number rather than meaning, the same risk runs the
 other way.
+
+## 5. ID stability policy
+
+The pieces of this guarantee already exist scattered across Sections 2
+and 3 above; this section states it once, directly, as a policy
+commitment a compliance-minded reader or implementer can cite without
+reconstructing it from elsewhere in this document.
+
+**An AVE ID, once published, is never renumbered or reused. Full
+stop.** No exception exists for a record later found to be mistaken,
+redundant, or poorly scoped, that is what `deprecated`, `merged`, and
+`rejected` status exist for (Section 3), not a reason to free up a
+number.
+
+**A record's content can be revised as evidence improves; its
+identifier cannot.** Description, remediation, severity, AIVSS score,
+and every other field are expected to be corrected when a better
+understanding of the same behavioral class emerges, the way any of
+this project's own corrections passes have done. None of that touches
+the `ave_id` itself. The number is a permanent pointer; what it points
+at is allowed to get more accurate over time.
+
+**A deprecated or merged record keeps its own number.** If
+`AVE-2026-00019` is later found to be a variant of `AVE-2026-00007`,
+`00019` does not get deleted, freed, or handed to a future unrelated
+record, it is marked `merged` with `merged_into` pointing at `00007`
+(Section 3), and `00019` itself stays permanently resolvable at its own
+URL with its own history intact.
+
+**This is a commitment this project holds itself to going forward, not
+a description of what has merely happened so far.** Nothing has yet
+forced a real test of this guarantee at scale; stating it as policy
+now, while the corpus is still small, is deliberately the same
+discipline Section 1 already applies to record-growth: cheap to commit
+to early, expensive to retrofit credibly after an implementer has
+already depended on a number that then moved.

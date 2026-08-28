@@ -56,6 +56,15 @@ AVE is a standard, not a product. The `bawbel-scanner` implements it as the
 reference implementation. Any tool can map to it — see the
 [implementer guide](docs/specs/ave-implementer-guide.md) for how.
 
+### What AVE is not
+
+AVE is a naming and classification standard. It assigns stable IDs to
+behavioral vulnerability classes and describes how to detect them. It
+is not a runtime enforcement mechanism, and an AVE ID on its own stops
+nothing. Enforcement requires a separate policy or gating layer that
+consumes AVE's records, the same relationship CWE has to an actual
+static analyzer, or a CVE has to a patch management system.
+
 ```
 Your CI pipeline scans dependencies for known package vulnerabilities.
 It does not scan your SKILL.md for prompt injection.
@@ -534,7 +543,9 @@ See [GOVERNANCE.md](GOVERNANCE.md) for the decision-making process, how records
 are proposed and reviewed, and the path toward neutral governance.
 
 See [docs/specs/scaling-and-governance.md](docs/specs/scaling-and-governance.md)
-for record-growth discipline, schema versioning, and deprecation policy.
+for record-growth discipline, schema versioning, and deprecation policy,
+including AVE's ID stability guarantee: identifiers are never
+renumbered or reused once published.
 
 See [docs/specs/researcher-process.md](docs/specs/researcher-process.md)
 for the practical, step-by-step process a contributor actually follows
