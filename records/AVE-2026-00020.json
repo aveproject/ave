@@ -4,7 +4,7 @@
   "component_type": "skill",
   "title": "Cross-Agent Prompt Injection (A2A)",
   "attack_class": "Prompt Injection - Cross-Agent A2A",
-  "description": "In agentic pipelines where one agent delegates tasks to sub-agents (A2A - Agent to Agent), the output of the first agent becomes the input of the second. A malicious component in the first agent's context can craft output that contains instructions designed to be interpreted as commands by the sub-agent, bypassing the orchestrator's safety controls.",
+  "description": "In agentic pipelines where one agent delegates tasks to sub-agents (A2A - Agent to Agent), the output of the first agent becomes the input of the second. A malicious component in the first agent's context can craft output that contains instructions designed to be interpreted as commands by the sub-agent, bypassing the orchestrator's safety controls. This record shares its underlying failure with AVE-2026-00002, AVE-2026-00016, AVE-2026-00028, AVE-2026-00041, AVE-2026-00043, AVE-2026-00044, and AVE-2026-00065: the same missing content-versus-instruction boundary, realized here at a sub-agent's input, where one agent's output becomes the next agent's trusted instruction stream in an A2A delegation chain.",
   "affected_platforms": [
     "claude-code",
     "any-multi-agent-framework"
@@ -90,7 +90,7 @@
   "researcher": "Bawbel Security Research Team",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-09T00:00:00Z",
+  "last_updated": "2026-08-29T00:00:00Z",
   "references": [
     {
       "tag": "Cohen 2024",

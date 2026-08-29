@@ -4,7 +4,7 @@
   "component_type": "mcp_server",
   "title": "Prompt injection via MCP server-card tool descriptions before agent makes first call",
   "attack_class": "Prompt Injection - MCP Server-Card Injection",
-  "description": "An attacker poisons the .well-known/mcp-server-card/server.json or .well-known/mcp.json file served by an MCP server. When an agent connects, it fetches the server-card and reads all tool descriptions before making a single tool call. Malicious behavioral instructions embedded in tool descriptions, parameter descriptions, or config schemas are loaded into the agent's context and executed immediately - before any user interaction occurs. This attack surface exists at the discovery layer, not the execution layer, making it invisible to runtime monitoring.",
+  "description": "An attacker poisons the .well-known/mcp-server-card/server.json or .well-known/mcp.json file served by an MCP server. When an agent connects, it fetches the server-card and reads all tool descriptions before making a single tool call. Malicious behavioral instructions embedded in tool descriptions, parameter descriptions, or config schemas are loaded into the agent's context and executed immediately - before any user interaction occurs. This attack surface exists at the discovery layer, not the execution layer, making it invisible to runtime monitoring. This record shares its underlying failure with AVE-2026-00002, AVE-2026-00016, AVE-2026-00020, AVE-2026-00028, AVE-2026-00043, AVE-2026-00044, and AVE-2026-00065: the same missing content-versus-instruction boundary, realized here at the MCP server-card fetched at connection time, before any tool call and outside runtime monitoring's reach.",
   "affected_platforms": [
     "claude-desktop",
     "claude-code",
@@ -77,7 +77,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-05-01T00:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-08-29T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",

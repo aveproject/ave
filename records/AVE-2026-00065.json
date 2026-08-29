@@ -6,7 +6,7 @@
   "title": "A2A agent card poisoning via embedded adversarial instructions",
   "attack_class": "Prompt Injection - A2A Agent Card Poisoning",
   "severity": "HIGH",
-  "description": "A malicious remote agent embeds adversarial instructions within its A2A (Agent-to-Agent) protocol agent card, the structured metadata document describing its capabilities, endpoints, and operational details that a host agent uses to plan task delegation. When agent cards are injected directly into an LLM's reasoning context without strict boundary enforcement, the metadata is reinterpreted as executable instruction rather than descriptive data. This differs from MCP server-card injection (AVE-2026-00041) in protocol, discovery mechanism, and payload surface; A2A has no fixed .well-known path convention and no tool.description field, the payload lives in the agent's own self-declared identity and capability claims within a peer discovery and delegation exchange, not a file fetched before a tool call.",
+  "description": "A malicious remote agent embeds adversarial instructions within its A2A (Agent-to-Agent) protocol agent card, the structured metadata document describing its capabilities, endpoints, and operational details that a host agent uses to plan task delegation. When agent cards are injected directly into an LLM's reasoning context without strict boundary enforcement, the metadata is reinterpreted as executable instruction rather than descriptive data. This differs from MCP server-card injection (AVE-2026-00041) in protocol, discovery mechanism, and payload surface; A2A has no fixed .well-known path convention and no tool.description field, the payload lives in the agent's own self-declared identity and capability claims within a peer discovery and delegation exchange, not a file fetched before a tool call. This record shares its underlying failure with AVE-2026-00002, AVE-2026-00016, AVE-2026-00020, AVE-2026-00028, AVE-2026-00041, AVE-2026-00043, and AVE-2026-00044: the same missing content-versus-instruction boundary, realized here at a remote agent's self-declared A2A agent-card metadata, read as trusted capability description rather than untrusted peer input.",
   "affected_platforms": [
     "any-a2a-protocol-implementation"
   ],
@@ -54,7 +54,7 @@
   "researcher": "Kumar Aditya",
   "researcher_url": "https://www.keysight.com/blogs/en/tech/nwvs/2026/03/12/agent-card-poisoning",
   "published": "2026-07-27T00:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-08-29T00:00:00Z",
   "references": [
     {
       "tag": "Keysight research",
