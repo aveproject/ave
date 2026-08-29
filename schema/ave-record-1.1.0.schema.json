@@ -582,6 +582,23 @@
         "type": "string"
       },
       "description": "Scanner hint — toxic-flow chain IDs this class can participate in, e.g. credential-exfiltration, rug-pull-chain. Optional."
+    },
+    "security_boundary": {
+      "type": "string",
+      "description": "The trust boundary this record's vulnerability crosses, e.g. 'untrusted content to instruction context', 'agent to agent', 'human approval to autonomous action'. Optional. Answers audit question Q2: the most important question for distinguishing a real vulnerability from a bare capability or technique description."
+    },
+    "missing_control": {
+      "type": "string",
+      "description": "The specific control whose absence makes exploitation possible, e.g. 'no explicit tool allowlist', 'no provenance label', 'no approval gate'. Optional, but a record without this and without security_boundary is a candidate for capability-only or technique-only conflation. See docs/audits/capability-vulnerability-audit.md."
+    },
+    "vulnerability_rationale": {
+      "type": "object",
+      "properties": {
+        "capability": { "type": "string" },
+        "vulnerability": { "type": "string" },
+        "impact": { "type": "string" }
+      },
+      "description": "The explicit three-line artifact from audit question Q7: what the component can do, what specific condition makes that dangerous, and what results. Optional. This is the sharpest single check against capability/vulnerability conflation, a record that can't fill this in honestly is probably miscategorized."
     }
   }
 }
