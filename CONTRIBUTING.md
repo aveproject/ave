@@ -154,6 +154,8 @@ description. Reviewers will ask for this if it is missing.
 pip install -e ".[dev]"
 python scripts/validate_records.py    # schema-checks every record, including yours
 python scripts/check_fixtures.py      # confirms every record has +/- fixtures
+python scripts/check_confidence_signal.py  # soft-warns on #98 high-confidence floor-basis records
+python scripts/write_verification_basis.py   # derives verification_basis; reports declarations its axes refute
 pytest tests/ -x -q                   # full suite: schema, AIVSS arithmetic, mitigation enums
 ```
 
@@ -163,7 +165,11 @@ record's own stated `aarf`/`cvss_base`/`thm`/`mitigation_factor`
 values (a common failure mode is drafting against one set of factors
 and writing down another), and `check_fixtures.py` confirms
 `tests/fixtures/AVE-YYYY-NNNNN_positive.md` and `_negative.md` both
-exist -- required for every record, see Step 4. If `npm`-based schema
+exist -- required for every record, see Step 4. If your record states
+`evidence_vantage` or `evidence_method`, `validate_records.py` also
+recomputes `verification_basis` from them and fails when a declared value
+disagrees, so the declaration is checkable rather than taken on trust --
+see docs/guides/evidence-vantage-producer-guide.md. If `npm`-based schema
 tooling (`ajv`) is more convenient for your own workflow, it's a valid
 supplementary check, but the record must pass the scripts above before
 a PR is reviewed, not just an ad-hoc schema validator.

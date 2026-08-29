@@ -136,6 +136,7 @@ pip install -e ".[dev]"
 pytest tests/ -x -q                   # validate records + fixtures
 python scripts/validate_records.py    # schema-check every record
 python scripts/check_fixtures.py      # every record has +/- fixtures
+python scripts/write_verification_basis.py   # derive verification_basis from the evidence axes
 ```
 
 ---
