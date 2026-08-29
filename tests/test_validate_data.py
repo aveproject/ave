@@ -297,3 +297,167 @@ def test_an_unpinnable_side_may_still_state_a_count(tmp_path):
     errors = list(validator.iter_errors(crosswalk_document(endpoint)))
 
     assert errors == [], [error.message for error in errors]
+
+
+def record_with(**overrides):
+    record = {
+        "ave_id": "AVE-2026-99999",
+        "schema_version": "1.1.0",
+        "status": "draft",
+        "title": "Verification basis fixture",
+        "description": "A minimal draft record carrying evidence axes.",
+        "attack_class": "test",
+        "behavioral_fingerprint": "test",
+        "references": [{"tag": "Source", "text": "Source", "url": "https://example.com"}],
+        # Section 8 forbids a record with both of these empty, so the fixture
+        # carries one: without it main() returns 1 for a reason that has nothing
+        # to do with verification_basis, and the failing assertions below would
+        # pass while proving nothing.
+        "example_patterns": ["example"],
+    }
+    record.update(overrides)
+    return record
+
+
+def record_validator():
+    schema = json.loads(validate_records.SCHEMA_PATH.read_text(encoding="utf-8"))
+    return validate_records.build_validator(schema)
+
+
+def test_schema_accepts_the_external_authority_engine():
+    """The member issue #98 agreed on. Without it a record whose finding comes
+    from an outside answer has no value to write and its author writes the
+    nearest one, which reads as a pattern match."""
+    errors = validate_records.check_schema(
+        record_with(evidence_basis_engines=["pattern", "external_authority"]),
+        record_validator(),
+    )
+
+    assert errors == [], errors
+
+
+def test_schema_rejects_an_engine_outside_the_enum():
+    """The enum stays closed: the new member is a rung, not an opening."""
+    errors = validate_records.check_schema(
+        record_with(evidence_basis_engines=["external_registry"]), record_validator()
+    )
+
+    assert any("external_registry" in error for error in errors), errors
+
+
+@pytest.mark.parametrize("field,value", [
+    ("evidence_vantage", "substrate"),
+    ("evidence_vantage", "artifact"),
+    ("evidence_method", "intercepted"),
+    ("evidence_method", "reconstructed"),
+    ("verification_basis", "substrate_intercepted"),
+    ("verification_basis", "artifact_reconstructed"),
+])
+def test_schema_accepts_each_axis_value(field, value):
+    errors = validate_records.check_schema(
+        record_with(**{field: value}), record_validator()
+    )
+
+    assert errors == [], errors
+
+
+@pytest.mark.parametrize("field,value", [
+    ("evidence_vantage", "trusted"),
+    ("evidence_method", "live"),
+    ("verification_basis", "substrate"),
+    ("verification_basis", "self_reported"),
+])
+def test_schema_rejects_a_value_outside_a_closed_axis(field, value):
+    """Asserted on the offending value's own message, not on the error list
+    being non-empty: a fixture that failed for an unrelated missing property
+    would satisfy the weaker assertion while proving nothing about the axis."""
+    errors = validate_records.check_schema(
+        record_with(**{field: value}), record_validator()
+    )
+
+    assert any(f"'{value}'" in error and field in error for error in errors), errors
+
+
+def test_a_declared_verification_basis_its_own_axes_refute_is_an_error():
+    """A hard failure, not a warning, and it runs inside the validator CI
+    already invokes rather than beside it. verification_basis is derived, so a
+    value disagreeing with the derivation is refuted by the record's own
+    contents, not a judgement call that wants a human glance."""
+    errors = validate_records.check_verification_basis(
+        record_with(
+            verification_basis="substrate_intercepted",
+            evidence_vantage="artifact",
+            evidence_basis_engines=["pattern"],
+        )
+    )
+
+    assert len(errors) == 1
+    assert "artifact_reconstructed" in errors[0]
+
+
+def test_a_declared_verification_basis_its_axes_support_passes():
+    assert validate_records.check_verification_basis(
+        record_with(
+            verification_basis="substrate_intercepted",
+            evidence_vantage="substrate",
+            evidence_method="intercepted",
+            evidence_basis_engines=["external_authority"],
+        )
+    ) == []
+
+
+def test_a_record_declaring_no_verification_basis_is_not_an_error():
+    """The field is optional and derived; a record that omits it has said
+    nothing false."""
+    assert validate_records.check_verification_basis(record_with()) == []
+
+
+def test_every_shipped_record_passes_the_verification_basis_check():
+    errors = []
+    for path in sorted(validate_records.RECORDS_DIR.glob("AVE-*.json")):
+        record = json.loads(path.read_text(encoding="utf-8"))
+        errors.extend(f"{path.name}: {e}" for e in
+                      validate_records.check_verification_basis(record))
+
+    assert errors == []
+
+
+def test_the_validator_run_itself_fails_on_a_contradicted_declaration(
+    tmp_path, monkeypatch
+):
+    """Asserts the wiring, not the function.
+
+    Calling check_verification_basis directly proves the rule and proves
+    nothing about whether anything runs it: with the call removed from main's
+    error list, every other test in this file still passed. This one drives
+    main() over a directory holding one contradicted record, so deleting the
+    wiring turns it red.
+    """
+    record = record_with(
+        verification_basis="substrate_intercepted",
+        evidence_vantage="artifact",
+        evidence_basis_engines=["pattern"],
+    )
+    (tmp_path / "AVE-2026-99999.json").write_text(
+        json.dumps(record, indent=2) + "\n", encoding="utf-8"
+    )
+    monkeypatch.setattr(validate_records, "RECORDS_DIR", tmp_path)
+
+    assert validate_records.main() == 1
+
+
+def test_the_validator_run_passes_the_same_record_without_the_declaration(
+    tmp_path, monkeypatch
+):
+    """The negative control for the test above: same record, same directory,
+    declaration dropped. Without this, a validator that failed everything would
+    satisfy the assertion above."""
+    record = record_with(
+        evidence_vantage="artifact", evidence_basis_engines=["pattern"]
+    )
+    (tmp_path / "AVE-2026-99999.json").write_text(
+        json.dumps(record, indent=2) + "\n", encoding="utf-8"
+    )
+    monkeypatch.setattr(validate_records, "RECORDS_DIR", tmp_path)
+
+    assert validate_records.main() == 0

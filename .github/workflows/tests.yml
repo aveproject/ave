@@ -33,5 +33,8 @@ jobs:
       - name: Check every record has positive and negative conformance fixtures
         run: python scripts/check_fixtures.py
 
+      - name: Confidence signal soft warning (issue #98 consumer check)
+        run: python scripts/check_confidence_signal.py
+
       - name: Run tests
         run: pytest tests/ -x -q

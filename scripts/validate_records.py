@@ -3,7 +3,8 @@
 #       enforcement config, no dual-empty behavioral_vector/example_patterns),
 #       plus AIVSS score arithmetic and vendor-neutral language, added after a
 #       hand-drafted batch of records caught real instances of exactly these
-#       problems that nothing here checked
+#       problems that nothing here checked, plus a declared verification_basis
+#       that the record's own evidence axes contradict
 # Why:  a malformed or drifted record breaks every downstream scanner that loads it,
 #       and a free-text value in `mitigation` would let vendor-specific config
 #       leak back into a standard that is supposed to stay vendor-neutral.
@@ -16,13 +17,27 @@
 #       schema/ave-record-1.1.0.schema.json (handles the draft-vs-active
 #       conditional required set natively and enforces date-time / uri metadata),
 #       plus a handful of checks the schema's additionalProperties:false already
-#       implies but which deserve a readable, named failure message of their own
+#       implies but which deserve a readable, named failure message of their own.
+#       verification_basis is a hard error rather than a warning because it is
+#       derived rather than authored: a value disagreeing with the derivation is
+#       not a judgement call needing a human glance, it is a statement the
+#       record's own contents refute, and the whole point of carrying the field
+#       is that the declaration can be falsified.
 import json
 import re
 import sys
 from pathlib import Path
 
 import jsonschema
+
+# CI runs this file as `python scripts/validate_records.py`, which puts scripts/
+# on sys.path rather than the repository root, so the sibling module has to be
+# reachable by the same name the tests import it under (pyproject sets
+# pythonpath = ["."] for pytest). Adding the root explicitly makes both entry
+# points resolve one module rather than each resolving a different one.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from scripts.write_verification_basis import check_record as check_verification_basis  # noqa: E402
 
 RECORDS_DIR = Path("records")
 SCHEMA_PATH = Path("schema/ave-record-1.1.0.schema.json")
@@ -206,6 +221,7 @@ def main() -> int:
             + check_mitigation_enums_only(record)
             + check_aivss_arithmetic(record)
             + check_no_vendor_boilerplate(raw_text)
+            + check_verification_basis(record)
         )
         for e in errors:
             print(f"{rid}: {e}")
