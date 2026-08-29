@@ -4,7 +4,7 @@
   "component_type": "mcp_server",
   "title": "Prompt injection via rich UI payload (canvas, artifact, form) rendered by MCP App",
   "attack_class": "Prompt Injection - MCP App UI Payload Injection",
-  "description": "MCP Apps can render rich UI elements - canvases, artifacts, interactive forms, and embedded content - directly in the agent's interface. An attacker crafts a UI payload that renders visually benign content to the user while embedding prompt injection instructions in metadata, alt text, accessibility attributes, or hidden elements that the underlying model reads. The agent acts on the injected instructions while the user sees only the harmless rendered surface. This attack exploits the gap between what the user sees and what the model processes.",
+  "description": "MCP Apps can render rich UI elements - canvases, artifacts, interactive forms, and embedded content - directly in the agent's interface. An attacker crafts a UI payload that renders visually benign content to the user while embedding prompt injection instructions in metadata, alt text, accessibility attributes, or hidden elements that the underlying model reads. The agent acts on the injected instructions while the user sees only the harmless rendered surface. This attack exploits the gap between what the user sees and what the model processes. This record shares its underlying failure with AVE-2026-00002, AVE-2026-00016, AVE-2026-00020, AVE-2026-00028, AVE-2026-00041, AVE-2026-00044, and AVE-2026-00065: the same missing content-versus-instruction boundary, realized here in the gap between a rendered UI surface the user sees and the underlying metadata the model actually reads.",
   "affected_platforms": [
     "claude-desktop",
     "claude-code",
@@ -74,7 +74,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-05-01T00:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-08-29T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",

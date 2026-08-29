@@ -4,7 +4,7 @@
   "component_type": "skill",
   "title": "Prompt injection via poisoned async task result injected into future agent context",
   "attack_class": "Prompt Injection - Async Task Result Poisoning",
-  "description": "Agentic workflows increasingly use async task queues where the agent dispatches a task, continues other work, and later reads the result. An attacker who controls the task result delivery mechanism (a queue, webhook, or polling endpoint) injects malicious instructions into the result payload. When the agent reads the result in a future turn, the injected content is interpreted as trusted context from a completed task - not as external untrusted input. The temporal gap between task dispatch and result consumption bypasses synchronous safety checks.",
+  "description": "Agentic workflows increasingly use async task queues where the agent dispatches a task, continues other work, and later reads the result. An attacker who controls the task result delivery mechanism (a queue, webhook, or polling endpoint) injects malicious instructions into the result payload. When the agent reads the result in a future turn, the injected content is interpreted as trusted context from a completed task - not as external untrusted input. The temporal gap between task dispatch and result consumption bypasses synchronous safety checks. This record shares its underlying failure with AVE-2026-00002, AVE-2026-00016, AVE-2026-00020, AVE-2026-00028, AVE-2026-00041, AVE-2026-00043, and AVE-2026-00065: the same missing content-versus-instruction boundary, realized here at an async task result payload, read across a temporal gap as trusted completed-task context rather than external input.",
   "affected_platforms": [
     "claude-code",
     "any-agent-with-async-task-execution",
@@ -71,7 +71,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-05-01T00:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-08-29T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",

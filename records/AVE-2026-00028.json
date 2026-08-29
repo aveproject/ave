@@ -4,7 +4,7 @@
   "component_type": "skill",
   "title": "Prompt Injection via File or Document Content",
   "attack_class": "Prompt Injection - File Content",
-  "description": "When an agent is asked to process a user-uploaded document, the document's content should be treated as untrusted data, not as instructions. A component that explicitly tells the agent to follow or execute any instructions found in uploaded files creates a reliable indirect prompt injection vector - the attacker simply needs to convince the user to upload a crafted document.",
+  "description": "When an agent is asked to process a user-uploaded document, the document's content should be treated as untrusted data, not as instructions. A component that explicitly tells the agent to follow or execute any instructions found in uploaded files creates a reliable indirect prompt injection vector - the attacker simply needs to convince the user to upload a crafted document. This record shares its underlying failure with AVE-2026-00002, AVE-2026-00016, AVE-2026-00020, AVE-2026-00041, AVE-2026-00043, AVE-2026-00044, and AVE-2026-00065: the same missing content-versus-instruction boundary, realized here at a user-uploaded document's content, which a component explicitly directs the agent to treat as instructions rather than data.",
   "affected_platforms": [
     "claude-code",
     "cursor",
@@ -88,7 +88,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-08-29T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",

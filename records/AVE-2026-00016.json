@@ -4,7 +4,7 @@
   "component_type": "other",
   "title": "Indirect Prompt Injection via RAG Retrieval",
   "attack_class": "Prompt Injection - RAG Retrieval",
-  "description": "A Retrieval-Augmented Generation (RAG) pipeline indexes external documents and injects their content into the agent's context at query time. An attacker who controls any document in the indexed corpus can embed instructions that will be treated as trusted context when retrieved, effectively injecting into the agent's reasoning without direct access to the system prompt.",
+  "description": "A Retrieval-Augmented Generation (RAG) pipeline indexes external documents and injects their content into the agent's context at query time. An attacker who controls any document in the indexed corpus can embed instructions that will be treated as trusted context when retrieved, effectively injecting into the agent's reasoning without direct access to the system prompt. This record shares its underlying failure with AVE-2026-00002, AVE-2026-00020, AVE-2026-00028, AVE-2026-00041, AVE-2026-00043, AVE-2026-00044, and AVE-2026-00065: the same missing content-versus-instruction boundary, realized here at retrieved document content injected into the agent's context at RAG query time.",
   "affected_platforms": [
     "claude-code",
     "cursor",
@@ -88,7 +88,7 @@
   "researcher": "Zou et al.",
   "researcher_url": "https://arxiv.org/abs/2402.07867",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-08-29T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",

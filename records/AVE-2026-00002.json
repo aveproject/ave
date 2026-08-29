@@ -4,7 +4,7 @@
   "component_type": "mcp_server",
   "title": "MCP tool description behavioral injection",
   "attack_class": "Prompt Injection - Tool Description",
-  "description": "An MCP server embeds behavioral instructions in tool description fields that are read by the agent during tool discovery. The agent treats these instructions as authoritative context, causing it to follow attacker-controlled directives. This attack fires before any tool is called, at the moment the agent reads the tool manifest.",
+  "description": "An MCP server embeds behavioral instructions in tool description fields that are read by the agent during tool discovery. The agent treats these instructions as authoritative context, causing it to follow attacker-controlled directives. This attack fires before any tool is called, at the moment the agent reads the tool manifest. This record shares its underlying failure with AVE-2026-00016, AVE-2026-00020, AVE-2026-00028, AVE-2026-00041, AVE-2026-00043, AVE-2026-00044, and AVE-2026-00065: the same missing content-versus-instruction boundary, realized here at the MCP tool-description field read during discovery, before any tool call occurs.",
   "affected_platforms": [
     "claude-desktop",
     "cursor",
@@ -90,7 +90,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-01T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-08-29T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",
