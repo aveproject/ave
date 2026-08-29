@@ -544,10 +544,37 @@
           "semgrep",
           "llm",
           "sandbox",
-          "magika"
+          "magika",
+          "external_authority"
         ]
       },
-      "description": "Scanner hint — engines capable of detecting this class. Optional. Used to populate evidence_basis on findings."
+      "description": "Scanner hint — engines capable of detecting this class. Optional. Used to populate evidence_basis on findings. external_authority means a party outside the observed artifact was queried and returned a determinate answer (a package registry, RDAP, a forge's user API); it names the observation rung, not whether the answer was right."
+    },
+    "evidence_vantage": {
+      "type": "string",
+      "enum": [
+        "substrate",
+        "artifact"
+      ],
+      "description": "Producer statement — the vantage every input this class's evidence depends on was obtained at, taken from the weakest input. substrate: obtained where the observed artifact could neither forge nor suppress it. artifact: at least one input derives from output the artifact itself produced. artifact is a floor a producer may always truthfully state; a consumer learns from it only that the evidence lacks the stronger binding. Optional."
+    },
+    "evidence_method": {
+      "type": "string",
+      "enum": [
+        "intercepted",
+        "reconstructed"
+      ],
+      "description": "Producer statement — how the evidence for this class is established, taken from the weakest input. intercepted: from events captured as they occurred. reconstructed: from state examined after the fact. reconstructed is a floor a producer may always truthfully state. Optional; absent reads as reconstructed."
+    },
+    "verification_basis": {
+      "type": "string",
+      "enum": [
+        "substrate_intercepted",
+        "substrate_reconstructed",
+        "artifact_intercepted",
+        "artifact_reconstructed"
+      ],
+      "description": "Derived, not authored — the composition of evidence_vantage and evidence_method with the vantage implied by evidence_basis_engines, each taken by weakest input. scripts/write_verification_basis.py computes it. A record may carry a declared value, which validate_records.py then checks against the derivation and fails on a mismatch, so the declaration is falsifiable rather than self-reported. Optional."
     },
     "derivable_into": {
       "type": "array",

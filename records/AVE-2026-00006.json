@@ -62,10 +62,10 @@
   "remediation": "1. Revoke all token approvals granted during the period the component was active using a tool like revoke.cash. 2. Transfer remaining funds to a new wallet. 3. Report the attacker address to blockchain security services. 4. Require explicit per-transaction user confirmation for all future wallet operations.",
   "status": "active",
   "kill_switch_active": true,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "MITRE ATT&CK T1657",

@@ -56,6 +56,15 @@ AVE is a standard, not a product. The `bawbel-scanner` implements it as the
 reference implementation. Any tool can map to it — see the
 [implementer guide](docs/specs/ave-implementer-guide.md) for how.
 
+### What AVE is not
+
+AVE is a naming and classification standard. It assigns stable IDs to
+behavioral vulnerability classes and describes how to detect them. It
+is not a runtime enforcement mechanism, and an AVE ID on its own stops
+nothing. Enforcement requires a separate policy or gating layer that
+consumes AVE's records, the same relationship CWE has to an actual
+static analyzer, or a CVE has to a patch management system.
+
 ```
 Your CI pipeline scans dependencies for known package vulnerabilities.
 It does not scan your SKILL.md for prompt injection.
@@ -73,12 +82,13 @@ AVE fixes that.
 AVE's ID scheme has been tested by people who didn't build it, not
 just used by people who did.
 
-Three independent tools, cfgaudit, Ramparts, and nova-proximity, none
-of them sharing code with AVE or with each other, built crosswalks
-against AVE's records on their own initiative, unprompted. In each
-case the comparison went beyond matching category labels: mechanism-
-level correspondence was checked field by field, real trigger
-conditions against real behavioral fingerprints, and dozens of
+Eight independent tools, cfgaudit, ClawScan, nova-proximity, Ramparts,
+Semia, SkillSpector (NVIDIA), skill-security-scanner, and skillsentry,
+none of them sharing code with AVE or with each other, built
+crosswalks against AVE's records on their own initiative, unprompted.
+In each case the comparison went beyond matching category labels:
+mechanism-level correspondence was checked field by field, real
+trigger conditions against real behavioral fingerprints, and dozens of
 findings converged on the identical AVE ID independently.
 
 One of those crosswalks (Ramparts) also surfaced a real methodological
@@ -92,7 +102,7 @@ two published AVE records, corrected the underlying process
 documentation, not just the two records, credited in
 [CONTRIBUTORS.md](CONTRIBUTORS.md).
 
-80 records. 3 independent crosswalks. See
+80 records. 8 independent crosswalks. See
 [crosswalks/](crosswalks/) for the full mappings, and
 [docs/writeups/](docs/writeups/) for full technical write-ups on
 individual records.
@@ -511,8 +521,14 @@ at [aveproject.org/crosswalks.html](https://aveproject.org/crosswalks.html).
 
 | This scanner | Maps to AVE via |
 |---|---|
-| SkillSpector (NVIDIA) | [`crosswalks/skillspector-to-ave.json`](crosswalks/skillspector-to-ave.json) |
+| cfgaudit | [`crosswalks/cfgaudit-to-ave.json`](crosswalks/cfgaudit-to-ave.json) |
 | ClawScan (OpenClaw) | [`crosswalks/clawscan-to-ave.json`](crosswalks/clawscan-to-ave.json) |
+| nova-proximity (Nova-Hunting) | [`crosswalks/nova-proximity-to-ave.json`](crosswalks/nova-proximity-to-ave.json) |
+| Ramparts (Highflame Inc.) | [`crosswalks/ramparts-to-ave.json`](crosswalks/ramparts-to-ave.json) |
+| Semia (RiemaLabs) | [`crosswalks/semia-to-ave.json`](crosswalks/semia-to-ave.json) |
+| SkillSpector (NVIDIA) | [`crosswalks/skillspector-to-ave.json`](crosswalks/skillspector-to-ave.json) |
+| skill-security-scanner (honysyang) | [`crosswalks/skill-security-scanner-to-ave.json`](crosswalks/skill-security-scanner-to-ave.json) |
+| skillsentry (vythanhtra) | [`crosswalks/skillsentry-to-ave.json`](crosswalks/skillsentry-to-ave.json) |
 
 Maintaining a scanner? The [implementer guide](docs/specs/ave-implementer-guide.md)
 covers how to map your rule IDs to AVE ids and add AVE ID emission to your
@@ -527,7 +543,9 @@ See [GOVERNANCE.md](GOVERNANCE.md) for the decision-making process, how records
 are proposed and reviewed, and the path toward neutral governance.
 
 See [docs/specs/scaling-and-governance.md](docs/specs/scaling-and-governance.md)
-for record-growth discipline, schema versioning, and deprecation policy.
+for record-growth discipline, schema versioning, and deprecation policy,
+including AVE's ID stability guarantee: identifiers are never
+renumbered or reused once published.
 
 See [docs/specs/researcher-process.md](docs/specs/researcher-process.md)
 for the practical, step-by-step process a contributor actually follows

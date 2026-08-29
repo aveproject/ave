@@ -64,10 +64,10 @@
   "remediation": "1. Remove the component immediately. 2. Review all agent outputs produced while the component was active for policy violations. 3. Audit other components from the same source. 4. Implement identity-anchoring in your agent framework - the system prompt should assert the agent's identity with higher trust than component instructions.",
   "status": "active",
   "kill_switch_active": true,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-20T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "Wei 2023",

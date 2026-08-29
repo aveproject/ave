@@ -75,10 +75,10 @@
   "remediation": "1. Deny hook registration instructions in skill files - hooks are infrastructure, not skill-level config. 2. Maintain a static registry of tool handlers set at server startup - reject any runtime attempt to modify the registry. 3. Scan all skill files for hook registration patterns before loading. 4. Suppress the finding with documented justification if the hook is a legitimate internal observability tool.",
   "status": "active",
   "kill_switch_active": true,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-05-16T00:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "CWE-601",

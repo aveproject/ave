@@ -65,10 +65,10 @@
   "remediation": "1. Remove the component immediately. 2. Audit agent action logs for shell executions and network requests during the period it was active. 3. Review all processes spawned by the agent for signs of persistence. 4. Rotate credentials on systems the agent had access to.",
   "status": "active",
   "kill_switch_active": true,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "CWE-78",

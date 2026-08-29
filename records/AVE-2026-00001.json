@@ -97,10 +97,10 @@
   "remediation": "1. Remove the component immediately.\n2. Block all network egress from the agent runtime to unknown domains.\n3. Audit all actions taken by the agent during the exposure window.\n4. Rotate credentials accessible to the agent.",
   "status": "active",
   "kill_switch_active": false,
-  "researcher": "Bawbel Security Research Team",
+  "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-01T09:00:00Z",
-  "last_updated": "2026-08-09T00:00:00Z",
+  "last_updated": "2026-08-26T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",
