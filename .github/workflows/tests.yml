@@ -36,5 +36,8 @@ jobs:
       - name: Confidence signal soft warning (issue #98 consumer check)
         run: python scripts/check_confidence_signal.py
 
+      - name: Capability-vulnerability taxonomy soft warning
+        run: python scripts/check_vulnerability_taxonomy.py
+
       - name: Run tests
         run: pytest tests/ -x -q
