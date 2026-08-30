@@ -297,7 +297,7 @@
     "component_type": "mcp_server",
     "title": "MCP tool description behavioral injection",
     "attack_class": "Prompt Injection - Tool Description",
-    "description": "An MCP server embeds behavioral instructions in tool description fields that are read by the agent during tool discovery. The agent treats these instructions as authoritative context, causing it to follow attacker-controlled directives. This attack fires before any tool is called, at the moment the agent reads the tool manifest.",
+    "description": "An MCP server embeds behavioral instructions in tool description fields that are read by the agent during tool discovery. The agent treats these instructions as authoritative context, causing it to follow attacker-controlled directives. This attack fires before any tool is called, at the moment the agent reads the tool manifest. This record shares its underlying failure with AVE-2026-00016, AVE-2026-00020, AVE-2026-00028, AVE-2026-00041, AVE-2026-00043, AVE-2026-00044, and AVE-2026-00065: the same missing content-versus-instruction boundary, realized here at the MCP tool-description field read during discovery, before any tool call occurs.",
     "affected_platforms": [
       "claude-desktop",
       "cursor",
@@ -385,7 +385,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-01T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-08-29T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -557,7 +557,7 @@
     "component_type": "mcp_server",
     "title": "Prompt injection via MCP server-card tool descriptions before agent makes first call",
     "attack_class": "Prompt Injection - MCP Server-Card Injection",
-    "description": "An attacker poisons the .well-known/mcp-server-card/server.json or .well-known/mcp.json file served by an MCP server. When an agent connects, it fetches the server-card and reads all tool descriptions before making a single tool call. Malicious behavioral instructions embedded in tool descriptions, parameter descriptions, or config schemas are loaded into the agent's context and executed immediately - before any user interaction occurs. This attack surface exists at the discovery layer, not the execution layer, making it invisible to runtime monitoring.",
+    "description": "An attacker poisons the .well-known/mcp-server-card/server.json or .well-known/mcp.json file served by an MCP server. When an agent connects, it fetches the server-card and reads all tool descriptions before making a single tool call. Malicious behavioral instructions embedded in tool descriptions, parameter descriptions, or config schemas are loaded into the agent's context and executed immediately - before any user interaction occurs. This attack surface exists at the discovery layer, not the execution layer, making it invisible to runtime monitoring. This record shares its underlying failure with AVE-2026-00002, AVE-2026-00016, AVE-2026-00020, AVE-2026-00028, AVE-2026-00043, AVE-2026-00044, and AVE-2026-00065: the same missing content-versus-instruction boundary, realized here at the MCP server-card fetched at connection time, before any tool call and outside runtime monitoring's reach.",
     "affected_platforms": [
       "claude-desktop",
       "claude-code",
@@ -632,7 +632,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-01T00:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-08-29T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -1971,7 +1971,7 @@
     "title": "A2A agent card poisoning via embedded adversarial instructions",
     "attack_class": "Prompt Injection - A2A Agent Card Poisoning",
     "severity": "HIGH",
-    "description": "A malicious remote agent embeds adversarial instructions within its A2A (Agent-to-Agent) protocol agent card, the structured metadata document describing its capabilities, endpoints, and operational details that a host agent uses to plan task delegation. When agent cards are injected directly into an LLM's reasoning context without strict boundary enforcement, the metadata is reinterpreted as executable instruction rather than descriptive data. This differs from MCP server-card injection (AVE-2026-00041) in protocol, discovery mechanism, and payload surface; A2A has no fixed .well-known path convention and no tool.description field, the payload lives in the agent's own self-declared identity and capability claims within a peer discovery and delegation exchange, not a file fetched before a tool call.",
+    "description": "A malicious remote agent embeds adversarial instructions within its A2A (Agent-to-Agent) protocol agent card, the structured metadata document describing its capabilities, endpoints, and operational details that a host agent uses to plan task delegation. When agent cards are injected directly into an LLM's reasoning context without strict boundary enforcement, the metadata is reinterpreted as executable instruction rather than descriptive data. This differs from MCP server-card injection (AVE-2026-00041) in protocol, discovery mechanism, and payload surface; A2A has no fixed .well-known path convention and no tool.description field, the payload lives in the agent's own self-declared identity and capability claims within a peer discovery and delegation exchange, not a file fetched before a tool call. This record shares its underlying failure with AVE-2026-00002, AVE-2026-00016, AVE-2026-00020, AVE-2026-00028, AVE-2026-00041, AVE-2026-00043, and AVE-2026-00044: the same missing content-versus-instruction boundary, realized here at a remote agent's self-declared A2A agent-card metadata, read as trusted capability description rather than untrusted peer input.",
     "affected_platforms": [
       "any-a2a-protocol-implementation"
     ],
@@ -2032,7 +2032,7 @@
     "researcher": "Kumar Aditya",
     "researcher_url": "https://www.keysight.com/blogs/en/tech/nwvs/2026/03/12/agent-card-poisoning",
     "published": "2026-07-27T00:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-08-29T00:00:00Z",
     "references": [
       {
         "tag": "Keysight research",
@@ -2210,7 +2210,8 @@
     "detection_layer": "content",
     "confidence_baseline": 0.85,
     "evidence_basis_engines": [
-      "pattern"
+      "pattern",
+      "external_authority"
     ],
     "derivable_into": [
       "remote-control-chain"
@@ -3658,7 +3659,7 @@
     "component_type": "other",
     "title": "Indirect Prompt Injection via RAG Retrieval",
     "attack_class": "Prompt Injection - RAG Retrieval",
-    "description": "A Retrieval-Augmented Generation (RAG) pipeline indexes external documents and injects their content into the agent's context at query time. An attacker who controls any document in the indexed corpus can embed instructions that will be treated as trusted context when retrieved, effectively injecting into the agent's reasoning without direct access to the system prompt.",
+    "description": "A Retrieval-Augmented Generation (RAG) pipeline indexes external documents and injects their content into the agent's context at query time. An attacker who controls any document in the indexed corpus can embed instructions that will be treated as trusted context when retrieved, effectively injecting into the agent's reasoning without direct access to the system prompt. This record shares its underlying failure with AVE-2026-00002, AVE-2026-00020, AVE-2026-00028, AVE-2026-00041, AVE-2026-00043, AVE-2026-00044, and AVE-2026-00065: the same missing content-versus-instruction boundary, realized here at retrieved document content injected into the agent's context at RAG query time.",
     "affected_platforms": [
       "claude-code",
       "cursor",
@@ -3745,7 +3746,7 @@
     "researcher": "Zou et al.",
     "researcher_url": "https://arxiv.org/abs/2402.07867",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-08-29T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -4160,7 +4161,7 @@
     "component_type": "skill",
     "title": "Cross-Agent Prompt Injection (A2A)",
     "attack_class": "Prompt Injection - Cross-Agent A2A",
-    "description": "In agentic pipelines where one agent delegates tasks to sub-agents (A2A - Agent to Agent), the output of the first agent becomes the input of the second. A malicious component in the first agent's context can craft output that contains instructions designed to be interpreted as commands by the sub-agent, bypassing the orchestrator's safety controls.",
+    "description": "In agentic pipelines where one agent delegates tasks to sub-agents (A2A - Agent to Agent), the output of the first agent becomes the input of the second. A malicious component in the first agent's context can craft output that contains instructions designed to be interpreted as commands by the sub-agent, bypassing the orchestrator's safety controls. This record shares its underlying failure with AVE-2026-00002, AVE-2026-00016, AVE-2026-00028, AVE-2026-00041, AVE-2026-00043, AVE-2026-00044, and AVE-2026-00065: the same missing content-versus-instruction boundary, realized here at a sub-agent's input, where one agent's output becomes the next agent's trusted instruction stream in an A2A delegation chain.",
     "affected_platforms": [
       "claude-code",
       "any-multi-agent-framework"
@@ -4246,7 +4247,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-08-29T00:00:00Z",
     "references": [
       {
         "tag": "Cohen 2024",
@@ -5151,7 +5152,7 @@
     "component_type": "skill",
     "title": "Prompt Injection via File or Document Content",
     "attack_class": "Prompt Injection - File Content",
-    "description": "When an agent is asked to process a user-uploaded document, the document's content should be treated as untrusted data, not as instructions. A component that explicitly tells the agent to follow or execute any instructions found in uploaded files creates a reliable indirect prompt injection vector - the attacker simply needs to convince the user to upload a crafted document.",
+    "description": "When an agent is asked to process a user-uploaded document, the document's content should be treated as untrusted data, not as instructions. A component that explicitly tells the agent to follow or execute any instructions found in uploaded files creates a reliable indirect prompt injection vector - the attacker simply needs to convince the user to upload a crafted document. This record shares its underlying failure with AVE-2026-00002, AVE-2026-00016, AVE-2026-00020, AVE-2026-00041, AVE-2026-00043, AVE-2026-00044, and AVE-2026-00065: the same missing content-versus-instruction boundary, realized here at a user-uploaded document's content, which a component explicitly directs the agent to treat as instructions rather than data.",
     "affected_platforms": [
       "claude-code",
       "cursor",
@@ -5237,7 +5238,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-08-29T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -6929,7 +6930,7 @@
     "component_type": "mcp_server",
     "title": "Prompt injection via rich UI payload (canvas, artifact, form) rendered by MCP App",
     "attack_class": "Prompt Injection - MCP App UI Payload Injection",
-    "description": "MCP Apps can render rich UI elements - canvases, artifacts, interactive forms, and embedded content - directly in the agent's interface. An attacker crafts a UI payload that renders visually benign content to the user while embedding prompt injection instructions in metadata, alt text, accessibility attributes, or hidden elements that the underlying model reads. The agent acts on the injected instructions while the user sees only the harmless rendered surface. This attack exploits the gap between what the user sees and what the model processes.",
+    "description": "MCP Apps can render rich UI elements - canvases, artifacts, interactive forms, and embedded content - directly in the agent's interface. An attacker crafts a UI payload that renders visually benign content to the user while embedding prompt injection instructions in metadata, alt text, accessibility attributes, or hidden elements that the underlying model reads. The agent acts on the injected instructions while the user sees only the harmless rendered surface. This attack exploits the gap between what the user sees and what the model processes. This record shares its underlying failure with AVE-2026-00002, AVE-2026-00016, AVE-2026-00020, AVE-2026-00028, AVE-2026-00041, AVE-2026-00044, and AVE-2026-00065: the same missing content-versus-instruction boundary, realized here in the gap between a rendered UI surface the user sees and the underlying metadata the model actually reads.",
     "affected_platforms": [
       "claude-desktop",
       "claude-code",
@@ -6999,7 +7000,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-01T00:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-08-29T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -7065,7 +7066,7 @@
     "component_type": "skill",
     "title": "Prompt injection via poisoned async task result injected into future agent context",
     "attack_class": "Prompt Injection - Async Task Result Poisoning",
-    "description": "Agentic workflows increasingly use async task queues where the agent dispatches a task, continues other work, and later reads the result. An attacker who controls the task result delivery mechanism (a queue, webhook, or polling endpoint) injects malicious instructions into the result payload. When the agent reads the result in a future turn, the injected content is interpreted as trusted context from a completed task - not as external untrusted input. The temporal gap between task dispatch and result consumption bypasses synchronous safety checks.",
+    "description": "Agentic workflows increasingly use async task queues where the agent dispatches a task, continues other work, and later reads the result. An attacker who controls the task result delivery mechanism (a queue, webhook, or polling endpoint) injects malicious instructions into the result payload. When the agent reads the result in a future turn, the injected content is interpreted as trusted context from a completed task - not as external untrusted input. The temporal gap between task dispatch and result consumption bypasses synchronous safety checks. This record shares its underlying failure with AVE-2026-00002, AVE-2026-00016, AVE-2026-00020, AVE-2026-00028, AVE-2026-00041, AVE-2026-00043, and AVE-2026-00065: the same missing content-versus-instruction boundary, realized here at an async task result payload, read across a temporal gap as trusted completed-task context rather than external input.",
     "affected_platforms": [
       "claude-code",
       "any-agent-with-async-task-execution",
@@ -7134,7 +7135,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-01T00:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-08-29T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
