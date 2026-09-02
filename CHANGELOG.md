@@ -9,6 +9,27 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 ## [Unreleased]
 
 ### Changed
+- `scripts/check_confidence_signal.py` now reports two named findings
+  rather than one warning. Running its engine-set cardinality test and
+  the `verification_basis` derivation against each other over the same
+  `evidence_basis_engines` field showed neither subsumes the other: two
+  engines that both read artifact-produced content derive
+  `artifact_intercepted` and cardinality stayed silent, while a single
+  `sandbox` engine derives `substrate_intercepted` and cardinality
+  flagged it. Cardinality measures corroboration, how many independent
+  sources agreed; the derivation measures vantage, where the observation
+  was made from. Both signals are real and they take different repairs,
+  so the check emits `vantage_floor` and `independence_floor` separately
+  and a record may carry both, one, or neither. The vantage arm imports
+  the derivation from `scripts/write_verification_basis.py` rather than
+  recomputing it, and derives even where a record carries a stamped
+  `verification_basis`, since the stamp is the author's own copy. On the
+  current corpus this turns 0 findings into 8 `vantage_floor` findings
+  across 8 records — all of them records that declare a high
+  `confidence_baseline` and no `evidence_vantage` at all. Still a soft
+  warning; the exit code is untouched. `--json` gains a `finding` key per
+  entry and a `records` count alongside `count`. Consumer guidance in
+  `docs/guides/confidence-baseline-consumer-guide.md`.
 - AVE-2026-00070: `researcher`/`researcher_url` correction — was
   listed as "Saray Chak" / bawbel.io despite the record's own
   `references` entry already citing the actual external source (Zhu,

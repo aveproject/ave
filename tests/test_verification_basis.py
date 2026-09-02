@@ -63,6 +63,24 @@ def test_sandbox_also_reaches_substrate():
     )) == "substrate_reconstructed"
 
 
+def test_the_derived_vantage_is_readable_without_parsing_the_composed_value():
+    """The vantage half of the composition, pinned as a name of its own.
+
+    scripts/check_confidence_signal.py floors its vantage arm on this. A
+    consumer that had to recover the vantage by splitting
+    'substrate_intercepted' on an underscore, or by re-testing
+    SUBSTRATE_ENGINES itself, would be a second definition of the same
+    predicate -- which is the defect the confidence check was split to fix.
+    """
+    assert writer.derived_vantage(record(
+        evidence_vantage="substrate", evidence_basis_engines=["sandbox"],
+    )) == "substrate"
+    assert writer.derived_vantage(record(
+        evidence_vantage="substrate", evidence_basis_engines=["pattern"],
+    )) == "artifact"
+    assert writer.derived_vantage(record()) == "artifact"
+
+
 def test_the_ceiling_does_not_raise_a_record_that_claims_nothing():
     """A strong engine set is permission to make a claim, not the claim. A
     record that declares no vantage stays at the floor even with the strongest

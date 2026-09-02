@@ -89,6 +89,21 @@ def declared_method(record: dict) -> str:
     return value if value in METHOD_VALUES else FLOOR_METHOD
 
 
+def derived_vantage(record: dict) -> str:
+    """The vantage this record is entitled to: the weaker of what its producer
+    declared and what its engine set can reach.
+
+    Named rather than left inline inside derive() because it is the answer to a
+    question consumers ask on its own -- where was this observed from -- and a
+    consumer that has to recover it by reading the front half of a composed
+    string, or by re-deriving it from SUBSTRATE_ENGINES, is a second definition
+    of the same predicate waiting to disagree with this one.
+    """
+    if engine_vantage(record) != "substrate":
+        return FLOOR_VANTAGE
+    return declared_vantage(record)
+
+
 def derive(record: dict) -> str:
     """Compose the two axes into verification_basis, weakest input winning.
 
@@ -98,10 +113,7 @@ def derive(record: dict) -> str:
     not claim. The result names the cell, not a score: it says where the
     observation was made from and how, and nothing about whether it was right.
     """
-    vantage = declared_vantage(record)
-    if engine_vantage(record) != "substrate":
-        vantage = FLOOR_VANTAGE
-    return f"{vantage}_{declared_method(record)}"
+    return f"{derived_vantage(record)}_{declared_method(record)}"
 
 
 def check_record(record: dict) -> list[str]:
