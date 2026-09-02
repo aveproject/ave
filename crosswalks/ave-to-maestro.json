@@ -1,0 +1,79 @@
+{
+  "$schema": "https://aveproject.org/schema/crosswalk-1.0.0.schema.json",
+  "source": {
+    "standard": "AVE",
+    "version": "1.1.0",
+    "url": "https://aveproject.org",
+    "record_count": 80,
+    "commit": "f68e8884d50be8d12f970e4f7f3114a3b4dfd7b5"
+  },
+  "target": {
+    "tool": "MAESTRO (Multi-Agent Environment, Security, Threat, Risk, & Outcome)",
+    "vendor": "Cloud Security Alliance",
+    "url": "https://cloudsecurityalliance.org/blog/2025/02/06/agentic-ai-threat-modeling-framework-maestro",
+    "github": "https://github.com/CloudSecurityAlliance/MAESTRO",
+    "status": "Continuously evolving via community contribution, not discretely versioned. Verified before building this crosswalk: the CSA's own framework post carries no version marker, and the CSA's GitHub repo (an AI-powered threat analyzer tool built on the framework, not a versioned spec repo for the framework itself) has zero tags and zero releases despite being actively pushed to as recently as 2026-08-27. A previous internal note treated a future 'v2' as a blocker for this crosswalk; that blocker does not exist and this crosswalk was not waiting on anything real.",
+    "checked_against_live_site": "2026-08-30"
+  },
+  "generated": "2026-08-30",
+  "note": "Deliberate pilot, not a full-corpus crosswalk: 6 AVE records mapped to 5 of MAESTRO's ~49 layer/threat combinations (7 layers, each with 6-8 named threats), the clearest, most unambiguous mechanism matches, following the same pilot-first approach used for the OpenCRE and OWASP GenAI Crosswalk submissions. MAESTRO's own threats are named at a broad, principle level (e.g. 'Agent Tool Misuse' covers any unsafe use of an already-authorized tool); AVE provides the individual behavioral class underneath. Two tempting matches were checked and rejected rather than forced: AVE-2026-00006 (Cryptocurrency Drain) was initially considered for Layer 4's 'Resource Hijacking', but that MAESTRO threat is about hijacked compute/infrastructure resources, not financial/wallet theft via an authorized tool, so it maps to Layer 7's 'Agent Tool Misuse' instead. AVE-2026-00017 (Server Impersonation) was considered for Layer 7's 'Agent Impersonation' but is excluded from this pilot: MAESTRO's threat concerns one agent impersonating another agent within a multi-agent ecosystem, while AVE-2026-00017 describes an MCP server (a tool/service, not itself an agent) impersonating a well-known official server. The trust-exploitation shape is similar; the entity type is not the same, and that distinction is exactly what MAESTRO's own layer boundaries are drawn around. Recorded here rather than silently mapped, the same discipline already applied to AVE-2026-00059/00065 in the OpenCRE pilot.",
+  "mappings": [
+    {
+      "maestro_layer": "Layer 3 - Agent Frameworks",
+      "maestro_threat": "Supply Chain Attacks (targeting dependencies)",
+      "ave_ids": ["AVE-2026-00062"],
+      "primary_ave_id": "AVE-2026-00062",
+      "notes": "Direct match. AVE-2026-00062 (Unpinned Dependency Substitution) is exactly this threat at the level of a single behavioral class: a mutable dependency reference lets the reviewed and executed artifact silently diverge after approval."
+    },
+    {
+      "maestro_layer": "Layer 4 - Deployment and Infrastructure",
+      "maestro_threat": "Infrastructure-as-Code (IaC) Manipulation",
+      "ave_ids": ["AVE-2026-00071"],
+      "primary_ave_id": "AVE-2026-00071",
+      "notes": "AVE-2026-00071 (Container Daemon Redirect) is a declared configuration value (DOCKER_HOST, or a -H/--host flag in a committed command) manipulated to point the container daemon at attacker infrastructure, so every subsequent build, run, pull, and mount silently targets it. This is IaC manipulation specifically, not a compromised image (nothing in the image itself is malicious) and not orchestration-layer exploitation (no Kubernetes/orchestrator component is involved)."
+    },
+    {
+      "maestro_layer": "Layer 7 - Agent Ecosystem",
+      "maestro_threat": "Agent Goal Manipulation",
+      "ave_ids": ["AVE-2026-00007"],
+      "primary_ave_id": "AVE-2026-00007",
+      "notes": "Direct match, close to a shared vocabulary already: AVE-2026-00007's own attack_class is 'Prompt Injection - Goal Hijack', explicit instruction-override language ('ignore all previous instructions') redirecting the agent from its intended task."
+    },
+    {
+      "maestro_layer": "Layer 7 - Agent Ecosystem",
+      "maestro_threat": "Agent Tool Misuse",
+      "ave_ids": ["AVE-2026-00006", "AVE-2026-00068"],
+      "primary_ave_id": "AVE-2026-00068",
+      "notes": "Two distinct AVE mechanisms under the same MAESTRO threat. AVE-2026-00006 (Cryptocurrency Drain): the agent's own wallet tool access is used, under disguised instructions, to transfer funds or approve unlimited token allowances. AVE-2026-00068 (CLI Command Composition): individually-authorized CLI commands compose through shared OS state into a capability beyond task scope. Both are an agent operating within tools it was actually granted, misused, not a boundary or sandbox failure."
+    },
+    {
+      "maestro_layer": "Layer 7 - Agent Ecosystem",
+      "maestro_threat": "Marketplace Manipulation",
+      "ave_ids": ["AVE-2026-00066"],
+      "primary_ave_id": "AVE-2026-00066",
+      "notes": "AVE-2026-00066 (Hallucinated Resource Squatting): an attacker precomputes plausible-but-nonexistent names an LLM is statistically likely to hallucinate, then preemptively registers those exact names on a public registry with malicious content. Considered for Layer 7's 'Malicious Agent Discovery' instead, but that MAESTRO threat reads as agent-specific (a malicious agent being surfaced in an agent directory/registry search); AVE-2026-00066's mechanism is registry-squatting broadly (packages, repos, or skills), which 'Marketplace Manipulation' names without narrowing to agents specifically, so it is the better fit."
+    }
+  ],
+  "gaps_in_ave": [
+    {
+      "topic": "Model Stealing / Model Extraction (Layer 1, Layer 6)",
+      "reason": "AVE catalogs behavioral classes in agentic components (skills, MCP servers, system prompts, agent plugins), not attacks against a foundation model's own weights or training process. Out of AVE's current scope entirely, not a gap to fill."
+    },
+    {
+      "topic": "Denial of Service on computationally expensive queries (Layer 1)",
+      "reason": "A related, unresolved internal question (a possible resource-exhaustion/agentic-DoS gap) is tracked separately and was not resolved as part of building this crosswalk; see the trust-strategy roadmap rather than treating this pilot as having settled it."
+    }
+  ],
+  "gaps_in_maestro": [
+    {
+      "topic": "Server/component impersonation distinct from agent impersonation",
+      "ave_id": "AVE-2026-00017",
+      "reason": "See the note field. MAESTRO's Layer 7 'Agent Impersonation' is scoped to one agent impersonating another; a non-agent component (an MCP server) impersonating a well-known official one has no clean home in the current seven-layer, named-threat list."
+    }
+  ],
+  "coverage": {
+    "maestro_threats_mapped": 5,
+    "ave_classes_covered": 6,
+    "note_on_unmapped": "This is a deliberate pilot covering 3 of 7 layers and 5 of roughly 49 named layer/threat combinations. No claim is made about the other layers or threats; a full-corpus pass was not attempted here."
+  }
+}
