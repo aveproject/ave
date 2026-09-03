@@ -404,6 +404,20 @@ Coverage scripts:
 Each record ships with a detection rule and positive/negative fixtures.
 Identified from the research-new-attack-classes benchmark (Task 11): these were the three confirmed genuine gaps across MCPSecBench, FSF-MCP, MCP-SafetyBench, and Hou et al. 2025.
 
+**[CORRECTED 2026-09-02, see #249]** The sourcing claim in the line above
+does not hold: `docs/agents/research/benchmark-2026-06.md`'s per-dataset
+class tables that this attribution rests on were found to be substantially
+fabricated (72 of 102 checkable claims wrong, see #249/#241) — the "planned"
+rows these three records were drafted against were never checked against
+each paper's real, published taxonomy. This does not implicate the three
+records themselves: each carries its own independent, verified primary
+sourcing in its own `references` field (RFC 8414/7636 and CWE-601 for
+AVE-2026-00051, CWE-114/284 and the OWASP MCP Top 10 for AVE-2026-00050,
+OWASP Host Header Testing and CWE-644/20 for AVE-2026-00049), none of which
+depend on the retracted benchmark analysis. Kept, not edited away, per this
+project's practice of publishing negative results rather than quietly
+correcting them out of the historical record.
+
 ### AIVSS score corrections
 
 Six records had incorrect scores — formula `((cvss_base + AARS) / 2) x ThM` was not applied, and ThM values outside the valid set {0.75, 0.90, 1.0} were used.
@@ -568,6 +582,12 @@ Three ADRs are locked and documented in `docs/adr/`:
   enable `ave_id` emission in their finding output
 - Resource exhaustion / agentic DoS record — the one confirmed genuine gap from the
   benchmark-2026-06 research report
+  **[CORRECTED 2026-09-02, see #249/#241]** This roadmap item does not hold: neither
+  MCPSecBench nor MCP-SafetyBench contains a resource-exhaustion or denial-of-service
+  class in their real, published taxonomies — the "genuine gap" this item names never
+  existed. Dropped rather than carried forward; not implemented in any shipped version.
+  Kept here, corrected in place, rather than removed, so the original stale roadmap
+  item stays visible alongside its correction.
 - Section 6.2 review priorities 2-4 from `AVE_V1.1.0_MIGRATION_BRIEF.md` — only 2 of the
   6 priority-1 records got a human spot-check in 1.2.0 (both had real bugs, since fixed);
   00045/00046/00050/00051 remain unreviewed LLM drafts, and priorities 2-4 haven't started
