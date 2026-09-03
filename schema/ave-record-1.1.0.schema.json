@@ -599,6 +599,45 @@
         "impact": { "type": "string" }
       },
       "description": "The explicit three-line artifact from audit question Q7: what the component can do, what specific condition makes that dangerous, and what results. Optional. This is the sharpest single check against capability/vulnerability conflation, a record that can't fill this in honestly is probably miscategorized."
+    },
+    "framework_sources": {
+      "type": "object",
+      "description": "Which version of each referenced framework this record's mappings (owasp_mcp, owasp_asi, mitre_atlas, nist_ai_rmf) were made against. Optional. A mapping to an unratified or moving framework is undecidable without this: a consumer holding owasp_mcp: [\"MCP03\"] cannot tell which reading of the numbering produced it — confirmed as a live, present-tense divergence, not a hypothetical, in crosswalks/ramparts-to-ave.json, where AVE's own MCP03 and Ramparts' MCP03 are unrelated categories that happen to share a number. Mirrors the commit/pin_status pinning already used on crosswalk endpoints (schema/crosswalk-1.0.0.schema.json), one layer down: a crosswalk endpoint pins the tree a record count was read from, this pins the framework reading a record's own tag was read from. Keyed by the mapping field it describes, e.g. framework_sources.owasp_mcp, not four parallel sibling fields, because frameworks version differently (MCP Top 10 has no release, MITRE ATLAS versions discretely, NIST AI RMF is a dated publication) and a single container shape has to accommodate all of them. See OWASP/www-project-mcp-top-10#52 for the case that prompted this.",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string",
+            "description": "Version or dated publication of the referenced framework this mapping was made against, e.g. '4.9.0' for MITRE ATLAS or a dated NIST AI RMF publication. Use commit instead where the framework is tracked in a repository."
+          },
+          "commit": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{40}$",
+            "description": "Full 40-character commit sha pinning the tree this mapping was read against, where the referenced framework has git history to pin. Same convention as crosswalk endpoint commit pinning: full, not abbreviated."
+          },
+          "read_date": {
+            "type": "string",
+            "format": "date",
+            "description": "ISO 8601 date this framework reading was last verified against. Required when pin_status is unpinnable, where it is the nearest thing an unversionable source has to a pin."
+          },
+          "pin_status": {
+            "type": "string",
+            "enum": [
+              "unpinnable"
+            ],
+            "description": "Present only to declare that the referenced framework has no version, tag, or commit to pin against, e.g. the MCP Top 10 prior to a canonical numbering reference existing. Distinguishes a stated exemption from a field nobody has filled in yet. An entry declaring this should also carry read_date and unpinnable_reason."
+          },
+          "unpinnable_reason": {
+            "type": "string",
+            "description": "Why this framework reading cannot be pinned, in terms a reader can check, e.g. 'MCP Top 10 is in pilot with no canonical numbering reference published (OWASP/www-project-mcp-top-10#52)'. Required when pin_status is unpinnable."
+          },
+          "content_digest": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$",
+            "description": "Lowercase sha256, prefixed sha256:, of the bytes read at read_date, for a framework with no git history to pin. Does not let a reader re-derive the mapping, but does let them tell whether the source has moved since it was read. Optional even when pin_status is unpinnable."
+          }
+        }
+      }
     }
   }
 }
