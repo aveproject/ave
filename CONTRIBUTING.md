@@ -158,6 +158,7 @@ python scripts/check_confidence_signal.py  # soft-warns on #98 high-confidence r
 python scripts/write_verification_basis.py   # derives verification_basis; reports declarations its axes refute
 python scripts/check_vulnerability_taxonomy.py  # soft-warns on records missing security_boundary/missing_control/vulnerability_rationale
 python scripts/check_vulnerability_taxonomy.py --strict --only AVE-2026-NNNNN   # your new record must carry all three taxonomy fields
+python scripts/check_framework_sources.py --strict --only AVE-2026-NNNNN   # if your record carries owasp_mcp/owasp_asi/mitre_atlas/nist_ai_rmf, each needs a framework_sources entry
 pytest tests/ -x -q                   # full suite: schema, AIVSS arithmetic, mitigation enums
 ```
 
