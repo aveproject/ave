@@ -15,7 +15,7 @@
   ],
   "aivss_score": 4.5,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:L/SI:H/SA:N",
-  "owasp_mcp": ["MCP02"],
+  "owasp_mcp": ["MCP03"],
   "owasp_asi": ["ASI02"],
   "mitre_atlas": ["AML.T0015"],
   "nist_ai_rmf": [],
@@ -106,6 +106,10 @@
   "evidence_basis_engines": ["llm"],
   "derivable_into": ["remote-control-chain"],
   "framework_sources": {
+    "owasp_mcp": {
+      "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+      "read_date": "2026-09-05"
+    },
     "owasp_asi": {
       "version": "2026",
       "read_date": "2026-08-23"

@@ -15,7 +15,7 @@
   ],
   "aivss_score": 4.8,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:L/SC:L/SI:L/SA:N",
-  "owasp_mcp": ["MCP09"],
+  "owasp_mcp": ["MCP02"],
   "behavioral_fingerprint": "Configuration sets a declarative flag (auto_approve, skip_confirmation, require_approval: false, or equivalent) that removes a human-in-the-loop check for high-risk actions, present in config rather than in instruction text, and therefore invisible to a review process that only inspects a component's stated instructions.",
   "behavioral_vector": [
     "approval-bypass-config",
@@ -83,5 +83,11 @@
   "detection_layer": "registry_metadata",
   "confidence_baseline": 0.6,
   "evidence_basis_engines": ["pattern"],
-  "derivable_into": ["remote-control-chain"]
+  "derivable_into": ["remote-control-chain"],
+  "framework_sources": {
+    "owasp_mcp": {
+      "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+      "read_date": "2026-09-05"
+    }
+  }
 }
