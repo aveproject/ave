@@ -96,5 +96,11 @@
   "detection_layer": "runtime",
   "confidence_baseline": 0.6,
   "evidence_basis_engines": ["sandbox", "llm"],
-  "derivable_into": ["remote-control-chain"]
+  "derivable_into": ["remote-control-chain"],
+  "framework_sources": {
+    "owasp_asi": {
+      "version": "2026",
+      "read_date": "2026-08-23"
+    }
+  }
 }

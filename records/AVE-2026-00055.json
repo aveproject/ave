@@ -138,5 +138,11 @@
   "derivable_into": [
     "rug-pull-chain",
     "remote-control-chain"
-  ]
+  ],
+  "framework_sources": {
+    "owasp_asi": {
+      "version": "2026",
+      "read_date": "2026-08-23"
+    }
+  }
 }
