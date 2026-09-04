@@ -618,18 +618,19 @@
           "read_date": {
             "type": "string",
             "format": "date",
-            "description": "ISO 8601 date this framework reading was last verified against. Required when pin_status is unpinnable, where it is the nearest thing an unversionable source has to a pin."
+            "description": "ISO 8601 date this framework reading was last verified against. Required when pin_status is unpinnable or unknown, where it is the nearest thing an unversionable or unrecoverable source has to a pin."
           },
           "pin_status": {
             "type": "string",
             "enum": [
-              "unpinnable"
+              "unpinnable",
+              "unknown"
             ],
-            "description": "Present only to declare that the referenced framework has no version, tag, or commit to pin against, e.g. the MCP Top 10 prior to a canonical numbering reference existing. Distinguishes a stated exemption from a field nobody has filled in yet. An entry declaring this should also carry read_date and unpinnable_reason."
+            "description": "Present only to declare a real gap rather than leave a blank field indistinguishable from one nobody has filled in. 'unpinnable': the referenced framework itself has no version, tag, or commit to pin against, e.g. the MCP Top 10 prior to a canonical numbering reference existing. An entry declaring this should also carry read_date and unpinnable_reason. 'unknown': the referenced framework does have real, addressable versions, but this record's mapping predates any tracking of which one was read, and the specific version is not recoverable now. An entry declaring this should carry read_date (the date this gap was confirmed, not a version read); unpinnable_reason does not apply, since the framework itself is not at fault."
           },
           "unpinnable_reason": {
             "type": "string",
-            "description": "Why this framework reading cannot be pinned, in terms a reader can check, e.g. 'MCP Top 10 is in pilot with no canonical numbering reference published (OWASP/www-project-mcp-top-10#52)'. Required when pin_status is unpinnable."
+            "description": "Why this framework reading cannot be pinned, in terms a reader can check, e.g. 'MCP Top 10 is in pilot with no canonical numbering reference published (OWASP/www-project-mcp-top-10#52)'. Required when pin_status is unpinnable. Not used when pin_status is unknown, since that declares a gap in AVE's own recordkeeping, not a property of the framework."
           },
           "content_digest": {
             "type": "string",

@@ -149,7 +149,17 @@
       "pattern",
       "semgrep"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00001",
@@ -289,7 +299,17 @@
     "derivable_into": [
       "rug-pull-chain",
       "remote-control-chain"
-    ]
+    ],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00002",
@@ -420,7 +440,17 @@
     ],
     "derivable_into": [
       "remote-control-chain"
-    ]
+    ],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00006",
@@ -549,7 +579,17 @@
       "semgrep",
       "yara"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00041",
@@ -695,7 +735,17 @@
       "pattern",
       "semgrep"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00047",
@@ -842,7 +892,13 @@
       "yara",
       "semgrep"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00048",
@@ -987,7 +1043,17 @@
     ],
     "derivable_into": [
       "privilege-escalation-chain"
-    ]
+    ],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00049",
@@ -1130,7 +1196,13 @@
       "pattern",
       "semgrep"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00050",
@@ -1278,7 +1350,17 @@
       "semgrep",
       "llm"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00051",
@@ -1423,7 +1505,13 @@
       "pattern",
       "semgrep"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00052",
@@ -1564,7 +1652,13 @@
     "derivable_into": [
       "remote-control-chain",
       "credential-exfiltration"
-    ]
+    ],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00055",
@@ -1706,7 +1800,13 @@
     "derivable_into": [
       "rug-pull-chain",
       "remote-control-chain"
-    ]
+    ],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00059",
@@ -1848,7 +1948,17 @@
     "derivable_into": [
       "remote-control-chain",
       "credential-exfiltration"
-    ]
+    ],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00060",
@@ -2083,7 +2193,13 @@
     "derivable_into": [
       "remote-control-chain",
       "credential-exfiltration"
-    ]
+    ],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00074",
@@ -2215,7 +2331,13 @@
     ],
     "derivable_into": [
       "remote-control-chain"
-    ]
+    ],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00003",
@@ -2346,7 +2468,17 @@
       "semgrep",
       "yara"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00004",
@@ -2480,7 +2612,17 @@
       "semgrep",
       "yara"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00005",
@@ -2612,7 +2754,17 @@
       "semgrep",
       "yara"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00007",
@@ -2743,7 +2895,17 @@
       "semgrep",
       "llm"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00008",
@@ -2874,7 +3036,17 @@
       "pattern",
       "semgrep"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00009",
@@ -3006,7 +3178,17 @@
       "semgrep",
       "llm"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00010",
@@ -3135,7 +3317,13 @@
       "pattern",
       "semgrep"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00011",
@@ -3264,7 +3452,17 @@
       "pattern",
       "semgrep"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00012",
@@ -3394,7 +3592,17 @@
       "pattern",
       "semgrep"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00013",
@@ -3526,7 +3734,17 @@
       "semgrep",
       "yara"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00015",
@@ -3651,7 +3869,13 @@
       "pattern",
       "semgrep"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00016",
@@ -3778,7 +4002,17 @@
       "semgrep",
       "llm"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00017",
@@ -3902,7 +4136,17 @@
       "pattern",
       "semgrep"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00018",
@@ -4024,7 +4268,17 @@
       "semgrep",
       "llm"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00019",
@@ -4153,7 +4407,17 @@
       "semgrep",
       "llm"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00020",
@@ -4279,7 +4543,17 @@
       "semgrep",
       "llm"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00021",
@@ -4400,7 +4674,13 @@
       "pattern",
       "semgrep"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00022",
@@ -4525,7 +4805,17 @@
       "pattern",
       "semgrep"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00023",
@@ -4645,7 +4935,17 @@
       "semgrep",
       "llm"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00024",
@@ -4769,7 +5069,13 @@
       "semgrep",
       "magika"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00025",
@@ -4892,7 +5198,13 @@
       "pattern",
       "semgrep"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00026",
@@ -5016,7 +5328,17 @@
       "semgrep",
       "yara"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00027",
@@ -5144,7 +5466,17 @@
       "pattern",
       "semgrep"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00028",
@@ -5270,7 +5602,17 @@
       "semgrep",
       "llm"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00029",
@@ -5392,7 +5734,17 @@
       "pattern",
       "yara"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00030",
@@ -5516,7 +5868,13 @@
       "pattern",
       "semgrep"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00031",
@@ -5642,7 +6000,17 @@
       "semgrep",
       "llm"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00032",
@@ -5768,7 +6136,17 @@
       "semgrep",
       "yara"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00033",
@@ -5896,7 +6274,17 @@
       "semgrep",
       "yara"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00034",
@@ -6028,7 +6416,17 @@
       "semgrep",
       "yara"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00035",
@@ -6149,7 +6547,13 @@
       "semgrep",
       "llm"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00036",
@@ -6277,7 +6681,17 @@
       "semgrep",
       "llm"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00037",
@@ -6402,7 +6816,17 @@
       "semgrep",
       "llm"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00038",
@@ -6527,7 +6951,13 @@
       "semgrep",
       "llm"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00039",
@@ -6654,7 +7084,17 @@
       "yara",
       "semgrep"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00040",
@@ -6779,7 +7219,13 @@
       "pattern",
       "semgrep"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00042",
@@ -6922,7 +7368,17 @@
     ],
     "derivable_into": [
       "rug-pull-chain"
-    ]
+    ],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00043",
@@ -7058,7 +7514,17 @@
       "semgrep",
       "llm"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00044",
@@ -7193,7 +7659,17 @@
       "semgrep",
       "llm"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00045",
@@ -7342,7 +7818,17 @@
     "derivable_into": [
       "credential-exfiltration",
       "privilege-escalation-chain"
-    ]
+    ],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00053",
@@ -7481,7 +7967,13 @@
     ],
     "derivable_into": [
       "credential-exfiltration"
-    ]
+    ],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00054",
@@ -7611,7 +8103,13 @@
     "derivable_into": [
       "remote-control-chain",
       "credential-exfiltration"
-    ]
+    ],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00056",
@@ -7734,7 +8232,13 @@
     ],
     "derivable_into": [
       "credential-exfiltration"
-    ]
+    ],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00057",
@@ -8064,7 +8568,13 @@
     "evidence_basis_engines": [
       "pattern"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00063",
@@ -8415,7 +8925,13 @@
     ],
     "derivable_into": [
       "remote-control-chain"
-    ]
+    ],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00067",
@@ -8509,7 +9025,13 @@
       "sandbox",
       "llm"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00068",
@@ -8604,7 +9126,13 @@
     ],
     "derivable_into": [
       "remote-control-chain"
-    ]
+    ],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00069",
@@ -8703,7 +9231,13 @@
     ],
     "derivable_into": [
       "remote-control-chain"
-    ]
+    ],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00070",
@@ -8809,7 +9343,13 @@
     "derivable_into": [
       "remote-control-chain",
       "credential-exfiltration"
-    ]
+    ],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00071",
@@ -8928,7 +9468,13 @@
     "evidence_basis_engines": [
       "pattern"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00072",
@@ -9300,7 +9846,13 @@
     ],
     "derivable_into": [
       "credential-exfiltration"
-    ]
+    ],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00076",
@@ -9432,7 +9984,13 @@
     ],
     "derivable_into": [
       "remote-control-chain"
-    ]
+    ],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00077",
@@ -9569,7 +10127,13 @@
     ],
     "derivable_into": [
       "credential-exfiltration"
-    ]
+    ],
+    "framework_sources": {
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00078",
@@ -10068,7 +10632,17 @@
       "semgrep",
       "llm"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-08-09"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-08-23"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00058",

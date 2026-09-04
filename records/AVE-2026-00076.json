@@ -104,5 +104,11 @@
   "detection_layer": "registry_metadata",
   "confidence_baseline": 0.55,
   "evidence_basis_engines": ["llm"],
-  "derivable_into": ["remote-control-chain"]
+  "derivable_into": ["remote-control-chain"],
+  "framework_sources": {
+    "owasp_asi": {
+      "version": "2026",
+      "read_date": "2026-08-23"
+    }
+  }
 }

@@ -107,5 +107,11 @@
   "detection_layer": "content",
   "confidence_baseline": 0.7,
   "evidence_basis_engines": ["pattern"],
-  "derivable_into": ["credential-exfiltration"]
+  "derivable_into": ["credential-exfiltration"],
+  "framework_sources": {
+    "owasp_asi": {
+      "version": "2026",
+      "read_date": "2026-08-23"
+    }
+  }
 }
