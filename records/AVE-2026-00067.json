@@ -9,7 +9,7 @@
   "description": "A skill that is entirely benign when reviewed or executed in isolation produces an output, such as an audit finding, an endorsement, a validation result, or another benign-looking artifact, that a separate, later-invoked skill treats as a trust or authorization signal without independently re-verifying the underlying claim. Neither skill individually does anything dangerous; the vulnerability exists only in the composition, when both are invoked along the same task path in a shared execution context. Because per-skill security review evaluates each skill's own behavior in isolation, it structurally cannot see this class of risk: an upstream skill's legitimate, correct output becomes a spoofable trust credential the moment a downstream skill treats it as authoritative rather than re-verifying the claim itself. Published research demonstrates this mechanism accepting harmful software installation at over 96% success across four of five tested model backends when preceded by an approval-like output from an unrelated upstream skill, versus near-zero success when the same downstream skill is invoked in isolation.",
   "aivss_score": 5.0,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:L/SI:H/SA:N",
-  "owasp_mcp": ["MCP02"],
+  "owasp_mcp": ["MCP07"],
   "owasp_asi": ["ASI03", "ASI08"],
   "mitre_atlas": [],
   "nist_ai_rmf": [],
@@ -74,6 +74,10 @@
   "evidence_basis_engines": ["sandbox", "llm"],
   "derivable_into": [],
   "framework_sources": {
+    "owasp_mcp": {
+      "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+      "read_date": "2026-09-05"
+    },
     "owasp_asi": {
       "version": "2026",
       "read_date": "2026-08-23"

@@ -112,8 +112,7 @@
     "notes": "Claims elevated permissions. Dynamic identity is primary vector."
   },
   "owasp_mcp": [
-    "MCP09",
-    "MCP10"
+    "MCP07"
   ],
   "severity": "MEDIUM",
   "evidence_kind_default": "tool_description_pattern",
@@ -126,6 +125,10 @@
   ],
   "derivable_into": [],
   "framework_sources": {
+    "owasp_mcp": {
+      "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+      "read_date": "2026-09-05"
+    },
     "mitre_atlas": {
       "pin_status": "unknown",
       "read_date": "2026-08-09"

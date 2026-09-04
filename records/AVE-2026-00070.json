@@ -9,7 +9,7 @@
   "description": "A poisoned tool embeds encrypted attack primitives within its observations, which spread across the memories and context of multiple distinct agents as they use that tool during a multi-agent collaborative task. Each individual primitive remains dormant and inert on its own; no single agent's session, memory, or tool output contains anything a local security check would flag as malicious, and the collaborative task itself completes with no observable degradation to benign performance. Only when an attacker later scans the execution trace or the individual agents' memories, decrypts the primitives using a key established in the original poisoning step, and reassembles them, does the full backdoor payload exist and become executable, entirely after the multi-agent run has already finished. This is distinct from a single-session, single-model reassembly of static tool-description fragments (AVE-2026-00059): the fragments here live in multiple agents' own runtime observations and memories, not one client's static tool schema, and the reassembly is external, offline, and attacker-driven, not performed by any agent's own inference process during the session.",
   "aivss_score": 6.4,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:N",
-  "owasp_mcp": ["MCP03"],
+  "owasp_mcp": ["MCP06"],
   "owasp_asi": ["ASI06"],
   "mitre_atlas": [],
   "nist_ai_rmf": [],
@@ -79,6 +79,10 @@
   "evidence_basis_engines": ["sandbox", "llm"],
   "derivable_into": ["remote-control-chain", "credential-exfiltration"],
   "framework_sources": {
+    "owasp_mcp": {
+      "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+      "read_date": "2026-09-05"
+    },
     "owasp_asi": {
       "version": "2026",
       "read_date": "2026-08-23"

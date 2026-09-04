@@ -91,5 +91,11 @@
   "detection_layer": "registry_metadata",
   "confidence_baseline": 0.8,
   "evidence_basis_engines": ["pattern"],
-  "derivable_into": ["remote-control-chain"]
+  "derivable_into": ["remote-control-chain"],
+  "framework_sources": {
+    "owasp_mcp": {
+      "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+      "read_date": "2026-09-05"
+    }
+  }
 }

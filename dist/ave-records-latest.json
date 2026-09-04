@@ -151,6 +151,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -301,6 +305,10 @@
       "remote-control-chain"
     ],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -335,8 +343,7 @@
       "ASI01"
     ],
     "owasp_mcp": [
-      "MCP03",
-      "MCP10"
+      "MCP03"
     ],
     "nist_ai_rmf": [
       "MAP-1.5",
@@ -442,6 +449,10 @@
       "remote-control-chain"
     ],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -581,6 +592,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -701,8 +716,7 @@
       }
     ],
     "owasp_mcp": [
-      "MCP03",
-      "MCP09"
+      "MCP03"
     ],
     "aivss": {
       "cvss_base": 9.3,
@@ -737,6 +751,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -857,8 +875,7 @@
       }
     ],
     "owasp_mcp": [
-      "MCP02",
-      "MCP09"
+      "MCP01"
     ],
     "aivss": {
       "cvss_base": 8.7,
@@ -894,6 +911,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -1007,7 +1028,6 @@
       }
     ],
     "owasp_mcp": [
-      "MCP03",
       "MCP07"
     ],
     "aivss": {
@@ -1045,6 +1065,10 @@
       "privilege-escalation-chain"
     ],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -1198,6 +1222,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -1317,7 +1345,7 @@
       }
     ],
     "owasp_mcp": [
-      "MCP04",
+      "MCP02",
       "MCP07"
     ],
     "aivss": {
@@ -1352,6 +1380,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -1507,6 +1539,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -1612,8 +1648,7 @@
       }
     ],
     "owasp_mcp": [
-      "MCP05",
-      "MCP04"
+      "MCP05"
     ],
     "owasp_asi": [
       "ASI05"
@@ -1654,6 +1689,10 @@
       "credential-exfiltration"
     ],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -1802,6 +1841,10 @@
       "remote-control-chain"
     ],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -1834,8 +1877,7 @@
       "ASI01"
     ],
     "owasp_mcp": [
-      "MCP03",
-      "MCP06"
+      "MCP03"
     ],
     "mitre_atlas": [
       "AML.T0051"
@@ -1950,6 +1992,10 @@
       "credential-exfiltration"
     ],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -1981,7 +2027,7 @@
     "aivss_score": 7.2,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
     "owasp_mcp": [
-      "MCP01"
+      "MCP05"
     ],
     "behavioral_fingerprint": "Tool call parameters containing shell metacharacters (backticks, pipes, semicolons, command substitution syntax) are passed to a host shell without escaping or parameterization, resulting in execution of attacker-controlled shell commands rather than the parameter being treated as inert string data.",
     "behavioral_vector": [
@@ -2071,7 +2117,13 @@
     ],
     "derivable_into": [
       "remote-control-chain"
-    ]
+    ],
+    "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00065",
@@ -2091,7 +2143,6 @@
     "aivss_score": 7.1,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
     "owasp_mcp": [
-      "MCP10",
       "MCP06"
     ],
     "owasp_asi": [
@@ -2195,6 +2246,10 @@
       "credential-exfiltration"
     ],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -2333,6 +2388,10 @@
       "remote-control-chain"
     ],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -2363,8 +2422,7 @@
       "ASI01"
     ],
     "owasp_mcp": [
-      "MCP01",
-      "MCP05"
+      "MCP01"
     ],
     "nist_ai_rmf": [
       "MAP-1.5",
@@ -2470,6 +2528,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -2599,8 +2661,7 @@
       "notes": "curl|bash pattern. Active in wild. NL delivery invisible to SAST."
     },
     "owasp_mcp": [
-      "MCP01",
-      "MCP03"
+      "MCP05"
     ],
     "severity": "MEDIUM",
     "evidence_kind_default": "multi_engine",
@@ -2614,6 +2675,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -2741,8 +2806,7 @@
       "notes": "rm -rf style. Full autonomy + tool use + data access."
     },
     "owasp_mcp": [
-      "MCP02",
-      "MCP07"
+      "MCP05"
     ],
     "severity": "MEDIUM",
     "evidence_kind_default": "multi_engine",
@@ -2756,6 +2820,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -2882,8 +2950,7 @@
       "notes": "Core goal override. Non-determinism makes detection hard."
     },
     "owasp_mcp": [
-      "MCP01",
-      "MCP03"
+      "MCP06"
     ],
     "severity": "MEDIUM",
     "evidence_kind_default": "multi_engine",
@@ -2897,6 +2964,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -3038,6 +3109,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -3165,7 +3240,6 @@
       "notes": "Safety bypass. Very high non-determinism. NL-only attack surface."
     },
     "owasp_mcp": [
-      "MCP01",
       "MCP03"
     ],
     "severity": "MEDIUM",
@@ -3180,6 +3254,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -3305,7 +3383,6 @@
       "notes": "Conceals instructions. Moderate amplification across most factors."
     },
     "owasp_mcp": [
-      "MCP01",
       "MCP03"
     ],
     "severity": "MEDIUM",
@@ -3319,6 +3396,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -3441,7 +3522,7 @@
       "notes": "Embeds tool calls with attacker parameters. Tool squatting variant."
     },
     "owasp_mcp": [
-      "MCP01"
+      "MCP03"
     ],
     "severity": "MEDIUM",
     "evidence_kind_default": "tool_description_pattern",
@@ -3454,6 +3535,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -3580,8 +3665,7 @@
       "notes": "Claims elevated permissions. Dynamic identity is primary vector."
     },
     "owasp_mcp": [
-      "MCP09",
-      "MCP10"
+      "MCP07"
     ],
     "severity": "MEDIUM",
     "evidence_kind_default": "tool_description_pattern",
@@ -3594,6 +3678,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -3736,6 +3824,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -3871,6 +3963,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -3899,8 +3995,7 @@
       "ASI06"
     ],
     "owasp_mcp": [
-      "MCP10",
-      "MCP03"
+      "MCP06"
     ],
     "nist_ai_rmf": [
       "MAP-1.5",
@@ -4004,6 +4099,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -4138,6 +4237,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -4168,8 +4271,7 @@
       "ASI01"
     ],
     "owasp_mcp": [
-      "MCP03",
-      "MCP08"
+      "MCP06"
     ],
     "nist_ai_rmf": [
       "MEASURE-2.5",
@@ -4270,6 +4372,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -4409,6 +4515,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -4545,6 +4655,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -4676,6 +4790,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -4807,6 +4925,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -4836,7 +4958,6 @@
       "ASI01"
     ],
     "owasp_mcp": [
-      "MCP10",
       "MCP06"
     ],
     "nist_ai_rmf": [
@@ -4937,6 +5058,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -5071,6 +5196,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -5099,7 +5228,6 @@
       "ASI01"
     ],
     "owasp_mcp": [
-      "MCP10",
       "MCP06"
     ],
     "nist_ai_rmf": [
@@ -5200,6 +5328,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -5330,6 +5462,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -5468,6 +5604,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -5500,8 +5640,7 @@
       "ASI01"
     ],
     "owasp_mcp": [
-      "MCP10",
-      "MCP03"
+      "MCP06"
     ],
     "nist_ai_rmf": [
       "MAP-1.5",
@@ -5604,6 +5743,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -5736,6 +5879,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -5768,8 +5915,7 @@
       "ASI01"
     ],
     "owasp_mcp": [
-      "MCP07",
-      "MCP02"
+      "MCP07"
     ],
     "nist_ai_rmf": [
       "MAP-1.5",
@@ -5870,6 +6016,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -6002,6 +6152,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -6138,6 +6292,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -6276,6 +6434,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -6418,6 +6580,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -6549,6 +6715,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -6683,6 +6853,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -6714,8 +6888,7 @@
       "ASI01"
     ],
     "owasp_mcp": [
-      "MCP10",
-      "MCP03"
+      "MCP06"
     ],
     "nist_ai_rmf": [
       "MAP-1.5",
@@ -6818,6 +6991,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -6851,8 +7028,7 @@
       "ASI07"
     ],
     "owasp_mcp": [
-      "MCP02",
-      "MCP08"
+      "MCP02"
     ],
     "nist_ai_rmf": [
       "MAP-1.5",
@@ -6953,6 +7129,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -7086,6 +7266,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -7118,8 +7302,7 @@
       "ASI05"
     ],
     "owasp_mcp": [
-      "MCP05",
-      "MCP10"
+      "MCP05"
     ],
     "nist_ai_rmf": [
       "MAP-1.5",
@@ -7221,6 +7404,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -7333,7 +7520,7 @@
     ],
     "owasp_mcp": [
       "MCP05",
-      "MCP10"
+      "MCP06"
     ],
     "aivss": {
       "cvss_base": 9,
@@ -7370,6 +7557,10 @@
       "rug-pull-chain"
     ],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -7480,8 +7671,7 @@
       }
     ],
     "owasp_mcp": [
-      "MCP03",
-      "MCP10"
+      "MCP03"
     ],
     "aivss": {
       "cvss_base": 8.5,
@@ -7516,6 +7706,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -7625,8 +7819,7 @@
       }
     ],
     "owasp_mcp": [
-      "MCP06",
-      "MCP10"
+      "MCP06"
     ],
     "aivss": {
       "cvss_base": 8.2,
@@ -7661,6 +7854,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -7820,6 +8017,10 @@
       "privilege-escalation-chain"
     ],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -7925,7 +8126,6 @@
       }
     ],
     "owasp_mcp": [
-      "MCP02",
       "MCP07"
     ],
     "owasp_asi": [
@@ -7969,6 +8169,10 @@
       "credential-exfiltration"
     ],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -8062,8 +8266,7 @@
       }
     ],
     "owasp_mcp": [
-      "MCP05",
-      "MCP07"
+      "MCP05"
     ],
     "owasp_asi": [
       "ASI05"
@@ -8105,6 +8308,10 @@
       "credential-exfiltration"
     ],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -8234,6 +8441,10 @@
       "credential-exfiltration"
     ],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -8356,7 +8567,13 @@
       "pattern",
       "llm"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00061",
@@ -8378,7 +8595,7 @@
     "aivss_score": 4.1,
     "cvss_base_vector": "CVSS:4.0/AV:A/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
     "owasp_mcp": [
-      "MCP05"
+      "MCP07"
     ],
     "behavioral_fingerprint": "Configuration explicitly sets a TLS verification bypass flag (verify=False, rejectUnauthorized: false, or equivalent) for the component's own outbound network calls, rather than relying on default, enforced certificate validation.",
     "behavioral_vector": [
@@ -8459,7 +8676,13 @@
     "evidence_basis_engines": [
       "pattern"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00062",
@@ -8570,6 +8793,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -8596,7 +8823,7 @@
     "aivss_score": 4.8,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:L/SC:L/SI:L/SA:N",
     "owasp_mcp": [
-      "MCP09"
+      "MCP02"
     ],
     "behavioral_fingerprint": "Configuration sets a declarative flag (auto_approve, skip_confirmation, require_approval: false, or equivalent) that removes a human-in-the-loop check for high-risk actions, present in config rather than in instruction text, and therefore invisible to a review process that only inspects a component's stated instructions.",
     "behavioral_vector": [
@@ -8684,7 +8911,13 @@
     ],
     "derivable_into": [
       "remote-control-chain"
-    ]
+    ],
+    "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00064",
@@ -8706,7 +8939,7 @@
     "aivss_score": 5.2,
     "cvss_base_vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
     "owasp_mcp": [
-      "MCP01"
+      "MCP05"
     ],
     "behavioral_fingerprint": "A project-level configuration file declares a command or script to execute automatically on project load or open, with no corresponding user confirmation step, distinct from a tool call the model or user explicitly initiates.",
     "behavioral_vector": [
@@ -8790,7 +9023,13 @@
     ],
     "derivable_into": [
       "remote-control-chain"
-    ]
+    ],
+    "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00066",
@@ -8927,6 +9166,10 @@
       "remote-control-chain"
     ],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -8945,7 +9188,7 @@
     "aivss_score": 5,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:L/SI:H/SA:N",
     "owasp_mcp": [
-      "MCP02"
+      "MCP07"
     ],
     "owasp_asi": [
       "ASI03",
@@ -9027,6 +9270,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -9128,6 +9375,10 @@
       "remote-control-chain"
     ],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -9233,6 +9484,10 @@
       "remote-control-chain"
     ],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -9251,7 +9506,7 @@
     "aivss_score": 6.4,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:N",
     "owasp_mcp": [
-      "MCP03"
+      "MCP06"
     ],
     "owasp_asi": [
       "ASI06"
@@ -9345,6 +9600,10 @@
       "credential-exfiltration"
     ],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -9470,6 +9729,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -9589,7 +9852,13 @@
     ],
     "derivable_into": [
       "remote-control-chain"
-    ]
+    ],
+    "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00073",
@@ -9713,7 +9982,13 @@
     ],
     "derivable_into": [
       "credential-exfiltration"
-    ]
+    ],
+    "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00075",
@@ -9848,6 +10123,10 @@
       "credential-exfiltration"
     ],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -9874,7 +10153,7 @@
     "aivss_score": 4.5,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:L/SI:H/SA:N",
     "owasp_mcp": [
-      "MCP02"
+      "MCP03"
     ],
     "owasp_asi": [
       "ASI02"
@@ -9986,6 +10265,10 @@
       "remote-control-chain"
     ],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -10016,8 +10299,7 @@
     "aivss_score": 4.8,
     "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
     "owasp_mcp": [
-      "MCP07",
-      "MCP10"
+      "MCP07"
     ],
     "owasp_asi": [
       "ASI02"
@@ -10129,6 +10411,10 @@
       "credential-exfiltration"
     ],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
@@ -10258,7 +10544,13 @@
     ],
     "derivable_into": [
       "remote-control-chain"
-    ]
+    ],
+    "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00079",
@@ -10383,7 +10675,13 @@
     ],
     "derivable_into": [
       "remote-control-chain"
-    ]
+    ],
+    "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00080",
@@ -10509,7 +10807,13 @@
     ],
     "derivable_into": [
       "privilege-escalation-chain"
-    ]
+    ],
+    "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      }
+    }
   },
   {
     "ave_id": "AVE-2026-00014",
@@ -10620,8 +10924,7 @@
       "notes": "Social engineering. Multi-agent + dynamic identity amplify."
     },
     "owasp_mcp": [
-      "MCP09",
-      "MCP10"
+      "MCP03"
     ],
     "severity": "LOW",
     "evidence_kind_default": "semantic_inference",
@@ -10634,6 +10937,10 @@
     ],
     "derivable_into": [],
     "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      },
       "mitre_atlas": {
         "pin_status": "unknown",
         "read_date": "2026-08-09"
@@ -10764,6 +11071,12 @@
       "pattern",
       "llm"
     ],
-    "derivable_into": []
+    "derivable_into": [],
+    "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-05"
+      }
+    }
   }
 ]
