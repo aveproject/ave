@@ -117,5 +117,15 @@
   "detection_layer": "server_card",
   "confidence_baseline": 0.55,
   "evidence_basis_engines": ["llm", "pattern"],
-  "derivable_into": ["remote-control-chain", "credential-exfiltration"]
+  "derivable_into": ["remote-control-chain", "credential-exfiltration"],
+  "framework_sources": {
+    "mitre_atlas": {
+      "pin_status": "unknown",
+      "read_date": "2026-08-09"
+    },
+    "owasp_asi": {
+      "version": "2026",
+      "read_date": "2026-08-23"
+    }
+  }
 }

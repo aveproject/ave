@@ -140,5 +140,15 @@
     "pattern",
     "semgrep"
   ],
-  "derivable_into": []
+  "derivable_into": [],
+  "framework_sources": {
+    "mitre_atlas": {
+      "pin_status": "unknown",
+      "read_date": "2026-08-09"
+    },
+    "owasp_asi": {
+      "version": "2026",
+      "read_date": "2026-08-23"
+    }
+  }
 }

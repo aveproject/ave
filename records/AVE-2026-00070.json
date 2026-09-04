@@ -77,5 +77,11 @@
   "detection_layer": "runtime",
   "confidence_baseline": 0.45,
   "evidence_basis_engines": ["sandbox", "llm"],
-  "derivable_into": ["remote-control-chain", "credential-exfiltration"]
+  "derivable_into": ["remote-control-chain", "credential-exfiltration"],
+  "framework_sources": {
+    "owasp_asi": {
+      "version": "2026",
+      "read_date": "2026-08-23"
+    }
+  }
 }

@@ -53,6 +53,24 @@ def test_unpinnable_without_read_date_does_not_count():
     assert check.missing_sources(r) == ["owasp_mcp"]
 
 
+def test_unknown_with_read_date_counts_as_a_real_source():
+    r = record(
+        owasp_mcp=["MCP03"],
+        framework_sources={"owasp_mcp": {"pin_status": "unknown", "read_date": "2026-08-20"}},
+    )
+    assert check.missing_sources(r) == []
+
+
+def test_unknown_without_read_date_does_not_count():
+    """Mutation check: if the unknown branch stopped checking read_date,
+    this must go red -- unknown alone is a bare declaration, not a pin."""
+    r = record(
+        owasp_mcp=["MCP03"],
+        framework_sources={"owasp_mcp": {"pin_status": "unknown"}},
+    )
+    assert check.missing_sources(r) == ["owasp_mcp"]
+
+
 def test_multiple_mapped_fields_each_checked_independently():
     r = record(
         owasp_mcp=["MCP03"],

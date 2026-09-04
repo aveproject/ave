@@ -137,5 +137,11 @@
     "pattern",
     "semgrep"
   ],
-  "derivable_into": []
+  "derivable_into": [],
+  "framework_sources": {
+    "owasp_asi": {
+      "version": "2026",
+      "read_date": "2026-08-23"
+    }
+  }
 }

@@ -119,5 +119,11 @@
   ],
   "derivable_into": [
     "credential-exfiltration"
-  ]
+  ],
+  "framework_sources": {
+    "owasp_asi": {
+      "version": "2026",
+      "read_date": "2026-08-23"
+    }
+  }
 }
