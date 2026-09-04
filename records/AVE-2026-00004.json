@@ -114,8 +114,7 @@
     "notes": "curl|bash pattern. Active in wild. NL delivery invisible to SAST."
   },
   "owasp_mcp": [
-    "MCP01",
-    "MCP03"
+    "MCP05"
   ],
   "severity": "MEDIUM",
   "evidence_kind_default": "multi_engine",
@@ -129,6 +128,10 @@
   ],
   "derivable_into": [],
   "framework_sources": {
+    "owasp_mcp": {
+      "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+      "read_date": "2026-09-05"
+    },
     "mitre_atlas": {
       "pin_status": "unknown",
       "read_date": "2026-08-09"

@@ -15,7 +15,7 @@
   ],
   "aivss_score": 7.2,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
-  "owasp_mcp": ["MCP01"],
+  "owasp_mcp": ["MCP05"],
   "behavioral_fingerprint": "Tool call parameters containing shell metacharacters (backticks, pipes, semicolons, command substitution syntax) are passed to a host shell without escaping or parameterization, resulting in execution of attacker-controlled shell commands rather than the parameter being treated as inert string data.",
   "behavioral_vector": [
     "transport-layer-rce",
@@ -89,5 +89,11 @@
   "detection_layer": "transport",
   "confidence_baseline": 0.6,
   "evidence_basis_engines": ["pattern"],
-  "derivable_into": ["remote-control-chain"]
+  "derivable_into": ["remote-control-chain"],
+  "framework_sources": {
+    "owasp_mcp": {
+      "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+      "read_date": "2026-09-05"
+    }
+  }
 }

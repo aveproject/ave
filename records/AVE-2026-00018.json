@@ -16,8 +16,7 @@
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:L/VI:H/VA:N/SC:L/SI:H/SA:N",
   "owasp_asi": ["ASI01"],
   "owasp_mcp": [
-    "MCP03",
-    "MCP08"
+    "MCP06"
   ],
   "nist_ai_rmf": [
     "MEASURE-2.5",
@@ -118,6 +117,10 @@
   ],
   "derivable_into": [],
   "framework_sources": {
+    "owasp_mcp": {
+      "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+      "read_date": "2026-09-05"
+    },
     "mitre_atlas": {
       "pin_status": "unknown",
       "read_date": "2026-08-09"

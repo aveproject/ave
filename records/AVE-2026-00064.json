@@ -15,7 +15,7 @@
   ],
   "aivss_score": 5.2,
   "cvss_base_vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
-  "owasp_mcp": ["MCP01"],
+  "owasp_mcp": ["MCP05"],
   "behavioral_fingerprint": "A project-level configuration file declares a command or script to execute automatically on project load or open, with no corresponding user confirmation step, distinct from a tool call the model or user explicitly initiates.",
   "behavioral_vector": [
     "zero-click-execution",
@@ -82,5 +82,11 @@
   "detection_layer": "registry_metadata",
   "confidence_baseline": 0.55,
   "evidence_basis_engines": ["pattern"],
-  "derivable_into": ["remote-control-chain"]
+  "derivable_into": ["remote-control-chain"],
+  "framework_sources": {
+    "owasp_mcp": {
+      "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+      "read_date": "2026-09-05"
+    }
+  }
 }
