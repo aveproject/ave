@@ -159,6 +159,8 @@ python scripts/write_verification_basis.py   # derives verification_basis; repor
 python scripts/check_vulnerability_taxonomy.py  # soft-warns on records missing security_boundary/missing_control/vulnerability_rationale
 python scripts/check_vulnerability_taxonomy.py --strict --only AVE-2026-NNNNN   # your new record must carry all three taxonomy fields
 python scripts/check_framework_sources.py --strict --only AVE-2026-NNNNN   # if your record carries owasp_mcp/owasp_asi/mitre_atlas/nist_ai_rmf, each needs a framework_sources entry
+python scripts/generate_terms.py      # regenerate docs/terms.md after any schema field or description change
+python scripts/check_terms_sync.py    # hard failure if docs/terms.md disagrees with the live schema -- run before opening a PR
 pytest tests/ -x -q                   # full suite: schema, AIVSS arithmetic, mitigation enums
 ```
 
@@ -239,6 +241,13 @@ period before merging.
 Current schema: **v1.1.0**.
 Canonical file: `schema/ave-record-1.1.0.schema.json`.
 (`schema/ave-record-1.0.0.schema.json` remains, permanently, as the frozen v1.0.0 canonical.)
+
+**Any change to a field's description, additive or structural, requires
+regenerating `docs/terms.md`**: `python scripts/generate_terms.py`, then
+confirm with `python scripts/check_terms_sync.py` before opening the PR.
+That file's per-field definitions are generated from the schema's own
+descriptions and are never hand-edited; `check_terms_sync.py` is a hard
+CI failure, not a soft warning, if the two disagree.
 
 ---
 
