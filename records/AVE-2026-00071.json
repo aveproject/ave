@@ -92,5 +92,11 @@
   "detection_layer": "registry_metadata",
   "confidence_baseline": 0.75,
   "evidence_basis_engines": ["pattern"],
-  "derivable_into": []
+  "derivable_into": [],
+  "framework_sources": {
+    "owasp_asi": {
+      "version": "2026",
+      "read_date": "2026-08-23"
+    }
+  }
 }

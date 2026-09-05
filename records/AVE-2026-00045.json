@@ -143,5 +143,15 @@
   "derivable_into": [
     "credential-exfiltration",
     "privilege-escalation-chain"
-  ]
+  ],
+  "framework_sources": {
+    "mitre_atlas": {
+      "pin_status": "unknown",
+      "read_date": "2026-08-09"
+    },
+    "owasp_asi": {
+      "version": "2026",
+      "read_date": "2026-08-23"
+    }
+  }
 }

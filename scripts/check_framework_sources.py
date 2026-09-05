@@ -30,15 +30,16 @@ FRAMEWORK_FIELDS = ("owasp_mcp", "owasp_asi", "mitre_atlas", "nist_ai_rmf")
 
 def has_real_source(entry: dict) -> bool:
     """True when a framework_sources entry is a real, checkable pin rather
-    than an empty or partial placeholder. An unpinnable declaration counts
-    only with its read_date (the nearest thing an unversionable source has
-    to a pin); anything else needs a version or commit alongside its
-    read_date, matching the same pin_status vocabulary already used on
-    crosswalk endpoints (schema/crosswalk-1.0.0.schema.json).
+    than an empty or partial placeholder. An unpinnable or unknown
+    declaration counts only with its read_date (the nearest thing an
+    unversionable or unrecoverable source has to a pin); anything else
+    needs a version or commit alongside its read_date, matching the same
+    pin_status vocabulary already used on crosswalk endpoints
+    (schema/crosswalk-1.0.0.schema.json).
     """
     if not entry:
         return False
-    if entry.get("pin_status") == "unpinnable":
+    if entry.get("pin_status") in ("unpinnable", "unknown"):
         return bool(entry.get("read_date"))
     return bool((entry.get("version") or entry.get("commit")) and entry.get("read_date"))
 
