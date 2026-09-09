@@ -68,6 +68,22 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   new record.
 
 ### Added
+- AVE-2026-00081: Lingering authority — a task/subgoal/episode-scoped
+  capability grant outlives the closure event that justified it, with
+  nothing in the agent's runtime tying revocation to that closure, so
+  the agent's later, unrelated turns can reuse it. Sourced from
+  Santos-Grueiro, "Lingering Authority: Revocable Resource-and-Effect
+  Capabilities for Coding Agents" (arXiv:2606.22504), whose PORTICO
+  reference monitor demonstrates the gap empirically: a non-revoking
+  baseline permits 10/10 post-closure reuses and 6/6 forbidden effects
+  in a deterministic stale-write audit, versus 0/10 and 0/6 under a
+  revoking design. Distinct from AVE-2026-00021/00063 (active bypass
+  of a check, not this record's un-rechecked legitimate grant), from
+  AVE-2026-00045 (scope misuse within a still-valid grant, no elapsed
+  time or event required, versus this record's temporal/lifecycle
+  framing), and from AVE-2026-00050 (an undeclared registration, not
+  this record's legitimately-granted-but-unrevoked capability). Id
+  confirmed via issue #268 (MEDIUM, AIVSS 6.1).
 - AVE-2026-00078, 00079, 00080: three genuinely distinct multi-agent
   pipeline mechanisms extracted from Bappy et al., "Adversarial Attacks
   in Multi-Agent LLM Pipelines: Unveiling Structural Vulnerabilities in
