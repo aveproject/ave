@@ -9,6 +9,22 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 ## [Unreleased]
 
 ### Changed
+- `docs/specs/scaling-and-governance.md` Section 4 is now "Crosswalk
+  discipline", covering two checks instead of one. The existing numbering
+  caution becomes 4.1 unchanged; new 4.2 covers submitting content into an
+  external project's repository. Before proposing content into any
+  external repo: determine whether the target file is generated or
+  hand-authored, find the project's own registration mechanism if it is
+  generated, and run that generator locally against the change before
+  opening anything. Prompted by
+  `GenAI-Security-Project/GenAI-Data-Security-Initiative#66` (closed, not
+  merged), where AVE's four-record pilot was hand-appended to generated
+  `data/entries/` files with no `FRAMEWORK_FILES` registration; the
+  project's next generator run would have silently deleted every entry.
+  The PR closed primarily on a separate governance question, so the defect
+  was never paid for, which is the reason to write the check down now.
+  Nothing cited Section 4 externally, so no reference renumbering was
+  needed.
 - `scripts/check_confidence_signal.py` now reports two named findings
   rather than one warning. Running its engine-set cardinality test and
   the `verification_basis` derivation against each other over the same
