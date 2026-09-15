@@ -10816,6 +10816,149 @@
     }
   },
   {
+    "ave_id": "AVE-2026-00082",
+    "schema_version": "1.1.0",
+    "status": "active",
+    "component_type": "skill",
+    "title": "Local skill name collision: deterministic router shadowing across discovery roots",
+    "attack_class": "local_skill_name_collision",
+    "severity": "MEDIUM",
+    "description": "Two skill files already present on the local filesystem -- no registry, no network fetch, no hallucinated name -- resolve to an identical effective name: either an explicit declared name field in each file's frontmatter, or, when that field is absent, the file's own filename stem used as the fallback name. An agent's skill router typically discovers skills across several local roots of differing trust (e.g. a user-level directory the operator controls directly, and a workspace-level directory any collaborator with repository write access can also write to), then flattens all discovered skills into one name-keyed lookup with no per-root namespace separation. When two skills collide on the same resolved name, whichever the router resolves last silently shadows the other, with no content-level warning, conflict indicator, or operator-visible signal that a collision occurred at all. An attacker who can write to a lower-trust root can therefore plant a skill sharing the exact resolved name of an existing trusted skill from a higher-trust root and have their skill invoked in the trusted skill's place. Distinct from AVE-2026-00066 (Hallucinated Skill-Name Squatting): that record requires an LLM to hallucinate a plausible-but-nonexistent name and an attacker to have pre-registered that exact name on a public registry the agent then resolves against -- entry point is the model's own hallucinated belief, not a name it already knew. This record requires no registry and no hallucination: both colliding files already exist locally, right now, and deterministic resolution order, not LLM guessing behavior, decides which one wins. Distinct from AVE-2026-00074 (Reclaimable Dead External Anchor): that record requires a previously-live external reference to decay and become re-registerable over time. This record involves no external reference and no decay -- the collision is available to exploit the moment both files are written, with no waiting period. Distinct from AVE-2026-00017 (MCP Server Impersonation or Spoofing): that record requires a component to actively assert a false identity claim (falsely identifying itself as a well-known official server) that an agent then trusts. Neither skill in this record's mechanism makes any claim about being something else -- both are honestly whatever they are, and the vulnerability is that the router's name-based lookup cannot distinguish a trusted root's skill from an untrusted root's skill once their resolved names match.",
+    "affected_platforms": [
+      "claude-code",
+      "cursor",
+      "any-agent-with-local-multi-root-skill-discovery"
+    ],
+    "aivss_score": 4.4,
+    "cvss_base_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:L/UI:N/VC:H/VI:H/VA:N/SC:L/SI:L/SA:N",
+    "owasp_mcp": [
+      "MCP03"
+    ],
+    "owasp_asi": [],
+    "mitre_atlas": [
+      "AML.T0074"
+    ],
+    "nist_ai_rmf": [],
+    "behavioral_fingerprint": "Two skill files under different local discovery roots resolve to an identical effective name (declared or filename-derived), and the agent's router silently invokes whichever one resolution order picks, with no check that the two roots carry different trust levels and no signal surfaced when the collision occurs.",
+    "behavioral_vector": [
+      "local-namespace-collision",
+      "skill-shadowing",
+      "trust-tier-flattening"
+    ],
+    "provenance_vector": {
+      "entry_class": "registry_metadata",
+      "payload_surface": "a skill's declared name field in its frontmatter/manifest, or its filename stem when that field is absent or empty, as resolved by the agent's local skill-discovery/registration logic across multiple discovery roots"
+    },
+    "trifecta_profile": {
+      "requires": [
+        "untrusted_content"
+      ]
+    },
+    "security_boundary": "workspace-level (lower-trust) skill namespace -> user-level (higher-trust) skill namespace, both flattened into a single name-keyed resolution lookup with no trust-tier separation",
+    "missing_control": "no collision detection or trust-tier namespace isolation at skill discovery/resolution time -- two skills resolving to the same name across differently-trusted directories are accepted silently, with no operator-visible warning",
+    "vulnerability_rationale": {
+      "capability": "An agent's skill router discovers skill files from multiple local directories with differing trust levels and resolves them into a single flat, name-keyed lookup.",
+      "vulnerability": "No check exists for whether two discovered skills resolve to the same effective name; deterministic resolution order, not trust level, decides which file's behavior actually runs, and the collision is never surfaced to the user.",
+      "impact": "An attacker with write access to a lower-trust discovery root can have their skill silently substituted for and invoked in place of a trusted, higher-trust skill sharing the same resolved name, with no detectable warning that the substitution occurred."
+    },
+    "mitigation": {
+      "strategy": [
+        "validate_input",
+        "provenance_label"
+      ],
+      "enforcement_point": "agent_framework",
+      "trifecta_control": "break_untrusted_content"
+    },
+    "example_patterns": [
+      "workspace-level file at .agent/skills/deploy.md declares name: deploy, colliding with an existing user-level ~/.agent/skills/deploy.md",
+      "two skill files with no explicit name field, both named deploy.md, land in different discovery roots and collide on the shared filename-derived fallback name"
+    ],
+    "mutation_count": 0,
+    "detection_methodology": "1. Enumerate every skill file across every local discovery root the agent scans (e.g. workspace-level, user-level, any other configured skill directory). 2. For each file, resolve its effective name: the declared frontmatter name field if present and non-empty (after trimming whitespace), otherwise the file's own filename stem. 3. Lowercase and group all discovered skills by resolved name, since routers typically match case-insensitively. 4. Flag any group containing more than one file, reporting every colliding path so a reviewer can see the full collision, not just the winning file.",
+    "indicators_of_compromise": [
+      "Two or more skill files under different discovery roots (e.g. one workspace-level, one user-level) resolving to an identical name, case-insensitive -- via an explicit declared name field or, when absent, an identical filename stem used as the fallback",
+      "No content-level warning, conflict indicator, or operator-visible signal surfaced when the collision occurs"
+    ],
+    "remediation": "1. Rename one of the colliding skills so each discovery root's namespace no longer overlaps. 2. Prefer a runtime that refuses to silently resolve a name collision -- erroring out or requiring explicit operator confirmation before invoking either skill, rather than picking one by resolution order. 3. Where multiple discovery roots of differing trust levels are supported, prefix or namespace skill names by their originating root so an identical base name cannot silently cross a trust boundary. 4. Audit existing skill directories across all discovery roots for pre-existing collisions before this becomes exploitable.",
+    "kill_switch_active": false,
+    "researcher": "Sharath Rajasekar (rsharath)",
+    "researcher_url": "https://github.com/rsharath",
+    "published": "2026-09-09T09:00:00Z",
+    "last_updated": "2026-09-09T09:00:00Z",
+    "references": [
+      {
+        "tag": "Ramparts SkillNameCollision detector",
+        "text": "highflame-ai/ramparts, src/skills.rs -- analyze_skill_set groups every discovered skill by its resolved, lowercased name and emits a SkillNameCollision finding for any name shared by more than one file, with the doc comment stating the mechanism directly: 'Whichever skill the agent's router resolves last shadows the others -- an attacker who can write a workspace-level skill with the same name as a trusted user-level skill can silently replace it.' Introduced by rsharath, commit 9c7bd3d7, 2026-04-27.",
+        "url": "https://github.com/highflame-ai/ramparts/blob/main/src/skills.rs"
+      },
+      {
+        "tag": "Ramparts test coverage",
+        "text": "highflame-ai/ramparts, src/skills.rs -- skill_name_collision_emits_finding parses two skills with the same name at different paths and asserts exactly one SkillNameCollision finding is produced, naming both colliding paths.",
+        "url": "https://github.com/highflame-ai/ramparts/blob/main/src/skills.rs"
+      },
+      {
+        "tag": "MITRE ATLAS AML.T0074",
+        "text": "Masquerading -- 'Adversaries may attempt to manipulate features of their artifacts to make them appear legitimate or benign... This may include manipulating file metadata, tricking users into misidentifying the file type, and giving legitimate task or service names.' The 'giving legitimate task or service names' clause is a direct definitional match for this record's mechanism.",
+        "url": "https://atlas.mitre.org/techniques/AML.T0074"
+      },
+      {
+        "tag": "AVE issue #150",
+        "text": "Originating issue proposing this record, including the primary source and the initial distinctness comparison against AVE-2026-00066 and AVE-2026-00074.",
+        "url": "https://github.com/aveproject/ave/issues/150"
+      },
+      {
+        "tag": "AVE Registry",
+        "text": "AVE-2026-00082 -- AVE behavioral vulnerability registry",
+        "url": "https://github.com/aveproject/ave/blob/main/records/AVE-2026-00082.json"
+      }
+    ],
+    "aivss": {
+      "cvss_base": 6.8,
+      "aarf": {
+        "autonomy": 1,
+        "tool_use": 0.5,
+        "multi_agent": 0,
+        "non_determinism": 0,
+        "self_modification": 0,
+        "dynamic_identity": 0.5,
+        "persistent_memory": 0.5,
+        "natural_language_input": 0,
+        "data_access": 0.5,
+        "external_dependencies": 0
+      },
+      "aars": 3,
+      "thm": 0.9,
+      "mitigation_factor": 1,
+      "aivss_score": 4.4,
+      "aivss_severity": "MEDIUM",
+      "spec_version": "0.8",
+      "notes": "cvss_base 6.8 reflects a local, low-complexity attack requiring a real precondition (local write access to a lower-trust discovery root, PR:L/AT:P/AV:L) against a high-confidentiality/high-integrity impact (total behavioral substitution) -- lower than a network-vector class like AVE-2026-00062 despite a comparable 'silent substitution, no warning' impact shape, because the attack surface is more constrained. autonomy scored at maximum (1): once the colliding file is planted, the router's own deterministic resolution does the rest with no further attacker interaction. dynamic_identity scored 0.5, not the 1 a false-identity-claim record like AVE-2026-00017 earns: the collision creates real trust-anchor confusion (the router cannot distinguish trusted from untrusted by name alone) but involves no active impersonation or forged claim, an honest name genuinely shared, not a spoofed one. non_determinism scored 0: resolution order is deterministic once both files exist, not variable run to run, per the primary source's own framing. persistent_memory scored 0.5: the vulnerable state (the collision itself) persists across sessions via file presence, a real but structurally different persistence than an in-session memory write. thm scored 0.9 (PoC exists) rather than 1: the detection mechanism is real, shipped, and test-covered (skill_name_collision_emits_finding), and the attack itself requires no sophisticated construction (writing two files with matching names), but no disclosed CVE or real-world exploitation is cited by the source project. mitigation_factor 1: no broadly effective, ecosystem-wide fix is yet standard practice -- the fact a dedicated scanner rule had to be built for this is itself evidence no runtime commonly refuses or warns on the collision by default. owasp_mcp mapped to MCP03 (Tool Poisoning) after reading the category's full primary-source text (github.com/OWASP/www-project-mcp-top-10, 2025/MCP03) directly, stated honestly as the best-available fit rather than a clean one: MCP03's own text is specifically about schema/tool-description content tampering causing a benign-looking operation to map to a destructive one, which is not this record's mechanism (no content in the trusted skill is altered at all; a separate file is invoked instead). MCP09 (Shadow MCP Servers) was considered and rejected after reading its real text: that category describes unregistered/ungoverned server deployments as an infrastructure-visibility problem, not a client-side skill-namespace collision -- a worse fit than MCP03 despite 'shadow' resonating with 'shadowing' at the label level, exactly the kind of same-word-different-mechanism trap OWASP/www-project-mcp-top-10#52 already documents elsewhere in this corpus. No category in the current 2025/ Top 10 cleanly describes a local name-collision-driven silent substitution; flagging this as a real gap worth raising with that project rather than forcing a second stretch tag. owasp_asi left empty after checking all ten categories' real primary-source text directly (genai.owasp.org, 'OWASP Top 10 for Agentic Applications 2026', download/52117): ASI03 (Identity and Privilege Abuse) was the closest candidate but its real mechanism is agent-to-agent delegation-chain and credential-cache exploitation, not a local file-resolution collision with no identity claim involved; ASI02, ASI06, ASI09, and ASI10 were also read directly and ruled out on the same basis. nist_ai_rmf left empty rather than copying this corpus's own dominant (MAP-1.5, MEASURE-2.5, MANAGE-1.3) pattern, which appears on 25 of roughly 56 tagged records: checked all three subcategories against the real NIST AI 100-1 text (Tables 2-4) directly, and all three are generic organizational-process subcategories (documented risk tolerance, model validity/reliability testing, documented risk-response planning) that don't describe this record's specific mechanism any more than they'd describe nearly any other AI risk finding -- a strong signal this corpus-wide pattern is unverified boilerplate rather than a genuine per-record mapping, worth a dedicated nist_ai_rmf audit mirroring the earlier owasp_asi audit (issue #196), not something this one record's drafting should silently perpetuate."
+    },
+    "evidence_kind_default": "config_schema",
+    "detection_stage": "static_detection",
+    "detection_layer": "registry_metadata",
+    "confidence_baseline": 0.9,
+    "evidence_basis_engines": [
+      "pattern"
+    ],
+    "derivable_into": [
+      "rug-pull-chain"
+    ],
+    "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "source_url": "https://github.com/OWASP/www-project-mcp-top-10/tree/165fe0f78ef104459237b4a8e0f6e78db9b02391/2025",
+        "read_date": "2026-09-09"
+      },
+      "mitre_atlas": {
+        "version": "5.6.0",
+        "commit": "41d4f5ca4112f0e492ffaa3ebff07dc80a75afa5",
+        "source_url": "https://raw.githubusercontent.com/mitre-atlas/atlas-data/41d4f5ca4112f0e492ffaa3ebff07dc80a75afa5/dist/ATLAS.yaml",
+        "read_date": "2026-09-09"
+      }
+    }
+  },
+  {
     "ave_id": "AVE-2026-00014",
     "schema_version": "1.1.0",
     "component_type": "skill",

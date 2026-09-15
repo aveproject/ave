@@ -11,7 +11,7 @@ Stable IDs, AIVSS scores, and behavioral fingerprints for every way a skill file
 MCP server, system prompt, or agent plugin can be weaponized — scored consistently,
 mapped to the frameworks security teams already report against.
 
-[![Records](https://img.shields.io/badge/records-80-0f6e56?style=flat-square)](records/)
+[![Records](https://img.shields.io/badge/records-81-0f6e56?style=flat-square)](records/)
 [![Schema](https://img.shields.io/badge/schema-v1.1.0-0a3024?style=flat-square)](schema/ave-record-1.1.0.schema.json)
 [![AIVSS](https://img.shields.io/badge/AIVSS-v0.8-d4a017?style=flat-square)](https://aivss.owasp.org)
 [![OWASP MCP](https://img.shields.io/badge/OWASP-MCP%20Top%2010-0a3024?style=flat-square)](https://owasp.org)
@@ -102,7 +102,7 @@ two published AVE records, corrected the underlying process
 documentation, not just the two records, credited in
 [CONTRIBUTORS.md](CONTRIBUTORS.md).
 
-80 records. 8 independent crosswalks. See
+81 records. 8 independent crosswalks. See
 [crosswalks/](crosswalks/) for the full mappings, and
 [docs/writeups/](docs/writeups/) for full technical write-ups on
 individual records.
@@ -140,12 +140,12 @@ skill file          ->   in CI / pre-commit   ->  before deploy
 
 | | |
 |---|---|
-| Total records | 80 |
+| Total records | 81 |
 | Schema version | 1.1.0 |
 | AIVSS spec | v0.8 |
 | CRITICAL (>= 9.0) | 1 |
-| HIGH (7.0-8.9) | 14 |
-| MEDIUM (4.0-6.9) | 56 |
+| HIGH (7.0-8.9) | 15 |
+| MEDIUM (4.0-6.9) | 63 |
 | LOW (< 4.0) | 2 |
 | Framework: OWASP MCP Top 10 | all records |
 | Framework: MITRE ATLAS | where applicable |
@@ -208,7 +208,7 @@ AIVSS = ((8.5 + 7.5) / 2) x 1.0 x 1 = 8.0  ->  HIGH
 ## Record index
 
 <details>
-<summary><strong>80 records, click to expand</strong></summary>
+<summary><strong>81 records, click to expand</strong></summary>
 
 | AVE ID | Title | AIVSS | Severity |
 |---|---|---|---|
@@ -292,6 +292,7 @@ AIVSS = ((8.5 + 7.5) / 2) x 1.0 x 1 = 8.0  ->  HIGH
 | [AVE-2026-00078](records/AVE-2026-00078.json) | Consensus Poisoning: Unverified Multi-Agent Result Acceptance | 6.4 | MEDIUM |
 | [AVE-2026-00079](records/AVE-2026-00079.json) | Plan Hijacking via False Completion Signal | 6.2 | MEDIUM |
 | [AVE-2026-00080](records/AVE-2026-00080.json) | Silent Agent Substitution (Sybil) via Unverified Retry | 6.8 | MEDIUM |
+| [AVE-2026-00082](records/AVE-2026-00082.json) | Local Skill Name Collision (Deterministic Router Shadowing) | 4.4 | MEDIUM |
 
 </details>
 

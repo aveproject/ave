@@ -68,6 +68,18 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   new record.
 
 ### Added
+- AVE-2026-00082: local skill name collision (deterministic router
+  shadowing across discovery roots) -- two skill files already present
+  on the local filesystem resolve to an identical effective name
+  (declared or filename-derived); an agent's router silently invokes
+  whichever discovery root's file resolution order picks, with no
+  operator-visible signal a collision occurred. Distinct from
+  AVE-2026-00066 (requires LLM hallucination + public registry) and
+  AVE-2026-00074 (requires external reference decay): neither a
+  registry nor a hallucination nor decay is involved here, both files
+  already exist locally and deterministic resolution order decides the
+  winner. Sourced from highflame-ai/ramparts' SkillNameCollision
+  detector (issue #150) (MEDIUM, AIVSS 4.4)
 - AVE-2026-00078, 00079, 00080: three genuinely distinct multi-agent
   pipeline mechanisms extracted from Bappy et al., "Adversarial Attacks
   in Multi-Agent LLM Pipelines: Unveiling Structural Vulnerabilities in
