@@ -8,17 +8,17 @@
     "commit": "1e29789e4941b6c1c2435508dbf3c245eedc8d04"
   },
   "target": {
-    "registry": "aee-vocabulary",
+    "registry": "agent-evidence-vocabulary",
     "version": "0.2.0",
     "license": "CC0-1.0",
-    "url": "https://github.com/astrogilda/aee-vocabulary",
+    "url": "https://github.com/astrogilda/agent-evidence-vocabulary",
     "registry_file": "vocabulary.yaml",
     "term_count": 8,
     "checked_against_live_file": "2026-09-15",
     "commit": "66177d65690e9d7eb7e4ff59df8f91792a90735b"
   },
   "generated": "2026-09-15",
-  "note": "A field-level crosswalk between AVE's evidence-provenance properties and the aee-vocabulary registry, which names the axes an execution-evidence claim is read on: who observed the execution, how directly, and what the claim leaves out. The unit is a schema property rather than a category, because the two sides describe different things: AVE enumerates behavioral vulnerability classes and the registry names the provenance axes any claim about an execution carries. They meet at exactly one place, which is how AVE says where its evidence came from. Read coverage before trusting a row: none of the 80 records carries evidence_vantage, evidence_method or verification_basis. All three are optional in schema v1.1.0 and all three read absent on every record at the commit above, verified by fetching each record file rather than by reading the schema. Every mapping below is therefore evidence: inferred, established by comparing two schema definitions, and none is evidence: emitted. A row moves to emitted when a record carries the field and a reviewer can fetch it.",
+  "note": "A field-level crosswalk between AVE's evidence-provenance properties and the agent-evidence-vocabulary registry, which names the axes an execution-evidence claim is read on: who observed the execution, how directly, and what the claim leaves out. The unit is a schema property rather than a category, because the two sides describe different things: AVE enumerates behavioral vulnerability classes and the registry names the provenance axes any claim about an execution carries. They meet at exactly one place, which is how AVE says where its evidence came from. Read coverage before trusting a row: none of the 80 records carries evidence_vantage, evidence_method or verification_basis. All three are optional in schema v1.1.0 and all three read absent on every record at the commit above, verified by fetching each record file rather than by reading the schema. Every mapping below is therefore evidence: inferred, established by comparing two schema definitions, and none is evidence: emitted. A row moves to emitted when a record carries the field and a reviewer can fetch it.",
   "mappings": [
     {
       "ave_field": "evidence_vantage",
