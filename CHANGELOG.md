@@ -68,6 +68,13 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   new record.
 
 ### Added
+- AVE-2026-00083: silent guardrail comparison failure — a protection
+  mechanism (guardrail, approval gate, or judge) executes on every
+  request and reports a permissive result because its own comparison,
+  branch, or aggregation logic never evaluates the real input, across
+  five independently reproduced structural forms. Proposed by
+  arian-gogani (github.com/arian-gogani/failopen,
+  CWE-CAPEC/AI-Working-Group#1); researcher field credits him directly.
 - AVE-2026-00078, 00079, 00080: three genuinely distinct multi-agent
   pipeline mechanisms extracted from Bappy et al., "Adversarial Attacks
   in Multi-Agent LLM Pipelines: Unveiling Structural Vulnerabilities in
