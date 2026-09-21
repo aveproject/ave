@@ -9,6 +9,22 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 ## [Unreleased]
 
 ### Changed
+- `docs/specs/scaling-and-governance.md` Section 4 is now "Crosswalk
+  discipline", covering two checks instead of one. The existing numbering
+  caution becomes 4.1 unchanged; new 4.2 covers submitting content into an
+  external project's repository. Before proposing content into any
+  external repo: determine whether the target file is generated or
+  hand-authored, find the project's own registration mechanism if it is
+  generated, and run that generator locally against the change before
+  opening anything. Prompted by
+  `GenAI-Security-Project/GenAI-Data-Security-Initiative#66` (closed, not
+  merged), where AVE's four-record pilot was hand-appended to generated
+  `data/entries/` files with no `FRAMEWORK_FILES` registration; the
+  project's next generator run would have silently deleted every entry.
+  The PR closed primarily on a separate governance question, so the defect
+  was never paid for, which is the reason to write the check down now.
+  Nothing cited Section 4 externally, so no reference renumbering was
+  needed.
 - `scripts/check_confidence_signal.py` now reports two named findings
   rather than one warning. Running its engine-set cardinality test and
   the `verification_basis` derivation against each other over the same
@@ -75,6 +91,34 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   five independently reproduced structural forms. Proposed by
   arian-gogani (github.com/arian-gogani/failopen,
   CWE-CAPEC/AI-Working-Group#1); researcher field credits him directly.
+- AVE-2026-00081: Lingering authority — a task/subgoal/episode-scoped
+  capability grant outlives the closure event that justified it, with
+  nothing in the agent's runtime tying revocation to that closure, so
+  the agent's later, unrelated turns can reuse it. Sourced from
+  Santos-Grueiro, "Lingering Authority: Revocable Resource-and-Effect
+  Capabilities for Coding Agents" (arXiv:2606.22504), whose PORTICO
+  reference monitor demonstrates the gap empirically: a non-revoking
+  baseline permits 10/10 post-closure reuses and 6/6 forbidden effects
+  in a deterministic stale-write audit, versus 0/10 and 0/6 under a
+  revoking design. Distinct from AVE-2026-00021/00063 (active bypass
+  of a check, not this record's un-rechecked legitimate grant), from
+  AVE-2026-00045 (scope misuse within a still-valid grant, no elapsed
+  time or event required, versus this record's temporal/lifecycle
+  framing), and from AVE-2026-00050 (an undeclared registration, not
+  this record's legitimately-granted-but-unrevoked capability). Id
+  confirmed via issue #268 (MEDIUM, AIVSS 6.1).
+- AVE-2026-00082: local skill name collision (deterministic router
+  shadowing across discovery roots) -- two skill files already present
+  on the local filesystem resolve to an identical effective name
+  (declared or filename-derived); an agent's router silently invokes
+  whichever discovery root's file resolution order picks, with no
+  operator-visible signal a collision occurred. Distinct from
+  AVE-2026-00066 (requires LLM hallucination + public registry) and
+  AVE-2026-00074 (requires external reference decay): neither a
+  registry nor a hallucination nor decay is involved here, both files
+  already exist locally and deterministic resolution order decides the
+  winner. Sourced from highflame-ai/ramparts' SkillNameCollision
+  detector (issue #150) (MEDIUM, AIVSS 4.4)
 - AVE-2026-00078, 00079, 00080: three genuinely distinct multi-agent
   pipeline mechanisms extracted from Bappy et al., "Adversarial Attacks
   in Multi-Agent LLM Pipelines: Unveiling Structural Vulnerabilities in
