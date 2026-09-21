@@ -10816,6 +10816,127 @@
     }
   },
   {
+    "ave_id": "AVE-2026-00081",
+    "schema_version": "1.1.0",
+    "status": "active",
+    "title": "Lingering authority: a task-scoped capability outlives the episode that justified it",
+    "attack_class": "Persistence - Lingering Authority",
+    "severity": "MEDIUM",
+    "description": "An agent is granted a temporary resource or effect capability -- a tool permission, credential, or access token -- scoped to a specific task, subgoal, or episode. That episode closes (the subgoal completes, a task ends, an incident resolves, an approval window expires) but nothing in the agent's runtime ties the capability's revocation to that closure event, so the capability remains structurally valid and reusable. The agent's own later turns in the same session -- or an attacker who can extend, race, or mimic the closure signal -- continue to invoke the stale capability for actions the now-closed episode no longer justifies, executing writes, mutations, or network egress the current task has no standing to authorize. Distinct from AVE-2026-00021 (Human-in-Loop Bypass) and AVE-2026-00063 (Approval Gate Bypass Configuration): those records describe actively bypassing a confirmation or approval check at the moment of action, via instruction or config. This record involves no bypass of any check -- the grant was legitimately issued and nothing re-checks it when its own justifying condition ends. Distinct from AVE-2026-00045 (Cross-App-Access Escalation): that record's grant is legitimately used, unexpired, for a purpose outside its scope, within a single session with no elapsed time or external event required. Here the grant is used within its originally intended purpose, but past the point where a real external, checkable event (episode closure) should have ended it -- the inverse framing: temporal and lifecycle, not scope. Distinct from AVE-2026-00050 (Parasitic Toolchain): that record smuggles in an undeclared registration beyond manifest scope at session init. Here the capability was legitimately declared and granted; the failure is purely a missing closure-triggered revocation. First formalized and measured by PORTICO (arXiv:2606.22504), whose non-revoking baseline permitted all 10 of 10 tested post-closure capability reuses and executed 6 of 6 forbidden effects (file writes, git mutation, network egress) in a deterministic stale-write audit, versus 0 of 10 and 0 of 6 respectively under a revoking reference monitor with the same initial grants at the same turns.",
+    "aivss_score": 6.1,
+    "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
+    "owasp_mcp": [
+      "MCP02"
+    ],
+    "owasp_asi": [
+      "ASI03"
+    ],
+    "mitre_atlas": [],
+    "nist_ai_rmf": [],
+    "behavioral_fingerprint": "A capability, tool permission, or access grant issued for one task, subgoal, or episode is invoked again after that episode's own closure event (task completion, subgoal resolution, incident closure, approval-window expiry) has already occurred in the same session, with no intervening revocation, re-grant, or re-authorization event recorded between the closure and the reuse.",
+    "behavioral_vector": [
+      "capability-lifecycle",
+      "stale-authorization",
+      "closure-triggered-revocation-gap",
+      "toctou"
+    ],
+    "provenance_vector": {
+      "entry_class": "runtime",
+      "payload_surface": "a task/subgoal/episode-scoped capability handle (tool permission, credential, or access grant) retained in the agent's own runtime/session state after that episode's closure event, with no mechanism binding its revocation to that closure"
+    },
+    "security_boundary": "closed-episode authorization to continued autonomous action",
+    "missing_control": "no closure-triggered revocation binding a capability grant to the episode that justified it",
+    "vulnerability_rationale": {
+      "capability": "The agent can invoke a tool, file-write, git-mutation, or network-egress capability that was granted for a specific task, subgoal, or episode.",
+      "vulnerability": "Nothing in the agent's runtime ties that capability's revocation to the closure of the episode that justified it, so the capability remains structurally valid and reusable after its justifying condition has already ended.",
+      "impact": "The agent, or an attacker able to extend or race the closure signal, executes writes, mutations, or network egress that the current, later task has no standing to authorize, using access that should already have been revoked."
+    },
+    "mitigation": {
+      "strategy": [
+        "isolate_scope",
+        "least_privilege",
+        "deny_by_default"
+      ],
+      "enforcement_point": "agent_framework",
+      "trifecta_control": "not_applicable"
+    },
+    "example_patterns": [
+      "Coding agent is granted write access to a specific file for one subtask; after that subtask's own completion is logged, the agent uses the same still-valid write handle to modify an unrelated file later in the same session, with no new grant issued for it.",
+      "An agent is granted temporary elevated access scoped to resolving an open incident; the incident is marked resolved mid-session, but the agent's next several tool calls continue to use the same elevated grant for unrelated work with no revocation event in between.",
+      "A procurement agent validates a spending authorization at the start of a purchase workflow; the user's authorization is reduced hours later, but the workflow completes the transaction using the original, now-stale authorization token."
+    ],
+    "mutation_count": 0,
+    "detection_methodology": "1. Reconstruct the session's capability-grant timeline: every capability, credential, or access-token grant, the task/subgoal/episode it was scoped to, and that episode's own completion, resolution, or closure event. 2. For each closure event, check every subsequent tool call, file write, git mutation, or network request in the same session for use of a capability handle that was scoped to the now-closed episode. 3. Flag any such use where no revocation, re-grant, or re-authorization event is recorded between the closure and the reuse. 4. Confirm the reused capability was not independently re-justified by a new, later grant covering the same handle -- a fresh grant for the same access is not this class.",
+    "indicators_of_compromise": [
+      "A tool call, file write, git mutation, or network request executes using a capability, credential, or grant handle that was issued for a task, subgoal, or episode whose own completion, resolution, or closure event is already recorded earlier in the same session log, with no intervening re-grant or revocation entry between the two.",
+      "Session or audit logs contain a task-completion, ticket-resolution, or incident-closure event with no corresponding capability-revocation, token-invalidation, or deny-rule entry logged at or immediately after that event.",
+      "The same capability handle or access token appears in tool-call logs across two or more unrelated, sequential subgoals within one session, with no re-grant or re-authorization event recorded between them."
+    ],
+    "remediation": "Bind every temporary capability grant to the specific episode, subgoal, or task contract that justified issuing it, using an explicit request-grant-invoke lifecycle: compile the task contract into initial capabilities and trusted closure predicates, materialize any expansion as an opaque, epoch-bound handle, and remove that handle from the planner's next interface the moment its own closure predicate fires, rejecting any subsequent replay of the retired handle before it can reach a side-effecting tool call. Do not rely on session-level or blanket task-level access scoping alone; require re-validation or a fresh grant for any capability use that follows a detected closure event, matching PORTICO's own evaluated design (arXiv:2606.22504).",
+    "kill_switch_active": false,
+    "researcher": "Igor Santos-Grueiro",
+    "researcher_url": "https://arxiv.org/abs/2606.22504",
+    "published": "2026-09-09T00:00:00Z",
+    "last_updated": "2026-09-09T00:00:00Z",
+    "references": [
+      {
+        "tag": "arXiv:2606.22504",
+        "text": "Santos-Grueiro, Igor. 'Lingering Authority: Revocable Resource-and-Effect Capabilities for Coding Agents.' cs.CR, submitted 2026-06-21. Coins 'lingering authority' and proposes PORTICO, a reference monitor implementing a request-grant-invoke capability lifecycle with epoch-bound handles and closure-triggered revocation. A non-revoking comparator permits 10/10 tested post-closure capability reuses and executes 6/6 forbidden effects (file writes, git mutation, network egress) in a deterministic stale-write audit, versus 0/10 and 0/6 under PORTICO, with both systems matching on task success, scope compliance, and all pre-closure decisions.",
+        "url": "https://arxiv.org/abs/2606.22504"
+      },
+      {
+        "tag": "AVE issue #268",
+        "text": "ave_id AVE-2026-00081 confirmed via the id-confirmation issue, including the distinctness comparison against AVE-2026-00021, AVE-2026-00045, AVE-2026-00050, and AVE-2026-00063, and the primary-source framework mappings.",
+        "url": "https://github.com/aveproject/ave/issues/268"
+      }
+    ],
+    "aivss": {
+      "cvss_base": 8,
+      "aarf": {
+        "autonomy": 1,
+        "tool_use": 1,
+        "multi_agent": 0,
+        "non_determinism": 0.5,
+        "self_modification": 0,
+        "dynamic_identity": 0,
+        "persistent_memory": 1,
+        "natural_language_input": 0.5,
+        "data_access": 1,
+        "external_dependencies": 0.5
+      },
+      "aars": 5.5,
+      "thm": 0.9,
+      "mitigation_factor": 1,
+      "aivss_score": 6.1,
+      "aivss_severity": "MEDIUM",
+      "spec_version": "0.8",
+      "notes": "persistent_memory and data_access scored at maximum (1): the entire mechanism is a capability persisting in the agent's own runtime state across what should have been a hard boundary, and the worst-case reuse is typically against files, credentials, or other sensitive data the grant covers. autonomy and tool_use also at maximum: the reuse happens with no human confirmation, and the mechanism is definitionally about tool/resource access. multi_agent, self_modification, and dynamic_identity scored 0: the mechanism is single-agent and does not require the component to alter its own instructions or assume a different persona. non_determinism and natural_language_input scored 0.5: whether an episode's closure is correctly detected can vary run to run (especially where closure is inferred from a natural-language completion claim rather than a structured event), but the core failure -- no closure-triggered revocation -- is structural, not language-driven, so neither extreme fit cleanly. external_dependencies scored 0.5: one of the paper's three tested effect classes is network egress, but exploitability of that specific effect depends on what the granted capability actually covers. thm set to 0.90 (PoC exists, not yet exploited in the wild): PORTICO's own evaluation is a real, working, measured demonstration (scripted traces, six live model traces, frozen real-repository runs with recorded commits), not a theoretical scenario, but there is no disclosed in-the-wild incident yet. mitigation_factor set to 1 (no broad ecosystem-wide mitigation exists yet): PORTICO is a novel 2026 research design, not yet a widely adopted standard fix. owasp_mcp mapped to MCP02 (Privilege Escalation via Scope Creep) after reading the category's full primary-source text (github.com/OWASP/www-project-mcp-top-10, 2025/MCP02 document, commit 165fe0f78ef104459237b4a8e0f6e78db9b02391): its detection checklist names 'no enforced expiration for scopes or tokens' verbatim, and its own remediation #3 ('Expiry-Based & Just-in-Time (JIT) Access... require revalidation for long-running or recurring tasks') is the same gap this record describes, even though MCP02's top-line description frames the more general case as privileges expanding rather than failing to contract. MCP07 (Insufficient Authentication & Authorization) was also checked and rejected: its own text is about authentication/identity verification and cross-agent token reuse, not episode-closure-triggered revocation specifically. owasp_asi mapped to ASI03 (Identity and Privilege Abuse) after reading the actual 2026 PDF directly (genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026, pages 15-16): Common Example of the Vulnerability #4 is literally 'Time-of-Check to Time-of-Use (TOCTOU) in Agent Workflows... Permissions may be validated at the start of a workflow but change or expire before execution. The agent continues with outdated authorization,' and Example Attack Scenario #5 ('Workflow Authorization Drift') describes the same mechanism verbatim in worked form. mitre_atlas confirmed empty: swept the live ATLAS.yaml (mitre-atlas/atlas-data, 170+ techniques) directly for stale/expired/revalidation/TOCTOU/closure language; the only hit, AML.T0091.000 (Application Access Token), describes an adversary using a *stolen* token to bypass authentication -- a different mechanism (credential theft) from a legitimately-issued grant the agent's own runtime fails to revoke. A genuine gap, not an unresearched omission. nist_ai_rmf confirmed empty: checked the actual NIST AI 100-1 text (Tables 1-4) directly; MANAGE-2.4 ('mechanisms... to supersede, disengage, or deactivate AI systems that demonstrate performance or outcomes inconsistent with intended use') and GOVERN-1.7 (decommissioning AI systems) are the closest, but both operate at whole-AI-system deactivation/decommissioning granularity, not per-capability, per-episode revocation. Neither is a clean fit at the granularity this class describes."
+    },
+    "evidence_kind_default": "behavioral_pattern",
+    "detection_stage": "runtime_observed",
+    "detection_layer": "runtime",
+    "confidence_baseline": 0.6,
+    "evidence_basis_engines": [
+      "llm",
+      "sandbox"
+    ],
+    "derivable_into": [
+      "privilege-escalation-chain"
+    ],
+    "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "read_date": "2026-09-09",
+        "source_url": "https://github.com/OWASP/www-project-mcp-top-10/blob/165fe0f78ef104459237b4a8e0f6e78db9b02391/2025/MCP02-2025%E2%80%93Privilege-Escalation-via-Scope-Creep.md"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-09-09",
+        "source_url": "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/"
+      }
+    }
+  },
+  {
     "ave_id": "AVE-2026-00014",
     "schema_version": "1.1.0",
     "component_type": "skill",
