@@ -5,7 +5,7 @@
 <br/>
 <br/>
 
-**The behavioral classification standard for agentic AI components.**
+**The open behavioral classification standard for agentic AI components.**
 
 Stable IDs, AIVSS scores, and behavioral fingerprints for every way a skill file,
 MCP server, system prompt, or agent plugin can be weaponized — scored consistently,
