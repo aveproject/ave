@@ -86,7 +86,13 @@ separately as part of a future version bump (alongside `owasp_ast`, see
 by this policy document. This section states the policy the schema change
 will implement, it does not implement it.
 
-## 4. Crosswalk numbering caution
+## 4. Crosswalk discipline
+
+Two checks that apply to every crosswalk AVE builds or submits. Both are
+the same discipline: confirm how the external thing actually behaves, not
+how it looks.
+
+### 4.1 Numbering caution
 
 External frameworks still being drafted (OWASP's MCP Top 10 has not
 been formally ratified as of this writing) get independently
@@ -105,6 +111,53 @@ case for an unratified standard, not the exception. This applies
 symmetrically: if another project ever crosswalks to AVE's own
 `owasp_mcp` field by number rather than meaning, the same risk runs the
 other way.
+
+### 4.2 Submitting content into an external project's repository
+
+A crosswalk that is correct at the mapping level can still be defective at
+the mechanical level, by being written into a file the target project does
+not actually hand-author. Before proposing content into any external
+project's repository, confirm how that project builds the file being
+edited. Three checks, in order, every time:
+
+1. **Is the target file generated or hand-authored?** Look for a
+   generator script referencing the target path (`grep -rn
+   "data/entries\|generate" scripts/`, or that project's equivalent)
+   before assuming the file can be edited directly.
+2. **If it is generated, find the registration mechanism.** A manifest, a
+   config listing what feeds the generator, a `FRAMEWORK_FILES`-style
+   registry, whatever that project's own convention is. Register the new
+   source. Do not append to the generator's output and assume it
+   persists.
+3. **Run the generator locally against the proposed change**, where the
+   project's tooling allows it. If the entry disappears or is
+   overwritten, that is the defect, found before submission instead of
+   after.
+
+**The precedent this guards against, stated directly.** AVE's four-record
+pilot into the GenAI Data Security Initiative
+(`GenAI-Security-Project/GenAI-Data-Security-Initiative#66`, closed
+2026-09-14, not merged) hand-appended its entries to
+`data/entries/ASI02/04/05.json` with no `FRAMEWORK_FILES` registration and
+no registry entry. Those files are generated. That project's maintainer
+identified it directly in the close: the next run of their own generator
+would have silently deleted every AVE entry. The PR closed primarily on a
+separate governance question, that AVE does not yet meet that project's
+independent-governance bar, so the defect never had to be paid for. It was
+still real, and reading the target repo's build before writing into it
+would have caught it.
+
+**A prior submission that did not need this check is not evidence the
+check can be skipped.** The OpenCRE pilot (`OWASP/OpenCRE#1017`) and the
+OWASP MCP Top 10 finding (`OWASP/www-project-mcp-top-10#52`) went into
+hand-authored content and plain issue text, so neither exercised a
+generator at all. Every project's real build process is different, and the
+only way to know which kind a target is, is to check that target.
+
+**Resubmission is gated on the governance question, not on this defect.**
+Fixing the registration mechanics does not make a closed submission ready
+to reopen where it closed on independent governance. That is a separate
+question on its own timeline (Section 1, review authority).
 
 ## 5. ID stability policy
 
