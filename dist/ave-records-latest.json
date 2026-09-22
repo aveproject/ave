@@ -11080,6 +11080,163 @@
     }
   },
   {
+    "ave_id": "AVE-2026-00083",
+    "schema_version": "1.1.0",
+    "status": "active",
+    "title": "Silent guardrail comparison failure: a protection mechanism that executes but never evaluates its verdict",
+    "attack_class": "Trust Boundary - Silent Guardrail Comparison Failure",
+    "severity": "MEDIUM",
+    "description": "A protection mechanism -- a guardrail, an approval gate, a judge or eval scorer, a policy check -- is present in a component's own code (or in the agent framework, SDK, or proxy library implementing it), is invoked on every request that reaches it, and its logs, code coverage, and test suite all show it executing normally. Despite this, the mechanism's own comparison, branch, or aggregation logic never genuinely evaluates the real input against its intended deny condition, so it returns the result read downstream as 'permitted' or 'no violation' regardless of, or for a wide class of, the actual input. Five structural forms produce this behavior, each independently reproduced against shipped, real-world code by arian-gogani (github.com/arian-gogani/failopen): (1) an elif intended to catch a global or catch-all verdict is bound to the wrong enclosing conditional, making it unreachable once an unrelated, narrower branch is taken; (2) a verdict or classification value is declared as a bare, loosely-typed string -- often arriving from a model completion, json.loads, or a subprocess -- and compared with an exact == against a single expected literal, so any other phrasing (a full sentence, different casing, a synonym, an empty string) falls through to the permissive branch, reproduced in deepeval's role-violation, prompt-alignment, and conversation-completeness metrics scoring a judge verdict of 'Yes, the model violated its assigned role' as full compliance (confident-ai/deepeval#3283), litellm's Aporia guardrail hook forwarding content marked 'modify' or 'rephrase' unmodified because only the literal 'block' is handled (BerriAI/litellm#41097), and a microsoft/autogen governance sample executing on any verdict string it does not recognize as 'deny' (microsoft/autogen#7960); (3) the same approval or validation helper is invoked from two or more call sites with opposite defaults for identical, malformed input -- raising on one path, silently returning a permissive default on the other -- reproduced in openai-agents-python's needs_approval evaluator diverging between its core runner (raises UserError) and its realtime session (returns False, read as approval granted) for the same unrecognized configuration value (openai/openai-agents-python#5024), and guardrails-ai's on_fail default diverging between its Python API (raises) and its RAIL config path (silently becomes a no-op) for the same validator (guardrails-ai/guardrails#1656); (4) an error-handling or absent-dependency path omits, or an unparseable value silently coerces into, the specific state the downstream verdict logic reads, so an errored or unreachable check counts as passing -- reproduced in AutoGPT classic's Agent Protocol server path constructing an agent with no permission_manager (the CLI entry point in the same codebase always supplies one), so Agent.execute()'s own 'if self.permission_manager:' guard silently skips the entire deny-list check only on the network-facing path, and in protectai/rebuff's LLM detection tactic, where an unparseable model completion parses to NaN and 'NaN > threshold' is always false; and (5) a security verdict is computed with all() or any() over a collection that a reachable configuration or caller-supplied path can leave empty, so the aggregate reports a full pass having evaluated zero checks -- all([]) is True by definition, with a live, confirmed instance in a guardrail-orchestration product's own verdict aggregation currently under coordinated disclosure and deliberately unnamed by the source pending vendor response. The same measurement found zero instances of one detectable shape of this defect across 1,128,865 lines of mature, heavily reviewed Python (certbot, bandit, pyjwt, sigstore-python, python-tuf, detect-secrets) and fifteen confirmed instances across thirty-six projects whose enforcement code is roughly eighteen months old or newer (twenty-one read and found clean), indicating this concentrates in newly-written enforcement layers rather than software broadly. The common, externally observable behavior across all five forms -- and the reason this is drafted as one behavioral class rather than five separate ones -- is that the mechanism's own telemetry is indistinguishable from a genuine pass: the check appears in logs and traces, the deciding line is marked covered because it executes, and a project's own test suite can stay green with the defect present, because tests are typically written from the same understanding of the input space as the code being tested. Distinct from AVE-2026-00063 (Approval Gate Bypassed via Declarative Configuration): that record's mechanism is a config flag that visibly and legibly disables a check, discoverable by a reviewer reading the config file itself. This record's check is never disabled or bypassed; it is invoked and executes, and is unreachable, mistyped, divergent, or blind to real state at the code level -- invisible to a config or instruction-text review and requiring source-level or behavioral analysis to surface. Distinct from AVE-2026-00076 (Natural-Language Steering of an Approval Classifier Subagent): that record's classifier genuinely evaluates its real input and is merely biased toward a looser decision by adversarial natural-language steering text reaching it. This record's mechanism produces the permissive result independent of any steering content at all -- the comparison itself is structurally incapable of reaching its deny branch, or is blind to the real input, regardless of what that input says. Distinct from AVE-2026-00078 (Unverified Multi-Agent Consensus) and AVE-2026-00079 (Plan-to-Execution Binding Bypass): both describe an orchestrator's own total absence of a verification step (no quorum check exists; no plan-to-trace binding exists anywhere in the architecture). This record's mechanism is the inverse -- a verification step does exist, is invoked, and is intended to run, but its own internal logic never reaches or genuinely evaluates the comparison that would make it work. Distinct from AVE-2026-00038 (Unbounded Tool Use or Sub-Agent Spawning): that record is a component instructing an agent to ignore scope boundaries entirely, with no gating mechanism present in the architecture at all. This record requires a real gating mechanism to be present, configured, and invoked, whose own internal comparison then fails silently. First raised as a candidate CWE entry (CWE-CAPEC/AI-Working-Group#1), distinct from CWE-693's existing eighteen children (none of which describes a mechanism that executes, reports success, and never evaluates its comparison), from CWE-636 / Not Failing Securely (which requires an error or failure condition to trigger degradation; several of these five forms fire on a perfectly healthy, error-free request with nothing having gone wrong), and from CWE-754 (which covers a check that is missing or fails to consider a condition, not one that is present, configured, and observably executing).",
+    "aivss_score": 6.3,
+    "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
+    "owasp_mcp": [
+      "MCP07"
+    ],
+    "owasp_asi": [],
+    "mitre_atlas": [],
+    "nist_ai_rmf": [],
+    "behavioral_fingerprint": "A guardrail, judge, approval gate, or similar protection-mechanism check executes on every request and returns a value read downstream as 'permitted' or 'no violation', without its own comparison, branch, or aggregation logic having actually evaluated the real verdict against the specific input in front of it -- because an elif is scoped under the wrong enclosing conditional making a verdict branch unreachable, an equality comparison is made against an unconstrained or loosely-typed value so any phrasing other than the one literal it expects falls through to the permissive branch, two code paths reach the same decision point with opposite defaults for identical input, an error-handling path omits the field the downstream verdict logic reads, or a security verdict is aggregated with all()/any() over a collection a caller-controlled configuration path can leave empty. The check's own logging, code coverage, and test suite all show it running normally, because the deciding branch is reached and executes -- it just never receives, or never compares against, the value that would make it fail.",
+    "behavioral_vector": [
+      "guardrail-bypass",
+      "silent-fail-open",
+      "unevaluated-comparison",
+      "vacuous-verdict"
+    ],
+    "provenance_vector": {
+      "entry_class": "runtime",
+      "payload_surface": "the protection mechanism's own verdict-comparison, branch, or aggregation logic and the runtime code path it takes -- an elif's enclosing conditional, an equality comparison against an unconstrained verdict value, which of two call sites with divergent defaults handles the request, an error-handling branch's omitted field, or a collection an aggregation runs over -- evaluated, or never reached, when the check executes against a real request"
+    },
+    "security_boundary": "the protection mechanism's own comparison/branch logic to the permit-or-deny decision the caller relies on it to produce",
+    "missing_control": "no requirement that a protection mechanism's permissive result only follow an actually-executed, affirmative comparison against the real input -- an unreached branch, a type-unconstrained comparison, a divergent default, an omitted field, or an aggregation over an empty collection all currently produce the same silent 'permitted' result as a genuine, evaluated pass",
+    "vulnerability_rationale": {
+      "capability": "The component, or the library/SDK/proxy implementing it, runs a protection mechanism -- a guardrail, judge, or approval gate -- on every request that reaches it, and the caller reads its returned verdict as authoritative for whether to proceed.",
+      "vulnerability": "The mechanism's own comparison, branch, or aggregation logic can be structurally unreachable, mistyped against an unconstrained value, divergent across call sites, or blind to an omitted field or emptied collection, such that it returns the permissive result without ever having genuinely evaluated the input in front of it -- while its own logs, code coverage, and test suite all show it running normally.",
+      "impact": "Whatever action, disclosure, or execution the mechanism existed to gate proceeds silently and is recorded as a passed check, for some or all inputs, with no operator-visible signal distinguishing a genuine pass from a mechanism that never reached its own comparison."
+    },
+    "mitigation": {
+      "strategy": [
+        "deny_by_default",
+        "validate_input"
+      ],
+      "enforcement_point": "agent_framework",
+      "trifecta_control": "not_applicable"
+    },
+    "example_patterns": [
+      "A moderation service's global 'flagged' verdict check is written as an elif under a per-category threshold's own if block; once any single category threshold is configured, the global catch-all silently stops firing for every other category.",
+      "An LLM-judge metric declares its verdict field as a plain string and scores it by comparing verdict == 'yes'; a judge that answers 'Yes, the policy was violated' in a full sentence scores as full compliance instead of a caught violation.",
+      "A tool-approval helper is called with strict=True from the primary execution path (raising on a misconfigured policy) and with strict=False from a secondary entry point (silently returning 'no approval needed' for the same misconfiguration), so which code path handles a given request determines whether approval is actually enforced."
+    ],
+    "mutation_count": 0,
+    "detection_methodology": "1. For each protection-mechanism, guardrail, approval-gate, or judge check in the codebase, trace every branch and comparison in its verdict-computation path. 2. Identify the specific comparison, branch, or aggregation that decides 'permit' versus 'deny', and determine whether every syntactically possible value of its actual runtime input reaches a deny branch, or whether some values (an any()/all() aggregation over an emptiable collection, an == comparison against a single literal, an elif shadowed by an enclosing conditional, a divergent default across two call sites, an exception path omitting the field the verdict logic reads) fall through to a permissive default. 3. For a live or deployed instance, exercise the check with a range of legitimate but non-canonical inputs -- a verdict phrased as a full sentence rather than a bare token, an error or malformed-config condition, an empty or None collection, the same request routed through a different caller or code path -- and confirm whether it reaches its deny branch or silently falls through. 4. Confirm the deny branch is reachable in principle, not merely present as dead code, by re-planting the defect and checking whether at least one existing test in the project's own suite fails -- mutation testing, per the primary source's own strongest available check.",
+    "indicators_of_compromise": [
+      "An elif clause intended to catch a global or catch-all verdict is nested under, or bound to, a narrower enclosing if block, making it unreachable whenever that narrower condition's own branch is taken instead.",
+      "A verdict, decision, or classification value declared as a bare or loosely-typed string (or unconstrained scalar arriving from json.loads, a subprocess, or a model completion) compared with an exact-match == against a single expected literal, with the else/fallthrough path returning the permissive result.",
+      "The same approval or validation helper invoked from two or more call sites with different default or strict parameters, such that identical, malformed input reaches an exception on one call path and a silent permissive default on another.",
+      "An exception or catch handler that returns or logs a result omitting the specific field the downstream verdict-aggregation logic reads, causing an errored or swallowed check to be read as passing.",
+      "A security verdict computed via all() or any() over a collection that a reachable configuration or caller-supplied path can leave empty, so the aggregate reports a full pass having evaluated zero checks."
+    ],
+    "remediation": "1. Represent 'not evaluated' as its own explicit third state the caller must handle, never collapsed into 'permitted' -- make the permissive outcome require an affirmative, evaluated deny-check pass, not merely the absence of a matched deny condition. 2. Constrain the compared or aggregated value's domain at the point it enters the process (deserialization, subprocess output, model completion), not only at the point of comparison -- a Literal type annotation on a value from json.loads documents an intent it does not enforce at runtime. 3. For every guardrail, approval gate, or judge check, add a test that deliberately re-plants the defect (an unreachable branch, a mismatched literal, a divergent default, an emptied collection) and asserts the check's own verdict output, not just the end-to-end outcome, since an unrelated component can produce the correct final state while the guard itself evaluates nothing. 4. Emit 'evaluated' and 'outcome' as two separate, machine-checkable signals from every protection mechanism, so an operator or scanner can distinguish 'ran and permitted' from 'ran and never reached a comparison'.",
+    "kill_switch_active": false,
+    "researcher": "arian-gogani",
+    "researcher_url": "https://github.com/arian-gogani",
+    "published": "2026-09-21T00:00:00Z",
+    "last_updated": "2026-09-21T00:00:00Z",
+    "references": [
+      {
+        "tag": "failopen (primary measurement)",
+        "text": "arian-gogani. 'failopen' -- reproductions of a protection mechanism that executes, reports success, and never evaluates its comparison, across seven real, shipped products, each reproduced against the actual shipped code with an executable, one-command repro script. Includes a published static detector (detector/vacuous.py) for the all()/any()-over-an-emptiable-collection form, measured at zero false positives across 1,868 files of the Python 3.14 standard library.",
+        "url": "https://github.com/arian-gogani/failopen"
+      },
+      {
+        "tag": "failopen MEASUREMENT.md",
+        "text": "Prevalence write-up with stated limitations: zero findings across 1,128,865 lines of mature, heavily reviewed Python (certbot, bandit, pyjwt, sigstore-python, python-tuf, detect-secrets); fifteen confirmed findings across thirty-six projects whose enforcement code is roughly eighteen months old or newer, twenty-one read and found clean; explicit statement that the 36-project sample is not a population estimate and that the detector in measurement 1 would not have found most of the fifteen.",
+        "url": "https://github.com/arian-gogani/failopen/blob/main/MEASUREMENT.md"
+      },
+      {
+        "tag": "failopen CWE-PROPOSAL.md",
+        "text": "Draft CWE entry proposal for the CWE AI Working Group naming five observed structural forms, the ChildOf relationship to CWE-693 (Protection Mechanism Failure) and boundary against CWE-636, CWE-697, CWE-184, and CWE-754, with an honest self-correction narrowing which forms remain unmapped to an existing CWE after a broader re-check.",
+        "url": "https://github.com/arian-gogani/failopen/blob/main/CWE-PROPOSAL.md"
+      },
+      {
+        "tag": "CWE-CAPEC/AI-Working-Group#1",
+        "text": "Originating discussion where arian-gogani raised this as a third candidate behavioral class adjacent to two AVE gap-mapping questions, including the CWE-693-versus-new-class reasoning, the prevalence methodology's stated limitations, and independent confirmation that a full sweep of AVE's then-80 published records surfaced one incidental, non-matching hit (AVE-2026-00078) and no genuine overlap.",
+        "url": "https://github.com/CWE-CAPEC/AI-Working-Group/issues/1"
+      },
+      {
+        "tag": "deepeval#3283",
+        "text": "confident-ai/deepeval -- role_violation, prompt_alignment, and conversation_completeness metrics score a judge verdict answering in a full sentence ('Yes, the model violated its assigned role') as full compliance, because verdict is typed as a bare str and compared with an exact match; toxicity, bias, and hallucination metrics in the same codebase use Literal and reject a verbose verdict loudly, confirming this is not how the maintainers intended the comparison to behave.",
+        "url": "https://github.com/confident-ai/deepeval/issues/3283"
+      },
+      {
+        "tag": "openai-agents-python#5024",
+        "text": "openai/openai-agents-python -- evaluate_needs_approval_setting raises UserError for a misconfigured needs_approval value when called without strict from the core runner, but returns its default (False, read as approval granted) when called with strict=False from the realtime session path, for the identical misconfigured input.",
+        "url": "https://github.com/openai/openai-agents-python/issues/5024"
+      },
+      {
+        "tag": "litellm#41097",
+        "text": "BerriAI/litellm -- the Aporia guardrail hook's own source comment names four possible verdict values (modify, passthrough, block, rephrase); only block raises, so modify and rephrase -- both meaning 'do not send this content as written' -- are forwarded unmodified with no log line marking a skipped verdict.",
+        "url": "https://github.com/BerriAI/litellm/issues/41097"
+      },
+      {
+        "tag": "guardrails-ai#1656",
+        "text": "guardrails-ai/guardrails -- on_fail defaults to OnFailAction.EXCEPTION in the Python API (validator_base.py) but to OnFailAction.NOOP in the RAIL config schema path (rail_schema.py) for the same validator; the RAIL path is also keyed on an alias transformation, so a plausible-looking attribute name can miss and silently resolve to NOOP.",
+        "url": "https://github.com/guardrails-ai/guardrails/issues/1656"
+      },
+      {
+        "tag": "autogen#7960",
+        "text": "microsoft/autogen -- the agentchat_external_governance sample's decision block checks decision['verdict'] == 'deny' and =='require_approval' explicitly, then falls through to execution for every other value, including 'denied', 'DENY', 'block', an error object, or an empty string, despite the field being asked of an external governance service whose response is untyped JSON.",
+        "url": "https://github.com/microsoft/autogen/pull/7960"
+      },
+      {
+        "tag": "AVE issue #276",
+        "text": "ave_id AVE-2026-00083 confirmed via the id-confirmation issue, including the distinctness comparison against AVE-2026-00038, AVE-2026-00063, AVE-2026-00076, AVE-2026-00078, and AVE-2026-00079, and the correction of an earlier, superseded prevalence snapshot cited in the originating discussion thread.",
+        "url": "https://github.com/aveproject/ave/issues/276"
+      }
+    ],
+    "aivss": {
+      "cvss_base": 8.7,
+      "aarf": {
+        "autonomy": 1,
+        "tool_use": 0.5,
+        "multi_agent": 0,
+        "non_determinism": 0.5,
+        "self_modification": 0,
+        "dynamic_identity": 0,
+        "persistent_memory": 0,
+        "natural_language_input": 0.5,
+        "data_access": 0.5,
+        "external_dependencies": 1
+      },
+      "aars": 4,
+      "thm": 1,
+      "mitigation_factor": 1,
+      "aivss_score": 6.3,
+      "aivss_severity": "MEDIUM",
+      "spec_version": "0.8",
+      "notes": "autonomy scored at maximum (1): for four of the five forms the permissive result fires on every request with no attacker interaction beyond sending an ordinary, even benign, request -- there is nothing to 'trigger' since the defect is structural, not input-dependent. external_dependencies scored at maximum (1), the same reasoning AVE-2026-00062 applies: whether, and in which specific way, this manifests is entirely dependent on which SDK, library, or service implements the guardrail -- all seven reproduced instances are defects specific to one particular package's own implementation, not a protocol-level or architecture-level flaw. tool_use, non_determinism, natural_language_input, and data_access all scored 0.5 (partial, not maximum) because they hold for a real subset of the five forms but not the class as a whole: tool_use because several confirmed instances gate tool or command execution (AutoGPT, openai-agents-python) while others gate text/score output with no tool call involved (deepeval); non_determinism because forms 1/3/4/5 are deterministic control-flow or aggregation defects that fire identically every run, while form 2's failure rate depends on how an LLM judge happens to phrase its verdict on a given call; natural_language_input because form 2 is centrally about natural-language verdict phrasing defeating an exact-match comparison, while forms 1/3/4/5 are pure structural/syntactic defects (an elif's scope, a divergent default, an emptied collection) that would occur identically for a boolean or enum verdict; data_access because the actual reach of a defeated guardrail varies by which action it was gating, from an eval score (low) to unrestricted shell execution (AutoGPT, high). multi_agent, self_modification, and dynamic_identity scored 0: the mechanism is single-component, does not require the component to alter its own instructions, and involves no impersonation or identity claim of any kind. persistent_memory scored 0: the underlying code defect is a static, load-bearing property of the shipped software rather than an effect that persists in the agent's own session or memory store, and a single bypass event does not itself write a lasting belief or credential into agent state the way AVE-2026-00019 or AVE-2026-00081 describe. thm set to 1 (mechanism real and demonstrated): all five forms are reproduced with an executable, one-command script against the actual shipped package or sample (not a retyped approximation) across seven independent, unrelated codebases, plus a published static detector with measured real-world yield -- this is a working exploit description across multiple, independently-confirmed targets, not a single theoretical scenario. mitigation_factor set to 1 (no broadly effective, ecosystem-wide mitigation exists yet): unlike a known fix such as re-enabling TLS verification or pinning a dependency, there is currently no standard, widely-adopted practice for this defect class -- the primary source's own stated goal is establishing an identifier and vocabulary precisely because none exists yet, and the source's own detector implements only one of five forms. cvss_base_vector reflects a network-reachable check (AV:N) requiring no special attacker positioning, privilege, or user interaction (AT:N/PR:N/UI:N) to encounter, full confidentiality/integrity compromise at the mechanism's own decision boundary and at whatever it gates (VC:H/VI:H, SC:H/SI:H) since the defect grants exactly the access or action the guardrail existed to withhold, and no availability impact at either layer (VA:N/SA:N) since this is not a denial-of-service-shaped class. owasp_mcp mapped to MCP07 (Insufficient Authentication & Authorization) after reading the category's full primary-source text directly (github.com/OWASP/www-project-mcp-top-10, 2025/MCP07 document, commit 165fe0f78ef104459237b4a8e0f6e78db9b02391): its own description states the category covers cases where 'MCP servers, tools, or agents fail to properly verify identities or enforce access controls during interactions' and where 'authorization flaws occur when... Agents or users can perform actions beyond their intended privileges' -- the consequence this record produces exactly. Flagged honestly as an imperfect fit: MCP07's own worked checklist (hard-coded secrets, client-side-only enforcement, unverified caller-identity metadata, missing scope validation) is entirely about identity/token-based authorization being absent or weak, not about a present, invoked authorization check whose own comparison logic is structurally defective -- the closer framing is CWE-693/Protection Mechanism Failure at the code-weakness level, which OWASP's MCP Top 10 has no direct analogue of. MCP03 (Tool Poisoning), MCP06 (Intent Flow Subversion), MCP08 (Lack of Audit and Telemetry), and MCP09 (Shadow MCP Servers) were also read in full and rejected: MCP03 and MCP06 require a compromised or adversarial tool description/context altering agent behavior, which this record's mechanism does not need (four of five forms fire on entirely benign input); MCP08 is the near-opposite of this record's mechanism, since the defective check still produces normal-looking logs and telemetry rather than an absence of them; MCP09 concerns unregistered server deployments, an infrastructure-governance problem unrelated to a code-level comparison defect. owasp_asi confirmed empty after reading the full primary-source PDF directly (genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026, 'OWASP Top 10 for Agentic Applications 2026', December 2025, all ten ASI01-ASI10 category descriptions read in full, not just titles): ASI03 (Identity and Privilege Abuse)'s own TOCTOU example concerns permissions validated once at workflow start and never re-checked as they change, a lifecycle/timing gap distinct from a same-request comparison that never evaluates at all; ASI02 (Tool Misuse and Exploitation) requires an agent applying an otherwise-legitimate tool unsafely, not a defect in the enforcement code itself; ASI09 (Human-Agent Trust Exploitation) is specifically about human over-reliance on an agent's own persuasive output, not a code-level guardrail defect with no human judgment involved. No category cleanly describes a present, invoked protection mechanism whose own comparison is structurally incapable of reaching its deny branch; a genuine gap, matching the primary source's own independent finding that this is also absent from CSA's named March 2026 gap list. mitre_atlas confirmed empty after fetching and searching the live ATLAS.yaml (mitre-atlas/atlas-data, main branch) directly for guardrail/verdict/bypass/evasion/defense-evasion language: AML.T0054 (LLM Jailbreak) requires adversarial prompting to induce a model to override its own guardrails, a fundamentally different mechanism from a code-level comparison defect that fires independent of any adversarial input; AML.T0107 (Exploitation for Defense Evasion) was the closest candidate, and its second sentence ('vulnerabilities may exist in defensive security software that can be used to disable or circumvent them') is a real textual echo, but the technique's controlling definition requires 'a programming error... to execute adversary-controlled code', which is not required by four of this record's five forms (no code execution or active exploitation is needed; the defect misfires on ordinary, even benign, requests) -- a real gap rather than a stretch worth forcing. nist_ai_rmf confirmed empty after reading the actual NIST AI 100-1 text (Tables 1-4) directly: MEASURE 1.2 ('effectiveness of existing controls are regularly assessed and updated') was the closest candidate, but per this project's own prior audit (issue #196) this is exactly the kind of generic organizational-process subcategory that could describe nearly any AI risk finding and was flagged as likely unverified boilerplate elsewhere in this corpus -- not a mapping specific to this record's mechanism, so left empty with this note rather than perpetuated."
+    },
+    "evidence_kind_default": "behavioral_pattern",
+    "detection_stage": "runtime_observed",
+    "detection_layer": "runtime",
+    "confidence_baseline": 0.45,
+    "evidence_basis_engines": [
+      "pattern",
+      "llm",
+      "sandbox"
+    ],
+    "derivable_into": [
+      "privilege-escalation-chain"
+    ],
+    "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "source_url": "https://github.com/OWASP/www-project-mcp-top-10/blob/165fe0f78ef104459237b4a8e0f6e78db9b02391/2025/MCP07-2025%E2%80%93Insufficient-Authentication%26Authorization.md",
+        "read_date": "2026-09-21"
+      }
+    },
+    "verification_basis": "artifact_reconstructed"
+  },
+  {
     "ave_id": "AVE-2026-00014",
     "schema_version": "1.1.0",
     "component_type": "skill",

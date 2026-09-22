@@ -84,6 +84,13 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   new record.
 
 ### Added
+- AVE-2026-00083: silent guardrail comparison failure — a protection
+  mechanism (guardrail, approval gate, or judge) executes on every
+  request and reports a permissive result because its own comparison,
+  branch, or aggregation logic never evaluates the real input, across
+  five independently reproduced structural forms. Proposed by
+  arian-gogani (github.com/arian-gogani/failopen,
+  CWE-CAPEC/AI-Working-Group#1); researcher field credits him directly.
 - AVE-2026-00081: Lingering authority — a task/subgoal/episode-scoped
   capability grant outlives the closure event that justified it, with
   nothing in the agent's runtime tying revocation to that closure, so
