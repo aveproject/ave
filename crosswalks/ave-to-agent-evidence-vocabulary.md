@@ -11,7 +11,7 @@ against
 | | |
 |---|---|
 | Source | AVE 1.1.0, 80 records, commit `1e29789e4941b6c1c2435508dbf3c245eedc8d04` |
-| Target | [agent-evidence-vocabulary](https://github.com/astrogilda/agent-evidence-vocabulary) 0.2.0, 8 terms, CC0-1.0, commit `66177d65690e9d7eb7e4ff59df8f91792a90735b` |
+| Target | [agent-evidence-vocabulary](https://github.com/probityai/agent-evidence-vocabulary) 0.2.0, 8 terms, CC0-1.0, commit `66177d65690e9d7eb7e4ff59df8f91792a90735b` |
 | Generated | 2026-09-15 |
 | Unit | one schema property, not one category |
 

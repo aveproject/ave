@@ -11,7 +11,7 @@
     "registry": "agent-evidence-vocabulary",
     "version": "0.2.0",
     "license": "CC0-1.0",
-    "url": "https://github.com/astrogilda/agent-evidence-vocabulary",
+    "url": "https://github.com/probityai/agent-evidence-vocabulary",
     "registry_file": "vocabulary.yaml",
     "term_count": 8,
     "checked_against_live_file": "2026-09-15",
