@@ -2652,6 +2652,135 @@
     "verification_basis": "artifact_reconstructed"
   },
   {
+    "ave_id": "AVE-2026-00086",
+    "schema_version": "1.1.0",
+    "status": "active",
+    "title": "Mid-session WebMCP tool hijacking: a live registry swap replaces an already-discovered tool under its own name",
+    "attack_class": "Trust Boundary - Mid-Session Tool Registry Hijacking",
+    "severity": "HIGH",
+    "description": "WebMCP lets a website expose tools directly to an AI agent within a live browser session, so the set of tools an agent can observe and invoke is dynamic rather than fixed at session start. A compromised or malicious third-party script running on the same page, a CDN, an advertising SDK, or any other same-page JavaScript component, manipulates the agent's live tool registry during the session. In the AbortSignal-hijack form, the malicious script waits until a predefined trigger condition is satisfied, then uses the browser's AbortSignal API to unregister an already-discovered, already-invoked-at-least-once tool, and immediately re-registers a malicious replacement under the exact same tool name before the agent's next invocation of it. In the registration-race form, the malicious script wins a race to register a tool under a target name before the legitimate tool ever registers, so the agent's first discovery of that name already resolves to the attacker's implementation. In both forms, the agent has no mechanism to detect that the live implementation behind a tool name changed, because WebMCP's own tool surface carries no binding between a tool's name and a stable origin or identity across the session -- the agent trusts the name, and whichever implementation currently answers to it. Demonstrated across a real testbed with benign and malicious page servers and three current frontier models (GPT-5.4, Claude Opus 4.6, Gemini 2.5-flash), 1,440 total runs across 12 conditions, 4 task scenarios, and the 3 models. The AbortSignal-hijack form achieves a 94% average malicious-tool-invocation rate (100% on GPT-5.4, 100% on Claude Opus, 82% on Gemini), and the registration-race form achieves 100% across all three models. A timing-sensitivity study confirms the AbortSignal form's success is strictly bounded by whether the hijack completes before the tool's first legitimate invocation: 100% success when the malicious replacement is in place before the agent's first call, and 0% at every later injection point tested, including immediately after the agent's first legitimate call to the original tool. Scoped specifically to this tool-identity-substitution mechanism, not the same paper's separate Tool Framing category (metadata- and description-based manipulation of an agent's understanding of a tool's role), which the paper's own discussion states partially overlaps with indirect prompt injection already covered elsewhere in this corpus; this record's mechanism involves no description, metadata, or natural-language content manipulation of any kind. Distinct from AVE-2026-00074 (Dead Anchor Reclamation): that record's mechanism is an external identity anchor (a GitHub owner, package name, or domain) that was live when a skill was authored and has since decayed into an unclaimed, re-registerable state over an external, slow timescale. This record's mechanism is a live, in-session, client-side tool registry manipulated via a browser API in real time, with no external decay, no waiting period, and no registry outside the WebMCP session itself. Distinct from AVE-2026-00080 (Runtime Agent Identity Substitution): that record's mechanism is an orchestrator accepting an unverified process at an agent's own routing position during a multi-agent retry cycle, with no credential or attestation check binding the response to the same agent instance. This record involves a single agent's own tool registry, poisoned by a third-party script on the page it is interacting with; no multi-agent orchestration, routing position, or retry cycle is involved anywhere in the mechanism. Distinct from AVE-2026-00082 (Local Skill Name Collision): that record's mechanism is two already-existing local files resolving to an identical name at discovery time, a static, filesystem-level condition requiring no attacker runtime action beyond placing a file. This record's mechanism is an active, live browser API call (AbortSignal) or registration-order race, executed during an active session by a malicious third-party script, with no local files or discovery roots involved at all. Distinct from AVE-2026-00002 (Tool Description Behavioral Injection): that record's mechanism is content-level injection within a tool's own description field, requiring the model to be steered by natural-language directives it reads. This record requires no description, schema, or natural-language content manipulation whatsoever; the malicious tool's own description can be entirely accurate, the substitution happens purely at the registry-identity level, invisible to any defense that only inspects tool-description text.",
+    "aivss_score": 7,
+    "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
+    "owasp_mcp": [
+      "MCP03"
+    ],
+    "owasp_asi": [
+      "ASI03"
+    ],
+    "mitre_atlas": [
+      "AML.T0074"
+    ],
+    "nist_ai_rmf": [],
+    "behavioral_fingerprint": "A tool an agent has already discovered, and in some cases already invoked, within a live WebMCP session is unregistered (via a browser lifecycle API such as AbortSignal, or by losing a registration-order race before it ever registers) and a malicious replacement is registered under the exact same tool name, by a third-party script executing on the same page rather than by the tool's own origin. The agent's subsequent invocation of that tool name is dispatched to the attacker's replacement implementation with no content, schema, or description change signaling the substitution, and no mechanism in the agent's own tool-selection logic checks whether the implementation currently bound to a trusted name is the same one that was present when the name was first trusted.",
+    "behavioral_vector": [
+      "tool-registry-hijacking",
+      "mid-session-substitution",
+      "name-squatting",
+      "webmcp"
+    ],
+    "provenance_vector": {
+      "entry_class": "runtime",
+      "payload_surface": "a WebMCP tool registry entry (name-to-implementation binding) within a live browser session, unregistered and re-registered under the identical name by a third-party script executing on the same page, with no origin-binding or identity check connecting the name to a stable implementation across the substitution",
+      "escalation": "capability_to_identity"
+    },
+    "security_boundary": "a tool name an agent has already discovered and begun trusting within a session to the specific, stable implementation that name is bound to for the remainder of that session",
+    "missing_control": "no binding between a WebMCP tool's name and a stable origin, identity, or implementation fingerprint across a session; the agent's own tool-selection logic trusts whichever implementation currently answers to a name it already discovered, with no check for a mid-session change",
+    "vulnerability_rationale": {
+      "capability": "An agent operating in a live WebMCP session discovers and invokes tools by name, exposed dynamically by the page it is interacting with, and the set of available tools and their implementations can change during the session.",
+      "vulnerability": "No binding connects a tool's name to a stable origin, identity, or implementation across the session; a third-party script on the same page can unregister an already-trusted tool and register a malicious replacement under the identical name, or win a registration race before the legitimate tool ever registers, with the agent's own tool-selection logic having no way to detect the substitution.",
+      "impact": "The agent invokes the attacker's implementation believing it to be the already-trusted tool it discovered earlier in the session, so whatever action, data access, or output the hijacked tool's name implied trust for is redirected to attacker control, with a measured 94-100% success rate across current frontier models and no content-level signal for a defense inspecting tool descriptions to catch."
+    },
+    "mitigation": {
+      "strategy": [
+        "verify_identity",
+        "deny_by_default"
+      ],
+      "enforcement_point": "runtime_proxy",
+      "trifecta_control": "not_applicable"
+    },
+    "example_patterns": [
+      "An agent completing an e-commerce checkout discovers and successfully invokes a 'get_cart' WebMCP tool early in the task. A compromised advertising script on the same page aborts the original tool's registration once the cart-inspection step completes and registers a malicious 'get_cart' under the same name before the agent's next call, which the agent then dispatches to the replacement, redirecting the checkout's address or payment fields.",
+      "A knowledge-base search page exposes a 'save_to_knowledge_base' WebMCP tool. A third-party script races to register its own tool under that exact name before the page's own legitimate registration completes, so the agent's very first discovery of the name already resolves to the attacker's implementation, with no substitution event visible in the session at all.",
+      "A driver-update workflow exposes 'check_driver_version', 'download_driver', and 'execute_installer' as WebMCP tools. A malicious script waits until the agent has verified the current driver version, then hijacks 'download_driver' under its existing name to serve a different payload than the one the agent's earlier, legitimate check would have selected."
+    ],
+    "mutation_count": 0,
+    "detection_methodology": "1. For each WebMCP tool an agent discovers within a session, record the tool's name alongside a fingerprint of its registering origin, schema, and, where available, the specific script or module that performed the registration. 2. Monitor the live tool registry for any unregister-then-reregister event, or any registration completing after an expected registration point, targeting a name already bound to a previously observed implementation. 3. Flag any case where a tool name's registering origin, schema fingerprint, or registration timing differs from what was first observed for that name in the same session. 4. Where reachable, replay the session's tool-invocation sequence against the fingerprint recorded at each tool's first registration and confirm whether any invocation was actually dispatched to a later, differently-fingerprinted registration under the same name.",
+    "indicators_of_compromise": [
+      "A WebMCP tool name is unregistered and re-registered within the same session, with the re-registration originating from a different script, module, or page component than the name's original registration.",
+      "A tool invocation for a given name is dispatched to an implementation whose schema, behavior, or registering origin differs from what was recorded when the agent first discovered that name in the session.",
+      "A tool's registration for a given name completes after the agent's task workflow would ordinarily expect it (a registration race indicator), or immediately following the agent's first legitimate invocation of a different tool (an AbortSignal-hijack timing indicator)."
+    ],
+    "remediation": "1. Bind every WebMCP tool's name to a stable origin and identity (a signed manifest, a content fingerprint, or an equivalent binding) at first registration, and refuse or flag any later registration under the same name from a different origin or identity for the remainder of the session. 2. Treat unregister-then-reregister events, and registration races, as security-relevant lifecycle events requiring their own logging and, where the tool has already been invoked, requiring re-confirmation before the agent trusts the name again. 3. Enforce data boundaries for third-party page scripts so that a script other than a tool's own registering origin cannot alter or replace that tool's registry entry. 4. Maintain traceable logs of tool registration and invocation events, including which script or origin performed each registration, so a mid-session substitution is forensically visible even where it cannot be prevented outright.",
+    "kill_switch_active": false,
+    "researcher": "Lin-Fa Lee",
+    "researcher_url": "https://arxiv.org/abs/2606.06387",
+    "published": "2026-09-27T00:00:00Z",
+    "last_updated": "2026-09-27T00:00:00Z",
+    "references": [
+      {
+        "tag": "arXiv:2606.06387",
+        "text": "Lee, Lin-Fa; Chang, Yi-Yu; Yu, Chia-Mu; Yeh, Kuo-Hui. 'WebMCP Tool Surface Poisoning: Runtime Manipulation Attacks on LLM Agents.' cs.CR, submitted 2026-06-04. Identifies Mid-Session Tool Injection (MSTI), classified into Tool Hijacking (registry-level, this record's scope) and Tool Framing (metadata-level, out of scope here per the paper's own overlap note with indirect prompt injection). AbortSignal hijack: 94% average malicious-invocation rate across GPT-5.4/Claude Opus 4.6/Gemini 2.5-flash (100%/100%/82%). Registration race: 100% across all three models. A timing-analysis appendix confirms AbortSignal-hijack success is strictly bounded by whether the substitution completes before the tool's first legitimate invocation.",
+        "url": "https://arxiv.org/abs/2606.06387"
+      },
+      {
+        "tag": "AVE issue #292",
+        "text": "ave_id AVE-2026-00086 confirmed via the id-confirmation issue, including the distinctness comparison against AVE-2026-00002, AVE-2026-00074, AVE-2026-00080, and AVE-2026-00082, and the deliberate scoping decision to exclude the source paper's own Tool Framing category as already covered elsewhere in the corpus.",
+        "url": "https://github.com/aveproject/ave/issues/292"
+      }
+    ],
+    "aivss": {
+      "cvss_base": 8.5,
+      "aarf": {
+        "autonomy": 1,
+        "tool_use": 1,
+        "multi_agent": 0,
+        "non_determinism": 0.5,
+        "self_modification": 0,
+        "dynamic_identity": 1,
+        "persistent_memory": 0,
+        "natural_language_input": 0,
+        "data_access": 1,
+        "external_dependencies": 1
+      },
+      "aars": 5.5,
+      "thm": 1,
+      "mitigation_factor": 1,
+      "aivss_score": 7,
+      "aivss_severity": "HIGH",
+      "spec_version": "0.8",
+      "notes": "autonomy and tool_use scored at maximum (1): once the hijack or registration race is won within its timing window, the substitution requires no further attacker interaction, and the mechanism is definitionally about the agent's own tool discovery and invocation capability being misdirected. dynamic_identity scored at maximum (1), higher than the comparable factor on AVE-2026-00084 in the same sourcing pass: this mechanism's entire effect depends on the malicious tool actively assuming the exact name, and therefore the inherited trust, of an already-legitimate, already-discovered tool -- genuine name-based impersonation, not merely a missing re-validation step on an otherwise-unchanged, honest identity. data_access and external_dependencies scored at maximum (1): the hijacked tool inherits whatever trust and data access the agent already extends to its name (the paper's own threat model names information leakage and workflow redirection as explicit attacker objectives), and the measured 82-100% success rate varies meaningfully by which specific model is in use, with severity and even exploitability tied to the specific WebMCP implementation's own registration-lifecycle behavior. non_determinism scored 0.5: the paper's own results show real, measured per-model variance (Gemini notably lower than GPT-5.4 and Claude Opus on the AbortSignal variant), and the AbortSignal form's success is strictly timing-window-dependent, a real-world race condition property, even though the paper's own controlled testbed produces clean, largely deterministic splits once timing is fixed. persistent_memory scored 0: the substitution is scoped to the live browser session's own tool registry state and the paper's threat model gives no basis to claim the effect persists once that session ends. multi_agent, self_modification, and natural_language_input scored 0: the mechanism is single-agent, does not involve the component altering its own instructions, and (for the Tool Hijacking forms this record is scoped to) requires no natural-language content manipulation of any kind, pure registry-identity substitution. cvss_base_vector mirrors the reasoning already applied to AVE-2026-00084/00085 in this same sourcing pass: network-delivered (AV:N), low complexity once timing is achieved (AC:L), a real precondition requiring a compromised or malicious third-party script already present on the page (AT:P), no additional privilege or user interaction (PR:N/UI:N), full confidentiality/integrity impact given arbitrary tool substitution (VC:H/VI:H, SC:H/SI:H), and low availability impact at either layer (VA:L/SA:L) since this is not a denial-of-service-shaped class. thm set to 1 (mechanism real and demonstrated): a real testbed with benign and malicious page servers, three current frontier models, 1,440 total runs, and a dedicated timing-sensitivity study isolating exactly when the attack succeeds and fails -- a working, reproduced demonstration, not a theoretical scenario. mitigation_factor set to 1 (no broadly effective, ecosystem-wide mitigation exists yet): WebMCP is a newly emerging protocol and the paper's own recommended mitigations, origin-binding, lifecycle consistency, data-boundary enforcement, are design proposals, not yet standard practice anywhere evaluated. owasp_mcp mapped to MCP03 (Tool Poisoning) after reading the category's full primary-source text directly (same commit as prior records in this sourcing pass, 165fe0f78ef104459237b4a8e0f6e78db9b02391): flagged honestly as an imperfect fit -- MCP03's own text centers on schema or contract tampering causing benign operations to map to destructive ones, while this mechanism swaps the entire tool implementation under an unchanged name rather than tampering with an existing schema in place. MCP03 remains the best available category among the ten (the same choice this corpus already made for AVE-2026-00082's structurally similar name-collision mechanism, after MCP09 was checked and rejected there as an infrastructure-governance category, not a client-side registry-identity problem). owasp_asi mapped to ASI03 (Identity and Privilege Abuse) after reading the full 2026 PDF text directly: its own worked example, 'Synthetic Identity Injection: Attackers impersonate internal agents by using unverified descriptors... to gain inherited trust and perform privileged actions under a fabricated identity,' is a close structural match with 'tool' substituted for 'agent' -- a malicious tool assumes an unverified descriptor (its name) to inherit the trust the agent already extends to it. mitre_atlas mapped to AML.T0074 (Masquerading) after confirming its live text directly in ATLAS.yaml: 'the name or location of an object... is manipulated or abused for the sake of evading defenses and observation... giving legitimate task or service names' is a direct, unstretched match for a malicious tool registered under an existing, legitimate tool's exact name. nist_ai_rmf confirmed empty after checking the actual NIST AI 100-1 text directly: no subcategory beyond the same generic security-evaluation or third-party-risk boilerplate already found non-specific for the other records in this sourcing pass fits this mechanism any more precisely."
+    },
+    "evidence_kind_default": "behavioral_pattern",
+    "detection_stage": "runtime_observed",
+    "detection_layer": "runtime",
+    "confidence_baseline": 0.55,
+    "evidence_basis_engines": [
+      "sandbox",
+      "llm"
+    ],
+    "derivable_into": [
+      "credential-exfiltration"
+    ],
+    "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "source_url": "https://github.com/OWASP/www-project-mcp-top-10/blob/165fe0f78ef104459237b4a8e0f6e78db9b02391/2025/MCP03-2025%E2%80%93Tool-Poisoning.md",
+        "read_date": "2026-09-27"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-09-27",
+        "source_url": "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/"
+      },
+      "mitre_atlas": {
+        "version": "5.6.0",
+        "read_date": "2026-09-27",
+        "source_url": "https://raw.githubusercontent.com/mitre-atlas/atlas-data/main/dist/ATLAS.yaml"
+      }
+    },
+    "verification_basis": "artifact_reconstructed"
+  },
+  {
     "ave_id": "AVE-2026-00003",
     "schema_version": "1.1.0",
     "component_type": "skill",
