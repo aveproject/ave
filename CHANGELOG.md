@@ -84,6 +84,22 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   new record.
 
 ### Added
+- AVE-2026-00087: Agentjacking — a monitoring/diagnostic integration's
+  own publicly-writable ingest endpoint lets an attacker plant a
+  crafted event formatted to visually mimic the integration's
+  authentic system-generated template; when an agent queries the
+  integration's MCP server for diagnostic data, it reads the
+  attacker's embedded command as legitimate remediation guidance and
+  executes it with full developer privileges. Sourced from Tenet
+  Security's Agentjacking disclosure: 85% exploitation success across
+  Claude Code, Cursor, and Codex CLI; at least 2,388 organizations
+  with publicly exposed Sentry DSNs; Sentry itself acknowledged the
+  underlying issue as "technically not defensible." Distinct from
+  AVE-2026-00018/00042/00043/00044, checked field by field, including
+  a deliberate re-check that initially flagged this as possibly
+  already covered by AVE-2026-00044 before mechanism-level comparison
+  ruled that out. researcher field credits Tenet Security, not AVE.
+  Id confirmed via issue #295 (HIGH, AIVSS 7.8).
 - AVE-2026-00086: mid-session WebMCP tool hijacking — a tool an agent
   already discovered and trusted within a live browser session is
   unregistered (via the AbortSignal API, or a registration-order race)

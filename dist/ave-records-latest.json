@@ -2781,6 +2781,140 @@
     "verification_basis": "artifact_reconstructed"
   },
   {
+    "ave_id": "AVE-2026-00087",
+    "schema_version": "1.1.0",
+    "status": "active",
+    "title": "Agentjacking: a crafted tool response visually mimics a trusted system template to hijack an agent",
+    "attack_class": "Prompt Injection - Tool Response Template Mimicry",
+    "severity": "HIGH",
+    "description": "A monitoring or diagnostic integration exposes an MCP server whose ingest endpoint is designed to be publicly writable, a deliberate architectural choice so that unauthenticated clients (a user's own browser, for instance) can report events without holding a full credential. An attacker who obtains the write-only ingest credential, often trivially recoverable from a target's own public frontend JavaScript, POSTs a crafted event directly to that ingest endpoint, controlling the entire payload structure. The injected event embeds carefully formatted markdown, headings, code blocks, and a fabricated resolution or remediation section naming an executable command, within standard fields of the event schema, styled to be visually indistinguishable from the integration's own authentic, system-generated output. When a developer later asks their AI coding agent to investigate the resulting error or event, the integration's own MCP server returns the poisoned event to the agent as diagnostic data. The agent's own handling of MCP tool responses treats this returned data as authoritative system output rather than as untrusted external content requiring the same scrutiny as user-supplied input, and because the markdown formatting mirrors the integration's authentic template exactly, there is no visual or structural cue distinguishing the compromise from a genuine event. The agent, unable to distinguish the attacker's embedded instruction from legitimate remediation guidance, executes the suggested command with the developer's own full privileges. Demonstrated concretely against Sentry, a widely deployed error-tracking and performance-monitoring platform, using its DSN (Data Source Name), a public, write-only credential intentionally embedded in frontend JavaScript by design, requiring no additional authentication to submit events. Testing across three current AI coding agents, Claude Code, Cursor, and OpenAI Codex CLI, achieved an 85% exploitation success rate. Tenet Security identified at least 2,388 organizations with publicly exposed Sentry DSNs that could be used to inject malicious events by this method. Sentry itself has acknowledged the underlying issue as 'technically not defensible' given the DSN's intentionally public-write design, and has activated a narrow content filter blocking one specific payload string rather than a structural fix. The attack bypasses EDR, WAF, IAM, VPN, Cloudflare, and firewall defenses entirely, because no conventionally malicious artifact, no malware signature, no anomalous network behavior, exists anywhere in the chain: every request is a legitimately formatted, protocol-valid event submitted to an endpoint explicitly designed to accept unauthenticated writes. Distinct from AVE-2026-00044 (Async Task Result Poisoning): that record's own stated distinguishing property, explicitly named in its description, is a temporal gap between task dispatch and a later, separate turn's result consumption, which is what it identifies as bypassing synchronous safety checks. This record's mechanism is a synchronous MCP tool call and response within a single interaction, a developer asks the agent to investigate an error and the poisoned response returns immediately, with no temporal gap, no task dispatch, and no later-turn consumption pattern anywhere in the mechanism. Distinct from AVE-2026-00043 (MCP App UI Payload Injection): that record's mechanism is instructions hidden in non-rendered elements, hidden divs, alt attributes, SVG metadata, invisible to the user while still processed by the model. This record's malicious content is fully rendered and visible, exactly as the legitimate system's own output would be; its evasion technique is visual mimicry of an authentic template, the structurally opposite concealment strategy from hiding content the user cannot see. Distinct from AVE-2026-00042 (REPL Code Mode Payload Injection): that record's mechanism is tool-result content containing escape sequences or string terminators that break out of a data context directly into a dynamically constructed eval() or exec() code string, a syntactic code-injection technique. This record requires no code-context breakout of any kind; the agent reads the content as natural-language diagnostic guidance within its own normal reasoning process and is persuaded to act on it, not tricked via a parsing or escaping vulnerability. Distinct from AVE-2026-00018 (Tool Result Manipulation): that record's mechanism is the agent itself being instructed by some other component to falsify, alter, or suppress a tool result before reporting it to a user or downstream system. This record is the inverse direction entirely: the tool result itself, as genuinely returned by the integration's own MCP server, is what deceives the agent into acting, with no instruction anywhere telling the agent to lie about anything.",
+    "aivss_score": 7.8,
+    "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
+    "owasp_mcp": [
+      "MCP06"
+    ],
+    "owasp_asi": [
+      "ASI01"
+    ],
+    "mitre_atlas": [
+      "AML.T0051.001"
+    ],
+    "nist_ai_rmf": [],
+    "behavioral_fingerprint": "An MCP tool response, returned by a legitimate, correctly functioning integration server in answer to an agent's own genuine query (an error lookup, a diagnostic check), contains content an attacker injected upstream at the integration's own publicly-writable ingest point, formatted with markdown or equivalent structured styling that exactly mimics the integration's authentic, system-generated output template. The agent's own handling of the tool response treats it as authoritative system data rather than untrusted external content, finds no visual or structural cue distinguishing it from a genuine event because the formatting is indistinguishable from the real template, and executes an embedded command the injected content presents as legitimate remediation guidance.",
+    "behavioral_vector": [
+      "tool-response-mimicry",
+      "template-spoofing",
+      "diagnostic-integration-abuse",
+      "data-to-instruction"
+    ],
+    "provenance_vector": {
+      "entry_class": "tool_response",
+      "payload_surface": "an MCP tool's return value (an error, diagnostic, or monitoring event) injected upstream at the integration's own publicly-writable ingest endpoint, formatted to visually mimic the integration's authentic, system-generated output template with no structural or visual cue distinguishing it from a genuine event",
+      "escalation": "data_to_instruction"
+    },
+    "security_boundary": "an MCP integration's own authentic, system-generated output template to any content returned through the same tool response channel, regardless of what actually produced it",
+    "missing_control": "no verification, at the point an agent consumes an MCP tool response, that the response's content actually originated from the integration's own system rather than from an attacker who submitted it through the same publicly-writable ingest channel the integration was designed to accept unauthenticated writes through",
+    "vulnerability_rationale": {
+      "capability": "An agent queries an MCP-exposed monitoring or diagnostic integration (an error tracker, a performance monitor) to investigate an event, and the integration's own MCP server returns event data the agent reads as authoritative diagnostic context.",
+      "vulnerability": "The integration's own ingest endpoint is designed to accept unauthenticated writes from a public, write-only credential, and nothing in the agent's own tool-response handling verifies that returned content actually originated from the integration's own system rather than from anyone who submitted it through that same public channel; formatting the injected content to mimic the integration's authentic template removes any visual cue an operator or the agent could otherwise use to notice the difference.",
+      "impact": "The agent executes an attacker-chosen command with the developer's own full privileges, believing it is following the integration's own legitimate remediation guidance, with no conventionally malicious artifact anywhere in the chain for EDR, WAF, IAM, VPN, Cloudflare, or firewall defenses to detect."
+    },
+    "mitigation": {
+      "strategy": [
+        "validate_input",
+        "provenance_label"
+      ],
+      "enforcement_point": "runtime_proxy",
+      "trifecta_control": "break_untrusted_content"
+    },
+    "example_patterns": [
+      "A publicly-writable error-ingestion endpoint's write-only credential, embedded by design in a target's own frontend JavaScript, is used to submit a crafted error event whose message field contains markdown formatted to match the platform's own dashboard styling exactly, including a fabricated 'Suggested Fix' section naming a shell command.",
+      "A performance-monitoring integration's MCP server returns a synthetic trace event to an agent investigating a latency regression; the trace's metadata fields contain an injected instruction styled as a platform-generated optimization recommendation, which the agent treats as authoritative because the integration itself is already trusted.",
+      "A bug-tracking integration accepts unauthenticated issue submissions by design (its own public bug-report form); an attacker files a report whose body is formatted to match the tracker's own auto-triage comment template precisely, and an agent asked to triage the queue executes the embedded 'reproduction steps' as if the tracker's own automation had generated them."
+    ],
+    "mutation_count": 0,
+    "detection_methodology": "1. For each MCP integration an agent consumes tool responses from, determine whether the integration's own ingest or write path accepts content from any party without full authentication (a public write-only credential, an unauthenticated public submission form, or equivalent). 2. For any such integration, treat its tool responses as untrusted external content requiring the same scrutiny as user-supplied input, never as authoritative system output, regardless of how closely the response's formatting matches the integration's own authentic template. 3. Scan tool response content for imperative language, embedded commands, or structured injection patterns before it reaches agent context, independent of whether the response 'looks like' genuine system output. 4. Where the integration supports it, verify content provenance (a submitter identity, an authenticated-write flag, a signature) rather than relying on formatting or template similarity as a trust signal.",
+    "indicators_of_compromise": [
+      "An MCP integration's ingest or submission endpoint accepts content from an unauthenticated or only-partially-authenticated party (a public write-only credential, an open submission form) by explicit design.",
+      "A tool response returned to an agent contains an embedded, actionable command (a shell command, an install instruction, a configuration change) presented as a system-generated recommendation, resolution, or fix.",
+      "An agent executes a command sourced from a monitoring, diagnostic, or bug-tracking tool response with no independent verification step, and the command's origin cannot be distinguished from the integration's own legitimate output by content or formatting alone."
+    ],
+    "remediation": "1. Treat every MCP tool response from an integration whose own ingest path accepts unauthenticated or partially-authenticated writes as untrusted external content, never as authoritative system output, regardless of formatting similarity to the integration's genuine template. 2. Bind agent-executable actions suggested within tool response content to an explicit, separate confirmation step naming the specific command and its source, rather than allowing the agent to execute a suggestion embedded in returned diagnostic data directly. 3. Where an integration's architecture requires a publicly-writable ingest point, apply content-provenance labeling (marking which fields were submitted by an unauthenticated party versus generated by the integration's own trusted pipeline) so a consuming agent can distinguish the two. 4. Scan tool response content for injection patterns and embedded commands at the MCP proxy or gateway layer, before the content reaches agent context, independent of the response's apparent formatting authenticity.",
+    "kill_switch_active": false,
+    "researcher": "Tenet Security",
+    "researcher_url": "https://tenetsecurity.ai/blog/agentjacking-coding-agents-with-fake-sentry-errors/",
+    "published": "2026-09-27T00:00:00Z",
+    "last_updated": "2026-09-27T00:00:00Z",
+    "references": [
+      {
+        "tag": "Tenet Security -- Agentjacking",
+        "text": "Tenet Security. 'One Fake Bug Report Hijacked a $250B Company's AI Agent' / 'Agentjacking: Coding Agents with Fake Sentry Errors.' Demonstrates a crafted Sentry error event, submitted via a public, write-only DSN credential, hijacking AI coding agents (Claude Code, Cursor, OpenAI Codex CLI) into executing attacker-chosen commands via markdown formatted to mimic Sentry's own authentic system template. 85% exploitation success rate across the three tested agents; at least 2,388 organizations identified with publicly exposed Sentry DSNs. Sentry acknowledged the issue as 'technically not defensible' given the DSN's intentional public-write design.",
+        "url": "https://tenetsecurity.ai/blog/agentjacking-coding-agents-with-fake-sentry-errors/"
+      },
+      {
+        "tag": "Cloud Security Alliance Lab Space corroboration",
+        "text": "Independent corroborating technical writeup of the Agentjacking mechanism and its architectural root cause (Sentry's event-ingestion design intersecting with the Sentry MCP server's trust of returned data as authoritative system output).",
+        "url": "https://labs.cloudsecurityalliance.org/research/csa-research-note-agentjacking-sentry-mcp-20260614-csa-style/"
+      },
+      {
+        "tag": "AVE issue #295",
+        "text": "ave_id AVE-2026-00087 confirmed via the id-confirmation issue, including the distinctness comparison against AVE-2026-00018, AVE-2026-00042, AVE-2026-00043, and AVE-2026-00044, and the deliberate re-check that initially flagged this as possibly already covered by AVE-2026-00044 before mechanism-level comparison ruled that out.",
+        "url": "https://github.com/aveproject/ave/issues/295"
+      }
+    ],
+    "aivss": {
+      "cvss_base": 8.7,
+      "aarf": {
+        "autonomy": 1,
+        "tool_use": 1,
+        "multi_agent": 0,
+        "non_determinism": 0.5,
+        "self_modification": 0,
+        "dynamic_identity": 1,
+        "persistent_memory": 0.5,
+        "natural_language_input": 1,
+        "data_access": 1,
+        "external_dependencies": 1
+      },
+      "aars": 7,
+      "thm": 1,
+      "mitigation_factor": 1,
+      "aivss_score": 7.8,
+      "aivss_severity": "HIGH",
+      "spec_version": "0.8",
+      "notes": "autonomy and tool_use scored at maximum (1): once the malicious event is planted at the ingest endpoint, no further attacker interaction is needed, it fires whenever the integration is naturally queried in the course of the agent's own normal diagnostic work, and the mechanism is definitionally about the agent's own MCP tool-calling capability. dynamic_identity scored at maximum (1): the entire technique is centered on visually mimicking the integration's own authentic, system-generated template so precisely that no formatting or structural cue distinguishes the compromise, genuine template-identity mimicry rather than a missing re-validation step on an honest, unchanged identity. natural_language_input scored at maximum (1): unlike the structural, syntactic mechanisms in AVE-2026-00084 and AVE-2026-00086 from the same sourcing pass, this mechanism's entire exploitation step is the agent reading natural-language, markdown-formatted content and being persuaded, as a reasoning act, that it represents legitimate guidance, a natural-language-input mechanism in the most direct sense. data_access and external_dependencies scored at maximum (1): demonstrated impact is arbitrary command execution with full developer privileges, and the mechanism is specific to integrations whose own ingest architecture accepts unauthenticated or partially-authenticated writes, a real, measured, integration-specific dependency. non_determinism scored 0.5: the 85% success rate reflects real, non-total variance across the three tested agents rather than a uniform result. persistent_memory scored 0.5: the malicious event persists in the integration's own event store and can be re-triggered whenever the same error is investigated again, a real but partial persistence property, distinct from a full cross-session standing capability change. multi_agent and self_modification scored 0: the mechanism is single-agent and does not involve the component altering its own instructions or runtime. cvss_base_vector mirrors the reasoning already applied across this sourcing pass: network-delivered (AV:N), low complexity (AC:L), a real precondition requiring the attacker to obtain the target's own ingest credential (AT:P, though the source's own finding that 2,388 organizations have publicly exposed credentials means this precondition is often trivially satisfied in practice), no additional privilege or unusual user interaction beyond the agent's own normal diagnostic workflow (PR:N/UI:N), full confidentiality/integrity impact given arbitrary command execution (VC:H/VI:H, SC:H/SI:H), and low availability impact at either layer (VA:L/SA:L) since this is not primarily a denial-of-service-shaped class. thm set to 1 (mechanism real and demonstrated): a real, disclosed, reproduced attack against a specific, named, widely-deployed production integration, with a measured 85% success rate across three current production coding agents and a real, acknowledged response from the affected vendor, not a theoretical scenario. mitigation_factor set to 1 (no broadly effective, ecosystem-wide mitigation exists yet): the affected vendor's own response was a narrow, single-payload-string content filter rather than a structural fix, and the vendor itself states the underlying architecture is 'technically not defensible' given the credential's intentional public-write design -- no standard practice for provenance-verifying tool response content exists yet across the evaluated agents. owasp_mcp mapped to MCP06 (Intent Flow Subversion) after reading the category's full primary-source text directly (same commit as prior records in this sourcing pass, 165fe0f78ef104459237b4a8e0f6e78db9b02391): its own vulnerability checklist names 'Agent treats MCP resource text or tool outputs as potential instructions rather than passive data' verbatim, a precise, unstretched match for this record's own core failure, the strongest MCP Top 10 fit found across this entire sourcing pass. owasp_asi mapped to ASI01 (Agent Goal Hijack) after reading the full 2026 PDF text directly: its own description names 'deceptive tool outputs' explicitly among the techniques by which 'attackers can manipulate an agent's objectives, task selection, or decision pathways,' and its own first Example Attack Scenario, EchoLeak, a zero-click indirect prompt injection silently triggering hidden instructions via content an agent processes as trusted, is structurally analogous. mitre_atlas mapped to AML.T0051.001 (Indirect, a child of LLM Prompt Injection) after confirming its live text in ATLAS.yaml directly: 'an adversary may inject prompts indirectly via a separate data channel ingested by the LLM' is a precise, unstretched match, and the same technique already grounds AVE-2026-00044's mapping for a structurally similar external-data-channel injection mechanism, reused here because the role genuinely matches, not forked unnecessarily. nist_ai_rmf confirmed empty after checking the actual NIST AI 100-1 text directly: no subcategory beyond the same generic third-party-integration or security-evaluation boilerplate already found non-specific across this entire sourcing pass fits this mechanism any more precisely."
+    },
+    "evidence_kind_default": "behavioral_pattern",
+    "detection_stage": "runtime_observed",
+    "detection_layer": "runtime",
+    "confidence_baseline": 0.6,
+    "evidence_basis_engines": [
+      "llm",
+      "sandbox"
+    ],
+    "derivable_into": [
+      "remote-control-chain"
+    ],
+    "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "source_url": "https://github.com/OWASP/www-project-mcp-top-10/blob/165fe0f78ef104459237b4a8e0f6e78db9b02391/2025/MCP06-2025%E2%80%93Intent-Flow-Subversion.md",
+        "read_date": "2026-09-27"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-09-27",
+        "source_url": "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/"
+      },
+      "mitre_atlas": {
+        "version": "5.6.0",
+        "read_date": "2026-09-27",
+        "source_url": "https://raw.githubusercontent.com/mitre-atlas/atlas-data/main/dist/ATLAS.yaml"
+      }
+    },
+    "verification_basis": "artifact_reconstructed"
+  },
+  {
     "ave_id": "AVE-2026-00003",
     "schema_version": "1.1.0",
     "component_type": "skill",
