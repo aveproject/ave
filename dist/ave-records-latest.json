@@ -2529,6 +2529,129 @@
     "verification_basis": "artifact_reconstructed"
   },
   {
+    "ave_id": "AVE-2026-00085",
+    "schema_version": "1.1.0",
+    "status": "active",
+    "title": "Collusive cross-skill composition: a malicious workflow split across independently benign skills",
+    "attack_class": "Obfuscation - Collusive Cross-Skill Composition",
+    "severity": "HIGH",
+    "description": "An attacker decomposes a single malicious workflow into three or more sub-payloads and packages each as its own independently-installable skill, with a real, narrow, individually-benign function -- one might be a project-setup helper, another an API analyzer, another a test runner. Adjacent sub-skills are connected through genuine runtime artifacts, a file, an environment variable, a task-state value, that one sub-skill's actual execution produces and a subsequent sub-skill's execution consumes, so the complete harmful behavior exists only in the ordered composition's real data flow during genuine agent execution and never in any single skill's own declared instructions, code, or permissions. Because per-skill scanners inspect each skill's own content, permissions, dependencies, and code behavior in isolation, every sub-skill passes individual review, and the complete attack surfaces only when all sub-skills are installed together and the agent executes them in their intended order. Demonstrated with ColluSkill, evaluated against six real, currently-deployed skill scanners (CISCO Skill Scanner, SkillFortify, Auditor, SlowMist, Vetter, SkillSpector): an average 96.0% attack success rate across the six, reaching 100% on two of them, and the best performance among five single-skill and one multi-skill attack baseline evaluated on the same scanners (the next-best baseline, a multi-skill benchmark not purpose-built for scanner evasion, reaches 34.8%). ColluSkill's chain planning uses an attacker-controlled LLM to infer an ordered payload plan and iteratively rewrites any sub-skill a scanner flags, using the scanner's own feedback, while keeping already-passing sub-skills unchanged -- this refinement measurably raises average attack success rate from 64.9% before any refinement to 96.0% after seven iterations. Real runtime execution is confirmed, not merely scanner evasion in the abstract: ColluSkill attack chains successfully activate on three real coding agents (OpenCode, Claude Code, Codex) across different model backbones (GPT-5.5, DeepSeek-V4-Pro, GLM-5.2), with chain activation success ranging 58.5% to 92.5% depending on the agent. The paper's own proposed defense, ChainGuard, a context-aware scanner that evaluates a candidate skill together with the full set of skills already installed rather than in isolation, reduces but does not eliminate the attack (22.5% residual attack success rate) while passing 99.5% of benign workflows. Distinct from AVE-2026-00059 (Fragmented Cross-Description Reassembly): that record's fragments are tool-description text spread across multiple tools, reassembled inside the model's own inference at a separately planted trigger, before any tool call executes -- a pure inference-time text-combination mechanism. This record's fragments are real, separately-installed skill packages whose harmful composition is reconstructed only through actual runtime artifact passing during genuine, completed execution, not text combined in the model's context. Distinct from AVE-2026-00057 (Static Analysis Evasion): that record's evasion mechanism is encoding or obfuscation within one skill's own payload, defeating single-pass static pattern matching on that one file. No sub-skill in this record's mechanism contains any encoded, obfuscated, or otherwise suspicious content at all; each is genuinely, functionally benign on its own, and the evasion is achieved by the composition itself, not by hiding content within any single skill. Distinct from AVE-2026-00070 (Distributed Cross-Agent Backdoor Fragments): that record's fragments are encrypted, dormant primitives embedded in tool observations, persisting across multiple distinct agents' own memories and reassembled externally by the attacker after the collaborative run ends. This record's sub-skills are unencrypted, fully functional, and complete their entire harmful workflow live, within one agent's own session, with no external post-run reassembly step and no multi-agent memory persistence involved. Distinct from AVE-2026-00067 (Skill Composition Trust Transfer): that record's mechanism is a downstream skill accepting an upstream skill's claimed endorsement or validation result as sufficient authorization without independently reverifying it -- a misplaced-trust-in-a-claim mechanism. No skill in this record's mechanism makes or relies on any trust or endorsement claim about another skill at all; the sub-skills exchange functional data artifacts as ordinary parts of one attacker-planned workflow, with no vouching or authorization claim anywhere in the chain. Distinct from AVE-2026-00068 (CLI Command Composition): that record is shell-state composition of already-trusted commands within one session, with no installation-time security-scanning-evasion property in its mechanism at all. This record is specifically and centrally about defeating per-component security scanners at skill-installation time through deliberate cross-package decomposition, a mechanism 00068 does not involve.",
+    "aivss_score": 7.1,
+    "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
+    "owasp_mcp": [
+      "MCP04"
+    ],
+    "owasp_asi": [
+      "ASI04"
+    ],
+    "mitre_atlas": [],
+    "nist_ai_rmf": [],
+    "behavioral_fingerprint": "Three or more independently-installed skill files, each with a real, narrow, individually-benign function, connect through genuine runtime artifacts (a file, an environment variable, a task-state value) that one sub-skill's actual execution produces and a subsequent sub-skill's execution consumes. No single sub-skill's declared instructions, code, or permissions contain the harmful behavior; it exists only in the ordered composition's real data flow once all sub-skills are installed together and executed in their intended sequence during genuine agent operation, so a scanner that evaluates each skill's own content and behavior in isolation, without cross-skill dependency or artifact-flow analysis, finds nothing to flag in any individual skill.",
+    "behavioral_vector": [
+      "cross-skill-composition",
+      "scanner-evasion",
+      "workflow-decomposition",
+      "artifact-chaining"
+    ],
+    "provenance_vector": {
+      "entry_class": "runtime",
+      "payload_surface": "three or more independently-packaged skill files, each individually benign and functionally narrow, connected through real runtime artifacts that one sub-skill's actual execution produces and a subsequent sub-skill's execution consumes, reconstructing a single attacker-planned malicious workflow only through their ordered, live composition during genuine agent execution"
+    },
+    "security_boundary": "per-skill security review and scanning to the actual unit of risk, which is the ordered composition of multiple independently-scanned skills, not any single skill evaluated alone",
+    "missing_control": "no cross-skill dependency, artifact-flow, or composition-level analysis at scan or install time; available scanners evaluate each skill's own content, permissions, and behavior independently and have no mechanism to reconstruct or flag a harmful workflow that exists only across multiple skills' real, live execution artifacts",
+    "vulnerability_rationale": {
+      "capability": "An agent installs and executes multiple independently-packaged skills within one session, and skills can pass real data to each other through files, environment state, or task outputs that one skill's own execution produces and a later skill's execution consumes.",
+      "vulnerability": "No available skill scanner analyzes a candidate skill together with the other skills already installed in the same environment; each skill is scanned and approved in isolation, so a malicious workflow deliberately split across multiple skills, none individually risky or suspicious, passes every per-skill check that exists.",
+      "impact": "The complete, harmful workflow executes during ordinary agent operation once all sub-skills are installed and invoked in their intended order, achieving the effect of a single fully malicious skill while evading every scanner that inspects skills one at a time; even a purpose-built cross-skill defense reduces but does not eliminate the residual attack success rate."
+    },
+    "mitigation": {
+      "strategy": [
+        "validate_input",
+        "isolate_scope"
+      ],
+      "enforcement_point": "static_scan",
+      "trifecta_control": "not_applicable"
+    },
+    "example_patterns": [
+      "Three skill packages, a 'project setup' helper, an 'API analyzer,' and a 'test runner,' each pass individual security review and appear unrelated. Installed together, the setup skill writes a config value the analyzer skill reads and forwards to an external endpoint, which the test runner then uses to determine when to trigger a destructive cleanup command -- no single skill's own code or description references the other two.",
+      "A skill marketplace scanner flags a candidate skill's suspicious file-write behavior. The skill's author republishes a revised version that removes the flagged behavior from that skill and moves it into a second, newly-published companion skill with an unrelated, benign-sounding name; installing both together reconstructs the original flagged behavior via a shared temp file neither skill's own description mentions.",
+      "A workflow-automation skill collection ships as four separate packages that each declare only read access to their own narrow data source; only when a user installs all four does their combined, chained output reach an external service none of the four individually declares communicating with."
+    ],
+    "mutation_count": 0,
+    "detection_methodology": "1. For each skill under review, enumerate every other skill currently installed, or commonly co-installed, in the same environment, not just the candidate skill's own declared content. 2. Reconstruct producer-consumer relationships across the installed skill set: does any skill read a file, environment variable, or task-state value that another skill's own execution writes, and is that dependency undeclared in either skill's own manifest or description. 3. For skills connected by a real cross-skill dependency, evaluate the composed, chain-level intent, not each skill's isolated behavior -- does the ordered execution path reach a sensitive action (external transmission, privileged operation, destructive command) that no single skill in the chain would reach on its own. 4. Flag the chain, and every skill contributing to it, when a composed path reaches a sensitive action; do not clear any individual skill in the chain based solely on its own isolated scan result.",
+    "indicators_of_compromise": [
+      "Two or more independently-installed skills share an undeclared data dependency (a common file path, environment variable name, or task-state key) that does not appear in either skill's own manifest, description, or declared permissions.",
+      "A skill's own declared function is narrow and individually low-risk, but its output is consumed by a separately-installed skill whose own declared function, combined with the first skill's output, reaches a sensitive action neither skill's own description names.",
+      "A skill's published revision history shows previously-flagged suspicious behavior removed from one skill and appearing, on the same or a near-identical timeline, as new behavior in a separate, newly-published companion skill by the same or a related publisher."
+    ],
+    "remediation": "1. Scan every candidate skill together with the full set of skills already installed in the target environment, not in isolation, reconstructing cross-skill artifact and data-flow dependencies before approving installation. 2. Treat a composed execution path that reaches a sensitive action as the unit of risk, and block or flag every skill contributing to that path, not just whichever individual skill happens to contain the most suspicious-looking content. 3. Require skills to explicitly declare any data they expect to read from, or write for, other skills, and treat an undeclared cross-skill data dependency discovered at runtime as itself a finding. 4. Where composition-aware scanning is not available, apply least-privilege sandboxing per skill so that even a successful cross-skill chain cannot reach artifacts or capabilities beyond what each individual skill's own declared scope would allow.",
+    "kill_switch_active": false,
+    "researcher": "Puyu Zeng",
+    "researcher_url": "https://arxiv.org/abs/2608.09732",
+    "published": "2026-09-27T00:00:00Z",
+    "last_updated": "2026-09-27T00:00:00Z",
+    "references": [
+      {
+        "tag": "arXiv:2608.09732",
+        "text": "Zeng, Puyu; Qin, Simeng; Li, Jingzhi; Jia, Ju; Liu, Zheli; Jia, Xiaojun. 'ColluSkill: Adversarial Cross-Skill Composition for Evading Agent Skill Scanners.' cs.CR, submitted 2026-08-10. Proposes ColluSkill, a collusive multi-skill-chain attack framework using LLM-based chain planning and iterative scanner-feedback refinement; evaluated against six real skill scanners (96.0% average ASR, up to 100% on two), with real chain activation confirmed on three coding agents across three model backbones. Also proposes ChainGuard, a context-aware cross-skill scanner reducing but not eliminating the attack (22.5% residual ASR, 99.5% benign-workflow pass rate).",
+        "url": "https://arxiv.org/abs/2608.09732"
+      },
+      {
+        "tag": "AVE issue #290",
+        "text": "ave_id AVE-2026-00085 confirmed via the id-confirmation issue, including the distinctness comparison against AVE-2026-00057, AVE-2026-00059, AVE-2026-00067, AVE-2026-00068, and AVE-2026-00070.",
+        "url": "https://github.com/aveproject/ave/issues/290"
+      }
+    ],
+    "aivss": {
+      "cvss_base": 8.7,
+      "aarf": {
+        "autonomy": 1,
+        "tool_use": 1,
+        "multi_agent": 0,
+        "non_determinism": 0.5,
+        "self_modification": 0,
+        "dynamic_identity": 0,
+        "persistent_memory": 0.5,
+        "natural_language_input": 0.5,
+        "data_access": 1,
+        "external_dependencies": 1
+      },
+      "aars": 5.5,
+      "thm": 1,
+      "mitigation_factor": 1,
+      "aivss_score": 7.1,
+      "aivss_severity": "HIGH",
+      "spec_version": "0.8",
+      "notes": "autonomy and tool_use scored at maximum (1): once all sub-skills are installed, the chain executes during ordinary agent operation with no further attacker interaction, and the mechanism is definitionally about the agent's own skill/tool-invocation capability chaining multiple installed capabilities together. data_access and external_dependencies scored at maximum (1): the demonstrated effect range spans sensitive-data discovery with external transmission through backdoor activation, and severity is directly tied to which specific scanners and which specific agent/model backbone are in use -- the paper's own measured per-scanner ASR ranges from 91.5% to 100%, and per-agent chain activation from 58.5% to 92.5%, real, substantial variance by external dependency. non_determinism and natural_language_input scored 0.5, not higher: chain activation success is measurably backbone-dependent (a real, nonzero spread across GPT-5.5/DeepSeek-V4-Pro/GLM-5.2), and constructing the attack itself is LLM-driven (chain planning and iterative scanner-feedback rewriting), but the exploitation step once sub-skills are installed is governed by real data-artifact flow rather than natural-language steering of the target agent at call time, so neither factor reaches its maximum. persistent_memory scored 0.5: the sub-skills remain installed as a standing capability after the attack completes, but the harmful workflow itself completes within one normal session's execution rather than depending on cross-session dormancy the way a fragment-persistence mechanism would. multi_agent, self_modification, and dynamic_identity scored 0: the mechanism is single-agent, does not involve the component altering its own instructions, and no sub-skill makes any false or claimed identity, each is honestly whatever its narrow, benign function actually is. cvss_base_vector mirrors AVE-2026-00084's reasoning: network-delivered skill packages (AV:N), low complexity once the specific multi-skill precondition is met (AC:L), a real attacker-controlled precondition requiring three or more specific skills to be installed together (AT:P), no additional privilege or user interaction beyond ordinary skill installation and use (PR:N/UI:N), full confidentiality/integrity impact at both the agent and downstream systems given the paper's own demonstrated effects (VC:H/VI:H, SC:H/SI:H), and low rather than high availability impact at either layer (VA:L/SA:L) since this is not primarily a denial-of-service-shaped class. thm set to 1 (mechanism real and demonstrated): evaluated against six real, currently-deployed, named skill scanners with measured, reproducible results, and real chain execution confirmed on three real coding agents across three model backbones, not a theoretical scenario. mitigation_factor set to 1 (no broadly effective, ecosystem-wide mitigation exists yet): even the paper's own purpose-built defense, ChainGuard, leaves a real 22.5% residual attack success rate, and no evaluated production scanner defends against the mechanism at all today. owasp_mcp mapped to MCP04 (Software Supply Chain Attacks & Dependency Tampering) after reading the category's full primary-source text directly (same commit as AVE-2026-00084's citation, 165fe0f78ef104459237b4a8e0f6e78db9b02391): flagged honestly as an imperfect fit -- MCP04's own checklist centers on compromised or tampered third-party components, while every sub-skill in this mechanism is genuinely, individually benign and uncompromised; the fit is at the level of third-party-component-composition risk broadly, the best available category among the ten, not a precise mechanism match. MCP03 (Tool Poisoning) was also read in full and rejected: its real text is specifically about schema or contract tampering causing benign operations to map to destructive ones, a different mechanism from composing multiple genuinely-unmodified, individually-correct skills. owasp_asi mapped to ASI04 (Agentic Supply Chain Vulnerabilities) after reading the full 2026 PDF text directly: its own description states these vulnerabilities arise when 'agents, tools, and related artefacts they work with are provided by third parties' and that 'agentic ecosystems often compose capabilities at runtime... thereby increasing the attack surface' -- the phrase 'compose capabilities at runtime' is a close match for this record's own mechanism, a stronger fit than the same category's application to AVE-2026-00084. mitre_atlas confirmed empty after searching the live ATLAS.yaml directly: AML.T0010.005 (AI Agent Tool) centers on tools carrying malicious code or prompt injections, the opposite of this mechanism's property that no individual component is malicious; AML.T0067 (LLM Trusted Output Components Manipulation) and AML.T0094 (Delay Execution of LLM Instructions) both describe single-prompt evasion techniques, not multi-component decomposition defeating per-component scanning. No existing technique names workflow decomposition across multiple independently-scanned components as its own mechanism; a genuine gap, left empty rather than stretched a second time in this same sourcing pass. nist_ai_rmf confirmed empty after checking the actual NIST AI 100-1 text directly: no subcategory beyond the same generic third-party-component boilerplate already flagged as non-specific on AVE-2026-00081, AVE-2026-00083, and AVE-2026-00084 was found to fit this mechanism any more precisely."
+    },
+    "evidence_kind_default": "behavioral_pattern",
+    "detection_stage": "static_detection",
+    "detection_layer": "content",
+    "confidence_baseline": 0.5,
+    "evidence_basis_engines": [
+      "pattern",
+      "llm",
+      "sandbox"
+    ],
+    "derivable_into": [
+      "credential-exfiltration",
+      "privilege-escalation-chain"
+    ],
+    "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "source_url": "https://github.com/OWASP/www-project-mcp-top-10/blob/165fe0f78ef104459237b4a8e0f6e78db9b02391/2025/MCP04-2025%E2%80%93Software-Supply-Chain-Attacks%26Dependency-Tampering.md",
+        "read_date": "2026-09-27"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-09-27",
+        "source_url": "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/"
+      }
+    },
+    "verification_basis": "artifact_reconstructed"
+  },
+  {
     "ave_id": "AVE-2026-00003",
     "schema_version": "1.1.0",
     "component_type": "skill",

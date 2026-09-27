@@ -11,7 +11,7 @@ Stable IDs, AIVSS scores, and behavioral fingerprints for every way a skill file
 MCP server, system prompt, or agent plugin can be weaponized — scored consistently,
 mapped to the frameworks security teams already report against.
 
-[![Records](https://img.shields.io/badge/records-84-0f6e56?style=flat-square)](records/)
+[![Records](https://img.shields.io/badge/records-85-0f6e56?style=flat-square)](records/)
 [![Schema](https://img.shields.io/badge/schema-v1.1.0-0a3024?style=flat-square)](schema/ave-record-1.1.0.schema.json)
 [![AIVSS](https://img.shields.io/badge/AIVSS-v0.8-d4a017?style=flat-square)](https://aivss.owasp.org)
 [![OWASP MCP](https://img.shields.io/badge/OWASP-MCP%20Top%2010-0a3024?style=flat-square)](https://owasp.org)
@@ -102,7 +102,7 @@ two published AVE records, corrected the underlying process
 documentation, not just the two records, credited in
 [CONTRIBUTORS.md](CONTRIBUTORS.md).
 
-84 records. 8 independent crosswalks. See
+85 records. 8 independent crosswalks. See
 [crosswalks/](crosswalks/) for the full mappings, and
 [docs/writeups/](docs/writeups/) for full technical write-ups on
 individual records.
@@ -140,11 +140,11 @@ skill file          ->   in CI / pre-commit   ->  before deploy
 
 | | |
 |---|---|
-| Total records | 84 |
+| Total records | 85 |
 | Schema version | 1.1.0 |
 | AIVSS spec | v0.8 |
 | CRITICAL (>= 9.0) | 1 |
-| HIGH (7.0-8.9) | 16 |
+| HIGH (7.0-8.9) | 17 |
 | MEDIUM (4.0-6.9) | 65 |
 | LOW (< 4.0) | 2 |
 | Framework: OWASP MCP Top 10 | all records |
@@ -208,7 +208,7 @@ AIVSS = ((8.5 + 7.5) / 2) x 1.0 x 1 = 8.0  ->  HIGH
 ## Record index
 
 <details>
-<summary><strong>84 records, click to expand</strong></summary>
+<summary><strong>85 records, click to expand</strong></summary>
 
 | AVE ID | Title | AIVSS | Severity |
 |---|---|---|---|
@@ -296,6 +296,7 @@ AIVSS = ((8.5 + 7.5) / 2) x 1.0 x 1 = 8.0  ->  HIGH
 | [AVE-2026-00082](records/AVE-2026-00082.json) | Local Skill Name Collision (Deterministic Router Shadowing) | 4.4 | MEDIUM |
 | [AVE-2026-00083](records/AVE-2026-00083.json) | Silent guardrail comparison failure: a protection mechanism that executes but never evaluates its verdict | 6.3 | MEDIUM |
 | [AVE-2026-00084](records/AVE-2026-00084.json) | Lifecycle hook trust decoupling: a vetted plugin update silently rebinds hooks outside the model's decision path | 7.0 | HIGH |
+| [AVE-2026-00085](records/AVE-2026-00085.json) | Collusive cross-skill composition: a malicious workflow split across independently benign skills | 7.1 | HIGH |
 
 </details>
 
