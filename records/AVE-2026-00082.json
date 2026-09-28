@@ -105,6 +105,7 @@
   "detection_stage": "static_detection",
   "detection_layer": "registry_metadata",
   "confidence_baseline": 0.9,
+  "evidence_vantage": "artifact",
   "evidence_basis_engines": ["pattern"],
   "derivable_into": ["rug-pull-chain"],
   "framework_sources": {
