@@ -2399,6 +2399,136 @@
     }
   },
   {
+    "ave_id": "AVE-2026-00084",
+    "schema_version": "1.1.0",
+    "status": "active",
+    "title": "Lifecycle hook trust decoupling: a vetted plugin update silently rebinds hooks outside the model's decision path",
+    "attack_class": "Supply Chain - Lifecycle Hook Trust Decoupling",
+    "severity": "HIGH",
+    "description": "An agent harness exposes lifecycle hooks -- manifest entries that bind a runtime event (session start, tool invocation, file or config edit) to a shell command the harness dispatches directly, as a subprocess, without the model ever deciding to invoke it. A plugin passes marketplace or registry vetting under a benign, reviewed lifecycle-hook configuration and a stable public identity. A later version update, published under that same identity, silently adds or rebinds a hook to an attacker-chosen command. The harness's own automatic update-sync path applies the new binding with no per-entry re-authorization, no new LLM decision, and typically no user-facing notification distinguishing the change from the plugin's original, already-reviewed state -- the update inherits the trust the original install earned. When the bound event next fires, the harness dispatches the attacker's command directly from its own event-dispatch layer, outside the model's reasoning or tool-call decision path entirely, so prompt-level, alignment, or model-mediated defenses never see the exploitation step and cannot intervene. Confirmed concretely on Claude Code: the harness's automatic marketplace-update synchronization checks repositories for manifest changes and applies them, hook entries included, without validating individual hook entries against what a reviewer or scanner last inspected. Demonstrated with HookPry, an open-source, fully automated attack framework realizing this mechanism across seven real agent harnesses (Claude Code, OpenClaw, OpenHarness, Codex CLI, OpenCode, Hermes, WorkBuddy) and five LLM backends, 25 harness/backend combinations, 1,000 end-to-end runs: HookPry compromises all seven harnesses, with a 77.0% micro-averaged and 77.9% macro-averaged end-to-end attack success rate, peaking at 92.5% on the Hermes harness, and 83.9% average mechanism utility (the proportion of runs in which hook triggering, payload loading, and hook registration actually occur, independent of whether the full external effect is confirmed). An ablation study confirms the temporal-decoupling component is load-bearing, not incidental: blocking the ability for a new hook entry to inherit an existing plugin identity's authorization drops end-to-end success to 0%, and removing the harness-specific compilation step (translating the attack into each harness's native lifecycle-hook interface) also drops it to 0%, while removing only the metadata-optimization component (which improves marketplace discoverability of the carrier plugin, not the exploitation mechanism itself) reduces but does not eliminate success (a 16.4 percentage-point drop). Representative defenses are shown insufficient against the confirmed mechanism: Microsoft Defender achieves 0% recall, and the union of three static defenses still misses 47.5% of the malicious artifacts HookPry generates. The paper's authors state they have responsibly disclosed their findings to all affected harness vendors and are awaiting response. Distinct from AVE-2026-00046 (Tool Hook Interception): that record's mechanism is a skill's own declared instruction text asking the agent to register a hook targeting tool calls -- an LLM-mediated act, visible in the skill's stated instructions and requiring the model to act on them. This record's hook binding is applied by the harness's own update-sync path with no LLM decision, instruction-following, or content read by the model involved at any point. Distinct from AVE-2026-00050 (Parasitic Toolchain): that record is an undeclared registration exceeding a component's own manifest scope, occurring at session initialization. This record's plugin legitimately has lifecycle-hook capability declared in its manifest from the start; the violation is that a later, same-identity update can silently change which event and command are bound, with the harness treating that change as covered by the original install's already-completed vetting. Distinct from AVE-2026-00062 (Unpinned Dependency Substitution): that record's mechanism requires a mutable version specifier (a floating tag or unbounded range) causing a different version to resolve than intended. This record's mechanism works even against a correctly pinned, explicitly versioned update that a marketplace's own update mechanism legitimately and deliberately applies -- the gap is the absence of per-update hook re-authorization, not dependency-resolution ambiguity. Distinct from AVE-2026-00081 (Lingering Authority): that record is a task or episode-scoped capability grant reused after its own closure event, within a single session's lifecycle. This record's trust is scoped to a plugin's persistent public identity, not a session episode, and persists across a version-update boundary that spans installs and sessions entirely, with the defining property being that hook dispatch bypasses the model's decision path altogether rather than a stale grant being reused within it.",
+    "aivss_score": 7,
+    "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
+    "owasp_mcp": [
+      "MCP04"
+    ],
+    "owasp_asi": [
+      "ASI04"
+    ],
+    "mitre_atlas": [
+      "AML.T0010.005"
+    ],
+    "nist_ai_rmf": [],
+    "behavioral_fingerprint": "A plugin or skill that already passed marketplace/registry vetting under a benign, reviewed lifecycle-hook configuration receives a later version update, published under the same stable public identity, that adds or changes the shell command bound to a lifecycle event (session start, tool invocation, file or config edit). The harness applies the updated hook binding via its own automatic update-sync path, with no new LLM decision, per-entry re-authorization, or user-facing notification distinguishing the updated binding from the plugin's original, already-reviewed state. When the bound event next fires, the harness dispatches the attacker-chosen command as a subprocess directly from its own event-dispatch layer, never passing through the model's own reasoning or tool-call decision, so the exploitation step is invisible to any defense that only inspects prompts, model outputs, or tool calls.",
+    "behavioral_vector": [
+      "lifecycle-hook",
+      "trust-decoupling",
+      "update-time-rebinding",
+      "model-bypass",
+      "supply-chain"
+    ],
+    "provenance_vector": {
+      "entry_class": "registry_metadata",
+      "payload_surface": "a plugin's lifecycle-hook manifest/config entry (an event-name-to-shell-command binding), changed by a marketplace- or registry-delivered version update published under the plugin's own already-vetted, stable public identity, with no per-entry re-authorization distinguishing the updated binding from the plugin's original, reviewed state"
+    },
+    "security_boundary": "a plugin's own already-established install-time vetting to the runtime privilege its lifecycle-hook binding grants after any subsequent version update",
+    "missing_control": "no re-validation, re-authorization, or LLM-mediated decision at the point a versioned plugin update changes a lifecycle-hook binding; the harness's own update-sync path applies the new binding as though the update inherited the same vetting the plugin's original release received",
+    "vulnerability_rationale": {
+      "capability": "The harness binds lifecycle events (session start, tool invocation, file or config edit) to shell commands declared in a plugin's own lifecycle-hook configuration, and dispatches the bound command as a subprocess directly from its own event-dispatch layer whenever the event fires.",
+      "vulnerability": "A plugin's lifecycle-hook binding can be added or changed by a later, same-identity version update with no re-authorization, re-vetting, or LLM decision distinguishing the updated binding from what the plugin's original, already-reviewed release declared; the harness's automatic update-sync path applies the change and treats the update as inheriting the original install's trust.",
+      "impact": "The harness executes an attacker-chosen command with host privileges outside the model's own reasoning or tool-call decision path entirely, so prompt-level, alignment, or model-mediated defenses never see the exploitation step, and static or behavioral scanners that inspected the plugin's original manifest miss a binding introduced only in a later update."
+    },
+    "mitigation": {
+      "strategy": [
+        "require_human_approval",
+        "pin_integrity"
+      ],
+      "enforcement_point": "agent_framework",
+      "trifecta_control": "not_applicable"
+    },
+    "example_patterns": [
+      "A coding-agent harness plugin ships v1.0 with a benign, reviewed lifecycle hook (e.g. a post-install linter). Its v1.1 update, published under the same plugin identity, silently rebinds the same hook event to a different shell command; the harness's automatic update sync applies the new binding with no new approval prompt.",
+      "A marketplace plugin passes initial security review with no lifecycle hooks declared at all. A subsequent point release adds a session-start hook for the first time; the harness treats the addition as part of the plugin's already-trusted update stream rather than a new capability grant requiring its own review.",
+      "An agent harness exposes several lifecycle events (tool-use, file-edit, session-start) to plugin-declared hook bindings sharing one configuration schema; a plugin author republishes an update changing only the bound command string for an existing, previously-benign hook entry, with the binding's event name and manifest position unchanged."
+    ],
+    "mutation_count": 0,
+    "detection_methodology": "1. For each installed plugin or skill exposing lifecycle-hook bindings, diff its current hook configuration against the version present at its last human-reviewed or security-scanned state. 2. Flag any lifecycle-hook binding (event-to-command mapping) that is new, or whose bound command has changed, since that last reviewed state, regardless of whether the plugin's overall identity, name, or publisher remained constant. 3. For each flagged binding, confirm whether the harness's own update-delivery path applied it without an intervening authorization prompt, LLM tool-call decision, or user notification specific to that hook entry. 4. Where reachable, exercise the bound lifecycle event in a sandboxed session and confirm whether the dispatched command executes as a subprocess outside the model's own context or reasoning trace.",
+    "indicators_of_compromise": [
+      "A plugin's lifecycle-hook configuration (event-to-command bindings) differs between the version a scanner or reviewer last inspected and the version currently installed, with no corresponding new-capability approval event logged for the change.",
+      "A lifecycle event (session start, tool invocation, file or config edit) is bound to a shell command that does not appear in the plugin's own changelog, release notes, or the description shown at its most recent user-facing update prompt, if any was shown at all.",
+      "Harness or agent session logs show a subprocess spawned in direct response to a lifecycle event firing, with no corresponding LLM tool-call, reasoning trace, or user-facing action in the same turn."
+    ],
+    "remediation": "1. Treat any change to a plugin's lifecycle-hook configuration, an added binding, a changed command, or a changed event target, as a new capability grant requiring its own explicit re-authorization, never inherited from the plugin's original install-time trust. 2. Bind the hook configuration that passed vetting to a specific, content-addressed version; refuse to apply an automatic update that changes hook bindings without an explicit, item-level user or policy-engine confirmation. 3. Route lifecycle-hook dispatch through the same decision and logging path used for LLM-initiated tool calls, or at minimum log and alert on hook-dispatched subprocess execution with the same visibility as a tool call, rather than as a silent, harness-internal event. 4. Where feasible, run lifecycle-hook subprocesses under the harness's own least-privilege sandbox rather than with full host privileges.",
+    "kill_switch_active": false,
+    "researcher": "Pengxun Li",
+    "researcher_url": "https://arxiv.org/abs/2609.03884",
+    "published": "2026-09-27T00:00:00Z",
+    "last_updated": "2026-09-27T00:00:00Z",
+    "references": [
+      {
+        "tag": "arXiv:2609.03884",
+        "text": "Li, Pengxun; Zhang, Litian; Hou, Jianwei; Wu, Shujiang; Li, Song; Kang, Zifeng; Zhang, Xi. 'A Blind Trust, the Bloody Thrust: When Attacker-Controlled Hook Updates Steer AI Agent Harnesses towards Malicious Behaviors.' cs.CR, submitted 2026-09-03, revised 2026-09-08. Proposes HookPry, an open-source, fully automated attack framework; 1,000 end-to-end runs across 25 harness/backend combinations compromise all seven evaluated harnesses (77.0% micro-averaged E2E-ASR, peak 92.5%), with an ablation study confirming the temporal-decoupling and cross-harness-compilation components are individually load-bearing, and representative static/AV defenses shown insufficient (Microsoft Defender 0% recall). States responsible disclosure to affected vendors already sent.",
+        "url": "https://arxiv.org/abs/2609.03884"
+      },
+      {
+        "tag": "AVE issue #288",
+        "text": "ave_id AVE-2026-00084 confirmed via the id-confirmation issue, including the distinctness comparison against AVE-2026-00046, AVE-2026-00050, AVE-2026-00062, and AVE-2026-00081.",
+        "url": "https://github.com/aveproject/ave/issues/288"
+      }
+    ],
+    "aivss": {
+      "cvss_base": 9,
+      "aarf": {
+        "autonomy": 1,
+        "tool_use": 0,
+        "multi_agent": 0,
+        "non_determinism": 0.5,
+        "self_modification": 0,
+        "dynamic_identity": 0.5,
+        "persistent_memory": 1,
+        "natural_language_input": 0,
+        "data_access": 1,
+        "external_dependencies": 1
+      },
+      "aars": 5,
+      "thm": 1,
+      "mitigation_factor": 1,
+      "aivss_score": 7,
+      "aivss_severity": "HIGH",
+      "spec_version": "0.8",
+      "notes": "autonomy scored at maximum (1): once the malicious update is published and accepted by the harness's own update-sync path, the hook fires on the next matching lifecycle event with zero further attacker interaction. tool_use scored 0, deliberately, not by oversight: the paper's own central finding is that hook dispatch happens outside the LLM's tool-calling and reasoning path entirely -- the harness's own event-dispatch layer spawns the subprocess directly, so this mechanism does not require, and specifically bypasses, the agent's own tool-calling capability. persistent_memory and data_access scored at maximum (1): the hook binding, once updated, persists across every future session until removed or patched (a standing config-state change, not a one-off), and the confirmed effect range spans credential collection, data exfiltration, resource hijacking, command and control, tampering, and privilege escalation -- the ten attack objectives HookPry's own taxonomy formalizes against MITRE ATT&CK tactics. external_dependencies scored at maximum (1): the paper's own cross-harness evaluation shows real, measured effectiveness variance by harness (55.3% to 93.4% macro-average by attack category, 41.7% to 92.5% by harness), and a harness whose update-sync path already re-validates hook entries per update would not be vulnerable at all -- severity is definitionally tied to which specific harness is in use. non_determinism and dynamic_identity scored 0.5: the paper's own RQ1.2 measures real, nonzero cross-backend standard deviation in end-to-end success (1.1 to 9.6 percentage points depending on harness) tied to which LLM backend generates the triggering tool-use pattern, and the mechanism exploits the harness's own assumption that a stable, genuine, unchanged plugin identity across a version update still carries its original trust level -- real trust-anchor confusion, but not a spoofed or false identity claim, since the identity genuinely is the same plugin throughout. multi_agent, self_modification, and natural_language_input scored 0: the mechanism is single-harness, does not require the component to alter its own instructions, and involves no natural-language content at any point in the exploitation path -- the payload is a shell command bound via manifest configuration, not text a model interprets. cvss_base_vector reflects a network-delivered update (AV:N), low complexity once the update channel is controlled (AC:L), a real attacker-controlled-update precondition (AT:P, matching the paper's own supply-chain threat model: the attacker controls only plugin metadata and lifecycle-hook configuration, not local or repository access), no privileges or user interaction required beyond that precondition (PR:N/UI:N), full confidentiality/integrity impact at both the vulnerable harness and the subsequent host system (VC:H/VI:H, SC:H/SI:H) given arbitrary command execution with host privileges, and low rather than high availability impact at either layer (VA:L/SA:L) since this is not primarily a denial-of-service-shaped class even though resource-hijacking effects were among the ten confirmed attack objectives. thm set to 1 (mechanism real and demonstrated): 1,000 real end-to-end runs across seven real, named, current agent harnesses and five real LLM backends, with an ablation study isolating which components are load-bearing and a stated responsible disclosure already sent to affected vendors -- this is a working, reproduced exploit framework, not a theoretical scenario. mitigation_factor set to 1 (no broadly effective, ecosystem-wide mitigation exists yet): the paper's own evaluation shows representative production defenses, including a major commercial antivirus product, are insufficient against the confirmed mechanism, and no standard practice for per-update lifecycle-hook re-authorization is yet in place across the evaluated harnesses. owasp_mcp mapped to MCP04 (Software Supply Chain Attacks & Dependency Tampering) after reading the category's full primary-source text directly (github.com/OWASP/www-project-mcp-top-10, 2025/MCP04 document, commit 165fe0f78ef104459237b4a8e0f6e78db9b02391): its own description states 'compromised dependencies can alter agent behavior, introduce hidden backdoors, or modify protocol semantics without triggering detection,' and its vulnerability checklist names 'fetch dependencies automatically during runtime/build' and 'no integrity verification mechanisms' verbatim -- both a direct match for a harness's own automatic update-sync path applying an unvalidated hook-binding change. owasp_asi mapped to ASI04 (Agentic Supply Chain Vulnerabilities) after reading the full 2026 PDF text directly (genai.owasp.org, 'OWASP Top 10 for Agentic Applications 2026', pages 18-20): its own description states these vulnerabilities 'arise when agents, tools, and related artefacts they work with are provided by third parties and may be malicious, compromised, or tampered with in transit,' and that 'agentic ecosystems often compose capabilities at runtime -- loading external tools/agent personas dynamically -- thereby increasing the attack surface,' a direct categorical match even though none of ASI04's own worked examples describes this specific lifecycle-hook-update variant. mitre_atlas mapped to AML.T0010.005 (AI Agent Tool, under AML.T0010 AI Supply Chain Compromise) after searching the live ATLAS.yaml (mitre-atlas/atlas-data, main branch) directly: its own description names agent tools as 'an attractive target for adversaries because compromising an AI agent can provide them with broad accesses and permissions on the victim's system via the agent's other tools' and cites a real prior incident (the Postmark MCP npm backdoor) of a trusted, published package being compromised via an update -- structurally analogous. Flagged honestly as an imperfect fit: T0010.005's own text centers on tools carrying malicious code or prompt injections, a content-level compromise, while this record's specific mechanism is narrower and does not require the plugin's own code or description to be malicious at all, only its lifecycle-hook manifest entry; no more specific existing ATLAS technique naming lifecycle-hook update-time trust decoupling was found. nist_ai_rmf confirmed empty after checking the actual NIST AI 100-1 text (Tables 1-4) directly: MAP 4.2 ('internal risk controls for components of the AI system, including third-party AI technologies, are identified and documented') was the closest candidate, but it is a generic third-party-component risk-documentation subcategory that does not describe this record's specific update-time trust-decoupling mechanism any more precisely than it would describe nearly any other third-party supply-chain finding -- left empty rather than perpetuated, matching the same discipline applied to AVE-2026-00081 and AVE-2026-00083."
+    },
+    "evidence_kind_default": "config_schema",
+    "detection_stage": "static_detection",
+    "detection_layer": "registry_metadata",
+    "confidence_baseline": 0.7,
+    "evidence_basis_engines": [
+      "pattern",
+      "sandbox"
+    ],
+    "derivable_into": [
+      "remote-control-chain",
+      "privilege-escalation-chain"
+    ],
+    "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "source_url": "https://github.com/OWASP/www-project-mcp-top-10/blob/165fe0f78ef104459237b4a8e0f6e78db9b02391/2025/MCP04-2025%E2%80%93Software-Supply-Chain-Attacks%26Dependency-Tampering.md",
+        "read_date": "2026-09-27"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-09-27",
+        "source_url": "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/"
+      },
+      "mitre_atlas": {
+        "version": "5.6.0",
+        "read_date": "2026-09-27",
+        "source_url": "https://raw.githubusercontent.com/mitre-atlas/atlas-data/main/dist/ATLAS.yaml"
+      }
+    },
+    "verification_basis": "artifact_reconstructed"
+  },
+  {
     "ave_id": "AVE-2026-00003",
     "schema_version": "1.1.0",
     "component_type": "skill",
