@@ -1,0 +1,150 @@
+{
+  "$schema": "https://aveproject.org/schema/crosswalk-1.0.0.schema.json",
+  "source": {
+    "standard": "AVE",
+    "version": "1.1.0",
+    "url": "https://aveproject.org",
+    "record_count": 80,
+    "commit": "1e29789e4941b6c1c2435508dbf3c245eedc8d04"
+  },
+  "target": {
+    "registry": "agent-evidence-vocabulary",
+    "version": "0.2.0",
+    "license": "CC0-1.0",
+    "url": "https://github.com/probityai/agent-evidence-vocabulary",
+    "registry_file": "vocabulary.yaml",
+    "term_count": 8,
+    "checked_against_live_file": "2026-09-15",
+    "commit": "66177d65690e9d7eb7e4ff59df8f91792a90735b"
+  },
+  "generated": "2026-09-15",
+  "note": "A field-level crosswalk between AVE's evidence-provenance properties and the agent-evidence-vocabulary registry, which names the axes an execution-evidence claim is read on: who observed the execution, how directly, and what the claim leaves out. The unit is a schema property rather than a category, because the two sides describe different things: AVE enumerates behavioral vulnerability classes and the registry names the provenance axes any claim about an execution carries. They meet at exactly one place, which is how AVE says where its evidence came from. Read coverage before trusting a row: none of the 80 records carries evidence_vantage, evidence_method or verification_basis. All three are optional in schema v1.1.0 and all three read absent on every record at the commit above, verified by fetching each record file rather than by reading the schema. Every mapping below is therefore evidence: inferred, established by comparing two schema definitions, and none is evidence: emitted. A row moves to emitted when a record carries the field and a reviewer can fetch it.",
+  "mappings": [
+    {
+      "ave_field": "evidence_vantage",
+      "ave_values": [
+        "substrate",
+        "artifact"
+      ],
+      "registry_term": "observation_vantage",
+      "registry_section": "evidence_dimensions",
+      "registry_values": [
+        "substrate",
+        "artifact"
+      ],
+      "match_type": "exact",
+      "evidence": "inferred",
+      "notes": "Value sets are identical and so is the composition rule: both take the weakest input, so a claim mixing substrate and artifact observations inherits artifact. The two definitions were written independently and reached the same two-value split, which is the case for mapping them exact rather than structural. The registry adds one consumer-side requirement AVE's schema does not state, that a consumer with no policy-pinned substrate root must treat a substrate row as unattested rather than infer the root from the claim."
+    },
+    {
+      "ave_field": "evidence_method",
+      "ave_values": [
+        "intercepted",
+        "reconstructed"
+      ],
+      "registry_term": "observation_directness",
+      "registry_section": "evidence_dimensions",
+      "registry_values": [
+        "intercepted",
+        "reconstructed"
+      ],
+      "match_type": "exact",
+      "evidence": "inferred",
+      "notes": "Identical value sets, identical weakest-input composition, and both treat reconstructed as the floor a producer may always truthfully state. AVE's schema says an absent value reads as reconstructed; the registry does not state a default, so a producer emitting both sides should write the value rather than rely on either reading."
+    },
+    {
+      "ave_field": "verification_basis",
+      "ave_values": [
+        "substrate_intercepted",
+        "substrate_reconstructed",
+        "artifact_intercepted",
+        "artifact_reconstructed"
+      ],
+      "registry_term": "observation_vantage + observation_directness",
+      "registry_section": "evidence_dimensions",
+      "match_type": "structural",
+      "evidence": "inferred",
+      "notes": "The four values are the product of the two axes above, which is what scripts/write_verification_basis.py composes. The registry keeps the axes separate and does not define the composed term, so this is a structural correspondence rather than a term pairing: a consumer holding an AVE verification_basis can split it into the two registry axes without loss, and a consumer holding both registry values can compose the AVE value without loss."
+    },
+    {
+      "ave_field": "evidence_basis_engines",
+      "ave_values": [
+        "pattern",
+        "yara",
+        "semgrep",
+        "llm",
+        "sandbox",
+        "magika",
+        "external_authority"
+      ],
+      "registry_term": "observation_vantage",
+      "registry_section": "evidence_dimensions",
+      "match_type": "partial",
+      "evidence": "inferred",
+      "notes": "One value carries vantage information and the rest do not. external_authority means a party outside the observed artifact answered, which is the substrate side of the registry's axis; sandbox observes execution and is the other candidate. pattern, yara, semgrep, llm and magika all read the artifact's own bytes, so they sit on the artifact side. AVE's own schema already composes this field into verification_basis by weakest input, so the partial mapping is not a gap in AVE, it is the reason the composed field exists."
+    }
+  ],
+  "gaps": [
+    {
+      "side": "registry",
+      "registry_term": "field_evidence_partition",
+      "reason": "Declares which identity's signature backs which field inside one mixed claim. AVE records a vulnerability class rather than a signed claim, so there is no per-field signer to partition."
+    },
+    {
+      "side": "registry",
+      "registry_term": "issuance_time_basis",
+      "reason": "Distinguishes a timestamp anchored to a beacon from one the producer asserts. AVE records carry published and last_updated as editorial dates on the record, not as claims about when an execution was observed."
+    },
+    {
+      "side": "registry",
+      "registry_term": "containment_posture",
+      "reason": "Describes the network posture an execution ran under. AVE classifies component behavior independently of any one run's containment."
+    },
+    {
+      "side": "registry",
+      "registry_term": "coverage_denominator",
+      "reason": "States the population a claim was measured over. An AVE record is a class definition rather than a measurement, so it has no denominator to declare."
+    },
+    {
+      "side": "registry",
+      "registry_term": "does_not_assert",
+      "reason": "Carries, inside the signed bytes, what a claim deliberately leaves out. AVE has no signed-claim envelope for this to sit in; the nearest thing is prose in vulnerability_rationale."
+    },
+    {
+      "side": "registry",
+      "registry_term": "result",
+      "reason": "A recomputable outcome lattice over one execution: fail, degraded, pass_indirect, pass. AVE scores a class with AIVSS rather than recording an outcome, and the registry's own out-of-scope block rules out reading its lattice as a threshold anyway."
+    },
+    {
+      "side": "ave",
+      "ave_field": "confidence_baseline",
+      "reason": "A scanner's prior on a single-engine match. The registry's out-of-scope block excludes scored assessment, so there is deliberately no term for it and there will not be one."
+    },
+    {
+      "side": "ave",
+      "ave_field": "detection_stage",
+      "reason": "Says when in a component's lifecycle a class is detectable. The registry has no lifecycle axis."
+    },
+    {
+      "side": "ave",
+      "ave_field": "detection_layer",
+      "reason": "Says which layer of a component a detector reads. The registry's vantage axis is about the relation between observer and observed, not about which layer was read, and the two are orthogonal."
+    },
+    {
+      "side": "ave",
+      "ave_field": "evidence_kind_default",
+      "reason": "A scanner hint naming the detection technique. The registry names where a claim came from rather than how it was computed."
+    }
+  ],
+  "coverage": {
+    "registry_terms_total": 8,
+    "registry_terms_mapped": 2,
+    "registry_terms_structurally_covered": 1,
+    "registry_terms_unmapped": 6,
+    "ave_evidence_fields_total": 7,
+    "ave_evidence_fields_mapped": 4,
+    "ave_records_total": 80,
+    "ave_records_carrying_any_mapped_field": 0,
+    "what_the_counts_leave_out": "registry_terms_mapped counts observation_vantage and observation_directness. verification_basis covers the same two axes composed, so it is counted once as structural rather than twice, and registry_terms_unmapped plus the two mapped terms is 8. ave_records_carrying_any_mapped_field is 0 because evidence_vantage, evidence_method and verification_basis are absent from all 80 record files at the pinned commit, checked by fetching each file. evidence_basis_engines is present on records and is the partial row, so the zero describes the three composed fields rather than the whole mapping."
+  }
+}
