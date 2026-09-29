@@ -84,6 +84,19 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   new record.
 
 ### Added
+- AVE-2026-00084: lifecycle hook trust decoupling — a plugin that
+  already passed marketplace vetting under a benign lifecycle-hook
+  config receives a later, same-identity update that silently adds or
+  rebinds a hook to an attacker-chosen command; the harness applies it
+  via its own automatic update-sync path with no re-authorization, and
+  dispatches the hook as a subprocess outside the model's own decision
+  path entirely. Sourced from Li et al., "A Blind Trust, the Bloody
+  Thrust" (arXiv:2609.03884): HookPry, an open-source attack framework,
+  compromises all seven evaluated agent harnesses across 1,000 runs
+  (77.0% E2E-ASR, peak 92.5%), with Microsoft Defender at 0% recall.
+  Distinct from AVE-2026-00046/00050/00062/00081, checked field by
+  field. researcher field credits Pengxun Li and coauthors, not AVE.
+  Id confirmed via issue #288 (HIGH, AIVSS 7.0).
 - AVE-2026-00083: silent guardrail comparison failure — a protection
   mechanism (guardrail, approval gate, or judge) executes on every
   request and reports a permissive result because its own comparison,
