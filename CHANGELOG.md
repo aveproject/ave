@@ -84,6 +84,22 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   new record.
 
 ### Added
+- AVE-2026-00085: collusive cross-skill composition — an attacker
+  decomposes a malicious workflow into three or more sub-payloads,
+  each packaged as its own independently-installable, individually
+  benign skill, connected only through real runtime artifacts one
+  sub-skill produces and a later one consumes; the harmful behavior
+  exists only in the live composition, never in any single skill's own
+  content, so every sub-skill passes per-skill scanning individually.
+  Sourced from Zeng et al., "ColluSkill: Adversarial Cross-Skill
+  Composition for Evading Agent Skill Scanners" (arXiv:2608.09732):
+  96.0% average attack success rate across six real, named skill
+  scanners, confirmed executing on three real coding agents; the
+  paper's own proposed defense (ChainGuard) reduces but does not
+  eliminate the attack (22.5% residual). Distinct from
+  AVE-2026-00057/00059/00067/00068/00070, checked field by field.
+  researcher field credits Puyu Zeng and coauthors, not AVE. Id
+  confirmed via issue #290 (HIGH, AIVSS 7.1).
 - AVE-2026-00084: lifecycle hook trust decoupling — a plugin that
   already passed marketplace vetting under a benign lifecycle-hook
   config receives a later, same-identity update that silently adds or
