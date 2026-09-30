@@ -9,6 +9,28 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 ## [Unreleased]
 
 ### Changed
+- New standing check, `scripts/check_mutation_thm_trail.py`: soft-warns
+  on records where `mutation_count` is 1 or higher but `aivss.notes`
+  has no discoverable mention of the ThM decision made when that
+  mutation was recorded (raised or left unchanged, either way). The
+  record-sourcing process already requires stating that decision
+  explicitly in the commit message, but a commit message isn't visible
+  to anyone reading the record JSON directly or reviewing a PR without
+  digging through git history; this makes the same explanation
+  checkable by requiring it live in the record's own `aivss.notes`
+  field, the same place this kind of reasoning trail already lives
+  (see `AVE-2026-00074`'s `notes` explaining an empty `mitre_atlas`).
+  A keyword match, not a correctness check -- no script can judge
+  whether a cited source is genuinely a working PoC versus theoretical,
+  only that a real, in-record explanation exists for a human reviewer
+  to check. Confirmed `validate_records.py`'s existing AIVSS-arithmetic
+  check already catches a `thm` change that isn't reflected in
+  `aivss_score`, so this fills the specific, separate gap rather than
+  duplicating that. Wired in following `check_vulnerability_taxonomy.py`'s
+  own graduated pattern exactly: a corpus-wide soft warning in CI and
+  `CONTRIBUTING.md` (49 of 85 existing records flagged, none
+  retroactively required to fix), `--strict --only AVE-2026-NNNNN` for
+  gating a new or edited record specifically. Issue #305.
 - `docs/specs/scaling-and-governance.md` Section 4 is now "Crosswalk
   discipline", covering two checks instead of one. The existing numbering
   caution becomes 4.1 unchanged; new 4.2 covers submitting content into an

@@ -39,6 +39,9 @@ jobs:
       - name: Capability-vulnerability taxonomy soft warning
         run: python scripts/check_vulnerability_taxonomy.py
 
+      - name: Mutation-ThM trail soft warning
+        run: python scripts/check_mutation_thm_trail.py
+
       - name: docs/terms.md matches the live schema (hard failure)
         run: python scripts/check_terms_sync.py
 
