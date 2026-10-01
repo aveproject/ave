@@ -102,7 +102,7 @@ Include an AVE taxonomy entry alongside the `runs` array so that tools can cross
     "taxa": [
       {
         "id": "AVE-2026-00001",
-        "name": "Supply Chain - Metamorphic Payload via External Config Fetch",
+        "name": "Metamorphic payload via external config fetch",
         "helpUri": "https://aveproject.org/registry.html#AVE-2026-00001"
       }
     ]
@@ -116,7 +116,7 @@ Add one taxon per AVE record that appears in the scan results. Scanners may incl
 
 ## Example: minimal valid SARIF output
 
-One finding for AVE-2026-00001 (external instruction fetch) against a hypothetical skill file:
+One finding for AVE-2026-00001 (metamorphic payload via external config fetch) against a hypothetical skill file:
 
 ```json
 {
@@ -155,12 +155,12 @@ One finding for AVE-2026-00001 (external instruction fetch) against a hypothetic
       "taxonomies": [
         {
           "name": "AVE",
-          "version": "1.0.0",
+          "version": "1.1.0",
           "informationUri": "https://aveproject.org",
           "taxa": [
             {
               "id": "AVE-2026-00001",
-              "name": "Supply Chain - Metamorphic Payload via External Config Fetch"
+              "name": "Metamorphic payload via external config fetch"
             }
           ]
         }
@@ -170,7 +170,7 @@ One finding for AVE-2026-00001 (external instruction fetch) against a hypothetic
           "ruleId": "AVE-2026-00001",
           "level": "error",
           "message": {
-            "text": "Tool description fetches instructions from an external URL at runtime. An attacker controlling the URL can inject arbitrary directives. Matched pattern: `requests.get(` at line 14."
+            "text": "Component contains instructions to fetch and execute remote content, replacing its own behavioral instructions at runtime. Matched pattern: `requests.get(` at line 14."
           },
           "locations": [
             {
@@ -189,11 +189,13 @@ One finding for AVE-2026-00001 (external instruction fetch) against a hypothetic
             }
           ],
           "properties": {
-            "confidence": 0.91,
-            "evidence_kind": "tool_description_pattern",
+            "confidence": 0.88,
+            "evidence_kind": "multi_engine",
             "evidence_stage": "static_detection",
-            "owasp_mcp": ["MCP03", "MCP09"],
-            "mitre_atlas": ["AML.T0010", "AML.T0043"]
+            "owasp_mcp": ["MCP04", "MCP06"],
+            "mitre_atlas": ["AML.T0011", "AML.T0081"],
+            "owasp_asi": ["ASI01", "ASI04"],
+            "nist_ai_rmf": ["MAP-1.5", "MEASURE-2.5", "MANAGE-1.3"]
           }
         }
       ]
@@ -218,6 +220,9 @@ One finding for AVE-2026-00001 (external instruction fetch) against a hypothetic
 | `evidence_kind_default` | — | `result.properties.evidence_kind` |
 | `owasp_mcp` | `rules[].properties.owasp_mcp` | `result.properties.owasp_mcp` |
 | `mitre_atlas` | `rules[].properties.mitre_atlas` | `result.properties.mitre_atlas` |
+| `owasp_asi` | `rules[].properties.owasp_asi` | `result.properties.owasp_asi` |
+| `nist_ai_rmf` | `rules[].properties.nist_ai_rmf` | `result.properties.nist_ai_rmf` |
+| `verification_basis` | **never** | `result.properties.verification_basis` (if the record has one) |
 
 ---
 
@@ -237,6 +242,8 @@ For findings to appear correctly in the GitHub Security tab:
 
 ## Versioning
 
-This convention is versioned alongside the AVE schema. The current version is **AVE-in-SARIF v1.0**, corresponding to AVE schema v1.0.0.
+This convention has its own version, separate from the AVE schema's: **AVE-in-SARIF v1.0**. The two don't move in lockstep, because this document maps schema field *names* into SARIF, not a frozen schema snapshot. A record that validates against whatever the current AVE schema version is still maps the same way, as long as the field names and semantics this document references haven't changed.
 
-Breaking changes (new required fields, removed fields, changed semantics) increment the major version and are announced with a 30-day notice period. Additive changes (new optional `result.properties.*` fields) are non-breaking and do not increment the version.
+Breaking changes to *this convention* (new required fields, removed fields, changed semantics) increment the major version and are announced with a 30-day notice period. Additive changes (new optional `result.properties.*` fields) are non-breaking and do not increment the version.
+
+**Revision note (2026-10-01):** the worked example, `taxonomies` block, and properties tables had gone stale against the live schema and corpus without the version number moving, which is itself the failure mode this section exists to prevent. Checked and corrected: `downloadUri`/`organization` were pointing at Bawbel-branded infrastructure (`api.piranha.bawbel.io`, "Bawbel Security Research") rather than AVE's own real, independent API and identity; the worked example cited `AVE-2026-00001` with `owasp_mcp`/`mitre_atlas` values that no longer matched the live record; `owasp_asi` and `nist_ai_rmf` existed on records with no documented SARIF representation at all. All of that is corrected above. None of it was a breaking change under this section's own rule, so the version stays v1.0; what changed is this document matching reality again, not the convention's own shape.
