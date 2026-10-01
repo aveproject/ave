@@ -15,6 +15,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          # The confidence ratchet diffs a change against where it started,
+          # which a single-commit checkout cannot reach.
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v7
@@ -33,8 +37,18 @@ jobs:
       - name: Check every record has positive and negative conformance fixtures
         run: python scripts/check_fixtures.py
 
-      - name: Confidence signal soft warning (issue #98 consumer check)
-        run: python scripts/check_confidence_signal.py
+      # Soft warning over every record (issue #98), plus the ratchet over the
+      # records this change adds or edits, which fails the run (issue #286).
+      - name: Confidence signal, soft warning and ratchet
+        env:
+          BASE: ${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || github.event.before }}
+        run: |
+          case "$BASE" in
+            ''|0000000000000000000000000000000000000000)
+              echo "No base to diff against (a new branch), so only the soft warning runs."
+              python scripts/check_confidence_signal.py ;;
+            *) python scripts/check_confidence_signal.py --ratchet-since "$BASE" ;;
+          esac
 
       - name: Capability-vulnerability taxonomy soft warning
         run: python scripts/check_vulnerability_taxonomy.py

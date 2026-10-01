@@ -304,3 +304,123 @@ def test_an_empty_records_directory_is_reported_not_passed(tmp_path, monkeypatch
     """An absent corpus must never read as a clean run."""
     monkeypatch.setattr(check_confidence_signal, "RECORDS_DIR", tmp_path)
     assert check_confidence_signal.main([]) == 2
+
+
+# --- the ratchet (issue #286) -------------------------------------------------
+
+import subprocess
+
+
+def _git(repo, *args):
+    subprocess.run(["git", "-C", str(repo), *args], check=True, capture_output=True)
+
+
+def _write(repo, rid, **overrides):
+    records = repo / "records"
+    records.mkdir(exist_ok=True)
+    (records / f"{rid}.json").write_text(json.dumps(base_record(ave_id=rid, **overrides)), encoding="utf-8")
+
+
+@pytest.fixture
+def repo(tmp_path, monkeypatch):
+    """A git repository holding one old, unstamped, high-confidence record on
+    its base commit, on a branch named "base", with the working directory set to it the
+    way CI runs the script."""
+    _git(tmp_path, "init", "-q", "-b", "main")
+    _git(tmp_path, "config", "user.email", "t@example.org")
+    _git(tmp_path, "config", "user.name", "T")
+    _write(tmp_path, "AVE-2026-00001", confidence_baseline=0.9)
+    _git(tmp_path, "add", "-A")
+    _git(tmp_path, "commit", "-q", "-m", "base")
+    _git(tmp_path, "branch", "base")
+    monkeypatch.chdir(tmp_path)
+    return tmp_path
+
+
+def _commit(repo):
+    _git(repo, "add", "-A")
+    _git(repo, "commit", "-q", "-m", "change")
+
+
+def test_lacks_vantage_stamp_asks_for_the_statement_not_a_value():
+    assert check_confidence_signal.lacks_vantage_stamp(base_record(confidence_baseline=0.9))
+    assert check_confidence_signal.lacks_vantage_stamp(
+        base_record(confidence_baseline=0.9, evidence_vantage=""))
+    assert not check_confidence_signal.lacks_vantage_stamp(
+        base_record(confidence_baseline=0.9, evidence_vantage="artifact"))
+    assert not check_confidence_signal.lacks_vantage_stamp(base_record(confidence_baseline=0.5))
+    assert not check_confidence_signal.lacks_vantage_stamp(base_record(confidence_baseline=None))
+
+
+def test_ratchet_fails_a_new_unstamped_high_confidence_record(repo, capsys):
+    _write(repo, "AVE-2026-00002", confidence_baseline=0.9)
+    _commit(repo)
+    assert check_confidence_signal.ratchet("base") == 1
+    out = capsys.readouterr().out
+    assert "AVE-2026-00002" in out
+    assert "AVE-2026-00001" not in out
+
+
+def test_ratchet_fails_an_edited_record_that_is_still_unstamped(repo):
+    _write(repo, "AVE-2026-00001", confidence_baseline=0.95)
+    _commit(repo)
+    assert check_confidence_signal.ratchet("base") == 1
+
+
+def test_ratchet_passes_when_the_change_states_the_vantage(repo):
+    _write(repo, "AVE-2026-00002", confidence_baseline=0.9, evidence_vantage="artifact")
+    _write(repo, "AVE-2026-00001", confidence_baseline=0.9, evidence_vantage="substrate")
+    _commit(repo)
+    assert check_confidence_signal.ratchet("base") == 0
+
+
+def test_ratchet_leaves_older_records_to_the_soft_warning(repo):
+    (repo / "README.md").write_text("unrelated", encoding="utf-8")
+    _commit(repo)
+    assert check_confidence_signal.ratchet("base") == 0
+
+
+def test_ratchet_ignores_base_changes_after_the_branch_point(repo):
+    _git(repo, "switch", "-q", "-c", "feature")
+    (repo / "README.md").write_text("feature branch", encoding="utf-8")
+    _commit(repo)
+
+    _git(repo, "switch", "-q", "base")
+    record_path = repo / "records" / "AVE-2026-00001.json"
+    record = json.loads(record_path.read_text(encoding="utf-8"))
+    record_path.write_text(json.dumps(record, indent=2), encoding="utf-8")
+    _commit(repo)
+
+    _git(repo, "switch", "-q", "feature")
+    two_dot = subprocess.run(
+        ["git", "diff", "--name-only", "base..HEAD", "--", "records"],
+        capture_output=True, text=True, check=True,
+    )
+    assert two_dot.stdout.strip() == "records/AVE-2026-00001.json"
+    assert check_confidence_signal.changed_record_paths("base") == []
+    assert check_confidence_signal.ratchet("base") == 0
+
+
+def test_ratchet_ignores_deleted_records(repo):
+    (repo / "records" / "AVE-2026-00001.json").unlink()
+    _commit(repo)
+    assert check_confidence_signal.changed_record_paths("base") == []
+    assert check_confidence_signal.ratchet("base") == 0
+
+
+def test_ratchet_passes_a_low_confidence_record_without_the_stamp(repo):
+    _write(repo, "AVE-2026-00002", confidence_baseline=0.45)
+    _commit(repo)
+    assert check_confidence_signal.ratchet("base") == 0
+
+
+def test_ratchet_cannot_read_the_change_and_says_nothing_was_checked(repo, capsys):
+    assert check_confidence_signal.ratchet("no-such-ref") == 2
+    assert "none was checked" in capsys.readouterr().err
+
+
+def test_main_returns_the_ratchet_verdict(repo):
+    _write(repo, "AVE-2026-00002", confidence_baseline=0.9)
+    _commit(repo)
+    assert check_confidence_signal.main(["--ratchet-since", "base"]) == 1
+    assert check_confidence_signal.main([]) == 0

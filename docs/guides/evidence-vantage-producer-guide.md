@@ -38,6 +38,16 @@ record lacks the stronger binding. This matters more than it looks: if the
 weaker value reads as a confession, honest authors avoid it, values drift
 upward, and the axis stops meaning anything within a year.
 
+## When stating it is required
+
+A record whose `confidence_baseline` sits in the high band (0.85 or above)
+must state `evidence_vantage` when a change adds it or edits it. CI runs
+`scripts/check_confidence_signal.py --ratchet-since <base>` on every pull
+request and fails the run when a record the pull request touches carries a
+high number and no vantage. `artifact` satisfies it, since the floor is always
+true to state. Records that predate the requirement keep the soft warning
+until they are stamped, so the count of unstamped records can only fall.
+
 Both axes are optional, and **absence reads as the floor**. Silence is never
 credited as the stronger claim.
 
