@@ -36,6 +36,8 @@ Each AVE record that produced at least one detection must appear in `run.tool.dr
 | `rules[].properties.aivss_score` | `aivss.aivss_score` | float, e.g. `9.3` |
 | `rules[].properties.owasp_mcp` | `owasp_mcp` | array of MCPNN strings |
 | `rules[].properties.mitre_atlas` | `mitre_atlas` | array of AML.Txxxx strings (if present) |
+| `rules[].properties.owasp_asi` | `owasp_asi` | array of ASINN strings (if present) |
+| `rules[].properties.nist_ai_rmf` | `nist_ai_rmf` | array of NIST AI RMF function-category strings (if present) |
 
 ### results block — per-detection data (one entry per finding)
 
@@ -52,6 +54,9 @@ Each detection instance is a SARIF `result`:
 | `result.properties.evidence_stage` | runtime-determined | `"static_detection"`, `"runtime_observed"`, etc. |
 | `result.properties.owasp_mcp` | `owasp_mcp` | repeated on result for tooling that ignores the rules block |
 | `result.properties.mitre_atlas` | `mitre_atlas` | repeated if present |
+| `result.properties.owasp_asi` | `owasp_asi` | repeated if present |
+| `result.properties.nist_ai_rmf` | `nist_ai_rmf` | repeated if present |
+| `result.properties.verification_basis` | `verification_basis` | optional; present only where the source record carries a derived value (4 of 86 records as of this revision). A string, one of `substrate_intercepted`/`substrate_reconstructed`/`artifact_intercepted`/`artifact_reconstructed`. Tells a consumer whether this finding's basis could be forged by the artifact itself, finer-grained than `confidence_baseline` alone. Do not infer absence as "low confidence"; most records simply haven't had it derived yet. |
 
 ---
 
@@ -86,11 +91,11 @@ Include an AVE taxonomy entry alongside the `runs` array so that tools can cross
 "taxonomies": [
   {
     "name": "AVE",
-    "version": "1.0.0",
-    "releaseDateUtc": "2026-06-18",
+    "version": "1.1.0",
+    "releaseDateUtc": "2026-06-21",
     "informationUri": "https://aveproject.org",
-    "downloadUri": "https://api.piranha.bawbel.io/records",
-    "organization": "Bawbel Security Research",
+    "downloadUri": "https://api.aveproject.org/records",
+    "organization": "AVE Project",
     "shortDescription": {
       "text": "Agentic Vulnerability Enumeration — behavioral vulnerability classes for agentic AI components"
     },
@@ -105,7 +110,7 @@ Include an AVE taxonomy entry alongside the `runs` array so that tools can cross
 ]
 ```
 
-Add one taxon per AVE record that appears in the scan results. Scanners may include the full 48-record taxa list to enable filtering even for records with zero findings.
+Add one taxon per AVE record that appears in the scan results. Scanners may include the full taxa list for all published records to enable filtering even for records with zero findings.
 
 ---
 
@@ -127,19 +132,21 @@ One finding for AVE-2026-00001 (external instruction fetch) against a hypothetic
           "rules": [
             {
               "id": "AVE-2026-00001",
-              "name": "external_instruction_fetch",
+              "name": "Supply Chain - Metamorphic Payload",
               "shortDescription": {
-                "text": "Supply Chain - Metamorphic Payload via External Config Fetch"
+                "text": "Metamorphic payload via external config fetch"
               },
               "fullDescription": {
-                "text": "A skill or MCP component fetches instructions or configuration from an external URL at runtime, allowing an attacker who controls that URL to inject arbitrary directives into the agent's execution context."
+                "text": "A skill or MCP component fetches its instructions from an external URL at runtime. The fetched content replaces the original instructions, allowing an attacker to change the component's behavior after it passes a security review. The attack is invisible to static scanners because the malicious payload does not exist at scan time."
               },
               "helpUri": "https://aveproject.org/registry.html#AVE-2026-00001",
               "properties": {
-                "severity": "CRITICAL",
-                "aivss_score": 9.3,
-                "owasp_mcp": ["MCP03", "MCP09"],
-                "mitre_atlas": ["AML.T0010", "AML.T0043"]
+                "severity": "HIGH",
+                "aivss_score": 8.0,
+                "owasp_mcp": ["MCP04", "MCP06"],
+                "mitre_atlas": ["AML.T0011", "AML.T0081"],
+                "owasp_asi": ["ASI01", "ASI04"],
+                "nist_ai_rmf": ["MAP-1.5", "MEASURE-2.5", "MANAGE-1.3"]
               }
             }
           ]
