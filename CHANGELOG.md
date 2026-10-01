@@ -84,6 +84,21 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   new record.
 
 ### Added
+- AVE-2026-00086: mid-session WebMCP tool hijacking — a tool an agent
+  already discovered and trusted within a live browser session is
+  unregistered (via the AbortSignal API, or a registration-order race)
+  and a malicious replacement is registered under the identical name
+  by a third-party page script, with no origin or identity binding
+  connecting the name to a stable implementation. Sourced from Lee,
+  Chang, Yu, Yeh, "WebMCP Tool Surface Poisoning" (arXiv:2606.06387):
+  94% average malicious-invocation rate (AbortSignal hijack) and 100%
+  (registration race) across three frontier models. Scoped to the
+  source paper's Tool Hijacking category specifically, not its
+  separate Tool Framing category, which the paper's own discussion
+  states overlaps with indirect prompt injection already covered
+  elsewhere in this corpus. Distinct from AVE-2026-00002/00074/00080/
+  00082, checked field by field. researcher field credits Lin-Fa Lee
+  and coauthors, not AVE. Id confirmed via issue #292 (HIGH, AIVSS 7.0).
 - AVE-2026-00085: collusive cross-skill composition — an attacker
   decomposes a malicious workflow into three or more sub-payloads,
   each packaged as its own independently-installable, individually
