@@ -84,8 +84,21 @@
 #       query and a re-run fires no vantage finding on any record whose
 #       detection_methodology names an authority probe, the field earns its
 #       version bump.
+#
+#       The ratchet (issue #286). The soft warning did not move anyone: at
+#       8a4da7e no record carried evidence_vantage, and the vantage-floor count
+#       rose from 8 to 9 when AVE-2026-00082 landed unstamped after #242. So a
+#       record a change adds or edits must now state its vantage when its
+#       confidence sits in the high band, and --ratchet-since REF fails the run
+#       when one does not. Older records keep the soft warning, so the count can
+#       only fall. Stating "artifact" is always true and satisfies the ratchet:
+#       what it refuses is silence beside a high number, not a weak vantage,
+#       which the soft warning above still names. The records that predate the
+#       ratchet keep the soft warning until changed. Even a format-only edit
+#       must stamp one. The follow-up to #286 can stamp the backlog first.
 import argparse
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -268,6 +281,63 @@ def confidence_signals(record: dict) -> list[dict]:
     return findings
 
 
+def lacks_vantage_stamp(record: dict) -> bool:
+    """True when the record's confidence sits in the high band and the record
+    does not state evidence_vantage. This is the ratchet's whole predicate: it
+    asks for the statement, never for a particular value, because "artifact"
+    is a floor any producer may truthfully state and the vantage-floor finding
+    already says what a weak value means."""
+    confidence = record.get("confidence_baseline")
+    if confidence is None or confidence < HIGH_CONFIDENCE:
+        return False
+    return not record.get("evidence_vantage")
+
+
+def changed_record_paths(base: str) -> list[Path]:
+    """The record files a change adds, edits or renames since it left BASE,
+    read with the three-dot form so commits that landed on BASE afterwards are
+    not counted as the change's own. Raises RuntimeError when git cannot
+    answer, because a ratchet that cannot list the change must not report
+    that the change is clean."""
+    result = subprocess.run(
+        ["git", "diff", "--name-only", "--diff-filter=AMR", f"{base}...HEAD",
+         "--", str(RECORDS_DIR)],
+        capture_output=True, text=True, check=False,
+    )
+    if result.returncode != 0:
+        raise RuntimeError(result.stderr.strip() or f"git diff exited {result.returncode}")
+    return sorted(
+        Path(line) for line in result.stdout.splitlines()
+        if Path(line).name.startswith("AVE-") and line.endswith(".json")
+    )
+
+
+def ratchet(base: str) -> int:
+    """Exit status of the ratchet over the records changed since BASE: 0 when
+    each one that sits in the high band states its vantage, 1 when any does
+    not, 2 when the change could not be read."""
+    try:
+        paths = changed_record_paths(base)
+    except RuntimeError as err:
+        print(f"ERROR: could not list the records changed since {base}, so none "
+              f"was checked: {err}", file=sys.stderr)
+        return 2
+    unstamped = []
+    for path in paths:
+        record = json.loads(path.read_text(encoding="utf-8"))
+        if lacks_vantage_stamp(record):
+            unstamped.append(record.get("ave_id", path.stem))
+    if unstamped:
+        print(f"FAIL: {len(unstamped)} of {len(paths)} record(s) this change adds or "
+              f"edits declare confidence_baseline >= {HIGH_CONFIDENCE} without "
+              f"evidence_vantage: {', '.join(unstamped)}. State where the evidence "
+              f"was obtained: substrate, or artifact, which is always true to state.")
+        return 1
+    print(f"Ratchet: {len(paths)} record(s) changed since {base}; every one in the "
+          f"high band states evidence_vantage.")
+    return 0
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(
         description="Report AVE records whose self-reported confidence_baseline "
@@ -277,6 +347,12 @@ def main(argv=None) -> int:
     parser.add_argument(
         "--json", dest="as_json", action="store_true",
         help="emit findings as JSON for downstream tooling",
+    )
+    parser.add_argument(
+        "--ratchet-since", metavar="REF",
+        help="fail when a record added or edited since REF declares a high-band "
+             "confidence_baseline without evidence_vantage (issue #286); the soft "
+             "warning still covers every record",
     )
     args = parser.parse_args(argv)
 
@@ -311,6 +387,8 @@ def main(argv=None) -> int:
         else:
             print(f"All {len(paths)} records have confidence consistent with their basis.")
 
+    if args.ratchet_since:
+        return ratchet(args.ratchet_since)
     return 0  # soft warning: exit code untouched, same as check_researcher_matches_disclosure
 
 
