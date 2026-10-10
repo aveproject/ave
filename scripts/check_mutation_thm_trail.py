@@ -4,12 +4,12 @@
 #       correctness, a script can't judge whether a cited source is
 #       genuinely a PoC versus theoretical, only that a real,
 #       in-record explanation exists for a human reviewer to check.
-# Why:  the sourcing process for new record variants requires stating
-#       the ThM decision explicitly, raised or unchanged, either way,
-#       in the commit message. That's invisible to anyone reading the
-#       record JSON directly. This check makes the requirement durable
-#       by looking for the same explanation inside the record itself,
-#       where a reviewer or a future contributor can actually see it.
+# Why:  when a record's mutation_count rises, the ThM decision (raised
+#       or unchanged) belongs where a reader of the record JSON can see
+#       it, not only in a commit message. This check introduces that
+#       expectation; no earlier written requirement existed. It looks
+#       for the explanation inside the record itself, where a reviewer
+#       or a future contributor can actually see it.
 import argparse
 import json
 import sys
