@@ -50,8 +50,8 @@ No redacted or partial disclosures.
 | [aveproject/ave](https://github.com/aveproject/ave) | AVE standard — records and schema |
 | [aveproject/ave-site](https://github.com/aveproject/ave-site) | aveproject.org website |
 | [bawbel/scanner](https://github.com/bawbel/scanner) | CLI scanner (reference implementation) |
-| [api.piranha.bawbel.io](https://api.piranha.bawbel.io) | PiranhaDB threat intel API |
-| [bawbel.io](https://bawbel.io) | Bawbel website |
+| [aveproject/ave-api](https://github.com/aveproject/ave-api) | Reference API source |
+| [api.aveproject.org](https://api.aveproject.org) | Reference API, live lookup by AVE ID |
 
 ---
 
