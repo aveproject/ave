@@ -10,11 +10,11 @@ Single source of truth for how work happens in this repo.
 aveproject/ave — the behavioral classification standard for agentic AI components.
 An independent standard that bawbel-scanner implements. NOT a feature of the scanner.
 
-- Records: 56 published (schema_version 1.1.0)
+- Records: see dist/ave-records-latest.json (the count changes; do not hardcode it here)
 - Schema: schema/ave-record-1.1.0.schema.json
 - Scoring: OWASP AIVSS v0.8
 - Registry: aveproject.org
-- Public API: api.piranha.bawbel.io
+- Public API: api.aveproject.org
 - Scanner: github.com/bawbel/scanner (reference implementation)
 
 This repo contains DEFINITIONS, not detections.
@@ -129,7 +129,7 @@ def validate_record(record: dict) -> tuple[bool, list[str]]:
 
 ```bash
 npm install ajv ajv-formats           # schema validation deps
-npm run build:local                   # build records.js for ave-site
+node scripts/build-records.js         # build dist/ave-records-latest.json
 
 # Python validation
 pip install -e ".[dev]"
