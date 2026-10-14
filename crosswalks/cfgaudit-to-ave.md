@@ -1,6 +1,6 @@
 # cfgaudit → AVE crosswalk
 
-[cfgaudit](https://github.com/cfgaudit/cfgaudit) is a static auditor of committable AI-agent **configuration files** (Claude Code `settings.json` / `CLAUDE.md` / `.mcp.json` / hooks / plugins, and the cross-agent equivalents: Cursor, Copilot, Gemini, Codex, Devin, Zed, Continue). It does not connect to running servers or observe runtime, so it maps only to AVE's `static_detection` records.
+[cfgaudit](https://github.com/cfgaudit/cfgaudit) is a static auditor of committable AI-agent **configuration files** (Claude Code `settings.json` / `CLAUDE.md` / `.mcp.json` / hooks / plugins, and the cross-agent equivalents: Cursor, Copilot, Gemini, Codex, Devin, Zed, Continue, OpenCode, Kimi, Cline, qwen, Grok). It does not connect to running servers or observe runtime, so it maps only to AVE's `static_detection` records.
 
 cfgaudit emits each rule's primary AVE id in its JSON and SARIF output (`AVEID` in JSON; `properties.ave_id` in SARIF). This crosswalk is the source of truth that mapping is kept in sync with. Full write-up: [`docs/cfgaudit-to-ave.md`](https://github.com/cfgaudit/cfgaudit/blob/main/docs/cfgaudit-to-ave.md).
 
@@ -8,26 +8,32 @@ cfgaudit emits each rule's primary AVE id in its JSON and SARIF output (`AVEID` 
 
 | | Version |
 |---|---|
-| cfgaudit | 1.13.0, read at `ac9f2a5` |
-| AVE record set | 80 records (AVE-2026-00001 .. 00080), read at `1d1d197` |
+| cfgaudit | 1.16.0, read at the tag (`7868c87`) |
+| AVE record set | 87 records (AVE-2026-00001 .. 00087), 61 of them `static_detection`, read at `7d32d20` |
 | Bawbel Scanner (validation, below) | 1.3.0 |
 
 ## Coverage
 
-cfgaudit has **108 rules** in total. **64 of them map onto 27 AVE behavioral classes**, up from the 53 onto 23 this file carried at v1.11.0. It is a many-to-one mapping: several cfgaudit rules land on the same AVE class, because cfgaudit slices threats by config surface where AVE slices by behavior. For example, cfgaudit has five distinct secret-detection rules (a secret in `settings.json` env, in an MCP `env`/`headers` block, an entropy fallback, a Continue inline `apiKey`, a crypto signing key), and all five map to the single AVE class `AVE-2026-00047` (hardcoded credentials in component).
+cfgaudit has **114 rules** in total. **66 of them map onto 28 AVE behavioral classes**, up from the 64 onto 27 this file carried at v1.13.0. It is a many-to-one mapping: several cfgaudit rules land on the same AVE class, because cfgaudit slices threats by config surface where AVE slices by behavior. For example, cfgaudit has five distinct secret-detection rules (a secret in `settings.json` env, in an MCP `env`/`headers` block, an entropy fallback, a Continue inline `apiKey`, a crypto signing key), and all five map to the single AVE class `AVE-2026-00047` (hardcoded credentials in component).
 
-The other 44 rules have no AVE class: they check config surfaces AVE's skill and MCP-server records do not enumerate (see "Config surfaces beyond AVE's model" below).
+The other 48 rules have no AVE class: they check config surfaces AVE's skill and MCP-server records do not enumerate (see "Config surfaces beyond AVE's model" below).
 
-**This revision spans two cfgaudit releases,** v1.12.0 and v1.13.0, because the v1.12.0 refresh was still open when v1.13.0 shipped. Eleven rule-to-class pairs are new and four classes are new to this file. Seven of the eleven are rules that existed all along, mapped here for the first time because `AVE-2026-00071`, `00072`, `00073` and `00076` were published after the v1.11.0 crosswalk was generated; three of those four came out of this crosswalk's own gap list ([#68](https://github.com/aveproject/ave/issues/68)). The record set has since grown to 80, but `AVE-2026-00078` through `AVE-2026-00080` are `runtime_observed` and `runtime_drift_detected`, so they give no static rule a home.
+**This revision spans three cfgaudit releases,** v1.14.0, v1.15.0 and v1.16.0, which added eight rules, `CFG107` through `CFG114`. Two of them map:
 
-**Five rules are left unmapped on purpose.** `CFG100`, `CFG101` and `CFG102` from v1.12.0, and `CFG106` plus the other two findings of `CFG103` from v1.13.0. In each case the nearest class is wrong on a stated detail; reasons are under "Config surfaces beyond AVE's model".
+- `CFG113` (an instruction file that tells the agent to fetch remote text and follow it) maps to `AVE-2026-00001`, metamorphic payload via external config fetch. The class is new to this file.
+- `CFG114` (committed OpenCode plugin or tool code) maps to `AVE-2026-00064`. Measured on opencode 1.18.18, the loader runs plugin files when OpenCode starts in the repository and tool files when it loads an agent, both with no prompt.
 
-**Both sides are pinned by commit**, so the counts can be re-derived. The cfgaudit tree read is the `v1.13.0` tag itself.
+**Six of the eight are left unmapped on purpose:** `CFG107`, `CFG108`, `CFG109`, `CFG110`, `CFG111` and `CFG112`. Four of them open new surfaces and two extend existing ones; reasons are under "Config surfaces beyond AVE's model".
+
+**The record set grew from 80 to 87.** `AVE-2026-00081`, `00083`, `00086` and `00087` are runtime records. `00082`, `00084` and `00085` are `static_detection` and are listed under "Gaps", each with the detail that keeps it from mapping; `00082` comes close to `CFG102`.
+
+**Both sides are pinned by commit**, so the counts can be re-derived. The cfgaudit tree read is the `v1.16.0` tag itself.
 
 ## Rule mapping
 
 | cfgaudit rule(s) | AVE id | Class | Notes |
 |---|---|---|---|
+| CFG113 | AVE-2026-00001 | metamorphic payload via external config fetch | instruction to fetch remote text and follow it as instructions |
 | CFG024 | AVE-2026-00029 | homoglyph / Unicode obfuscation | hidden Unicode control chars in instruction text |
 | CFG026 | AVE-2026-00007 | goal hijack | override / persona / authority instruction |
 | CFG092 | AVE-2026-00007 | goal hijack | Kimi agent file `override: true` replaces the whole system prompt |
@@ -51,7 +57,7 @@ The other 44 rules have no AVE class: they check config surfaces AVE's skill and
 | CFG075 | AVE-2026-00061 | TLS verification disabled in config | `NODE_TLS_REJECT_UNAUTHORIZED=0`, `GIT_SSL_NO_VERIFY`, `--insecure` in MCP `env`/`args` |
 | CFG010, CFG055, CFG074, CFG089, CFG098 | AVE-2026-00062 | unpinned dependency / supply-chain substitution | unpinned `@latest`/`:latest`, `skills-lock.json` with no integrity pin, marketplace source without a full-SHA pin; CFG098 adds a `marketplace.json` archive source with no `sha256` and an npm source at a non-default registry |
 | CFG003, CFG004, CFG048, CFG053, CFG063, CFG079, CFG087, CFG091, CFG093, CFG096, CFG104, CFG105 | AVE-2026-00063 | approval gate bypassed by declarative config | `enableAllProjectMcpServers`, `defaultMode: bypassPermissions`, VS Code `chat.permissions.default`, blanket MCP-trust keys, Codex `approval_policy`/`approvals_reviewer`, `autoMode` classifier, a hook answering a permission gate, qwen `approvalMode: yolo`, Cursor allowlists, Gemini MCP `trust`, Devin `permissions.allow`, OpenCode `permission` |
-| CFG047, CFG067, CFG086 | AVE-2026-00064 | zero-click project-load auto-run | `.vscode/tasks.json` `runOn: folderOpen` and Zed `create_worktree` hook tasks, committed project hooks, zero-click hook events |
+| CFG047, CFG067, CFG086, CFG114 | AVE-2026-00064 | zero-click project-load auto-run | `.vscode/tasks.json` `runOn: folderOpen` and Zed `create_worktree` hook tasks, committed project hooks, zero-click hook events; CFG114 adds committed OpenCode `.opencode/plugin` and `.opencode/tool` code. CFG114 also reports committed Copilot CLI project extensions, at `info` only: those load after folder trust and behind an experimental flag, so they are not zero-click, but the rule emits one id |
 | CFG082 | AVE-2026-00071 | container daemon redirected off-host | `DOCKER_HOST` in a `settings.json` or MCP `env`, or `docker -H` in a command site, naming a remote `tcp://`/`ssh://` daemon |
 | CFG018 | AVE-2026-00072 | MCP server bound to every interface, no auth step | bind address `0.0.0.0` or `[::]` in an MCP server's `args`/`env`, which the record also calls NeighborJack |
 | CFG005, CFG046, CFG071, CFG099 | AVE-2026-00073 | endpoint redirect via a static config value | `ANTHROPIC_BASE_URL` off Anthropic (CVE-2026-21852), `OTEL_EXPORTER_OTLP_*ENDPOINT` to a non-local collector, a model or provider base URL over cleartext `http://`, qwen top-level `proxy` |
@@ -70,10 +76,14 @@ Seven of the eight surfaces listed here at v1.10.0 have since been closed by AVE
 | Sandbox weakening in config | four mechanisms, listed below | CFG022, CFG061, CFG064, CFG079, CFG095 | **the one still open** |
 | Cleartext endpoint, distinct from TLS verification disabled | a committed `http://` MCP server URL, an A2A `agent_card_url` | CFG049, CFG097 | mostly closed by `AVE-2026-00073`, two fields reached only by its catch-all |
 | Plugin auto-load from a committed manifest | Grok `[plugins]` `enabled` / `paths` | CFG100 | unmapped on purpose, see below |
-| A guardrail that does not hold | a `deny` pattern walked past by flag reordering | CFG101 | probably outside AVE's model by construction |
-| Two committed skills claiming one name | two `SKILL.md` files, load order decides | CFG102 | no class fits without stretching one |
-| An **automated** security reviewer switched off or blunted | Codex `[features.guardianv2]` `enabled`, `review_threshold` | CFG103 | new gap: `AVE-2026-00063` is a bypassed **human**-approval step |
-| Repository grants browser or desktop-application access | Codex `[browser_use]` `full_cdp_access`, `[computer_use]` app access | CFG106 | new gap, and not filed under `AVE-2026-00063` on purpose |
+| A guardrail that does not hold | a `deny` pattern walked past by flag reordering; an invisible character inside a permission rule or hook matcher | CFG101, CFG111 | probably outside AVE's model by construction |
+| Two committed skills claiming one name | two `SKILL.md` files, load order decides | CFG102 | narrowed by `AVE-2026-00082`, not closed |
+| An **automated** security reviewer switched off or blunted | Codex `[features.guardianv2]` `enabled`, `review_threshold` | CFG103 | `AVE-2026-00063` is a bypassed **human**-approval step |
+| Repository grants browser or desktop-application access | Codex `[browser_use]` `full_cdp_access`, `[computer_use]` app access | CFG106 | not filed under `AVE-2026-00063` on purpose |
+| A configuration-declared environment that loads code into every shell | Codex `shell_environment_policy.set`, Claude Code settings `env` with `BASH_ENV`, `LD_PRELOAD`, `NODE_OPTIONS` | CFG107, CFG110 | new |
+| A committed scheduler that fires prompts on a timer | `.claude/scheduled_tasks.json` | CFG108 | new |
+| A declared configuration that never loads | a Codex config that fails to parse, a Claude Code settings file the agent discards | CFG109, CFG012 | new |
+| A committed credential source sent to a committed endpoint | MCP `bearer_token_file` | CFG112 | new |
 
 ### Sandbox weakening, the one surface still open
 
@@ -88,17 +98,29 @@ This is the last of the eight, and the reason it is still open is that the field
 
 **The hardening-not-weakening trap, extended.** Beyond `disableTmpWrite`, `exclude_tmpdir_env_var` and `exclude_slash_tmp`, three more instances turned up while building v1.12.0, all measured: Grok's `[plugins] disabled` (naming a plugin to discover but not activate hardens); qwen's `memory.autoSkillConfirm`, whose default is **true**, so the weakening value there is `false`, the inverse of every `disable*` key; and Codex's profile `filesystem` block, where across 69 real `.codex/config.toml` files the decisions are `deny` 177, `write` 72, `read` 53, `none` 51, so the block's presence is overwhelmingly hardening and only a granting direction on a sensitive target is a finding. One more for an `indicators_of_compromise` list: a read grant on `~/.ssh/id_ed25519.pub` is not credential exposure, and a real profile in that corpus carries exactly that.
 
-### The two new gaps
+### Two gaps on Codex reviewer and access settings
 
 **An automated reviewer switched off by config.** Codex's `[features.guardianv2]` decides whether its own security reviewer runs (`enabled`), at what score it escalates to a blocking review (`review_threshold`, default `0.5`, a number the reviewer's own prompt states), and what prompt it is given (`classifier_instructions`). The prompt half is `AVE-2026-00076` and is mapped above. The other two are not: `AVE-2026-00063` is explicitly a bypassed *human*-approval step, and Guardian v2 is an automated reviewer. `features` is not on Codex's project-layer denylist, so a committed `.codex/config.toml` sets all three; verified against codex `0.150.0-alpha.7` by reading the effective config back through its app server in a trusted directory, with a denylisted key and an ordinary key as controls.
 
 **A repository granting browser or desktop access.** Codex's `[browser_use]` grants per-origin `access`, `downloads`, `uploads` and `full_cdp_access` (full Chrome DevTools Protocol, so script execution plus cookie and storage access inside the browser session), and `[computer_use]` grants control of desktop applications by bundle id, AUMID or executable. The value type is an enum of exactly `allow` and `deny`, so there is no ask state and `allow` is unambiguously the weakening direction. This is deliberately **not** filed under `AVE-2026-00063`: whether a prompt is skipped is unverified, because the value is observable in the effective config but the tools themselves live in the client app. Filing it there would assert more than the detection does.
 
+### The four surfaces new in this revision
+
+**A configuration-declared environment that loads code into every shell (CFG107, CFG110).** Codex `shell_environment_policy.set` and the Claude Code settings `env` block both set the process environment of every shell command and hook the agent starts, so `BASH_ENV`, `LD_PRELOAD`, `NODE_OPTIONS` and similar run repository-chosen code in each of them. Measured for Claude Code: a project-scope `env` value reaches the hook process. The mechanism is the one `AVE-2026-00055` describes, but that record is bound to an untrusted MCP launch config. Stretching it onto the agent's own process environment would change what it asserts, so this is reported as a gap.
+
+**A committed scheduler that fires prompts on a timer (CFG108).** A committed `.claude/scheduled_tasks.json` self-enables Claude Code's otherwise-off cron scheduler and enqueues a repository-authored prompt on a schedule. `AVE-2026-00063` is a bypassed human-approval gate; this bypasses no gate, it opens a new autonomous channel.
+
+**A declared configuration that never loads (CFG109, and the discarded-file case of CFG012).** The repository states guardrails that are not in force, because the agent does not load the file. Measured in both directions: Codex logs `Invalid configuration; using defaults` and runs, and Claude Code silently discards a whole settings file, every deny rule and hook with it, on a top-level type error or on one unloadable `PreToolUse` or `PermissionRequest` hook entry. `AVE-2026-00083` is the nearest in effect, a protection that executes but never evaluates, but it is `runtime_observed` and scoped to a mechanism's own comparison logic.
+
+**A committed credential source sent to a committed endpoint (CFG112).** An MCP server's `bearer_token_file` names a file on the reader's machine whose content is sent as a bearer token to the server URL in the same committed file. `AVE-2026-00047` is a credential written into the component; here the file names where to read one and where to send it.
+
+`CFG111` extends the "guardrail that does not hold" row: an invisible character such as a zero-width space inside a permission rule or hook matcher leaves the rule present and matching nothing. Like `CFG101`, it is an ineffective control rather than an attacker behaviour.
+
 ### The three deliberately unmapped rules
 
 - **CFG100**, Grok `[plugins]`. `AVE-2026-00064` would be the class, but it requires the loader to run plugin code at project load with no prompt. That is not verified against the shipped Grok build, so mapping it would assert a mechanism nobody measured.
 - **CFG101**, a deny rule walked past by flag reordering. Claude Code matches a `Bash(...)` pattern as a literal prefix, so `Bash(rm -rf *)` never covered `rm -fr x`. Measured against Claude Code 2.1.231; about 44% of 22,016 indexed `settings.json` files with a `deny` block leave the gap open. `AVE-2026-00063` is a flag that removes a gate, `AVE-2026-00068` is composition through shell state. Neither is "the denylist misses an equivalent spelling". This is an ineffective control, not an attacker behavior, so it may be outside AVE's scope.
-- **CFG102**, two committed skills claiming one name. `AVE-2026-00017` is the closest class but is explicitly MCP server identity, and `AVE-2026-00066` is registry squatting on hallucinated names. Neither covers two local files where load order decides which body runs.
+- **CFG102**, two committed skills claiming one name. `AVE-2026-00017` is the closest class but is explicitly MCP server identity, and `AVE-2026-00066` is registry squatting on hallucinated names. Neither covers two local files where load order decides which body runs. `AVE-2026-00082` (local skill name collision) is much closer, but it asserts that the shadowing is silent and that it spans discovery roots of differing trust. Measured for Claude Code, a duplicate inside one repository is resolved by qualification, not silently shadowed, and the cross-root case needs a machine-wide view a repository-scoped scanner does not have. What stays uncovered is the same-root collision, per agent, where the losing skill is never reported.
 
 These are not gaps in this crosswalk. They are config classes outside AVE's current skill/MCP scope, listed so coverage stays visible in both directions.
 
@@ -137,4 +159,7 @@ Static `static_detection` classes cfgaudit does not map, with the reason:
 | AVE-2026-00060 | STDIO transport shell injection. A server-side implementation flaw: it needs SAST of the MCP server's source, not a read of its launch configuration. Same layer as AVE-2026-00052 and AVE-2026-00053. |
 | AVE-2026-00065 | A2A agent card poisoning. cfgaudit reaches the committed pointer but not the card. A `.gemini/agents/*.md` may carry an inline `agent_card_json`, which cfgaudit recognises well enough to classify the file as a remote agent, but it does not audit the card's contents. It does flag a cleartext `agent_card_url` and a credential literal in the same file's `auth` block (CFG097). |
 | AVE-2026-00069 | Image-hidden instructions in a skill package. Needs binary content analysis of a bundled image; cfgaudit reads text configuration only. Same layer as AVE-2026-00024. |
-| AVE-2026-00077 | Cross-origin tool and resource declaration in one MCP manifest. New gap. cfgaudit reads MCP *launch* configuration (`command`, `args`, `env`, `url`, `headers`), not the manifest a server returns once it is running, so the two declarations this record correlates are never both in view. |
+| AVE-2026-00077 | Cross-origin tool and resource declaration in one MCP manifest. cfgaudit reads MCP *launch* configuration (`command`, `args`, `env`, `url`, `headers`), not the manifest a server returns once it is running, so the two declarations this record correlates are never both in view. |
+| AVE-2026-00082 | Local skill name collision. Close to `CFG102`, which narrows that gap without closing it; see "The three deliberately unmapped rules". |
+| AVE-2026-00084 | Lifecycle hook trust decoupling on plugin update. `static_detection`, but the detection is a diff against the last-reviewed plugin version, which a single repository snapshot cannot provide. cfgaudit's plugin rules (`CFG055` pinning, `CFG067` committed hooks) touch the committed half and are not remapped. |
+| AVE-2026-00085 | Collusive cross-skill composition. Needs correlation across independently benign skills; cfgaudit checks each file in isolation. Same deferral as `AVE-2026-00059`. |
