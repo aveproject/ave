@@ -12,14 +12,14 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 - New standing check, `scripts/check_mutation_thm_trail.py`: soft-warns
   on records where `mutation_count` is 1 or higher but `aivss.notes`
   has no discoverable mention of the ThM decision made when that
-  mutation was recorded (raised or left unchanged, either way). The
-  record-sourcing process already requires stating that decision
-  explicitly in the commit message, but a commit message isn't visible
-  to anyone reading the record JSON directly or reviewing a PR without
-  digging through git history; this makes the same explanation
-  checkable by requiring it live in the record's own `aivss.notes`
-  field, the same place this kind of reasoning trail already lives
-  (see `AVE-2026-00074`'s `notes` explaining an empty `mitre_atlas`).
+  mutation was recorded (raised or left unchanged, either way). This
+  introduces the expectation that an edit raising `mutation_count`
+  states the ThM decision (raised or left unchanged) in the record's
+  own `aivss.notes`, where a reader of the record JSON or a reviewer
+  of a PR can see it without digging through git history. No earlier
+  written requirement existed; the same field already carries this
+  kind of reasoning elsewhere (see `AVE-2026-00074`'s `notes`
+  explaining an empty `mitre_atlas`).
   A keyword match, not a correctness check -- no script can judge
   whether a cited source is genuinely a working PoC versus theoretical,
   only that a real, in-record explanation exists for a human reviewer
