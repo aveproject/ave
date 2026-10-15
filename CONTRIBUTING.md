@@ -160,7 +160,7 @@ python scripts/check_vulnerability_taxonomy.py  # soft-warns on records missing 
 python scripts/check_vulnerability_taxonomy.py --strict --only AVE-2026-NNNNN   # your new record must carry all three taxonomy fields
 python scripts/check_mutation_thm_trail.py  # soft-warns on records with mutation_count >= 1 and no ThM-decision trail in aivss.notes
 python scripts/check_mutation_thm_trail.py --strict --only AVE-2026-NNNNN   # if your edit raises mutation_count, aivss.notes must state the ThM decision (raised or unchanged, either way)
-python scripts/check_framework_sources.py --strict --only AVE-2026-NNNNN   # if your record carries owasp_mcp/owasp_asi/mitre_atlas/nist_ai_rmf, each needs a framework_sources entry
+python scripts/check_framework_sources.py --strict --only AVE-2026-NNNNN   # CI enforces this for every record now; run it scoped to yours before pushing, same check either way
 python scripts/generate_terms.py      # regenerate docs/terms.md after any schema field or description change
 python scripts/check_terms_sync.py    # hard failure if docs/terms.md disagrees with the live schema -- run before opening a PR
 pytest tests/ -x -q                   # full suite: schema, AIVSS arithmetic, mitigation enums
