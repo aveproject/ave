@@ -9,6 +9,19 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 ## [Unreleased]
 
 ### Changed
+- `framework_sources` backfill completed and `scripts/check_framework_sources.py
+  --strict` now runs corpus-wide in CI, no longer deferred (#245, #260,
+  #264 were the earlier passes). The 61 records still missing a pin
+  entry (56 for `nist_ai_rmf`, 10 for `mitre_atlas`) now carry an
+  `unknown` declaration each, since no citable version or commit
+  exists for any of the 66: every `mitre_atlas` gap was checked back
+  to the commit that added it and each confirmed the technique against
+  MITRE's own current data at the time without citing a dated
+  snapshot, and a repo-wide history search found no dated verification
+  event for `nist_ai_rmf` at all. `docs/terms-relationships.md`'s
+  coverage numbers are recomputed from live data; one of its prior
+  clauses is corrected along the way, not just its numbers (see that
+  file's own note).
 - New standing check, `scripts/check_mutation_thm_trail.py`: soft-warns
   on records where `mutation_count` is 1 or higher but `aivss.notes`
   has no discoverable mention of the ThM decision made when that
