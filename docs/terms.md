@@ -246,6 +246,10 @@ Name of the researcher or team who authored this record. REQUIRED once a record 
 
 URL for the researcher or team. Optional.
 
+### `revisions`
+
+Optional, append-only history of edits that changed a value a consumer may gate on, such as a derived verification_basis. Entries are appended in date order and never rewritten or removed. A record with no revisions array makes no claim about its own history; a consumer must not read its absence as never revised. Design: issue #317, agreed on #219.
+
 ### `schema_version`
 
 AVE schema version this record was authored against, e.g. 1.1.0.

@@ -644,6 +644,56 @@
           }
         }
       }
+    },
+    "revisions": {
+      "type": "array",
+      "description": "Optional, append-only history of edits that changed a value a consumer may gate on, such as a derived verification_basis. Entries are appended in date order and never rewritten or removed. A record with no revisions array makes no claim about its own history; a consumer must not read its absence as never revised. Design: issue #317, agreed on #219.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "date",
+          "field",
+          "from",
+          "to",
+          "reason_code"
+        ],
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "ISO 8601 date the change landed in this record, e.g. the merge date of the pull request that made it."
+          },
+          "field": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Name of the record field whose value changed, e.g. evidence_vantage."
+          },
+          "from": {
+            "description": "The field's value before the change, or null when the field was absent before (an added declaration has no prior value)."
+          },
+          "to": {
+            "not": {
+              "type": "null"
+            },
+            "description": "The field's value after the change."
+          },
+          "reason_code": {
+            "type": "string",
+            "enum": [
+              "declaration_added",
+              "declaration_corrected",
+              "vocabulary_member_added",
+              "derivation_rule_changed"
+            ],
+            "description": "Closed code for why this entry exists, so a consumer can count and filter revisions by cause without parsing prose. Copied from revision_reason in probityai/agent-evidence-vocabulary at commit aff6e0187d05fbb01aa26bd4b4035aebcbc81be0 (https://github.com/probityai/agent-evidence-vocabulary/blob/aff6e0187d05fbb01aa26bd4b4035aebcbc81be0/vocabulary.yaml#L291-L315), where the codes are status proposed; this enum stands on its own and does not follow later changes there. declaration_added: a field the record omitted is now declared, and a value derived from it changed as a result. declaration_corrected: a field the record already declared was wrong and now carries a different value. vocabulary_member_added: the schema gained a closed-vocabulary member, and re-deriving the record under it changed a derived value; the record's own declarations did not change. derivation_rule_changed: the rule that computes a derived value changed; the record's own declarations did not change."
+          },
+          "reason": {
+            "type": "string",
+            "description": "Optional free text: what changed downstream and where the change was made."
+          }
+        }
+      }
     }
   }
 }
