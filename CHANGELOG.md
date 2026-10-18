@@ -9,6 +9,14 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 ## [Unreleased]
 
 ### Changed
+- `README.md`: `AVE-2026-00044`'s record index row and the Stats HIGH and
+  MEDIUM counts brought back in line with `records/`. #294 moved the record
+  from 6.1 MEDIUM to 8.1 HIGH, and the README kept the old values. New
+  `tests/test_readme_sync.py` checks the record index, the Stats block, the
+  records badge and the index summary against `records/` (draft records,
+  which need not carry a score yet, are left out), with a fixture test for
+  each refusal it can make. `CONTRIBUTING.md` now says when a record change
+  needs a README update.
 - New standing check, `scripts/check_mutation_thm_trail.py`: soft-warns
   on records where `mutation_count` is 1 or higher but `aivss.notes`
   has no discoverable mention of the ThM decision made when that
