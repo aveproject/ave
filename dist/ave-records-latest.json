@@ -11768,6 +11768,169 @@
     "verification_basis": "artifact_reconstructed"
   },
   {
+    "ave_id": "AVE-2026-00089",
+    "schema_version": "1.1.0",
+    "status": "active",
+    "component_type": "agent",
+    "title": "Model-supplied sandbox boundary: a tool parameter the model sets defines or widens the sandbox's writable scope",
+    "attack_class": "Sandbox Escape - Model-Supplied Policy Boundary",
+    "severity": "MEDIUM",
+    "description": "A coding agent runs terminal commands inside a sandbox whose writable scope is meant to be the workspace the user started the session in. The harness, however, computes that scope from a value the model supplies in the tool call itself, such as the command's working directory, rather than from the session's own root. Content the model reads (an MCP tool response, a web search result, a README) steers it to set that value to a location outside the workspace, and the sandbox grants write access there. The agent can then write the sandbox's own helper binary, the user's shell startup files or launch agents without approval, so later commands run unsandboxed. The model does not break the boundary; it sets it. Demonstrated in two products. Codex CLI 0.2.0 to 0.38.0 could treat a model-generated cwd as the sandbox's writable root, including paths outside the folder where the user started the session (CVE-2025-59532); the fix separates the command's working directory from the directory the sandbox policy is computed from. Cursor before 3.0 added the run_terminal_cmd tool's optional working_directory parameter to the sandbox's allowed write list whenever the model set a non-default value (CVE-2026-50548, part of Cato AI Labs' DuneSlide research), and the proof of concept overwrote Cursor's cursorsandbox helper. Distinct from AVE-2026-00053 (Path traversal via unsanitized path parameter in an MCP file handler): there a handler fails to contain a caller-supplied path against its own fixed scope; here the value is honored exactly and the policy layer derives the boundary from it. Distinct from AVE-2026-00054 (Code-execution sandbox escape via JavaScript prototype-chain traversal): there a payload breaks the runtime's isolation; here the isolation works as configured, and the configuration came from the model. Distinct from AVE-2026-00088 (Sandbox side-effect trust handoff): there the boundary stays intact and a host component later runs files the agent wrote inside it; here the boundary itself moves. Path-validation failures against a fixed boundary, such as a symlink canonicalization fallback (CVE-2026-50549) or a validate-then-use race on a model-supplied path (CVE-2026-34452), are related but not instances of this class.",
+    "aivss_score": 6.6,
+    "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:L/UI:P/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N",
+    "owasp_mcp": [
+      "MCP05"
+    ],
+    "owasp_asi": [
+      "ASI05"
+    ],
+    "mitre_atlas": [
+      "AML.T0105"
+    ],
+    "nist_ai_rmf": [],
+    "behavioral_fingerprint": "A coding agent's sandbox computes its writable scope from a value the model supplies in a tool call (a terminal command's working directory or an equivalent path parameter) instead of from the session's user-established root, so a model steered by content it reads sets that value to a location outside the workspace and the sandbox grants write access there, letting the agent overwrite files such as the sandbox's own helper or the user's shell startup files without approval.",
+    "behavioral_vector": [
+      "model-supplied-policy-boundary",
+      "sandbox-scope-widening",
+      "tool-parameter-trust",
+      "sandbox-escape"
+    ],
+    "provenance_vector": {
+      "entry_class": "model_generated",
+      "payload_surface": "a tool-call parameter the model generates (a terminal command's working_directory or cwd) that the harness uses to compute the sandbox's writable roots",
+      "escalation": "instruction_to_capability"
+    },
+    "security_boundary": "the user-established session workspace to the sandbox's writable scope, when that scope is computed from a value chosen by the model the sandbox exists to constrain",
+    "missing_control": "no anchoring of the sandbox policy's writable roots to user-established session configuration; model-supplied tool-call parameters are not treated as untrusted input to the policy layer",
+    "vulnerability_rationale": {
+      "capability": "A coding agent runs terminal commands in a sandbox and can choose each command's working directory as a tool-call parameter.",
+      "vulnerability": "The harness computes the sandbox's writable scope from that model-supplied parameter instead of from the session's own root, so the party the sandbox constrains also chooses where the sandbox allows it to write.",
+      "impact": "Content the model reads can widen the sandbox to any location the process can write, letting the agent overwrite the sandbox's own helper or shell startup files without approval and run later commands unsandboxed on the host with the user's privileges."
+    },
+    "mitigation": {
+      "strategy": [
+        "isolate_scope",
+        "validate_input",
+        "deny_by_default"
+      ],
+      "enforcement_point": "agent_framework",
+      "trifecta_control": "break_untrusted_content"
+    },
+    "example_patterns": [
+      "A sandboxed run_terminal_cmd call in which the model sets working_directory to /Applications/Cursor.app/Contents/Resources/app/resources/helpers, after which a write to the cursorsandbox helper succeeds without an approval prompt.",
+      "A shell tool call whose cwd parameter is the user's home directory although the session was started in ~/src/project, after which the command appends to ~/.zshrc inside a sandbox that permits it.",
+      "A tool call that sets the working directory to ~/Library/LaunchAgents and writes a plist there, persisting a command outside the sandbox."
+    ],
+    "mutation_count": 0,
+    "detection_methodology": "1. For each sandboxed command an agent runs, record the session's user-established root and the working directory or path parameter the model supplied in the tool call. 2. Flag any tool call whose working directory, after canonicalization, resolves outside the session root, and any sandbox profile or policy built for that call whose writable roots include a path outside the session root and the declared temp directories. 3. Treat writes during a session to the agent tool's own sandbox helper or installation directory, shell startup files (~/.zshrc, ~/.zshenv, ~/.bashrc, ~/.profile) or launch-agent directories as high-signal indicators. 4. In harness code review, check whether the function that builds the sandbox's writable roots takes the command's working directory or the session's root as its input; the two must be separate values.",
+    "indicators_of_compromise": [
+      "A tool call from the model sets working_directory or cwd to a path outside the session's workspace, such as the user's home directory, an application bundle or ~/Library/LaunchAgents.",
+      "The agent tool's own sandbox helper binary (for example cursorsandbox) is modified during or after an agent session.",
+      "Shell startup files (~/.zshrc, ~/.zshenv, ~/.bashrc) or launch-agent plists are modified by a process the agent's sandbox launched.",
+      "A sandbox profile generated for an agent command lists a writable root that is neither the session root nor a declared temp directory."
+    ],
+    "remediation": "1. Compute the sandbox's writable roots only from user-established configuration (the directory the session was started in and explicitly configured additional roots), never from a tool-call parameter the model supplies. 2. Keep the command's working directory and the sandbox policy's root as separate values; a working directory outside the policy root should run with no added write access, or be refused. 3. Canonicalize any model-supplied path before comparing it with the policy root, and fail closed when canonicalization fails. 4. Protect the agent tool's own installation and sandbox helper, and shell startup and launch-agent paths, from writes by sandboxed commands regardless of the policy computed for a given call.",
+    "kill_switch_active": false,
+    "researcher": "Cato AI Labs; Tzanko Matev (Codetracer)",
+    "researcher_url": "https://www.catonetworks.com/blog/duneslide-two-critical-rce-vulnerabilities/",
+    "published": "2026-10-19T00:00:00Z",
+    "last_updated": "2026-10-19T00:00:00Z",
+    "references": [
+      {
+        "tag": "OpenAI GHSA-w5fx-fh39-j5rw (CVE-2025-59532)",
+        "text": "Codex CLI advisory, published 2025-09-19, High (CVSS 4.0 8.6), affected 0.2.0 to 0.38.0, fixed 0.39.0 (IDE extension 0.4.12): 'Codex CLI could treat a model-generated cwd as the sandbox's writable root, including paths outside of the folder where the user started their session.' The fix bases the sandbox policy boundary on where the user started the session, 'not the one generated by the model'. Credits Tzanko Matev (Codetracer).",
+        "url": "https://github.com/openai/codex/security/advisories/GHSA-w5fx-fh39-j5rw"
+      },
+      {
+        "tag": "Codex fix commit 8595237",
+        "text": "'fix: ensure cwd for conversation and sandbox are separate concerns' (#3874). Before it, the command's cwd was passed both as the spawned process's working directory and into get_writable_roots_with_cwd in the seatbelt and landlock sandboxes; after it, the policy uses the session's turn_context.cwd and the model's value only sets the command's working directory.",
+        "url": "https://github.com/openai/codex/commit/8595237505a1e0faabc2af3db805b66ce3ae182d"
+      },
+      {
+        "tag": "Cursor GHSA-3p48-7v9f-v5cw (CVE-2026-50548)",
+        "text": "Cursor advisory, published 2026-06-05, Critical, fixed in 3.0: 'the sandbox grants write access to the command's working directory. A flaw was identified in how the agent could modify the working_directory parameter, which could cause the sandbox to include writable paths outside the intended workspace.' Credits Cato AI Labs.",
+        "url": "https://github.com/cursor/cursor/security/advisories/GHSA-3p48-7v9f-v5cw"
+      },
+      {
+        "tag": "Cato AI Labs -- DuneSlide",
+        "text": "Itay Ravia, 2026-07-01. 'The first vulnerability stems from how the sandbox constructs its security boundaries based on tool parameters': when the model assigns a non-default working_directory to run_terminal_cmd, 'that path is blindly added to the sandbox's allowed write list'; the PoC overwrites the cursorsandbox helper. Includes the disclosure timeline, in which Cursor first rejected the report as outside its threat model and reopened it after escalation.",
+        "url": "https://www.catonetworks.com/blog/duneslide-two-critical-rce-vulnerabilities/"
+      },
+      {
+        "tag": "Pillar Research -- GitPwned (corroboration)",
+        "text": "Ariel Fogel, 2026-07-20. Describes CVE-2025-59532 in its conclusion: 'the CLI used a model-generated working directory to define its own security boundaries, letting the model specify where it was allowed to write.'",
+        "url": "https://www.pillar.security/blog/gitpwned-allowlist-to-rce"
+      },
+      {
+        "tag": "Cursor GHSA-3v8f-48vw-3mjx (CVE-2026-50549), related",
+        "text": "Cursor advisory, published 2026-06-05, Critical, fixed in 3.0: when canonicalization of a symlink target fails, Cursor 'falls back to the original path and writes without approval'. Cited as a related path-validation failure against a fixed boundary, not an instance of this class.",
+        "url": "https://github.com/cursor/cursor/security/advisories/GHSA-3v8f-48vw-3mjx"
+      },
+      {
+        "tag": "Anthropic SDK GHSA-w828-4qhx-vxx3 (CVE-2026-34452), related",
+        "text": "Anthropic Python SDK advisory, published 2026-03-31, Medium (CVSS 4.0 5.8), CWE-59 and CWE-367, fixed 0.87.0: the async memory tool validated that model-supplied paths resolved inside the memory directory, then used the unresolved path, a validate-then-use race. Cited as a related path-validation failure, not an instance of this class.",
+        "url": "https://github.com/anthropics/anthropic-sdk-python/security/advisories/GHSA-w828-4qhx-vxx3"
+      },
+      {
+        "tag": "AVE issue #335",
+        "text": "ave_id AVE-2026-00089 proposed with the field-by-field comparison against AVE-2026-00053, 00054, 00052, 00011, 00068, 00048 and 00088, the seven audit answers including Q6 and its strongest counterargument, and the reasoning for keeping CVE-2026-50549 and CVE-2026-34452 out of the fingerprint.",
+        "url": "https://github.com/aveproject/ave/issues/335"
+      }
+    ],
+    "aivss": {
+      "cvss_base": 8.6,
+      "aarf": {
+        "autonomy": 1,
+        "tool_use": 1,
+        "multi_agent": 0,
+        "non_determinism": 0.5,
+        "self_modification": 0.5,
+        "dynamic_identity": 0.5,
+        "persistent_memory": 0.5,
+        "natural_language_input": 0,
+        "data_access": 1,
+        "external_dependencies": 1
+      },
+      "aars": 6,
+      "thm": 0.9,
+      "mitigation_factor": 1,
+      "aivss_score": 6.6,
+      "aivss_severity": "MEDIUM",
+      "spec_version": "0.8",
+      "notes": "Kept as a new record rather than a mutation of an existing one, per the record-growth discipline's mechanical test, after a field-by-field comparison: AVE-2026-00053 (content: an MCP file handler fails to canonicalize a caller-supplied path against its own fixed scope, an implementation bug classed E in the audit) differs because here the parameter's value is honored exactly and the policy layer derives the boundary from it; AVE-2026-00054 (runtime: a payload breaks the language runtime's isolation) differs because here the isolation works as configured and the configuration came from the model; AVE-2026-00052 (an unsanitized parameter reaching a shell) involves no sandbox policy; AVE-2026-00011 (content: injected directives naming a tool call and its parameters) is this class's delivery step, not its vulnerability, which is the harness's sandbox policy trusting the parameter; AVE-2026-00068 names working directory only as shared shell state between commands; AVE-2026-00048 is an unset delegation scope; AVE-2026-00088 (sandbox side-effect trust handoff, proposed in the same pass) keeps the boundary intact and abuses what a host component later does with files written inside it, whereas here the boundary itself moves. Related but kept out of the fingerprint: CVE-2026-50549 (Cursor falls back to the in-workspace symlink path when canonicalization fails and writes without approval) and CVE-2026-34452 (the Anthropic Python SDK's async memory tool validated a model-supplied path, then used the unresolved path, a validate-then-use race exploitable by a local attacker able to write to the memory directory). In both the boundary is fixed and a path check against it fails, which is a path-validation failure rather than a boundary the model sets; they are cited as neighbors, not instances. entry_class model_generated reused, as in AVE-2026-00056 and AVE-2026-00088: the payload is a value the model itself produces in a tool call. Q6 (replace the LLM with a deterministic program): the flaw, in the form that matters, does not survive. A conventional program does not take its sandbox boundary from the output of the component the sandbox exists to contain; Cato AI Labs' own write-up: 'Traditionally, a remote attacker cannot control the working directory of a sandboxed operation.' Strongest counterargument: this is an ordinary input-validation bug (the Advisory Database files CVE-2025-59532 as CWE-20), and a deterministic sandbox that derived its root from an untrusted request would have the same flaw. Answer: the structural error can exist without a model, but the input only becomes attacker-reachable because a model generates it, so the constrained party, a model steerable by any content it reads, is the party choosing the boundary; both vendor fixes confirm the framing by separating model-supplied execution parameters from user-established policy (Codex's fix commit splits command_cwd from sandbox_policy_cwd). Classified A rather than E. autonomy scored 1: once the model sets the parameter, the sandbox grants the scope and writes proceed with no approval in auto-run mode. tool_use scored 1: the mechanism is a tool-call parameter. non_determinism scored 0.5: exploitation depends on the model following injected content (Cursor initially rejected the report on threat-model grounds about MCP misuse, not reproducibility, but model compliance still varies). self_modification scored 0.5: the demonstrated chain overwrites the agent's own sandbox helper so later commands run unsandboxed, a change to the agent runtime, though the class itself is the widened scope, not the helper overwrite. dynamic_identity scored 0.5: the policy layer gives a model-supplied value the authority of the user-established session root, a trust-anchor confusion over who sets policy, scored as AVE-2026-00088 and AVE-2026-00084 scored theirs. persistent_memory scored 0.5: the escape happens within a session, but its demonstrated payloads persist (an overwritten sandbox helper, ~/.zshrc, ~/Library/LaunchAgents). natural_language_input scored 0: the delivery is natural language but the boundary step is a structured parameter value, which the scoring reference scores 0. data_access scored 1: arbitrary writes anywhere the process can write, leading to host command execution. external_dependencies scored 1: severity depends entirely on whether a specific harness derives its policy from the parameter (Codex CLI before 0.39.0, Cursor before 3.0). multi_agent scored 0. cvss_base_vector is the Codex advisory's own vector for CVE-2025-59532, the most conservative vendor reading (Cato scores both DuneSlide findings CVSS 9.8 under 3.1, Cursor rates CVE-2026-50548 Critical): network-borne injected content (AV:N), low complexity (AC:L), no attack-time precondition beyond the default auto-run sandbox (AT:N), low privileges as the vendor scored it (PR:L), passive user interaction (an innocuous prompt, UI:P), full impact (VC:H/VI:H/VA:H). thm set to 0.90 (PoC exists, not exploited in the wild): both instances have working PoCs and vendor fixes, with no reported in-the-wild exploitation. mitigation_factor set to 1: the fixes are per product, Cursor first rejected the report as outside its threat model, and Cato states it is disclosing further issues in other coding agents; no ecosystem-wide standard mitigation exists. owasp_mcp mapped to MCP05 (Command Injection & Execution) after reading the category text at commit 165fe0f78ef104459237b4a8e0f6e78db9b02391: its checklist names 'Agent outputs are not constrained to allowlists of permitted commands, arguments, or file paths' and 'No runtime sandboxing isolates tool execution from the host system'. MCP02 (permission scope drift over time) and MCP07 (authentication and authorization between MCP parties) were read and rejected. owasp_asi mapped to ASI05 (Unexpected Code Execution) after reading the 2026 document: it names execution leading to 'host or container compromise, persistence, or sandbox escape'. ASI02 was read and rejected by its own scope: it covers an agent that 'operates within its authorized privileges', and it routes code-execution outcomes to ASI05. mitre_atlas mapped to AML.T0105 (Escape to Host) after reading it in the live ATLAS.yaml (v5.6.0): 'There are many ways an adversary may escape from a container or sandbox environment via AI Systems.' AML.T0053 (AI Agent Tool Invocation) was considered and left out: it describes the delivery step common to any tool-using record, not the policy flaw. nist_ai_rmf checked, no fit: NIST AI 100-1's nearest subcategory, MEASURE 2.7, is generic security evaluation."
+    },
+    "evidence_kind_default": "behavioral_pattern",
+    "detection_stage": "runtime_observed",
+    "detection_layer": "runtime",
+    "confidence_baseline": 0.65,
+    "evidence_basis_engines": [
+      "pattern",
+      "sandbox"
+    ],
+    "derivable_into": [
+      "remote-control-chain",
+      "privilege-escalation-chain"
+    ],
+    "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "source_url": "https://github.com/OWASP/www-project-mcp-top-10/blob/165fe0f78ef104459237b4a8e0f6e78db9b02391/2025/MCP05-2025%E2%80%93Command-Injection%26Execution.md",
+        "read_date": "2026-10-19"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-10-19",
+        "source_url": "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/"
+      },
+      "mitre_atlas": {
+        "version": "5.6.0",
+        "read_date": "2026-10-19",
+        "source_url": "https://raw.githubusercontent.com/mitre-atlas/atlas-data/main/dist/ATLAS.yaml"
+      }
+    },
+    "verification_basis": "artifact_reconstructed"
+  },
+  {
     "ave_id": "AVE-2026-00014",
     "schema_version": "1.1.0",
     "component_type": "skill",

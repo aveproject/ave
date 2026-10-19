@@ -106,6 +106,21 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   new record.
 
 ### Added
+- AVE-2026-00089: Model-supplied sandbox boundary. A coding agent's
+  sandbox computes its writable scope from a value the model supplies in
+  a tool call (a terminal command's working directory) instead of from
+  the session's own root, so content the model reads can widen the
+  sandbox to any location the process can write, such as the sandbox's
+  own helper binary or the user's shell startup files. Sourced from the
+  Codex CLI advisory for CVE-2025-59532 and its fix commit, Cursor's
+  advisory for CVE-2026-50548 and Cato AI Labs' DuneSlide write-up, each
+  read directly. Distinct from AVE-2026-00053 (a handler failing to
+  contain a path against a fixed scope), 00054, 00052, 00011, 00068,
+  00048 and 00088, checked field by field; CVE-2026-50549 and
+  CVE-2026-34452 are cited as related path-validation failures, not
+  instances. researcher field credits Cato AI Labs and Tzanko Matev
+  (Codetracer), not AVE. Id proposed via issue #335 (MEDIUM, AIVSS
+  6.6).
 - AVE-2026-00087: Agentjacking — a monitoring/diagnostic integration's
   own publicly-writable ingest endpoint lets an attacker plant a
   crafted event formatted to visually mimic the integration's
