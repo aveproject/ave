@@ -19,6 +19,11 @@ Minor additions (new optional fields) are non-breaking and can ship in a patch r
 **Deprecation:** a record is deprecated by setting `status` to `"deprecated"`, with a
 note explaining why. `ave_id` values are never reused or deleted.
 
+**Corpus-wide score changes:** a change of scoring metric, or any change that moves more
+than five records across a severity band, is recorded in `docs/scoring-history.md` with
+the full before and after table. The CVSS-AI to OWASP AIVSS v0.8 migration is the first
+entry.
+
 **Crosswalk updates:** maintainer or contributors may update crosswalk JSON files to
 add new tool mappings. No record changes required.
 

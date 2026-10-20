@@ -162,6 +162,9 @@ Every record is scored with [OWASP AIVSS v0.8](https://aivss.owasp.org):
 AIVSS = ((CVSS_Base + AARS) / 2) x ThM x Mitigation_Factor
 ```
 
+Scores published before 2026-05-12 used a different metric, CVSS-AI. See
+[docs/scoring-history.md](docs/scoring-history.md).
+
 **AARS** (Agentic Amplification and Reachability Score) is the weighted sum
 of 10 Agentic Amplification and Risk Factors (AARF), each scored 0.0-1.0:
 

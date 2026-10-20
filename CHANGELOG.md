@@ -690,6 +690,17 @@ Three ADRs are locked and documented in `docs/adr/`:
 
 ---
 
+## Before 1.0.0: scoring migration to OWASP AIVSS v0.8 (2026-05-12)
+
+Every record moved from the project-defined CVSS-AI metric (`cvss_ai_score`,
+`cvss_ai_vector`) to OWASP AIVSS v0.8 (the `aivss` object, `aivss_score`,
+`cvss_base_vector`) in #17 (`develop`) and #18 (`main`). The two metrics are not
+comparable. 45 records that are still published changed score, every one downward, and
+41 changed severity band. The full before and after table, the reason, and the policy for
+future corpus-wide changes are in [docs/scoring-history.md](docs/scoring-history.md) (#341).
+
+---
+
 ## Done since the original "Planned for v1.2" list
 
 - `GOVERNANCE.md` — shipped
