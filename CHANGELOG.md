@@ -9,6 +9,24 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 ## [Unreleased]
 
 ### Changed
+- AVE-2026-00063 and AVE-2026-00064: sourcing and `researcher`
+  correction (#339). Both cited only the cfgaudit crosswalk gap that
+  surfaced them and their own registry entry, which does not meet the
+  primary-source rule, and both credited "Saray Chak" / bawbel.io, the
+  misattribution pattern `docs/specs/researcher-process.md` documents.
+  00064 now cites GHSA-ph6w-f82w-28w6 (repository hooks ran after a
+  generic trust prompt with no hook-specific confirmation, the nearest
+  documented instance), CVE-2025-59536 (an ordering bug: repository MCP
+  servers ran before the trust dialog) and Check Point Research's
+  "Caught in the Hook" report, and credits Check Point Research (Aviv
+  Donenfeld, Oded Vanunu). 00063 now cites CVE-2026-33068 (a committed
+  `permissions.defaultMode: bypassPermissions` also skipped the
+  workspace trust dialog; the nearest documented instance, since the fix
+  concerns the trust prompt rather than a per-action gate) and credits
+  the reporter as the advisory names it, hackerone.com/cantina_xyz, with
+  `researcher_url` omitted because no first-party page was found. The
+  caveats are stated in each record's `aivss.notes`. No score, mapping,
+  fingerprint or `mutation_count` change.
 - New standing check, `scripts/check_mutation_thm_trail.py`: soft-warns
   on records where `mutation_count` is 1 or higher but `aivss.notes`
   has no discoverable mention of the ThM decision made when that
