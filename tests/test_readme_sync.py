@@ -134,17 +134,21 @@ def restated_total_drift(readme: str, records: dict) -> list[str]:
     return problems
 
 
-def test_readme_record_index_matches_records():
-    records, problems = load_records()
+def every_check(readme: str, records: dict) -> list[str]:
+    """Every check the README is held to."""
+    return index_drift(readme, records) + stats_drift(readme, records) + restated_total_drift(readme, records)
 
-    assert problems + index_drift(README.read_text(encoding="utf-8"), records) == []
+
+def readme_drift(readme_path: Path = README, records_dir: Path = RECORDS_DIR) -> list[str]:
+    """The whole real-data path: read the records, then run every check on the
+    README. The real-data test runs this, and so does a fixture below that
+    drifts against each check, so a step left out of it fails that fixture."""
+    records, problems = load_records(records_dir)
+    return problems + every_check(readme_path.read_text(encoding="utf-8"), records)
 
 
-def test_readme_stats_and_restated_totals_match_records():
-    records, problems = load_records()
-    readme = README.read_text(encoding="utf-8")
-
-    assert problems + stats_drift(readme, records) + restated_total_drift(readme, records) == []
+def test_readme_matches_records():
+    assert readme_drift() == []
 
 
 # --- each refusal the checks can make is shown, with its own message --------------
@@ -186,10 +190,6 @@ def readme_with(rows=(ROW,), total=1, high=1, medium=0, badge=1, summary=1, drop
     ])
 
 
-def every_check(readme, records):
-    return index_drift(readme, records) + stats_drift(readme, records) + restated_total_drift(readme, records)
-
-
 # cases that must pass
 
 def test_a_readme_that_states_the_records_passes_every_check():
@@ -216,6 +216,27 @@ def test_rows_outside_their_section_are_not_read():
                        "<strong>9 records, click to expand</strong>", ""])
 
     assert every_check(readme_with() + stray, ONE) == []
+
+
+# drift against each check, through the path the real README goes through
+
+def test_a_readme_that_drifts_against_each_check_is_reported_through_the_real_data_path(tmp_path):
+    (tmp_path / "records").mkdir()
+    for name in ("AVE-2026-00001.json", "AVE-2026-00002.json"):
+        (tmp_path / "records" / name).write_text(json.dumps(RECORD), encoding="utf-8")
+    row = ROW.replace("| 8.0 |", "| 7.5 |")
+    readme = readme_with(rows=(row,), total=2, high=0, medium=1, badge=2, summary=3)
+    (tmp_path / "README.md").write_text(readme, encoding="utf-8")
+
+    assert readme_drift(tmp_path / "README.md", tmp_path / "records") == [
+        "AVE-2026-00002.json repeats AVE-2026-00001, already read from another file",
+        "AVE-2026-00001: README says score 7.5, the record says 8.0",
+        "Stats says 0 HIGH, records/ holds 1",
+        "Stats says 1 MEDIUM, records/ holds 0",
+        "Stats says 2 total records, records/ holds 1",
+        "the records badge says 2, records/ holds 1",
+        "the index summary says 3, records/ holds 1",
+    ]
 
 
 # the index
