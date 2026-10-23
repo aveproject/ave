@@ -67,13 +67,25 @@ framework_sources**: the first four are the mapping itself — which
 category a record corresponds to in an external framework.
 framework_sources is provenance for that mapping — which version or
 commit of the referenced framework the mapping was made against. A
-record can carry the mapping without the provenance; as of the last
-corpus-wide backfill pass, `owasp_mcp` (required on every record) and
-`owasp_asi` have full coverage (80 of 80, and 69 of 69 tagged records
-respectively), `mitre_atlas` is partially backfilled (40 of 50 tagged
-records, covering exactly the ones a dated, citable audit event actually
-verified), and `nist_ai_rmf` has none yet — no audit trail for it was
-ever found in this project's history. framework_sources exists
+record can carry the mapping without the provenance; as of the
+2026-10-15 backfill, `owasp_mcp` and `owasp_asi` have full, real-pin
+coverage (87 of 87, and 74 of 74 tagged records respectively, every
+entry a real version or commit). `mitre_atlas` has a real, citable
+version/commit pin on 4 of its 54 tagged records (AVE-2026-00082,
+-00084, -00086, -00087, all pinned against ATLAS v5.6.0); the other 50
+carry an `unknown` declaration dated 2026-08-09, from the original
+backfill pass. Correcting this document's own prior claim here rather
+than carrying it forward: that prior sentence said those 50 covered
+"the ones a dated, citable audit event actually verified," which,
+checked directly against the live records, is not what they are --
+every one of them has `pin_status: "unknown"`, not a verified pin.
+`nist_ai_rmf` now carries an `unknown` declaration on all 56 tagged
+records, added in the same 2026-10-15 pass; it previously had none,
+and no dated verification event for it was ever found anywhere in
+this project's history, confirmed again before this backfill. An
+`unknown` entry means the mapping predates framework_sources tracking
+and the version it was actually read against is not recoverable; it
+records an honest gap, not a lower-confidence pin. framework_sources exists
 specifically because an unversioned or unratified framework's category
 meaning can shift under an unpinned mapping: see
 OWASP/www-project-mcp-top-10#52, the live case (not a hypothetical) that

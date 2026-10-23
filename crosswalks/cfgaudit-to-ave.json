@@ -3,25 +3,32 @@
   "source": {
     "tool": "cfgaudit",
     "vendor": "cfgaudit",
-    "version": "1.13.0",
+    "version": "1.16.0",
     "url": "https://github.com/cfgaudit/cfgaudit",
     "license": "Apache-2.0",
     "tool_class": "static configuration auditor",
-    "rules_total": 108,
-    "rules_mapped": 64,
-    "commit": "ac9f2a5314f7ae64242a10cade836d83f304987e"
+    "rules_total": 114,
+    "rules_mapped": 66,
+    "commit": "7868c87ff576de8e497cdc419a0095808b88a4dd"
   },
   "target": {
     "standard": "AVE",
     "version": "1.1.0",
     "url": "https://aveproject.org",
-    "record_count": 80,
-    "static_record_count": 58,
-    "commit": "cd1010e81ad608d0e066ccec387dd5dad7dd3056"
+    "record_count": 87,
+    "static_record_count": 61,
+    "commit": "7d32d20f0256e21725c8796ea7698befe3c3f10c"
   },
-  "generated": "2026-08-16",
-  "note": "cfgaudit is a static auditor of committable AI-agent CONFIGURATION files. It does not connect to running servers or observe runtime, so it maps only to AVE's static_detection records. Each cfgaudit rule emits its primary AVE id in JSON/SARIF output (see github.com/cfgaudit/cfgaudit/blob/main/docs/cfgaudit-to-ave.md). Mappings are class-level behavioral equivalence, not asserted identity. cfgaudit now maps 61 config-surface rules onto 27 AVE behavioral classes, up from 53 onto 23 at v1.11.0. Only two of the eight new mappings are new cfgaudit rules; the other six are rules that existed all along and are mapped here for the first time, because AVE-2026-00071, 00072, 00073 and 00076 were published on 2026-08-06 and later, after the v1.11.0 crosswalk was generated on 2026-08-05. Three of those four came out of this crosswalk's own gap list (aveproject/ave#68), which is now down to one open surface. Three cfgaudit rules new in v1.12.0 are deliberately left unmapped rather than fitted to an approximate class; each is listed under config_surfaces_beyond_ave with the reason. Both sides are pinned by commit, so every count here can be re-derived. The cfgaudit tree read is two commits past the v1.12.0 tag, and the delta is stated rather than smoothed over: cfgaudit/cfgaudit#516 corrects CFG071 from unmapped to AVE-2026-00073, and cfgaudit/cfgaudit#518 collapses CFG101's findings to one per permission list. Neither adds or removes a rule, so rules_total holds for the tag as well; rules_mapped at the tag itself is 60, not 61.",
+  "generated": "2026-10-12",
+  "note": "cfgaudit is a static auditor of committable AI-agent CONFIGURATION files. It does not connect to running servers or observe runtime, so it maps only to AVE's static_detection records. Each cfgaudit rule emits its primary AVE id in JSON/SARIF output (see github.com/cfgaudit/cfgaudit/blob/main/docs/cfgaudit-to-ave.md). Mappings are class-level behavioral equivalence, not asserted identity. cfgaudit now maps 66 config-surface rules onto 28 AVE behavioral classes, up from 64 onto 27 at v1.13.0. This revision spans three cfgaudit releases (v1.14.0, v1.15.0, v1.16.0), which added eight rules, CFG107 through CFG114. Two map: CFG113 to AVE-2026-00001, a class this file did not cover before, and CFG114 to AVE-2026-00064. The other six are left unmapped on purpose and listed under config_surfaces_beyond_ave with the reason. The record set grew from 80 to 87; of the seven new records, AVE-2026-00082, 00084 and 00085 are static_detection and are listed under gaps, each with the detail that keeps it from mapping. Both sides are pinned by commit: cfgaudit at the v1.16.0 tag, AVE at the commit read.",
   "mappings": [
+    {
+      "ave_id": "AVE-2026-00001",
+      "title": "Metamorphic payload via external config fetch",
+      "cfgaudit_rules": [
+        "CFG113"
+      ]
+    },
     {
       "ave_id": "AVE-2026-00003",
       "title": "Credential exfiltration via agent instruction",
@@ -213,7 +220,8 @@
       "cfgaudit_rules": [
         "CFG047",
         "CFG067",
-        "CFG086"
+        "CFG086",
+        "CFG114"
       ]
     },
     {
@@ -278,14 +286,26 @@
     {
       "ave_id": "AVE-2026-00077",
       "note": "cross-origin tool and resource declaration in one MCP manifest. New gap. cfgaudit reads MCP launch configuration (command, args, env, url, headers), not the manifest a server returns once it is running, so the two declarations this record correlates are never both in view."
+    },
+    {
+      "ave_id": "AVE-2026-00082",
+      "note": "Local skill name collision. The same shape as CFG102, which narrows that gap without closing it: the record asserts that the shadowing is silent and that it spans discovery roots of differing trust. Measured for Claude Code, a duplicate inside one repository is resolved by qualification rather than silently shadowed, and the cross-root case needs a machine-wide view a repository-scoped scanner does not have. See the CFG102 entry under config_surfaces_beyond_ave."
+    },
+    {
+      "ave_id": "AVE-2026-00084",
+      "note": "Lifecycle hook trust decoupling on plugin update. static_detection, but the detection is a diff against the last-reviewed plugin version, which a single repository snapshot cannot provide. cfgaudit's plugin rules (CFG055 pinning, CFG067 committed hooks) touch the committed half and are not remapped."
+    },
+    {
+      "ave_id": "AVE-2026-00085",
+      "note": "Collusive cross-skill composition. Needs correlation across independently benign skills; cfgaudit checks each file in isolation. Same deferral as AVE-2026-00059."
     }
   ],
   "coverage": {
-    "ave_static_records": 58,
-    "cfgaudit_rules_total": 108,
-    "cfgaudit_rules_mapped": 64,
-    "ave_classes_covered": 27,
-    "cfgaudit_rules_unmapped": 44
+    "ave_static_records": 61,
+    "cfgaudit_rules_total": 114,
+    "cfgaudit_rules_mapped": 66,
+    "ave_classes_covered": 28,
+    "cfgaudit_rules_unmapped": 48
   },
   "validation": {
     "against": {
@@ -322,21 +342,22 @@
       "example_rules": [
         "CFG100"
       ],
-      "note": "New, and deliberately unmapped rather than forced. Grok's committed config carries a [plugins] table with enabled and paths, which points the agent at plugin code the repository ships. AVE-2026-00064 would be the class, but it requires that the loader runs that code at project load with no prompt, and cfgaudit has not verified that against the shipped Grok build. Mapping it on the strength of the shape alone would assert a mechanism nobody measured. Note the polarity: 'disabled' in that table hardens, so a record enumerating field names should not list it as an indicator."
+      "note": "Deliberately unmapped rather than forced. Grok's committed config carries a [plugins] table with enabled and paths, which points the agent at plugin code the repository ships. AVE-2026-00064 would be the class, but it requires that the loader runs that code at project load with no prompt, and cfgaudit has not verified that against the shipped Grok build. Mapping it on the strength of the shape alone would assert a mechanism nobody measured. Note the polarity: 'disabled' in that table hardens, so a record enumerating field names should not list it as an indicator."
     },
     {
       "surface": "a guardrail that does not hold, as distinct from an attacker behaviour",
       "example_rules": [
-        "CFG101"
+        "CFG101",
+        "CFG111"
       ],
-      "note": "New, and probably outside AVE's model by construction rather than a gap to fill. Claude Code matches a Bash(...) permission pattern as a literal prefix, so a deny rule naming bundled short flags is walked past by writing the same flags in another order: Bash(rm -rf *) never covered rm -fr x. Measured against Claude Code 2.1.231, and roughly 44% of 22,016 indexed settings.json files carrying a deny block leave the gap open. AVE-2026-00063 is a flag that removes a gate and AVE-2026-00068 is composition through shell state; neither is 'the denylist misses an equivalent spelling'. Recorded here because a taxonomy of agent vulnerabilities may want a place for ineffective controls, not because cfgaudit is asking for a record."
+      "note": "Probably outside AVE's model by construction rather than a gap to fill. Claude Code matches a Bash(...) permission pattern as a literal prefix, so a deny rule naming bundled short flags is walked past by writing the same flags in another order: Bash(rm -rf *) never covered rm -fr x. Measured against Claude Code 2.1.231, and roughly 44% of 22,016 indexed settings.json files carrying a deny block leave the gap open. AVE-2026-00063 is a flag that removes a gate and AVE-2026-00068 is composition through shell state; neither is 'the denylist misses an equivalent spelling'. Recorded here because a taxonomy of agent vulnerabilities may want a place for ineffective controls, not because cfgaudit is asking for a record. CFG111 (v1.15.0) is a second instance of the same kind: an invisible character such as a zero-width space inside a permission rule or hook matcher, so the rule is present and matches nothing. AVE-2026-00063 is a gate a configuration removes; here the gate is declared and silently inert."
     },
     {
       "surface": "two committed skills claiming one name",
       "example_rules": [
         "CFG102"
       ],
-      "note": "New. Name shadowing between two skill files in the same repository, where load order decides which body runs. AVE-2026-00017 is the closest class but is explicitly MCP server identity, and AVE-2026-00066 is registry squatting on hallucinated names; neither covers two local files. Reported as a gap rather than mapped to either."
+      "note": "Narrowed, not closed. Name shadowing between two skill files in the same repository. AVE-2026-00017 is MCP server identity and AVE-2026-00066 registry squatting on hallucinated names. AVE-2026-00082 (local skill name collision) is much closer, but it asserts silent shadowing across discovery roots of differing trust, which a repository-scoped scan does not establish: measured for Claude Code, a same-repository duplicate is resolved by qualification. What stays uncovered is the same-root collision, per agent, where the losing skill is never reported. Listed under gaps as well."
     },
     {
       "surface": "automated security reviewer switched off or blunted by config",
@@ -351,6 +372,36 @@
         "CFG106"
       ],
       "note": "Codex's [browser_use] grants per-origin access including full_cdp_access (script, cookie and storage access inside the browser session) and [computer_use] grants desktop application control. Deliberately not filed under AVE-2026-00063: whether a prompt is skipped is unverified, since the value is observable in the effective config but the tools live in the client app, so the class would assert more than the detection does."
+    },
+    {
+      "surface": "a configuration-declared environment that loads code into every shell",
+      "example_rules": [
+        "CFG107",
+        "CFG110"
+      ],
+      "note": "New. Codex shell_environment_policy.set (CFG107) and the Claude Code settings env block (CFG110) setting BASH_ENV, LD_PRELOAD, NODE_OPTIONS and similar, so code runs in every shell command and hook the agent starts. The mechanism is the one AVE-2026-00055 describes, but that record is bound to an untrusted MCP launch config; stretching it onto the agent's own process environment would change what it asserts."
+    },
+    {
+      "surface": "a committed scheduler that fires prompts on a timer",
+      "example_rules": [
+        "CFG108"
+      ],
+      "note": "New. A committed .claude/scheduled_tasks.json: its presence self-enables Claude Code's otherwise-off scheduler and enqueues a repository-authored prompt on a schedule. AVE-2026-00063 is a bypassed human approval gate; this bypasses no gate, it opens a new autonomous channel."
+    },
+    {
+      "surface": "a declared configuration that never loads",
+      "example_rules": [
+        "CFG109",
+        "CFG012"
+      ],
+      "note": "New. The repository states guardrails that are not in force because the agent does not load the file. Measured in both directions: Codex logs 'Invalid configuration; using defaults' and runs, and Claude Code silently discards a whole settings file, every deny rule and hook with it, on a top-level type error or on one unloadable PreToolUse or PermissionRequest hook entry. AVE-2026-00083 is the nearest in effect but is runtime_observed and scoped to a mechanism's own comparison logic."
+    },
+    {
+      "surface": "a committed credential source sent to a committed endpoint",
+      "example_rules": [
+        "CFG112"
+      ],
+      "note": "New. An MCP server's bearer_token_file names a file on the reader's machine whose content is sent as a bearer token to the server URL in the same committed file. AVE-2026-00047 is a credential written into the component; here the file names where to read one and where to send it, which no record covers."
     }
   ]
 }
