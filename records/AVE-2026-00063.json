@@ -47,11 +47,15 @@
   ],
   "remediation": "Do not expose a configuration-level bypass for approval gates on high-risk actions at all; if a narrower, explicitly-scoped auto-approval is a genuine product requirement, scope it to specific, named, low-risk actions rather than a blanket flag, and log every use of the bypass distinctly from a human-confirmed approval.",
   "kill_switch_active": false,
-  "researcher": "Saray Chak",
-  "researcher_url": "https://bawbel.io",
+  "researcher": "hackerone.com/cantina_xyz",
   "published": "2026-07-27T00:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-10-20T00:00:00Z",
   "references": [
+    {
+      "tag": "CVE-2026-33068 (GHSA-mmgp-wc2j-qcv7)",
+      "text": "Claude Code advisory, published 2026-03-18, High, CWE-807, patched 2.1.53: 'A malicious repository could set permissions.defaultMode to bypassPermissions in its committed .claude/settings.json, causing the trust dialog to be silently skipped on first open.' A declarative approval-bypass setting of the kind this record describes; the fixed vulnerability concerns the workspace-trust prompt rather than a per-action approval gate. Reported by hackerone.com/cantina_xyz.",
+      "url": "https://github.com/anthropics/claude-code/security/advisories/GHSA-mmgp-wc2j-qcv7"
+    },
     {
       "tag": "cfgaudit crosswalk",
       "text": "Gap identified during the cfgaudit-to-AVE crosswalk (PR #67); config-level approval bypass distinct from the instruction-level delegation mechanism in AVE-2026-00048",
@@ -76,7 +80,7 @@
     "aivss_score": 4.8,
     "aivss_severity": "MEDIUM",
     "spec_version": "0.8",
-    "notes": "Deliberately kept as a separate record from AVE-2026-00048 rather than merged into it, per the record-growth discipline's mechanical test: different entry_class (registry_metadata versus content), different payload_surface (a declarative config flag versus instruction text), confirmed by direct comparison of the two records' provenance_vector fields before drafting, not assumed. Credit note carried in references rather than a full tracking-issue citation, since this record itself is the resolution of that gap, not a proposal awaiting one."
+    "notes": "Deliberately kept as a separate record from AVE-2026-00048 rather than merged into it, per the record-growth discipline's mechanical test: different entry_class (registry_metadata versus content), different payload_surface (a declarative config flag versus instruction text), confirmed by direct comparison of the two records' provenance_vector fields before drafting, not assumed. Credit note carried in references rather than a full tracking-issue citation, since this record itself is the resolution of that gap, not a proposal awaiting one. Sourcing correction (2026-10-20): this record originally cited only the cfgaudit crosswalk gap that surfaced it and credited the maintainer. CVE-2026-33068 (GHSA-mmgp-wc2j-qcv7, reported by hackerone.com/cantina_xyz) is now cited: a committed .claude/settings.json setting permissions.defaultMode to bypassPermissions, a declarative approval-bypass setting of the kind this record describes, also caused Claude Code's workspace trust dialog to be silently skipped on first open. The vulnerability Anthropic fixed concerns the workspace-trust prompt rather than a per-action approval gate, so it is the nearest documented instance, not an exact match, and it does not change the scoring. researcher_url is omitted because no first-party page for the credited reporter was found."
   },
   "evidence_kind_default": "behavioral_pattern",
   "detection_stage": "static_detection",

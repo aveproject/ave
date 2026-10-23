@@ -9618,11 +9618,15 @@
     ],
     "remediation": "Do not expose a configuration-level bypass for approval gates on high-risk actions at all; if a narrower, explicitly-scoped auto-approval is a genuine product requirement, scope it to specific, named, low-risk actions rather than a blanket flag, and log every use of the bypass distinctly from a human-confirmed approval.",
     "kill_switch_active": false,
-    "researcher": "Saray Chak",
-    "researcher_url": "https://bawbel.io",
+    "researcher": "hackerone.com/cantina_xyz",
     "published": "2026-07-27T00:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-10-20T00:00:00Z",
     "references": [
+      {
+        "tag": "CVE-2026-33068 (GHSA-mmgp-wc2j-qcv7)",
+        "text": "Claude Code advisory, published 2026-03-18, High, CWE-807, patched 2.1.53: 'A malicious repository could set permissions.defaultMode to bypassPermissions in its committed .claude/settings.json, causing the trust dialog to be silently skipped on first open.' A declarative approval-bypass setting of the kind this record describes; the fixed vulnerability concerns the workspace-trust prompt rather than a per-action approval gate. Reported by hackerone.com/cantina_xyz.",
+        "url": "https://github.com/anthropics/claude-code/security/advisories/GHSA-mmgp-wc2j-qcv7"
+      },
       {
         "tag": "cfgaudit crosswalk",
         "text": "Gap identified during the cfgaudit-to-AVE crosswalk (PR #67); config-level approval bypass distinct from the instruction-level delegation mechanism in AVE-2026-00048",
@@ -9654,7 +9658,7 @@
       "aivss_score": 4.8,
       "aivss_severity": "MEDIUM",
       "spec_version": "0.8",
-      "notes": "Deliberately kept as a separate record from AVE-2026-00048 rather than merged into it, per the record-growth discipline's mechanical test: different entry_class (registry_metadata versus content), different payload_surface (a declarative config flag versus instruction text), confirmed by direct comparison of the two records' provenance_vector fields before drafting, not assumed. Credit note carried in references rather than a full tracking-issue citation, since this record itself is the resolution of that gap, not a proposal awaiting one."
+      "notes": "Deliberately kept as a separate record from AVE-2026-00048 rather than merged into it, per the record-growth discipline's mechanical test: different entry_class (registry_metadata versus content), different payload_surface (a declarative config flag versus instruction text), confirmed by direct comparison of the two records' provenance_vector fields before drafting, not assumed. Credit note carried in references rather than a full tracking-issue citation, since this record itself is the resolution of that gap, not a proposal awaiting one. Sourcing correction (2026-10-20): this record originally cited only the cfgaudit crosswalk gap that surfaced it and credited the maintainer. CVE-2026-33068 (GHSA-mmgp-wc2j-qcv7, reported by hackerone.com/cantina_xyz) is now cited: a committed .claude/settings.json setting permissions.defaultMode to bypassPermissions, a declarative approval-bypass setting of the kind this record describes, also caused Claude Code's workspace trust dialog to be silently skipped on first open. The vulnerability Anthropic fixed concerns the workspace-trust prompt rather than a per-action approval gate, so it is the nearest documented instance, not an exact match, and it does not change the scoring. researcher_url is omitted because no first-party page for the credited reporter was found."
     },
     "evidence_kind_default": "behavioral_pattern",
     "detection_stage": "static_detection",
@@ -9730,11 +9734,26 @@
     ],
     "remediation": "Require explicit, un-bypassable user confirmation before any project-load auto-run executes, regardless of what the project's own configuration requests; treat auto-run configuration as a request the environment may deny, not an instruction the environment must honor.",
     "kill_switch_active": false,
-    "researcher": "Saray Chak",
-    "researcher_url": "https://bawbel.io",
+    "researcher": "Check Point Research (Aviv Donenfeld, Oded Vanunu)",
+    "researcher_url": "https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536/",
     "published": "2026-07-27T00:00:00Z",
-    "last_updated": "2026-07-27T00:00:00Z",
+    "last_updated": "2026-10-20T00:00:00Z",
     "references": [
+      {
+        "tag": "Anthropic GHSA-ph6w-f82w-28w6",
+        "text": "Claude Code advisory, published 2025-09-02, High, CWE-94, patched v1.0.87: the startup warning 'did not properly document that selecting \"Yes, proceed\" would allow Claude Code to execute files in the folder without additional confirmation.' The nearest documented instance of this class: repository-defined hooks in .claude/settings.json ran once the user accepted a generic folder-trust prompt, with no hook-specific confirmation. Reported by Check Point Research.",
+        "url": "https://github.com/anthropics/claude-code/security/advisories/GHSA-ph6w-f82w-28w6"
+      },
+      {
+        "tag": "CVE-2025-59536 (GHSA-4fgq-fpq9-mr3g)",
+        "text": "Claude Code advisory, published 2025-10-03, High, CWE-94, patched v1.0.111: 'Claude Code could be tricked to execute code contained in a project before the user accepted the startup trust dialog.' An ordering bug rather than an absent confirmation step: MCP servers auto-approved by repository settings ran before the trust dialog was accepted. Reported by Check Point Research.",
+        "url": "https://github.com/anthropics/claude-code/security/advisories/GHSA-4fgq-fpq9-mr3g"
+      },
+      {
+        "tag": "Check Point Research -- Caught in the Hook",
+        "text": "Aviv Donenfeld and Oded Vanunu, 2026-02-25. Demonstrates repository-controlled .claude/settings.json hooks and .mcp.json servers executing commands when a user opens an untrusted project, with the disclosure timeline mapping the hooks finding to GHSA-ph6w-f82w-28w6 and the MCP consent bypass to CVE-2025-59536.",
+        "url": "https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536/"
+      },
       {
         "tag": "cfgaudit crosswalk",
         "text": "Gap identified during the cfgaudit-to-AVE crosswalk (PR #67), confirmed as a clean gap against the full corpus before drafting",
@@ -9766,7 +9785,7 @@
       "aivss_score": 5.2,
       "aivss_severity": "MEDIUM",
       "spec_version": "0.8",
-      "notes": "Scores MEDIUM despite the severe, intuitive read of 'zero-click RCE' because AARF's amplification-breadth component is narrow for this class, a specific, single-mechanism configuration weakness, not a broad autonomous or multi-agent scenario. cvss_base carries the actual severity of the impact, near-maximum at 9.0. Confirmed as a genuine gap against the full corpus (no existing record mentions auto-run or zero-click under any phrasing) before drafting, not assumed from the category name alone."
+      "notes": "Scores MEDIUM despite the severe, intuitive read of 'zero-click RCE' because AARF's amplification-breadth component is narrow for this class, a specific, single-mechanism configuration weakness, not a broad autonomous or multi-agent scenario. cvss_base carries the actual severity of the impact, near-maximum at 9.0. Confirmed as a genuine gap against the full corpus (no existing record mentions auto-run or zero-click under any phrasing) before drafting, not assumed from the category name alone. Sourcing correction (2026-10-20): this record originally cited only the cfgaudit crosswalk gap that surfaced it and credited the maintainer. Check Point Research's 'Caught in the Hook' report and the two Claude Code advisories it led to are now cited, and researcher now credits Check Point Research. GHSA-ph6w-f82w-28w6 is the nearest documented instance: repository-defined hooks in .claude/settings.json ran once the user accepted a generic folder-trust prompt, with no hook-specific confirmation. CVE-2025-59536 (GHSA-4fgq-fpq9-mr3g) is an ordering bug rather than an absent confirmation step: MCP servers auto-approved by repository settings ran before the startup trust dialog was accepted. Neither is an exact match for this record's fingerprint, and neither changes the scoring."
     },
     "evidence_kind_default": "behavioral_pattern",
     "detection_stage": "static_detection",
