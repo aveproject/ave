@@ -106,6 +106,21 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   new record.
 
 ### Added
+- Optional, append-only `revisions` array on records (#317, design agreed
+  on #219). Each entry carries `date`, `field`, `from`, `to` and a closed
+  `reason_code`, with an optional free-text `reason`; `from` is null for an
+  added field. The four `reason_code` values are copied from
+  `revision_reason` in probityai/agent-evidence-vocabulary at commit
+  aff6e0187d05fbb01aa26bd4b4035aebcbc81be0, and the enum description cites
+  that commit; AVE's copy stands on its own. A record with no `revisions`
+  array makes no claim about its own history. `validate_records.py` also
+  refuses entries out of date order and a `last_updated` older than the
+  latest revision. First use: AVE-2026-00074, whose `evidence_vantage`
+  stamp in #299 moved its derived `verification_basis` from
+  `artifact_reconstructed` to `substrate_reconstructed`. Its `last_updated`
+  moves to the date of this edit, since #299 left it at 2026-08-07. The
+  other eight records stamped in #299 get no entry, because their derived
+  basis did not change.
 - AVE-2026-00087: Agentjacking — a monitoring/diagnostic integration's
   own publicly-writable ingest endpoint lets an attacker plant a
   crafted event formatted to visually mimic the integration's

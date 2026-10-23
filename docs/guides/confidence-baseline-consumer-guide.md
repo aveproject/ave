@@ -42,6 +42,12 @@ a consumer is told which:
 
 A record can carry both, one, or neither.
 
+An `evidence_vantage` of `substrate` is the producer's declaration, not an
+observation a consumer can check: AVE records are unsigned, so a reader with
+no pinned substrate root treats it as unattested. AVE-2026-00074's
+`substrate`, for example, rests on queries to external authorities rather
+than on observation of an executed artifact.
+
 These were one check until the two predicates were run against each other
 over the same field. Engine-set cardinality was the check's original floor
 test, chosen when no measure of vantage existed, and it turns out not to

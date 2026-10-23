@@ -168,6 +168,74 @@ DISCLOSURE_SIGNAL_WORDS = [
 ]
 
 
+def check_revision_order(record: dict) -> list[str]:
+    """The schema checks each revisions entry's shape; it cannot check the
+    array's order or its agreement with last_updated. Entries are appended in
+    date order, so a date earlier than the one before it is a rewritten
+    history, and a revision dated after last_updated means last_updated no
+    longer names the record's latest change, which is the one signal a
+    consumer had before this field existed (#317). This checks one record
+    only: an earlier entry deleted or rewritten in place is visible only
+    against the previous version of the record, so the schema's append-only
+    rule is not fully enforced here.
+    """
+    revisions = record.get("revisions")
+    if not isinstance(revisions, list):
+        return []
+    errors = []
+    dates = [entry.get("date", "") for entry in revisions if isinstance(entry, dict)]
+    for i in range(1, len(dates)):
+        if dates[i] < dates[i - 1]:
+            errors.append(
+                f"revisions[{i}].date {dates[i]} is earlier than revisions[{i - 1}].date "
+                f"{dates[i - 1]}: revisions are appended in date order"
+            )
+    last_updated = str(record.get("last_updated") or "")[:10]
+    if dates and last_updated and max(dates) > last_updated:
+        errors.append(
+            f"last_updated {last_updated} predates the latest revision {max(dates)}: "
+            f"last_updated must name the record's latest change"
+        )
+    return errors
+
+
+def check_revision_values(record: dict, known_fields) -> list[str]:
+    """Each revision must name a field the schema defines and record a real
+    change, and the revisions of one field must chain: every entry's from is
+    the previous entry's to, and the latest to is the value the record holds
+    now. That refuses a misspelt field, a no-op entry, a duplicated entry and
+    a history that contradicts the record. A deleted or rewritten earlier
+    entry can only be seen against the previous version of the record.
+    """
+    revisions = record.get("revisions")
+    if not isinstance(revisions, list):
+        return []
+    errors = []
+    latest = {}
+    for i, entry in enumerate(revisions):
+        if not isinstance(entry, dict):
+            continue
+        field = entry.get("field")
+        if field not in known_fields:
+            errors.append(f"revisions[{i}].field {field!r} is not a property the schema defines")
+            continue
+        if entry.get("from") == entry.get("to"):
+            errors.append(f"revisions[{i}] has the same from and to: it records no change")
+        if field in latest and entry.get("from") != latest[field]:
+            errors.append(
+                f"revisions[{i}].from {entry.get('from')!r} is not the previous to "
+                f"{latest[field]!r} for {field}"
+            )
+        latest[field] = entry.get("to")
+    for field, value in latest.items():
+        if record.get(field) != value:
+            errors.append(
+                f"the latest revision of {field} sets it to {value!r}, "
+                f"but the record holds {record.get(field)!r}"
+            )
+    return errors
+
+
 def check_researcher_matches_disclosure(record: dict) -> list[str]:
     """Soft warning only: flags records where `researcher` is an AVE
     maintainer name while `references` contains something that reads
@@ -198,6 +266,26 @@ def check_researcher_matches_disclosure(record: dict) -> list[str]:
     return []
 
 
+def record_errors(record: dict, raw_text: str, validator) -> list[str]:
+    """Every hard error for one record, in the order main() reports them.
+
+    main() and the tests both call this, so a check dropped from the
+    pipeline fails a test instead of passing silently.
+    """
+    return (
+        check_schema(record, validator)
+        + check_no_old_field_names(record)
+        + check_no_nested_owasp_mcp_mapping(record)
+        + check_behavioral_vector_or_example_patterns(record)
+        + check_mitigation_enums_only(record)
+        + check_aivss_arithmetic(record)
+        + check_no_vendor_boilerplate(raw_text)
+        + check_verification_basis(record)
+        + check_revision_order(record)
+        + check_revision_values(record, validator.schema.get("properties", {}))
+    )
+
+
 def main() -> int:
     schema = json.loads(SCHEMA_PATH.read_text())
     jsonschema.Draft202012Validator.check_schema(schema)
@@ -213,16 +301,7 @@ def main() -> int:
         raw_text = path.read_text()
         record = json.loads(raw_text)
         rid = record.get("ave_id", path.name)
-        errors = (
-            check_schema(record, validator)
-            + check_no_old_field_names(record)
-            + check_no_nested_owasp_mcp_mapping(record)
-            + check_behavioral_vector_or_example_patterns(record)
-            + check_mitigation_enums_only(record)
-            + check_aivss_arithmetic(record)
-            + check_no_vendor_boilerplate(raw_text)
-            + check_verification_basis(record)
-        )
+        errors = record_errors(record, raw_text, validator)
         for e in errors:
             print(f"{rid}: {e}")
         total_errors += len(errors)
