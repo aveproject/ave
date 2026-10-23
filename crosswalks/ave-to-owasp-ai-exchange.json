@@ -1,0 +1,137 @@
+{
+  "$schema": "https://aveproject.org/schema/crosswalk-1.0.0.schema.json",
+  "source": {
+    "standard": "AVE",
+    "version": "1.1.0",
+    "url": "https://aveproject.org",
+    "record_count": 87,
+    "commit": "733974d4e29ce499caa766350a0ec6ee123ea3cf"
+  },
+  "target": {
+    "tool": "OWASP AI Exchange",
+    "vendor": "OWASP Foundation",
+    "url": "https://owaspai.org",
+    "github": "https://github.com/OWASP/www-project-ai-security-and-privacy-guide",
+    "license": "CC0-1.0",
+    "commit": "caf2e43bd8dd21666d2c08ddb532192ac255a248",
+    "checked_against_live_site": "2026-10-20"
+  },
+  "generated": "2026-10-20",
+  "note": "Deliberate pilot, not a full-corpus crosswalk: 13 AVE records selected by a rule fixed before mapping (two from each of the four largest provenance_vector.entry_class groups, one each from the two smaller major groups, plus four records expected not to fit), mapped at the mechanism level against the Exchange's 25 permalinked threat items as they stand at the pinned commit. 7 of 13 found a real correspondence (6 narrower, 1 related); 6 are honest no_fit, split between conventional/delegated (4) and genuine gaps in the Exchange's current agentic coverage (2). Licence basis: no LICENSE file in the target repository; CC0 1.0 is stated in the content itself (charter.md and the overview's attribution block), recorded here as that, not as a repo-level grant. The Exchange has no real versioning (its only tag is a placeholder v0.0.0); this crosswalk is pinned by commit and will go stale as the Exchange's content changes under it, the same caveat the Exchange's own living-document framing states about itself. This crosswalk is not endorsed by, affiliated with, or submitted to OWASP or the AI Exchange; it lives only in this repository, the same way ave-to-maestro.json does. It makes no claim about ISO/IEC 27090 or prEN 18282: the Exchange's own public statements about its contribution to those standards are the Exchange's claims, not something this crosswalk has read or verified. Controls are explicitly out of scope; every mapping below is threat-to-threat.",
+  "mappings": [
+    {
+      "aix_section": "2.2.2",
+      "aix_threat": "Indirect prompt injection",
+      "aix_permalink": "https://owaspai.org/go/indirectpromptinjection",
+      "ave_ids": ["AVE-2026-00007"],
+      "primary_ave_id": "AVE-2026-00007",
+      "relationship": "narrower",
+      "notes": "AVE-2026-00007 (Agent goal hijack via direct instruction override) sounds direct from its own name, but is structurally indirect in the Exchange's own terms: 2.2.1 Direct prompt injection is specifically a user typing adversarial prompts into a live session, while AVE-2026-00007's attacker is a third party authoring component content (a skill instruction body) that an application loads into the prompt, exactly 2.2.2's own definition. The explicit instruction-override language ('ignore all previous instructions') is one specific stylistic instance of 2.2.2's general mechanism, not a different threat."
+    },
+    {
+      "aix_section": "2.3.1",
+      "aix_threat": "Disclosure of sensitive data in model output",
+      "aix_permalink": "https://owaspai.org/go/disclosureinoutput",
+      "ave_ids": ["AVE-2026-00015"],
+      "primary_ave_id": "AVE-2026-00015",
+      "relationship": "narrower",
+      "notes": "AVE-2026-00015 (system prompt extraction via direct interrogation instruction) arrives via indirect injection (2.2.2), but its own title and fingerprint foreground the confidentiality outcome, the system prompt being disclosed, which is 2.3.1's subject: the Exchange's overview names system prompts explicitly as augmentation data, and 2.3.1 covers sensitive data from training or augmentation data appearing in output. Mapped to the outcome threat rather than the delivery mechanism."
+    },
+    {
+      "aix_section": "2.2.2",
+      "aix_threat": "Indirect prompt injection",
+      "aix_permalink": "https://owaspai.org/go/indirectpromptinjection",
+      "ave_ids": ["AVE-2026-00020"],
+      "primary_ave_id": "AVE-2026-00020",
+      "relationship": "narrower",
+      "notes": "AVE-2026-00020 (Cross-Agent Prompt Injection, A2A) was first checked against 2.2.3 Agent message structure manipulation, given both are agent-to-agent, and rejected: 2.2.3's own definition explicitly scopes itself to structured protocol fields (task parameters, tool arguments, routing metadata) and explicitly contrasts itself with natural-language text content. AVE-2026-00020's mechanism is natural-language instructions embedded in one agent's output and read as trusted input by the next, 2.2.2's own mechanism carried over an agent-to-agent channel instead of a document or webpage channel."
+    },
+    {
+      "aix_section": "2.2.2",
+      "aix_threat": "Indirect prompt injection",
+      "aix_permalink": "https://owaspai.org/go/indirectpromptinjection",
+      "ave_ids": ["AVE-2026-00018"],
+      "primary_ave_id": "AVE-2026-00018",
+      "relationship": "related",
+      "notes": "AVE-2026-00018 (Tool Result Manipulation / Output Poisoning) shares only the injection-delivery dimension with 2.2.2: a component instructs the agent, which is how the agent comes to misreport a tool result. The actual outcome this record names, an agent fabricating or suppressing a tool result it then reports onward, is not itself a named Exchange threat. 4.7 Augmentation data manipulation was checked and rejected: 4.7 is explicitly a conventional at-rest/in-transit integrity attack on stored data, not an already-injected agent being talked into lying about its own output."
+    },
+    {
+      "aix_section": "2.2.2",
+      "aix_threat": "Indirect prompt injection",
+      "aix_permalink": "https://owaspai.org/go/indirectpromptinjection",
+      "ave_ids": ["AVE-2026-00044"],
+      "primary_ave_id": "AVE-2026-00044",
+      "relationship": "narrower",
+      "notes": "AVE-2026-00044 (prompt injection via poisoned async task result) is a clean instance of 2.2.2's general mechanism, with a temporal variant 2.2.2's own text does not name but does not exclude: the injected content is consumed in a later turn, after the synchronous dispatch step, which is what lets it bypass checks applied at dispatch time."
+    },
+    {
+      "aix_section": "2.2.2",
+      "aix_threat": "Indirect prompt injection",
+      "aix_permalink": "https://owaspai.org/go/indirectpromptinjection",
+      "ave_ids": ["AVE-2026-00069"],
+      "primary_ave_id": "AVE-2026-00069",
+      "relationship": "narrower",
+      "notes": "AVE-2026-00069 (multimodal image-hidden instructions, SkillCamo) is a modality-specific instance of 2.2.2: image-encoded rather than text-encoded third-party instructions. Its scanner-evasion framing (designed to beat text-only skill scanners) was checked against 2.1.x Evasion and rejected: Evasion in the Exchange's sense is fooling the model's own decision boundary with crafted input, not fooling a static scanner that is not the AI model. The vulnerability mechanism is indirect injection; evasion describes the delivery's detection-resistance, not a separate threat match."
+    },
+    {
+      "aix_section": "2.2.2",
+      "aix_threat": "Indirect prompt injection",
+      "aix_permalink": "https://owaspai.org/go/indirectpromptinjection",
+      "ave_ids": ["AVE-2026-00002"],
+      "primary_ave_id": "AVE-2026-00002",
+      "relationship": "narrower",
+      "notes": "AVE-2026-00002 (MCP tool description behavioral injection) was checked against 2.2.3 given the MCP-schema framing and rejected for the same reason as AVE-2026-00020: the tool's description field is a natural-language text field, and the attack is text content read as instructions during tool discovery, matching 2.2.2's own definition, not 2.2.3's structured-field-forgery scope."
+    }
+  ],
+  "gaps_in_ave": [
+    {
+      "topic": "2.1.1-2.1.5 Evasion (all five sub-types)",
+      "reason": "Not attempted in this pilot's 13-record sample, which deliberately targeted agent-component mechanisms. Evasion concerns a deployed model's own decision boundary against crafted input, territory AVE's gaps_in_maestro note already scopes out of AVE's current coverage (behavioral classes in agentic components, not attacks on a foundation model's own inference properties). Not re-litigated here; same boundary as the MAESTRO crosswalk's existing gap."
+    },
+    {
+      "topic": "3.1.1-3.2.3 Development-time threats (data/model poisoning and leak, source leak)",
+      "reason": "Same reasoning: these concern the model training/engineering pipeline itself, out of AVE's current component-level scope, not searched against in this pilot."
+    },
+    {
+      "topic": "2.4 Model exfiltration, 2.3.2 Model inversion and membership inference, 4.2/4.3 Direct runtime model poisoning/leak",
+      "reason": "Concern the deployed model's own weights, training data, or confidentiality directly, not an agentic component's behavior. Out of AVE's current scope, not searched against in this pilot."
+    }
+  ],
+  "gaps_in_exchange": [
+    {
+      "ave_id": "AVE-2026-00058",
+      "reason": "Deceptive skill trigger or activation-scope manipulation: the agent's or orchestrator's own skill/tool discovery and selection logic is deceived by a manifest field, distinct from content read once a component is already invoked. No Exchange threat, at any granularity, addresses discovery or selection integrity. AI-specific (fails the swap-the-LLM-for-a-deterministic-program test, since the router's own matching logic is agentic-framework decision logic), not a conventional bug delegated elsewhere. A real, unrepresented gap, not a forced match."
+    },
+    {
+      "ave_id": "AVE-2026-00078",
+      "reason": "Consensus poisoning: an orchestrator's aggregation-layer accepts a single sub-agent's result with no quorum or cross-verification step. AVE's own record text is explicit that this is not injected content at all. No Exchange threat addresses multi-agent result corroboration or aggregation-layer trust. AI-specific, genuinely unrepresented."
+    },
+    {
+      "ave_id": "AVE-2026-00052",
+      "reason": "Command injection in an MCP server's own handler code. Record's own text: 'no LLM reasoning or natural-language instruction is required to trigger it.' Conventional, explicitly delegated by the Exchange's own scope statement to other resources, not a gap to fill."
+    },
+    {
+      "ave_id": "AVE-2026-00053",
+      "reason": "Path traversal in an MCP resource handler's own implementation. Record's own text: 'a code-level flaw in the tool's implementation, not a prompt-driven instruction.' Conventional, delegated, same as AVE-2026-00052."
+    },
+    {
+      "ave_id": "AVE-2026-00061",
+      "reason": "A declared TLS-verification-disabled configuration flag, fires regardless of any agent reasoning. Conventional, delegated."
+    },
+    {
+      "ave_id": "AVE-2026-00047",
+      "reason": "A hardcoded credential literal in a skill file. The record notes a downstream prompt-injection risk from an already-compromised agent, but as scoped, the record itself is a conventional secrets-hygiene issue. Delegated."
+    }
+  ],
+  "coverage": {
+    "pilot_ave_records": 13,
+    "aix_threats_mapped": 2,
+    "mapping_rows": 7,
+    "relationship_equivalent": 0,
+    "relationship_narrower": 6,
+    "relationship_related": 1,
+    "relationship_broader": 0,
+    "relationship_no_fit": 6,
+    "note_on_unmapped": "This is a deliberate 13-record pilot, not a full-corpus crosswalk. The 7 mapped rows land on only 2 of the Exchange's 25 threat items (2.2.2 Indirect prompt injection, 2.3.1 Disclosure of sensitive data in model output), which the feasibility report flags explicitly as the expected shape of a full crosswalk: AVE's agent-component scope concentrates heavily on the content-versus-instruction boundary that 2.2.2 names, not spread evenly across the Exchange's threat list. No claim is made about the other 23 threat items or the ~74 AVE records outside this pilot; a full-corpus pass was not attempted here."
+  }
+}
