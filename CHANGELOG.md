@@ -27,6 +27,19 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   `researcher_url` omitted because no first-party page was found. The
   caveats are stated in each record's `aivss.notes`. No score, mapping,
   fingerprint or `mutation_count` change.
+- `framework_sources` backfill completed and `scripts/check_framework_sources.py
+  --strict` now runs corpus-wide in CI, no longer deferred (#245, #260,
+  #264 were the earlier passes). The 61 records still missing a pin
+  entry (56 for `nist_ai_rmf`, 10 for `mitre_atlas`) now carry an
+  `unknown` declaration each, since no citable version or commit
+  exists for any of the 66: every `mitre_atlas` gap was checked back
+  to the commit that added it and each confirmed the technique against
+  MITRE's own current data at the time without citing a dated
+  snapshot, and a repo-wide history search found no dated verification
+  event for `nist_ai_rmf` at all. `docs/terms-relationships.md`'s
+  coverage numbers are recomputed from live data; one of its prior
+  clauses is corrected along the way, not just its numbers (see that
+  file's own note).
 - New standing check, `scripts/check_mutation_thm_trail.py`: soft-warns
   on records where `mutation_count` is 1 or higher but `aivss.notes`
   has no discoverable mention of the ThM decision made when that
@@ -124,6 +137,40 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   new record.
 
 ### Added
+- AVE-2026-00089: Model-supplied sandbox boundary. A coding agent's
+  sandbox computes its writable scope from a value the model supplies in
+  a tool call (a terminal command's working directory) instead of from
+  the session's own root, so content the model reads can widen the
+  sandbox to any location the process can write, such as the sandbox's
+  own helper binary or the user's shell startup files. Sourced from the
+  Codex CLI advisory for CVE-2025-59532 and its fix commit, Cursor's
+  advisory for CVE-2026-50548 and Cato AI Labs' DuneSlide write-up, each
+  read directly. Distinct from AVE-2026-00053 (a handler failing to
+  contain a path against a fixed scope), 00054, 00052, 00011, 00068,
+  00048 and 00088, checked field by field; CVE-2026-50549 and
+  CVE-2026-34452 are cited as related path-validation failures, not
+  instances. researcher field credits Cato AI Labs and Tzanko Matev
+  (Codetracer), not AVE. Id proposed via issue #335 (MEDIUM, AIVSS
+  6.6).
+- AVE-2026-00088: Sandbox side-effect trust handoff. A sandboxed
+  coding agent, steered by content it reads, writes a file the sandbox
+  allows (a hook definition, an editor task, Git metadata or hooks, the
+  agent tool's own project configuration, a virtualenv interpreter),
+  and a more-privileged component outside the sandbox later executes
+  it as trusted configuration, so the agent's side effect runs on the
+  host. Sourced from the vendor advisories for CVE-2026-48124,
+  CVE-2026-25725, CVE-2026-26268 and CVE-2026-73217, Pillar Research's
+  "The Week of Sandbox Escapes" series and Cymulate Research Labs'
+  "Configuration-Based Sandbox Escape" research, each read directly.
+  Distinct from AVE-2026-00064 (attacker-supplied configuration that
+  auto-runs on project load; here the sandboxed agent is the writer and
+  the boundary is the sandbox-to-host handoff), and from 00054, 00050,
+  00084, 00071, 00075 and 00063, checked field by field. Docker-socket,
+  allow-default seatbelt and command-allowlist findings from the same
+  research were excluded as different mechanisms. researcher field
+  credits Pillar Research, Cymulate Research Labs and the researchers
+  the CVE-2026-26268 advisory names, not AVE. Id proposed via issue
+  #330 (MEDIUM, AIVSS 6.4).
 - AVE-2026-00087: Agentjacking — a monitoring/diagnostic integration's
   own publicly-writable ingest endpoint lets an attacker plant a
   crafted event formatted to visually mimic the integration's

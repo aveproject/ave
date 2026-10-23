@@ -148,6 +148,14 @@
     "owasp_asi": {
       "version": "2026",
       "read_date": "2026-08-23"
+    },
+    "mitre_atlas": {
+      "pin_status": "unknown",
+      "read_date": "2026-10-15"
+    },
+    "nist_ai_rmf": {
+      "pin_status": "unknown",
+      "read_date": "2026-10-15"
     }
   }
 }

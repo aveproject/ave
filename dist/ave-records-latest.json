@@ -162,6 +162,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -316,6 +320,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -460,6 +468,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -603,6 +615,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -762,6 +778,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -916,6 +936,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -1073,6 +1097,14 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -1231,6 +1263,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -1384,6 +1420,14 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -1546,6 +1590,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -1702,6 +1750,14 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -2004,6 +2060,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -3212,6 +3272,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -3360,6 +3424,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -3506,6 +3574,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -3650,6 +3722,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -3795,6 +3871,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -3940,6 +4020,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -4078,6 +4162,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -4221,6 +4309,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -4364,6 +4456,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -4510,6 +4606,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -4645,6 +4745,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -4785,6 +4889,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -4923,6 +5031,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -5058,6 +5170,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -5201,6 +5317,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -5341,6 +5461,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -5472,6 +5596,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -5611,6 +5739,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -5744,6 +5876,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -5879,6 +6015,14 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -6011,6 +6155,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -6149,6 +6297,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -6291,6 +6443,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -6430,6 +6586,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -6566,6 +6726,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -6699,6 +6863,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -6839,6 +7007,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -6980,6 +7152,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -7123,6 +7299,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -7269,6 +7449,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -7400,6 +7584,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -7542,6 +7730,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -7680,6 +7872,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -7814,6 +8010,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -7955,6 +8155,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -8089,6 +8293,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -8246,6 +8454,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -8395,6 +8607,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -8558,6 +8774,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -8706,6 +8926,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -9722,6 +9946,14 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -10040,6 +10272,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -10285,6 +10521,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -10821,6 +11061,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "mitre_atlas": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -10967,6 +11211,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -11098,6 +11346,10 @@
       "owasp_mcp": {
         "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
         "read_date": "2026-09-05"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -11229,6 +11481,10 @@
       "owasp_mcp": {
         "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
         "read_date": "2026-09-05"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -11361,6 +11617,10 @@
       "owasp_mcp": {
         "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
         "read_date": "2026-09-05"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
@@ -11787,6 +12047,343 @@
     "verification_basis": "artifact_reconstructed"
   },
   {
+    "ave_id": "AVE-2026-00088",
+    "schema_version": "1.1.0",
+    "status": "active",
+    "component_type": "agent",
+    "title": "Sandbox side-effect trust handoff: an agent-written workspace file is run by a trusted component outside the sandbox",
+    "attack_class": "Sandbox Escape - Side-Effect Trust Handoff",
+    "severity": "MEDIUM",
+    "description": "A coding agent runs inside a sandbox that lets it create and modify files in the workspace but not run arbitrary commands on the host. Content the agent processes (a README, a project note, a dependency's documentation) steers it into writing a file the sandbox allows: a hook definition, an editor task, Git metadata, the agent tool's own project configuration, or an interpreter inside a virtualenv. A more-privileged component outside the sandbox later reads that file and executes it as trusted configuration or code: the agent harness's own hook engine or startup configuration loader, the editor's task runner, or an editor extension that runs Git or discovers Python interpreters. That component does not distinguish agent-written files from user-authored ones and does not run what it consumes under the sandbox's execution policy, so the agent's side effect executes on the host with the user's privileges even though the agent process itself never left the sandbox. Demonstrated across vendors: Cursor ran a Stop hook from an agent-written .claude/settings.local.json at the end of the turn (CVE-2026-48124), ran Git hooks the agent planted in improperly protected .git settings (CVE-2026-26268), ran a core.fsmonitor helper the agent placed in a repository created with --separate-git-dir past a literal .git/config deny rule (patched in 3.0.0), and ran a virtualenv interpreter the agent replaced when the Python extension invoked it outside the sandbox (CVE-2026-73217). Claude Code loaded SessionStart hooks from a .claude/settings.json the sandbox let the agent create because the file was absent at startup (CVE-2026-25725). Antigravity's write tools let the agent drop a runOn: folderOpen task into .vscode/tasks.json, which VS Code's task runner executed on the host on the next open. Codex CLI let apply_patch create .codex/config.toml, whose notify command runs outside the sandbox, and Gemini CLI mounted the user's settings.json writable into its container. Distinct from AVE-2026-00064 (Zero-click code execution via project-load auto-run configuration): that record covers attacker-supplied project configuration that auto-runs on project load, a pre-consent boundary; here the writer is the sandboxed agent, the file usually does not exist in the repository at all, and the trigger is usually not project load, so confirming before project-load auto-run does not close it. Distinct from AVE-2026-00054 (Code-execution sandbox escape via JavaScript prototype-chain traversal): there a payload breaks the sandbox itself; here the sandbox works as designed and a component it does not govern does the executing. Distinct from AVE-2026-00050 (Parasitic Toolchain) and AVE-2026-00084 (Lifecycle hook trust decoupling): there hooks arrive through a component's own registration call or a plugin update; here they arrive as files the agent wrote into its workspace.",
+    "aivss_score": 6.4,
+    "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:P/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N",
+    "owasp_mcp": [
+      "MCP05"
+    ],
+    "owasp_asi": [
+      "ASI05"
+    ],
+    "mitre_atlas": [
+      "AML.T0105",
+      "AML.T0081"
+    ],
+    "nist_ai_rmf": [],
+    "behavioral_fingerprint": "A sandboxed agent, steered by content it processes, writes a file inside the workspace it is permitted to write (a hook definition, an editor task, Git metadata or hooks, the agent tool's own project configuration, or an interpreter in a virtualenv), and a more-privileged component outside the sandbox later loads and executes that file as trusted configuration or code, without distinguishing agent-written files from user-authored ones and without applying the sandbox's execution policy, so the agent's side effect runs on the host.",
+    "behavioral_vector": [
+      "sandbox-side-effect-escape",
+      "agent-written-executable-config",
+      "host-side-trust-handoff",
+      "deferred-execution"
+    ],
+    "provenance_vector": {
+      "entry_class": "model_generated",
+      "payload_surface": "a file the sandboxed agent writes inside its writable workspace (.claude/settings.json or settings.local.json hooks, .vscode/tasks.json, .git or separate-git-dir config and hooks, .codex/config.toml, a virtualenv's Python executable) that a host-side component outside the sandbox later loads and executes",
+      "escalation": "instruction_to_capability"
+    },
+    "security_boundary": "a sandboxed agent's permitted workspace writes to the host-side components that load and execute workspace configuration or code outside the sandbox",
+    "missing_control": "no provenance tracking or re-validation of agent-written files at the point a host-side component consumes them as executable configuration, and no requirement that those components run what they consume under the same sandbox policy and approval flow as the agent's own commands",
+    "vulnerability_rationale": {
+      "capability": "A sandboxed coding agent can create and modify files anywhere in its workspace, which is the ordinary work it is there to do.",
+      "vulnerability": "Host-side components outside the sandbox (the agent harness's hook engine or config loader, an editor's task runner, Git and language extensions) treat workspace files as trusted executable configuration without distinguishing those the agent wrote during a session, and run them outside the sandbox's execution policy.",
+      "impact": "Content the agent reads can turn a permitted file write into command execution on the host with the user's privileges, persisting across sessions, without the agent process ever leaving the sandbox or triggering an approval prompt."
+    },
+    "mitigation": {
+      "strategy": [
+        "provenance_label",
+        "require_human_approval",
+        "isolate_scope"
+      ],
+      "enforcement_point": "agent_framework",
+      "trifecta_control": "break_untrusted_content"
+    },
+    "example_patterns": [
+      "During a sandboxed agent session, the agent's terminal tool runs mkdir -p .claude and writes .claude/settings.local.json registering a Stop hook whose command runs a script it also wrote; at the end of the turn the editor's hook engine executes the script in the user's local context with no approval prompt.",
+      "Following instructions in a README, the agent writes .vscode/tasks.json with runOptions.runOn set to folderOpen and .vscode/settings.json with task.allowAutomaticTasks on; the next time the user opens the project, the editor's task runner executes the task on the host.",
+      "The agent runs git init --separate-git-dir=.git-alt in a probe folder, sets core.fsmonitor to a helper it wrote under .git-alt/hooks, and the editor's Git extension host later runs git status on the new repository outside the sandbox, executing the helper.",
+      "An apply_patch call creates .codex/config.toml in a workspace that had no .codex directory, setting notify to a shell command; the CLI runs the notify command outside the sandbox after every subsequent agent turn."
+    ],
+    "mutation_count": 0,
+    "detection_methodology": "1. Treat a defined set of workspace paths as host-executable configuration: agent-tool hook and settings files (.claude/settings.json, .claude/settings.local.json, .codex/config.toml, .gemini/settings.json), editor task and launch files (.vscode/tasks.json, .vscode/settings.json automatic-task keys), Git metadata including separate git directories (any directory a .git file points to, its config and hooks), and interpreter executables inside virtualenvs. 2. During an agent session, record every agent tool call that creates or modifies one of these paths, keyed to the session and the content that preceded it. 3. Flag any such write that declares an executable command (a hook command, a task command, core.fsmonitor, core.hooksPath, diff.external, notify, a replaced interpreter binary) unless the user explicitly asked for that change. 4. At runtime, correlate process executions spawned by host-side components (hook engines, task runners, Git and language extensions) with files the agent wrote in the same or a previous session, and alert when a host-side component executes agent-written content outside the sandbox.",
+    "indicators_of_compromise": [
+      "An agent tool call during a sandboxed session creates or modifies .claude/settings.json, .claude/settings.local.json, .codex/config.toml, .vscode/tasks.json or a Git config or hooks path, adding an executable command the user did not request.",
+      "A .git file in the workspace points to a non-standard git directory (for example .git-alt) whose config sets core.fsmonitor, core.hooksPath or diff.external to a script inside the workspace.",
+      "A virtualenv's bin/python is a shell script or wrapper rather than the interpreter binary or its symlink.",
+      "A host-side process (an editor's hook engine, task runner, or Git or Python extension host) executes a script that was written by the agent process earlier in the session."
+    ],
+    "remediation": "1. Treat workspace files that can trigger execution (hook and settings files, editor task files, Git config and hooks wherever the git directory lives, interpreter paths) as execution configuration, not project state, and deny agent writes to them by default, protecting the path abstraction rather than one literal filename, and protecting paths that do not yet exist. 2. Record the provenance of files the agent writes and require explicit, dedicated approval, naming the command and the file that supplied it, before any host-side component executes agent-written configuration. 3. Run hooks, tasks and helper execution under the same sandbox policy and approval flow as the agent's own shell commands. 4. Have editor extensions treat repositories and environments created during an agent session as untrusted until the user confirms them, for example by disabling fsmonitor and hooks during automatic Git discovery.",
+    "kill_switch_active": false,
+    "researcher": "Pillar Research (Eilon Cohen, Dan Lisichkin, Ariel Fogel); Cymulate Research Labs (Ilan Kalendarov, Ben Zamir, Elad Beber); Novee Security Research Team, Daniel Teixeira (Nvidia AI Red Team) and Philip Tsukerman",
+    "researcher_url": "https://www.pillar.security/blog/the-week-of-sandbox-escapes",
+    "published": "2026-10-18T00:00:00Z",
+    "last_updated": "2026-10-18T00:00:00Z",
+    "references": [
+      {
+        "tag": "Cursor GHSA-pc9j-3qc2-95wv (CVE-2026-48124)",
+        "text": "Cursor advisory, published 2026-05-21, High (CVSS 4.0 8.5), affected 2.4.37, patched 3.0.0: Cursor Desktop could execute workspace-defined Claude hook commands from .claude/settings.local.json without dedicated approval; 'A malicious workspace or agent-created file could configure hooks that run local commands in the user's context when an agent turn ends. This could allow sandbox escape'.",
+        "url": "https://github.com/cursor/cursor/security/advisories/GHSA-pc9j-3qc2-95wv"
+      },
+      {
+        "tag": "Anthropic GHSA-ff64-7w26-62rf (CVE-2026-25725)",
+        "text": "Claude Code advisory, published 2026-02-06, High (CVSS 4.0 7.7), CWE-501 and CWE-668, patched v2.1.2: bubblewrap did not protect .claude/settings.json when it was absent at startup, which 'allowed malicious code running inside the sandbox to create this file and inject persistent hooks (such as SessionStart commands) that would execute with host privileges when Claude Code was restarted'.",
+        "url": "https://github.com/anthropics/claude-code/security/advisories/GHSA-ff64-7w26-62rf"
+      },
+      {
+        "tag": "Cursor GHSA-8pcm-8jpx-hv8r (CVE-2026-26268)",
+        "text": "Cursor advisory, published 2026-02-13, High (CVSS 3.1 8.0), fixed in 2.5: 'A malicious agent (ie prompt injection) could write to improperly protected .git settings, including git hooks, which may cause out-of-sandbox RCE next time they are triggered. No user interaction was required as Git executes these commands automatically.' Credits Novee Security Research Team, Daniel Teixeira (Nvidia AI Red Team) and Philip Tsukerman. Earliest vendor-confirmed instance found.",
+        "url": "https://github.com/cursor/cursor/security/advisories/GHSA-8pcm-8jpx-hv8r"
+      },
+      {
+        "tag": "Cursor GHSA-p9g2-cr55-cw9c (CVE-2026-73217)",
+        "text": "Cursor advisory, published 2026-07-14, High, fixed in 3.1.2: an agent in Auto-Run Sandbox mode could replace a virtualenv's Python executable with a malicious wrapper, which the Microsoft Python extension then invoked outside the sandbox, executing arbitrary host commands.",
+        "url": "https://github.com/cursor/cursor/security/advisories/GHSA-p9g2-cr55-cw9c"
+      },
+      {
+        "tag": "Pillar Research -- The hook was already in the workspace",
+        "text": "Eilon Cohen, 2026-07-20. Write-up and PoC for CVE-2026-48124: the sandboxed agent created .claude/settings.local.json and a script, registered it as a Stop hook, and Cursor's hook engine executed it at the end of the turn; 'Cursor could be made to trust automation settings written inside the workspace by the agent itself.'",
+        "url": "https://www.pillar.security/blog/the-hook-was-already-in-the-workspace"
+      },
+      {
+        "tag": "Pillar Research -- Git directories do not have to be called .git",
+        "text": "Eilon Cohen, 2026-07-20. Cursor's seatbelt denied writes to the literal path .git/config; the agent used --separate-git-dir=.git-alt, wrote core.fsmonitor and a helper there, and Cursor's Git extension host ran git status outside the sandbox, executing the helper. Patched in Cursor 3.0.0.",
+        "url": "https://www.pillar.security/blog/git-directories-do-not-have-to-be-called-git"
+      },
+      {
+        "tag": "Pillar Research -- A time bomb in .vscode",
+        "text": "Dan Lisichkin, 2026-07-20. Under prompt injection Antigravity's agent wrote a runOn: folderOpen task to .vscode/tasks.json, which its write-tool blocklist did not cover, and VS Code's task runner executed it on the host on the next open. Google classified it 'Other valid security vulnerabilities' with a downgrade.",
+        "url": "https://www.pillar.security/blog/a-time-bomb-in-vscode-bypassing-antigravitys-secure-mode"
+      },
+      {
+        "tag": "Pillar Research -- The Week of Sandbox Escapes",
+        "text": "Eilon Cohen, Dan Lisichkin and Ariel Fogel, 2026-07-20. Series overview naming the shared pattern across Cursor, Codex, Gemini CLI and Antigravity: the agent 'only had to write something that a trusted component outside the sandbox would later run, load, scan, or treat as safe'.",
+        "url": "https://www.pillar.security/blog/the-week-of-sandbox-escapes"
+      },
+      {
+        "tag": "Cymulate Research Labs -- Configuration-Based Sandbox Escape",
+        "text": "Ilan Kalendarov, Ben Zamir and Elad Beber, disclosed 2026-04-07. Names the class 'Configuration-Based Sandbox Escape' (modifying trusted files or execution paths that are later processed outside the sandbox) and documents it in Claude Code (CVE-2026-25725), Gemini CLI (writable settings.json mount, unresolved at disclosure) and Codex CLI (apply_patch creating .codex/config.toml whose notify runs outside the sandbox, closed by OpenAI as informational).",
+        "url": "https://cymulate.com/blog/the-race-to-ship-ai-tools-left-security-behind-part-1-sandbox-escape/"
+      },
+      {
+        "tag": "AVE issue #330",
+        "text": "ave_id AVE-2026-00088 proposed with the field-by-field comparison against AVE-2026-00064, 00054, 00050, 00084, 00071, 00075 and 00063, the seven audit answers including Q6, and the findings from the same research excluded as different mechanisms.",
+        "url": "https://github.com/aveproject/ave/issues/330"
+      }
+    ],
+    "aivss": {
+      "cvss_base": 7.7,
+      "aarf": {
+        "autonomy": 1,
+        "tool_use": 1,
+        "multi_agent": 0,
+        "non_determinism": 0.5,
+        "self_modification": 0.5,
+        "dynamic_identity": 0.5,
+        "persistent_memory": 1,
+        "natural_language_input": 0,
+        "data_access": 1,
+        "external_dependencies": 1
+      },
+      "aars": 6.5,
+      "thm": 0.9,
+      "mitigation_factor": 1,
+      "aivss_score": 6.4,
+      "aivss_severity": "MEDIUM",
+      "spec_version": "0.8",
+      "notes": "Kept as a separate record from AVE-2026-00064 rather than folded into it as a mutation, per the record-growth discipline's mechanical test, after a field-by-field comparison: 00064's entry_class is registry_metadata and its payload_surface is attacker-supplied project configuration that auto-runs on project load (audit boundary: passive action to code execution, no confirmation); this record's writer is the sandboxed agent itself, the file usually does not exist in the repository at all, the boundary crossed is the sandbox-to-host handoff, and the trigger is usually not project load (turn end, git status, interpreter discovery, the next restart), so 00064's own fix (confirm before project-load auto-run) does not close it. The overlap is real for one vector of CVE-2026-48124, whose advisory names both 'a malicious workspace' and 'an agent-created file'; it is cited here for the agent-written PoC Pillar published. Also compared field by field with AVE-2026-00054 (runtime: the sandbox itself is broken by a prototype-chain payload; here the sandbox works as designed), AVE-2026-00050 (runtime: hook registration beyond a component manifest at session init; no manifest is involved here), AVE-2026-00084 (registry_metadata: a vetted plugin's update rebinds a hook; here the change is the agent's own write), AVE-2026-00071 (registry_metadata: daemon redirect to remote infrastructure), AVE-2026-00075 (skill_file: bytecode diverging from reviewed source) and AVE-2026-00063 (an approval flag in config; overlaps only where an agent-written config also sets one, as in Cymulate's Codex approval_policy, and the executing step there is still notify run outside the sandbox). entry_class model_generated reused rather than forked: as in AVE-2026-00056, the payload is something the agent itself produces (a file it writes), not something it reads. Q6 (replace the LLM with a deterministic program with the same workspace write access): the flaw partly survives, since any sandboxed process whose output a privileged consumer trusts can escape the same way. What remains agentic: the sandbox exists to contain a model steered by untrusted content, and the attacker needs only text the model reads rather than code execution inside the sandbox, because writing arbitrary workspace files is the agent's normal capability; the decision to write comes from model reasoning over injected content (the CVE-2026-26268 advisory's own words: 'A malicious agent (ie prompt injection)'); and in most instances the trusted consumer is the agent harness itself (hooks, notify, startup config) treating its own agent's writes as the user's configuration. Classified A rather than E for that reason, with the partial survival stated. autonomy scored 1: once the file is written, the trusted component executes it on its own trigger with no further attacker interaction and no approval prompt. tool_use scored 1: the mechanism is the agent's own file-write or shell tool producing the artifact. non_determinism scored 0.5: exploitation depends on the model following injected content, which varies run to run (OpenAI's own closure of Cymulate's Codex report cited prompt injection). self_modification scored 0.5: in the hook, notify and settings instances the agent writes its own harness's configuration and so changes the agent runtime's later behavior; the Git, editor-task and virtualenv instances change a different component, so not 1. dynamic_identity scored 0.5: the consumer extends user-authored trust to an agent-written file, a trust-anchor confusion over authorship, scored as AVE-2026-00084 scored inherited vetting trust. persistent_memory scored 1: the written file stays on disk and re-executes on every later trigger (the CVE-2026-25725 advisory calls them 'persistent hooks'; Cymulate's Gemini settings persist across directories). natural_language_input scored 0: the delivery is natural language, but the exploit step at the boundary is structural (a configuration file executed by a component), which the scoring reference scores 0. data_access scored 1: execution runs as the user on the host, with the user's keys, tokens and files. external_dependencies scored 1: severity depends entirely on which host-side consumer trusts which file (a hook engine, a task runner, a Python or Git extension). multi_agent scored 0. cvss_base_vector follows the CVE-2026-25725 advisory's own vector: network-borne delivery through content the agent reads (AV:N), low complexity (AC:L), a precondition on sandbox or auto-run mode and on the agent following the content (AT:P), no privileges (PR:N), passive user interaction such as continuing the session or restarting the tool (UI:P), and full host impact (VC:H/VI:H/VA:H). The Cursor advisory scored its instance higher (8.5, AV:L/AT:N) and CVE-2026-26268 was scored 8.0 under CVSS 3.1; 7.7 is the most conservative vendor reading of the same handoff. thm set to 0.90 (PoC exists, not exploited in the wild): every instance cited has a working PoC and most have a vendor-confirmed fix, but no in-the-wild exploitation is reported. mitigation_factor set to 1: fixes are per path and per product (Antigravity's blocklist missed tasks.json, Cursor's rule missed .git-alt), Google downgraded one instance, OpenAI closed another as informational and Gemini CLI's was unresolved at disclosure; no ecosystem-wide standard mitigation exists. MEDIUM despite host code execution, honestly, as with AVE-2026-00064: a narrow handoff mechanism with no multi-agent component. owasp_mcp mapped to MCP05 (Command Injection & Execution) after reading the category text at commit 165fe0f78ef104459237b4a8e0f6e78db9b02391: its description covers instructions hidden in context causing the agent to generate malicious commands, and its checklist names 'No runtime sandboxing isolates tool execution from the host system' and 'Execution occurs across different contexts (e.g., generating commands on one server that execute on another without re-validation)'. MCP02 was read and rejected (it is permission scope drifting over time). owasp_asi mapped to ASI05 (Unexpected Code Execution) after reading the 2026 document: it covers execution 'that leads to host or container compromise, persistence, or sandbox escape', and its Example 4 is an agent-generated object passed to another component and executed without validation; the ASI02 text routes code-execution outcomes to ASI05, and ASI03 (identity and delegation abuse) was read and rejected. mitre_atlas mapped to AML.T0105 (Escape to Host) and AML.T0081 (Modify AI Agent Configuration) after reading both in the live ATLAS.yaml (v5.6.0): T0105's own text names 'modifying an AI Agent's configuration to disable safety features or user confirmations could allow the adversary to invoke tools to be run on host environments rather than in the sandbox'; T0081 covers the subset where the written file is the agent harness's own configuration (Claude Code and Cursor hook settings, Codex config.toml, Gemini settings.json), not the Git, editor-task or virtualenv instances. AML.T0101, suggested by a third-party list, is 'Data Destruction via AI Agent Tool Invocation' in the live file and does not apply. nist_ai_rmf checked, no fit: NIST AI 100-1's nearest subcategory, MEASURE 2.7 (AI system security and resilience evaluated and documented), would apply to every security record equally, and the document names nothing about sandboxing or containment."
+    },
+    "evidence_kind_default": "behavioral_pattern",
+    "detection_stage": "runtime_observed",
+    "detection_layer": "runtime",
+    "confidence_baseline": 0.6,
+    "evidence_basis_engines": [
+      "pattern",
+      "sandbox"
+    ],
+    "derivable_into": [
+      "remote-control-chain"
+    ],
+    "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "source_url": "https://github.com/OWASP/www-project-mcp-top-10/blob/165fe0f78ef104459237b4a8e0f6e78db9b02391/2025/MCP05-2025%E2%80%93Command-Injection%26Execution.md",
+        "read_date": "2026-10-18"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-10-18",
+        "source_url": "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/"
+      },
+      "mitre_atlas": {
+        "version": "5.6.0",
+        "read_date": "2026-10-18",
+        "source_url": "https://raw.githubusercontent.com/mitre-atlas/atlas-data/main/dist/ATLAS.yaml"
+      }
+    },
+    "verification_basis": "artifact_reconstructed"
+  },
+  {
+    "ave_id": "AVE-2026-00089",
+    "schema_version": "1.1.0",
+    "status": "active",
+    "component_type": "agent",
+    "title": "Model-supplied sandbox boundary: a tool parameter the model sets defines or widens the sandbox's writable scope",
+    "attack_class": "Sandbox Escape - Model-Supplied Policy Boundary",
+    "severity": "MEDIUM",
+    "description": "A coding agent runs terminal commands inside a sandbox whose writable scope is meant to be the workspace the user started the session in. The harness, however, computes that scope from a value the model supplies in the tool call itself, such as the command's working directory, rather than from the session's own root. Content the model reads (an MCP tool response, a web search result, a README) steers it to set that value to a location outside the workspace, and the sandbox grants write access there. The agent can then write the sandbox's own helper binary, the user's shell startup files or launch agents without approval, so later commands run unsandboxed. The model does not break the boundary; it sets it. Demonstrated in two products. Codex CLI 0.2.0 to 0.38.0 could treat a model-generated cwd as the sandbox's writable root, including paths outside the folder where the user started the session (CVE-2025-59532); the fix separates the command's working directory from the directory the sandbox policy is computed from. Cursor before 3.0 added the run_terminal_cmd tool's optional working_directory parameter to the sandbox's allowed write list whenever the model set a non-default value (CVE-2026-50548, part of Cato AI Labs' DuneSlide research), and the proof of concept overwrote Cursor's cursorsandbox helper. Distinct from AVE-2026-00053 (Path traversal via unsanitized path parameter in an MCP file handler): there a handler fails to contain a caller-supplied path against its own fixed scope; here the value is honored exactly and the policy layer derives the boundary from it. Distinct from AVE-2026-00054 (Code-execution sandbox escape via JavaScript prototype-chain traversal): there a payload breaks the runtime's isolation; here the isolation works as configured, and the configuration came from the model. Distinct from AVE-2026-00088 (Sandbox side-effect trust handoff): there the boundary stays intact and a host component later runs files the agent wrote inside it; here the boundary itself moves. Path-validation failures against a fixed boundary, such as a symlink canonicalization fallback (CVE-2026-50549) or a validate-then-use race on a model-supplied path (CVE-2026-34452), are related but not instances of this class.",
+    "aivss_score": 6.6,
+    "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:L/UI:P/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N",
+    "owasp_mcp": [
+      "MCP05"
+    ],
+    "owasp_asi": [
+      "ASI05"
+    ],
+    "mitre_atlas": [
+      "AML.T0105"
+    ],
+    "nist_ai_rmf": [],
+    "behavioral_fingerprint": "A coding agent's sandbox computes its writable scope from a value the model supplies in a tool call (a terminal command's working directory or an equivalent path parameter) instead of from the session's user-established root, so a model steered by content it reads sets that value to a location outside the workspace and the sandbox grants write access there, letting the agent overwrite files such as the sandbox's own helper or the user's shell startup files without approval.",
+    "behavioral_vector": [
+      "model-supplied-policy-boundary",
+      "sandbox-scope-widening",
+      "tool-parameter-trust",
+      "sandbox-escape"
+    ],
+    "provenance_vector": {
+      "entry_class": "model_generated",
+      "payload_surface": "a tool-call parameter the model generates (a terminal command's working_directory or cwd) that the harness uses to compute the sandbox's writable roots",
+      "escalation": "instruction_to_capability"
+    },
+    "security_boundary": "the user-established session workspace to the sandbox's writable scope, when that scope is computed from a value chosen by the model the sandbox exists to constrain",
+    "missing_control": "no anchoring of the sandbox policy's writable roots to user-established session configuration; model-supplied tool-call parameters are not treated as untrusted input to the policy layer",
+    "vulnerability_rationale": {
+      "capability": "A coding agent runs terminal commands in a sandbox and can choose each command's working directory as a tool-call parameter.",
+      "vulnerability": "The harness computes the sandbox's writable scope from that model-supplied parameter instead of from the session's own root, so the party the sandbox constrains also chooses where the sandbox allows it to write.",
+      "impact": "Content the model reads can widen the sandbox to any location the process can write, letting the agent overwrite the sandbox's own helper or shell startup files without approval and run later commands unsandboxed on the host with the user's privileges."
+    },
+    "mitigation": {
+      "strategy": [
+        "isolate_scope",
+        "validate_input",
+        "deny_by_default"
+      ],
+      "enforcement_point": "agent_framework",
+      "trifecta_control": "break_untrusted_content"
+    },
+    "example_patterns": [
+      "A sandboxed run_terminal_cmd call in which the model sets working_directory to /Applications/Cursor.app/Contents/Resources/app/resources/helpers, after which a write to the cursorsandbox helper succeeds without an approval prompt.",
+      "A shell tool call whose cwd parameter is the user's home directory although the session was started in ~/src/project, after which the command appends to ~/.zshrc inside a sandbox that permits it.",
+      "A tool call that sets the working directory to ~/Library/LaunchAgents and writes a plist there, persisting a command outside the sandbox."
+    ],
+    "mutation_count": 0,
+    "detection_methodology": "1. For each sandboxed command an agent runs, record the session's user-established root and the working directory or path parameter the model supplied in the tool call. 2. Flag any tool call whose working directory, after canonicalization, resolves outside the session root, and any sandbox profile or policy built for that call whose writable roots include a path outside the session root and the declared temp directories. 3. Treat writes during a session to the agent tool's own sandbox helper or installation directory, shell startup files (~/.zshrc, ~/.zshenv, ~/.bashrc, ~/.profile) or launch-agent directories as high-signal indicators. 4. In harness code review, check whether the function that builds the sandbox's writable roots takes the command's working directory or the session's root as its input; the two must be separate values.",
+    "indicators_of_compromise": [
+      "A tool call from the model sets working_directory or cwd to a path outside the session's workspace, such as the user's home directory, an application bundle or ~/Library/LaunchAgents.",
+      "The agent tool's own sandbox helper binary (for example cursorsandbox) is modified during or after an agent session.",
+      "Shell startup files (~/.zshrc, ~/.zshenv, ~/.bashrc) or launch-agent plists are modified by a process the agent's sandbox launched.",
+      "A sandbox profile generated for an agent command lists a writable root that is neither the session root nor a declared temp directory."
+    ],
+    "remediation": "1. Compute the sandbox's writable roots only from user-established configuration (the directory the session was started in and explicitly configured additional roots), never from a tool-call parameter the model supplies. 2. Keep the command's working directory and the sandbox policy's root as separate values; a working directory outside the policy root should run with no added write access, or be refused. 3. Canonicalize any model-supplied path before comparing it with the policy root, and fail closed when canonicalization fails. 4. Protect the agent tool's own installation and sandbox helper, and shell startup and launch-agent paths, from writes by sandboxed commands regardless of the policy computed for a given call.",
+    "kill_switch_active": false,
+    "researcher": "Cato AI Labs; Tzanko Matev (Codetracer)",
+    "researcher_url": "https://www.catonetworks.com/blog/duneslide-two-critical-rce-vulnerabilities/",
+    "published": "2026-10-19T00:00:00Z",
+    "last_updated": "2026-10-19T00:00:00Z",
+    "references": [
+      {
+        "tag": "OpenAI GHSA-w5fx-fh39-j5rw (CVE-2025-59532)",
+        "text": "Codex CLI advisory, published 2025-09-19, High (CVSS 4.0 8.6), affected 0.2.0 to 0.38.0, fixed 0.39.0 (IDE extension 0.4.12): 'Codex CLI could treat a model-generated cwd as the sandbox's writable root, including paths outside of the folder where the user started their session.' The fix bases the sandbox policy boundary on where the user started the session, 'not the one generated by the model'. Credits Tzanko Matev (Codetracer).",
+        "url": "https://github.com/openai/codex/security/advisories/GHSA-w5fx-fh39-j5rw"
+      },
+      {
+        "tag": "Codex fix commit 8595237",
+        "text": "'fix: ensure cwd for conversation and sandbox are separate concerns' (#3874). Before it, the command's cwd was passed both as the spawned process's working directory and into get_writable_roots_with_cwd in the seatbelt and landlock sandboxes; after it, the policy uses the session's turn_context.cwd and the model's value only sets the command's working directory.",
+        "url": "https://github.com/openai/codex/commit/8595237505a1e0faabc2af3db805b66ce3ae182d"
+      },
+      {
+        "tag": "Cursor GHSA-3p48-7v9f-v5cw (CVE-2026-50548)",
+        "text": "Cursor advisory, published 2026-06-05, Critical, fixed in 3.0: 'the sandbox grants write access to the command's working directory. A flaw was identified in how the agent could modify the working_directory parameter, which could cause the sandbox to include writable paths outside the intended workspace.' Credits Cato AI Labs.",
+        "url": "https://github.com/cursor/cursor/security/advisories/GHSA-3p48-7v9f-v5cw"
+      },
+      {
+        "tag": "Cato AI Labs -- DuneSlide",
+        "text": "Itay Ravia, 2026-07-01. 'The first vulnerability stems from how the sandbox constructs its security boundaries based on tool parameters': when the model assigns a non-default working_directory to run_terminal_cmd, 'that path is blindly added to the sandbox's allowed write list'; the PoC overwrites the cursorsandbox helper. Includes the disclosure timeline, in which Cursor first rejected the report as outside its threat model and reopened it after escalation.",
+        "url": "https://www.catonetworks.com/blog/duneslide-two-critical-rce-vulnerabilities/"
+      },
+      {
+        "tag": "Pillar Research -- GitPwned (corroboration)",
+        "text": "Ariel Fogel, 2026-07-20. Describes CVE-2025-59532 in its conclusion: 'the CLI used a model-generated working directory to define its own security boundaries, letting the model specify where it was allowed to write.'",
+        "url": "https://www.pillar.security/blog/gitpwned-allowlist-to-rce"
+      },
+      {
+        "tag": "Cursor GHSA-3v8f-48vw-3mjx (CVE-2026-50549), related",
+        "text": "Cursor advisory, published 2026-06-05, Critical, fixed in 3.0: when canonicalization of a symlink target fails, Cursor 'falls back to the original path and writes without approval'. Cited as a related path-validation failure against a fixed boundary, not an instance of this class.",
+        "url": "https://github.com/cursor/cursor/security/advisories/GHSA-3v8f-48vw-3mjx"
+      },
+      {
+        "tag": "Anthropic SDK GHSA-w828-4qhx-vxx3 (CVE-2026-34452), related",
+        "text": "Anthropic Python SDK advisory, published 2026-03-31, Medium (CVSS 4.0 5.8), CWE-59 and CWE-367, fixed 0.87.0: the async memory tool validated that model-supplied paths resolved inside the memory directory, then used the unresolved path, a validate-then-use race. Cited as a related path-validation failure, not an instance of this class.",
+        "url": "https://github.com/anthropics/anthropic-sdk-python/security/advisories/GHSA-w828-4qhx-vxx3"
+      },
+      {
+        "tag": "AVE issue #335",
+        "text": "ave_id AVE-2026-00089 proposed with the field-by-field comparison against AVE-2026-00053, 00054, 00052, 00011, 00068, 00048 and 00088, the seven audit answers including Q6 and its strongest counterargument, and the reasoning for keeping CVE-2026-50549 and CVE-2026-34452 out of the fingerprint.",
+        "url": "https://github.com/aveproject/ave/issues/335"
+      }
+    ],
+    "aivss": {
+      "cvss_base": 8.6,
+      "aarf": {
+        "autonomy": 1,
+        "tool_use": 1,
+        "multi_agent": 0,
+        "non_determinism": 0.5,
+        "self_modification": 0.5,
+        "dynamic_identity": 0.5,
+        "persistent_memory": 0.5,
+        "natural_language_input": 0,
+        "data_access": 1,
+        "external_dependencies": 1
+      },
+      "aars": 6,
+      "thm": 0.9,
+      "mitigation_factor": 1,
+      "aivss_score": 6.6,
+      "aivss_severity": "MEDIUM",
+      "spec_version": "0.8",
+      "notes": "Kept as a new record rather than a mutation of an existing one, per the record-growth discipline's mechanical test, after a field-by-field comparison: AVE-2026-00053 (content: an MCP file handler fails to canonicalize a caller-supplied path against its own fixed scope, an implementation bug classed E in the audit) differs because here the parameter's value is honored exactly and the policy layer derives the boundary from it; AVE-2026-00054 (runtime: a payload breaks the language runtime's isolation) differs because here the isolation works as configured and the configuration came from the model; AVE-2026-00052 (an unsanitized parameter reaching a shell) involves no sandbox policy; AVE-2026-00011 (content: injected directives naming a tool call and its parameters) is this class's delivery step, not its vulnerability, which is the harness's sandbox policy trusting the parameter; AVE-2026-00068 names working directory only as shared shell state between commands; AVE-2026-00048 is an unset delegation scope; AVE-2026-00088 (sandbox side-effect trust handoff, proposed in the same pass) keeps the boundary intact and abuses what a host component later does with files written inside it, whereas here the boundary itself moves. Related but kept out of the fingerprint: CVE-2026-50549 (Cursor falls back to the in-workspace symlink path when canonicalization fails and writes without approval) and CVE-2026-34452 (the Anthropic Python SDK's async memory tool validated a model-supplied path, then used the unresolved path, a validate-then-use race exploitable by a local attacker able to write to the memory directory). In both the boundary is fixed and a path check against it fails, which is a path-validation failure rather than a boundary the model sets; they are cited as neighbors, not instances. entry_class model_generated reused, as in AVE-2026-00056 and AVE-2026-00088: the payload is a value the model itself produces in a tool call. Q6 (replace the LLM with a deterministic program): the flaw, in the form that matters, does not survive. A conventional program does not take its sandbox boundary from the output of the component the sandbox exists to contain; Cato AI Labs' own write-up: 'Traditionally, a remote attacker cannot control the working directory of a sandboxed operation.' Strongest counterargument: this is an ordinary input-validation bug (the Advisory Database files CVE-2025-59532 as CWE-20), and a deterministic sandbox that derived its root from an untrusted request would have the same flaw. Answer: the structural error can exist without a model, but the input only becomes attacker-reachable because a model generates it, so the constrained party, a model steerable by any content it reads, is the party choosing the boundary; both vendor fixes confirm the framing by separating model-supplied execution parameters from user-established policy (Codex's fix commit splits command_cwd from sandbox_policy_cwd). Classified A rather than E. autonomy scored 1: once the model sets the parameter, the sandbox grants the scope and writes proceed with no approval in auto-run mode. tool_use scored 1: the mechanism is a tool-call parameter. non_determinism scored 0.5: exploitation depends on the model following injected content (Cursor initially rejected the report on threat-model grounds about MCP misuse, not reproducibility, but model compliance still varies). self_modification scored 0.5: the demonstrated chain overwrites the agent's own sandbox helper so later commands run unsandboxed, a change to the agent runtime, though the class itself is the widened scope, not the helper overwrite. dynamic_identity scored 0.5: the policy layer gives a model-supplied value the authority of the user-established session root, a trust-anchor confusion over who sets policy, scored as AVE-2026-00088 and AVE-2026-00084 scored theirs. persistent_memory scored 0.5: the escape happens within a session, but its demonstrated payloads persist (an overwritten sandbox helper, ~/.zshrc, ~/Library/LaunchAgents). natural_language_input scored 0: the delivery is natural language but the boundary step is a structured parameter value, which the scoring reference scores 0. data_access scored 1: arbitrary writes anywhere the process can write, leading to host command execution. external_dependencies scored 1: severity depends entirely on whether a specific harness derives its policy from the parameter (Codex CLI before 0.39.0, Cursor before 3.0). multi_agent scored 0. cvss_base_vector is the Codex advisory's own vector for CVE-2025-59532, the most conservative vendor reading (Cato scores both DuneSlide findings CVSS 9.8 under 3.1, Cursor rates CVE-2026-50548 Critical): network-borne injected content (AV:N), low complexity (AC:L), no attack-time precondition beyond the default auto-run sandbox (AT:N), low privileges as the vendor scored it (PR:L), passive user interaction (an innocuous prompt, UI:P), full impact (VC:H/VI:H/VA:H). thm set to 0.90 (PoC exists, not exploited in the wild): both instances have working PoCs and vendor fixes, with no reported in-the-wild exploitation. mitigation_factor set to 1: the fixes are per product, Cursor first rejected the report as outside its threat model, and Cato states it is disclosing further issues in other coding agents; no ecosystem-wide standard mitigation exists. owasp_mcp mapped to MCP05 (Command Injection & Execution) after reading the category text at commit 165fe0f78ef104459237b4a8e0f6e78db9b02391: its checklist names 'Agent outputs are not constrained to allowlists of permitted commands, arguments, or file paths' and 'No runtime sandboxing isolates tool execution from the host system'. MCP02 (permission scope drift over time) and MCP07 (authentication and authorization between MCP parties) were read and rejected. owasp_asi mapped to ASI05 (Unexpected Code Execution) after reading the 2026 document: it names execution leading to 'host or container compromise, persistence, or sandbox escape'. ASI02 was read and rejected by its own scope: it covers an agent that 'operates within its authorized privileges', and it routes code-execution outcomes to ASI05. mitre_atlas mapped to AML.T0105 (Escape to Host) after reading it in the live ATLAS.yaml (v5.6.0): 'There are many ways an adversary may escape from a container or sandbox environment via AI Systems.' AML.T0053 (AI Agent Tool Invocation) was considered and left out: it describes the delivery step common to any tool-using record, not the policy flaw. nist_ai_rmf checked, no fit: NIST AI 100-1's nearest subcategory, MEASURE 2.7, is generic security evaluation."
+    },
+    "evidence_kind_default": "behavioral_pattern",
+    "detection_stage": "runtime_observed",
+    "detection_layer": "runtime",
+    "confidence_baseline": 0.65,
+    "evidence_basis_engines": [
+      "pattern",
+      "sandbox"
+    ],
+    "derivable_into": [
+      "remote-control-chain",
+      "privilege-escalation-chain"
+    ],
+    "framework_sources": {
+      "owasp_mcp": {
+        "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
+        "source_url": "https://github.com/OWASP/www-project-mcp-top-10/blob/165fe0f78ef104459237b4a8e0f6e78db9b02391/2025/MCP05-2025%E2%80%93Command-Injection%26Execution.md",
+        "read_date": "2026-10-19"
+      },
+      "owasp_asi": {
+        "version": "2026",
+        "read_date": "2026-10-19",
+        "source_url": "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/"
+      },
+      "mitre_atlas": {
+        "version": "5.6.0",
+        "read_date": "2026-10-19",
+        "source_url": "https://raw.githubusercontent.com/mitre-atlas/atlas-data/main/dist/ATLAS.yaml"
+      }
+    },
+    "verification_basis": "artifact_reconstructed"
+  },
+  {
     "ave_id": "AVE-2026-00014",
     "schema_version": "1.1.0",
     "component_type": "skill",
@@ -11919,6 +12516,10 @@
       "owasp_asi": {
         "version": "2026",
         "read_date": "2026-08-23"
+      },
+      "nist_ai_rmf": {
+        "pin_status": "unknown",
+        "read_date": "2026-10-15"
       }
     }
   },
