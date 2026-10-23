@@ -119,6 +119,25 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   new record.
 
 ### Added
+- AVE-2026-00088: Sandbox side-effect trust handoff. A sandboxed
+  coding agent, steered by content it reads, writes a file the sandbox
+  allows (a hook definition, an editor task, Git metadata or hooks, the
+  agent tool's own project configuration, a virtualenv interpreter),
+  and a more-privileged component outside the sandbox later executes
+  it as trusted configuration, so the agent's side effect runs on the
+  host. Sourced from the vendor advisories for CVE-2026-48124,
+  CVE-2026-25725, CVE-2026-26268 and CVE-2026-73217, Pillar Research's
+  "The Week of Sandbox Escapes" series and Cymulate Research Labs'
+  "Configuration-Based Sandbox Escape" research, each read directly.
+  Distinct from AVE-2026-00064 (attacker-supplied configuration that
+  auto-runs on project load; here the sandboxed agent is the writer and
+  the boundary is the sandbox-to-host handoff), and from 00054, 00050,
+  00084, 00071, 00075 and 00063, checked field by field. Docker-socket,
+  allow-default seatbelt and command-allowlist findings from the same
+  research were excluded as different mechanisms. researcher field
+  credits Pillar Research, Cymulate Research Labs and the researchers
+  the CVE-2026-26268 advisory names, not AVE. Id proposed via issue
+  #330 (MEDIUM, AIVSS 6.4).
 - AVE-2026-00087: Agentjacking — a monitoring/diagnostic integration's
   own publicly-writable ingest endpoint lets an attacker plant a
   crafted event formatted to visually mimic the integration's
