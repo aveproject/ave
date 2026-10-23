@@ -13,12 +13,12 @@
 #       predate this field are not retroactively required to carry it --
 #       determining what each was actually mapped against is real,
 #       per-record judgment and a separate backfill task (issue #245).
-#       This check therefore defaults to --only-scoped use gating new
-#       submissions; corpus-wide CI enforcement is deliberately deferred
-#       until after the backfill, following the volume caution raised on
-#       check_confidence_signal.py in #242 (one line to nine on 80
-#       records; this field is unset on all 80, so an un-scoped corpus-wide
-#       CI step today would immediately be noisier than that).
+#       That backfill completed 2026-10-15: every record missing a pin
+#       now carries a real version/commit where one was citable, or an
+#       honest "unknown" declaration where it was not. CI now runs
+#       --strict corpus-wide (.github/workflows/tests.yml); the
+#       --only-scoped form below stays useful for checking a specific
+#       record before pushing.
 import argparse
 import json
 import sys
