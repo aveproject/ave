@@ -56,6 +56,9 @@ jobs:
       - name: Mutation-ThM trail soft warning
         run: python scripts/check_mutation_thm_trail.py
 
+      - name: framework_sources present for every mapped framework (hard failure)
+        run: python scripts/check_framework_sources.py --strict
+
       - name: docs/terms.md matches the live schema (hard failure)
         run: python scripts/check_terms_sync.py
 
