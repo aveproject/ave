@@ -145,8 +145,12 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   aff6e0187d05fbb01aa26bd4b4035aebcbc81be0, and the enum description cites
   that commit; AVE's copy stands on its own. A record with no `revisions`
   array makes no claim about its own history. `validate_records.py` also
-  refuses entries out of date order and a `last_updated` older than the
-  latest revision. First use: AVE-2026-00074, whose `evidence_vantage`
+  refuses entries out of date order, a `last_updated` older than the
+  latest revision, an entry whose `field` is not a top-level record field,
+  an entry whose `from` equals its `to` (a no-op), an entry whose `from`
+  does not match the previous entry for the same field (a broken chain),
+  and a latest `to` that differs from the record's current value for that
+  field. First use: AVE-2026-00074, whose `evidence_vantage`
   stamp in #299 moved its derived `verification_basis` from
   `artifact_reconstructed` to `substrate_reconstructed`. Its `last_updated`
   moves to the date of this edit, since #299 left it at 2026-08-07. The
