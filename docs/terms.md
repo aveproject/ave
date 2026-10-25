@@ -258,6 +258,10 @@ Name of the researcher or team who authored this record. REQUIRED once a record 
 
 URL for the researcher or team. Optional.
 
+### `revisions`
+
+Optional, append-only history of edits that changed a value a consumer may gate on, such as a derived verification_basis. Entries are appended in date order and never rewritten or removed; validate_records.py checks the order, that each field is a top-level record field, that each change is not a no-op, that each from matches the previous entry for that field, and that the latest to matches the record, but it cannot see a rewritten first date, a deleted entry or a removed array, since those need the previous version of the record. Only top-level fields can be named, so a change to a nested value such as aivss.thm records the whole aivss object. A record with no revisions array makes no claim about its own history; a consumer must not read its absence as never revised. Design: issue #317, agreed on #219.
+
 ### `schema_version`
 
 AVE schema version this record was authored against, e.g. 1.1.0.
