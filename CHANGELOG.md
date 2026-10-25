@@ -9,6 +9,13 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 ## [Unreleased]
 
 ### Changed
+- `README.md`: `AVE-2026-00044`'s record index row brought back in line
+  with `records/`. #294 moved the record from 6.1 MEDIUM to 8.1 HIGH, and
+  the README kept the old values. New `tests/test_readme_sync.py` checks
+  the record index, the Stats block, the records badge and the index
+  summary against `records/` (draft records, which need not carry a score
+  yet, are left out), with a fixture test for each refusal it can make.
+  `CONTRIBUTING.md` now says when a record change needs a README update.
 - AVE-2026-00063 and AVE-2026-00064: sourcing and `researcher`
   correction (#339). Both cited only the cfgaudit crosswalk gap that
   surfaced them and their own registry entry, which does not meet the
