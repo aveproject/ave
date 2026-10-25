@@ -118,6 +118,10 @@ Key rules:
   credit.
 - `severity` and `aivss.aivss_score` must agree:
   CRITICAL >= 9.0 · HIGH 7.0-8.9 · MEDIUM 4.0-6.9 · LOW < 4.0.
+- Add the record's row to the README record index and update the Stats
+  total and band count, the records badge, the index summary and the
+  record count in the "Independent validation" paragraph;
+  `tests/test_readme_sync.py` checks all but the last against `records/`.
 
 ### AIVSS v0.8 calculation
 
@@ -269,6 +273,10 @@ Target `develop` for the PR, same as new records.
 AIVSS score changes require written rationale for each AARF factor that
 changes. Framework mapping additions (`owasp_asi`, `mitre_atlas`)
 are welcome without prior issue if the mapping is clear.
+
+If the change moves `aivss.aivss_score` or `severity`, update the record's
+row in the README record index, and the Stats band counts when the
+severity band changes; `tests/test_readme_sync.py` fails until they agree.
 
 `ave_id` values are immutable. Never renumber a record. If a record is wrong
 or obsolete, set `status: "deprecated"` — never delete.
