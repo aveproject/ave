@@ -2547,7 +2547,7 @@
     "researcher": "AIR Security",
     "researcher_url": "https://www.air.security",
     "published": "2026-08-07T00:00:00Z",
-    "last_updated": "2026-08-07T00:00:00Z",
+    "last_updated": "2026-10-13T00:00:00Z",
     "references": [
       {
         "tag": "repo-forensics dead-anchor scanner",
@@ -2613,7 +2613,17 @@
         "version": "2026",
         "read_date": "2026-08-23"
       }
-    }
+    },
+    "revisions": [
+      {
+        "date": "2026-09-28",
+        "field": "evidence_vantage",
+        "from": null,
+        "to": "substrate",
+        "reason_code": "declaration_added",
+        "reason": "Stamped in #299. The derived verification_basis moved from artifact_reconstructed to substrate_reconstructed as a result."
+      }
+    ]
   },
   {
     "ave_id": "AVE-2026-00084",

@@ -3,174 +3,1956 @@
   "source": {
     "tool": "SkillSpector",
     "vendor": "NVIDIA",
-    "version": "2.0.0",
+    "version": "2.13.1",
+    "tag": "v2.13.1",
     "url": "https://github.com/NVIDIA/SkillSpector",
-    "categories": 16,
-    "patterns": 64,
-    "license": "Apache-2.0"
+    "license": "Apache-2.0",
+    "tool_class": "static skill and MCP scanner with an optional LLM stage",
+    "commit": "f3b25697d76256998ca9d42c198d256258d4c035",
+    "rules_total": 78,
+    "rules_mapped": 58,
+    "categories": 18,
+    "rules_outside_category_map": 37,
+    "readme_claim": {
+      "patterns": 71,
+      "categories": 17,
+      "table_rows": 73
+    },
+    "pin_note": "Pinned to the newest release tag, not the default branch: at the time of reading, the default branch HEAD (d7338f58200a9ae2a24810cee08911ab68b107a7) still reported version 2.12.0.",
+    "previous_revision": {
+      "version": "2.0.0",
+      "patterns": 64,
+      "categories": 16,
+      "basis": "documentation"
+    }
   },
   "target": {
     "standard": "AVE",
     "version": "1.1.0",
     "url": "https://aveproject.org",
-    "record_count": 56,
-    "commit": "38b6cf0c384eec42a1370f080ba976de6cae2700"
+    "record_count": 89,
+    "static_record_count": 61,
+    "commit": "a3661ae1541b6542a7b5094500d62efcaa54c152"
   },
-  "generated": "2026-07-12",
-  "note": "Crosswalk from SkillSpector's 16 scanner categories to AVE behavioral class ids. Rule-level mappings below were last checked against SkillSpector 2.0.0's category/pattern documentation on 2026-06-21 and reflect the 51-record set current at that time. AVE-2026-00052 through 00056 (added 2026-07-10) are not yet reflected in the mappings or gaps below -- that requires re-checking SkillSpector's actual category catalog, which this repo does not have live access to; the AVE side of that recheck (target.record_count) is updated, the SkillSpector side is not. SkillSpector organises detection as an internal scanner taxonomy; AVE is a behavioral standard. Some SkillSpector categories are scanner mechanics (YARA signatures, taint tracking, AST analysis) rather than vulnerability classes -- these are marked as no_ave_class with an explanation. Gaps indicate behavioral classes that AVE does not yet enumerate.",
+  "generated": "2026-10-26",
+  "note": "Rule-level crosswalk from SkillSpector 2.13.1 to AVE, built by reading SkillSpector's source at the tagged commit, not its documentation. It replaces a revision that was checked against SkillSpector 2.0.0's documentation. SkillSpector scans skill and MCP files statically, with an optional LLM stage that --no-llm turns off, so this file maps only to AVE's static_detection records: the 28 runtime_observed and runtime_drift_detected records are listed under out_of_scope_ave_records and are not mapped. Three counts disagree and the code is the source of truth: RULE_ID_TO_CATEGORY defines 78 rules in 18 categories (this file's rules_total and categories); the README says 71 patterns across 17 categories, and its tables list 73 rows; the previous revision recorded 16 categories and 64 patterns. Scope decision: the 78 in-map rules are the catalogue and each appears exactly once under mappings. 37 more rule ids are emitted by analyzers but are absent from RULE_ID_TO_CATEGORY: AST1 to AST10 (Python AST checks; only AST10 is named in PATTERN_NAMES), BH1 to BH4 (bundled hooks and settings), RP1 to RP3 (rug pull), PE4 and PE5, AE1 to AE7 (artifact integrity and coverage) and, behind the LLM stage, SSD-1 to SSD-4, SDI-1 to SDI-4 and SQP-1 to SQP-3. They are in scope and handled the same way, listed separately under rules_outside_category_map so the 78 stay countable. Mappings are class-level equivalence, not identity: relationship states how far a rule and a record overlap, and a hit on a related rule is a lead and not an instance of the AVE class. Rules marked detection llm need an LLM and are absent from a --no-llm scan. This crosswalk is an independent reading and is not endorsed by or affiliated with NVIDIA. Built 2026-10-26; the AST and semantic rules were handled in this revision.",
+  "revision_note": "Full rewrite from source. The previous revision (generated 2026-07-12, last checked against documentation on 2026-06-21) mapped 16 category names against SkillSpector 2.0.0's documentation and said it had not been re-checked against the source; SkillSpector has no v2.0.0 tag, and its earliest tag is v2.5.0. Changes: category keys are now SkillSpector's own category strings (18 instead of 16); dangerous_code_ast and taint_tracking no longer exist as categories (the AST rules are emitted outside the category map, and TT1 to TT6 sit under Data Exfiltration, Privilege Escalation and Insecure Deserialization); every rule has its own entry with a relationship; mappings to runtime_observed records (AVE-2026-00018, 00019, 00050) were dropped; 21 of the previous 41 category-to-record links did not survive and are listed under dropped_from_previous_revision; the previous conclusion that YARA matches are only known malware was reversed, because the built-in agent_skills.yar rules are behavioral; the previous gaps for trigger_abuse and mcp_least_privilege were re-stated rule by rule. The file does not round-trip through the previous formatting, so the diff is a full rewrite.",
+  "relationship_vocabulary": {
+    "equivalent": "Same behavior on the same surface: the AVE record's own description and indicators cover what the rule matches.",
+    "narrower": "The AVE class is a specific instance of what the rule flags: every instance of the class would trip the rule, but the rule also fires on things that are not the class.",
+    "broader": "The AVE class contains what the rule flags as one instance, and more.",
+    "related": "Shares one dimension (object, trigger or outcome) without either containing the other, or the surface differs. A hit is a lead, not an instance of the AVE class.",
+    "no_fit": "No static AVE class matches.",
+    "scope": "With several ave_ids the relationship is stated against the first; the others are secondary links explained in the notes.",
+    "detection": "static: deterministic regex, AST, filesystem or YARA check. static+network: deterministic but queries OSV.dev. llm: depends on an LLM and is absent from a scan run with --no-llm."
+  },
   "mappings": [
     {
-      "skillspector_category": "prompt_injection",
-      "skillspector_patterns": 5,
-      "description": "Instruction overrides, hidden directives, exfiltration commands, behavior manipulation, harmful content embedded in skill instructions",
-      "ave_ids": ["AVE-2026-00002", "AVE-2026-00007", "AVE-2026-00009", "AVE-2026-00010"],
-      "primary_ave_id": "AVE-2026-00002",
-      "notes": "AVE-2026-00002 is the canonical tool description injection class. AVE-2026-00007 covers goal override; AVE-2026-00009 jailbreak instructions; AVE-2026-00010 hidden instruction concealment."
+      "skillspector_category": "Prompt Injection",
+      "skillspector_patterns": 6,
+      "description": "Instruction overrides, hidden directives, exfiltration commands, behavior steering, whitespace padding, harmful content in skill text",
+      "ave_ids": [
+        "AVE-2026-00007",
+        "AVE-2026-00029",
+        "AVE-2026-00003",
+        "AVE-2026-00009",
+        "AVE-2026-00010",
+        "AVE-2026-00013"
+      ],
+      "primary_ave_id": "AVE-2026-00007",
+      "notes": "P1 is the cleanest match (AVE-2026-00007). P2 and P9 are concealment techniques that overlap AVE-2026-00029; P3 and P4 are partial; P5 has no AVE class.",
+      "skillspector_rules": [
+        {
+          "id": "P1",
+          "name": "Override Instructions",
+          "relationship": "equivalent",
+          "ave_ids": [
+            "AVE-2026-00007",
+            "AVE-2026-00009"
+          ],
+          "detection": "static",
+          "notes": "Regexes over any file body for instruction-override phrasing: 'ignore previous instructions', 'override safety', 'bypass security', 'forget your instructions', 'your new instructions are', 'you are now in jailbreak/unrestricted mode', 'enable developer mode'. This is the phrasing AVE-2026-00007 lists as its indicators. The jailbreak-mode and developer-mode patterns also fall under AVE-2026-00009."
+        },
+        {
+          "id": "P2",
+          "name": "Hidden Instructions",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00029"
+          ],
+          "detection": "static",
+          "notes": "Hiding techniques: HTML and '[//]: #' comments containing instruction keywords, zero-width characters and 'data:text/plain;base64' URIs (markdown, perl and other file types only), plus Unicode Tag characters and bidirectional controls in every file type. The character-level techniques are AVE-2026-00029's mechanism. Comment-based hiding and data URIs have no AVE class: AVE-2026-00010 is a secrecy directive in plain text, not concealment by markup."
+        },
+        {
+          "id": "P3",
+          "name": "External Transmission Instructions",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00013",
+            "AVE-2026-00003"
+          ],
+          "detection": "static",
+          "notes": "Prose regexes for instructions to send the conversation, context, history or 'all user data' to an external destination, plus 'silently' or 'secretly' send. The object is conversation context or user data, which no AVE exfiltration record names: AVE-2026-00013 is PII fields and AVE-2026-00003 is credentials. Shares the instruct-then-transmit shape."
+        },
+        {
+          "id": "P4",
+          "name": "Subtle Steering",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00010"
+          ],
+          "detection": "static",
+          "notes": "Prose regexes for behavior steering: 'always recommend X over Y', 'subtly steer the user', 'gain the user's trust and then', 'append this to every response', and 'never mention, tell or warn the user'. Only the last pattern overlaps an AVE class (the secrecy directive of AVE-2026-00010); the rest is bias and manipulation of output, which no static AVE record describes."
+        },
+        {
+          "id": "P5",
+          "name": "Harmful Content",
+          "relationship": "no_fit",
+          "ave_ids": [],
+          "detection": "static",
+          "notes": "Word lists and phrases for physical-harm content (poisons, bomb making, self-harm), severity CRITICAL. A content-safety check, not an agent behavior class."
+        },
+        {
+          "id": "P9",
+          "name": "Whitespace Padding",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00029"
+          ],
+          "detection": "static",
+          "notes": "Large blank-line blocks and long space runs that push injected text out of the visible area, in file bodies and in manifest description fields (the tool-poisoning analyzer also emits P9). Same aim as AVE-2026-00029, instructions a human reviewer cannot see but the model reads, reached by layout instead of Unicode characters."
+        }
+      ]
     },
     {
-      "skillspector_category": "data_exfiltration",
-      "skillspector_patterns": 4,
-      "description": "External transmission, environment variable harvesting, file system enumeration, context leakage",
-      "ave_ids": ["AVE-2026-00003", "AVE-2026-00013", "AVE-2026-00026", "AVE-2026-00039"],
-      "primary_ave_id": "AVE-2026-00003",
-      "notes": "AVE-2026-00003 is credential exfiltration; AVE-2026-00013 PII exfiltration; AVE-2026-00026 tool output encoding exfil; AVE-2026-00039 covert steganographic channel."
-    },
-    {
-      "skillspector_category": "privilege_escalation",
-      "skillspector_patterns": null,
-      "description": "Permission escalation, scope expansion, false authority claims",
-      "ave_ids": ["AVE-2026-00012", "AVE-2026-00022", "AVE-2026-00045"],
-      "primary_ave_id": "AVE-2026-00045",
-      "notes": "AVE-2026-00045 is cross-app escalation; AVE-2026-00012 permission escalation via false claim; AVE-2026-00022 scope creep."
-    },
-    {
-      "skillspector_category": "supply_chain",
-      "skillspector_patterns": null,
-      "description": "Compromised dependencies, tampered packages, supply chain attacks, dynamic remote imports",
-      "ave_ids": ["AVE-2026-00001", "AVE-2026-00024", "AVE-2026-00034", "AVE-2026-00049", "AVE-2026-00051"],
-      "primary_ave_id": "AVE-2026-00001",
-      "notes": "AVE-2026-00001 is the canonical metamorphic/external-fetch class; AVE-2026-00024 content type mismatch; AVE-2026-00034 dynamic skill import. AVE-2026-00049 (HTTP Host Header Injection) and AVE-2026-00051 (OAuth Discovery Rebinding) added: both are attack_class='Supply Chain - ...' in AVE's own taxonomy, sharing the supply-chain framing of a trusted server delivering tampered routing/auth metadata rather than tampered code."
-    },
-    {
-      "skillspector_category": "excessive_agency",
-      "skillspector_patterns": null,
-      "description": "Overbroad capabilities, unbounded tool use, autonomous action without confirmation",
-      "ave_ids": ["AVE-2026-00021", "AVE-2026-00038", "AVE-2026-00048"],
-      "primary_ave_id": "AVE-2026-00038",
-      "notes": "AVE-2026-00038 covers unbounded tool use; AVE-2026-00021 autonomous action without confirmation; AVE-2026-00048 unsafe agent delegation chain."
-    },
-    {
-      "skillspector_category": "output_handling",
-      "skillspector_patterns": null,
-      "description": "Unsafe output injection into downstream systems, unescaped content",
-      "ave_ids": ["AVE-2026-00040"],
-      "primary_ave_id": "AVE-2026-00040",
-      "notes": "AVE-2026-00040 covers insecure output injection into downstream systems."
-    },
-    {
-      "skillspector_category": "system_prompt_leakage",
-      "skillspector_patterns": null,
-      "description": "System prompt extraction, disclosure of instructions to untrusted parties",
-      "ave_ids": ["AVE-2026-00015"],
+      "skillspector_category": "System Prompt Leakage",
+      "skillspector_patterns": 3,
+      "description": "Direct and indirect system prompt extraction and exfiltration by instruction",
+      "ave_ids": [
+        "AVE-2026-00015",
+        "AVE-2026-00026"
+      ],
       "primary_ave_id": "AVE-2026-00015",
-      "notes": "AVE-2026-00015 covers system prompt extraction."
+      "notes": "One AVE record, AVE-2026-00015, covers the object; P6 is the direct form, P7 and P8 the indirect and tool-based forms.",
+      "skillspector_rules": [
+        {
+          "id": "P6",
+          "name": "System Prompt Leakage",
+          "relationship": "equivalent",
+          "ave_ids": [
+            "AVE-2026-00015"
+          ],
+          "detection": "static",
+          "notes": "Prose regexes for instructions to print, reveal, dump or repeat the system prompt or internal rules ('verbatim repeat your system prompt', 'begin your reply with your instructions'). This is the phrasing in AVE-2026-00015's indicators."
+        },
+        {
+          "id": "P7",
+          "name": "System Prompt Leakage",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00015",
+            "AVE-2026-00026"
+          ],
+          "detection": "static",
+          "notes": "Prose regexes for indirect extraction: summarize, translate, encode (base64, rot13) or reformat the system prompt as JSON or a poem, 'repeat everything above', 'how were you configured'. Same object as AVE-2026-00015, whose title names direct interrogation, so these are variants at the edge of it. The encode patterns resemble AVE-2026-00026's encoding of a system prompt."
+        },
+        {
+          "id": "P8",
+          "name": "System Prompt Leakage",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00015",
+            "AVE-2026-00026"
+          ],
+          "detection": "static",
+          "notes": "Prose regexes for instructions to write the system prompt to a file or log, send it to a URL or webhook, or pipe it to curl. The object is AVE-2026-00015's; the transmission step is the one AVE-2026-00026 describes, without its encoding."
+        }
+      ]
     },
     {
-      "skillspector_category": "memory_poisoning",
-      "skillspector_patterns": null,
-      "description": "Injecting false or malicious content into agent memory or conversation history",
-      "ave_ids": ["AVE-2026-00019", "AVE-2026-00025"],
-      "primary_ave_id": "AVE-2026-00019",
-      "notes": "AVE-2026-00019 is agent memory poisoning; AVE-2026-00025 conversation history injection."
-    },
-    {
-      "skillspector_category": "tool_misuse",
-      "skillspector_patterns": null,
-      "description": "Exploiting tool interfaces, manipulating tool results, abusing tool dispatch",
-      "ave_ids": ["AVE-2026-00011", "AVE-2026-00018"],
-      "primary_ave_id": "AVE-2026-00011",
-      "notes": "AVE-2026-00011 covers dynamic tool call injection; AVE-2026-00018 tool result manipulation."
-    },
-    {
-      "skillspector_category": "rogue_agent",
-      "skillspector_patterns": null,
-      "description": "Agent spawning without trust boundaries, sub-agent delegation abuse, rogue agent behavior",
-      "ave_ids": ["AVE-2026-00048", "AVE-2026-00036", "AVE-2026-00050"],
-      "primary_ave_id": "AVE-2026-00048",
-      "notes": "AVE-2026-00048 covers unsafe agent delegation chain; AVE-2026-00036 lateral movement via agent pivot. AVE-2026-00050 (Parasitic Toolchain) added: a component that silently registers itself as additional tools/hooks in the agent's runtime is a rogue-agent pattern -- it behaves as an unauthorised actor inside the trusted tool dispatch layer, surviving session resets like a persistent rogue presence."
-    },
-    {
-      "skillspector_category": "trigger_abuse",
-      "skillspector_patterns": null,
-      "description": "Abusing skill trigger conditions, deferred or conditional payload execution",
-      "ave_ids": ["AVE-2026-00001", "AVE-2026-00027"],
-      "primary_ave_id": "AVE-2026-00001",
-      "notes": "AVE-2026-00001 covers deferred remote fetch triggers; AVE-2026-00027 multi-turn persistence attack.",
-      "gap": "No AVE record specifically addresses conditional trigger abuse as a distinct behavioral class."
-    },
-    {
-      "skillspector_category": "dangerous_code_ast",
-      "skillspector_patterns": null,
-      "description": "AST behavioral analysis: exec(), eval(), subprocess, dynamic imports detected via abstract syntax tree",
-      "ave_ids": ["AVE-2026-00004", "AVE-2026-00033"],
-      "primary_ave_id": "AVE-2026-00033",
-      "notes": "AVE-2026-00033 covers unsafe deserialization and eval; AVE-2026-00004 shell pipe injection.",
-      "scanner_mechanic": "AST analysis is a detection technique. The underlying behavioral classes are covered by AVE records for the specific class (shell injection, eval abuse, etc.)."
-    },
-    {
-      "skillspector_category": "taint_tracking",
-      "skillspector_patterns": null,
-      "description": "Data flow from untrusted sources (env vars, user input) to dangerous sinks (network calls, exec)",
-      "ave_ids": ["AVE-2026-00003", "AVE-2026-00026", "AVE-2026-00049"],
+      "skillspector_category": "Data Exfiltration",
+      "skillspector_patterns": 9,
+      "description": "External transmission, environment harvesting, file enumeration, context leakage, cloud uploads, and the Python taint flows TT1 to TT4",
+      "ave_ids": [
+        "AVE-2026-00003",
+        "AVE-2026-00013"
+      ],
       "primary_ave_id": "AVE-2026-00003",
-      "notes": "Taint tracking is a detection technique that surfaces exfiltration and injection classes already covered by AVE. AVE-2026-00049 (HTTP Host Header Injection) added: the attacker-controlled host value flows from a tainted source into the Host header sink -- a textbook taint-tracking detection target.",
-      "scanner_mechanic": "Taint tracking is a scanner mechanic, not a vulnerability class. It detects exfiltration and injection patterns covered by multiple AVE records."
+      "notes": "Most rules cover one half of AVE-2026-00003 (read or send). TT3 is the only full flow. Conversation context, the object of P3 and E4, is not named by any AVE record.",
+      "skillspector_rules": [
+        {
+          "id": "E1",
+          "name": "External Transmission",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00003",
+            "AVE-2026-00013"
+          ],
+          "detection": "static",
+          "notes": "Regexes for outbound transmission: requests or httpx post and put to a literal URL, fetch POST, curl -d, wget --post, URLs on api., data., collect., telemetry. or analytics. hosts, and one prose pattern ('send user data to https://'). Matches the send half only and has no test that the data is sensitive, so legitimate telemetry fires too (confidence 0.5 to 0.7)."
+        },
+        {
+          "id": "E2",
+          "name": "Env Variable Harvesting",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00003"
+          ],
+          "detection": "static",
+          "notes": "Python AST check for copying or enumerating the whole os.environ mapping (copy, items, keys, values, dict(), spread, loops), a regex fallback for unparsable files, JavaScript process.env key reads, 'env | grep key', printenv and prose such as 'collect all environment variables'. The read half of AVE-2026-00003 with no transmission test; TT3 covers the full flow."
+        },
+        {
+          "id": "E3",
+          "name": "File System Enumeration",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00003"
+          ],
+          "detection": "static",
+          "notes": "Regexes for scanning directories for secrets: glob over .env, .ssh and .aws, os.walk over home, listdir of .ssh, find for *.pem, and prose such as 'find credential files'. The discovery step before AVE-2026-00003's read and transmit; no transmission test."
+        },
+        {
+          "id": "E4",
+          "name": "Conversation Context Leak",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00013",
+            "AVE-2026-00003"
+          ],
+          "detection": "static",
+          "notes": "Prose regexes for sending, exporting or logging the conversation, chat history, session or agent memory to an external or remote destination. Conversation context is not named as the object of any AVE exfiltration record, so AVE-2026-00013 (collect and transmit user data) is the nearest by shape."
+        },
+        {
+          "id": "E5",
+          "name": "Cloud Storage Exfiltration",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00003"
+          ],
+          "detection": "static",
+          "notes": "Regexes for cloud-storage uploads: boto3 put_object and upload_file, aws s3 cp, sync and mv, gsutil, az storage blob upload. Confidence 0.55 to 0.65 because backups use the same calls. Shares the external-destination step of AVE-2026-00003 and says nothing about what is uploaded."
+        },
+        {
+          "id": "TT1",
+          "name": "Direct Source-to-Sink Flow",
+          "relationship": "no_fit",
+          "ave_ids": [],
+          "detection": "static",
+          "notes": "Python data-flow from any source to any sink that is not one of the credential, file-to-network, external-to-exec or deserialization pairs, for example a file read written to another file. A generic data-flow report, not a behavior class."
+        },
+        {
+          "id": "TT2",
+          "name": "Variable-Mediated Taint Flow",
+          "relationship": "no_fit",
+          "ave_ids": [],
+          "detection": "static",
+          "notes": "The same flows as TT1 passing through an intermediate variable (confidence 0.65)."
+        },
+        {
+          "id": "TT3",
+          "name": "Credential Exfiltration Flow",
+          "relationship": "equivalent",
+          "ave_ids": [
+            "AVE-2026-00003"
+          ],
+          "detection": "static",
+          "notes": "Python AST data-flow (same file, across direct calls): os.environ, os.getenv to a network sink (requests, httpx, urlopen, socket send). Credential read followed by external transmission is AVE-2026-00003's behavior, and its indicators list os.environ access. Differs: the flow is in bundled Python code rather than an instruction to the agent, and any environment variable counts as a credential."
+        },
+        {
+          "id": "TT4",
+          "name": "File Data Exfiltration Flow",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00003"
+          ],
+          "detection": "static",
+          "notes": "Python data-flow from open(), read_text() or read_bytes() to a network sink. File contents need not be credentials, so it is wider than AVE-2026-00003 on the object and narrower on the surface (bundled Python only)."
+        }
+      ]
     },
     {
-      "skillspector_category": "yara_signatures",
-      "skillspector_patterns": null,
-      "description": "YARA signature matches: malware families, webshells, cryptominers, exploit tools",
+      "skillspector_category": "Privilege Escalation",
+      "skillspector_patterns": 4,
+      "description": "Excessive permission requests, sudo and root use, credential file access, and the external-input-to-exec taint flow TT5",
+      "ave_ids": [
+        "AVE-2026-00003",
+        "AVE-2026-00012",
+        "AVE-2026-00033",
+        "AVE-2026-00038"
+      ],
+      "primary_ave_id": "AVE-2026-00003",
+      "notes": "PE3 is the read half of AVE-2026-00003. TT5 maps to AVE-2026-00033 for eval and exec; its shell sinks are best fit by AVE-2026-00052, pending deprecation.",
+      "skillspector_rules": [
+        {
+          "id": "PE1",
+          "name": "Excessive Permissions",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00038",
+            "AVE-2026-00012"
+          ],
+          "detection": "static",
+          "notes": "Flags 'permissions: *', several dangerous permissions listed together, and prose asking for or taking 'full access', 'escalate my privileges' or 'bypass permission checks' (severity LOW). The wildcard grant is the shape of AVE-2026-00038; the escalate-and-bypass prose is near AVE-2026-00012's claimed grant. Neither is a full match."
+        },
+        {
+          "id": "PE2",
+          "name": "Sudo/Root Invocation",
+          "relationship": "no_fit",
+          "ave_ids": [],
+          "detection": "static",
+          "notes": "sudo, doas, pkexec, setuid chmod and 'run as root'. Elevated execution is a capability use, not a behavior class in AVE."
+        },
+        {
+          "id": "PE3",
+          "name": "Credential File Access",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00003"
+          ],
+          "detection": "static",
+          "notes": "Path references to credential stores (.ssh keys, .aws/credentials, gcloud, .kube/config, .git-credentials, .netrc, /etc/shadow, .env, keychains, browser cookie and login databases) and prose such as 'read the ssh key'. The read half of AVE-2026-00003; no transmission test."
+        },
+        {
+          "id": "TT5",
+          "name": "External Input to Execution Flow",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00033"
+          ],
+          "detection": "static",
+          "notes": "Python data-flow from network or user input to exec, eval, compile, os.system, os.popen or subprocess. The exec and eval sinks match AVE-2026-00033 (its indicators include eval(user_input)). The shell sinks are command injection, whose best-fit record is AVE-2026-00052, proposed for deprecation in discussion 234 and so not recorded as a mapping."
+        }
+      ]
+    },
+    {
+      "skillspector_category": "Supply Chain",
+      "skillspector_patterns": 10,
+      "description": "Unpinned and vulnerable dependencies, remote execution, obfuscation, shipped bytecode, concealed executables, dependency source redirection",
+      "ave_ids": [
+        "AVE-2026-00062",
+        "AVE-2026-00001",
+        "AVE-2026-00004",
+        "AVE-2026-00024",
+        "AVE-2026-00057",
+        "AVE-2026-00061",
+        "AVE-2026-00075"
+      ],
+      "primary_ave_id": "AVE-2026-00062",
+      "notes": "SC1 to SC3 match AVE-2026-00062, 00004 and 00057. SC8 is a presence check and AVE-2026-00075 is the narrower case that also needs divergence from source. SC10 has no AVE counterpart.",
+      "skillspector_rules": [
+        {
+          "id": "SC1",
+          "name": "Unpinned Dependencies",
+          "relationship": "equivalent",
+          "ave_ids": [
+            "AVE-2026-00062"
+          ],
+          "detection": "static",
+          "notes": "Requirements lines with no version or '>=' only, '*' or 'latest' in package.json, '^' ranges (confidence 0.4), and prose such as 'install the latest' or 'do not pin'. Mutable version specifiers are AVE-2026-00062's mechanism."
+        },
+        {
+          "id": "SC2",
+          "name": "Remote Code Execution",
+          "relationship": "equivalent",
+          "ave_ids": [
+            "AVE-2026-00004",
+            "AVE-2026-00001"
+          ],
+          "detection": "static",
+          "notes": "Regexes for curl or wget piped to sh, bash, python, node, ruby or perl, download-then-run, exec or eval of requests, urllib or fetch output, and 'download and run the script'. The curl-to-bash and eval(requests.get(...)) forms are AVE-2026-00004's own examples. Fetching code to execute at runtime is also the payload step of AVE-2026-00001."
+        },
+        {
+          "id": "SC3",
+          "name": "Obfuscated Code",
+          "relationship": "equivalent",
+          "ave_ids": [
+            "AVE-2026-00057"
+          ],
+          "detection": "static",
+          "notes": "exec or eval of base64, hex, zlib or marshal-decoded data, atob, obfuscator-style _0x names, long hex or base64 literals (confidence 0.5 to 0.6) and shell decode-to-execute chains. Encoded content decoded and executed at runtime is AVE-2026-00057. Differs: AVE-2026-00057 also covers keyword fragments joined by string concatenation, which SC3 does not test."
+        },
+        {
+          "id": "SC4",
+          "name": "Known Vulnerable Dependency",
+          "relationship": "no_fit",
+          "ave_ids": [],
+          "detection": "static+network",
+          "notes": "Dependency CVE lookup: a live query to OSV.dev with a static fallback list, the only rule that needs the network. AVE enumerates behavior classes, not known-vulnerable versions."
+        },
+        {
+          "id": "SC5",
+          "name": "Abandoned Dependency",
+          "relationship": "no_fit",
+          "ave_ids": [],
+          "detection": "static",
+          "notes": "Dependency named in a built-in list of abandoned or archived packages. The nearest record, AVE-2026-00074, is a dangling external anchor verified live against GitHub, a registry, RDAP or a cloud provider; a fixed list of abandoned names is a different test for a different risk."
+        },
+        {
+          "id": "SC6",
+          "name": "Typosquatting Dependency",
+          "relationship": "no_fit",
+          "ave_ids": [],
+          "detection": "static",
+          "notes": "Dependency name within a small edit distance of a popular package. The nearest records are identity claims (AVE-2026-00017 for MCP servers) and squatting on hallucinated skill names (AVE-2026-00066, runtime_observed, out of scope). No static AVE class covers typosquatted package dependencies."
+        },
+        {
+          "id": "SC7",
+          "name": "Untrusted Container Image",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00061"
+          ],
+          "detection": "static",
+          "notes": "Container pulls with verification off: --disable-content-trust, DOCKER_CONTENT_TRUST=0, --insecure-registry. Only the registry TLS case overlaps AVE-2026-00061; image signature checking is a different control."
+        },
+        {
+          "id": "SC8",
+          "name": "Shipped Python Bytecode",
+          "relationship": "narrower",
+          "ave_ids": [
+            "AVE-2026-00075"
+          ],
+          "detection": "static",
+          "notes": "Filesystem walk that flags any __pycache__ directory or .pyc or .pyo file (confidence 0.95, HIGH). It never opens the bytecode or compares it with a sibling .py: its own docstring says presence alone is the signal and disassembly can come later. Every AVE-2026-00075 instance ships a .pyc, so SC8 fires on it, but SC8 also fires on benign bytecode and does not test divergence from the source, so a hit is a lead and not a 00075 instance."
+        },
+        {
+          "id": "SC9",
+          "name": "Concealed Executable Artifact",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00024"
+          ],
+          "detection": "static",
+          "notes": "Executables nested in docx, xlsx, pptx or zip containers or in hidden or disguised artifacts (confidence 1.0). Same outcome as AVE-2026-00024, executable content a reviewer misses because of its wrapper, with a different carrier: nesting and hiding instead of a wrong extension. SC9 also reports coverage limits (an excluded or referenced artifact that was not inspected), which are not a behavior."
+        },
+        {
+          "id": "SC10",
+          "name": "Dependency Source Redirection",
+          "relationship": "no_fit",
+          "ave_ids": [],
+          "detection": "static",
+          "notes": "Deterministic check for package-manager source changes (npm, Yarn, pip, Poetry, Maven, Cargo): a registry or index added or replaced in config files, commands and environment variables, reported HIGH, with unresolved destinations reported as such. No AVE record covers it. AVE-2026-00073 is the same shape (a static value redirects traffic) but its object is where the agent sends telemetry or model traffic. AVE-2026-00062 is about the absence of a pin, which does not help when the registry itself is swapped. Listed as an AVE-side gap."
+        }
+      ]
+    },
+    {
+      "skillspector_category": "Excessive Agency",
+      "skillspector_patterns": 5,
+      "description": "Unrestricted tool access, autonomous decisions, scope creep, unbounded resources, external model selection",
+      "ave_ids": [
+        "AVE-2026-00021",
+        "AVE-2026-00022",
+        "AVE-2026-00038",
+        "AVE-2026-00063"
+      ],
+      "primary_ave_id": "AVE-2026-00021",
+      "notes": "EA2 matches AVE-2026-00021. EA1 and EA3 are partial. EA4 and EA5 are resource and cost checks.",
+      "skillspector_rules": [
+        {
+          "id": "EA1",
+          "name": "Unrestricted Tool Access",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00038"
+          ],
+          "detection": "static",
+          "notes": "Flags 'tools: *' and 'permissions: *', and prose such as 'grant access to all tools', 'no tool restrictions', 'execute arbitrary commands', 'allowlist is empty'. Matches the unlimited-tool-authority clause of AVE-2026-00038. AVE-2026-00038 also covers unbounded sub-agent spawning and recursive capability expansion, which EA1 does not test."
+        },
+        {
+          "id": "EA2",
+          "name": "Autonomous Decision Making",
+          "relationship": "equivalent",
+          "ave_ids": [
+            "AVE-2026-00021",
+            "AVE-2026-00063"
+          ],
+          "detection": "static",
+          "notes": "Prose such as 'without asking for confirmation', 'skip confirmation', 'do not ask the user before', 'assume consent', and the tokens auto_approve, auto-confirm and --no-confirm in any file. The prose is AVE-2026-00021's indicators. The tokens also overlap AVE-2026-00063 (a declared flag that removes approval), but EA2 does not require the flag to sit in a configuration file."
+        },
+        {
+          "id": "EA3",
+          "name": "Scope Creep",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00022"
+          ],
+          "detection": "static",
+          "notes": "Generic scope-expansion prose: 'also perform any other', 'beyond the scope', 'handle everything', 'act as a general-purpose'. No comparison with a manifest. Shares AVE-2026-00022's idea of acting beyond declared purpose but not its test."
+        },
+        {
+          "id": "EA4",
+          "name": "Unbounded Resource Access",
+          "relationship": "no_fit",
+          "ave_ids": [],
+          "detection": "static",
+          "notes": "Unbounded retries, timeouts or 'no rate limit' language. Resource exhaustion, not an AVE behavior class."
+        },
+        {
+          "id": "EA5",
+          "name": "External Model or Provider Selection",
+          "relationship": "no_fit",
+          "ave_ids": [],
+          "detection": "static",
+          "notes": "Pinned model or provider keys and coding-CLI shell-outs that can switch the billing account. A cost-control check with no AVE class."
+        }
+      ]
+    },
+    {
+      "skillspector_category": "Output Handling",
+      "skillspector_patterns": 3,
+      "description": "Unvalidated model output reaching interpreters, cross-context output, unbounded output",
+      "ave_ids": [
+        "AVE-2026-00040"
+      ],
+      "primary_ave_id": "AVE-2026-00040",
+      "notes": "OH1 matches AVE-2026-00040. OH2 and OH3 have no static AVE class.",
+      "skillspector_rules": [
+        {
+          "id": "OH1",
+          "name": "Unvalidated Output Injection",
+          "relationship": "equivalent",
+          "ave_ids": [
+            "AVE-2026-00040"
+          ],
+          "detection": "static",
+          "notes": "Model output (variables named response, output, result, completion and similar) passed to exec, eval, os.system, subprocess, innerHTML, document.write or a SQL string, plus prose such as 'pipe the output directly to the shell'. This is AVE-2026-00040's payload surface, agent output reaching an interpreter unescaped."
+        },
+        {
+          "id": "OH2",
+          "name": "Cross-Context Output",
+          "relationship": "no_fit",
+          "ave_ids": [],
+          "detection": "static",
+          "notes": "Prose about passing output across contexts, agents or sessions, or injecting output into the system prompt. The static AVE records do not cover it; the nearest, AVE-2026-00018 and AVE-2026-00020, are runtime_observed and out of scope."
+        },
+        {
+          "id": "OH3",
+          "name": "Unbounded Output",
+          "relationship": "no_fit",
+          "ave_ids": [],
+          "detection": "static",
+          "notes": "max_tokens=None, 'no output limit', 'flood the console'. Resource exhaustion with no AVE class."
+        }
+      ]
+    },
+    {
+      "skillspector_category": "Memory Poisoning",
+      "skillspector_patterns": 3,
+      "description": "Persistent context injection, context window stuffing, memory manipulation",
+      "ave_ids": [
+        "AVE-2026-00027",
+        "AVE-2026-00009",
+        "AVE-2026-00025"
+      ],
+      "primary_ave_id": "AVE-2026-00027",
+      "notes": "MP1 matches AVE-2026-00027. MP2 and the runtime memory records (AVE-2026-00019, 00023) are runtime_observed and out of scope.",
+      "skillspector_rules": [
+        {
+          "id": "MP1",
+          "name": "Persistent Context Injection",
+          "relationship": "equivalent",
+          "ave_ids": [
+            "AVE-2026-00027"
+          ],
+          "detection": "static",
+          "notes": "Prose such as 'remember this for all future interactions', 'from now on always', 'store this in your memory', 'treat this as a permanent rule'. These are AVE-2026-00027's indicators (instruction persistence across turns and sessions)."
+        },
+        {
+          "id": "MP2",
+          "name": "Context Window Stuffing",
+          "relationship": "no_fit",
+          "ave_ids": [],
+          "detection": "static",
+          "notes": "A repeated token run or prose such as 'fill the context window'. The matching AVE class, AVE-2026-00023, is runtime_observed and out of scope."
+        },
+        {
+          "id": "MP3",
+          "name": "Memory Manipulation",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00025",
+            "AVE-2026-00009"
+          ],
+          "detection": "static",
+          "notes": "Prose for clearing, overwriting or tampering with memory, 'forget all previous instructions', 'rewrite your personality', 'inject fake memories', 'pretend your previous conversation included...', and sentences adopting a reset state as the conversation state. The fabricated-history patterns are AVE-2026-00025; the identity-rewrite patterns are near AVE-2026-00009. AVE-2026-00019 (memory poisoning) is runtime_observed and out of scope."
+        }
+      ]
+    },
+    {
+      "skillspector_category": "Tool Misuse",
+      "skillspector_patterns": 4,
+      "description": "Dangerous tool parameters, chained commands, unsafe defaults, privileged Kubernetes workloads",
+      "ave_ids": [
+        "AVE-2026-00061",
+        "AVE-2026-00004",
+        "AVE-2026-00005"
+      ],
+      "primary_ave_id": "AVE-2026-00061",
+      "notes": "Grab-bag regex rules. The only clean AVE overlap is TLS verification disabled (AVE-2026-00061) inside TM3.",
+      "skillspector_rules": [
+        {
+          "id": "TM1",
+          "name": "Tool Parameter Abuse",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00005",
+            "AVE-2026-00061"
+          ],
+          "detection": "static",
+          "notes": "A grab bag of dangerous parameters: shell=True (with AST resolution of variables), rm -rf on / or ~, --force, --no-verify, chmod 777, git push --force and reset --hard, curl -k and --insecure, SQL built by f-string. Only rm -rf on broad paths overlaps AVE-2026-00005 and only the curl and wget certificate flags overlap AVE-2026-00061."
+        },
+        {
+          "id": "TM2",
+          "name": "Chaining Abuse",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00004"
+          ],
+          "detection": "static",
+          "notes": "Chained commands: '&& rm -', '&& curl ... | sh', '| sudo', a trailing '| sh', and prose such as 'chain these tools to bypass the safety check'. The curl-to-shell chain is AVE-2026-00004. AVE-2026-00068 (command composition through shared shell state) is runtime_observed and out of scope."
+        },
+        {
+          "id": "TM3",
+          "name": "Unsafe Defaults",
+          "relationship": "narrower",
+          "ave_ids": [
+            "AVE-2026-00061"
+          ],
+          "detection": "static",
+          "notes": "Unsafe defaults: verify=False, VERIFY_SSL=False, NODE_TLS_REJECT_UNAUTHORIZED=0, auth=None, allow_anonymous, CORS *, mode 777, debug mode, sandbox=False and 'disable security'. TLS verification disabled is one instance in that list and is AVE-2026-00061; the other settings have no static AVE class."
+        },
+        {
+          "id": "TM4",
+          "name": "Privileged Kubernetes Workload",
+          "relationship": "no_fit",
+          "ave_ids": [],
+          "detection": "static",
+          "notes": "Privileged Kubernetes workloads: privileged: true, hostPath, host PID, network or IPC, kubectl run --privileged. A cluster takeover primitive with no AVE class."
+        }
+      ]
+    },
+    {
+      "skillspector_category": "Rogue Agent",
+      "skillspector_patterns": 2,
+      "description": "Self-modification and session persistence",
+      "ave_ids": [
+        "AVE-2026-00008",
+        "AVE-2026-00001"
+      ],
+      "primary_ave_id": "AVE-2026-00008",
+      "notes": "RA2 matches AVE-2026-00008. The previous revision mapped this category to AVE-2026-00048, 00036 and 00050; none of the rules reads like those records.",
+      "skillspector_rules": [
+        {
+          "id": "RA1",
+          "name": "Self-Modification",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00001"
+          ],
+          "detection": "static",
+          "notes": "Writes to the skill's own file or SKILL.md, self-modify and self-update names, and prose such as 'rewrite the current code' and 'disable the safety check'. Shares one outcome with AVE-2026-00001, a component whose instructions change after review, but there is no remote fetch, which is the trigger in AVE-2026-00001."
+        },
+        {
+          "id": "RA2",
+          "name": "Session Persistence",
+          "relationship": "equivalent",
+          "ave_ids": [
+            "AVE-2026-00008"
+          ],
+          "detection": "static",
+          "notes": "Crontab, systemctl or launchctl enable, startup-file appends (.bashrc and similar), hidden directories in home, registry and plist writes, nohup, disown and setsid, and prose such as 'schedule a recurring task'. The cron and startup-file cases are AVE-2026-00008's fingerprint. RA2 also fires on nohup and hidden-directory writes, which AVE-2026-00008 does not name."
+        }
+      ]
+    },
+    {
+      "skillspector_category": "Trigger Abuse",
+      "skillspector_patterns": 3,
+      "description": "Over-broad, shadowing and baiting triggers in the skill manifest",
+      "ave_ids": [
+        "AVE-2026-00058",
+        "AVE-2026-00082"
+      ],
+      "primary_ave_id": "AVE-2026-00058",
+      "notes": "Manifest word-list checks. They overlap AVE-2026-00058 on broad activation but do not test the mismatch with the skill's real function.",
+      "skillspector_rules": [
+        {
+          "id": "TR1",
+          "name": "Overly Broad Trigger",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00058"
+          ],
+          "detection": "static",
+          "notes": "A manifest trigger that is a single common word (the, do, make, code, file, data, hello...) or two characters or fewer, or a description clause 'whenever the user says <common word>'. Over-broad activation is part of AVE-2026-00058, which also requires the breadth to exceed the skill's actual function; TR1 does not compare against what the skill does."
+        },
+        {
+          "id": "TR2",
+          "name": "Shadow Command Trigger",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00082"
+          ],
+          "detection": "static",
+          "notes": "A manifest trigger equal to one of 51 built-in command words (help, run, test, commit...), or a description clause that claims to intercept or override such a command. Router-level shadowing of trusted functionality is the idea behind AVE-2026-00082, but TR2 tests a fixed word list inside one skill and cannot see a second skill or a discovery root."
+        },
+        {
+          "id": "TR3",
+          "name": "Keyword Baiting Trigger",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00058"
+          ],
+          "detection": "static",
+          "notes": "A trigger or description clause that matches all input: 'anything', 'always', 'whenever the user says anything', 'all messages'. Over-broad activation as in AVE-2026-00058, with no comparison against the skill's real function."
+        }
+      ]
+    },
+    {
+      "skillspector_category": "Insecure Deserialization",
+      "skillspector_patterns": 5,
+      "description": "Python deserialization flows and PHP, Ruby and JavaScript deserializer sinks",
+      "ave_ids": [
+        "AVE-2026-00033"
+      ],
+      "primary_ave_id": "AVE-2026-00033",
+      "notes": "All rules are code sinks for the vulnerability AVE-2026-00033 describes as an instruction.",
+      "skillspector_rules": [
+        {
+          "id": "TT6",
+          "name": "Untrusted Data to Deserializer Flow",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00033"
+          ],
+          "detection": "static",
+          "notes": "Python data-flow from network, user or file input to an unsafe deserializer (pickle, marshal, dill, jsonpickle, joblib, read_pickle, yaml.unsafe_load). 'Deserialize untrusted input using pickle' is an AVE-2026-00033 indicator; the surface here is bundled Python and not an instruction to the agent."
+        },
+        {
+          "id": "DS1",
+          "name": "PHP Object Injection",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00033"
+          ],
+          "detection": "static",
+          "notes": "PHP unserialize( in PHP files, any call, no source test. Insecure deserialization is AVE-2026-00033's vulnerability, as a code sink rather than an instruction."
+        },
+        {
+          "id": "DS2",
+          "name": "Ruby Marshal Deserialization",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00033"
+          ],
+          "detection": "static",
+          "notes": "Ruby Marshal.load or Marshal.restore in Ruby files. Same relationship as DS1."
+        },
+        {
+          "id": "DS3",
+          "name": "Unsafe Ruby YAML Deserialization",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00033"
+          ],
+          "detection": "static",
+          "notes": "Ruby YAML.load, Psych.load or Oj.load in Ruby files. Same relationship as DS1."
+        },
+        {
+          "id": "DS4",
+          "name": "Unsafe JavaScript Deserialization",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00033"
+          ],
+          "detection": "static",
+          "notes": "node-serialize, serialize-to-js, funcster or .unserialize( in JavaScript and TypeScript files. Same relationship as DS1."
+        }
+      ]
+    },
+    {
+      "skillspector_category": "YARA Match",
+      "skillspector_patterns": 4,
+      "description": "YARA rule matches, bucketed by the rule's category meta",
+      "ave_ids": [
+        "AVE-2026-00003",
+        "AVE-2026-00002",
+        "AVE-2026-00004",
+        "AVE-2026-00005",
+        "AVE-2026-00007",
+        "AVE-2026-00008",
+        "AVE-2026-00009",
+        "AVE-2026-00015",
+        "AVE-2026-00029",
+        "AVE-2026-00032",
+        "AVE-2026-00034"
+      ],
+      "primary_ave_id": "AVE-2026-00003",
+      "notes": "The previous revision said YARA is only known malware. The built-in agent_skills.yar rules are behavioral and fall under YR1 and YR4; the other built-in rules are malware, webshell, miner and hack-tool signatures.",
+      "skillspector_rules": [
+        {
+          "id": "YR1",
+          "name": "Malware Signature",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00003",
+            "AVE-2026-00004",
+            "AVE-2026-00005",
+            "AVE-2026-00008",
+            "AVE-2026-00034"
+          ],
+          "detection": "static",
+          "notes": "Bucket for YARA rules whose category meta is malware, so a mapping is per YARA rule. Built-in members: agent_skill_credential_exfiltration_webhook (AVE-2026-00003), agent_skill_remote_bootstrap_execution (AVE-2026-00004, and pip install from a URL for AVE-2026-00034), agent_skill_destructive_autonomous_actions (AVE-2026-00005) and backdoor_persistence (AVE-2026-00008), plus reverse_shell, reverse_shell_multiline, keylogger_indicators, ransomware_behavior, c2_framework_indicators and info_stealer, which have no AVE class. User-supplied rules (--yara-rules-dir) are not covered."
+        },
+        {
+          "id": "YR2",
+          "name": "Webshell Detected",
+          "relationship": "no_fit",
+          "ave_ids": [],
+          "detection": "static",
+          "notes": "Webshell signatures (PHP, Python, JSP, ASPX). Known-malware matching with no AVE class."
+        },
+        {
+          "id": "YR3",
+          "name": "Crypto Miner Detected",
+          "relationship": "no_fit",
+          "ave_ids": [],
+          "detection": "static",
+          "notes": "Cryptominer signatures (stratum, pools, miner software, coinjacking). Mining is not wallet drain (AVE-2026-00006); no AVE class."
+        },
+        {
+          "id": "YR4",
+          "name": "Hack Tool / Exploit Detected",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00007",
+            "AVE-2026-00002",
+            "AVE-2026-00032",
+            "AVE-2026-00009",
+            "AVE-2026-00015",
+            "AVE-2026-00029"
+          ],
+          "detection": "static",
+          "notes": "Bucket for YARA rules whose category meta is hack_tool or exploit. Built-in members include agent_skill_prompt_injection_hidden_instructions (override, reveal-prompt and persona-bypass phrasing: AVE-2026-00007, 00015 and 00009), agent_skill_mcp_tool_poisoning_metadata (AVE-2026-00002, with zero-width and bidi bytes for AVE-2026-00029) and network_reconnaissance (masscan, arp-scan, enum4linux: AVE-2026-00032). The remaining members (offensive tool references, privilege escalation tools, exploit frameworks, phishing kits) have no AVE class."
+        }
+      ]
+    },
+    {
+      "skillspector_category": "MCP Least Privilege",
+      "skillspector_patterns": 4,
+      "description": "Manifest permissions compared with code capabilities",
+      "ave_ids": [
+        "AVE-2026-00022",
+        "AVE-2026-00038"
+      ],
+      "primary_ave_id": "AVE-2026-00022",
+      "notes": "Pure static. LP1 and LP3 compare declared scope with actual behavior, the idea in AVE-2026-00022.",
+      "skillspector_rules": [
+        {
+          "id": "LP1",
+          "name": "Underdeclared Capability",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00022"
+          ],
+          "detection": "static",
+          "notes": "Pure static check: code capability categories (shell, network, file read, file write, environment, MCP) found in executable files but not covered by the manifest's permissions or allowed-tools. It compares declared scope with actual behavior, the idea in AVE-2026-00022, but at the level of six capability categories rather than the files, APIs or systems an instruction directs the agent to touch."
+        },
+        {
+          "id": "LP2",
+          "name": "Wildcard Permission",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00038"
+          ],
+          "detection": "static",
+          "notes": "A wildcard in the declared permissions (*, all, full, any). A blanket grant like AVE-2026-00038's unlimited tool authority, expressed in the manifest instead of an instruction."
+        },
+        {
+          "id": "LP3",
+          "name": "Missing Permission Declaration",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00022"
+          ],
+          "detection": "static",
+          "notes": "No tool scope declared at all while the code has capabilities. The declared scope that AVE-2026-00022 compares against is missing, so the comparison cannot be made; SkillSpector reports the absence."
+        },
+        {
+          "id": "LP4",
+          "name": "Overdeclared Permission",
+          "relationship": "no_fit",
+          "ave_ids": [],
+          "detection": "static",
+          "notes": "Permission declared but no matching code capability found (overdeclaration). The previous revision recorded this as a gap and it still is: no AVE record describes over-declared scope."
+        }
+      ]
+    },
+    {
+      "skillspector_category": "MCP Tool Poisoning",
+      "skillspector_patterns": 4,
+      "description": "Hidden content, Unicode deception and injection in skill and tool metadata, plus an LLM description-behavior check",
+      "ave_ids": [
+        "AVE-2026-00002",
+        "AVE-2026-00029",
+        "AVE-2026-00041",
+        "AVE-2026-00058"
+      ],
+      "primary_ave_id": "AVE-2026-00002",
+      "notes": "TP3 matches AVE-2026-00002. TP4 is the only LLM-dependent rule inside the category map.",
+      "skillspector_rules": [
+        {
+          "id": "TP1",
+          "name": "Hidden Instructions",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00002",
+            "AVE-2026-00029"
+          ],
+          "detection": "static",
+          "notes": "Static check of manifest metadata fields (name, description, triggers, parameter text) for HTML and markdown comments (confidence 0.95 when they hold SYSTEM or IGNORE keywords), zero-width characters, data URIs and long base64 blobs. Hidden content in the description field is the surface of AVE-2026-00002; the zero-width characters are AVE-2026-00029's. The concealment technique, not directive content, is what TP1 tests."
+        },
+        {
+          "id": "TP2",
+          "name": "Unicode Deception",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00029"
+          ],
+          "detection": "static",
+          "notes": "Unicode deception in identifiers: Cyrillic and Greek homoglyphs, right-to-left and directional overrides, invisible formatting, mixed scripts. The technique is AVE-2026-00029's; the target is a name (for example read_file with a Cyrillic letter) rather than instruction text a reviewer is meant to miss."
+        },
+        {
+          "id": "TP3",
+          "name": "Parameter Description Injection",
+          "relationship": "equivalent",
+          "ave_ids": [
+            "AVE-2026-00002",
+            "AVE-2026-00041"
+          ],
+          "detection": "static",
+          "notes": "Static check of parameter descriptions and defaults: override phrases, SYSTEM or [INST] tokens, exfiltration verbs, descriptions over 500 characters, and defaults that are external URLs or shell commands. These are the indicators of AVE-2026-00002 (override phrases, descriptions far longer than needed), and AVE-2026-00041 names parameter descriptions as an injection surface."
+        },
+        {
+          "id": "TP4",
+          "name": "Description-Behavior Mismatch",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00058"
+          ],
+          "detection": "llm",
+          "notes": "LLM check (skipped with --no-llm) that the manifest description matches what the code does, emitted at LLM confidence 0.5 or more. Matches AVE-2026-00058's case of a generic description over a narrow sensitive implementation, but the test is a model's judgement and not a deterministic comparison."
+        }
+      ]
+    },
+    {
+      "skillspector_category": "Agent Snooping",
+      "skillspector_patterns": 3,
+      "description": "Reads of agent config directories, MCP config and peer skills",
+      "ave_ids": [
+        "AVE-2026-00022"
+      ],
+      "primary_ave_id": "AVE-2026-00022",
+      "notes": "Access to resources a skill has no need for. Related to AVE-2026-00022 but the rules do not check a manifest.",
+      "skillspector_rules": [
+        {
+          "id": "AS1",
+          "name": "Agent Config Directory Access",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00022"
+          ],
+          "detection": "static",
+          "notes": "Reads of .claude, .codex, .gemini or .continue directories and their config files, in code and prose. Access to a resource the skill has no need for (AVE-2026-00022's idea), flagged by resource kind with no comparison to a manifest. Agent config can hold API keys, so AVE-2026-00003 is the follow-on if they are sent."
+        },
+        {
+          "id": "AS2",
+          "name": "MCP Config Access",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00022"
+          ],
+          "detection": "static",
+          "notes": "Reads of mcp.json and MCP config files, and prose such as 'list MCP servers'. Same relationship as AS1; the config holds server URLs and tokens."
+        },
+        {
+          "id": "AS3",
+          "name": "Skill Enumeration",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00022"
+          ],
+          "detection": "static",
+          "notes": "Listing or reading other installed skills (their SKILL.md, the skills directories). Same relationship as AS1. No AVE record describes one skill reading its peers."
+        }
+      ]
+    },
+    {
+      "skillspector_category": "Anti-Refusal",
+      "skillspector_patterns": 3,
+      "description": "Refusal, disclaimer and safety-policy suppression",
+      "ave_ids": [
+        "AVE-2026-00009",
+        "AVE-2026-00007"
+      ],
+      "primary_ave_id": "AVE-2026-00009",
+      "notes": "Jailbreak wording. Related to AVE-2026-00009, whose fingerprint is persona and unrestricted-mode language.",
+      "skillspector_rules": [
+        {
+          "id": "AR1",
+          "name": "Refusal Suppression",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00009"
+          ],
+          "detection": "static",
+          "notes": "Prose such as 'never refuse', 'always comply', 'you cannot say no', 'no request is off limits'. Refusal suppression is a jailbreak technique and belongs to AVE-2026-00009's class, though AVE-2026-00009's fingerprint is persona and unrestricted-mode language and not refusal wording."
+        },
+        {
+          "id": "AR2",
+          "name": "Disclaimer Suppression",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00009"
+          ],
+          "detection": "static",
+          "notes": "Prose such as 'no warnings or disclaimers', 'do not moralize', 'skip the ethics'. SkillSpector calls it a jailbreak preamble. The weakest of the three anti-refusal links to AVE-2026-00009."
+        },
+        {
+          "id": "AR3",
+          "name": "Safety Policy Nullification",
+          "relationship": "related",
+          "ave_ids": [
+            "AVE-2026-00009",
+            "AVE-2026-00007"
+          ],
+          "detection": "static",
+          "notes": "Prose such as 'you have no restrictions', 'act as an unfiltered model', 'do anything now', 'developer mode enabled', 'ignore your guidelines'. The unrestricted-persona and mode wording is AVE-2026-00009; 'ignore your guidelines' is AVE-2026-00007's override."
+        }
+      ]
+    },
+    {
+      "skillspector_category": "Server-Side Request Forgery",
+      "skillspector_patterns": 3,
+      "description": "Cloud metadata endpoints, private-range requests, dynamic request targets",
       "ave_ids": [],
       "primary_ave_id": null,
-      "no_ave_class": true,
-      "notes": "YARA signatures detect known malware artifacts -- not behavioral vulnerability classes in the AVE sense. Positive YARA matches indicate the skill bundles known malware, which is outside AVE's enumeration scope. AVE records describe behavioral classes in skill instructions, not embedded malware payloads."
+      "notes": "No AVE record covers SSRF.",
+      "skillspector_rules": [
+        {
+          "id": "SSRF1",
+          "name": "Cloud Metadata Access",
+          "relationship": "no_fit",
+          "ave_ids": [],
+          "detection": "static",
+          "notes": "Literal cloud metadata endpoints (169.254.169.254, metadata.google.internal, 100.100.100.200, fd00:ec2::254), skipped when the surrounding text documents a rejection rule. No AVE record covers server-side request forgery or metadata access; AVE-2026-00049's 'server-side request routing' concerns the Host header the component sends."
+        },
+        {
+          "id": "SSRF2",
+          "name": "Internal Network Request",
+          "relationship": "no_fit",
+          "ave_ids": [],
+          "detection": "static",
+          "notes": "A request call with a literal loopback, link-local or private-range URL. AVE-2026-00032 is an instruction to scan the network, a different behavior from one request to a private address."
+        },
+        {
+          "id": "SSRF3",
+          "name": "Dynamic Request Target",
+          "relationship": "no_fit",
+          "ave_ids": [],
+          "detection": "static",
+          "notes": "A request call whose URL host is a template or f-string value. No AVE class."
+        }
+      ]
+    }
+  ],
+  "rules_outside_category_map": [
+    {
+      "id": "AST1",
+      "name": "exec() Call",
+      "analyzer": "behavioral_ast",
+      "relationship": "related",
+      "ave_ids": [
+        "AVE-2026-00033"
+      ],
+      "detection": "static",
+      "notes": "Any exec() call in Python (AST, confidence 0.85, HIGH), with no test of what is executed. Dynamic code execution is AVE-2026-00033's sink (its indicators include eval(user_input)); AST1 has no untrusted-source test and AVE-2026-00033 is stated as an instruction to the agent."
     },
     {
-      "skillspector_category": "mcp_least_privilege",
-      "skillspector_patterns": null,
-      "description": "MCP server capability declarations that exceed the stated purpose of the skill",
-      "ave_ids": ["AVE-2026-00022", "AVE-2026-00002", "AVE-2026-00050"],
-      "primary_ave_id": "AVE-2026-00022",
-      "notes": "AVE-2026-00022 covers scope creep and undeclared resource access. AVE-2026-00002 covers tool description manipulation that may include overbroad capability claims. AVE-2026-00050 (Parasitic Toolchain) added: a component registering tool handlers beyond its declared manifest scope is a direct least-privilege violation at the MCP tool-registration layer.",
-      "gap": "No AVE record specifically addresses MCP server-card capability over-declaration as a distinct class."
+      "id": "AST2",
+      "name": "eval() Call",
+      "analyzer": "behavioral_ast",
+      "relationship": "related",
+      "ave_ids": [
+        "AVE-2026-00033"
+      ],
+      "detection": "static",
+      "notes": "Any eval() call in Python (HIGH, 0.85). Same relationship as AST1."
     },
     {
-      "skillspector_category": "mcp_tool_poisoning",
-      "skillspector_patterns": null,
-      "description": "Malicious instructions injected via MCP tool descriptions, Unicode homoglyphs or hidden HTML in tool metadata",
-      "ave_ids": ["AVE-2026-00002", "AVE-2026-00041", "AVE-2026-00029"],
-      "primary_ave_id": "AVE-2026-00002",
-      "notes": "AVE-2026-00002 is the canonical tool description injection class. AVE-2026-00041 covers MCP server-card injection specifically. AVE-2026-00029 covers homoglyph and Unicode obfuscation as a delivery variant."
+      "id": "AST3",
+      "name": "Dynamic Import",
+      "analyzer": "behavioral_ast",
+      "relationship": "no_fit",
+      "ave_ids": [],
+      "detection": "static",
+      "notes": "Any __import__() call (MEDIUM). A capability, not a behavior class."
+    },
+    {
+      "id": "AST4",
+      "name": "subprocess Call",
+      "analyzer": "behavioral_ast",
+      "relationship": "no_fit",
+      "ave_ids": [],
+      "detection": "static",
+      "notes": "Any subprocess run, call, Popen, check_output or check_call (MEDIUM, 0.70). A capability use. The vulnerable form, caller-controlled input reaching a shell, is best fit by AVE-2026-00052 (proposed for deprecation, discussion 234), which is not recorded as a mapping.",
+      "deprecation_pending_best_fit": [
+        "AVE-2026-00052"
+      ]
+    },
+    {
+      "id": "AST5",
+      "name": "os.system / exec-family",
+      "analyzer": "behavioral_ast",
+      "relationship": "no_fit",
+      "ave_ids": [],
+      "detection": "static",
+      "notes": "Any os.system, os.popen or os exec-family call (HIGH, 0.85). Same as AST4.",
+      "deprecation_pending_best_fit": [
+        "AVE-2026-00052"
+      ]
+    },
+    {
+      "id": "AST6",
+      "name": "compile() Call",
+      "analyzer": "behavioral_ast",
+      "relationship": "no_fit",
+      "ave_ids": [],
+      "detection": "static",
+      "notes": "Any compile() call (MEDIUM). A capability, not a behavior class."
+    },
+    {
+      "id": "AST7",
+      "name": "Dynamic getattr()",
+      "analyzer": "behavioral_ast",
+      "relationship": "no_fit",
+      "ave_ids": [],
+      "detection": "static",
+      "notes": "getattr() with a non-literal name, or a module __dict__ subscript with a non-literal key (LOW, 0.5). A capability signal with no AVE class."
+    },
+    {
+      "id": "AST8",
+      "name": "Dangerous Execution Chain",
+      "analyzer": "behavioral_ast",
+      "relationship": "related",
+      "ave_ids": [
+        "AVE-2026-00004",
+        "AVE-2026-00057"
+      ],
+      "detection": "static",
+      "notes": "exec, eval or compile whose first argument nests a compile, __import__, subprocess, os, base64, codecs, marshal, urllib, requests or httpx call (CRITICAL, 0.95). Structural nesting, not data flow. eval(requests.get(...)) is one of AVE-2026-00004's own examples and exec of decoded data is AVE-2026-00057; the rule fires on both and on other nestings."
+    },
+    {
+      "id": "AST9",
+      "name": "Reflective getattr() Sink",
+      "analyzer": "behavioral_ast",
+      "relationship": "related",
+      "ave_ids": [
+        "AVE-2026-00057"
+      ],
+      "detection": "static",
+      "notes": "getattr(os, 'system') and module __dict__['exec'] with a literal sink name (HIGH). SkillSpector calls it a deliberate evasion of name-based detection, which is the aim of AVE-2026-00057 (evading static scanners) reached by reflection instead of encoding."
+    },
+    {
+      "id": "AST10",
+      "name": "Insecure Deserialization",
+      "analyzer": "behavioral_ast",
+      "relationship": "related",
+      "ave_ids": [
+        "AVE-2026-00033"
+      ],
+      "detection": "static",
+      "notes": "pickle, marshal, dill, jsonpickle, read_pickle, joblib.load and yaml.unsafe_load unconditionally; yaml.load without a safe loader; torch.load without weights_only (MEDIUM). The same sink family as AVE-2026-00033, with no untrusted-source test. AST10 is named in PATTERN_NAMES and DEFAULT_EXPLANATIONS but not in RULE_ID_TO_CATEGORY."
+    },
+    {
+      "id": "BH1",
+      "name": "Bundled lifecycle hooks",
+      "analyzer": "bundled_execution_surface",
+      "relationship": "related",
+      "ave_ids": [
+        "AVE-2026-00064"
+      ],
+      "detection": "static",
+      "notes": "Reads hooks/hooks.json, .claude/settings.json, .claude/settings.local.json and the hooks field of .claude-plugin/plugin.json and reports that bundled lifecycle hooks can run on matching events, with severity set by reach and handler type (confidence 0.95, activation conditional). A committed auto-run surface in the sense of AVE-2026-00064; BH1 does not test the 'no user confirmation' condition. It remembers hook identities between the two settings files of one scan, not between versions, so it cannot see AVE-2026-00084's update-time rebinding."
+    },
+    {
+      "id": "BH2",
+      "name": "Bundled hook sends content remotely",
+      "analyzer": "bundled_execution_surface",
+      "relationship": "related",
+      "ave_ids": [
+        "AVE-2026-00046",
+        "AVE-2026-00003"
+      ],
+      "detection": "static",
+      "notes": "A bundled hook proven to send event or file content to a non-loopback host: an http handler on a sensitive event (UserPromptSubmit, PreToolUse, PostToolUse and similar), or a curl, wget, scp or rsync command uploading event input or a sensitive path (CRITICAL, 0.99). A hook that routes tool-call events to an external URL is AVE-2026-00046's behavior; the content sent is not limited to credentials (AVE-2026-00003)."
+    },
+    {
+      "id": "BH3",
+      "name": "Bundled permission surface",
+      "analyzer": "bundled_execution_surface",
+      "relationship": "equivalent",
+      "ave_ids": [
+        "AVE-2026-00063"
+      ],
+      "detection": "static",
+      "notes": "Settings permissions: whole-tool or broad allow grants (Bash, Bash(*), Read, Edit, Write, root-wide paths) and defaultMode values such as bypassPermissions; modes ignored on a surface are reported with activation ignored_by_surface. A declarative setting that removes the approval step is AVE-2026-00063 (the cfgaudit crosswalk maps bypassPermissions and allowlists to it the same way)."
+    },
+    {
+      "id": "BH4",
+      "name": "Bundled settings commands",
+      "analyzer": "bundled_execution_surface",
+      "relationship": "related",
+      "ave_ids": [
+        "AVE-2026-00064"
+      ],
+      "detection": "static",
+      "notes": "Settings keys that run shell commands: apiKeyHelper, awsAuthRefresh, otelHeadersHelper, statusLine, fileSuggestion (MEDIUM, 0.95). A project-level setting that makes the agent run a command, as in AVE-2026-00064, but the keys run only after settings activation and the rule does not test for a confirmation step."
+    },
+    {
+      "id": "RP1",
+      "name": "Unpinned MCP/package reference",
+      "analyzer": "mcp_rug_pull",
+      "relationship": "equivalent",
+      "ave_ids": [
+        "AVE-2026-00062"
+      ],
+      "detection": "static",
+      "notes": "Static mode: npx, uvx, pip install or docker pull references with no version, tag or digest, in code or manifest. A mutable dependency reference, AVE-2026-00062. The same id is reused in diff mode for added permissions, but diff mode needs previous_manifest, which build_context.py hard-codes to None, so a normal scan never runs it."
+    },
+    {
+      "id": "RP2",
+      "name": "Permission pre-staging",
+      "analyzer": "mcp_rug_pull",
+      "relationship": "no_fit",
+      "ave_ids": [],
+      "detection": "static",
+      "notes": "Static mode: any '\"permissions\": [...]' array (0.6) or 'request additional permissions' prose (0.7) in the manifest, labelled pre-staging. Fires on ordinary permission lists; no AVE class. In diff mode the same id means changed trigger phrases, which a normal scan never reaches."
+    },
+    {
+      "id": "RP3",
+      "name": "Unpinned skill version",
+      "analyzer": "mcp_rug_pull",
+      "relationship": "related",
+      "ave_ids": [
+        "AVE-2026-00062"
+      ],
+      "detection": "static",
+      "notes": "Static mode: manifest version '*', 'latest', 'any' or a '>=' or '^' constraint. An unpinned version of the skill itself; AVE-2026-00062 is about a dependency reference, so it is the nearest. In diff mode the same id means a changed parameter schema, which a normal scan never reaches."
+    },
+    {
+      "id": "PE4",
+      "name": "Docker Socket Access",
+      "analyzer": "static_patterns_privilege_escalation",
+      "relationship": "no_fit",
+      "ave_ids": [],
+      "detection": "static",
+      "notes": "docker.sock paths, docker.from_env() and DockerClient( (HIGH). Local container-daemon access; AVE-2026-00071 is a redirect of the daemon to a remote host, a different mechanism."
+    },
+    {
+      "id": "PE5",
+      "name": "Privileged Container / Container Escape",
+      "analyzer": "static_patterns_privilege_escalation",
+      "relationship": "no_fit",
+      "ave_ids": [],
+      "detection": "static",
+      "notes": "--privileged, a root bind mount, --cap-add SYS_ADMIN, host namespaces, nsenter, release_agent. Container escape primitives with no AVE class (sandbox weakening is an open surface in the cfgaudit crosswalk too)."
+    },
+    {
+      "id": "AE1",
+      "name": "Incomplete referenced artifact analysis",
+      "analyzer": "finalize_inspection_ledger",
+      "relationship": "no_fit",
+      "ave_ids": [],
+      "detection": "static",
+      "notes": "Coverage finding: a referenced artifact was not completely inspected (HIGH, 1.0). It says what the scan did not see, not a behavior."
+    },
+    {
+      "id": "AE2",
+      "name": "Artifact content does not match extension",
+      "analyzer": "artifact_integrity",
+      "relationship": "narrower",
+      "ave_ids": [
+        "AVE-2026-00024"
+      ],
+      "detection": "static",
+      "notes": "Content kind disagrees with the file extension: a binary suffix on text content or a text suffix on binary bytes (MEDIUM, 0.9). Decided by byte classification (text versus binary), not by an ML file-type model. AVE-2026-00024 is the specific case of an executable disguised as a skill file; AE2 also fires on non-executable mismatches."
+    },
+    {
+      "id": "AE3",
+      "name": "Embedded NUL bytes in text artifact",
+      "analyzer": "artifact_integrity",
+      "relationship": "related",
+      "ave_ids": [
+        "AVE-2026-00024"
+      ],
+      "detection": "static",
+      "notes": "A text artifact that contains NUL bytes (HIGH, 0.9). Binary content under a text file; near AVE-2026-00024 but does not test for an executable."
+    },
+    {
+      "id": "AE4",
+      "name": "Suspicious Unicode normalization or mixed script",
+      "analyzer": "artifact_integrity",
+      "relationship": "related",
+      "ave_ids": [
+        "AVE-2026-00029"
+      ],
+      "detection": "static",
+      "notes": "Format-character density of 1% or more, or mixed scripts, in text (MEDIUM, 0.8). The same family of tricks as AVE-2026-00029; it reports a signal, not a hidden instruction."
+    },
+    {
+      "id": "AE5",
+      "name": "Exceeds whole-file semantic analysis limit",
+      "analyzer": "artifact_integrity",
+      "relationship": "no_fit",
+      "ave_ids": [],
+      "detection": "static",
+      "notes": "Coverage finding: an instruction-capable file exceeds the whole-file semantic analysis limit (HIGH, 1.0)."
+    },
+    {
+      "id": "AE6",
+      "name": "Inter-character separators",
+      "analyzer": "artifact_integrity",
+      "relationship": "related",
+      "ave_ids": [
+        "AVE-2026-00057"
+      ],
+      "detection": "static",
+      "notes": "Instruction text with separators between characters to evade pattern matching, for example 'i g n o r e' (HIGH, 0.9). Evading static pattern matching by splitting keywords is part of AVE-2026-00057's fingerprint; AVE-2026-00057 names concatenation rather than separators."
+    },
+    {
+      "id": "AE7",
+      "name": "Size limit, trailing content not inspected",
+      "analyzer": "finalize_inspection_ledger",
+      "relationship": "no_fit",
+      "ave_ids": [],
+      "detection": "static",
+      "notes": "Coverage finding: a file exceeds the per-file size limit and trailing content was not inspected (HIGH, 1.0)."
+    },
+    {
+      "id": "SSD-1",
+      "name": "Semantic prompt injection",
+      "analyzer": "semantic_security_discovery",
+      "relationship": "related",
+      "ave_ids": [
+        "AVE-2026-00007",
+        "AVE-2026-00009"
+      ],
+      "detection": "llm",
+      "notes": "LLM. Polite reframings of ignore-your-instructions, role-play that grants permissions, fictional framings used to bypass safety. The meaning of AVE-2026-00007 and AVE-2026-00009 without their keywords."
+    },
+    {
+      "id": "SSD-2",
+      "name": "Novel or paraphrased attack phrasing",
+      "analyzer": "semantic_security_discovery",
+      "relationship": "related",
+      "ave_ids": [
+        "AVE-2026-00007"
+      ],
+      "detection": "llm",
+      "notes": "LLM. Paraphrased or encoded forms of known attack phrasing, the same classes as SSD-1 with AVE-2026-00007 first."
+    },
+    {
+      "id": "SSD-3",
+      "name": "Natural-language exfiltration instructions",
+      "analyzer": "semantic_security_discovery",
+      "relationship": "related",
+      "ave_ids": [
+        "AVE-2026-00003",
+        "AVE-2026-00013"
+      ],
+      "detection": "llm",
+      "notes": "LLM. Plain-language instructions to collect or leak data ('keep a log of all inputs', 'always echo back credentials'). The instruct-then-expose shape of AVE-2026-00003 and AVE-2026-00013 in plain words."
+    },
+    {
+      "id": "SSD-4",
+      "name": "Narrative or gradual deception",
+      "analyzer": "semantic_security_discovery",
+      "relationship": "no_fit",
+      "ave_ids": [],
+      "detection": "llm",
+      "notes": "LLM. Deception spread across steps. No single static AVE record; AVE-2026-00085 is the multi-skill form and needs several skills."
+    },
+    {
+      "id": "SDI-1",
+      "name": "Description-behavior mismatch",
+      "analyzer": "semantic_developer_intent",
+      "relationship": "related",
+      "ave_ids": [
+        "AVE-2026-00058"
+      ],
+      "detection": "llm",
+      "notes": "LLM. Manifest description versus code behavior (the TP4 test applied per file). AVE-2026-00058's generic-description case."
+    },
+    {
+      "id": "SDI-2",
+      "name": "Context-inappropriate capability",
+      "analyzer": "semantic_developer_intent",
+      "relationship": "related",
+      "ave_ids": [
+        "AVE-2026-00022",
+        "AVE-2026-00058"
+      ],
+      "detection": "llm",
+      "notes": "LLM. A code capability unjustified by the stated purpose, for example a text formatter that spawns subprocesses. Close to AVE-2026-00022 and AVE-2026-00058."
+    },
+    {
+      "id": "SDI-3",
+      "name": "Scope creep vs declared permissions",
+      "analyzer": "semantic_developer_intent",
+      "relationship": "related",
+      "ave_ids": [
+        "AVE-2026-00022"
+      ],
+      "detection": "llm",
+      "notes": "LLM. Code that accesses more than the manifest permissions cover (LP1 with judgement). AVE-2026-00022."
+    },
+    {
+      "id": "SDI-4",
+      "name": "Intent-code divergence",
+      "analyzer": "semantic_developer_intent",
+      "relationship": "no_fit",
+      "ave_ids": [],
+      "detection": "llm",
+      "notes": "LLM. Comments or docstrings that contradict the code. No AVE class."
+    },
+    {
+      "id": "SQP-1",
+      "name": "Vague triggers",
+      "analyzer": "semantic_quality_policy",
+      "relationship": "related",
+      "ave_ids": [
+        "AVE-2026-00058"
+      ],
+      "detection": "llm",
+      "notes": "LLM. Vague or over-broad trigger wording in markdown, text and manifests (TR1 and TR3 with judgement). AVE-2026-00058."
+    },
+    {
+      "id": "SQP-2",
+      "name": "Missing user warnings",
+      "analyzer": "semantic_quality_policy",
+      "relationship": "no_fit",
+      "ave_ids": [],
+      "detection": "llm",
+      "notes": "LLM. Missing user warnings for risky operations. A quality finding with no AVE class."
+    },
+    {
+      "id": "SQP-3",
+      "name": "Natural-language policy violations",
+      "analyzer": "semantic_quality_policy",
+      "relationship": "no_fit",
+      "ave_ids": [],
+      "detection": "llm",
+      "notes": "LLM. Natural-language policy violations, currently language or locale policy. No AVE class."
     }
   ],
   "gaps": [
     {
-      "skillspector_category": "yara_signatures",
-      "reason": "YARA detects embedded known-malware artifacts. AVE enumerates behavioral vulnerability classes in skill instructions, not malware payload matching. These are complementary, not overlapping."
+      "skillspector_category": "Prompt Injection",
+      "skillspector_rules": [
+        "P5"
+      ],
+      "reason": "Content safety (physical-harm content), not an agent behavior class."
     },
     {
-      "skillspector_category": "trigger_abuse",
-      "reason": "Conditional trigger abuse as a distinct behavioral class (deferred payload execution, dead-man switches) is not yet a separate AVE record. Partially covered by AVE-2026-00001 and AVE-2026-00027."
+      "skillspector_category": "Data Exfiltration",
+      "skillspector_rules": [
+        "TT1",
+        "TT2"
+      ],
+      "reason": "Generic data-flow reports between any source and sink, not a behavior class."
     },
     {
-      "skillspector_category": "mcp_least_privilege",
-      "reason": "Server-card capability over-declaration as a distinct behavioral class is not yet a separate AVE record, though AVE-2026-00050 now covers the runtime registration variant of this gap."
+      "skillspector_category": "Privilege Escalation",
+      "skillspector_rules": [
+        "PE2"
+      ],
+      "reason": "Elevated execution is a capability use, not a behavior class."
+    },
+    {
+      "skillspector_category": "Supply Chain",
+      "skillspector_rules": [
+        "SC4",
+        "SC5",
+        "SC6"
+      ],
+      "reason": "Known-vulnerable, abandoned and typosquatted dependencies are reputation and CVE checks. AVE enumerates behavior classes; the nearest records (AVE-2026-00074, 00017, 00066) test different things."
+    },
+    {
+      "skillspector_category": "Supply Chain",
+      "skillspector_rules": [
+        "SC10"
+      ],
+      "reason": "Package-manager dependency source redirection. A genuine gap on the AVE side with SC10 as its source: no AVE record's fingerprint or text covers it (all 89 records searched). The two nearest records, AVE-2026-00073 and 00062, are listed under checked_and_rejected."
+    },
+    {
+      "skillspector_category": "Excessive Agency",
+      "skillspector_rules": [
+        "EA4",
+        "EA5"
+      ],
+      "reason": "Resource exhaustion and billing-account switching. No AVE class."
+    },
+    {
+      "skillspector_category": "Output Handling",
+      "skillspector_rules": [
+        "OH2",
+        "OH3"
+      ],
+      "reason": "Cross-context output flow has only runtime AVE counterparts (out of scope); unbounded output is resource exhaustion."
+    },
+    {
+      "skillspector_category": "Memory Poisoning",
+      "skillspector_rules": [
+        "MP2"
+      ],
+      "reason": "Context window stuffing has only a runtime AVE counterpart, AVE-2026-00023 (out of scope)."
+    },
+    {
+      "skillspector_category": "Tool Misuse",
+      "skillspector_rules": [
+        "TM4"
+      ],
+      "reason": "Privileged Kubernetes workload. Cluster takeover primitive with no AVE class."
+    },
+    {
+      "skillspector_category": "YARA Match",
+      "skillspector_rules": [
+        "YR2",
+        "YR3"
+      ],
+      "reason": "Webshell and cryptominer signatures. Known-malware matching with no AVE class."
+    },
+    {
+      "skillspector_category": "MCP Least Privilege",
+      "skillspector_rules": [
+        "LP4"
+      ],
+      "reason": "Over-declared permissions. Carried over from the previous revision's gap on server-card over-declaration; still no AVE record."
+    },
+    {
+      "skillspector_category": "Server-Side Request Forgery",
+      "skillspector_rules": [
+        "SSRF1",
+        "SSRF2",
+        "SSRF3"
+      ],
+      "reason": "No AVE record covers SSRF or cloud metadata access."
+    },
+    {
+      "skillspector_category": "(emitted outside RULE_ID_TO_CATEGORY)",
+      "skillspector_rules": [
+        "AST3",
+        "AST4",
+        "AST5",
+        "AST6",
+        "AST7"
+      ],
+      "reason": "Python capability signals (dynamic import, subprocess, os.system, compile, dynamic getattr). AST4 and AST5 are best fit by AVE-2026-00052, pending deprecation."
+    },
+    {
+      "skillspector_category": "(emitted outside RULE_ID_TO_CATEGORY)",
+      "skillspector_rules": [
+        "RP2"
+      ],
+      "reason": "Fires on ordinary permission lists; no AVE class."
+    },
+    {
+      "skillspector_category": "(emitted outside RULE_ID_TO_CATEGORY)",
+      "skillspector_rules": [
+        "PE4",
+        "PE5"
+      ],
+      "reason": "Container socket and escape primitives. No AVE class."
+    },
+    {
+      "skillspector_category": "(emitted outside RULE_ID_TO_CATEGORY)",
+      "skillspector_rules": [
+        "AE1",
+        "AE5",
+        "AE7"
+      ],
+      "reason": "Coverage findings: they report what the scan could not inspect, not a behavior."
+    },
+    {
+      "skillspector_category": "(emitted outside RULE_ID_TO_CATEGORY)",
+      "skillspector_rules": [
+        "SSD-4",
+        "SDI-4",
+        "SQP-2",
+        "SQP-3"
+      ],
+      "reason": "LLM-only findings with no AVE class (narrative deception, comment-code divergence, missing warnings, language policy)."
+    }
+  ],
+  "ave_gaps": [
+    {
+      "ave_id": "AVE-2026-00006",
+      "reason": "Crypto wallet drain by fund-transfer instruction. No SkillSpector rule looks for transfers, allowance approvals or transaction signing. YR1's info_stealer names wallet.dat (theft of a wallet file) and YR3 matches miners; neither is a transfer instruction."
+    },
+    {
+      "ave_id": "AVE-2026-00011",
+      "reason": "Explicit tool-call directives with parameters. No rule detects an instruction that dictates a tool invocation; EA1, LP2 and PE1 concern how broad tool access is, not a directed call."
+    },
+    {
+      "ave_id": "AVE-2026-00014",
+      "reason": "False authority claims (text said to come from a model vendor or operator). No rule or YARA string looks for authority claims; P1 and AR3 match override and no-restriction phrasing only."
+    },
+    {
+      "ave_id": "AVE-2026-00017",
+      "reason": "MCP server impersonation. TP2 flags homoglyph and mixed-script identifiers, but no rule reads a claim of official or verified status or compares a name with a registry."
+    },
+    {
+      "ave_id": "AVE-2026-00030",
+      "reason": "Elevated privileges granted to anyone who claims a role. No rule tests for conditional privilege grants based on a claimed role."
+    },
+    {
+      "ave_id": "AVE-2026-00036",
+      "reason": "Lateral movement instructions. No rule has lateral-movement or pivot language; 'pivot' appears only inside the SSRF2 explanation text."
+    },
+    {
+      "ave_id": "AVE-2026-00039",
+      "reason": "Steganographic and covert-channel exfiltration. No rule looks for first-letter, whitespace or timing encodings of output. P7's acrostic and encode-the-prompt patterns touch the system-prompt case only."
+    },
+    {
+      "ave_id": "AVE-2026-00045",
+      "reason": "Cross-app-access escalation between MCP servers in one session. No rule tests for text in one server's tool description that tells the agent to use another server's tools."
+    },
+    {
+      "ave_id": "AVE-2026-00047",
+      "reason": "Hardcoded credentials. SkillSpector has no rule, static or LLM, that flags literal secret strings in files; PE3 flags paths to credential files and E2 flags bulk environment reads. Its report redaction hides secrets in output but does not report them."
+    },
+    {
+      "ave_id": "AVE-2026-00048",
+      "reason": "Unsafe agent delegation chain. No rule has sub-agent or delegation language; the only 'Subagent' strings in the analyzers are hook event names."
+    },
+    {
+      "ave_id": "AVE-2026-00049",
+      "reason": "Host header injection on agent-initiated requests. No rule inspects Host, X-Forwarded-Host or Forwarded headers."
+    },
+    {
+      "ave_id": "AVE-2026-00051",
+      "reason": "OAuth discovery rebinding. No rule reads OAuth discovery metadata; the OAuth wording in PE3 only decides when a token noun is benign."
+    },
+    {
+      "ave_id": "AVE-2026-00052",
+      "reason": "Command injection in MCP server implementation code. Proposed for deprecation in discussion 234 (CWE-78). The nearest checks (TT5, AST4, AST5) are not recorded as mappings."
+    },
+    {
+      "ave_id": "AVE-2026-00053",
+      "reason": "Path traversal in MCP resource handlers. Proposed for deprecation in discussion 234 (CWE-22). SkillSpector has no path-traversal rule."
+    },
+    {
+      "ave_id": "AVE-2026-00055",
+      "reason": "Command execution through an untrusted MCP launch configuration. No rule reads MCP server command and args fields; BH4 covers Claude Code settings keys such as apiKeyHelper, a different configuration surface."
+    },
+    {
+      "ave_id": "AVE-2026-00059",
+      "reason": "Fragmented cross-description injection. TP1 to TP3 inspect each metadata field on its own (docs/B.3.2), so a payload split across descriptions is not reassembled."
+    },
+    {
+      "ave_id": "AVE-2026-00060",
+      "reason": "STDIO transport shell injection in server code. Proposed for deprecation in discussion 234 (CWE-78). The nearest checks (TT5, AST4, AST5) are not recorded as mappings."
+    },
+    {
+      "ave_id": "AVE-2026-00065",
+      "reason": "A2A agent card poisoning. No rule or YARA string mentions agent cards or the A2A protocol."
+    },
+    {
+      "ave_id": "AVE-2026-00069",
+      "reason": "Image-hidden instructions. SkillSpector's image handling validates PNG and JPEG structure and, by its own documentation, does not inspect rendered content or perform OCR (docs/passive-documentation-images.md)."
+    },
+    {
+      "ave_id": "AVE-2026-00071",
+      "reason": "DOCKER_HOST daemon redirect. No rule mentions DOCKER_HOST or the -H and --host flags; PE4 and PE5 cover local socket and privileged-container primitives."
+    },
+    {
+      "ave_id": "AVE-2026-00072",
+      "reason": "MCP server bound to all interfaces. No rule inspects bind addresses; SSRF2 matches request targets, not listeners."
+    },
+    {
+      "ave_id": "AVE-2026-00073",
+      "reason": "Endpoint redirect through a static configuration value. SC10 is the same shape for package managers only. No rule checks telemetry, model-provider or MCP server URLs."
+    },
+    {
+      "ave_id": "AVE-2026-00074",
+      "reason": "Dead external anchor reclamation. It needs live lookups against GitHub, registries, RDAP or cloud providers. SC4 queries OSV.dev and SC5 and SC6 use fixed lists; none checks that a referenced owner, package or domain is still claimed."
+    },
+    {
+      "ave_id": "AVE-2026-00076",
+      "reason": "Natural-language steering of an approval classifier. No rule reads allow_instructions or block_instructions entries; BH3 reads Claude settings permissions only."
+    },
+    {
+      "ave_id": "AVE-2026-00077",
+      "reason": "Cross-origin tool and resource declarations in one MCP manifest. No rule compares the root domains or schemes of URLs declared in a manifest."
+    },
+    {
+      "ave_id": "AVE-2026-00084",
+      "reason": "Lifecycle hook trust decoupling on plugin update. Detection needs a diff against the last reviewed version. BH1 sees one snapshot (it only carries hook identities between the two settings files of one scan), and RP's diff mode needs previous_manifest, which build_context.py sets to None and which compares permissions, triggers and parameters, not hook bindings."
+    },
+    {
+      "ave_id": "AVE-2026-00085",
+      "reason": "Collusive cross-skill composition. Every rule evaluates one artifact or one skill; the multi-skill module only discovers skill directories under --recursive and does not correlate them."
+    }
+  ],
+  "out_of_scope_ave_records": {
+    "reason": "SkillSpector is a static scanner. These records are detected from runtime behavior or drift, so they are listed and not mapped.",
+    "runtime_observed": [
+      "AVE-2026-00016",
+      "AVE-2026-00018",
+      "AVE-2026-00019",
+      "AVE-2026-00020",
+      "AVE-2026-00023",
+      "AVE-2026-00028",
+      "AVE-2026-00031",
+      "AVE-2026-00035",
+      "AVE-2026-00037",
+      "AVE-2026-00042",
+      "AVE-2026-00043",
+      "AVE-2026-00044",
+      "AVE-2026-00050",
+      "AVE-2026-00054",
+      "AVE-2026-00056",
+      "AVE-2026-00066",
+      "AVE-2026-00067",
+      "AVE-2026-00068",
+      "AVE-2026-00078",
+      "AVE-2026-00080",
+      "AVE-2026-00081",
+      "AVE-2026-00083",
+      "AVE-2026-00086",
+      "AVE-2026-00087",
+      "AVE-2026-00088",
+      "AVE-2026-00089"
+    ],
+    "runtime_drift_detected": [
+      "AVE-2026-00070",
+      "AVE-2026-00079"
+    ]
+  },
+  "checked_and_rejected": [
+    {
+      "skillspector_rule": "SC10",
+      "ave_id": "AVE-2026-00073",
+      "reason": "Same shape (a static configuration value redirects traffic) but a different object: where a package manager resolves dependencies versus where the agent sends telemetry or model traffic."
+    },
+    {
+      "skillspector_rule": "SC10",
+      "ave_id": "AVE-2026-00062",
+      "reason": "AVE-2026-00062 is the absence of a pin. A pinned name still resolves from an attacker's registry, so pinning is not the control SC10 tests; AVE-2026-00074 makes the same point for changed target identity."
+    },
+    {
+      "skillspector_rule": "SC8",
+      "ave_id": "AVE-2026-00075",
+      "reason": "Recorded as narrower, not related: every 00075 instance ships a .pyc so SC8 fires, but SC8 never opens the bytecode and AVE-2026-00075 requires divergence from the sibling source."
+    },
+    {
+      "skillspector_rule": "TR2",
+      "ave_id": "AVE-2026-00058",
+      "reason": "AVE-2026-00058 needs activation scope broader than the skill's function; TR2 only tests a trigger against a fixed list of built-in command names."
+    },
+    {
+      "skillspector_rule": "TT5",
+      "ave_id": "AVE-2026-00052",
+      "reason": "Best fit for the shell sinks, but AVE-2026-00052 is proposed for deprecation (discussion 234, CWE-78), so it is noted and not recorded as a mapping."
+    },
+    {
+      "skillspector_rule": "AST4",
+      "ave_id": "AVE-2026-00052",
+      "reason": "Same as TT5: noted, not mapped, while AVE-2026-00052 is pending deprecation."
+    },
+    {
+      "skillspector_rule": "SC6",
+      "ave_id": "AVE-2026-00017",
+      "reason": "AVE-2026-00017 is a false claim of official MCP server identity; a typosquatted package name in a dependency list is a different object."
+    },
+    {
+      "skillspector_rule": "SC5",
+      "ave_id": "AVE-2026-00074",
+      "reason": "AVE-2026-00074 is verified live against the owning authority; SC5 matches a fixed list of abandoned names."
+    },
+    {
+      "skillspector_rule": "SSRF2",
+      "ave_id": "AVE-2026-00032",
+      "reason": "AVE-2026-00032 is an instruction to probe and map a network; SSRF2 flags one request call to a literal private address."
+    },
+    {
+      "skillspector_rule": "PE4",
+      "ave_id": "AVE-2026-00071",
+      "reason": "AVE-2026-00071 redirects the daemon to a remote host; PE4 flags local socket use."
+    },
+    {
+      "skillspector_rule": "TM3",
+      "ave_id": "AVE-2026-00072",
+      "reason": "Auth settings set to none are not a wildcard bind address; AVE-2026-00072 needs the 0.0.0.0 or [::] bind."
+    },
+    {
+      "skillspector_rule": "BH1",
+      "ave_id": "AVE-2026-00084",
+      "reason": "AVE-2026-00084 is detected by a diff against the last reviewed version; BH1 reads one snapshot."
+    },
+    {
+      "skillspector_rule": "RP1",
+      "ave_id": "AVE-2026-00084",
+      "reason": "RP's diff mode would be near AVE-2026-00084 (an update changes a trusted surface) but compares permissions, triggers and parameters rather than hook bindings, and is never run by a normal scan."
+    },
+    {
+      "skillspector_rule": "AS2",
+      "ave_id": "AVE-2026-00003",
+      "reason": "Reading MCP config is only the read half of AVE-2026-00003 and carries no transmission; recorded against AVE-2026-00022 instead."
+    },
+    {
+      "skillspector_rule": "MP2",
+      "ave_id": "AVE-2026-00023",
+      "reason": "AVE-2026-00023 is runtime_observed; out of scope."
+    },
+    {
+      "skillspector_rule": "OH2",
+      "ave_id": "AVE-2026-00018",
+      "reason": "AVE-2026-00018 and AVE-2026-00020 are runtime_observed; out of scope."
+    },
+    {
+      "skillspector_rule": "TP2",
+      "ave_id": "AVE-2026-00017",
+      "reason": "A homoglyph tool name spoofs an identifier but makes no claim of verified server identity, which is AVE-2026-00017's fingerprint."
+    }
+  ],
+  "dropped_from_previous_revision": [
+    {
+      "previous_category": "prompt_injection",
+      "ave_id": "AVE-2026-00002",
+      "reason": "Prompt Injection rules read file bodies, not tool-description metadata; the tool-description link now sits on the MCP Tool Poisoning rules (TP1, TP3)."
+    },
+    {
+      "previous_category": "data_exfiltration",
+      "ave_id": "AVE-2026-00026",
+      "reason": "No Data Exfiltration rule encodes data into tool output. AVE-2026-00026 now appears only as a secondary link on P7 and P8 (system prompt encoding and transmission)."
+    },
+    {
+      "previous_category": "data_exfiltration",
+      "ave_id": "AVE-2026-00039",
+      "reason": "No rule looks for steganographic or covert-channel output; see ave_gaps."
+    },
+    {
+      "previous_category": "privilege_escalation",
+      "ave_id": "AVE-2026-00022",
+      "reason": "The Privilege Escalation rules (PE1 to PE3, TT5) do not compare declared scope. AVE-2026-00022 now appears under Excessive Agency, MCP Least Privilege and Agent Snooping."
+    },
+    {
+      "previous_category": "privilege_escalation",
+      "ave_id": "AVE-2026-00045",
+      "reason": "No rule covers cross-app-access escalation; see ave_gaps."
+    },
+    {
+      "previous_category": "supply_chain",
+      "ave_id": "AVE-2026-00034",
+      "reason": "No Supply Chain rule covers dynamic third-party skill import. It appears only through the YARA rule agent_skill_remote_bootstrap_execution (YR1)."
+    },
+    {
+      "previous_category": "supply_chain",
+      "ave_id": "AVE-2026-00049",
+      "reason": "No rule inspects HTTP Host headers; the old link was by analogy with the 'supply chain' attack_class label, not by mechanism."
+    },
+    {
+      "previous_category": "supply_chain",
+      "ave_id": "AVE-2026-00051",
+      "reason": "No rule reads OAuth discovery metadata; the old link was by analogy with the attack_class label."
+    },
+    {
+      "previous_category": "excessive_agency",
+      "ave_id": "AVE-2026-00048",
+      "reason": "No rule has delegation or sub-agent language; the old link was by category name."
+    },
+    {
+      "previous_category": "memory_poisoning",
+      "ave_id": "AVE-2026-00019",
+      "reason": "AVE-2026-00019 is runtime_observed; out of scope for a static scanner."
+    },
+    {
+      "previous_category": "tool_misuse",
+      "ave_id": "AVE-2026-00011",
+      "reason": "No Tool Misuse rule detects an instruction that dictates a tool call with parameters."
+    },
+    {
+      "previous_category": "tool_misuse",
+      "ave_id": "AVE-2026-00018",
+      "reason": "AVE-2026-00018 is runtime_observed; out of scope."
+    },
+    {
+      "previous_category": "rogue_agent",
+      "ave_id": "AVE-2026-00048",
+      "reason": "Neither RA1 nor RA2 concerns delegation; the old link was by category name."
+    },
+    {
+      "previous_category": "rogue_agent",
+      "ave_id": "AVE-2026-00036",
+      "reason": "Neither RA1 nor RA2 concerns lateral movement."
+    },
+    {
+      "previous_category": "rogue_agent",
+      "ave_id": "AVE-2026-00050",
+      "reason": "AVE-2026-00050 is runtime_observed; out of scope."
+    },
+    {
+      "previous_category": "trigger_abuse",
+      "ave_id": "AVE-2026-00001",
+      "reason": "Remote fetch is detected by SC2, not by the Trigger Abuse rules, which are manifest word-list checks."
+    },
+    {
+      "previous_category": "trigger_abuse",
+      "ave_id": "AVE-2026-00027",
+      "reason": "Instruction persistence is detected by MP1 (Memory Poisoning), not by the Trigger Abuse rules."
+    },
+    {
+      "previous_category": "taint_tracking",
+      "ave_id": "AVE-2026-00026",
+      "reason": "No taint rule models encoding into tool output."
+    },
+    {
+      "previous_category": "taint_tracking",
+      "ave_id": "AVE-2026-00049",
+      "reason": "No rule inspects HTTP Host headers; the old link rested on a 'textbook taint-tracking target' argument, not on a SkillSpector rule."
+    },
+    {
+      "previous_category": "mcp_least_privilege",
+      "ave_id": "AVE-2026-00002",
+      "reason": "LP1 to LP4 compare permissions with code capabilities; none reads description text for directives."
+    },
+    {
+      "previous_category": "mcp_least_privilege",
+      "ave_id": "AVE-2026-00050",
+      "reason": "AVE-2026-00050 is runtime_observed; out of scope."
     }
   ],
   "coverage": {
-    "skillspector_categories_mapped": 15,
-    "skillspector_categories_no_ave_class": 1,
-    "skillspector_categories_with_gaps": 2,
-    "ave_records_referenced": 29
+    "skillspector_rules_total": 78,
+    "skillspector_categories": 18,
+    "skillspector_rules_mapped": 58,
+    "skillspector_rules_no_fit": 20,
+    "skillspector_categories_with_a_mapped_rule": 17,
+    "rules_outside_category_map": 37,
+    "rules_outside_category_map_mapped": 22,
+    "rules_outside_category_map_no_fit": 15,
+    "relationship_equivalent": 13,
+    "relationship_narrower": 3,
+    "relationship_broader": 0,
+    "relationship_related": 64,
+    "relationship_no_fit": 35,
+    "llm_dependent_rules": 12,
+    "ave_records_total": 89,
+    "ave_static_records": 61,
+    "ave_static_records_referenced": 34,
+    "ave_static_records_not_referenced": 27,
+    "ave_runtime_records_out_of_scope": 28,
+    "not_claimed": "No claim that SkillSpector emits AVE ids, that either project endorses the mapping, or that a hit on a related rule is an instance of the AVE class. Detection quality (precision, recall) was not measured; only what each rule is designed to match was read. Rules were read at the pinned tag and will drift as SkillSpector changes."
   }
 }
