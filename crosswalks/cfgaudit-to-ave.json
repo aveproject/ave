@@ -379,14 +379,14 @@
         "CFG107",
         "CFG110"
       ],
-      "note": "Added at v1.16.0. Codex shell_environment_policy.set (CFG107) and the Claude Code settings env block (CFG110) setting BASH_ENV, LD_PRELOAD, NODE_OPTIONS and similar, so code runs in every shell command and hook the agent starts. The mechanism is the one AVE-2026-00055 describes, but that record is bound to an untrusted MCP launch config; stretching it onto the agent's own process environment would change what it asserts."
+      "note": "Added at v1.14.0 (CFG107) and v1.15.0 (CFG110). Codex shell_environment_policy.set (CFG107) and the Claude Code settings env block (CFG110) setting BASH_ENV, LD_PRELOAD, NODE_OPTIONS and similar, so code runs in every shell command and hook the agent starts. The mechanism is the one AVE-2026-00055 describes, but that record is bound to an untrusted MCP launch config; stretching it onto the agent's own process environment would change what it asserts."
     },
     {
       "surface": "a committed scheduler that fires prompts on a timer",
       "example_rules": [
         "CFG108"
       ],
-      "note": "Added at v1.16.0. A committed .claude/scheduled_tasks.json: its presence self-enables Claude Code's otherwise-off scheduler and enqueues a repository-authored prompt on a schedule. AVE-2026-00063 is a bypassed human approval gate; this bypasses no gate, it opens a new autonomous channel."
+      "note": "Added at v1.14.0. A committed .claude/scheduled_tasks.json: its presence self-enables Claude Code's otherwise-off scheduler and enqueues a repository-authored prompt on a schedule. AVE-2026-00063 is a bypassed human approval gate; this bypasses no gate, it opens a new autonomous channel."
     },
     {
       "surface": "a declared configuration that never loads",
@@ -394,14 +394,14 @@
         "CFG109",
         "CFG012"
       ],
-      "note": "Added at v1.16.0. The repository states guardrails that are not in force because the agent does not load the file. Measured in both directions: Codex logs 'Invalid configuration; using defaults' and runs, and Claude Code silently discards a whole settings file, every deny rule and hook with it, on a top-level type error or on one unloadable PreToolUse or PermissionRequest hook entry. AVE-2026-00083 is the nearest in effect but is runtime_observed and scoped to a mechanism's own comparison logic."
+      "note": "CFG109 added at v1.15.0; CFG012 is older. The repository states guardrails that are not in force because the agent does not load the file. Measured in both directions: Codex logs 'Invalid configuration; using defaults' and runs, and Claude Code silently discards a whole settings file, every deny rule and hook with it, on a top-level type error or on one unloadable PreToolUse or PermissionRequest hook entry. AVE-2026-00083 is the nearest in effect but is runtime_observed and scoped to a mechanism's own comparison logic."
     },
     {
       "surface": "a committed credential source sent to a committed endpoint",
       "example_rules": [
         "CFG112"
       ],
-      "note": "Added at v1.16.0. An MCP server's bearer_token_file names a file on the reader's machine whose content is sent as a bearer token to the server URL in the same committed file. AVE-2026-00047 is a credential written into the component; here the file names where to read one and where to send it, which no record covers."
+      "note": "Added at v1.15.0. An MCP server's bearer_token_file names a file on the reader's machine whose content is sent as a bearer token to the server URL in the same committed file. AVE-2026-00047 is a credential written into the component; here the file names where to read one and where to send it, which no record covers."
     },
     {
       "surface": "a committed path that makes the agent read a file on the reader's machine",
@@ -409,7 +409,7 @@
         "CFG115",
         "CFG116"
       ],
-      "note": "New. CFG115: a committed config path is a symbolic link that resolves outside the repository, so the agent loads its settings, MCP config or instructions from a file on the machine that checked the repository out. CFG116: an @path import in a committed CLAUDE.md, AGENTS.md or .claude/rules file resolves outside the repository (~/..., an absolute path, ../ past the root); Claude Code loads it after a once-per-project approval dialog, and nobody reviewing the repository can see it. AVE-2026-00001 is a remote fetch and AVE-2026-00047 a credential written into the component; neither covers a repository choosing which local file the agent reads."
+      "note": "New. CFG115: a committed config path is a symbolic link that resolves outside the repository, so the agent loads its settings, MCP config or instructions from a file on the machine that checked the repository out. CFG116: an @path import in a committed CLAUDE.md, AGENTS.md or .claude/rules file resolves outside the repository (~/..., an absolute path, ../ past the root); Claude Code loads it after a once-per-project approval dialog. A reviewer sees the link or the import line, but not the content of the file it reaches. AVE-2026-00001 is a remote fetch, AVE-2026-00047 a credential written into the component, AVE-2026-00053 a path traversal in an MCP tool's own path validation and AVE-2026-00089 a runtime_observed sandbox scope taken from a tool parameter; none covers a repository choosing which local file the agent reads."
     }
   ]
 }
