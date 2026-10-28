@@ -1,0 +1,699 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aveproject.org/schema/ave-record-1.2.0.schema.json",
+  "title": "AVE Record",
+  "description": "AVE (the behavioral vulnerability enumeration standard for agentic AI components) — static definition of one behavioral vulnerability class. Schema v1.2.0.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "ave_id",
+    "schema_version",
+    "status",
+    "title",
+    "description",
+    "attack_class",
+    "behavioral_fingerprint",
+    "references"
+  ],
+  "if": {
+    "properties": {
+      "status": {
+        "const": "draft"
+      }
+    },
+    "required": [
+      "status"
+    ]
+  },
+  "then": {},
+  "else": {
+    "required": [
+      "published",
+      "severity",
+      "aivss",
+      "owasp_mcp",
+      "indicators_of_compromise",
+      "remediation",
+      "researcher"
+    ]
+  },
+  "properties": {
+    "ave_id": {
+      "type": "string",
+      "pattern": "^AVE-[0-9]{4}-[0-9]{5}$",
+      "description": "Unique identifier. Format: AVE-YYYY-NNNNN. Immutable once published. Wrong or obsolete records are deprecated, never renumbered or deleted."
+    },
+    "schema_version": {
+      "type": "string",
+      "description": "AVE schema version this record was authored against, e.g. 1.2.0.",
+      "examples": [
+        "1.2.0"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "deprecated",
+        "draft"
+      ],
+      "description": "Lifecycle status. active: published and current, full field set required. deprecated: superseded or withdrawn — record stays for reference, full field set required. draft: not yet peer-reviewed — only the core submit-required fields apply, everything else is enrichment added before promotion to active."
+    },
+    "published": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 datetime of first publication, e.g. 2026-04-01T09:00:00Z. Required once status is active or deprecated."
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 datetime of most recent update. Optional."
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "Human-readable title. Max 120 characters."
+    },
+    "attack_class": {
+      "type": "string",
+      "description": "Behavioral category, e.g. external_instruction_fetch, tool_description_injection, rug_pull. Use snake_case. Not a vulnerability_type string."
+    },
+    "component_type": {
+      "type": "string",
+      "enum": [
+        "skill",
+        "prompt",
+        "mcp_server",
+        "plugin",
+        "agent",
+        "tool",
+        "other"
+      ],
+      "description": "The kind of agent component this class primarily affects. skill: a skill file (SKILL.md, .skill, etc). prompt: a system prompt or instruction file. mcp_server: an MCP server or its server-card manifest. plugin: a plugin in an agent framework. agent: the agent runtime itself. tool: a tool definition. other: none of the above or cross-cutting. Optional — omit if the class spans multiple types."
+    },
+    "description": {
+      "type": "string",
+      "description": "Full narrative description. Explain the mechanism, why conventional tools miss it, and the worst-case impact."
+    },
+    "behavioral_fingerprint": {
+      "type": "string",
+      "description": "One or two sentences describing what the component DOES that is dangerous. Behavioral, not a byte signature. A second implementer should be able to write a detection rule from this alone."
+    },
+    "behavioral_vector": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Short tags summarising the attack path. Optional. e.g. supply-chain, external-fetch, self-modification. Distinct from example_patterns (illustrative payloads) — keep these short."
+    },
+    "example_patterns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Illustrative attack payload strings or code fragments demonstrating this class. Distinct from behavioral_vector (short tags) and indicators_of_compromise (defender observables). Researcher-facing examples for detection-rule authoring, not verbatim signatures. Optional."
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "CRITICAL",
+        "HIGH",
+        "MEDIUM",
+        "LOW"
+      ],
+      "description": "Severity. Must agree with aivss.aivss_score. CRITICAL requires >= 9.0. HIGH: 7.0-8.9. MEDIUM: 4.0-6.9. LOW: < 4.0."
+    },
+    "aivss_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 10,
+      "description": "Top-level shortcut mirroring aivss.aivss_score. Optional."
+    },
+    "cvss_base_vector": {
+      "type": "string",
+      "description": "CVSS 4.0 base vector string. Optional."
+    },
+    "aivss": {
+      "type": "object",
+      "description": "OWASP AIVSS v0.8 full scoring breakdown.",
+      "additionalProperties": false,
+      "required": [
+        "cvss_base",
+        "aars",
+        "thm",
+        "mitigation_factor",
+        "aivss_score",
+        "spec_version"
+      ],
+      "properties": {
+        "cvss_base": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10,
+          "description": "CVSS base score (0-10)."
+        },
+        "aarf": {
+          "type": "object",
+          "description": "Agentic Amplification and Risk Factors — 10 sub-scores 0.0-1.0. Optional.",
+          "additionalProperties": false,
+          "properties": {
+            "autonomy": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Autonomous action without human confirmation."
+            },
+            "tool_use": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Access to external tools or capabilities."
+            },
+            "multi_agent": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Multi-agent or sub-agent delegation."
+            },
+            "non_determinism": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Behavioral variability across runs."
+            },
+            "self_modification": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Ability to alter own instructions at runtime."
+            },
+            "dynamic_identity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Ability to assume different identities or personas."
+            },
+            "persistent_memory": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Access to persistent storage across sessions."
+            },
+            "natural_language_input": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Degree to which natural language drives behavior."
+            },
+            "data_access": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Access to sensitive data sources."
+            },
+            "external_dependencies": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Reliance on external URLs, APIs, or remote content."
+            }
+          }
+        },
+        "aars": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10,
+          "description": "Agentic Amplification and Reachability Score (0-10). Derived from AARF factors."
+        },
+        "thm": {
+          "type": "number",
+          "minimum": 0.5,
+          "maximum": 1.5,
+          "description": "Threat and Heuristic Multiplier (0.5-1.5). 1.0 = neutral. Reflects exploit availability and in-the-wild evidence."
+        },
+        "mitigation_factor": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Mitigation factor (0-1). 1.0 = no known effective mitigation."
+        },
+        "aivss_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10,
+          "description": "Final composed OWASP AIVSS score (0-10). Must agree with top-level severity."
+        },
+        "aivss_severity": {
+          "type": "string",
+          "enum": [
+            "CRITICAL",
+            "HIGH",
+            "MEDIUM",
+            "LOW"
+          ],
+          "description": "Severity label derived from aivss_score. Optional."
+        },
+        "spec_version": {
+          "type": "string",
+          "const": "0.8",
+          "description": "OWASP AIVSS specification version. Always 0.8 for this schema."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Free-text notes on scoring rationale. Optional."
+        }
+      }
+    },
+    "owasp_mcp": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^MCP[0-9]{2}$"
+      },
+      "minItems": 1,
+      "description": "OWASP MCP Top 10 categories. Format: MCPNN. REQUIRED once a record is active or deprecated — at least one. Provides the core OWASP grounding every published record must have."
+    },
+    "owasp_asi": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^ASI[0-9]{2}$"
+      },
+      "description": "OWASP Agentic Security Initiative (ASI) Top 10 categories. Format: ASINN. Optional — add when the class maps to the Agentic Top 10. Omit rather than force a poor fit."
+    },
+    "mitre_atlas": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^AML\\.T[0-9]{4}(\\.[0-9]{3})?$"
+      },
+      "description": "MITRE ATLAS technique IDs. Format: AML.Txxxx or AML.Txxxx.000. Optional — add when a technique applies. Do not force a mapping; omit if no current ATLAS technique covers this class."
+    },
+    "nist_ai_rmf": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "NIST AI RMF function and category mappings, e.g. MAP-1.5, MEASURE-2.5. Optional."
+    },
+    "provenance_vector": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "description": "Where in the agent context supply chain this class enters and what authority escalation it performs. A descriptive property of the vulnerability, independent of any defense. Optional; absent or null means not yet classified, not 'does not apply'.",
+      "properties": {
+        "entry_class": {
+          "type": "string",
+          "description": "Origin point in the context supply chain. Use the record's own detection_layer value when the class is layer-scoped; use a session-scoped token when more precise.",
+          "pattern": "^(content|server_card|registry_metadata|runtime|transport|tool_response|tool_schema|server_card_document|model_generated|memory|retrieved_document|user_input|operator_config|skill_file)$"
+        },
+        "payload_surface": {
+          "type": "string",
+          "description": "The concrete field or channel carrying the payload, e.g. tool_schema.description, server_card.jwks_uri, http.header.host. Free text; controlled vocabulary grown by convention."
+        },
+        "escalation": {
+          "type": "string",
+          "enum": [
+            "data_to_instruction",
+            "instruction_to_capability",
+            "capability_to_identity"
+          ],
+          "description": "The authority jump this class performs when exploited. If none fits, leave the whole object absent rather than forcing a fit."
+        }
+      }
+    },
+    "trifecta_profile": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "description": "Which lethal-trifecta conditions make this class exploitable (Simon Willison / Palo Alto; cited in OWASP Agentic Skills Top 10). A deployment-applicability filter. Does not affect severity or aivss_score. Optional; absent or null means not yet classified.",
+      "properties": {
+        "requires": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": [
+              "private_data",
+              "untrusted_content",
+              "external_comms"
+            ]
+          },
+          "description": "Conditions that must be present for the class to be exploitable."
+        },
+        "amplifies": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "private_data",
+              "untrusted_content",
+              "external_comms"
+            ]
+          },
+          "description": "Conditions that worsen impact without being strict preconditions."
+        }
+      }
+    },
+    "mitigation": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "description": "Abstract, vendor-neutral description of what class of defense neutralizes this class. Names the strategy, not a runnable control. Any enforcement tool can build a concrete control from these values; no tool's config syntax appears here. The prose remediation field remains the required human-readable form; this object is the structured, machine-consumable companion. Optional; absent or null means not yet classified.",
+      "properties": {
+        "strategy": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": [
+              "deny_by_default",
+              "require_human_approval",
+              "pin_integrity",
+              "isolate_scope",
+              "validate_input",
+              "sanitize_output",
+              "verify_identity",
+              "sever_egress",
+              "least_privilege",
+              "provenance_label"
+            ]
+          },
+          "description": "The class(es) of control that neutralize this vulnerability. Vendor-neutral verbs, not product config."
+        },
+        "enforcement_point": {
+          "type": "string",
+          "enum": [
+            "static_scan",
+            "server_card_fetch",
+            "runtime_proxy",
+            "agent_framework",
+            "downstream_system",
+            "network_layer"
+          ],
+          "description": "Where in the agent lifecycle a defense against this class would sit."
+        },
+        "trifecta_control": {
+          "type": "string",
+          "enum": [
+            "break_private_data",
+            "break_untrusted_content",
+            "break_external_comms",
+            "not_applicable"
+          ],
+          "description": "Which trifecta leg to sever to neutralize the class, conceptually. not_applicable for classes not exploitable via the trifecta."
+        }
+      }
+    },
+    "affected_platforms": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Agent platforms known to be affected, e.g. claude-code, cursor, windsurf. Optional — fill as evidence accumulates. Do not speculate."
+    },
+    "affected_registries": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Skill or tool registries where this class has been observed. Optional."
+    },
+    "mutation_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of distinct real-world textual mutations observed in the wild. Optional."
+    },
+    "indicators_of_compromise": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "description": "Observable IOC strings. REQUIRED once a record is active or deprecated — at least one. These are what defenders search for. Each entry is a specific observable: a phrase pattern, a behavioral indicator, or a network signal."
+    },
+    "detection_methodology": {
+      "type": "string",
+      "description": "Step-by-step detection approach: static scan, semantic analysis, behavioral sandbox, network monitoring. Optional."
+    },
+    "remediation": {
+      "type": "string",
+      "description": "How to mitigate or prevent this class. REQUIRED once a record is active or deprecated — must be actionable."
+    },
+    "kill_switch_active": {
+      "type": "boolean",
+      "description": "Whether a registry-level kill switch is currently active in the Bawbel registry. Optional — defaults to false."
+    },
+    "researcher": {
+      "type": "string",
+      "description": "Name of the researcher or team who authored this record. REQUIRED once a record is active or deprecated — records must be attributable. Use 'Bawbel Security Research Team' for internally authored records."
+    },
+    "researcher_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL for the researcher or team. Optional."
+    },
+    "references": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Primary sources: CVEs, papers, disclosures, scan reports. REQUIRED — at least one citable source, even for a draft record. This is the provenance signal a skeptic checks first.",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "uri",
+            "description": "Plain URI to a primary source."
+          },
+          {
+            "type": "object",
+            "required": [
+              "text"
+            ],
+            "additionalProperties": false,
+            "description": "Structured reference with optional tag and URL.",
+            "properties": {
+              "tag": {
+                "type": "string",
+                "description": "Short label, e.g. CVE, Research, Disclosure, Scan."
+              },
+              "text": {
+                "type": "string",
+                "description": "Human-readable description of the source."
+              },
+              "url": {
+                "type": "string",
+                "format": "uri",
+                "description": "URL to the source."
+              }
+            }
+          }
+        ]
+      }
+    },
+    "evidence_kind_default": {
+      "type": "string",
+      "enum": [
+        "tool_description_pattern",
+        "config_schema",
+        "file_type_mismatch",
+        "behavioral_pattern",
+        "semantic_inference",
+        "multi_engine"
+      ],
+      "description": "Scanner hint — default evidence_kind stamped on findings. Optional. Scanner may override per detection."
+    },
+    "detection_stage": {
+      "type": "string",
+      "enum": [
+        "static_detection",
+        "runtime_observed",
+        "runtime_drift_detected"
+      ],
+      "description": "Scanner hint — earliest lifecycle stage this class is reliably detectable. Optional. static_detection: pre-scan or CI suffices. runtime_observed: live agent session required."
+    },
+    "detection_layer": {
+      "type": "string",
+      "enum": [
+        "content",
+        "server_card",
+        "registry_metadata",
+        "runtime",
+        "transport"
+      ],
+      "description": "Where in the agent ecosystem this vulnerability class surfaces. Determines what kind of scanner or monitoring is needed to detect it. content: evidence is in the text body of the skill file, prompt file, or tool description — detectable by a static scanner before the agent runs. server_card: evidence is in the MCP server manifest (.well-known/mcp.json, tool schemas, parameter descriptions) — detectable when the server-card is fetched, before any tool call. registry_metadata: evidence is in the registry listing (server name, publisher description) — detectable by auditing the registry. runtime: evidence only appears during live agent execution (injected via tool results, memory writes, A2A messages, image pixels, async task payloads) — requires behavioral sandbox or runtime monitoring. transport: evidence is in the network layer (HTTP headers, OAuth discovery endpoints, webhook destinations) — requires a proxy or network monitor."
+    },
+    "confidence_baseline": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Scanner hint — base confidence for a single-engine match before FP adjustment. Optional. High-signal (e.g. hardcoded credential): 0.85-0.95. Low-signal (vague phrase): 0.40-0.55."
+    },
+    "evidence_basis_engines": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "pattern",
+          "yara",
+          "semgrep",
+          "llm",
+          "sandbox",
+          "magika",
+          "external_authority"
+        ]
+      },
+      "description": "Scanner hint — engines capable of detecting this class. Optional. Used to populate evidence_basis on findings. external_authority means a party outside the observed artifact was queried and returned a determinate answer (a package registry, RDAP, a forge's user API); it names the observation rung, not whether the answer was right."
+    },
+    "evidence_vantage": {
+      "type": "string",
+      "enum": [
+        "substrate",
+        "artifact"
+      ],
+      "description": "Producer statement — the vantage every input this class's evidence depends on was obtained at, taken from the weakest input. substrate: obtained where the observed artifact could neither forge nor suppress it. artifact: at least one input derives from output the artifact itself produced. artifact is a floor a producer may always truthfully state; a consumer learns from it only that the evidence lacks the stronger binding. Optional."
+    },
+    "evidence_method": {
+      "type": "string",
+      "enum": [
+        "intercepted",
+        "reconstructed"
+      ],
+      "description": "Producer statement — how the evidence for this class is established, taken from the weakest input. intercepted: from events captured as they occurred. reconstructed: from state examined after the fact. reconstructed is a floor a producer may always truthfully state. Optional; absent reads as reconstructed."
+    },
+    "verification_basis": {
+      "type": "string",
+      "enum": [
+        "substrate_intercepted",
+        "substrate_reconstructed",
+        "artifact_intercepted",
+        "artifact_reconstructed"
+      ],
+      "description": "Derived, not authored — the composition of evidence_vantage and evidence_method with the vantage implied by evidence_basis_engines, each taken by weakest input. scripts/write_verification_basis.py computes it. A record may carry a declared value, which validate_records.py then checks against the derivation and fails on a mismatch, so the declaration is falsifiable rather than self-reported. Optional."
+    },
+    "derivable_into": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Scanner hint — toxic-flow chain IDs this class can participate in, e.g. credential-exfiltration, rug-pull-chain. Optional."
+    },
+    "security_boundary": {
+      "type": "string",
+      "description": "The trust boundary this record's vulnerability crosses, e.g. 'untrusted content to instruction context', 'agent to agent', 'human approval to autonomous action'. Optional. Answers audit question Q2: the most important question for distinguishing a real vulnerability from a bare capability or technique description."
+    },
+    "missing_control": {
+      "type": "string",
+      "description": "The specific control whose absence makes exploitation possible, e.g. 'no explicit tool allowlist', 'no provenance label', 'no approval gate'. Optional, but a record without this and without security_boundary is a candidate for capability-only or technique-only conflation. See docs/audits/capability-vulnerability-audit.md."
+    },
+    "vulnerability_rationale": {
+      "type": "object",
+      "properties": {
+        "capability": { "type": "string" },
+        "vulnerability": { "type": "string" },
+        "impact": { "type": "string" }
+      },
+      "description": "The explicit three-line artifact from audit question Q7: what the component can do, what specific condition makes that dangerous, and what results. Optional. This is the sharpest single check against capability/vulnerability conflation, a record that can't fill this in honestly is probably miscategorized."
+    },
+    "framework_sources": {
+      "type": "object",
+      "description": "Which version of each referenced framework this record's mappings (owasp_mcp, owasp_asi, mitre_atlas, nist_ai_rmf) were made against. Optional. A mapping to an unratified or moving framework is undecidable without this: a consumer holding owasp_mcp: [\"MCP03\"] cannot tell which reading of the numbering produced it — confirmed as a live, present-tense divergence, not a hypothetical, in crosswalks/ramparts-to-ave.json, where AVE's own MCP03 and Ramparts' MCP03 are unrelated categories that happen to share a number. Mirrors the commit/pin_status pinning already used on crosswalk endpoints (schema/crosswalk-1.0.0.schema.json), one layer down: a crosswalk endpoint pins the tree a record count was read from, this pins the framework reading a record's own tag was read from. Keyed by the mapping field it describes, e.g. framework_sources.owasp_mcp, not four parallel sibling fields, because frameworks version differently (MCP Top 10 has no release, MITRE ATLAS versions discretely, NIST AI RMF is a dated publication) and a single container shape has to accommodate all of them. See OWASP/www-project-mcp-top-10#52 for the case that prompted this.",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string",
+            "description": "Version or dated publication of the referenced framework this mapping was made against, e.g. '4.9.0' for MITRE ATLAS or a dated NIST AI RMF publication. Use commit instead where the framework is tracked in a repository."
+          },
+          "commit": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{40}$",
+            "description": "Full 40-character commit sha pinning the tree this mapping was read against, where the referenced framework has git history to pin. Same convention as crosswalk endpoint commit pinning: full, not abbreviated."
+          },
+          "source_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "The resolved tree URL at commit, where a reader can go check the mapping directly without reconstructing it from commit and repo. Optional even when commit is present. Matches the specCommit/specSource pairing independently designed by BerkantACUN/guardmcp (PR #3, 'Pin the OWASP spec commit the mapping was drafted against') for the same OWASP MCP Top 10 versioning gap OWASP/www-project-mcp-top-10#52 raised and this field exists to close -- guardmcp's PR pins the identical commit sha AVE's own owasp_mcp backfill used (165fe0f78ef104459237b4a8e0f6e78db9b02391), independent convergence on the same fix from two unrelated projects reading the same gap."
+          },
+          "read_date": {
+            "type": "string",
+            "format": "date",
+            "description": "ISO 8601 date this framework reading was last verified against. Required when pin_status is unpinnable or unknown, where it is the nearest thing an unversionable or unrecoverable source has to a pin."
+          },
+          "pin_status": {
+            "type": "string",
+            "enum": [
+              "unpinnable",
+              "unknown"
+            ],
+            "description": "Present only to declare a real gap rather than leave a blank field indistinguishable from one nobody has filled in. 'unpinnable': the referenced framework itself has no version, tag, or commit to pin against, e.g. the MCP Top 10 prior to a canonical numbering reference existing. An entry declaring this should also carry read_date and unpinnable_reason. 'unknown': the referenced framework does have real, addressable versions, but this record's mapping predates any tracking of which one was read, and the specific version is not recoverable now. An entry declaring this should carry read_date (the date this gap was confirmed, not a version read); unpinnable_reason does not apply, since the framework itself is not at fault."
+          },
+          "unpinnable_reason": {
+            "type": "string",
+            "description": "Why this framework reading cannot be pinned, in terms a reader can check, e.g. 'MCP Top 10 is in pilot with no canonical numbering reference published (OWASP/www-project-mcp-top-10#52)'. Required when pin_status is unpinnable. Not used when pin_status is unknown, since that declares a gap in AVE's own recordkeeping, not a property of the framework."
+          },
+          "content_digest": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$",
+            "description": "Lowercase sha256, prefixed sha256:, of the bytes read at read_date, for a framework with no git history to pin. Does not let a reader re-derive the mapping, but does let them tell whether the source has moved since it was read. Optional even when pin_status is unpinnable."
+          }
+        }
+      }
+    },
+    "revisions": {
+      "type": "array",
+      "description": "Optional, append-only history of edits that changed a value a consumer may gate on, such as a derived verification_basis. Entries are appended in date order and never rewritten or removed; validate_records.py checks the order, that each field is a top-level record field, that each change is not a no-op, that each from matches the previous entry for that field, and that the latest to matches the record, but it cannot see a rewritten first date, a deleted entry or a removed array, since those need the previous version of the record. Only top-level fields can be named, so a change to a nested value such as aivss.thm records the whole aivss object. A record with no revisions array makes no claim about its own history; a consumer must not read its absence as never revised. Design: issue #317, agreed on #219.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "date",
+          "field",
+          "from",
+          "to",
+          "reason_code"
+        ],
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "ISO 8601 date the change landed in this record, e.g. the merge date of the pull request that made it."
+          },
+          "field": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Name of the record field whose value changed, e.g. evidence_vantage."
+          },
+          "from": {
+            "description": "The field's value before the change, or null when the field was absent before (an added declaration has no prior value)."
+          },
+          "to": {
+            "not": {
+              "type": "null"
+            },
+            "description": "The field's value after the change."
+          },
+          "reason_code": {
+            "type": "string",
+            "enum": [
+              "declaration_added",
+              "declaration_corrected",
+              "vocabulary_member_added",
+              "derivation_rule_changed"
+            ],
+            "description": "Closed code for why this entry exists, so a consumer can count and filter revisions by cause without parsing prose. Copied from revision_reason in probityai/agent-evidence-vocabulary at commit aff6e0187d05fbb01aa26bd4b4035aebcbc81be0 (https://github.com/probityai/agent-evidence-vocabulary/blob/aff6e0187d05fbb01aa26bd4b4035aebcbc81be0/vocabulary.yaml#L291-L315), where the codes are status proposed; this enum stands on its own and does not follow later changes there. declaration_added: a field the record omitted is now declared, and a value derived from it changed as a result. declaration_corrected: a field the record already declared was wrong and now carries a different value. vocabulary_member_added: the schema gained a closed-vocabulary member, and re-deriving the record under it changed a derived value; the record's own declarations did not change. derivation_rule_changed: the rule that computes a derived value changed; the record's own declarations did not change."
+          },
+          "reason": {
+            "type": "string",
+            "description": "Optional free text: what changed downstream and where the change was made."
+          }
+        }
+      }
+    }
+  }
+}

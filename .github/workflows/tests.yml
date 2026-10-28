@@ -63,4 +63,9 @@ jobs:
         run: python scripts/check_terms_sync.py
 
       - name: Run tests
+        env:
+          # tests/test_frozen_artifacts.py checks that no frozen entry is removed
+          # or rehashed since this change left its base, the same base as the
+          # confidence ratchet above.
+          FROZEN_BASE: ${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || github.event.before }}
         run: pytest tests/ -x -q

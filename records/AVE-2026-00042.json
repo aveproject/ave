@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00042",
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "component_type": "skill",
   "title": "Payload injection into agent-generated orchestration code via poisoned tool results in REPL/Code Mode",
   "attack_class": "Prompt Injection - REPL Code Mode Payload Injection",

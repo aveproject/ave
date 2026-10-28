@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00016",
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "component_type": "other",
   "title": "Indirect Prompt Injection via RAG Retrieval",
   "attack_class": "Prompt Injection - RAG Retrieval",

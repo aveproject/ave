@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00023",
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "component_type": "mcp_server",
   "title": "Model Context Window Manipulation",
   "attack_class": "Prompt Injection - Context Window Manipulation",

@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00001",
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "component_type": "skill",
   "title": "Metamorphic payload via external config fetch",
   "attack_class": "Supply Chain - Metamorphic Payload",

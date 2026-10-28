@@ -1,7 +1,7 @@
 [
   {
     "ave_id": "AVE-2026-00046",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "MCP tool hook hijacking - redirect tool execution to attacker-controlled callback",
     "attack_class": "Execution Hijack - Tool Hook Interception",
@@ -171,7 +171,7 @@
   },
   {
     "ave_id": "AVE-2026-00001",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Metamorphic payload via external config fetch",
     "attack_class": "Supply Chain - Metamorphic Payload",
@@ -329,7 +329,7 @@
   },
   {
     "ave_id": "AVE-2026-00002",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "mcp_server",
     "title": "MCP tool description behavioral injection",
     "attack_class": "Prompt Injection - Tool Description",
@@ -477,7 +477,7 @@
   },
   {
     "ave_id": "AVE-2026-00006",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Cryptocurrency wallet drain via malicious fund transfer instruction in agentic component",
     "attack_class": "Tool Abuse - Cryptocurrency Drain",
@@ -624,7 +624,7 @@
   },
   {
     "ave_id": "AVE-2026-00041",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "mcp_server",
     "title": "Prompt injection via MCP server-card tool descriptions before agent makes first call",
     "attack_class": "Prompt Injection - MCP Server-Card Injection",
@@ -787,7 +787,7 @@
   },
   {
     "ave_id": "AVE-2026-00044",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Prompt injection via poisoned async task result injected into future agent context",
     "attack_class": "Prompt Injection - Async Task Result Poisoning",
@@ -945,7 +945,7 @@
   },
   {
     "ave_id": "AVE-2026-00047",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Hardcoded credentials in agent component - API keys and secrets exposed in skill files",
     "attack_class": "Sensitive Data Exposure - Hardcoded Credentials",
@@ -1110,7 +1110,7 @@
   },
   {
     "ave_id": "AVE-2026-00048",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Unsafe agent delegation chain - sub-agent spawned with inherited permissions and no trust boundary",
     "attack_class": "Privilege Escalation - Unsafe Agent Delegation",
@@ -1272,7 +1272,7 @@
   },
   {
     "ave_id": "AVE-2026-00049",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "published": "2026-06-21T00:00:00Z",
     "last_updated": "2026-08-26T00:00:00Z",
@@ -1433,7 +1433,7 @@
   },
   {
     "ave_id": "AVE-2026-00050",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "published": "2026-06-21T00:00:00Z",
     "last_updated": "2026-08-26T00:00:00Z",
@@ -1599,7 +1599,7 @@
   },
   {
     "ave_id": "AVE-2026-00051",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "published": "2026-06-21T00:00:00Z",
     "last_updated": "2026-08-26T00:00:00Z",
@@ -1763,7 +1763,7 @@
   },
   {
     "ave_id": "AVE-2026-00052",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "mcp_server",
     "title": "Command injection via unsanitized tool-call parameter in MCP server implementation",
     "attack_class": "Tool Abuse - Implementation Command Injection",
@@ -1913,7 +1913,7 @@
   },
   {
     "ave_id": "AVE-2026-00055",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "mcp_server",
     "title": "Command execution via untrusted MCP server launch configuration (STDIO)",
     "attack_class": "Supply Chain - MCP STDIO Launch Configuration Injection",
@@ -2069,7 +2069,7 @@
   },
   {
     "ave_id": "AVE-2026-00059",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "component_type": "mcp_server",
     "title": "Fragmented cross-description prompt injection reassembled at a planted trigger (ShareLock-class)",
@@ -2224,7 +2224,7 @@
   },
   {
     "ave_id": "AVE-2026-00060",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "component_type": "mcp_server",
     "title": "STDIO transport shell injection via unsanitized tool call parameters",
@@ -2343,7 +2343,7 @@
   },
   {
     "ave_id": "AVE-2026-00065",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "component_type": "agent",
     "title": "A2A agent card poisoning via embedded adversarial instructions",
@@ -2474,7 +2474,7 @@
   },
   {
     "ave_id": "AVE-2026-00074",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "component_type": "skill",
     "title": "Reclaimable dead external anchor (GitHub owner, package, domain, or cloud subdomain) referenced by a skill",
@@ -2627,7 +2627,7 @@
   },
   {
     "ave_id": "AVE-2026-00084",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "title": "Lifecycle hook trust decoupling: a vetted plugin update silently rebinds hooks outside the model's decision path",
     "attack_class": "Supply Chain - Lifecycle Hook Trust Decoupling",
@@ -2757,7 +2757,7 @@
   },
   {
     "ave_id": "AVE-2026-00085",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "title": "Collusive cross-skill composition: a malicious workflow split across independently benign skills",
     "attack_class": "Obfuscation - Collusive Cross-Skill Composition",
@@ -2880,7 +2880,7 @@
   },
   {
     "ave_id": "AVE-2026-00086",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "title": "Mid-session WebMCP tool hijacking: a live registry swap replaces an already-discovered tool under its own name",
     "attack_class": "Trust Boundary - Mid-Session Tool Registry Hijacking",
@@ -3009,7 +3009,7 @@
   },
   {
     "ave_id": "AVE-2026-00087",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "title": "Agentjacking: a crafted tool response visually mimics a trusted system template to hijack an agent",
     "attack_class": "Prompt Injection - Tool Response Template Mimicry",
@@ -3143,7 +3143,7 @@
   },
   {
     "ave_id": "AVE-2026-00003",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Credential exfiltration via agent instruction",
     "attack_class": "Data Exfiltration - Credential Theft",
@@ -3291,7 +3291,7 @@
   },
   {
     "ave_id": "AVE-2026-00004",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Arbitrary code execution via shell pipe injection in agentic component",
     "attack_class": "Tool Abuse - Shell Pipe Injection",
@@ -3443,7 +3443,7 @@
   },
   {
     "ave_id": "AVE-2026-00005",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Recursive file system destruction via destructive command injection in agentic component",
     "attack_class": "Tool Abuse - Destructive Command",
@@ -3593,7 +3593,7 @@
   },
   {
     "ave_id": "AVE-2026-00007",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Agent goal hijack via direct instruction override in agentic component",
     "attack_class": "Prompt Injection - Goal Hijack",
@@ -3741,7 +3741,7 @@
   },
   {
     "ave_id": "AVE-2026-00008",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Agent persistence via self-replication instruction in agentic component",
     "attack_class": "Persistence - Self-Replication",
@@ -3890,7 +3890,7 @@
   },
   {
     "ave_id": "AVE-2026-00009",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "AI identity jailbreak via role-play or persona override in agentic component",
     "attack_class": "Prompt Injection - Jailbreak",
@@ -4039,7 +4039,7 @@
   },
   {
     "ave_id": "AVE-2026-00010",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Covert instruction concealment via secrecy directive in agentic component",
     "attack_class": "Prompt Injection - Hidden Instruction",
@@ -4181,7 +4181,7 @@
   },
   {
     "ave_id": "AVE-2026-00011",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Arbitrary tool invocation via dynamic tool call injection in agentic component",
     "attack_class": "Tool Abuse - Dynamic Tool Call",
@@ -4328,7 +4328,7 @@
   },
   {
     "ave_id": "AVE-2026-00012",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Capability escalation via false permission grant in agentic component",
     "attack_class": "Privilege Escalation - Permission Grant",
@@ -4475,7 +4475,7 @@
   },
   {
     "ave_id": "AVE-2026-00013",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Personal data exfiltration via PII collection and transmission in agentic component",
     "attack_class": "Data Exfiltration - PII Theft",
@@ -4625,7 +4625,7 @@
   },
   {
     "ave_id": "AVE-2026-00015",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "System prompt extraction via direct interrogation instruction in agentic component",
     "attack_class": "Information Disclosure - System Prompt Leak",
@@ -4764,7 +4764,7 @@
   },
   {
     "ave_id": "AVE-2026-00016",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "other",
     "title": "Indirect Prompt Injection via RAG Retrieval",
     "attack_class": "Prompt Injection - RAG Retrieval",
@@ -4908,7 +4908,7 @@
   },
   {
     "ave_id": "AVE-2026-00017",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "mcp_server",
     "title": "MCP Server Impersonation or Spoofing",
     "attack_class": "Supply Chain - Server Impersonation",
@@ -5050,7 +5050,7 @@
   },
   {
     "ave_id": "AVE-2026-00018",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "mcp_server",
     "title": "Tool Result Manipulation or Output Poisoning",
     "attack_class": "Tool Abuse - Result Manipulation",
@@ -5189,7 +5189,7 @@
   },
   {
     "ave_id": "AVE-2026-00019",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Agent Memory Poisoning",
     "attack_class": "Persistence - Memory Poisoning",
@@ -5336,7 +5336,7 @@
   },
   {
     "ave_id": "AVE-2026-00020",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Cross-Agent Prompt Injection (A2A)",
     "attack_class": "Prompt Injection - Cross-Agent A2A",
@@ -5480,7 +5480,7 @@
   },
   {
     "ave_id": "AVE-2026-00021",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Autonomous Action Without User Confirmation",
     "attack_class": "Prompt Injection - Human-in-Loop Bypass",
@@ -5615,7 +5615,7 @@
   },
   {
     "ave_id": "AVE-2026-00022",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Scope Creep - Accessing Undeclared Resources",
     "attack_class": "Privilege Escalation - Scope Creep",
@@ -5758,7 +5758,7 @@
   },
   {
     "ave_id": "AVE-2026-00023",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "mcp_server",
     "title": "Model Context Window Manipulation",
     "attack_class": "Prompt Injection - Context Window Manipulation",
@@ -5895,7 +5895,7 @@
   },
   {
     "ave_id": "AVE-2026-00024",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "mcp_server",
     "title": "Supply Chain - Content Type Mismatch (Magika)",
     "attack_class": "Supply Chain - Content Type Mismatch",
@@ -6038,7 +6038,7 @@
   },
   {
     "ave_id": "AVE-2026-00025",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Conversation History Injection",
     "attack_class": "Prompt Injection - Conversation History",
@@ -6174,7 +6174,7 @@
   },
   {
     "ave_id": "AVE-2026-00026",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "mcp_server",
     "title": "Exfiltration via Tool Output Encoding",
     "attack_class": "Data Exfiltration - Output Encoding",
@@ -6316,7 +6316,7 @@
   },
   {
     "ave_id": "AVE-2026-00027",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Multi-Turn Attack - Instruction Persistence Across Conversations",
     "attack_class": "Prompt Injection - Multi-Turn Persistence",
@@ -6462,7 +6462,7 @@
   },
   {
     "ave_id": "AVE-2026-00028",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Prompt Injection via File or Document Content",
     "attack_class": "Prompt Injection - File Content",
@@ -6605,7 +6605,7 @@
   },
   {
     "ave_id": "AVE-2026-00029",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Homoglyph or Unicode Obfuscation Attack",
     "attack_class": "Obfuscation - Unicode Homoglyph",
@@ -6745,7 +6745,7 @@
   },
   {
     "ave_id": "AVE-2026-00030",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Privilege Escalation via False Role Claim",
     "attack_class": "Privilege Escalation - False Role Claim",
@@ -6882,7 +6882,7 @@
   },
   {
     "ave_id": "AVE-2026-00031",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Training Data or Feedback Loop Poisoning",
     "attack_class": "Persistence - Feedback Loop Poisoning",
@@ -7026,7 +7026,7 @@
   },
   {
     "ave_id": "AVE-2026-00032",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Network Reconnaissance Instruction",
     "attack_class": "Reconnaissance - Internal Network Scanning",
@@ -7171,7 +7171,7 @@
   },
   {
     "ave_id": "AVE-2026-00033",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Unsafe Deserialization or Eval Instruction",
     "attack_class": "Tool Abuse - Unsafe Deserialization",
@@ -7318,7 +7318,7 @@
   },
   {
     "ave_id": "AVE-2026-00034",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Supply Chain - Dynamic Third-Party Skill Import",
     "attack_class": "Supply Chain - Dynamic Skill Import",
@@ -7468,7 +7468,7 @@
   },
   {
     "ave_id": "AVE-2026-00035",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Environment or Sensor Data Manipulation",
     "attack_class": "Manipulation - Sensor Data Poisoning",
@@ -7603,7 +7603,7 @@
   },
   {
     "ave_id": "AVE-2026-00036",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Lateral Movement - Pivot to Other Systems",
     "attack_class": "Lateral Movement - Agent Pivot",
@@ -7749,7 +7749,7 @@
   },
   {
     "ave_id": "AVE-2026-00037",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Prompt Injection via Image or Vision Input",
     "attack_class": "Prompt Injection - Multimodal Vision",
@@ -7891,7 +7891,7 @@
   },
   {
     "ave_id": "AVE-2026-00038",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Excessive Agency - Unbounded Tool Use or Sub-Agent Spawning",
     "attack_class": "Tool Abuse - Unbounded Tool Use",
@@ -8029,7 +8029,7 @@
   },
   {
     "ave_id": "AVE-2026-00039",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Covert Channel - Steganographic Data Exfiltration",
     "attack_class": "Data Exfiltration - Covert Channel",
@@ -8174,7 +8174,7 @@
   },
   {
     "ave_id": "AVE-2026-00040",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "mcp_server",
     "title": "Insecure Output - Unescaped Injection into Downstream System",
     "attack_class": "Tool Abuse - Insecure Output Handling",
@@ -8312,7 +8312,7 @@
   },
   {
     "ave_id": "AVE-2026-00042",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Payload injection into agent-generated orchestration code via poisoned tool results in REPL/Code Mode",
     "attack_class": "Prompt Injection - REPL Code Mode Payload Injection",
@@ -8473,7 +8473,7 @@
   },
   {
     "ave_id": "AVE-2026-00043",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "mcp_server",
     "title": "Prompt injection via rich UI payload (canvas, artifact, form) rendered by MCP App",
     "attack_class": "Prompt Injection - MCP App UI Payload Injection",
@@ -8626,7 +8626,7 @@
   },
   {
     "ave_id": "AVE-2026-00045",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "Privilege escalation via cross-app-access - pivot from low-trust to high-trust MCP server using shared agent session",
     "attack_class": "Privilege Escalation - Cross-App-Access Escalation",
@@ -8793,7 +8793,7 @@
   },
   {
     "ave_id": "AVE-2026-00053",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "mcp_server",
     "title": "Path traversal via unsanitized path parameter in MCP resource/file-handler implementation",
     "attack_class": "Tool Abuse - Resource Path Traversal",
@@ -8945,7 +8945,7 @@
   },
   {
     "ave_id": "AVE-2026-00054",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "tool",
     "title": "Code-execution sandbox escape via JavaScript prototype-chain traversal",
     "attack_class": "Execution Hijack - Code Execution Sandbox Escape",
@@ -9084,7 +9084,7 @@
   },
   {
     "ave_id": "AVE-2026-00056",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "agent",
     "title": "Zero-click data exfiltration via markdown image auto-fetch in agent response",
     "attack_class": "Data Exfiltration - Rendered Content Auto-Fetch",
@@ -9217,7 +9217,7 @@
   },
   {
     "ave_id": "AVE-2026-00057",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "published": "2026-07-14T00:00:00Z",
     "last_updated": "2026-08-26T00:00:00Z",
@@ -9341,7 +9341,7 @@
   },
   {
     "ave_id": "AVE-2026-00061",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "component_type": "skill",
     "title": "TLS certificate verification disabled in agent component configuration",
@@ -9450,7 +9450,7 @@
   },
   {
     "ave_id": "AVE-2026-00062",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "component_type": "skill",
     "title": "Unpinned dependency version allowing supply chain substitution",
@@ -9569,7 +9569,7 @@
   },
   {
     "ave_id": "AVE-2026-00063",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "component_type": "skill",
     "title": "Human approval gate bypassed via declarative configuration, distinct from AVE-2026-00048",
@@ -9689,7 +9689,7 @@
   },
   {
     "ave_id": "AVE-2026-00064",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "component_type": "skill",
     "title": "Zero-click code execution via project-load auto-run configuration",
@@ -9816,7 +9816,7 @@
   },
   {
     "ave_id": "AVE-2026-00066",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "component_type": "skill",
     "title": "Hallucinated skill-name squatting (HalluSquatting)",
@@ -9969,7 +9969,7 @@
   },
   {
     "ave_id": "AVE-2026-00067",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "component_type": "skill",
     "title": "Skill composition trust transfer: an upstream skill's output silently becomes a downstream skill's trust signal",
@@ -10073,7 +10073,7 @@
   },
   {
     "ave_id": "AVE-2026-00068",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "component_type": "skill",
     "title": "CLI command composition risk: benign commands compose through shared shell state into unauthorized capability",
@@ -10178,7 +10178,7 @@
   },
   {
     "ave_id": "AVE-2026-00069",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "component_type": "skill",
     "title": "Multimodal image-hidden instructions (SkillCamo) bundled within a skill package",
@@ -10291,7 +10291,7 @@
   },
   {
     "ave_id": "AVE-2026-00070",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "component_type": "agent",
     "title": "Distributed cross-agent backdoor fragments reassembled externally after execution",
@@ -10407,7 +10407,7 @@
   },
   {
     "ave_id": "AVE-2026-00071",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "component_type": "skill",
     "title": "MCP daemon redirect via DOCKER_HOST or host flag, container operations land on attacker infrastructure",
@@ -10540,7 +10540,7 @@
   },
   {
     "ave_id": "AVE-2026-00072",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "component_type": "mcp_server",
     "title": "MCP server bound to all network interfaces with no authentication step (NeighborJack)",
@@ -10661,7 +10661,7 @@
   },
   {
     "ave_id": "AVE-2026-00073",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "component_type": "skill",
     "title": "Telemetry or API endpoint redirect via static configuration value",
@@ -10791,7 +10791,7 @@
   },
   {
     "ave_id": "AVE-2026-00075",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "component_type": "skill",
     "title": "Bytecode poisoning: compiled .pyc cache diverges from its own reviewed .py source",
@@ -10934,7 +10934,7 @@
   },
   {
     "ave_id": "AVE-2026-00076",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "component_type": "agent",
     "title": "Natural-language steering of an approval classifier subagent, distinct from AVE-2026-00021 and AVE-2026-00063",
@@ -11080,7 +11080,7 @@
   },
   {
     "ave_id": "AVE-2026-00077",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "component_type": "mcp_server",
     "title": "Cross-origin tool and resource declaration within a single MCP server manifest",
@@ -11230,7 +11230,7 @@
   },
   {
     "ave_id": "AVE-2026-00078",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "component_type": "agent",
     "title": "Consensus poisoning: orchestrator accepts a single sub-agent result as authoritative with no quorum verification",
@@ -11365,7 +11365,7 @@
   },
   {
     "ave_id": "AVE-2026-00079",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "component_type": "agent",
     "title": "Plan hijacking via false completion signal: forced early termination bypasses undeclared execution steps",
@@ -11500,7 +11500,7 @@
   },
   {
     "ave_id": "AVE-2026-00080",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "component_type": "agent",
     "title": "Silent agent substitution: unverified process at a routing slot treated as the legitimate agent during retry (Sybil)",
@@ -11636,7 +11636,7 @@
   },
   {
     "ave_id": "AVE-2026-00081",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "title": "Lingering authority: a task-scoped capability outlives the episode that justified it",
     "attack_class": "Persistence - Lingering Authority",
@@ -11757,7 +11757,7 @@
   },
   {
     "ave_id": "AVE-2026-00082",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "component_type": "skill",
     "title": "Local skill name collision: deterministic router shadowing across discovery roots",
@@ -11901,7 +11901,7 @@
   },
   {
     "ave_id": "AVE-2026-00083",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "title": "Silent guardrail comparison failure: a protection mechanism that executes but never evaluates its verdict",
     "attack_class": "Trust Boundary - Silent Guardrail Comparison Failure",
@@ -12058,7 +12058,7 @@
   },
   {
     "ave_id": "AVE-2026-00088",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "component_type": "agent",
     "title": "Sandbox side-effect trust handoff: an agent-written workspace file is run by a trusted component outside the sandbox",
@@ -12232,7 +12232,7 @@
   },
   {
     "ave_id": "AVE-2026-00089",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "component_type": "agent",
     "title": "Model-supplied sandbox boundary: a tool parameter the model sets defines or widens the sandbox's writable scope",
@@ -12395,7 +12395,7 @@
   },
   {
     "ave_id": "AVE-2026-00014",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "component_type": "skill",
     "title": "False authority claim via trust escalation impersonation in agentic component",
     "attack_class": "Social Engineering - Trust Escalation",
@@ -12535,7 +12535,7 @@
   },
   {
     "ave_id": "AVE-2026-00058",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "active",
     "published": "2026-07-14T00:00:00Z",
     "last_updated": "2026-08-26T00:00:00Z",

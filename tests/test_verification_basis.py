@@ -8,7 +8,7 @@ from scripts import write_verification_basis as writer
 def record(**overrides):
     base = {
         "ave_id": "AVE-2026-99999",
-        "schema_version": "1.1.0",
+        "schema_version": "1.2.0",
         "status": "active",
         "title": "Verification basis fixture",
         "description": "Fixture record for the verification_basis derivation.",

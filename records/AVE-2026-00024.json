@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00024",
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "component_type": "mcp_server",
   "title": "Supply Chain - Content Type Mismatch (Magika)",
   "attack_class": "Supply Chain - Content Type Mismatch",

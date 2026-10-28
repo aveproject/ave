@@ -1,6 +1,6 @@
 # AVE schema terms
 
-Per-field definitions below are generated directly from schema/ave-record-1.1.0.schema.json and are never hand-edited. Run scripts/generate_terms.py after any schema change.
+Per-field definitions below are generated directly from schema/ave-record.schema.json and are never hand-edited. Run scripts/generate_terms.py after any schema change.
 
 ## Relationships between similar-sounding fields
 
@@ -104,7 +104,7 @@ and its `specCommit` happens to be the exact same commit sha AVE's own
 a reader can check the mapping without reconstructing it from repo and
 sha by hand. Optional even when `commit` is present.
 
-<!-- GENERATED FROM schema/ave-record-1.1.0.schema.json, DO NOT HAND-EDIT BELOW THIS LINE -->
+<!-- GENERATED FROM schema/ave-record.schema.json, DO NOT HAND-EDIT BELOW THIS LINE -->
 
 ### `affected_platforms`
 
@@ -264,7 +264,7 @@ Optional, append-only history of edits that changed a value a consumer may gate 
 
 ### `schema_version`
 
-AVE schema version this record was authored against, e.g. 1.1.0.
+AVE schema version this record was authored against, e.g. 1.2.0.
 
 ### `security_boundary`
 

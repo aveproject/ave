@@ -10,7 +10,7 @@ def test_record_validator_rejects_invalid_date_time_format():
     validator = validate_records.build_validator(schema)
     record = {
         "ave_id": "AVE-2026-99999",
-        "schema_version": "1.1.0",
+        "schema_version": "1.2.0",
         "status": "draft",
         "title": "Invalid date-time fixture",
         "description": "A minimal draft record with malformed published metadata.",
@@ -302,7 +302,7 @@ def test_an_unpinnable_side_may_still_state_a_count(tmp_path):
 def record_with(**overrides):
     record = {
         "ave_id": "AVE-2026-99999",
-        "schema_version": "1.1.0",
+        "schema_version": "1.2.0",
         "status": "draft",
         "title": "Verification basis fixture",
         "description": "A minimal draft record carrying evidence axes.",

@@ -13,7 +13,7 @@ def _validator():
 
 BASE = {
     "ave_id": "AVE-2026-99999",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "status": "draft",
     "title": "Revisions fixture",
     "description": "A minimal draft record carrying a revisions array.",
