@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00011",
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "component_type": "skill",
   "title": "Arbitrary tool invocation via dynamic tool call injection in agentic component",
   "attack_class": "Tool Abuse - Dynamic Tool Call",

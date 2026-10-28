@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00085",
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "status": "active",
   "title": "Collusive cross-skill composition: a malicious workflow split across independently benign skills",
   "attack_class": "Obfuscation - Collusive Cross-Skill Composition",

@@ -10,7 +10,7 @@
  * independent consolidation logic against a second copy of records/.
  *
  * Two output artifacts, the same alias/versioned split schema/ already
- * uses (ave-record.schema.json vs ave-record-1.1.0.schema.json):
+ * uses (ave-record.schema.json vs ave-record-<version>.schema.json):
  *
  *   dist/ave-records-latest.json       always-current alias, overwritten
  *                                       on every run regardless of schema
@@ -51,6 +51,7 @@
  */
 
 const fs   = require("fs");
+const crypto = require("crypto");
 const path = require("path");
 
 // ── argument parsing ──────────────────────────────────────────────────────────
@@ -64,7 +65,7 @@ const has = (name) => args.includes(name);
 
 const REPO_ROOT      = path.join(__dirname, "..");
 const RECORDS_DIR    = flag("--records-dir", path.join(REPO_ROOT, "records"));
-const SCHEMA_PATH    = flag("--schema",      path.join(REPO_ROOT, "schema", "ave-record-1.1.0.schema.json"));
+const SCHEMA_PATH    = flag("--schema",      path.join(REPO_ROOT, "schema", "ave-record.schema.json"));
 const JSON_OUT_ARG   = flag("--json-out",    null);
 const MANIFEST_OUT_ARG = flag("--manifest-out", null);
 const INCLUDE_DRAFTS   = has("--include-drafts");
@@ -197,7 +198,18 @@ function buildOutput() {
     record_count: records.length,
     generated_at: generatedAt,
     source: "https://github.com/aveproject/ave",
+    // content identity of the records file written next to this manifest
+    sha256: crypto.createHash("sha256").update(jsonOutput, "utf8").digest("hex"),
   };
+  // only a caller that knows the exact commit the records came from may state it
+  // (the catalog release workflow passes the tagged commit); a local or PR build
+  // reads uncommitted files, so it must not guess one
+  if (process.env.AVE_SOURCE_COMMIT) {
+    if (!/^[0-9a-f]{40}$/.test(process.env.AVE_SOURCE_COMMIT)) {
+      throw new Error("AVE_SOURCE_COMMIT must be a full 40-character commit SHA");
+    }
+    manifest.source_commit = process.env.AVE_SOURCE_COMMIT;
+  }
   return { jsonOutput, manifestOutput: JSON.stringify(manifest, null, 2) + "\n" };
 }
 

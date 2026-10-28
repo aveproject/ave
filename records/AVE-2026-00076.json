@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00076",
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "status": "active",
   "component_type": "agent",
   "title": "Natural-language steering of an approval classifier subagent, distinct from AVE-2026-00021 and AVE-2026-00063",

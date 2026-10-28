@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00087",
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "status": "active",
   "title": "Agentjacking: a crafted tool response visually mimics a trusted system template to hijack an agent",
   "attack_class": "Prompt Injection - Tool Response Template Mimicry",

@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00043",
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "component_type": "mcp_server",
   "title": "Prompt injection via rich UI payload (canvas, artifact, form) rendered by MCP App",
   "attack_class": "Prompt Injection - MCP App UI Payload Injection",

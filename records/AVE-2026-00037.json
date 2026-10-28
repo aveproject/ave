@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00037",
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "component_type": "skill",
   "title": "Prompt Injection via Image or Vision Input",
   "attack_class": "Prompt Injection - Multimodal Vision",

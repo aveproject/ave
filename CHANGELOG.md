@@ -8,6 +8,39 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 
 ## [Unreleased]
 
+### Schema
+- **Schema 1.2.0** (#365). `schema/ave-record-1.2.0.schema.json` is the 1.1.0 schema as
+  it stands today, published under its own number; it differs from the 1.1.0 file only in
+  its `$id`, its own version string and the `schema_version` example. The alias
+  `schema/ave-record.schema.json` points at it, and all 89 records declare `1.2.0` (one
+  changed line each; `last_updated` is not touched, because the version label is not
+  record content).
+- **Why a new number:** the 1.1.0 file took eight optional properties in place after it was
+  published (`evidence_method`, `evidence_vantage`, `verification_basis`, #226 resolving
+  #222; `missing_control`, `security_boundary`, `vulnerability_rationale`, #231;
+  `framework_sources`, #247 with #256 and #266; `revisions`, #323) plus an
+  `evidence_basis_engines` enum widening (`external_authority`). Nothing became required and
+  nothing narrowed, so it is a minor version.
+- **Frozen files are enforced:** `schema/frozen-artifacts.json` records the SHA-256 of the
+  1.0.0, 1.1.0 and 1.2.0 record schemas, the crosswalk 1.0.0 schema and the
+  `dist/ave-records-v1.1.0` and `v1.2.0` snapshot pairs; `tests/test_frozen_artifacts.py`
+  fails when one changes or disappears, and when a change removes or rehashes an entry
+  since it left its base branch (`FROZEN_BASE` in `tests.yml`).
+- **Per-version validation:** `scripts/validate_records.py` checks each record against
+  `schema/ave-record-<schema_version>.schema.json`; a missing or unknown version is an error.
+  `scripts/generate_terms.py` and `scripts/build-records.js` now default to the alias.
+- **Manifests carry `sha256`** of the records file beside them (`tests/test_manifests.py`).
+  `source_commit` is written only when `AVE_SOURCE_COMMIT` is set to a full commit SHA; a
+  local or PR build never guesses one. The frozen v1.1.0 manifest keeps its original fields.
+- **History, recorded in `docs/specs/scaling-and-governance.md`:** the `v1.1.0` GitHub
+  Release (2026-06-24) was a catalog release of 51 records on schema 1.0.0, so two
+  different files are named `ave-records-v1.1.0.json` (that release asset, and the repo's
+  59-record snapshot on schema 1.1.0 from #63). The 1.0.0 schema was edited twice after its
+  tag (#24 widened `component_type` with `prompt`; #166 changed the `$id` the v1.0.0 notes
+  had called permanent). All of these files are frozen as they stand from 1.2.0 on.
+- `GOVERNANCE.md` now says new optional fields ship as a new minor schema version, as the
+  scaling spec does (it said a patch release).
+
 ### Changed
 - `README.md`: `AVE-2026-00044`'s record index row brought back in line
   with `records/`. #294 moved the record from 6.1 MEDIUM to 8.1 HIGH, and

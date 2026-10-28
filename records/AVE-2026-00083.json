@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00083",
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "status": "active",
   "title": "Silent guardrail comparison failure: a protection mechanism that executes but never evaluates its verdict",
   "attack_class": "Trust Boundary - Silent Guardrail Comparison Failure",

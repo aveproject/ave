@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00068",
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "status": "active",
   "component_type": "skill",
   "title": "CLI command composition risk: benign commands compose through shared shell state into unauthorized capability",

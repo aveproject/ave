@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00081",
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "status": "active",
   "title": "Lingering authority: a task-scoped capability outlives the episode that justified it",
   "attack_class": "Persistence - Lingering Authority",

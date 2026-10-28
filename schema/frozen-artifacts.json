@@ -1,0 +1,13 @@
+{
+  "description": "SHA-256 of every file that is frozen once published. tests/test_frozen_artifacts.py fails when one of these changes or disappears, and fails a change that removes or rehashes an existing entry. When a version is cut, add its files here; never edit an existing entry. The alias schema/ave-record.schema.json and dist/ave-records-latest.* are deliberately absent because they move.",
+  "files": {
+    "dist/ave-records-v1.1.0.json": "a64e277b1aec9452dc547ac68bdec879a8fb3e27de9611a15c12d0bf3527f8ef",
+    "dist/ave-records-v1.1.0.manifest.json": "b434a3982978da21733c1ac0c23f919d538b8d0d457990f2b346637dd9799aa0",
+    "dist/ave-records-v1.2.0.json": "92e002e98cdd10f5de36e0ccfa80696b623cdadf302cc4d884f2a33b7fd94390",
+    "dist/ave-records-v1.2.0.manifest.json": "f4577f4a18a1ad7ca4c9e550c447aea83b5c94c8bc6da3787e4b6757171b1c89",
+    "schema/ave-record-1.0.0.schema.json": "ae21572c5c0db4ae2fc7a0d73302dd9b1d8fe0ee86cc750603b2af4f4c9abb32",
+    "schema/ave-record-1.1.0.schema.json": "8771c3610b67af6e138f901e2661b84a2dd9e02713635336877cdb22abf33a1a",
+    "schema/ave-record-1.2.0.schema.json": "52bade262bc804c0c9f26c71a76caa72abbb89dc2f4f1e4033a51fc755fa8c92",
+    "schema/crosswalk-1.0.0.schema.json": "bb32493c51370583fb9eccc55d99ef30bed59824352ef0eabbd9d51ae4f5905c"
+  }
+}

@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00013",
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "component_type": "skill",
   "title": "Personal data exfiltration via PII collection and transmission in agentic component",
   "attack_class": "Data Exfiltration - PII Theft",

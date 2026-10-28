@@ -10,11 +10,11 @@
 import json
 from pathlib import Path
 
-SCHEMA_PATH = Path("schema/ave-record-1.1.0.schema.json")
+SCHEMA_PATH = Path("schema/ave-record.schema.json")
 RELATIONSHIPS_PATH = Path("docs/terms-relationships.md")
 OUTPUT_PATH = Path("docs/terms.md")
 
-GENERATED_MARKER = "<!-- GENERATED FROM schema/ave-record-1.1.0.schema.json, DO NOT HAND-EDIT BELOW THIS LINE -->"
+GENERATED_MARKER = "<!-- GENERATED FROM schema/ave-record.schema.json, DO NOT HAND-EDIT BELOW THIS LINE -->"
 
 
 def load_field_descriptions() -> dict[str, str]:
@@ -28,7 +28,7 @@ def render(fields: dict[str, str], relationships: str) -> str:
         "# AVE schema terms",
         "",
         "Per-field definitions below are generated directly from "
-        "schema/ave-record-1.1.0.schema.json and are never hand-edited. "
+        "schema/ave-record.schema.json and are never hand-edited. "
         "Run scripts/generate_terms.py after any schema change.",
         "",
         "## Relationships between similar-sounding fields",
