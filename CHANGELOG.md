@@ -8,6 +8,24 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-10-29
+
+### Summary
+- The first catalog release since `v1.1.0` (2026-06-24), and the first published with
+  `ave-records.json`, `ave-records.manifest.json`, `SHA256SUMS` and build provenance
+  attestations; see Releases below and the README's "Releases and pinning".
+- **89 records**, all `active`, up from 51 in `v1.1.0`: 38 new ids, `AVE-2026-00052`
+  through `AVE-2026-00089`. No id was removed, renumbered or reused. By severity:
+  1 CRITICAL, 20 HIGH, 66 MEDIUM, 2 LOW.
+- **Every record is on schema 1.2.0** (`v1.1.0` shipped schema 1.0.0). Schema 1.2.0
+  contains everything schema 1.1.0 introduced (the July notes at the end of this
+  section) plus the optional properties added to 1.1.0 afterwards (Schema below). The
+  1.0.0 and 1.1.0 schema files stay published and are now frozen.
+- **12 crosswalks**, up from 3 in `v1.1.0` (`ave-to-ast10`, `clawscan-to-ave`,
+  `skillspector-to-ave`).
+- Everything below was merged after `v1.1.0`. The two dated sections at the end were
+  headed `[1.3.0]` and `[1.2.0]` while unreleased; that work ships here.
+
 ### Releases
 - **Catalog releases** (#369). The record set is now published as GitHub Releases
   tagged `vX.Y.Z`, on their own cadence and SemVer, independent of schema versions.
@@ -498,7 +516,7 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   or `tool.description` field, payload surface is the agent's own
   self-declared identity/capabilities in a peer discovery exchange.
 
-### 2026-07-17 changes (headed [1.3.0] until now; never tagged or released)
+### 2026-07-17 changes (headed [1.3.0] before this release; never tagged on its own)
 
 #### Summary
 
@@ -519,7 +537,7 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   AVE-2026-00059 verified against MITRE's own published technique name (LLM
   Prompt Injection), not assumed from existing corpus convention.
 
-### 2026-07-12 changes (headed [1.2.0] until now; never tagged or released)
+### 2026-07-12 changes (headed [1.2.0] before this release; never tagged on its own)
 
 #### Summary
 
