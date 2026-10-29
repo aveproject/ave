@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00048",
-  "schema_version": "1.2.0",
+  "schema_version": "1.3.0",
   "component_type": "skill",
   "title": "Unsafe agent delegation chain - sub-agent spawned with inherited permissions and no trust boundary",
   "attack_class": "Privilege Escalation - Unsafe Agent Delegation",

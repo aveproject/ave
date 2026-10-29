@@ -138,7 +138,7 @@ presence right even when you can't get a value: a missing key reads as
 "nobody checked," an empty array reads as "checked, no fit yet." Never
 let a record ship with the key silently absent.
 
-- `owasp_mcp`: **required** once `status` is `active` or `deprecated`
+- `owasp_mcp`: **required** for every `status` except `draft`
   (enforced by the schema, `minItems: 1`) — every published record
   needs at least one real, defensible mapping to a primary-source OWASP
   MCP Top 10 category, verified against the category's own text (see

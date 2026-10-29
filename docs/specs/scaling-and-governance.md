@@ -62,11 +62,28 @@ catalog release: it is the first record set published for that schema version. T
 record set an implementer pins between schema versions is a catalog release
 (Section 6).
 
-**Version bump rules**:
+**Compatibility, which decides the version bump.** Compatibility is defined for
+consumers of published records.
 
-- Additive, optional field: minor bump (1.1 to 1.2).
-- Removing or renaming a required field, or changing an existing field's
-  meaning: major bump (1.x to 2.0).
+- A **minor** version never removes or renames a field, never changes a field's
+  meaning, and never narrows an existing type, enum or pattern. It may add optional
+  fields, widen enums, and add a requirement that every record AVE publishes already
+  satisfies in the same release.
+- Anything else is a **major** version.
+- **Consumers must treat any `status` other than `active` as not active, and must
+  not assume an enum's list of values is complete.** This is what lets an enum widen
+  in a minor version. Without it, a consumer that only filters out `deprecated`
+  would read a `merged` or `rejected` record (Section 3) as active.
+
+Under this rule:
+
+- An additive, optional field is minor (1.1 to 1.2).
+- Adding the `merged` and `rejected` statuses, with `merged_into` and
+  `rejection_reason` required on them, is minor (1.2 to 1.3): no published record
+  had either status when they were added.
+- Requiring the framework keys (#178) is minor only once every published record
+  carries them.
+- Removing or renaming a field, or changing a field's meaning, is major (1.x to 2.0).
 
 Every record must validate against the schema version it declares in its
 own `schema_version` field, enforced in CI: `scripts/validate_records.py` looks up
@@ -99,6 +116,8 @@ None of these changes narrowed anything, so together they are a minor version:
 1.2.0 is the 1.1.0 schema as it stood, published under its own number. From 1.2.0
 on, the 1.0.0, 1.1.0 and 1.2.0 files are frozen exactly as they stand, and
 `dist/ave-records-v1.1.0.json` and `dist/ave-records-v1.2.0.json` with them.
+Schema 1.3.0 (#104) is the first version shipped by the process above from the
+start; its schema file and `dist/ave-records-v1.3.0.json` are frozen the same way.
 
 ## 3. Deprecation policy
 
@@ -114,17 +133,25 @@ it silently gone.
 - `deprecated`: superseded by better understanding of the same class.
   Content stays, a note explains why it's no longer primary.
 - `merged`: a genuine duplicate or sub-case of another record. Adds
-  `merged_into`, pointing at the surviving `ave_id`. The merged record's
+  `merged_into`, pointing at the surviving `ave_id`, which must be an
+  `active` record, so merges never chain or loop. The merged record's
   own content and ID remain permanently resolvable.
 - `rejected`: found invalid, not a real distinct class. Adds
-  `rejection_reason`. Stays resolvable, matching CVE's own REJECT state.
+  `rejection_reason`, free text that links the public decision (an issue
+  or discussion). Stays resolvable, matching CVE's own REJECT state.
 
-**Implementation note**: the `status` enum expansion and the
-`merged_into`/`rejection_reason` fields are a real schema change, tracked
-separately as part of a future version bump (alongside `owasp_ast`, see
-`AVE_V1.1.0_MIGRATION_BRIEF.md` Section 7.0), not implied to already exist
-by this policy document. This section states the policy the schema change
-will implement, it does not implement it.
+A record that leaves `active` keeps its full field set, whatever its new
+status. Consumers treat every status other than `active` as not active
+(Section 2).
+
+**Implementation note**: schema 1.3.0 implements this section (#104).
+`status` gains `merged` and `rejected`; `merged_into` is required when a
+record is `merged` and `rejection_reason` when it is `rejected`; every
+status except `draft` requires the full field set. `scripts/validate_records.py`
+checks what the schema cannot: each field only on its own status, no
+record merged into itself, a merge target that exists and is `active`, and
+a `rejection_reason` that links a GitHub issue or discussion. The note a
+`deprecated` record carries has no dedicated field.
 
 ## 4. Crosswalk discipline
 

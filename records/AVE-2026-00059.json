@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00059",
-  "schema_version": "1.2.0",
+  "schema_version": "1.3.0",
   "status": "active",
   "component_type": "mcp_server",
   "title": "Fragmented cross-description prompt injection reassembled at a planted trigger (ShareLock-class)",

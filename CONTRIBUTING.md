@@ -36,7 +36,7 @@ contribution makes AI agents safer for everyone.
    before writing JSON. The maintainer will confirm the next available id.
 
 4. **Read the schema** at
-   [`schema/ave-record-1.2.0.schema.json`](schema/ave-record-1.2.0.schema.json)
+   [`schema/ave-record-1.3.0.schema.json`](schema/ave-record-1.3.0.schema.json)
    for field definitions, types, and required/optional status. The schema
    reference page is at [aveproject.org/schema.html](https://aveproject.org/schema.html).
 
@@ -236,18 +236,26 @@ PR description must include:
 
 ## Schema changes
 
-**Additive changes** (new optional fields, clarified descriptions):
-standard PR. No version bump required.
+Open an issue first. Every schema change is a new version, sized by the
+compatibility rule in
+[the scaling spec, section 2](docs/specs/scaling-and-governance.md#2-schema-versioning-policy):
 
-**Structural changes** (new required fields, renamed fields, removed fields,
-changed validation rules): open an issue first. These require a schema
-version bump, a migration path for existing records, and a 30-day comment
-period before merging.
+- **Minor:** it only adds: an optional field, a wider enum, or a requirement
+  every published record already meets. It ships as a new versioned schema
+  file with the alias updated to match, every record's `schema_version`
+  bumped, and the new files added to `schema/frozen-artifacts.json`.
+- **Major:** anything that removes, renames or narrows a field, or changes its
+  meaning. It also needs a migration path for existing records and a 30-day
+  comment period before merging.
 
-Current schema: **v1.2.0**.
-Canonical file: `schema/ave-record-1.2.0.schema.json`.
-(`schema/ave-record-1.0.0.schema.json` and `schema/ave-record-1.1.0.schema.json` remain, permanently, as frozen
-earlier versions; `tests/test_frozen_artifacts.py` fails if either changes.)
+A published versioned schema file never changes, not even a description; a
+correction ships in the next version.
+
+Current schema: **v1.3.0**.
+Canonical file: `schema/ave-record-1.3.0.schema.json`.
+(`schema/ave-record-1.0.0.schema.json`, `schema/ave-record-1.1.0.schema.json` and
+`schema/ave-record-1.2.0.schema.json` remain, permanently, as frozen earlier versions;
+`tests/test_frozen_artifacts.py` fails if any of them changes.)
 
 **Any change to a field's description, additive or structural, requires
 regenerating `docs/terms.md`**: `python scripts/generate_terms.py`, then
@@ -279,8 +287,18 @@ If the change moves `aivss.aivss_score` or `severity`, update the record's
 row in the README record index, and the Stats band counts when the
 severity band changes; `tests/test_readme_sync.py` fails until they agree.
 
-`ave_id` values are immutable. Never renumber a record. If a record is wrong
-or obsolete, set `status: "deprecated"` — never delete.
+`ave_id` values are immutable. Never renumber or delete a record. If a record
+is wrong or obsolete, change its `status` and keep its content:
+
+- `"deprecated"`: superseded by a better understanding of the same class; say
+  why in the pull request and in the record.
+- `"merged"`: a duplicate or sub-case of another record; set `merged_into` to
+  the surviving record, which must be `active`.
+- `"rejected"`: not a real distinct class; set `rejection_reason` to a short
+  explanation that links the public decision, a GitHub issue or discussion.
+
+`scripts/validate_records.py` checks the last two. See
+[the scaling spec, section 3](docs/specs/scaling-and-governance.md#3-deprecation-policy).
 
 ---
 
