@@ -362,10 +362,6 @@ curl -fsSLO https://github.com/aveproject/ave/releases/download/v1.2.0/ave-recor
 # Or track current: regenerated on every records/ change, no release needed
 curl -L https://raw.githubusercontent.com/aveproject/ave/main/dist/ave-records-latest.json \
   -o ave-records.json
-
-# Or pin to a frozen snapshot: the first record set published for schema 1.2.0
-curl -L https://raw.githubusercontent.com/aveproject/ave/main/dist/ave-records-v1.2.0.json \
-  -o ave-records.json
 ```
 To check what you pinned, see [Releases and pinning](#releases-and-pinning).
 
