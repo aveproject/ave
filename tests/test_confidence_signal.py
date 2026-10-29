@@ -8,7 +8,7 @@ from scripts import check_confidence_signal
 def base_record(**overrides):
     record = {
         "ave_id": "AVE-2026-99999",
-        "schema_version": "1.1.0",
+        "schema_version": "1.2.0",
         "status": "active",
         "title": "Confidence signal fixture",
         "description": "Fixture record for the confidence signal check.",

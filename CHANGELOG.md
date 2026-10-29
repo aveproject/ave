@@ -8,6 +8,39 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 
 ## [Unreleased]
 
+### Schema
+- **Schema 1.2.0** (#365). `schema/ave-record-1.2.0.schema.json` is the 1.1.0 schema as
+  it stands today, published under its own number; it differs from the 1.1.0 file only in
+  its `$id`, its own version string and the `schema_version` example. The alias
+  `schema/ave-record.schema.json` points at it, and all 89 records declare `1.2.0` (one
+  changed line each; `last_updated` is not touched, because the version label is not
+  record content).
+- **Why a new number:** the 1.1.0 file took eight optional properties in place after it was
+  published (`evidence_method`, `evidence_vantage`, `verification_basis`, #226 resolving
+  #222; `missing_control`, `security_boundary`, `vulnerability_rationale`, #231;
+  `framework_sources`, #247 with #256 and #266; `revisions`, #323) plus an
+  `evidence_basis_engines` enum widening (`external_authority`). Nothing became required and
+  nothing narrowed, so it is a minor version.
+- **Frozen files are enforced:** `schema/frozen-artifacts.json` records the SHA-256 of the
+  1.0.0, 1.1.0 and 1.2.0 record schemas, the crosswalk 1.0.0 schema and the
+  `dist/ave-records-v1.1.0` and `v1.2.0` snapshot pairs; `tests/test_frozen_artifacts.py`
+  fails when one changes or disappears, and when a change removes or rehashes an entry
+  since it left its base branch (`FROZEN_BASE` in `tests.yml`).
+- **Per-version validation:** `scripts/validate_records.py` checks each record against
+  `schema/ave-record-<schema_version>.schema.json`; a missing or unknown version is an error.
+  `scripts/generate_terms.py` and `scripts/build-records.js` now default to the alias.
+- **Manifests carry `sha256`** of the records file beside them (`tests/test_manifests.py`).
+  `source_commit` is written only when `AVE_SOURCE_COMMIT` is set to a full commit SHA; a
+  local or PR build never guesses one. The frozen v1.1.0 manifest keeps its original fields.
+- **History, recorded in `docs/specs/scaling-and-governance.md`:** the `v1.1.0` GitHub
+  Release (2026-06-24) was a catalog release of 51 records on schema 1.0.0, so two
+  different files are named `ave-records-v1.1.0.json` (that release asset, and the repo's
+  59-record snapshot on schema 1.1.0 from #63). The 1.0.0 schema was edited twice after its
+  tag (#24 widened `component_type` with `prompt`; #166 changed the `$id` the v1.0.0 notes
+  had called permanent). All of these files are frozen as they stand from 1.2.0 on.
+- `GOVERNANCE.md` now says new optional fields ship as a new minor schema version, as the
+  scaling spec does (it said a patch release).
+
 ### Changed
 - `README.md`: `AVE-2026-00044`'s record index row brought back in line
   with `records/`. #294 moved the record from 6.1 MEDIUM to 8.1 HIGH, and
@@ -446,11 +479,9 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   or `tool.description` field, payload surface is the agent's own
   self-declared identity/capabilities in a peer discovery exchange.
 
----
+### 2026-07-17 changes (headed [1.3.0] until now; never tagged or released)
 
-## [1.3.0] - 2026-07-17
-
-### Summary
+#### Summary
 
 - 3 new records: AVE-2026-00057 through AVE-2026-00059 — record set now at 59,
   118 tests passing.
@@ -469,11 +500,9 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   AVE-2026-00059 verified against MITRE's own published technique name (LLM
   Prompt Injection), not assumed from existing corpus convention.
 
----
+### 2026-07-12 changes (headed [1.2.0] until now; never tagged or released)
 
-## [1.2.0] - 2026-07-12
-
-### Summary
+#### Summary
 
 - Schema v1.1.0: 3 field renames, 1 field removal, 4 new optional fields, draft-vs-active
   conditional required set. `schema/ave-record-1.1.0.schema.json` is now canonical;
@@ -491,7 +520,7 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   target metadata synced to v1.1.0/56 records; their rule-level mappings are unchanged,
   since re-checking them requires each external tool's own current rule catalog.
 
-### Schema v1.1.0
+#### Schema v1.1.0
 
 Field renames (owasp_mapping -> owasp_asi, mitre_atlas_mapping -> mitre_atlas,
 nist_ai_rmf_mapping -> nist_ai_rmf) and removal (`aivss.owasp_mcp_mapping`, redundant
@@ -516,7 +545,7 @@ recommended (missing `pin_integrity` and `deny_by_default` respectively, both ex
 named in the prose remediation text). Priority-1 records 00045/00046/00050/00051 remain
 unreviewed LLM drafts as of this release.
 
-### New records
+#### New records
 
 | AVE ID | Attack class | Severity | AIVSS |
 |---|---|---|---|
@@ -536,7 +565,7 @@ attack_class category, dual-CVSS-assessor handling) recorded in
 scored below their pre-implementation severity estimate once AIVSS was actually
 computed — see each record's `aivss.notes` for why.
 
-### Repo hygiene (Phase 0, `TRUST_STRATEGY.md`)
+#### Repo hygiene (Phase 0, `TRUST_STRATEGY.md`)
 
 - `.github/workflows/tests.yml`, `codeql.yml`, `dependency-review.yml` (+
   `.github/dependabot.yml`), `secret-scan.yml` (+ `.gitleaks.toml`), `scorecard.yml` —
@@ -554,7 +583,7 @@ computed — see each record's `aivss.notes` for why.
 - 8 new README badges: Tests, Coverage, CodeQL, Dependency Review, Secret Scan, OpenSSF
   Scorecard, Security Policy, Code of Conduct
 
-### Crosswalks
+#### Crosswalks
 
 - `ave-to-owasp-mcp.md` regenerated programmatically from every record's own `owasp_mcp`
   field rather than patched — found the previous hand-maintained version had drifted for
@@ -793,12 +822,15 @@ Three ADRs are locked and documented in `docs/adr/`:
 ## Planned for v1.3
 
 - Cut a `v1.2.0` GitHub Release with the 56-record offline artifact (`ave-records-v1.2.0.json`)
+  **[SUPERSEDED 2026-10-29]** No 56-record release was cut. `dist/ave-records-v1.2.0.json`
+  is now the frozen 89-record snapshot on schema 1.2.0 (#366), and the `v1.2.0` release
+  will carry that set. Kept, with this note, as the item above it is.
 - AST10 crosswalk PR — submit `crosswalks/ave-to-ast10.json` as a contribution to the
   OWASP AST10 project repo; the crosswalk file itself is current, the external
   submission has not happened
 - Re-check `clawscan-to-ave.json` / `skillspector-to-ave.json` rule-level mappings
   against each tool's current rule catalog for AVE-2026-00052 through 00056 — this
-  release only updated their AVE-side target metadata (see 1.2.0 above)
+  release only updated their AVE-side target metadata (see the 2026-07-12 changes above)
 - CWE AI Working Group outreach — open a contribution issue on
   `github.com/CWE-CAPEC/AI-Working-Group` with a gap-mapping document covering how AVE
   records address the agentic behavioral classes missing from CWE-1446
@@ -813,5 +845,5 @@ Three ADRs are locked and documented in `docs/adr/`:
   Kept here, corrected in place, rather than removed, so the original stale roadmap
   item stays visible alongside its correction.
 - Section 6.2 review priorities 2-4 from `AVE_V1.1.0_MIGRATION_BRIEF.md` — only 2 of the
-  6 priority-1 records got a human spot-check in 1.2.0 (both had real bugs, since fixed);
+  6 priority-1 records got a human spot-check in the 2026-07-12 changes (both had real bugs, since fixed);
   00045/00046/00050/00051 remain unreviewed LLM drafts, and priorities 2-4 haven't started

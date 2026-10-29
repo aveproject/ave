@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00010",
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "component_type": "skill",
   "title": "Covert instruction concealment via secrecy directive in agentic component",
   "attack_class": "Prompt Injection - Hidden Instruction",

@@ -51,6 +51,12 @@ Never edited retroactively, including typo fixes; a correction ships in
 the next version, not a silent edit to a version already published and
 potentially already depended on by an implementer who pinned to it.
 
+Freezing is enforced, not only stated. `schema/frozen-artifacts.json` records the
+SHA-256 of every frozen file, and `tests/test_frozen_artifacts.py` fails when one of
+those files changes or disappears, and also when a change removes or rehashes an
+entry compared with where it left its base branch. The alias and
+`dist/ave-records-latest.*` are deliberately not in that list: they move.
+
 **Version bump rules**:
 
 - Additive, optional field: minor bump (1.1 to 1.2).
@@ -58,7 +64,36 @@ potentially already depended on by an implementer who pinned to it.
   meaning: major bump (1.x to 2.0).
 
 Every record must validate against the schema version it declares in its
-own `schema_version` field, enforced in CI.
+own `schema_version` field, enforced in CI: `scripts/validate_records.py` looks up
+`schema/ave-record-<schema_version>.schema.json` for each record and rejects a
+version that has no file.
+
+**Shipping an optional field after a release.** It goes into the next minor
+version as a new versioned file, `schema/ave-record-X.(Y+1).0.schema.json`, with the
+alias updated to match. Every record's `schema_version` is bumped with a one-line
+edit, the build writes the new `dist/ave-records-vX.(Y+1).0.json` snapshot and its
+manifest, and the new schema file and snapshot pair are added to
+`schema/frozen-artifacts.json`. Nothing already frozen is touched.
+
+**History, and why 1.2.0 exists.** The rules above were not followed at first, and
+1.2.0 is where they start being enforced. The `v1.1.0` GitHub Release (2026-06-24)
+was a catalog release: 51 records on schema 1.0.0, with an asset named
+`ave-records-v1.1.0.json`; its tag holds no 1.1.0 schema file. The versioned
+`schema/ave-record-1.1.0.schema.json` was created afterwards (#37, 2026-07-11), and
+`dist/ave-records-v1.1.0.json` on 2026-07-19 (#63) with 59 records on schema 1.1.0,
+so two different files carry the name `ave-records-v1.1.0.json`. The 1.1.0 schema
+then took eight optional properties in place: `evidence_method`, `evidence_vantage`
+and `verification_basis` (commit `038dbf6`, #226, resolving #222);
+`missing_control`, `security_boundary` and `vulnerability_rationale` (#231);
+`framework_sources` (#247, extended by #256 and #266); and `revisions` (#323). The
+same sync widened the `evidence_basis_engines` enum with `external_authority`. The
+1.0.0 file was edited twice after its tag: #24 added `prompt` to the
+`component_type` enum and reworded three descriptions, and #166 changed its `$id`,
+which the v1.0.0 release notes had called permanent, when the old host was retired.
+None of these changes narrowed anything, so together they are a minor version:
+1.2.0 is the 1.1.0 schema as it stood, published under its own number. From 1.2.0
+on, the 1.0.0, 1.1.0 and 1.2.0 files are frozen exactly as they stand, and
+`dist/ave-records-v1.1.0.json` and `dist/ave-records-v1.2.0.json` with them.
 
 ## 3. Deprecation policy
 

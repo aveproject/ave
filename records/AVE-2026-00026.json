@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00026",
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "component_type": "mcp_server",
   "title": "Exfiltration via Tool Output Encoding",
   "attack_class": "Data Exfiltration - Output Encoding",

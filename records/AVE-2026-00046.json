@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00046",
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "component_type": "skill",
   "title": "MCP tool hook hijacking - redirect tool execution to attacker-controlled callback",
   "attack_class": "Execution Hijack - Tool Hook Interception",

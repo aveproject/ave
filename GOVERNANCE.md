@@ -14,7 +14,8 @@ and having positive + negative detection fixtures.
 
 **Schema changes:** discussed in issues before implementation. Breaking changes (field
 removal, required field addition) require a new schema version and a migration script.
-Minor additions (new optional fields) are non-breaking and can ship in a patch release.
+Minor additions (new optional fields) are non-breaking and ship as a new minor schema
+version (see `docs/specs/scaling-and-governance.md`, section 2).
 
 **Deprecation:** a record is deprecated by setting `status` to `"deprecated"`, with a
 note explaining why. `ave_id` values are never reused or deleted.

@@ -1,4 +1,4 @@
-# What: validates every AVE record against the current schema plus the Section 8
+# What: validates every AVE record against the schema version it declares, plus the Section 8
 #       invariants from the v1.1.0 migration (no stale field names, no leaked
 #       enforcement config, no dual-empty behavioral_vector/example_patterns),
 #       plus AIVSS score arithmetic and vendor-neutral language, added after a
@@ -14,8 +14,10 @@
 #       violation this project enforces everywhere else; records shouldn't be
 #       the one place it's unchecked.
 # How:  jsonschema.Draft202012Validator with format checking enabled against
-#       schema/ave-record-1.1.0.schema.json (handles the draft-vs-active
-#       conditional required set natively and enforces date-time / uri metadata),
+#       schema/ave-record-<schema_version>.schema.json, the file for the version
+#       each record states (handles the draft-vs-active conditional required set
+#       natively and enforces date-time / uri metadata); a missing or unknown
+#       version is an error rather than a silent fallback to the newest schema,
 #       plus a handful of checks the schema's additionalProperties:false already
 #       implies but which deserve a readable, named failure message of their own.
 #       verification_basis is a hard error rather than a warning because it is
@@ -40,7 +42,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from scripts.write_verification_basis import check_record as check_verification_basis  # noqa: E402
 
 RECORDS_DIR = Path("records")
-SCHEMA_PATH = Path("schema/ave-record-1.1.0.schema.json")
+SCHEMA_DIR = Path("schema")
+# The alias always names the newest schema. Versioned files are looked up per
+# record by schema_version; this path is for callers that want "the current one".
+SCHEMA_PATH = SCHEMA_DIR / "ave-record.schema.json"
+SCHEMA_VERSION_PATTERN = re.compile(r"[0-9]+\.[0-9]+\.[0-9]+")
 
 OLD_FIELD_NAMES = ["owasp_mapping", "mitre_atlas_mapping", "nist_ai_rmf_mapping"]
 MITIGATION_ENUMS = {
@@ -75,6 +81,44 @@ def build_validator(schema: dict) -> jsonschema.Draft202012Validator:
     return jsonschema.Draft202012Validator(
         schema, format_checker=jsonschema.Draft202012Validator.FORMAT_CHECKER
     )
+
+
+# What: the schema versions that have a versioned file under schema/
+# Why:  the list in an "unknown version" message has to come from the files that
+#       exist, or it goes stale the day a version is added
+# How:  glob schema/ave-record-X.Y.Z.schema.json and sort numerically
+def published_schema_versions(schema_dir: Path | None = None) -> list[str]:
+    directory = SCHEMA_DIR if schema_dir is None else schema_dir
+    found = []
+    for path in directory.glob("ave-record-*.schema.json"):
+        version = path.name[len("ave-record-"):-len(".schema.json")]
+        if SCHEMA_VERSION_PATTERN.fullmatch(version):
+            found.append(version)
+    return sorted(found, key=lambda v: tuple(int(part) for part in v.split(".")))
+
+
+# What: the validator for the schema version one record declares, or an error
+# Why:  a record is judged by the frozen rules of the version it states, not by
+#       whichever version is newest; a record naming a version that has no file
+#       cannot be validated at all, and saying so beats guessing
+# How:  look up schema/ave-record-<schema_version>.schema.json, build and cache
+#       its validator; a missing, malformed or unpublished version returns an
+#       error message and no validator
+def validator_for_record(record: dict, cache: dict, schema_dir: Path | None = None):
+    directory = SCHEMA_DIR if schema_dir is None else schema_dir
+    version = record.get("schema_version")
+    if not isinstance(version, str) or not SCHEMA_VERSION_PATTERN.fullmatch(version):
+        return None, [f"schema_version {version!r} is missing or is not X.Y.Z, so the record cannot be validated"]
+    key = (str(directory), version)
+    if key not in cache:
+        path = directory / f"ave-record-{version}.schema.json"
+        if not path.is_file():
+            known = ", ".join(published_schema_versions(directory)) or "none"
+            return None, [f"schema_version '{version}' has no schema file {path} (published versions: {known})"]
+        schema = json.loads(path.read_text(encoding="utf-8"))
+        jsonschema.Draft202012Validator.check_schema(schema)
+        cache[key] = build_validator(schema)
+    return cache[key], []
 
 
 def check_no_old_field_names(record: dict) -> list[str]:
@@ -287,21 +331,24 @@ def record_errors(record: dict, raw_text: str, validator) -> list[str]:
 
 
 def main() -> int:
-    schema = json.loads(SCHEMA_PATH.read_text())
-    jsonschema.Draft202012Validator.check_schema(schema)
-    validator = build_validator(schema)
-
     paths = sorted(RECORDS_DIR.glob("AVE-*.json"))
     if not paths:
         print("No records found under records/", file=sys.stderr)
         return 1
 
+    cache: dict = {}
+    versions_seen: dict[str, int] = {}
     total_errors = 0
     for path in paths:
         raw_text = path.read_text()
         record = json.loads(raw_text)
         rid = record.get("ave_id", path.name)
-        errors = record_errors(record, raw_text, validator)
+        validator, version_errors = validator_for_record(record, cache)
+        if validator is None:
+            errors = version_errors
+        else:
+            versions_seen[record["schema_version"]] = versions_seen.get(record["schema_version"], 0) + 1
+            errors = record_errors(record, raw_text, validator)
         for e in errors:
             print(f"{rid}: {e}")
         total_errors += len(errors)
@@ -315,7 +362,8 @@ def main() -> int:
     if total_errors:
         print(f"\n{total_errors} error(s) across {len(paths)} records.", file=sys.stderr)
         return 1
-    print(f"All {len(paths)} records valid against {SCHEMA_PATH}.")
+    summary = ", ".join(f"{v}: {n}" for v, n in sorted(versions_seen.items()))
+    print(f"All {len(paths)} records valid against the schema version each declares ({summary}).")
     return 0
 
 

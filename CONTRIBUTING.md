@@ -36,7 +36,7 @@ contribution makes AI agents safer for everyone.
    before writing JSON. The maintainer will confirm the next available id.
 
 4. **Read the schema** at
-   [`schema/ave-record-1.1.0.schema.json`](schema/ave-record-1.1.0.schema.json)
+   [`schema/ave-record-1.2.0.schema.json`](schema/ave-record-1.2.0.schema.json)
    for field definitions, types, and required/optional status. The schema
    reference page is at [aveproject.org/schema.html](https://aveproject.org/schema.html).
 
@@ -244,9 +244,10 @@ changed validation rules): open an issue first. These require a schema
 version bump, a migration path for existing records, and a 30-day comment
 period before merging.
 
-Current schema: **v1.1.0**.
-Canonical file: `schema/ave-record-1.1.0.schema.json`.
-(`schema/ave-record-1.0.0.schema.json` remains, permanently, as the frozen v1.0.0 canonical.)
+Current schema: **v1.2.0**.
+Canonical file: `schema/ave-record-1.2.0.schema.json`.
+(`schema/ave-record-1.0.0.schema.json` and `schema/ave-record-1.1.0.schema.json` remain, permanently, as frozen
+earlier versions; `tests/test_frozen_artifacts.py` fails if either changes.)
 
 **Any change to a field's description, additive or structural, requires
 regenerating `docs/terms.md`**: `python scripts/generate_terms.py`, then

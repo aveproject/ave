@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00089",
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "status": "active",
   "component_type": "agent",
   "title": "Model-supplied sandbox boundary: a tool parameter the model sets defines or widens the sandbox's writable scope",

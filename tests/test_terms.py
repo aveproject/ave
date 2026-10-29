@@ -12,7 +12,7 @@ def test_render_output_matches_a_hand_computed_case():
     assert output == (
         "# AVE schema terms\n\n"
         "Per-field definitions below are generated directly from "
-        "schema/ave-record-1.1.0.schema.json and are never hand-edited. "
+        "schema/ave-record.schema.json and are never hand-edited. "
         "Run scripts/generate_terms.py after any schema change.\n\n"
         "## Relationships between similar-sounding fields\n\n"
         "Alpha and beta are unrelated.\n\n"
