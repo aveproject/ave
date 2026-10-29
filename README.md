@@ -362,6 +362,10 @@ curl -fsSLO https://github.com/aveproject/ave/releases/download/v1.2.0/ave-recor
 # Or track current: regenerated on every records/ change, no release needed
 curl -L https://raw.githubusercontent.com/aveproject/ave/main/dist/ave-records-latest.json \
   -o ave-records.json
+
+# Or pin to a frozen snapshot: the first record set published for schema 1.2.0
+curl -L https://raw.githubusercontent.com/aveproject/ave/main/dist/ave-records-v1.2.0.json \
+  -o ave-records.json
 ```
 To check what you pinned, see [Releases and pinning](#releases-and-pinning).
 
@@ -616,21 +620,6 @@ not just listed by name.
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the contributor-facing process.
 
 See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for community standards.
-
----
-
-## Contributors
-
-<a href="https://github.com/aveproject/ave/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=aveproject/ave" />
-</a>
-
-This shows who has contributed, not what they did. See
-[CONTRIBUTORS.md](CONTRIBUTORS.md) for that — specific credit for
-specific work: astrogilda's crosswalk schema and pin-status design,
-predictor2718's independently-built cfgaudit crosswalk, mmaxjr's
-validator fix, Alex Greenshpun's attribution correction — not a name
-list.
 
 ---
 
