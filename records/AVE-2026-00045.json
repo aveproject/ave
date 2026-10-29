@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00045",
-  "schema_version": "1.2.0",
+  "schema_version": "1.3.0",
   "component_type": "skill",
   "title": "Privilege escalation via cross-app-access - pivot from low-trust to high-trust MCP server using shared agent session",
   "attack_class": "Privilege Escalation - Cross-App-Access Escalation",

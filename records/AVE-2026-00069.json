@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00069",
-  "schema_version": "1.2.0",
+  "schema_version": "1.3.0",
   "status": "active",
   "component_type": "skill",
   "title": "Multimodal image-hidden instructions (SkillCamo) bundled within a skill package",

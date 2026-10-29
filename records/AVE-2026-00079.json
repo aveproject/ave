@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00079",
-  "schema_version": "1.2.0",
+  "schema_version": "1.3.0",
   "status": "active",
   "component_type": "agent",
   "title": "Plan hijacking via false completion signal: forced early termination bypasses undeclared execution steps",

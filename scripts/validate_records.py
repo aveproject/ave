@@ -4,7 +4,10 @@
 #       plus AIVSS score arithmetic and vendor-neutral language, added after a
 #       hand-drafted batch of records caught real instances of exactly these
 #       problems that nothing here checked, plus a declared verification_basis
-#       that the record's own evidence axes contradict
+#       that the record's own evidence axes contradict, plus the lifecycle rules
+#       schema 1.3.0's statuses need beyond the schema (merged_into and
+#       rejection_reason only on their own status, a link to the decision, a
+#       merge target that exists and is active)
 # Why:  a malformed or drifted record breaks every downstream scanner that loads it,
 #       and a free-text value in `mitigation` would let vendor-specific config
 #       leak back into a standard that is supposed to stay vendor-neutral.
@@ -63,6 +66,9 @@ MITIGATION_ENUMS = {
         "break_private_data", "break_untrusted_content", "break_external_comms", "not_applicable",
     },
 }
+
+# A rejection links the public decision behind it: a GitHub issue or discussion.
+DECISION_LINK = re.compile(r"https://github\.com/[\w.-]+/[\w.-]+/(?:issues|discussions)/[0-9]+")
 
 VENDOR_BOILERPLATE_PATTERNS = [
     r"bawbel-scanner",
@@ -310,6 +316,54 @@ def check_researcher_matches_disclosure(record: dict) -> list[str]:
     return []
 
 
+# What: merged_into and rejection_reason only on their own status, no self-merge, and a
+#       rejection_reason that links the public decision
+# Why:  the schema requires each field when its status is set (scaling spec section 3,
+#       #104) but cannot refuse it elsewhere, see the record's own id, or tell a link
+#       from prose; a stray merged_into on an active record would name a successor for
+#       a record that has none
+# How:  compare the fields against status and ave_id, and search the reason for a
+#       GitHub issue or discussion URL
+def check_status_fields(record: dict) -> list[str]:
+    status = record.get("status")
+    errors = []
+    if "merged_into" in record and status != "merged":
+        errors.append(f"merged_into belongs only on a merged record; this one is {status!r}")
+    if "rejection_reason" in record and status != "rejected":
+        errors.append(f"rejection_reason belongs only on a rejected record; this one is {status!r}")
+    if status == "merged" and record.get("merged_into") == record.get("ave_id"):
+        errors.append("merged_into names the record itself")
+    reason = record.get("rejection_reason")
+    if status == "rejected" and isinstance(reason, str) and not DECISION_LINK.search(reason):
+        errors.append(
+            "rejection_reason must link the public decision: a GitHub issue or discussion "
+            "URL, https://github.com/<owner>/<repo>/issues/<n> or /discussions/<n>"
+        )
+    return errors
+
+
+# What: every merged record's merged_into names an existing record whose status is active
+# Why:  a merge points readers and tools at the record that survives it; a target that
+#       does not exist, or is itself deprecated, merged, rejected or a draft, sends them
+#       nowhere useful, and requiring an active target means merges never chain or loop
+# How:  over the whole corpus, keyed by ave_id; a missing or self-naming merged_into is
+#       left to the schema and check_status_fields
+def check_merge_targets(records: dict) -> list[str]:
+    errors = []
+    for ave_id, record in sorted(records.items()):
+        target = record.get("merged_into")
+        if record.get("status") != "merged" or not isinstance(target, str) or target == ave_id:
+            continue
+        if target not in records:
+            errors.append(f"{ave_id}: merged_into {target} is not a record in records/")
+        elif records[target].get("status") != "active":
+            errors.append(
+                f"{ave_id}: merged_into {target} has status {records[target].get('status')!r}; "
+                "a merge must point at an active record, so merges never chain or loop"
+            )
+    return errors
+
+
 def record_errors(record: dict, raw_text: str, validator) -> list[str]:
     """Every hard error for one record, in the order main() reports them.
 
@@ -327,6 +381,7 @@ def record_errors(record: dict, raw_text: str, validator) -> list[str]:
         + check_verification_basis(record)
         + check_revision_order(record)
         + check_revision_values(record, validator.schema.get("properties", {}))
+        + check_status_fields(record)
     )
 
 
@@ -338,11 +393,13 @@ def main() -> int:
 
     cache: dict = {}
     versions_seen: dict[str, int] = {}
+    corpus: dict = {}
     total_errors = 0
     for path in paths:
         raw_text = path.read_text()
         record = json.loads(raw_text)
         rid = record.get("ave_id", path.name)
+        corpus[rid] = record
         validator, version_errors = validator_for_record(record, cache)
         if validator is None:
             errors = version_errors
@@ -358,6 +415,11 @@ def main() -> int:
             for w in warnings:
                 print(f"WARNING [{record['ave_id']}]: {w}")
             # do not increment the failure counter, do not affect exit code
+
+    corpus_errors = check_merge_targets(corpus)
+    for e in corpus_errors:
+        print(e)
+    total_errors += len(corpus_errors)
 
     if total_errors:
         print(f"\n{total_errors} error(s) across {len(paths)} records.", file=sys.stderr)

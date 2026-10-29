@@ -12,7 +12,7 @@ MCP server, system prompt, or agent plugin can be weaponized — scored consiste
 mapped to the frameworks security teams already report against.
 
 [![Records](https://img.shields.io/badge/records-89-0f6e56?style=flat-square)](records/)
-[![Schema](https://img.shields.io/badge/schema-v1.2.0-0a3024?style=flat-square)](schema/ave-record-1.2.0.schema.json)
+[![Schema](https://img.shields.io/badge/schema-v1.3.0-0a3024?style=flat-square)](schema/ave-record-1.3.0.schema.json)
 [![AIVSS](https://img.shields.io/badge/AIVSS-v0.8-d4a017?style=flat-square)](https://aivss.owasp.org)
 [![OWASP MCP](https://img.shields.io/badge/OWASP-MCP%20Top%2010-0a3024?style=flat-square)](https://owasp.org)
 [![MITRE ATLAS](https://img.shields.io/badge/MITRE-ATLAS-4a3f9e?style=flat-square)](https://atlas.mitre.org)
@@ -141,7 +141,7 @@ skill file          ->   in CI / pre-commit   ->  before deploy
 | | |
 |---|---|
 | Total records | 89 |
-| Schema version | 1.2.0 |
+| Schema version | 1.3.0 |
 | AIVSS spec | v0.8 |
 | CRITICAL (>= 9.0) | 1 |
 | HIGH (7.0-8.9) | 20 |
@@ -402,15 +402,15 @@ schema 1.1.0).
 
 ---
 
-## Schema v1.2.0
+## Schema v1.3.0
 
 Records validate against
-[`schema/ave-record-1.2.0.schema.json`](schema/ave-record-1.2.0.schema.json).
+[`schema/ave-record-1.3.0.schema.json`](schema/ave-record-1.3.0.schema.json).
 Each record is checked against the versioned file named by its own `schema_version`;
 earlier versions stay published and frozen (`schema/frozen-artifacts.json`).
 
 Canonical `$id`:
-`https://aveproject.org/schema/ave-record-1.2.0.schema.json`
+`https://aveproject.org/schema/ave-record-1.3.0.schema.json`
 
 **15 required fields:**
 
@@ -427,7 +427,7 @@ references · researcher
 ```json
 {
   "ave_id": "AVE-2026-00001",
-  "schema_version": "1.2.0",
+  "schema_version": "1.3.0",
   "status": "active",
   "published": "2026-04-01T09:00:00Z",
   "title": "Metamorphic payload via external config fetch",
@@ -460,9 +460,17 @@ references · researcher
 
 `status: "draft"` records need only a reduced eight-field core (`ave_id`,
 `schema_version`, `status`, `title`, `description`, `attack_class`,
-`behavioral_fingerprint`, `references`) — the full 15-field required set
-above applies once `status` is `active` or `deprecated`. See
+`behavioral_fingerprint`, `references`); the full 15-field required set
+above applies to every other status. See
 [CONTRIBUTING.md](CONTRIBUTING.md) for the thin-submission path.
+
+**Lifecycle statuses.** An `active` record is current. A record found wrong or
+obsolete is never deleted and keeps its full content: it becomes `deprecated`,
+with a note explaining why; `merged`, with `merged_into` naming the surviving
+`active` record; or `rejected`, with a `rejection_reason` that links the public
+decision. Treat any status other than `active` as not active, and expect the
+list to grow (the compatibility rule in
+[the scaling spec, section 2](docs/specs/scaling-and-governance.md#2-schema-versioning-policy)).
 
 Full schema reference: [aveproject.org/schema.html](https://aveproject.org/schema.html)
 
@@ -514,7 +522,7 @@ const Ajv = require('ajv/dist/2020');
 const addFormats = require('ajv-formats');
 const ajv = new Ajv({ strict: false });
 addFormats(ajv);
-const schema = require('./schema/ave-record-1.2.0.schema.json');
+const schema = require('./schema/ave-record-1.3.0.schema.json');
 const record = require('./records/AVE-2026-NNNNN.json');
 const ok = ajv.validate(schema, record);
 if (!ok) console.error(ajv.errors); else console.log('valid');

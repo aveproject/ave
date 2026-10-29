@@ -12,13 +12,17 @@ Saray CHAK (chaksaray), founder of Bawbel. Sole maintainer as of v1.1.0.
 behavioral class + citable primary source, merged only after passing schema validation
 and having positive + negative detection fixtures.
 
-**Schema changes:** discussed in issues before implementation. Breaking changes (field
-removal, required field addition) require a new schema version and a migration script.
-Minor additions (new optional fields) are non-breaking and ship as a new minor schema
-version (see `docs/specs/scaling-and-governance.md`, section 2).
+**Schema changes:** discussed in issues before implementation. Whether a change is a
+minor or a major version follows the compatibility rule in
+`docs/specs/scaling-and-governance.md`, section 2. A minor version only adds: optional
+fields, wider enums, or a requirement every published record already meets. Anything
+that removes, renames or narrows a field, or changes its meaning, is a major version
+and needs a migration script.
 
-**Deprecation:** a record is deprecated by setting `status` to `"deprecated"`, with a
-note explaining why. `ave_id` values are never reused or deleted.
+**Deprecation:** a record that is wrong or obsolete changes `status` and keeps its
+content. `"deprecated"` comes with a note explaining why. `"merged"` names the surviving
+record in `merged_into`. `"rejected"` gives a `rejection_reason` that links the public
+decision. `ave_id` values are never reused or deleted.
 
 **Crosswalk updates:** maintainer or contributors may update crosswalk JSON files to
 add new tool mappings. No record changes required.

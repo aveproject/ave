@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00053",
-  "schema_version": "1.2.0",
+  "schema_version": "1.3.0",
   "component_type": "mcp_server",
   "title": "Path traversal via unsanitized path parameter in MCP resource/file-handler implementation",
   "attack_class": "Tool Abuse - Resource Path Traversal",
