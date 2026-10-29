@@ -345,35 +345,11 @@ full consumption patterns including air-gapped environments.
 
 ## Implementing AVE in your scanner
 
-Three patterns depending on your environment:
-
-**Pattern 1 — Runtime API** (cloud CI/CD, always-on internet)
-```python
-import httpx
-resp = httpx.get("https://api.aveproject.org/records/AVE-2026-00002")
-record = resp.json()  # full record: fingerprint, IOCs, remediation, frameworks
-```
-
-**Pattern 2 — Bundled offline** (air-gapped, regulated environments)
-```bash
-# Pin to a catalog release: a fixed record set with checksums and provenance
-curl -fsSLO https://github.com/aveproject/ave/releases/download/v1.2.0/ave-records.json
-
-# Or track current: regenerated on every records/ change, no release needed
-curl -L https://raw.githubusercontent.com/aveproject/ave/main/dist/ave-records-latest.json \
-  -o ave-records.json
-```
-To check what you pinned, see [Releases and pinning](#releases-and-pinning).
-
-**Pattern 3 — ID-only emission** (SIEM resolves downstream, scanner makes no network calls)
-```json
-{ "rule_id": "your-rule", "ave_id": "AVE-2026-00002", "severity": "HIGH" }
-```
-
-The minimum viable integration is adding one field — `ave_id` — to your
-existing finding output. See [docs/specs/ave-implementer-guide.md](docs/specs/ave-implementer-guide.md)
-for the full guide including decision table, code examples, and how to
-request a crosswalk for your scanner's rule IDs.
+Put `ave_id` on each finding and the catalog release on each run, and scan
+against a pinned, verified release rather than calling the API at scan time.
+The [implementer guide](docs/specs/ave-implementer-guide.md) covers which
+pattern fits your tool, verification, air-gapped use, output fields, status
+watching and the API.
 
 ---
 
@@ -626,7 +602,7 @@ See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for community standards.
 | [aveproject.org](https://aveproject.org) | Public registry and documentation |
 | [bawbel/scanner](https://github.com/bawbel/scanner) | Reference implementation |
 | [aveproject/ave-site](https://github.com/aveproject/ave-site) | Website source |
-| [api.aveproject.org](https://api.aveproject.org) | Reference API, live lookup by AVE ID (Pattern 1 above) |
+| [api.aveproject.org](https://api.aveproject.org) | Reference API, live lookup by AVE ID ([implementer guide](docs/specs/ave-implementer-guide.md#the-api)) |
 | [OWASP AIVSS v0.8](https://aivss.owasp.org) | Scoring specification |
 | [MITRE ATLAS](https://atlas.mitre.org) | AI threat technique catalog |
 | [OWASP MCP Top 10](https://owasp.org) | MCP attack surface framework |
