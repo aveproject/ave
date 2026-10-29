@@ -58,6 +58,18 @@ Each detection instance is a SARIF `result`:
 | `result.properties.nist_ai_rmf` | `nist_ai_rmf` | repeated if present |
 | `result.properties.verification_basis` | `verification_basis` | optional; present only where the source record carries a derived value (4 of 86 records as of this revision). A string, one of `substrate_intercepted`/`substrate_reconstructed`/`artifact_intercepted`/`artifact_reconstructed`. Tells a consumer whether this finding's basis could be forged by the artifact itself, finer-grained than `confidence_baseline` alone. Do not infer absence as "low confidence"; most records simply haven't had it derived yet. |
 
+### run properties: which catalog the scan used (recommended)
+
+One set per run, in the run's property bag, so that a finding can be checked later against the same records. All three come from the manifest of the record set the scanner loaded (`ave-records.manifest.json` on a catalog release, or `dist/ave-records-latest.manifest.json`):
+
+| SARIF field | AVE source | Notes |
+|---|---|---|
+| `runs[].properties.ave_catalog` | manifest `release` | the catalog release tag, e.g. `"v1.2.0"`; `"latest"` when the scanner loaded `dist/ave-records-latest.json`, whose manifest has no `release` |
+| `runs[].properties.ave_schema_version` | manifest `schema_version` | e.g. `"1.2.0"` |
+| `runs[].properties.ave_records_sha256` | manifest `sha256` | SHA-256 of the records file; the only identifier of a `latest` snapshot, since a release tag can be downloaded again and `latest` cannot |
+
+These are catalog data, not record data: they never go on `rules[]` or on a `result`. The [implementer guide](ave-implementer-guide.md#what-to-put-in-your-output) covers the same fields for output that is not SARIF.
+
 ---
 
 ## Severity mapping
@@ -91,10 +103,10 @@ Include an AVE taxonomy entry alongside the `runs` array so that tools can cross
 "taxonomies": [
   {
     "name": "AVE",
-    "version": "1.1.0",
-    "releaseDateUtc": "2026-06-21",
+    "version": "1.2.0",
+    "releaseDateUtc": "2026-10-29",
     "informationUri": "https://aveproject.org",
-    "downloadUri": "https://api.aveproject.org/records",
+    "downloadUri": "https://github.com/aveproject/ave/releases/download/v1.2.0/ave-records.json",
     "organization": "AVE Project",
     "shortDescription": {
       "text": "Agentic Vulnerability Enumeration — behavioral vulnerability classes for agentic AI components"
@@ -111,6 +123,8 @@ Include an AVE taxonomy entry alongside the `runs` array so that tools can cross
 ```
 
 Add one taxon per AVE record that appears in the scan results. Scanners may include the full taxa list for all published records to enable filtering even for records with zero findings.
+
+`version` is the catalog release the scan used, without its `v` (the same release as `runs[].properties.ave_catalog`), `releaseDateUtc` is that release's publication date, and `downloadUri` is that release's `ave-records.json`. A scanner tracking `dist/ave-records-latest.json` has no release to name: it omits `version` and `releaseDateUtc`, and uses `https://raw.githubusercontent.com/aveproject/ave/main/dist/ave-records-latest.json` as `downloadUri`.
 
 ---
 
@@ -155,7 +169,7 @@ One finding for AVE-2026-00001 (metamorphic payload via external config fetch) a
       "taxonomies": [
         {
           "name": "AVE",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "informationUri": "https://aveproject.org",
           "taxa": [
             {
@@ -198,7 +212,12 @@ One finding for AVE-2026-00001 (metamorphic payload via external config fetch) a
             "nist_ai_rmf": ["MAP-1.5", "MEASURE-2.5", "MANAGE-1.3"]
           }
         }
-      ]
+      ],
+      "properties": {
+        "ave_catalog": "v1.2.0",
+        "ave_schema_version": "1.2.0",
+        "ave_records_sha256": "92e002e98cdd10f5de36e0ccfa80696b623cdadf302cc4d884f2a33b7fd94390"
+      }
     }
   ]
 }
@@ -224,6 +243,8 @@ One finding for AVE-2026-00001 (metamorphic payload via external config fetch) a
 | `nist_ai_rmf` | `rules[].properties.nist_ai_rmf` | `result.properties.nist_ai_rmf` |
 | `verification_basis` | **never** | `result.properties.verification_basis` (if the record has one) |
 
+The catalog the scan used goes on the run, not here: `runs[].properties.ave_catalog`, `ave_schema_version` and `ave_records_sha256`.
+
 ---
 
 ## GitHub Security tab integration checklist
@@ -247,3 +268,5 @@ This convention has its own version, separate from the AVE schema's: **AVE-in-SA
 Breaking changes to *this convention* (new required fields, removed fields, changed semantics) increment the major version and are announced with a 30-day notice period. Additive changes (new optional `result.properties.*` fields) are non-breaking and do not increment the version.
 
 **Revision note (2026-10-01):** the worked example, `taxonomies` block, and properties tables had gone stale against the live schema and corpus without the version number moving, which is itself the failure mode this section exists to prevent. Checked and corrected: `downloadUri`/`organization` were pointing at Bawbel-branded infrastructure (`api.piranha.bawbel.io`, "Bawbel Security Research") rather than AVE's own real, independent API and identity; the worked example cited `AVE-2026-00001` with `owasp_mcp`/`mitre_atlas` values that no longer matched the live record; `owasp_asi` and `nist_ai_rmf` existed on records with no documented SARIF representation at all. All of that is corrected above. None of it was a breaking change under this section's own rule, so the version stays v1.0; what changed is this document matching reality again, not the convention's own shape.
+
+**Revision note (2026-10-29):** added the recommended run properties `ave_catalog`, `ave_schema_version` and `ave_records_sha256`, which name the catalog release a scan used, now that releases are published with a manifest (`v1.2.0` onwards). Also stated what `taxonomies[].version`, `releaseDateUtc` and `downloadUri` hold, which this document had left unspecified: that same release's version, date and `ave-records.json`. Both examples moved from `1.1.0` to the `v1.2.0` release. The run properties are optional and no existing field was removed or changed, so the version stays v1.0.
