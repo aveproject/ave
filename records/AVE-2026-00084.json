@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00084",
-  "schema_version": "1.2.0",
+  "schema_version": "1.3.0",
   "status": "active",
   "title": "Lifecycle hook trust decoupling: a vetted plugin update silently rebinds hooks outside the model's decision path",
   "attack_class": "Supply Chain - Lifecycle Hook Trust Decoupling",

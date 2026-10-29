@@ -47,7 +47,7 @@ The record declares the BASELINE; the scanner assigns the ACTUAL value.
 
 Every record validates against schema/ave-record-1.1.0.schema.json.
 
-**15 required fields** (once `status` is `active` or `deprecated`):
+**15 required fields** (for every `status` except `draft`):
 ave_id · schema_version · status · published
 title · description · attack_class · severity · behavioral_fingerprint
 aivss · owasp_mcp

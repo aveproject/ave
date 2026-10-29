@@ -128,7 +128,7 @@ Behavioral category, e.g. external_instruction_fetch, tool_description_injection
 
 ### `ave_id`
 
-Unique identifier. Format: AVE-YYYY-NNNNN. Immutable once published. Wrong or obsolete records are deprecated, never renumbered or deleted.
+Unique identifier. Format: AVE-YYYY-NNNNN. Immutable once published. A wrong or obsolete record changes status (deprecated, merged or rejected); it is never renumbered or deleted.
 
 ### `behavioral_fingerprint`
 
@@ -196,7 +196,7 @@ Which version of each referenced framework this record's mappings (owasp_mcp, ow
 
 ### `indicators_of_compromise`
 
-Observable IOC strings. REQUIRED once a record is active or deprecated — at least one. These are what defenders search for. Each entry is a specific observable: a phrase pattern, a behavioral indicator, or a network signal.
+Observable IOC strings. REQUIRED for every status except draft: at least one. These are what defenders search for. Each entry is a specific observable: a phrase pattern, a behavioral indicator, or a network signal.
 
 ### `kill_switch_active`
 
@@ -205,6 +205,10 @@ Whether a registry-level kill switch is currently active in the Bawbel registry.
 ### `last_updated`
 
 ISO 8601 datetime of most recent update. Optional.
+
+### `merged_into`
+
+The ave_id of the record this one was merged into: the surviving record. Required when status is merged, and allowed only then. validate_records.py checks that it names an existing record whose status is active and never this record itself, so merges never chain or loop.
 
 ### `missing_control`
 
@@ -232,7 +236,7 @@ OWASP Agentic Security Initiative (ASI) Top 10 categories. Format: ASINN. Option
 
 ### `owasp_mcp`
 
-OWASP MCP Top 10 categories. Format: MCPNN. REQUIRED once a record is active or deprecated — at least one. Provides the core OWASP grounding every published record must have.
+OWASP MCP Top 10 categories. Format: MCPNN. REQUIRED for every status except draft: at least one. Provides the core OWASP grounding every published record must have.
 
 ### `provenance_vector`
 
@@ -240,19 +244,23 @@ Where in the agent context supply chain this class enters and what authority esc
 
 ### `published`
 
-ISO 8601 datetime of first publication, e.g. 2026-04-01T09:00:00Z. Required once status is active or deprecated.
+ISO 8601 datetime of first publication, e.g. 2026-04-01T09:00:00Z. Required for every status except draft.
 
 ### `references`
 
 Primary sources: CVEs, papers, disclosures, scan reports. REQUIRED — at least one citable source, even for a draft record. This is the provenance signal a skeptic checks first.
 
+### `rejection_reason`
+
+Why the record was rejected: free text that links the public decision, a GitHub issue or discussion URL. Required when status is rejected, and allowed only then; validate_records.py checks the link.
+
 ### `remediation`
 
-How to mitigate or prevent this class. REQUIRED once a record is active or deprecated — must be actionable.
+How to mitigate or prevent this class. REQUIRED for every status except draft: must be actionable.
 
 ### `researcher`
 
-Name of the researcher or team who authored this record. REQUIRED once a record is active or deprecated — records must be attributable. Use 'Bawbel Security Research Team' for internally authored records.
+Name of the researcher or team who authored this record. REQUIRED for every status except draft: records must be attributable. Use 'Bawbel Security Research Team' for internally authored records.
 
 ### `researcher_url`
 
@@ -264,7 +272,7 @@ Optional, append-only history of edits that changed a value a consumer may gate 
 
 ### `schema_version`
 
-AVE schema version this record was authored against, e.g. 1.2.0.
+AVE schema version this record was authored against, e.g. 1.3.0.
 
 ### `security_boundary`
 
@@ -276,7 +284,7 @@ Severity. Must agree with aivss.aivss_score. CRITICAL requires >= 9.0. HIGH: 7.0
 
 ### `status`
 
-Lifecycle status. active: published and current, full field set required. deprecated: superseded or withdrawn — record stays for reference, full field set required. draft: not yet peer-reviewed — only the core submit-required fields apply, everything else is enrichment added before promotion to active.
+Lifecycle status. active: published and current. deprecated: superseded by a better understanding of the same class; a note explains why. merged: a genuine duplicate or sub-case of another record; merged_into names the surviving record. rejected: found invalid, not a real distinct class (CVE's REJECT state); rejection_reason says why and links the public decision. draft: not yet peer-reviewed; only the core submit-required fields apply, everything else is enrichment added before promotion to active. Every status except draft requires the full field set, so a record that leaves active stays resolvable with its content. A consumer must treat any status other than active as not active, and must not assume this list of values is complete.
 
 ### `title`
 

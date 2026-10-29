@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00052",
-  "schema_version": "1.2.0",
+  "schema_version": "1.3.0",
   "component_type": "mcp_server",
   "title": "Command injection via unsanitized tool-call parameter in MCP server implementation",
   "attack_class": "Tool Abuse - Implementation Command Injection",

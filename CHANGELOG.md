@@ -8,6 +8,31 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 
 ## [Unreleased]
 
+### Schema
+- **Schema 1.3.0** (#104) implements the deprecation policy in
+  `docs/specs/scaling-and-governance.md` section 3, as merged:
+  - `status` gains `merged`, with `merged_into` (the surviving `ave_id`) required, and
+    `rejected`, with `rejection_reason` required. `deprecated` keeps its note; there is no
+    `deprecation_reason`, `superseded_by` or `deprecated_on` field.
+  - Every status except `draft` requires the full field set, so a record that leaves
+    `active` stays resolvable with its content.
+  - `scripts/validate_records.py` checks what the schema cannot: each of the two fields
+    only on its own status, no record merged into itself, a merge target that exists and
+    is `active` (so merges never chain or loop), and a `rejection_reason` that links a
+    GitHub issue or discussion (`tests/test_status_lifecycle.py`).
+  - `revisions.reason_code` gains `score_revised` and `status_changed`, extending the
+    vocabulary it was copied from.
+- **Records and files:** all 89 records declare `1.3.0` (one changed line each;
+  `last_updated` is not touched). The build wrote `dist/ave-records-v1.3.0.json` and its
+  manifest, and the new schema file and snapshot pair joined `schema/frozen-artifacts.json`.
+  The 1.0.0 to 1.2.0 files are unchanged.
+- **Compatibility rule** (scaling spec section 2): a minor version only adds (optional
+  fields, wider enums, a requirement every published record already meets); anything else
+  is a major version. Consumers must treat any `status` other than `active` as not active
+  and must not assume an enum's list of values is complete, which is what makes adding
+  `merged` and `rejected` a minor version. `GOVERNANCE.md` and `CONTRIBUTING.md` now defer
+  to the rule instead of contradicting it.
+
 ## [1.2.0] - 2026-10-29
 
 ### Summary

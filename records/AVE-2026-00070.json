@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00070",
-  "schema_version": "1.2.0",
+  "schema_version": "1.3.0",
   "status": "active",
   "component_type": "agent",
   "title": "Distributed cross-agent backdoor fragments reassembled externally after execution",
