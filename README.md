@@ -356,7 +356,10 @@ record = resp.json()  # full record: fingerprint, IOCs, remediation, frameworks
 
 **Pattern 2 — Bundled offline** (air-gapped, regulated environments)
 ```bash
-# Always current, no release tag required -- regenerated on every records/ change
+# Pin to a catalog release: a fixed record set with checksums and provenance
+curl -fsSLO https://github.com/aveproject/ave/releases/download/v1.2.0/ave-records.json
+
+# Or track current: regenerated on every records/ change, no release needed
 curl -L https://raw.githubusercontent.com/aveproject/ave/main/dist/ave-records-latest.json \
   -o ave-records.json
 
@@ -364,8 +367,7 @@ curl -L https://raw.githubusercontent.com/aveproject/ave/main/dist/ave-records-l
 curl -L https://raw.githubusercontent.com/aveproject/ave/main/dist/ave-records-v1.2.0.json \
   -o ave-records.json
 ```
-A versioned snapshot is also attached to each [GitHub Release](https://github.com/aveproject/ave/releases)
-once one is cut; the raw paths above do not wait on that.
+To check what you pinned, see [Releases and pinning](#releases-and-pinning).
 
 **Pattern 3 — ID-only emission** (SIEM resolves downstream, scanner makes no network calls)
 ```json
@@ -376,6 +378,55 @@ The minimum viable integration is adding one field — `ave_id` — to your
 existing finding output. See [docs/specs/ave-implementer-guide.md](docs/specs/ave-implementer-guide.md)
 for the full guide including decision table, code examples, and how to
 request a crosswalk for your scanner's rule IDs.
+
+---
+
+## Releases and pinning
+
+A catalog release is a [GitHub Release](https://github.com/aveproject/ave/releases)
+tagged `vX.Y.Z`: a fixed copy of the record set that does not change after it is
+published. Each one carries three files and a build provenance attestation for
+the first two:
+
+- `ave-records.json`: every published record.
+- `ave-records.manifest.json`: the release tag, `schema_version`, `record_count`,
+  the SHA-256 of `ave-records.json` and `source_commit`, the commit it was built from.
+- `SHA256SUMS`: checksums of both files.
+
+Pin a tag, then check what you downloaded:
+
+```bash
+TAG=v1.2.0
+for f in ave-records.json ave-records.manifest.json SHA256SUMS; do
+  curl -fsSLO "https://github.com/aveproject/ave/releases/download/$TAG/$f"
+done                                  # or: gh release download "$TAG" --repo aveproject/ave
+
+sha256sum -c SHA256SUMS
+git clone -q https://github.com/aveproject/ave ave-src
+python ave-src/scripts/check_release_assets.py . --tag "$TAG" --git-dir ave-src
+gh attestation verify ave-records.json --repo aveproject/ave
+gh attestation verify ave-records.manifest.json --repo aveproject/ave
+```
+
+`check_release_assets.py` confirms the checksums, that the manifest matches the
+records file, and that `source_commit` is the commit the tag points at.
+
+Three kinds of record file, and which is which:
+
+| File | What it is | Changes? |
+|---|---|---|
+| `ave-records.json` on release `vX.Y.Z` | The record set as of that catalog release | Never |
+| `dist/ave-records-latest.json` | The current record set | On every change to `records/` |
+| `dist/ave-records-v<schema>.json` | The first record set published for that schema version | Never (frozen) |
+
+The version in a release tag is the catalog's own; the version in a `dist/` file
+name is a schema version. Releases follow their own SemVer and cadence (a release
+when records have changed, at most monthly unless a correction is urgent); see
+[docs/specs/scaling-and-governance.md](docs/specs/scaling-and-governance.md),
+section 6. `v1.2.0` is the first release with these files. The older `v1.1.0`
+release has one asset, `ave-records-v1.1.0.json` (51 records on schema 1.0.0),
+which is a different file from `dist/ave-records-v1.1.0.json` (59 records on
+schema 1.1.0).
 
 ---
 
@@ -569,21 +620,6 @@ not just listed by name.
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the contributor-facing process.
 
 See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for community standards.
-
----
-
-## Contributors
-
-<a href="https://github.com/aveproject/ave/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=aveproject/ave" />
-</a>
-
-This shows who has contributed, not what they did. See
-[CONTRIBUTORS.md](CONTRIBUTORS.md) for that — specific credit for
-specific work: astrogilda's crosswalk schema and pin-status design,
-predictor2718's independently-built cfgaudit crosswalk, mmaxjr's
-validator fix, Alex Greenshpun's attribution correction — not a name
-list.
 
 ---
 

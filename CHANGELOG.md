@@ -8,6 +8,25 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 
 ## [Unreleased]
 
+### Releases
+- **Catalog releases** (#369). The record set is now published as GitHub Releases
+  tagged `vX.Y.Z`, on their own cadence and SemVer, independent of schema versions.
+  Each release carries `ave-records.json`, `ave-records.manifest.json` (with `release`
+  and `source_commit`, the tagged commit) and `SHA256SUMS`, plus a build provenance
+  attestation for both data files. Asset names carry no version, so a release asset can
+  no longer share a name with a `dist/` file, as `ave-records-v1.1.0.json` did.
+- `.github/workflows/catalog-release.yml` (run by hand) builds a commit on `main`,
+  refuses an existing or non-increasing tag and a version with no CHANGELOG section,
+  runs the validators and tests, verifies and attests the files and creates the
+  release, as a draft by default. Every action in it is pinned by full commit SHA.
+- `scripts/check_release_assets.py` verifies a release directory: `SHA256SUMS`, the
+  manifest's `sha256`, `record_count`, `schema_version`, `release` and `source_commit`
+  (against `--commit`, or the tag's commit with `--git-dir`). The workflow runs it before
+  publishing; implementers can run it after downloading.
+- Policy, cadence and history: `docs/specs/scaling-and-governance.md`, section 6. The
+  README's offline example now pins a release, and a new "Releases and pinning" section
+  shows how to check one.
+
 ### Schema
 - **Schema 1.2.0** (#365). `schema/ave-record-1.2.0.schema.json` is the 1.1.0 schema as
   it stands today, published under its own number; it differs from the 1.1.0 file only in
