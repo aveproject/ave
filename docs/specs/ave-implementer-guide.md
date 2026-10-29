@@ -257,9 +257,12 @@ fields are what make it reproducible. For people, link each id to
 ## Watching status
 
 An `ave_id` is never renumbered, reused or deleted. A record's status can still
-change: schema 1.2.0 has `active`, `deprecated` and `draft`, and a deprecated
-record stays in the published files. No record is deprecated today, but a tool
-that cites ids should find out when one is.
+change: schema 1.2.0 has `active`, `deprecated` and `draft`, and schema 1.3.0
+([#104](https://github.com/aveproject/ave/issues/104)) is set to add `merged`
+and `rejected`. A record that leaves `active` stays in the published files with
+its full content. Treat any status other than `active` as not active, and do
+not assume the list of statuses is complete. No record has left `active` yet,
+but a tool that cites ids should find out when one does.
 
 Run a scheduled check against `dist/ave-records-latest.json`, which shows a
 status change as soon as it is merged, before the next release. This workflow,
@@ -326,15 +329,17 @@ jobs:
 A `missing` id is a mistake in your mapping, since ids are never deleted (or a
 draft, which the published files leave out).
 
-When an id is deprecated:
+When a cited id is no longer `active`:
 
-- **Today**, read why. [GOVERNANCE.md](../../GOVERNANCE.md) requires a deprecation
-  to come with a note explaining it. Schema 1.2.0 has no field for that note,
-  so look in the record and in the change that deprecated it (the link in the
-  issue). If it names a record that replaces this one, move your rules there;
-  otherwise drop the mapping and say so in your documentation.
-- **Once schema 1.3.0 ships**, follow `superseded_by`, a field it is planned to
-  add that lists the ids replacing a deprecated record.
+- **`deprecated`**: superseded by a better understanding of the same class.
+  [GOVERNANCE.md](../../GOVERNANCE.md) requires a note explaining why, and no
+  field holds it, so read the record and the change that deprecated it (the
+  link in the issue). If the note names a record to use instead, move your
+  rules there; otherwise drop the mapping and say so in your documentation.
+- **`merged`** (schema 1.3.0): a duplicate or sub-case of another record.
+  `merged_into` names the surviving record; move your rules to it.
+- **`rejected`** (schema 1.3.0): found not to be a distinct behavioral class.
+  `rejection_reason` says why and links the public decision; drop the mapping.
 
 ---
 
