@@ -1,0 +1,160 @@
+name: catalog-release
+
+# Publishes a catalog release: a GitHub Release tagged v<version> carrying
+# ave-records.json, ave-records.manifest.json and SHA256SUMS, with a build
+# provenance attestation for the two data files. Run by hand from
+# Actions > catalog-release; it builds a commit already on main and never
+# pushes to the repository. Policy: docs/specs/scaling-and-governance.md,
+# section 6.
+#
+# Unlike the other workflows here, every action is pinned to a full commit
+# SHA, with its version in a comment: this one writes releases and signs
+# provenance, so a moved tag upstream must not be able to change what runs.
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Catalog version X.Y.Z (the tag will be vX.Y.Z; CHANGELOG.md needs a ## [X.Y.Z] section)"
+        required: true
+        type: string
+      ref:
+        description: "Branch, tag or commit to release; it must be on main"
+        required: false
+        default: main
+        type: string
+      draft:
+        description: "Create the release as a draft, to review before publishing"
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+concurrency:
+  group: catalog-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ inputs.version }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout the ref to release
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.ref }}
+          # the main-ancestry and newest-tag checks below need all history and tags
+          fetch-depth: 0
+          fetch-tags: true
+          persist-credentials: false
+
+      - name: The commit must be on main
+        run: |
+          if ! git merge-base --is-ancestor HEAD origin/main; then
+            echo "::error::$(git rev-parse HEAD) is not on origin/main; a catalog release only ships what main has"
+            exit 1
+          fi
+
+      - name: The version must be new, greater than the newest tag, and in CHANGELOG.md
+        run: |
+          if ! [[ "$VERSION" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+            echo "::error::version must be X.Y.Z, got '$VERSION'"
+            exit 1
+          fi
+          tag="v$VERSION"
+          if git rev-parse -q --verify "refs/tags/$tag" >/dev/null; then
+            echo "::error::$tag already exists"
+            exit 1
+          fi
+          # a draft release has no tag until it is published, so ask for releases too
+          if gh release view "$tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "::error::a release named $tag already exists (possibly a draft)"
+            exit 1
+          fi
+          newest=$(git tag --list 'v[0-9]*' --sort=-v:refname | head -n 1)
+          if [ -n "$newest" ] && [ "$(printf '%s\n%s\n' "$newest" "$tag" | sort -V | tail -n 1)" != "$tag" ]; then
+            echo "::error::$tag is not greater than the newest tag, $newest"
+            exit 1
+          fi
+          if ! awk -v h="## [$VERSION]" 'index($0, h) == 1 { found = 1 } END { exit !found }' CHANGELOG.md; then
+            echo "::error::CHANGELOG.md has no '## [$VERSION]' section to use as the release notes"
+            exit 1
+          fi
+
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.11"
+
+      - name: Install Python dependencies
+        run: pip install -e ".[dev]"
+
+      # The same checks tests.yml runs on every change. The confidence ratchet
+      # needs a base to diff against and is a pull-request check, so only its
+      # corpus-wide form runs here.
+      - name: Validators and test suite
+        run: |
+          python scripts/validate_records.py
+          python scripts/validate_crosswalks.py
+          python scripts/check_fixtures.py
+          python scripts/check_confidence_signal.py
+          python scripts/check_vulnerability_taxonomy.py
+          python scripts/check_mutation_thm_trail.py
+          python scripts/check_framework_sources.py --strict
+          python scripts/check_terms_sync.py
+          pytest tests/ -x -q
+
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "20"
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Build the release files
+        run: |
+          mkdir release
+          AVE_SOURCE_COMMIT="$(git rev-parse HEAD)" node scripts/build-records.js \
+            --json-out release/ave-records.json \
+            --manifest-out release/ave-records.manifest.json
+          jq --arg release "v$VERSION" '{release: $release} + .' release/ave-records.manifest.json > manifest.tmp
+          mv manifest.tmp release/ave-records.manifest.json
+          (cd release && sha256sum ave-records.json ave-records.manifest.json > SHA256SUMS)
+          cat release/ave-records.manifest.json release/SHA256SUMS
+
+      # the tag does not exist yet, so source_commit is checked against this run's commit
+      - name: Verify the release files
+        run: python scripts/check_release_assets.py release --tag "v$VERSION" --commit "$(git rev-parse HEAD)"
+
+      - name: Attest build provenance for both data files
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: |
+            release/ave-records.json
+            release/ave-records.manifest.json
+
+      - name: Create the release
+        env:
+          DRAFT: ${{ inputs.draft }}
+        run: |
+          awk -v h="## [$VERSION]" 'index($0, h) == 1 { f = 1; next } f && /^## / { exit } f' CHANGELOG.md > release-notes.md
+          if ! grep -q '[^[:space:]]' release-notes.md; then
+            echo "::error::the '## [$VERSION]' section of CHANGELOG.md is empty"
+            exit 1
+          fi
+          draft_flag=()
+          if [ "$DRAFT" = "true" ]; then draft_flag=(--draft); fi
+          gh release create "v$VERSION" \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$(git rev-parse HEAD)" \
+            --title "AVE v$VERSION" \
+            --notes-file release-notes.md \
+            "${draft_flag[@]}" \
+            release/ave-records.json release/ave-records.manifest.json release/SHA256SUMS

@@ -57,6 +57,11 @@ those files changes or disappears, and also when a change removes or rehashes an
 entry compared with where it left its base branch. The alias and
 `dist/ave-records-latest.*` are deliberately not in that list: they move.
 
+A `dist/ave-records-vX.Y.Z.json` snapshot is named after a schema version, not a
+catalog release: it is the first record set published for that schema version. The
+record set an implementer pins between schema versions is a catalog release
+(Section 6).
+
 **Version bump rules**:
 
 - Additive, optional field: minor bump (1.1 to 1.2).
@@ -229,3 +234,64 @@ now, while the corpus is still small, is deliberately the same
 discipline Section 1 already applies to record-growth: cheap to commit
 to early, expensive to retrofit credibly after an implementer has
 already depended on a number that then moved.
+
+## 6. Catalog releases
+
+A schema version describes the shape of a record. A catalog release is a fixed,
+checksummed copy of the record set itself, published on its own cadence, the way
+the CVE List publishes baseline and delta archives and OSV publishes `all.zip`.
+The two are numbered separately.
+
+**Three kinds of record file:**
+
+| File | What it is | Changes? |
+|---|---|---|
+| `ave-records.json` on the GitHub Release `vX.Y.Z` | The record set as of that catalog release | Never; the next release is a new tag |
+| `dist/ave-records-latest.json` | The current record set | On every change to `records/` |
+| `dist/ave-records-v<schema>.json` | The first record set published for that schema version | Never; frozen (Section 2) |
+
+**Releases are GitHub Releases tagged `vX.Y.Z`**, continuing `v1.0.0` and `v1.1.0`.
+`v1.2.0` happens to ship schema 1.2.0; after it the two numbers move independently.
+
+**Catalog SemVer:**
+
+- Patch: corrections to existing records only, no new ids.
+- Minor: new records, or a minor schema version.
+- Major: a major schema version, or any change to what an id means.
+
+**Assets on every release:**
+
+- `ave-records.json`: every non-draft record, built by `scripts/build-records.js`,
+  the same script that writes `dist/`, from `records/` at the tagged commit.
+- `ave-records.manifest.json`: `release`, `schema_version`, `record_count`,
+  `generated_at`, `source`, `sha256` (of `ave-records.json`) and `source_commit`,
+  the tagged commit.
+- `SHA256SUMS`: both files, in `sha256sum` format.
+- A build provenance attestation for both files, checked with
+  `gh attestation verify <file> --repo aveproject/ave`.
+
+Asset names carry no version; the tag does. `scripts/check_release_assets.py`
+checks the files against each other, against the tag and against the tagged commit.
+The release workflow runs it before publishing, and an implementer can run it after
+downloading (README, "Releases and pinning").
+
+**Cadence:** a release when records have changed, at most monthly unless a
+correction is urgent. This is the maintainer's policy, and the maintainer can change
+it.
+
+**Cutting a release:** Actions > catalog-release
+(`.github/workflows/catalog-release.yml`), run by hand with `version`, `ref`
+(default `main`) and `draft` (default true). It refuses a commit that is not on
+`main`, a tag that already exists or is not greater than the newest one, and a
+version with no `## [X.Y.Z]` section in `CHANGELOG.md`; that section becomes the
+release notes. It then runs the validators and tests, builds and verifies the three
+files, attests them and creates the release, as a draft unless told otherwise. It
+never pushes to the repository. The tag is created when the release is published.
+
+**History.** `v1.0.0` (2026-06-18) was the first stable schema release and has no
+assets. `v1.1.0` (2026-06-24) shipped 51 records on schema 1.0.0 as one asset named
+`ave-records-v1.1.0.json`, a different file from the repo's
+`dist/ave-records-v1.1.0.json` (59 records on schema 1.1.0; Section 2 has the
+details). Between the two, `CHANGELOG.md` carried sections headed `[1.2.0]`
+(2026-07-12) and `[1.3.0]` (2026-07-17) that were never tagged; they now sit under
+`[Unreleased]` as dated notes, so `v1.2.0` is the first release to ship that work.
