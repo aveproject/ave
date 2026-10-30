@@ -9,6 +9,10 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 ## [Unreleased]
 
 ### Checks
+- **Severity band** (#396). `scripts/validate_records.py` now fails a record whose `severity`, or
+  `aivss.aivss_severity` where it carries one, is not the band its `aivss.aivss_score` falls in:
+  CRITICAL from 9.0, HIGH from 7.0, MEDIUM from 4.0, LOW below. CLAUDE.md hard rule 6 and the schema
+  said the two must agree, and nothing enforced it. All 89 records agree, so no record changes.
 - **Documented field lists** (#389). `tests/test_documented_fields.py` reads the schema alias and
   fails when the lists in `README.md`, `CLAUDE.md` and `CONTRIBUTING.md` disagree with it: a
   field the schema has and a document lacks, a field a document names that the schema does not
