@@ -51,6 +51,11 @@ SCHEMA_DIR = Path("schema")
 SCHEMA_PATH = SCHEMA_DIR / "ave-record.schema.json"
 SCHEMA_VERSION_PATTERN = re.compile(r"[0-9]+\.[0-9]+\.[0-9]+")
 
+# The lowest score in each severity band, highest band first: CRITICAL 9.0 and
+# above, HIGH 7.0 to 8.9, MEDIUM 4.0 to 6.9, LOW below 4.0 (README.md "AIVSS
+# Scoring", the schema's severity description, CLAUDE.md hard rule 6).
+SEVERITY_BANDS = (("CRITICAL", 9.0), ("HIGH", 7.0), ("MEDIUM", 4.0), ("LOW", 0.0))
+
 OLD_FIELD_NAMES = ["owasp_mapping", "mitre_atlas_mapping", "nist_ai_rmf_mapping"]
 MITIGATION_ENUMS = {
     "strategy": {
@@ -159,6 +164,36 @@ def check_mitigation_enums_only(record: dict) -> list[str]:
         for v in values:
             if v not in allowed:
                 errors.append(f"mitigation.{field} value '{v}' is not a recognized vendor-neutral enum")
+    return errors
+
+
+def severity_for_score(score: float) -> str:
+    """The severity band a score falls in."""
+    return next(name for name, lowest in SEVERITY_BANDS if score >= lowest)
+
+
+def check_severity_band(record: dict) -> list[str]:
+    """Confirms severity, and aivss.aivss_severity where a record carries it,
+    is the band aivss.aivss_score falls in. CLAUDE.md hard rule 6 and the schema
+    both say the two must agree, and until this check nothing enforced it: a
+    rescore that moved a score across a band edge could leave the label behind,
+    and every consumer that gates on severity would read the old band. A record
+    with no aivss score (a draft) has nothing to compare."""
+    aivss = record.get("aivss")
+    if not isinstance(aivss, dict):
+        return []
+    score = aivss.get("aivss_score")
+    if isinstance(score, bool) or not isinstance(score, (int, float)):
+        return []
+
+    expected = severity_for_score(score)
+    errors = []
+    severity = record.get("severity")
+    if severity is not None and severity != expected:
+        errors.append(f"severity {severity} does not match aivss.aivss_score {score}, which is {expected}")
+    stated = aivss.get("aivss_severity")
+    if stated is not None and stated != expected:
+        errors.append(f"aivss.aivss_severity {stated} does not match aivss.aivss_score {score}, which is {expected}")
     return errors
 
 
@@ -379,6 +414,7 @@ def record_errors(record: dict, raw_text: str, validator) -> list[str]:
         + check_behavioral_vector_or_example_patterns(record)
         + check_mitigation_enums_only(record)
         + check_aivss_arithmetic(record)
+        + check_severity_band(record)
         + check_no_vendor_boilerplate(raw_text)
         + check_verification_basis(record)
         + check_revision_order(record)
