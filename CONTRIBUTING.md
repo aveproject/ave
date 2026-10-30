@@ -300,6 +300,49 @@ is wrong or obsolete, change its `status` and keep its content:
 `scripts/validate_records.py` checks the last two. See
 [the scaling spec, section 3](docs/specs/scaling-and-governance.md#3-deprecation-policy).
 
+### Recording a change: `revisions`
+
+Consumers gate on a record's `severity`, `status` and derived
+`verification_basis`, so a change to one of them has to say so in the record,
+not only in `last_updated`. Append an entry to the record's `revisions` array
+in the same pull request:
+
+```json
+{ "date": "2026-10-29", "field": "severity", "from": "MEDIUM", "to": "HIGH",
+  "reason_code": "score_revised", "reason": "Rescored in #294." }
+```
+
+`date` is the day the change merges. `from` is the value before (`null` when
+the field was absent) and `to` the value after, never `null`. The array is
+append-only: an earlier entry is never edited, reordered or removed. CI runs
+`python scripts/check_revisions_ratchet.py --ratchet-since origin/develop`,
+which compares each record you add or edit with its version where your branch
+left `develop`, and fails the pull request when
+
+- an earlier entry was changed, or the array was dropped, or
+- `severity`, `status` or the derived `verification_basis` changed and no new
+  entry explains it.
+
+A new record, and one that was still a `draft`, needs no entry: nothing a
+consumer could have gated on existed yet. Which `field` and `reason_code`:
+
+| What changed | `field` | `reason_code` |
+|---|---|---|
+| The record was rescored, so its severity moved | `severity` | `score_revised` |
+| The status changed (`deprecated`, `merged`, `rejected`) | `status` | `status_changed` |
+| A declaration the basis derives from was added | the declaration (`evidence_vantage`, `evidence_method` or `evidence_basis_engines`) | `declaration_added` |
+| Such a declaration was wrong and now differs | the same declaration | `declaration_corrected` |
+| The schema gained a vocabulary member, or the derivation rule changed, and the derived basis moved with no declaration changing | `verification_basis` | `vocabulary_member_added` or `derivation_rule_changed` |
+
+The derived `verification_basis` comes from
+`scripts/write_verification_basis.py`. When it moves because a declaration
+changed, the entry names that declaration, as AVE-2026-00074's does, and
+`reason` says the derived value moved. When no declaration changed, the entry
+names `verification_basis` itself, so the record must then carry that value
+(`python scripts/write_verification_basis.py --write` writes it into records
+already in that script's formatting). `scripts/validate_records.py` checks each
+entry's field, its from/to chain and its agreement with the record.
+
 ---
 
 ## Crosswalk contributions

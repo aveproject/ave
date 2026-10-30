@@ -226,8 +226,9 @@ def check_revision_order(record: dict) -> list[str]:
     longer names the record's latest change, which is the one signal a
     consumer had before this field existed (#317). This checks one record
     only: an earlier entry deleted or rewritten in place is visible only
-    against the previous version of the record, so the schema's append-only
-    rule is not fully enforced here.
+    against the previous version of the record, which
+    scripts/check_revisions_ratchet.py compares it with, so the schema's
+    append-only rule is enforced there, not here.
     """
     revisions = record.get("revisions")
     if not isinstance(revisions, list):
@@ -255,7 +256,8 @@ def check_revision_values(record: dict, known_fields) -> list[str]:
     the previous entry's to, and the latest to is the value the record holds
     now. That refuses a misspelt field, a no-op entry, a duplicated entry and
     a history that contradicts the record. A deleted or rewritten earlier
-    entry can only be seen against the previous version of the record.
+    entry can only be seen against the previous version of the record, which
+    scripts/check_revisions_ratchet.py does.
     """
     revisions = record.get("revisions")
     if not isinstance(revisions, list):
