@@ -50,6 +50,20 @@ jobs:
             *) python scripts/check_confidence_signal.py --ratchet-since "$BASE" ;;
           esac
 
+      # A record's revisions stay append-only, and a change to its severity, status or
+      # derived verification_basis since the base carries a revisions entry for it
+      # (issue #382). Judged against where the change left its base, the same base as
+      # the ratchet above.
+      - name: Revisions ratchet, append-only and required for gate-relevant changes
+        env:
+          BASE: ${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || github.event.before }}
+        run: |
+          case "$BASE" in
+            ''|0000000000000000000000000000000000000000)
+              echo "No base to diff against (a new branch), so the revisions ratchet is skipped." ;;
+            *) python scripts/check_revisions_ratchet.py --ratchet-since "$BASE" ;;
+          esac
+
       - name: Capability-vulnerability taxonomy soft warning
         run: python scripts/check_vulnerability_taxonomy.py
 
