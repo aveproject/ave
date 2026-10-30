@@ -8,6 +8,19 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 
 ## [Unreleased]
 
+### Checks
+- **Revisions ratchet** (#382). `scripts/check_revisions_ratchet.py --ratchet-since <base>`
+  runs on pull requests beside the confidence ratchet and compares every record a change
+  adds or edits with its version at the merge base (three-dot form). It fails when an
+  earlier `revisions` entry was edited, reordered or removed or the array was dropped, and
+  when `severity`, `status` or the derived `verification_basis` changed with no new entry
+  that explains it. A new record, or one still a draft at the base, is exempt. The derived
+  basis may be explained by an entry on `verification_basis` itself or by an entry for each
+  declaration that changed, which is how AVE-2026-00074 recorded its own. Run on the
+  repository's history it reports the AVE-2026-00044 rescore (#294) and the AVE-2026-00074
+  stamp (#299), the two changes that had no entry. `CONTRIBUTING.md` says when an entry is
+  required and which `reason_code` to use.
+
 ### Schema
 - **Schema 1.3.0** (#104) implements the deprecation policy in
   `docs/specs/scaling-and-governance.md` section 3, as merged:
