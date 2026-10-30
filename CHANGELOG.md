@@ -9,6 +9,11 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 ## [Unreleased]
 
 ### Checks
+- **Documented field lists** (#389). `tests/test_documented_fields.py` reads the schema alias and
+  fails when the lists in `README.md`, `CLAUDE.md` and `CONTRIBUTING.md` disagree with it: a
+  field the schema has and a document lacks, a field a document names that the schema does not
+  have, a field in the wrong list or listed twice, and a count ("15 required fields") that no
+  longer matches. It runs in the existing `pytest tests/` step.
 - **Revisions ratchet** (#382). `scripts/check_revisions_ratchet.py --ratchet-since <base>`
   runs on pull requests beside the confidence ratchet and compares every record a change
   adds or edits with its version at the merge base (three-dot form). It fails when an
