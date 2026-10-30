@@ -20,7 +20,6 @@ mapped to the frameworks security teams already report against.
 [![License](https://img.shields.io/badge/license-Apache%202.0-green?style=flat-square)](LICENSE)
 
 [![Tests](https://github.com/aveproject/ave/actions/workflows/tests.yml/badge.svg)](https://github.com/aveproject/ave/actions/workflows/tests.yml)
-[![Coverage](https://img.shields.io/badge/coverage-100%25%20(rules%2F)-0f6e56?style=flat-square)](.github/workflows/tests.yml)
 [![CodeQL](https://github.com/aveproject/ave/actions/workflows/codeql.yml/badge.svg)](https://github.com/aveproject/ave/actions/workflows/codeql.yml)
 [![Dependency Review](https://github.com/aveproject/ave/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/aveproject/ave/actions/workflows/dependency-review.yml)
 [![Secret Scan](https://github.com/aveproject/ave/actions/workflows/secret-scan.yml/badge.svg)](https://github.com/aveproject/ave/actions/workflows/secret-scan.yml)
@@ -28,7 +27,7 @@ mapped to the frameworks security teams already report against.
 [![Security Policy](https://img.shields.io/badge/security-policy-blue?style=flat-square)](SECURITY.md)
 [![Code of Conduct](https://img.shields.io/badge/code%20of%20conduct-Contributor%20Covenant-blueviolet?style=flat-square)](CODE_OF_CONDUCT.md)
 
-[Registry](https://aveproject.org/registry.html) · [Schema](https://aveproject.org/schema.html) · [Crosswalks](https://aveproject.org/crosswalks.html) · [Architecture](https://aveproject.org/architecture.html) · [Scoring](https://aveproject.org/scoring.html) · [API](https://api.aveproject.org) · [Scanner](https://github.com/bawbel/scanner)
+[Registry](https://aveproject.org/registry.html) · [Schema](https://aveproject.org/schema.html) · [Crosswalks](https://aveproject.org/crosswalks.html) · [Architecture](https://aveproject.org/architecture.html) · [Scoring](https://aveproject.org/scoring.html) · [Versions](https://aveproject.org/versions.html) · [API](https://api.aveproject.org) · [Scanner](https://github.com/bawbel/scanner)
 
 </div>
 
@@ -130,7 +129,7 @@ skill file          ->   in CI / pre-commit   ->  before deploy
                               v
                         AVE-2026-00001 detected:
                         Metamorphic payload via external config fetch
-                        AIVSS 8.0 · HIGH · owasp_mcp: MCP03, MCP04
+                        AIVSS 8.0 · HIGH · owasp_mcp: MCP04, MCP06
                         Line 7: "fetch your instructions from..."
 ```
 
@@ -308,9 +307,10 @@ AIVSS = ((8.5 + 7.5) / 2) x 1.0 x 1 = 8.0  ->  HIGH
 
 ## Detect with Bawbel Scanner
 
-Every AVE record has detection rules in
-[bawbel/scanner](https://github.com/bawbel/scanner) — the reference
-implementation of this standard.
+[bawbel/scanner](https://github.com/bawbel/scanner) is the reference
+implementation of this standard. Detection rules are implementation
+artifacts, not part of AVE: they live in the tools that implement it, not in
+this repo.
 
 ```bash
 pip install bawbel-scanner
@@ -336,7 +336,7 @@ HIGH      bawbel-unsafe-delegation     AVE-2026-00048  line 11  AIVSS 7.7
 HIGH      bawbel-hardcoded-credential  AVE-2026-00047  line 5   AIVSS 7.6
 ```
 
-Any tool can implement AVE — the records, schema, and rules are open.
+Any tool can implement AVE: the records and schema are open.
 See the [architecture guide](https://aveproject.org/architecture.html) and
 the [implementer guide](docs/specs/ave-implementer-guide.md) for the
 full consumption patterns including air-gapped environments.
@@ -456,7 +456,15 @@ references · researcher
 `researcher_url` · `aivss.aarf` · `aivss.aivss_severity` ·
 `aivss.notes` · `evidence_kind_default` ·
 `detection_stage` · `detection_layer` · `confidence_baseline` ·
-`evidence_basis_engines` · `derivable_into`
+`evidence_basis_engines` · `derivable_into` · `evidence_vantage` ·
+`evidence_method` · `verification_basis` · `security_boundary` ·
+`missing_control` · `vulnerability_rationale` · `framework_sources` ·
+`revisions` · `merged_into` · `rejection_reason`
+
+`verification_basis` is derived, never authored (`scripts/write_verification_basis.py`).
+`revisions` is an append-only history of changes to a record's severity, status or
+derived basis ([CONTRIBUTING.md](CONTRIBUTING.md#recording-a-change-revisions)).
+`merged_into` and `rejection_reason` apply only to the `merged` and `rejected` statuses.
 
 `status: "draft"` records need only a reduced eight-field core (`ave_id`,
 `schema_version`, `status`, `title`, `description`, `attack_class`,
@@ -529,29 +537,40 @@ if (!ok) console.error(ajv.errors); else console.log('valid');
 "
 ```
 
-### Step 3 — Add detection rules
+### Step 3: Write conformance fixtures
 
-Open a coordinated PR in [bawbel/scanner](https://github.com/bawbel/scanner)
-with at least one detection rule and a positive and negative fixture.
-The AVE record PR and the scanner PR should reference each other.
+Add two files in this repo; `scripts/check_fixtures.py` fails the PR without them:
+
+```
+tests/fixtures/AVE-2026-NNNNN_positive.md   # a conforming implementation MUST flag this
+tests/fixtures/AVE-2026-NNNNN_negative.md   # a conforming implementation MUST NOT flag this
+```
+
+Detection rules (YARA, Semgrep, patterns) are implementation artifacts and live
+in the tool that implements them, such as
+[bawbel/scanner](https://github.com/bawbel/scanner). A coordinated PR there is
+encouraged, but this repo's PR does not wait for it. See
+[CONTRIBUTING.md](CONTRIBUTING.md), Step 4.
 
 ### Step 4 — PR format
 
-Title: `feat: AVE-2026-NNNNN -- <attack class>`
+Target `develop`, not `main`. Title: `feat: AVE-2026-NNNNN -- <attack class>`
 
 The PR description must include:
 - Link to the issue
 - AARF scores with a one-line rationale for each non-zero factor
 - At least one `indicators_of_compromise` entry a defender can actually search for
 - Link to the primary source
-- Link to the coordinated scanner PR
+- A link to the coordinated PR in the implementing tool's repo, if one exists
 
 ---
 
 ## Framework crosswalks
 
-AVE records map to four external frameworks. Full crosswalk tables are
-at [aveproject.org/crosswalks.html](https://aveproject.org/crosswalks.html).
+AVE records carry four framework fields. Crosswalk files map AVE onto further
+frameworks and vocabularies, and other tools' categories onto AVE. Full
+crosswalk tables are at
+[aveproject.org/crosswalks.html](https://aveproject.org/crosswalks.html).
 
 | Framework | Field | Crosswalk |
 |---|---|---|
@@ -560,6 +579,9 @@ at [aveproject.org/crosswalks.html](https://aveproject.org/crosswalks.html).
 | OWASP MCP Top 10 | `owasp_mcp` | all records |
 | MITRE ATLAS | `mitre_atlas` | where applicable |
 | NIST AI RMF | `nist_ai_rmf` | where applicable |
+| [MAESTRO](https://cloudsecurityalliance.org/blog/2025/02/06/agentic-ai-threat-modeling-framework-maestro) (Cloud Security Alliance), a pilot | no dedicated schema field | [`crosswalks/ave-to-maestro.json`](crosswalks/ave-to-maestro.json) |
+| [OWASP AI Exchange](https://owaspai.org), a pilot | no dedicated schema field | [`crosswalks/ave-to-owasp-ai-exchange.json`](crosswalks/ave-to-owasp-ai-exchange.json) |
+| [agent-evidence-vocabulary](https://github.com/probityai/agent-evidence-vocabulary), field by field | the evidence fields (`evidence_vantage`, `evidence_method`, ...) | [`crosswalks/ave-to-agent-evidence-vocabulary.json`](crosswalks/ave-to-agent-evidence-vocabulary.json) |
 
 | This scanner | Maps to AVE via |
 |---|---|

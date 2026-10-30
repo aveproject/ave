@@ -11,7 +11,8 @@ aveproject/ave — the behavioral classification standard for agentic AI compone
 An independent standard that bawbel-scanner implements. NOT a feature of the scanner.
 
 - Records: see dist/ave-records-latest.json (the count changes; do not hardcode it here)
-- Schema: schema/ave-record-1.1.0.schema.json
+- Schema: schema/ave-record.schema.json, the alias for the newest version; each record
+  is validated against the versioned file it declares, schema/ave-record-X.Y.Z.schema.json
 - Scoring: OWASP AIVSS v0.8
 - Registry: aveproject.org
 - Public API: api.aveproject.org
@@ -43,9 +44,11 @@ The record declares the BASELINE; the scanner assigns the ACTUAL value.
 
 ---
 
-## Record schema v1.1.0
+## Record schema
 
-Every record validates against schema/ave-record-1.1.0.schema.json.
+Every record validates against the versioned schema file named by its own
+`schema_version` (`schema/ave-record-X.Y.Z.schema.json`); `scripts/validate_records.py`
+looks it up.
 
 **15 required fields** (for every `status` except `draft`):
 ave_id · schema_version · status · published
@@ -58,6 +61,10 @@ references · researcher
 ave_id · schema_version · status · title · description · attack_class ·
 behavioral_fingerprint · references
 
+**Statuses:** `active`, `deprecated`, `merged` (needs `merged_into`, an `active`
+record), `rejected` (needs `rejection_reason`, linking the public decision) and
+`draft`. Consumers treat any status other than `active` as not active.
+
 **Optional framework fields** (add when applicable, omit rather than force):
 owasp_asi · mitre_atlas · nist_ai_rmf
 
@@ -68,6 +75,15 @@ provenance_vector · trifecta_profile · mitigation · example_patterns
 **Optional scanner evidence declarations** (declare defaults the scanner uses):
 evidence_kind_default · detection_stage · detection_layer
 confidence_baseline · evidence_basis_engines · derivable_into
+
+**Optional evidence and rationale fields:**
+evidence_vantage · evidence_method · verification_basis (derived by
+scripts/write_verification_basis.py, never authored) · security_boundary ·
+missing_control · vulnerability_rationale
+
+**Optional provenance and history fields:**
+framework_sources · revisions (append-only, see hard rule 11) ·
+merged_into · rejection_reason
 
 **Optional ecosystem fields:**
 component_type · affected_platforms · affected_registries
@@ -106,7 +122,7 @@ Every function in validation scripts gets a What/Why/How comment.
 ```python
 # What: validates one AVE record against the JSON schema
 # Why:  a malformed record breaks every downstream scanner that loads it
-# How:  jsonschema.validate against schema/ave-record-1.1.0.schema.json
+# How:  jsonschema.validate against the schema file the record's schema_version names
 def validate_record(record: dict) -> tuple[bool, list[str]]:
     ...
 ```
@@ -116,9 +132,9 @@ def validate_record(record: dict) -> tuple[bool, list[str]]:
 ## TDD loop
 
 ```
-1. Write the failing test (record validation, rule match, fixture)
+1. Write the failing test (record validation, fixture)
 2. Run -> MUST FAIL
-3. Add the record / rule / fixture
+3. Add the record / fixture
 4. Run -> MUST PASS
 5. Run full suite -> green before commit
 ```
@@ -133,17 +149,20 @@ node scripts/build-records.js         # build dist/ave-records-latest.json
 
 # Python validation
 pip install -e ".[dev]"
-pytest tests/ -x -q                   # validate records + fixtures
+pytest tests/ -x -q                   # validate records + fixtures; includes the frozen-file check
 python scripts/validate_records.py    # schema-check every record
 python scripts/check_fixtures.py      # every record has +/- fixtures
 python scripts/write_verification_basis.py   # derive verification_basis from the evidence axes
+python scripts/check_terms_sync.py    # docs/terms.md matches the schema (generate_terms.py rewrites it)
+python scripts/check_confidence_signal.py --ratchet-since origin/develop   # high confidence states evidence_vantage
+python scripts/check_revisions_ratchet.py --ratchet-since origin/develop   # revisions append-only, gated changes have entries
 ```
 
 ---
 
 ## Hard rules
 
-1. Every record validates against schema/ave-record-1.1.0.schema.json.
+1. Every record validates against the schema file its schema_version names.
 2. confidence NEVER appears in an AVE record — it is per-detection.
 3. Behavioral fingerprints over signatures — describe what it DOES.
 4. Every record has a positive + negative conformance fixture. Detection
@@ -155,6 +174,10 @@ python scripts/write_verification_basis.py   # derive verification_basis from th
    are optional — add when they apply, omit rather than force a poor fit.
 9. references must have at least one citable primary source.
 10. Never commit records/INDEX.md — it is removed. The README is the index.
+11. A change to a record's severity, status or derived verification_basis
+    carries a revisions entry in the same PR; entries are append-only
+    (CONTRIBUTING.md, "Recording a change"; checked by
+    scripts/check_revisions_ratchet.py).
 
 ---
 
@@ -171,7 +194,9 @@ python scripts/write_verification_basis.py   # derive verification_basis from th
 - Frozen versioned schema and dist files
   (`ave-record-X.Y.Z.schema.json`, `ave-records-vX.Y.Z.json`) are never
   edited retroactively, including typo fixes. A correction ships in the
-  next version.
+  next version. `schema/frozen-artifacts.json` lists them by SHA-256 and
+  `tests/test_frozen_artifacts.py` fails when one changes; a new version adds
+  its files there and never edits an entry.
 
 ---
 
@@ -183,8 +208,8 @@ python scripts/write_verification_basis.py   # derive verification_basis from th
 | add-ave-record | Adding a new AVE record (the main workflow) |
 | research-new-attack-classes | Research threat landscape, benchmark against existing records, open issues for genuinely new classes |
 | grill-with-docs | Before defining a new vulnerability class |
-| tdd | Implementing record validation or rules |
-| diagnose | When a rule misfires or a record fails validation |
+| tdd | Implementing record validation or fixtures |
+| diagnose | When a check misfires or a record fails validation |
 | handoff | Session start/end |
 | git-guardrails | Block dangerous git commands |
 
