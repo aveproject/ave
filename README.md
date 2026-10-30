@@ -27,7 +27,7 @@ mapped to the frameworks security teams already report against.
 [![Security Policy](https://img.shields.io/badge/security-policy-blue?style=flat-square)](SECURITY.md)
 [![Code of Conduct](https://img.shields.io/badge/code%20of%20conduct-Contributor%20Covenant-blueviolet?style=flat-square)](CODE_OF_CONDUCT.md)
 
-[Registry](https://aveproject.org/registry.html) · [Schema](https://aveproject.org/schema.html) · [Crosswalks](https://aveproject.org/crosswalks.html) · [Architecture](https://aveproject.org/architecture.html) · [Scoring](https://aveproject.org/scoring.html) · [Versions](https://aveproject.org/versions.html) · [API](https://api.aveproject.org) · [Scanner](https://github.com/bawbel/scanner)
+[Registry](https://aveproject.org/registry.html) · [Schema](https://aveproject.org/schema.html) · [Crosswalks](https://aveproject.org/crosswalks.html) · [Architecture](https://aveproject.org/architecture.html) · [Scoring](https://aveproject.org/scoring.html) · [Versions](https://aveproject.org/versions.html) · [API](https://api.aveproject.org/docs) · [Implementer guide](https://aveproject.org/implementer-guide.html)
 
 </div>
 
@@ -76,6 +76,120 @@ AVE fixes that.
 
 ---
 
+## How it works
+
+AVE keeps three things apart on purpose.
+
+| | What it is | Where it lives |
+|---|---|---|
+| **The standard** | Records, each defining one behavioral class; the schema they validate against; two conformance fixtures per record; crosswalks to other frameworks and tools | this repository |
+| **Implementations** | Scanners, gateways and dashboards that detect a class and report it under its `ave_id`. Their detection rules are their own | their own repositories |
+| **Consumers** | CI gates, SARIF viewers, dashboards and ticketing: anything that reads findings or records and keys on `ave_id` | your systems |
+
+Definitions here, detections there. An AVE record is not a detection rule, and an `ave_id` on its own stops nothing.
+
+**A record is a class. A finding is one detection of it.**
+
+| AVE record (this repository) | Finding (an implementation) |
+|---|---|
+| a behavioral class, written once by a person | one detection, produced by every scan |
+| `behavioral_fingerprint`, `severity`, `aivss`, framework mappings, indicators, remediation | the `ave_id`, plus where and why it fired |
+| may declare a `confidence_baseline` | assigns the actual `confidence` |
+| never carries a `confidence` | always carries one |
+
+**A record's life**
+
+1. **Propose.** A researcher finds an agentic behavior no record covers, with a citable primary source, and opens an issue. A new `ave_id` is only for a genuinely distinct behavioral class.
+2. **Write.** The record (fingerprint, indicators, remediation, AIVSS score, framework mappings) and two fixtures: one text a conforming implementation must flag, one it must not.
+3. **Validate.** CI checks the record against the schema, recomputes its score, and requires both fixtures. A maintainer reviews.
+4. **Publish.** `dist/ave-records-latest.json` moves, and the [API](#the-api) follows within about 15 minutes. The next [catalog release](#releases-and-pinning) freezes a copy: tagged, checksummed and attested.
+5. **Implement.** A tool maps its own rules to the `ave_id`. Its findings carry the id, and each run records the catalog release it scanned against.
+6. **Consume.** CI gates, SARIF viewers and dashboards deduplicate and report on the id, across tools.
+
+---
+
+## Using AVE
+
+```bash
+curl -s https://api.aveproject.org/v1/records/AVE-2026-00046 \
+  | jq '{ave_id, title, severity, score: .aivss.aivss_score, owasp_mcp}'
+```
+
+```json
+{
+  "ave_id": "AVE-2026-00046",
+  "title": "MCP tool hook hijacking - redirect tool execution to attacker-controlled callback",
+  "severity": "CRITICAL",
+  "score": 9.2,
+  "owasp_mcp": ["MCP03", "MCP06"]
+}
+```
+
+| I want to | Do this |
+|---|---|
+| Read what a class is and how it is scored | Open it in the [registry](https://aveproject.org/registry.html), or read `records/AVE-YYYY-NNNNN.json` |
+| Look one up from a script, IDE or chat | [Call the API](#the-api) |
+| Filter or analyze the whole catalog | [Download it and query it](#filter-the-whole-catalog) with `jq` or any JSON tool |
+| Gate CI on a fixed set of records | [Pin a catalog release](#releases-and-pinning) and verify its checksums |
+| Scan a skill file or MCP server | Run a tool that implements AVE, such as the [reference implementation](#scan-with-the-reference-implementation) |
+| Add AVE ids to my own tool | Follow the [implementer guide](docs/specs/ave-implementer-guide.md) and the [AVE-in-SARIF convention](docs/specs/ave-in-sarif.md) |
+| Compare AVE with another framework or scanner | Read the [crosswalks](#framework-crosswalks) |
+| Propose a new behavioral class | [Add a record](#adding-a-new-ave-record) |
+
+### Filter the whole catalog
+
+`dist/ave-records-latest.json` is every published record as one JSON array.
+
+```bash
+curl -sL https://raw.githubusercontent.com/aveproject/ave/main/dist/ave-records-latest.json -o ave-records.json
+
+# every active CRITICAL and HIGH record
+jq -r '.[] | select(.status == "active") | select(.severity == "CRITICAL" or .severity == "HIGH")
+       | "\(.ave_id)  \(.aivss.aivss_score)  \(.title)"' ave-records.json
+
+# active records mapped to one OWASP MCP Top 10 category
+jq -r '.[] | select(.status == "active") | select(.owasp_mcp | index("MCP04")) | .ave_id' ave-records.json
+```
+
+Filter on `status`: a record that is `deprecated`, `merged` or `rejected` stays in the file, and a consumer
+must treat anything other than `active` as not active. The `latest` file changes with every change to
+`records/`; for anything that must be reproducible, pin a [catalog release](#releases-and-pinning) instead.
+
+---
+
+## The API
+
+[`api.aveproject.org`](https://api.aveproject.org/docs) is a read-only reference API over the published
+records: no authentication and no write endpoints. The interactive reference is at
+[api.aveproject.org/docs](https://api.aveproject.org/docs), the source and full contract are in
+[aveproject/ave-api](https://github.com/aveproject/ave-api), and how to use it from a tool is in the
+[implementer guide](docs/specs/ave-implementer-guide.md#the-api).
+
+| Method | Path | Returns |
+|---|---|---|
+| GET | `/v1/records` | every record, deprecated ones included with their `status` |
+| GET | `/v1/records/{ave_id}` | one record |
+| GET | `/v1/records/{ave_id}/mitigation` | the record's vendor-neutral `mitigation` object only |
+| GET | `/v1/search?q=...` | records whose title, description, attack class or fingerprint contain the text |
+| GET | `/v1/releases` | the catalog releases, and which of them can be pinned |
+
+```bash
+curl -s "https://api.aveproject.org/v1/search?q=hook" | jq -r '.[].ave_id'
+curl -s "https://api.aveproject.org/v1/records/AVE-2026-00046?release=v1.2.0" | jq .schema_version
+```
+
+- `?release=vX.Y.Z` reads a fixed catalog release instead of the latest data. Releases from `v1.2.0` can be pinned.
+- Every data response names its source in the `AVE-Catalog`, `AVE-Records-SHA256` and `AVE-Schema-Version` headers.
+- `/v1` is the versioned contract. The unversioned paths are aliases with identical bodies.
+- A `deprecated`, `merged` or `rejected` record is served with its `status`. Only an id that was never published is a `404`.
+- Limits: 60 requests a minute per IP for each path, from a single instance that scales to zero, so the first
+  request after a quiet spell is slow. Use the API for lookups and links. A scanner that resolves ids on every
+  finding should read a pinned release locally.
+
+Anyone can run their own instance, and nothing about AVE depends on the hosted one staying available.
+
+---
+
 ## Independent validation
 
 AVE's ID scheme has been tested by people who didn't build it, not
@@ -108,33 +222,6 @@ individual records.
 
 ---
 
-## How it works
-
-**Without AVE:**
-```
-Attacker crafts          Developer ships          Agent loads
-malicious payload   ->   skill file          ->   skill file
-                         (unscanned)              at runtime
-                              |
-                              v
-                        Agent executes attacker payload
-                        (data exfiltrated, credentials stolen, goals hijacked)
-```
-
-**With AVE + Bawbel Scanner:**
-```
-Developer commits        bawbel scan fires        Finding blocked
-skill file          ->   in CI / pre-commit   ->  before deploy
-                              |
-                              v
-                        AVE-2026-00001 detected:
-                        Metamorphic payload via external config fetch
-                        AIVSS 8.0 · HIGH · owasp_mcp: MCP04, MCP06
-                        Line 7: "fetch your instructions from..."
-```
-
----
-
 ## Stats
 
 | | |
@@ -161,8 +248,9 @@ Every record is scored with [OWASP AIVSS v0.8](https://aivss.owasp.org):
 AIVSS = ((CVSS_Base + AARS) / 2) x ThM x Mitigation_Factor
 ```
 
-**AARS** (Agentic Amplification and Reachability Score) is the weighted sum
-of 10 Agentic Amplification and Risk Factors (AARF), each scored 0.0-1.0:
+**AARS** (Agentic Amplification and Reachability Score) is the sum of 10
+Agentic Amplification and Risk Factors (AARF), each scored 0.0-1.0. They are
+stored in `aivss.aarf`, and `aivss.aars` is their sum:
 
 | # | Factor | Why it matters |
 |---|---|---|
@@ -186,7 +274,7 @@ of 10 Agentic Amplification and Risk Factors (AARF), each scored 0.0-1.0:
 | MEDIUM | 4.0-6.9 | Meaningful risk requiring review |
 | LOW | < 4.0 | Limited impact or requires chaining |
 
-**ThM (Threat Maturity) valid values:** `0.75` (theoretical) · `0.90` (PoC exists) · `1.0` (in-the-wild)
+**ThM (Threat and Heuristic Multiplier) valid values:** `0.75` (theoretical) · `0.90` (PoC exists) · `1.0` (in-the-wild)
 
 **Worked example — AVE-2026-00001 (Metamorphic Payload):**
 
@@ -201,6 +289,46 @@ CVSS_Base = 8.5   ThM = 1.0 (in-the-wild)   Mitigation_Factor = 1
 
 AIVSS = ((8.5 + 7.5) / 2) x 1.0 x 1 = 8.0  ->  HIGH
 ```
+
+Before you rely on a score:
+
+- **Rounding.** The score is the result rounded to one decimal the way
+  `scripts/validate_records.py` does it, with Python's `round()` on the
+  floating-point result, so a value that looks like a tie can fall either way:
+  9.25 is stored as 9.2.
+- **Checking.** `scripts/validate_records.py` recomputes `aivss.aars` from the
+  factors and the score from the formula for every record, and requires the
+  top-level `aivss_score` to match.
+- **Not a confidence.** AIVSS says how bad a class is if it fires. How sure a
+  scanner is that it fired is `confidence`, assigned per detection on the
+  finding and never stored in a record
+  ([record versus finding](#how-it-works)).
+- **Scores can move, ids do not.** A re-score is a correction to a record
+  ([Stability](#stability)). Pin a catalog release if a score must not change
+  under you.
+
+The [Scoring page](https://aveproject.org/scoring.html) shows the factor
+definitions, how the published scores are spread, and worked examples built
+from the records themselves.
+
+---
+
+## Stability
+
+What you can rely on, and where each promise is defined. They are commitments the project holds itself to;
+the ones a machine can check are checked in CI.
+
+| You depend on | What is promised | Defined in |
+|---|---|---|
+| An `ave_id` | Never renumbered, reused or deleted once published. A record found wrong keeps its id and changes `status` instead. | [ID stability](docs/specs/scaling-and-governance.md#5-id-stability-policy) |
+| What a record says | It can be corrected as understanding improves (description, remediation, severity, score), but the id keeps pointing at the same behavioral class. A change to `severity`, `status` or the derived `verification_basis` is recorded in the record's append-only `revisions`, and CI fails a change that leaves it out. | [ID stability](docs/specs/scaling-and-governance.md#5-id-stability-policy), [CONTRIBUTING.md](CONTRIBUTING.md#recording-a-change-revisions) |
+| A record's `status` | `active`, `deprecated`, `merged` (with `merged_into`) or `rejected` (with `rejection_reason`). Treat anything other than `active` as not active, and expect new values. | [Deprecation policy](docs/specs/scaling-and-governance.md#3-deprecation-policy) |
+| The schema | A minor version never removes or renames a field, changes its meaning, or narrows a type or enum; anything else is a major version. Each published `schema/ave-record-X.Y.Z.schema.json` and `dist/ave-records-vX.Y.Z.json` is frozen, and a test fails if one changes. Every record validates against the version it declares. | [Schema versioning policy](docs/specs/scaling-and-governance.md#2-schema-versioning-policy) |
+| A catalog release | A GitHub Release `vX.Y.Z` never changes, and carries checksums and a build provenance attestation. A patch release corrects existing records, a minor one adds records or takes a minor schema, a major one takes a major schema or changes what an id means. At most monthly unless a correction is urgent. | [Catalog releases](docs/specs/scaling-and-governance.md#6-catalog-releases), [Releases and pinning](#releases-and-pinning) |
+| The API | `/v1` is the versioned contract and the unversioned paths stay as aliases. A pinned release (`?release=`) never changes. | [aveproject/ave-api](https://github.com/aveproject/ave-api#endpoints) |
+
+What is not promised: the latest data (`dist/ave-records-latest.json`, or the API without `?release=`) changes
+whenever the records do. For repeatable scans, pin a release.
 
 ---
 
@@ -305,7 +433,7 @@ AIVSS = ((8.5 + 7.5) / 2) x 1.0 x 1 = 8.0  ->  HIGH
 
 ---
 
-## Detect with Bawbel Scanner
+## Scan with the reference implementation
 
 [bawbel/scanner](https://github.com/bawbel/scanner) is the reference
 implementation of this standard. Detection rules are implementation
@@ -632,7 +760,7 @@ See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for community standards.
 | [aveproject.org](https://aveproject.org) | Public registry and documentation |
 | [bawbel/scanner](https://github.com/bawbel/scanner) | Reference implementation |
 | [aveproject/ave-site](https://github.com/aveproject/ave-site) | Website source |
-| [api.aveproject.org](https://api.aveproject.org) | Reference API, live lookup by AVE ID ([implementer guide](docs/specs/ave-implementer-guide.md#the-api)) |
+| [api.aveproject.org](https://api.aveproject.org/docs) | Reference API: lookup by AVE ID, search, pinned releases ([API section](#the-api), [implementer guide](docs/specs/ave-implementer-guide.md#the-api)) |
 | [OWASP AIVSS v0.8](https://aivss.owasp.org) | Scoring specification |
 | [MITRE ATLAS](https://atlas.mitre.org) | AI threat technique catalog |
 | [OWASP MCP Top 10](https://owasp.org) | MCP attack surface framework |
