@@ -332,6 +332,32 @@ whenever the records do. For repeatable scans, pin a release.
 
 ---
 
+## Trust, and how to check it
+
+AVE is young, and a standard is only worth using if you can check it. Each row says what is verified and how
+to verify it yourself.
+
+| You want to know | What is checked | Check it yourself |
+|---|---|---|
+| A record is well formed and scored consistently | Every pull request validates every record against the schema version it declares and recomputes its `aars` and score. A failure fails the check. | `python scripts/validate_records.py` |
+| The class is real and sourced | The schema requires at least one reference on every record, a pull request must link the primary source, and a maintainer reviews it. | the record's `references` |
+| An implementation can test itself against it | Every record has a positive fixture a conforming implementation must flag and a negative one it must not. CI fails without both. | `tests/fixtures/AVE-YYYY-NNNNN_positive.md` and `_negative.md`; `python scripts/check_fixtures.py` |
+| The framework mappings are anchored | Every framework a record maps to has a `framework_sources` entry saying which edition the mapping was made against, or that the edition is unknown. CI fails without it. | `python scripts/check_framework_sources.py --strict` |
+| A record did not change under you | A change to `severity`, `status` or the derived basis is recorded in `revisions`, and git keeps every version. A released copy never changes. | `git log -p records/AVE-YYYY-NNNNN.json` |
+| The files you downloaded are the ones published | Each catalog release carries SHA-256 checksums and a build provenance attestation. | the commands in [Releases and pinning](#releases-and-pinning) |
+| Others have tested it | Eight independent tools built crosswalks against the records on their own initiative. | [Independent validation](#independent-validation), [`crosswalks/`](crosswalks/) |
+| The repository itself is looked after | CodeQL, dependency review, secret scanning and OpenSSF Scorecard run on it. | the badges at the top |
+
+What AVE does not claim: that it lists every agentic vulnerability. Records grow with research, not with
+quotas, and a class with no record is a gap to report, not a clean bill of health. Nor does AVE enforce
+anything; an `ave_id` stops nothing on its own ([what AVE is not](#what-ave-is-not)).
+
+Found a mistake, or something AVE does not cover? [Open an issue](https://github.com/aveproject/ave/issues/new/choose):
+a bug report for a wrong record, a schema change proposal, or a new record submission. To send a critical or
+pre-disclosure finding privately, see [SECURITY.md](SECURITY.md).
+
+---
+
 ## Record index
 
 <details>
