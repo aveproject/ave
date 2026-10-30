@@ -258,11 +258,14 @@ fields are what make it reproducible. For people, link each id to
 
 An `ave_id` is never renumbered, reused or deleted. A record's status can still
 change: schema 1.2.0 has `active`, `deprecated` and `draft`, and schema 1.3.0
-([#104](https://github.com/aveproject/ave/issues/104)) is set to add `merged`
-and `rejected`. A record that leaves `active` stays in the published files with
-its full content. Treat any status other than `active` as not active, and do
-not assume the list of statuses is complete. No record has left `active` yet,
-but a tool that cites ids should find out when one does.
+([#104](https://github.com/aveproject/ave/issues/104)) added `merged` and
+`rejected`. Schema 1.3.0 is in `dist/ave-records-latest.json`, but no catalog
+release carries it yet (`v1.2.0` is on schema 1.2.0), so a tool tracking
+`latest` can meet the new statuses before a pinned release can. A record that
+leaves `active` stays in the published files with its full content. Treat any
+status other than `active` as not active, and do not assume the list of
+statuses is complete. No record has left `active` yet, but a tool that cites
+ids should find out when one does.
 
 Run a scheduled check against `dist/ave-records-latest.json`, which shows a
 status change as soon as it is merged, before the next release. This workflow,
