@@ -40,6 +40,13 @@
       "untrusted_content"
     ]
   },
+  "security_boundary": "internal configuration → normal output channel",
+  "missing_control": "no confidentiality boundary prevents the agent's own operational configuration from being repeated back through its ordinary output",
+  "vulnerability_rationale": {
+    "capability": "Agent's output channel can include any content it has processed, including its own system prompt.",
+    "vulnerability": "No confidentiality boundary prevents internal configuration from being repeated back through the normal output channel on request.",
+    "impact": "Proprietary logic and security-policy disclosure, revealing attack surface for follow-on exploitation."
+  },
   "mitigation": {
     "strategy": [
       "validate_input",
@@ -62,7 +69,7 @@
   "researcher": "Perez & Ribeiro",
   "researcher_url": "https://arxiv.org/abs/2211.09527",
   "published": "2026-04-20T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Perez 2022",

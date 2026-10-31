@@ -44,6 +44,13 @@
       "private_data"
     ]
   },
+  "security_boundary": "retrieved document (should be data) → trusted context (treated as instruction)",
+  "missing_control": "no boundary distinguishes RAG-retrieved content from instruction",
+  "vulnerability_rationale": {
+    "capability": "A RAG pipeline retrieves external document content into agent context at query time.",
+    "vulnerability": "No boundary distinguishes retrieved document content from instruction once it enters context.",
+    "impact": "Attacker-controlled instructions execute via a corpus the attacker needs no direct system access to."
+  },
   "mitigation": {
     "strategy": [
       "sanitize_output",
@@ -87,7 +94,7 @@
   "researcher": "Zou et al.",
   "researcher_url": "https://arxiv.org/abs/2402.07867",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-29T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",

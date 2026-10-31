@@ -41,6 +41,13 @@
       "untrusted_content"
     ]
   },
+  "security_boundary": "agent decision → irreversible/high-impact action",
+  "missing_control": "human confirmation is component-configurable behavior, not a structurally enforced gate",
+  "vulnerability_rationale": {
+    "capability": "Agent can take consequential or irreversible actions.",
+    "vulnerability": "Human confirmation for high-impact actions is component-configurable, not a structurally enforced gate.",
+    "impact": "Irreversible actions execute with no review opportunity, increasing the blast radius of any error or attack."
+  },
   "mitigation": {
     "strategy": [
       "require_human_approval",
@@ -83,7 +90,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",

@@ -43,6 +43,13 @@
       "untrusted_content"
     ]
   },
+  "security_boundary": "claimed server identity → actual, verified identity (never checked)",
+  "missing_control": "no identity verification mechanism for MCP servers; trust follows a self-asserted manifest claim",
+  "vulnerability_rationale": {
+    "capability": "Agent grants trust and permission scope based on a server's claimed identity.",
+    "vulnerability": "No verification checks a claimed server identity against anything real.",
+    "impact": "A malicious server receives elevated trust and permissions it has no legitimate claim to."
+  },
   "mitigation": {
     "strategy": [
       "verify_identity",
@@ -86,7 +93,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "CWE-290",
