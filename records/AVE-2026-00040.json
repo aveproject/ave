@@ -24,7 +24,7 @@
     "MEASURE-2.5"
   ],
   "mitre_atlas": [],
-  "behavioral_fingerprint": "Component instructs the agent to produce output that will be directly interpreted by a downstream system (SQL database, HTML renderer, shell) without escaping or sanitisation, enabling classic injecti",
+  "behavioral_fingerprint": "Component instructs agent to pass user input or LLM output directly into SQL queries, HTML templates, or shell commands without escaping or sanitisation.",
   "behavioral_vector": [
     "output-inject",
     "xss",
@@ -85,7 +85,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "OWASP LLM Insecure Output",
@@ -131,5 +131,15 @@
       "pin_status": "unknown",
       "read_date": "2026-10-15"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "behavioral_fingerprint",
+      "from": "Component instructs the agent to produce output that will be directly interpreted by a downstream system (SQL database, HTML renderer, shell) without escaping or sanitisation, enabling classic injecti",
+      "to": "Component instructs agent to pass user input or LLM output directly into SQL queries, HTML templates, or shell commands without escaping or sanitisation.",
+      "reason_code": "declaration_corrected",
+      "reason": "Cut off at 200 characters, mid-word, by the AIVSS migration (9e7dd0b, #17, 2026-05-12); restored to the sentence the record had before it, which the cut text does not complete from the record's own words. Corrected in #414."
+    }
+  ]
 }

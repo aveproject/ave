@@ -26,7 +26,7 @@
   "mitre_atlas": [
     "AML.T0054"
   ],
-  "behavioral_fingerprint": "Component floods the agent's context window with large amounts of repetitive or irrelevant content to push safety instructions, system prompt constraints, or prior conversation context out of the acti",
+  "behavioral_fingerprint": "Component instructs agent to repeat, pad, or generate large volumes of content with the intent of overflowing the context window.",
   "behavioral_vector": [
     "context-overflow",
     "prompt-injection"
@@ -83,7 +83,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Perez 2022",
@@ -133,5 +133,15 @@
       "pin_status": "unknown",
       "read_date": "2026-10-15"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "behavioral_fingerprint",
+      "from": "Component floods the agent's context window with large amounts of repetitive or irrelevant content to push safety instructions, system prompt constraints, or prior conversation context out of the acti",
+      "to": "Component instructs agent to repeat, pad, or generate large volumes of content with the intent of overflowing the context window.",
+      "reason_code": "declaration_corrected",
+      "reason": "Cut off at 200 characters, mid-word, by the AIVSS migration (9e7dd0b, #17, 2026-05-12); restored to the sentence the record had before it, which the cut text does not complete from the record's own words. Corrected in #414."
+    }
+  ]
 }

@@ -86,7 +86,9 @@ Key rules:
 
 - `behavioral_fingerprint` describes what the component *does*, not a string
   it contains. "Component fetches remote content and executes it as
-  instructions" not "contains the word fetch."
+  instructions" not "contains the word fetch." It is a whole sentence: it ends in
+  `.`, `!`, `?` or a closing bracket, quote or backtick, and is not exactly 200
+  characters long, which `scripts/validate_records.py` checks.
 - `owasp_mcp` is required with at least one entry, verified against the
   category's own primary-source text — not inferred from how a
   similar-sounding record in the corpus happened to tag itself.
@@ -332,6 +334,7 @@ consumer could have gated on existed yet. Which `field` and `reason_code`:
 | The status changed (`deprecated`, `merged`, `rejected`) | `status` | `status_changed` |
 | A declaration the basis derives from was added | the declaration (`evidence_vantage`, `evidence_method` or `evidence_basis_engines`) | `declaration_added` |
 | Such a declaration was wrong and now differs | the same declaration | `declaration_corrected` |
+| A fingerprint was cut off or wrong and is corrected (the ratchet does not require this entry, but it is the record of the change) | `behavioral_fingerprint` | `declaration_corrected` |
 | The schema gained a vocabulary member, or the derivation rule changed, and the derived basis moved with no declaration changing | `verification_basis` | `vocabulary_member_added` or `derivation_rule_changed` |
 
 The derived `verification_basis` comes from

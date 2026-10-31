@@ -13,7 +13,7 @@ def base_record(**overrides):
         "title": "Confidence signal fixture",
         "description": "Fixture record for the confidence signal check.",
         "attack_class": "test",
-        "behavioral_fingerprint": "test",
+        "behavioral_fingerprint": "test.",
         "references": [{"tag": "Source", "text": "Source", "url": "https://example.com"}],
         "confidence_baseline": 0.85,
         "evidence_basis_engines": ["pattern"],

@@ -25,7 +25,7 @@
   "mitre_atlas": [
     "AML.T0068"
   ],
-  "behavioral_fingerprint": "Component uses visually similar Unicode characters (homoglyphs), zero-width characters, or bidirectional text control codes to hide malicious instructions from human reviewers while remaining fully re",
+  "behavioral_fingerprint": "Skill file contains zero-width characters, bidirectional override codes, or Cyrillic homoglyphs used to conceal instructions from human reviewers.",
   "behavioral_vector": [
     "obfuscation",
     "unicode",
@@ -84,7 +84,7 @@
   "researcher": "Boucher & Anderson",
   "researcher_url": "https://arxiv.org/abs/2111.00169",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Boucher 2021",
@@ -134,5 +134,15 @@
       "pin_status": "unknown",
       "read_date": "2026-10-15"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "behavioral_fingerprint",
+      "from": "Component uses visually similar Unicode characters (homoglyphs), zero-width characters, or bidirectional text control codes to hide malicious instructions from human reviewers while remaining fully re",
+      "to": "Skill file contains zero-width characters, bidirectional override codes, or Cyrillic homoglyphs used to conceal instructions from human reviewers.",
+      "reason_code": "declaration_corrected",
+      "reason": "Cut off at 200 characters, mid-word, by the AIVSS migration (9e7dd0b, #17, 2026-05-12); restored to the sentence the record had before it, which the cut text does not complete from the record's own words. Corrected in #414."
+    }
+  ]
 }

@@ -197,6 +197,32 @@ def check_severity_band(record: dict) -> list[str]:
     return errors
 
 
+FINGERPRINT_END = (".", "!", "?", ")", "]", '"', "'", "`")
+FINGERPRINT_CUT_LENGTH = 200
+
+
+def check_fingerprint_not_cut_off(record: dict) -> list[str]:
+    """Confirms behavioral_fingerprint was not cut off. The schema sets no length
+    limit, and the AIVSS migration (#17, #18) stored eight fingerprints cut at
+    exactly 200 characters, mid-word ("... human oversight checkp"), so a
+    fingerprint that stops mid-sentence reached every consumer without anything
+    noticing. A fingerprint must end in sentence-ending punctuation or a closing
+    bracket, quote or backtick, and must not be exactly 200 characters long, the
+    length it was cut to. A missing or non-string value is the schema's to report."""
+    text = record.get("behavioral_fingerprint")
+    if not isinstance(text, str):
+        return []
+    text = text.rstrip()
+    if not text:
+        return []
+    errors = []
+    if not text.endswith(FINGERPRINT_END):
+        errors.append(f"behavioral_fingerprint does not end in sentence-ending punctuation, so it looks cut off: ends '...{text[-25:]}'")
+    if len(text) == FINGERPRINT_CUT_LENGTH:
+        errors.append(f"behavioral_fingerprint is exactly {FINGERPRINT_CUT_LENGTH} characters, the length eight fingerprints were once cut to (#414); check it is whole")
+    return errors
+
+
 def check_aivss_arithmetic(record: dict) -> list[str]:
     """Recomputes aars and aivss_score from the record's own aarf, cvss_base,
     thm, and mitigation_factor fields, and confirms both the nested
@@ -415,6 +441,7 @@ def record_errors(record: dict, raw_text: str, validator) -> list[str]:
         + check_mitigation_enums_only(record)
         + check_aivss_arithmetic(record)
         + check_severity_band(record)
+        + check_fingerprint_not_cut_off(record)
         + check_no_vendor_boilerplate(raw_text)
         + check_verification_basis(record)
         + check_revision_order(record)

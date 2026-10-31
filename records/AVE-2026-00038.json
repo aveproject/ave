@@ -28,7 +28,7 @@
     "GOVERN-1.1"
   ],
   "mitre_atlas": [],
-  "behavioral_fingerprint": "Component grants the agent unlimited authority to use any available tool, spawn sub-agents without limits, or recursively expand its own capabilities without scope boundaries or human oversight checkp",
+  "behavioral_fingerprint": "Component instructs agent to use any available tool, spawn unlimited sub-agents, or recursively expand its capabilities without scope or oversight.",
   "behavioral_vector": [
     "scope-creep",
     "tool-abuse",
@@ -88,7 +88,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "CWE-400",
@@ -134,5 +134,15 @@
       "pin_status": "unknown",
       "read_date": "2026-10-15"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "behavioral_fingerprint",
+      "from": "Component grants the agent unlimited authority to use any available tool, spawn sub-agents without limits, or recursively expand its own capabilities without scope boundaries or human oversight checkp",
+      "to": "Component instructs agent to use any available tool, spawn unlimited sub-agents, or recursively expand its capabilities without scope or oversight.",
+      "reason_code": "declaration_corrected",
+      "reason": "Cut off at 200 characters, mid-word, by the AIVSS migration (9e7dd0b, #17, 2026-05-12); restored to the sentence the record had before it, which the cut text does not complete from the record's own words. Corrected in #414."
+    }
+  ]
 }
