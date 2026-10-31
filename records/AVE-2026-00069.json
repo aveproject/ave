@@ -24,6 +24,13 @@
     "payload_surface": "an image resource bundled within the skill package, distinct from the package's documentation, manifest, or source code text",
     "escalation": "data_to_instruction"
   },
+  "security_boundary": "text-only review pipeline → bundled image resource (never decoded for review)",
+  "missing_control": "no visual/multimodal decoding step exists in static review",
+  "vulnerability_rationale": {
+    "capability": "Multimodal agents can decode and act on bundled image content within a skill package.",
+    "vulnerability": "No visual/multimodal decoding step exists in the text-only static-review pipeline covering the rest of the package.",
+    "impact": "Instructions invisible to every current text-based scanner execute once a multimodal agent processes the resource."
+  },
   "mitigation": {
     "strategy": ["validate_input", "sanitize_output"],
     "enforcement_point": "static_scan",
@@ -45,7 +52,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-08-02T00:00:00Z",
-  "last_updated": "2026-08-02T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "SkillCamo (arXiv 2606.18198)",

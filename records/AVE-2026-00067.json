@@ -23,6 +23,13 @@
     "entry_class": "tool_response",
     "payload_surface": "a benign, correct upstream skill's output (endorsement, audit finding, validation result) consumed by a downstream skill as an implicit trust or authorization signal"
   },
+  "security_boundary": "upstream skill's output (benign) → downstream skill's trust signal (unverified)",
+  "missing_control": "no requirement that a downstream skill independently re-verify a trust claim carried in an upstream skill's output",
+  "vulnerability_rationale": {
+    "capability": "A downstream skill can consume another skill's output as part of its own decision logic.",
+    "vulnerability": "No requirement exists for a downstream skill to independently re-verify a trust or authorization claim in an upstream skill's output.",
+    "impact": "Harmful actions approved based on a spoofable trust credential no single skill's isolated review would ever catch."
+  },
   "mitigation": {
     "strategy": ["verify_identity", "isolate_scope"],
     "enforcement_point": "agent_framework",
@@ -44,7 +51,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-08-02T00:00:00Z",
-  "last_updated": "2026-08-02T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Benign in Isolation, Harmful in Composition (arXiv 2606.15242)",

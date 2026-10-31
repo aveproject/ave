@@ -29,6 +29,13 @@
   "trifecta_profile": {
     "requires": ["untrusted_content"]
   },
+  "security_boundary": "passive action (opening a project) → code execution, no confirmation",
+  "missing_control": "no confirmation gate on auto-run behavior triggered passively rather than by explicit tool call",
+  "vulnerability_rationale": {
+    "capability": "IDE/dev-environment configuration can declare commands to run automatically on project load.",
+    "vulnerability": "No confirmation gate exists for auto-run behavior triggered by a passive action rather than an explicit tool call.",
+    "impact": "Code execution requiring no action beyond opening a compromised project directory."
+  },
   "mitigation": {
     "strategy": ["deny_by_default", "validate_input"],
     "enforcement_point": "server_card_fetch",
@@ -49,7 +56,7 @@
   "researcher": "Check Point Research (Aviv Donenfeld, Oded Vanunu)",
   "researcher_url": "https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536/",
   "published": "2026-07-27T00:00:00Z",
-  "last_updated": "2026-10-20T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Anthropic GHSA-ph6w-f82w-28w6",

@@ -32,6 +32,13 @@
   "trifecta_profile": {
     "requires": ["external_comms"]
   },
+  "security_boundary": "model's own hallucinated belief → fetch/install action",
+  "missing_control": "no registry-existence or publisher-identity check before acting on a model-generated resource name",
+  "vulnerability_rationale": {
+    "capability": "Agent resolves user requests for well-known resources to package/repo/skill names it generates itself.",
+    "vulnerability": "No registry-existence or publisher-identity check occurs before fetching or installing a model-generated name.",
+    "impact": "Malware installation via a scalable, precomputed, cross-model squatting technique with no injection required at all."
+  },
   "mitigation": {
     "strategy": ["verify_identity", "pin_integrity"],
     "enforcement_point": "runtime_proxy",
@@ -53,7 +60,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-08-02T00:00:00Z",
-  "last_updated": "2026-08-02T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Beware of Agentic Botnets (arXiv 2607.07433)",
