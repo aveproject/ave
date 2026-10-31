@@ -1,0 +1,1370 @@
+[
+  {
+    "ave_id": "AVE-2026-00001",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 1
+  },
+  {
+    "ave_id": "AVE-2026-00002",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 1
+  },
+  {
+    "ave_id": "AVE-2026-00003",
+    "audit_classification": "B",
+    "audit_decision": "CLARIFY",
+    "audit_label": "INSUFFICIENT-BOUNDARY",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "clarify_fingerprint",
+      "find_primary_source",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "clarify_fingerprint"
+    ],
+    "batch": 1
+  },
+  {
+    "ave_id": "AVE-2026-00004",
+    "audit_classification": "E",
+    "audit_decision": "JUSTIFY",
+    "audit_label": "GENERIC-VULNERABILITY",
+    "has_taxonomy_fields": false,
+    "d7_decision": "JUSTIFY",
+    "actions": [
+      "add_taxonomy_fields",
+      "write_rationale",
+      "find_primary_source",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 7
+  },
+  {
+    "ave_id": "AVE-2026-00005",
+    "audit_classification": "E",
+    "audit_decision": "JUSTIFY",
+    "audit_label": "GENERIC-VULNERABILITY",
+    "has_taxonomy_fields": false,
+    "d7_decision": "JUSTIFY",
+    "actions": [
+      "add_taxonomy_fields",
+      "write_rationale",
+      "find_primary_source",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 7
+  },
+  {
+    "ave_id": "AVE-2026-00006",
+    "audit_classification": "B",
+    "audit_decision": "CLARIFY",
+    "audit_label": "INSUFFICIENT-BOUNDARY",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "clarify_fingerprint",
+      "find_primary_source",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "clarify_fingerprint"
+    ],
+    "batch": 1
+  },
+  {
+    "ave_id": "AVE-2026-00007",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 1
+  },
+  {
+    "ave_id": "AVE-2026-00008",
+    "audit_classification": "B",
+    "audit_decision": "CLARIFY",
+    "audit_label": "INSUFFICIENT-BOUNDARY",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "clarify_fingerprint",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "clarify_fingerprint"
+    ],
+    "batch": 1
+  },
+  {
+    "ave_id": "AVE-2026-00009",
+    "audit_classification": "C",
+    "audit_decision": "REFRAME",
+    "audit_label": "TECHNIQUE-CONFLATION",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "reframe_fingerprint",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "reframe_fingerprint"
+    ],
+    "batch": 1
+  },
+  {
+    "ave_id": "AVE-2026-00010",
+    "audit_classification": "B",
+    "audit_decision": "CLARIFY",
+    "audit_label": "INSUFFICIENT-BOUNDARY",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "clarify_fingerprint",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "clarify_fingerprint"
+    ],
+    "batch": 1
+  },
+  {
+    "ave_id": "AVE-2026-00011",
+    "audit_classification": "B",
+    "audit_decision": "CLARIFY",
+    "audit_label": "INSUFFICIENT-BOUNDARY",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "clarify_fingerprint",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "clarify_fingerprint"
+    ],
+    "batch": 1
+  },
+  {
+    "ave_id": "AVE-2026-00012",
+    "audit_classification": "B",
+    "audit_decision": "CLARIFY",
+    "audit_label": "INSUFFICIENT-BOUNDARY",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "clarify_fingerprint",
+      "find_primary_source",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "clarify_fingerprint"
+    ],
+    "batch": 1
+  },
+  {
+    "ave_id": "AVE-2026-00013",
+    "audit_classification": "B",
+    "audit_decision": "CLARIFY",
+    "audit_label": "INSUFFICIENT-BOUNDARY",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "clarify_fingerprint",
+      "find_primary_source",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "clarify_fingerprint"
+    ],
+    "batch": 2
+  },
+  {
+    "ave_id": "AVE-2026-00014",
+    "audit_classification": "B",
+    "audit_decision": "CLARIFY",
+    "audit_label": "INSUFFICIENT-BOUNDARY",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "clarify_fingerprint",
+      "find_primary_source",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "clarify_fingerprint"
+    ],
+    "batch": 2
+  },
+  {
+    "ave_id": "AVE-2026-00015",
+    "audit_classification": "B",
+    "audit_decision": "CLARIFY",
+    "audit_label": "INSUFFICIENT-BOUNDARY",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "clarify_fingerprint",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "clarify_fingerprint"
+    ],
+    "batch": 2
+  },
+  {
+    "ave_id": "AVE-2026-00016",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 2
+  },
+  {
+    "ave_id": "AVE-2026-00017",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "find_primary_source",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 2
+  },
+  {
+    "ave_id": "AVE-2026-00018",
+    "audit_classification": "B",
+    "audit_decision": "CLARIFY",
+    "audit_label": "INSUFFICIENT-BOUNDARY",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "clarify_fingerprint",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "clarify_fingerprint"
+    ],
+    "batch": 2
+  },
+  {
+    "ave_id": "AVE-2026-00019",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 2
+  },
+  {
+    "ave_id": "AVE-2026-00020",
+    "audit_classification": "B",
+    "audit_decision": "CLARIFY",
+    "audit_label": "INSUFFICIENT-BOUNDARY",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "clarify_fingerprint",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "clarify_fingerprint"
+    ],
+    "batch": 2
+  },
+  {
+    "ave_id": "AVE-2026-00021",
+    "audit_classification": "B",
+    "audit_decision": "CLARIFY",
+    "audit_label": "INSUFFICIENT-BOUNDARY",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "clarify_fingerprint",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "clarify_fingerprint"
+    ],
+    "batch": 2
+  },
+  {
+    "ave_id": "AVE-2026-00022",
+    "audit_classification": "B",
+    "audit_decision": "CLARIFY",
+    "audit_label": "INSUFFICIENT-BOUNDARY",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "clarify_fingerprint",
+      "find_primary_source",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "clarify_fingerprint"
+    ],
+    "batch": 2
+  },
+  {
+    "ave_id": "AVE-2026-00023",
+    "audit_classification": "B",
+    "audit_decision": "CLARIFY",
+    "audit_label": "INSUFFICIENT-BOUNDARY",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "clarify_fingerprint",
+      "restore_truncated_fingerprint",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "clarify_fingerprint",
+      "restore_truncated_fingerprint"
+    ],
+    "batch": 3
+  },
+  {
+    "ave_id": "AVE-2026-00024",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "find_primary_source",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 3
+  },
+  {
+    "ave_id": "AVE-2026-00025",
+    "audit_classification": "B",
+    "audit_decision": "CLARIFY",
+    "audit_label": "INSUFFICIENT-BOUNDARY",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "clarify_fingerprint",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "clarify_fingerprint"
+    ],
+    "batch": 3
+  },
+  {
+    "ave_id": "AVE-2026-00026",
+    "audit_classification": "B",
+    "audit_decision": "CLARIFY",
+    "audit_label": "INSUFFICIENT-BOUNDARY",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "clarify_fingerprint",
+      "restore_truncated_fingerprint",
+      "find_primary_source",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "clarify_fingerprint",
+      "restore_truncated_fingerprint"
+    ],
+    "batch": 3
+  },
+  {
+    "ave_id": "AVE-2026-00027",
+    "audit_classification": "B",
+    "audit_decision": "CLARIFY",
+    "audit_label": "INSUFFICIENT-BOUNDARY",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "clarify_fingerprint",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "clarify_fingerprint"
+    ],
+    "batch": 3
+  },
+  {
+    "ave_id": "AVE-2026-00028",
+    "audit_classification": "B",
+    "audit_decision": "CLARIFY",
+    "audit_label": "INSUFFICIENT-BOUNDARY",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "clarify_fingerprint",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "clarify_fingerprint"
+    ],
+    "batch": 3
+  },
+  {
+    "ave_id": "AVE-2026-00029",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "restore_truncated_fingerprint",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "restore_truncated_fingerprint"
+    ],
+    "batch": 3
+  },
+  {
+    "ave_id": "AVE-2026-00030",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "restore_truncated_fingerprint",
+      "find_primary_source",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "restore_truncated_fingerprint"
+    ],
+    "batch": 3
+  },
+  {
+    "ave_id": "AVE-2026-00031",
+    "audit_classification": "B",
+    "audit_decision": "CLARIFY",
+    "audit_label": "INSUFFICIENT-BOUNDARY",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "clarify_fingerprint",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "clarify_fingerprint"
+    ],
+    "batch": 3
+  },
+  {
+    "ave_id": "AVE-2026-00032",
+    "audit_classification": "C",
+    "audit_decision": "REFRAME",
+    "audit_label": "TECHNIQUE-CONFLATION",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "reframe_fingerprint",
+      "find_primary_source",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "reframe_fingerprint"
+    ],
+    "batch": 3
+  },
+  {
+    "ave_id": "AVE-2026-00033",
+    "audit_classification": "E",
+    "audit_decision": "JUSTIFY",
+    "audit_label": "GENERIC-VULNERABILITY",
+    "has_taxonomy_fields": false,
+    "d7_decision": "JUSTIFY",
+    "actions": [
+      "add_taxonomy_fields",
+      "restore_truncated_fingerprint",
+      "write_rationale",
+      "find_primary_source",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "restore_truncated_fingerprint"
+    ],
+    "batch": 7
+  },
+  {
+    "ave_id": "AVE-2026-00034",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "find_primary_source",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 4
+  },
+  {
+    "ave_id": "AVE-2026-00035",
+    "audit_classification": "E",
+    "audit_decision": "JUSTIFY",
+    "audit_label": "GENERIC-VULNERABILITY",
+    "has_taxonomy_fields": false,
+    "d7_decision": "JUSTIFY-IF-WRITTEN",
+    "actions": [
+      "add_taxonomy_fields",
+      "write_rationale_or_reject",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 8
+  },
+  {
+    "ave_id": "AVE-2026-00036",
+    "audit_classification": "B",
+    "audit_decision": "CLARIFY",
+    "audit_label": "INSUFFICIENT-BOUNDARY",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "clarify_fingerprint",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "clarify_fingerprint"
+    ],
+    "batch": 4
+  },
+  {
+    "ave_id": "AVE-2026-00037",
+    "audit_classification": "B",
+    "audit_decision": "CLARIFY",
+    "audit_label": "INSUFFICIENT-BOUNDARY",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "clarify_fingerprint",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "clarify_fingerprint"
+    ],
+    "batch": 4
+  },
+  {
+    "ave_id": "AVE-2026-00038",
+    "audit_classification": "D",
+    "audit_decision": "REWRITE",
+    "audit_label": "CAPABILITY-CONFLATION",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "rewrite",
+      "restore_truncated_fingerprint",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "rewrite",
+      "restore_truncated_fingerprint"
+    ],
+    "batch": 4
+  },
+  {
+    "ave_id": "AVE-2026-00039",
+    "audit_classification": "B",
+    "audit_decision": "CLARIFY",
+    "audit_label": "INSUFFICIENT-BOUNDARY",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "clarify_fingerprint",
+      "restore_truncated_fingerprint",
+      "find_primary_source",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "clarify_fingerprint",
+      "restore_truncated_fingerprint"
+    ],
+    "batch": 4
+  },
+  {
+    "ave_id": "AVE-2026-00040",
+    "audit_classification": "E",
+    "audit_decision": "JUSTIFY",
+    "audit_label": "GENERIC-VULNERABILITY",
+    "has_taxonomy_fields": false,
+    "d7_decision": "JUSTIFY",
+    "actions": [
+      "add_taxonomy_fields",
+      "restore_truncated_fingerprint",
+      "write_rationale",
+      "find_primary_source",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "restore_truncated_fingerprint"
+    ],
+    "batch": 7
+  },
+  {
+    "ave_id": "AVE-2026-00041",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 4
+  },
+  {
+    "ave_id": "AVE-2026-00042",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 4
+  },
+  {
+    "ave_id": "AVE-2026-00043",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 4
+  },
+  {
+    "ave_id": "AVE-2026-00044",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 4
+  },
+  {
+    "ave_id": "AVE-2026-00045",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 4
+  },
+  {
+    "ave_id": "AVE-2026-00046",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 5
+  },
+  {
+    "ave_id": "AVE-2026-00047",
+    "audit_classification": "E",
+    "audit_decision": "JUSTIFY",
+    "audit_label": "GENERIC-VULNERABILITY",
+    "has_taxonomy_fields": false,
+    "d7_decision": "JUSTIFY",
+    "actions": [
+      "add_taxonomy_fields",
+      "write_rationale",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 7
+  },
+  {
+    "ave_id": "AVE-2026-00048",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 5
+  },
+  {
+    "ave_id": "AVE-2026-00049",
+    "audit_classification": "E",
+    "audit_decision": "JUSTIFY",
+    "audit_label": "GENERIC-VULNERABILITY",
+    "has_taxonomy_fields": false,
+    "d7_decision": "DEFER",
+    "actions": [
+      "defer_decision",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 9
+  },
+  {
+    "ave_id": "AVE-2026-00050",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 5
+  },
+  {
+    "ave_id": "AVE-2026-00051",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 5
+  },
+  {
+    "ave_id": "AVE-2026-00052",
+    "audit_classification": "E",
+    "audit_decision": "JUSTIFY",
+    "audit_label": "GENERIC-VULNERABILITY",
+    "has_taxonomy_fields": false,
+    "d7_decision": "REJECT",
+    "actions": [
+      "reject"
+    ],
+    "needs_maintainer_approval": [
+      "reject"
+    ],
+    "batch": 9
+  },
+  {
+    "ave_id": "AVE-2026-00053",
+    "audit_classification": "E",
+    "audit_decision": "JUSTIFY",
+    "audit_label": "GENERIC-VULNERABILITY",
+    "has_taxonomy_fields": false,
+    "d7_decision": "REJECT",
+    "actions": [
+      "reject"
+    ],
+    "needs_maintainer_approval": [
+      "reject"
+    ],
+    "batch": 9
+  },
+  {
+    "ave_id": "AVE-2026-00054",
+    "audit_classification": "E",
+    "audit_decision": "JUSTIFY",
+    "audit_label": "GENERIC-VULNERABILITY",
+    "has_taxonomy_fields": false,
+    "d7_decision": "DEFER",
+    "actions": [
+      "defer_decision",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 9
+  },
+  {
+    "ave_id": "AVE-2026-00055",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 5
+  },
+  {
+    "ave_id": "AVE-2026-00056",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 5
+  },
+  {
+    "ave_id": "AVE-2026-00057",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 5
+  },
+  {
+    "ave_id": "AVE-2026-00058",
+    "audit_classification": "B",
+    "audit_decision": "CLARIFY",
+    "audit_label": "INSUFFICIENT-BOUNDARY",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "clarify_fingerprint",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [
+      "clarify_fingerprint"
+    ],
+    "batch": 5
+  },
+  {
+    "ave_id": "AVE-2026-00059",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 5
+  },
+  {
+    "ave_id": "AVE-2026-00060",
+    "audit_classification": "E",
+    "audit_decision": "JUSTIFY",
+    "audit_label": "GENERIC-VULNERABILITY",
+    "has_taxonomy_fields": false,
+    "d7_decision": "REJECT",
+    "actions": [
+      "reject"
+    ],
+    "needs_maintainer_approval": [
+      "reject"
+    ],
+    "batch": 9
+  },
+  {
+    "ave_id": "AVE-2026-00061",
+    "audit_classification": "E",
+    "audit_decision": "DEPRECATE-OR-JUSTIFY",
+    "audit_label": "GENERIC-VULNERABILITY",
+    "has_taxonomy_fields": false,
+    "d7_decision": "REJECT",
+    "actions": [
+      "reject"
+    ],
+    "needs_maintainer_approval": [
+      "reject"
+    ],
+    "batch": 9
+  },
+  {
+    "ave_id": "AVE-2026-00062",
+    "audit_classification": "E",
+    "audit_decision": "JUSTIFY-OR-MERGE",
+    "audit_label": "GENERIC-VULNERABILITY",
+    "has_taxonomy_fields": false,
+    "d7_decision": "DEFER",
+    "actions": [
+      "defer_decision",
+      "find_primary_source",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 9
+  },
+  {
+    "ave_id": "AVE-2026-00063",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 5
+  },
+  {
+    "ave_id": "AVE-2026-00064",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 6
+  },
+  {
+    "ave_id": "AVE-2026-00065",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 6
+  },
+  {
+    "ave_id": "AVE-2026-00066",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 6
+  },
+  {
+    "ave_id": "AVE-2026-00067",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 6
+  },
+  {
+    "ave_id": "AVE-2026-00068",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 6
+  },
+  {
+    "ave_id": "AVE-2026-00069",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 6
+  },
+  {
+    "ave_id": "AVE-2026-00070",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 6
+  },
+  {
+    "ave_id": "AVE-2026-00071",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "find_primary_source",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 6
+  },
+  {
+    "ave_id": "AVE-2026-00072",
+    "audit_classification": "E",
+    "audit_decision": "JUSTIFY",
+    "audit_label": "GENERIC-VULNERABILITY",
+    "has_taxonomy_fields": false,
+    "d7_decision": "JUSTIFY-IF-WRITTEN",
+    "actions": [
+      "add_taxonomy_fields",
+      "write_rationale_or_reject",
+      "find_primary_source",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 8
+  },
+  {
+    "ave_id": "AVE-2026-00073",
+    "audit_classification": "E",
+    "audit_decision": "JUSTIFY",
+    "audit_label": "GENERIC-VULNERABILITY",
+    "has_taxonomy_fields": false,
+    "d7_decision": "JUSTIFY",
+    "actions": [
+      "add_taxonomy_fields",
+      "write_rationale",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 7
+  },
+  {
+    "ave_id": "AVE-2026-00074",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 6
+  },
+  {
+    "ave_id": "AVE-2026-00075",
+    "audit_classification": "E",
+    "audit_decision": "JUSTIFY",
+    "audit_label": "GENERIC-VULNERABILITY",
+    "has_taxonomy_fields": false,
+    "d7_decision": "JUSTIFY",
+    "actions": [
+      "add_taxonomy_fields",
+      "write_rationale",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 8
+  },
+  {
+    "ave_id": "AVE-2026-00076",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 6
+  },
+  {
+    "ave_id": "AVE-2026-00077",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 7
+  },
+  {
+    "ave_id": "AVE-2026-00078",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 7
+  },
+  {
+    "ave_id": "AVE-2026-00079",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 7
+  },
+  {
+    "ave_id": "AVE-2026-00080",
+    "audit_classification": "A",
+    "audit_decision": "RETAIN",
+    "audit_label": "VALID-AVE",
+    "has_taxonomy_fields": false,
+    "d7_decision": null,
+    "actions": [
+      "add_taxonomy_fields",
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 7
+  },
+  {
+    "ave_id": "AVE-2026-00081",
+    "audit_classification": null,
+    "audit_decision": null,
+    "audit_label": null,
+    "has_taxonomy_fields": true,
+    "d7_decision": null,
+    "actions": [
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 8
+  },
+  {
+    "ave_id": "AVE-2026-00082",
+    "audit_classification": null,
+    "audit_decision": null,
+    "audit_label": null,
+    "has_taxonomy_fields": true,
+    "d7_decision": null,
+    "actions": [
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 8
+  },
+  {
+    "ave_id": "AVE-2026-00083",
+    "audit_classification": null,
+    "audit_decision": null,
+    "audit_label": null,
+    "has_taxonomy_fields": true,
+    "d7_decision": null,
+    "actions": [
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 8
+  },
+  {
+    "ave_id": "AVE-2026-00084",
+    "audit_classification": null,
+    "audit_decision": null,
+    "audit_label": null,
+    "has_taxonomy_fields": true,
+    "d7_decision": null,
+    "actions": [
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 8
+  },
+  {
+    "ave_id": "AVE-2026-00085",
+    "audit_classification": null,
+    "audit_decision": null,
+    "audit_label": null,
+    "has_taxonomy_fields": true,
+    "d7_decision": null,
+    "actions": [
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 8
+  },
+  {
+    "ave_id": "AVE-2026-00086",
+    "audit_classification": null,
+    "audit_decision": null,
+    "audit_label": null,
+    "has_taxonomy_fields": true,
+    "d7_decision": null,
+    "actions": [
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 8
+  },
+  {
+    "ave_id": "AVE-2026-00087",
+    "audit_classification": null,
+    "audit_decision": null,
+    "audit_label": null,
+    "has_taxonomy_fields": true,
+    "d7_decision": null,
+    "actions": [
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 8
+  },
+  {
+    "ave_id": "AVE-2026-00088",
+    "audit_classification": null,
+    "audit_decision": null,
+    "audit_label": null,
+    "has_taxonomy_fields": true,
+    "d7_decision": null,
+    "actions": [
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 9
+  },
+  {
+    "ave_id": "AVE-2026-00089",
+    "audit_classification": null,
+    "audit_decision": null,
+    "audit_label": null,
+    "has_taxonomy_fields": true,
+    "d7_decision": null,
+    "actions": [
+      "verify_framework_mappings"
+    ],
+    "needs_maintainer_approval": [],
+    "batch": 9
+  }
+]
