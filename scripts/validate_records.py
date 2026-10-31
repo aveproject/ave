@@ -219,7 +219,11 @@ def check_fingerprint_not_cut_off(record: dict) -> list[str]:
     if not text.endswith(FINGERPRINT_END):
         errors.append(f"behavioral_fingerprint does not end in sentence-ending punctuation, so it looks cut off: ends '...{text[-25:]}'")
     if len(text) == FINGERPRINT_CUT_LENGTH:
-        errors.append(f"behavioral_fingerprint is exactly {FINGERPRINT_CUT_LENGTH} characters, the length eight fingerprints were once cut to (#414); check it is whole")
+        errors.append(
+            f"behavioral_fingerprint is exactly {FINGERPRINT_CUT_LENGTH} characters, the length eight fingerprints were once cut to (#414). "
+            "If it stops short of a whole sentence, finish it or restore the earlier text from git history; "
+            f"if it is whole, reword it by a word or a character so it is no longer exactly {FINGERPRINT_CUT_LENGTH}"
+        )
     return errors
 
 

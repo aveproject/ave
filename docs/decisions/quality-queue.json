@@ -10,6 +10,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 1
   },
@@ -24,6 +25,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 1
   },
@@ -40,6 +42,7 @@
       "find_primary_source",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [
       "clarify_fingerprint"
     ],
@@ -58,6 +61,7 @@
       "find_primary_source",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 7
   },
@@ -74,6 +78,7 @@
       "find_primary_source",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 7
   },
@@ -90,6 +95,7 @@
       "find_primary_source",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [
       "clarify_fingerprint"
     ],
@@ -106,6 +112,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 1
   },
@@ -121,6 +128,7 @@
       "clarify_fingerprint",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [
       "clarify_fingerprint"
     ],
@@ -138,6 +146,7 @@
       "reframe_fingerprint",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [
       "reframe_fingerprint"
     ],
@@ -155,6 +164,7 @@
       "clarify_fingerprint",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [
       "clarify_fingerprint"
     ],
@@ -172,6 +182,7 @@
       "clarify_fingerprint",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [
       "clarify_fingerprint"
     ],
@@ -190,6 +201,7 @@
       "find_primary_source",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [
       "clarify_fingerprint"
     ],
@@ -208,6 +220,7 @@
       "find_primary_source",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [
       "clarify_fingerprint"
     ],
@@ -226,6 +239,7 @@
       "find_primary_source",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [
       "clarify_fingerprint"
     ],
@@ -243,6 +257,7 @@
       "clarify_fingerprint",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [
       "clarify_fingerprint"
     ],
@@ -259,6 +274,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 2
   },
@@ -274,6 +290,7 @@
       "find_primary_source",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 2
   },
@@ -289,6 +306,7 @@
       "clarify_fingerprint",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [
       "clarify_fingerprint"
     ],
@@ -305,6 +323,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 2
   },
@@ -320,6 +339,7 @@
       "clarify_fingerprint",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [
       "clarify_fingerprint"
     ],
@@ -337,6 +357,7 @@
       "clarify_fingerprint",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [
       "clarify_fingerprint"
     ],
@@ -355,6 +376,7 @@
       "find_primary_source",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [
       "clarify_fingerprint"
     ],
@@ -370,12 +392,17 @@
     "actions": [
       "add_taxonomy_fields",
       "clarify_fingerprint",
-      "restore_truncated_fingerprint",
       "verify_framework_mappings"
+    ],
+    "later_actions": [
+      {
+        "action": "rewrite_fingerprint",
+        "after": "catalog release v1.3.0"
+      }
     ],
     "needs_maintainer_approval": [
       "clarify_fingerprint",
-      "restore_truncated_fingerprint"
+      "rewrite_fingerprint"
     ],
     "batch": 3
   },
@@ -391,6 +418,7 @@
       "find_primary_source",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 3
   },
@@ -406,6 +434,7 @@
       "clarify_fingerprint",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [
       "clarify_fingerprint"
     ],
@@ -421,13 +450,18 @@
     "actions": [
       "add_taxonomy_fields",
       "clarify_fingerprint",
-      "restore_truncated_fingerprint",
       "find_primary_source",
       "verify_framework_mappings"
     ],
+    "later_actions": [
+      {
+        "action": "rewrite_fingerprint",
+        "after": "catalog release v1.3.0"
+      }
+    ],
     "needs_maintainer_approval": [
       "clarify_fingerprint",
-      "restore_truncated_fingerprint"
+      "rewrite_fingerprint"
     ],
     "batch": 3
   },
@@ -443,6 +477,7 @@
       "clarify_fingerprint",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [
       "clarify_fingerprint"
     ],
@@ -460,6 +495,7 @@
       "clarify_fingerprint",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [
       "clarify_fingerprint"
     ],
@@ -474,11 +510,16 @@
     "d7_decision": null,
     "actions": [
       "add_taxonomy_fields",
-      "restore_truncated_fingerprint",
       "verify_framework_mappings"
     ],
+    "later_actions": [
+      {
+        "action": "rewrite_fingerprint",
+        "after": "catalog release v1.3.0"
+      }
+    ],
     "needs_maintainer_approval": [
-      "restore_truncated_fingerprint"
+      "rewrite_fingerprint"
     ],
     "batch": 3
   },
@@ -491,13 +532,11 @@
     "d7_decision": null,
     "actions": [
       "add_taxonomy_fields",
-      "restore_truncated_fingerprint",
       "find_primary_source",
       "verify_framework_mappings"
     ],
-    "needs_maintainer_approval": [
-      "restore_truncated_fingerprint"
-    ],
+    "later_actions": [],
+    "needs_maintainer_approval": [],
     "batch": 3
   },
   {
@@ -512,6 +551,7 @@
       "clarify_fingerprint",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [
       "clarify_fingerprint"
     ],
@@ -530,6 +570,7 @@
       "find_primary_source",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [
       "reframe_fingerprint"
     ],
@@ -544,13 +585,18 @@
     "d7_decision": "JUSTIFY",
     "actions": [
       "add_taxonomy_fields",
-      "restore_truncated_fingerprint",
       "write_rationale",
       "find_primary_source",
       "verify_framework_mappings"
     ],
+    "later_actions": [
+      {
+        "action": "rewrite_fingerprint",
+        "after": "catalog release v1.3.0"
+      }
+    ],
     "needs_maintainer_approval": [
-      "restore_truncated_fingerprint"
+      "rewrite_fingerprint"
     ],
     "batch": 7
   },
@@ -566,6 +612,7 @@
       "find_primary_source",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 4
   },
@@ -581,6 +628,7 @@
       "write_rationale_or_reject",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 8
   },
@@ -596,6 +644,7 @@
       "clarify_fingerprint",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [
       "clarify_fingerprint"
     ],
@@ -613,6 +662,7 @@
       "clarify_fingerprint",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [
       "clarify_fingerprint"
     ],
@@ -628,12 +678,17 @@
     "actions": [
       "add_taxonomy_fields",
       "rewrite",
-      "restore_truncated_fingerprint",
       "verify_framework_mappings"
+    ],
+    "later_actions": [
+      {
+        "action": "rewrite_fingerprint",
+        "after": "catalog release v1.3.0"
+      }
     ],
     "needs_maintainer_approval": [
       "rewrite",
-      "restore_truncated_fingerprint"
+      "rewrite_fingerprint"
     ],
     "batch": 4
   },
@@ -647,13 +702,18 @@
     "actions": [
       "add_taxonomy_fields",
       "clarify_fingerprint",
-      "restore_truncated_fingerprint",
       "find_primary_source",
       "verify_framework_mappings"
     ],
+    "later_actions": [
+      {
+        "action": "rewrite_fingerprint",
+        "after": "catalog release v1.3.0"
+      }
+    ],
     "needs_maintainer_approval": [
       "clarify_fingerprint",
-      "restore_truncated_fingerprint"
+      "rewrite_fingerprint"
     ],
     "batch": 4
   },
@@ -666,13 +726,18 @@
     "d7_decision": "JUSTIFY",
     "actions": [
       "add_taxonomy_fields",
-      "restore_truncated_fingerprint",
       "write_rationale",
       "find_primary_source",
       "verify_framework_mappings"
     ],
+    "later_actions": [
+      {
+        "action": "rewrite_fingerprint",
+        "after": "catalog release v1.3.0"
+      }
+    ],
     "needs_maintainer_approval": [
-      "restore_truncated_fingerprint"
+      "rewrite_fingerprint"
     ],
     "batch": 7
   },
@@ -687,6 +752,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 4
   },
@@ -701,6 +767,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 4
   },
@@ -715,6 +782,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 4
   },
@@ -729,6 +797,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 4
   },
@@ -743,6 +812,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 4
   },
@@ -757,6 +827,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 5
   },
@@ -772,6 +843,7 @@
       "write_rationale",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 7
   },
@@ -786,6 +858,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 5
   },
@@ -800,6 +873,7 @@
       "defer_decision",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 9
   },
@@ -814,6 +888,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 5
   },
@@ -828,6 +903,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 5
   },
@@ -841,6 +917,7 @@
     "actions": [
       "reject"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [
       "reject"
     ],
@@ -856,6 +933,7 @@
     "actions": [
       "reject"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [
       "reject"
     ],
@@ -872,6 +950,7 @@
       "defer_decision",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 9
   },
@@ -886,6 +965,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 5
   },
@@ -900,6 +980,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 5
   },
@@ -914,6 +995,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 5
   },
@@ -929,6 +1011,7 @@
       "clarify_fingerprint",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [
       "clarify_fingerprint"
     ],
@@ -945,6 +1028,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 5
   },
@@ -958,6 +1042,7 @@
     "actions": [
       "reject"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [
       "reject"
     ],
@@ -973,6 +1058,7 @@
     "actions": [
       "reject"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [
       "reject"
     ],
@@ -990,6 +1076,7 @@
       "find_primary_source",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 9
   },
@@ -1004,6 +1091,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 5
   },
@@ -1018,6 +1106,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 6
   },
@@ -1032,6 +1121,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 6
   },
@@ -1046,6 +1136,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 6
   },
@@ -1060,6 +1151,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 6
   },
@@ -1074,6 +1166,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 6
   },
@@ -1088,6 +1181,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 6
   },
@@ -1102,6 +1196,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 6
   },
@@ -1117,6 +1212,7 @@
       "find_primary_source",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 6
   },
@@ -1133,6 +1229,7 @@
       "find_primary_source",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 8
   },
@@ -1148,6 +1245,7 @@
       "write_rationale",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 7
   },
@@ -1162,6 +1260,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 6
   },
@@ -1177,6 +1276,7 @@
       "write_rationale",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 8
   },
@@ -1191,6 +1291,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 6
   },
@@ -1205,6 +1306,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 7
   },
@@ -1219,6 +1321,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 7
   },
@@ -1233,6 +1336,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 7
   },
@@ -1247,6 +1351,7 @@
       "add_taxonomy_fields",
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 7
   },
@@ -1260,6 +1365,7 @@
     "actions": [
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 8
   },
@@ -1273,6 +1379,7 @@
     "actions": [
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 8
   },
@@ -1286,6 +1393,7 @@
     "actions": [
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 8
   },
@@ -1299,6 +1407,7 @@
     "actions": [
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 8
   },
@@ -1312,6 +1421,7 @@
     "actions": [
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 8
   },
@@ -1325,6 +1435,7 @@
     "actions": [
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 8
   },
@@ -1338,6 +1449,7 @@
     "actions": [
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 8
   },
@@ -1351,6 +1463,7 @@
     "actions": [
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 9
   },
@@ -1364,6 +1477,7 @@
     "actions": [
       "verify_framework_mappings"
     ],
+    "later_actions": [],
     "needs_maintainer_approval": [],
     "batch": 9
   }
