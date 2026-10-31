@@ -120,6 +120,8 @@ A record passing validation is not yet a published one. Update:
 
 - **dist/ave-records-latest.json**: add or replace this record's entry,
   keeping the array sorted by ave_id.
+- **dist/ave-taxonomy-latest.json**: regenerate it from that file with
+  `python3 scripts/build_taxonomy.py` (`--check` confirms they agree).
 - **CHANGELOG.md**: one line under Unreleased/Added: the ave_id, title,
   severity, and aivss_score.
 - **README.md, three separate things, don't assume any of them share a

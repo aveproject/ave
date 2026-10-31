@@ -25,6 +25,9 @@ from pathlib import Path
 ID = re.compile(r"AVE-[0-9]{4}-[0-9]{5}")
 JSON_ID_KEY = re.compile(r"ave[_-]?ids?", re.IGNORECASE)
 RUN_PROPERTIES = ("ave_catalog", "ave_schema_version", "ave_records_sha256")
+# The AVE taxonomy's SARIF identity: a taxonomy is matched by guid first, so another tool's "AVE" is not this one.
+# Frozen, and equal to GUID in scripts/build_taxonomy.py (a test pins the pair).
+AVE_GUID = "5110b285-34d7-5334-94db-0308b24cfb49"
 
 
 # What: the value if it is a dict, else an empty dict
@@ -77,6 +80,32 @@ class Issues:
 # What: whether a parsed document is SARIF
 # Why:  SARIF is judged against the spec; other JSON is only read for ids
 # How:  a `runs` key, or a $schema naming SARIF (so a SARIF file whose runs array is missing is reported as such)
+# What: whether a SARIF toolComponent reference names the AVE taxonomy
+# Why:  taxa and relationships point at a taxonomy by guid or name; a different guid means a different taxonomy
+# How:  a guid decides when there is one (case-insensitive); otherwise the name "AVE"
+def _is_ave_component(comp):
+    comp = _dict(comp)
+    guid = comp.get("guid")
+    if isinstance(guid, str):
+        return guid.lower() == AVE_GUID
+    return comp.get("name") == "AVE"
+
+
+# What: whether a reportingDescriptorReference points at an AVE class
+# Why:  result.taxa and rule relationships can point at any taxonomy; only AVE ids from AVE count here
+# How:  no toolComponent (the id pattern decides, as for result.taxa before) or an AVE component
+def _is_ave_ref(ref):
+    comp = _dict(ref).get("toolComponent")
+    return comp is None or _is_ave_component(comp)
+
+
+# What: the AVE ids a rule relates itself to, and a result tags itself with (form C)
+# How:  rule.relationships[].target and result.taxa[], AVE references only, in order, without repeats
+def _form_c_ids(res, rule):
+    refs = [_dict(_dict(rel).get("target")) for rel in _list(_dict(rule).get("relationships"))] + [_dict(t) for t in _list(res.get("taxa"))]
+    return list(dict.fromkeys(r["id"] for r in refs if _is_id(r.get("id")) and _is_ave_ref(r)))
+
+
 def is_sarif(doc):
     return isinstance(doc, dict) and ("runs" in doc or "sarif" in str(doc.get("$schema", "")).lower())
 
@@ -158,10 +187,15 @@ def extract_findings(doc):
                 add(_dict(res.get("properties")).get("ave_id"), "sarif.result.properties.ave_id", where)
                 if len(out) == before:
                     add(_dict(_dict(rules.get(rid)).get("properties")).get("ave_id"), "sarif.rule.properties.ave_id", where)
+            if len(out) == before:  # form C: the tool's rule relates itself to the class
+                for rel in _list(_dict(rules.get(rid)).get("relationships")):
+                    target = _dict(_dict(rel).get("target"))
+                    if _is_id(target.get("id")) and _is_ave_ref(target):
+                        add(target["id"], "sarif.rule.relationships", where)
             seen = {f["ave_id"] for f in out[before:]}
             for taxon in _list(res.get("taxa")):
                 tid = _dict(taxon).get("id")
-                if _is_id(tid) and tid not in seen:
+                if _is_id(tid) and tid not in seen and _is_ave_ref(taxon):
                     add(tid, "sarif.result.taxa", where)
                     seen.add(tid)
     return out
@@ -261,6 +295,10 @@ def _check_result(res, rules, where, found, require_ids):
     if isinstance(rid, str) and rid.startswith("AVE-") and result_id is None and rule_id is None:
         found.add("error", "ave_id_malformed", rid, f"{where}: ruleId {rid!r} looks like an AVE id but is not one (AVE-YYYY-NNNNN)")
         return
+    if result_id is None and rule_id is None and _form_c_ids(res, rule):  # form C
+        if rule is None:
+            found.add("error", "rule_missing", rid, f"{where}: ruleId {rid!r} has no matching rules[].id")
+        return
     if result_id is None and rule_id is None:
         note = "" if require_ids else "; not judged, --require-ids makes this an error"
         found.add("error" if require_ids else "warn", "no_ave_id", rid, f"{where}: ruleId {rid!r} is not an AVE id and the result carries no properties.ave_id (AVE-in-SARIF: ruleId is the ave_id, or properties.ave_id on the result and its rule names it){note}")
@@ -280,13 +318,32 @@ def _check_result(res, rules, where, found, require_ids):
         found.add("error", "id_mismatch", (rid, "form-b"), f"{where}: the result says {result_id!r} but its rule {rid!r} says {rule_id!r}")
 
 
+# What: checks how a run points at the AVE taxonomy
+# Why:  a reference with the wrong guid names some other taxonomy, and a tool that uses the taxonomy should declare it
+# How:  rule relationships and result.taxa whose toolComponent is called AVE but carries another guid are errors; using the
+#       taxonomy without declaring it in driver.supportedTaxonomies is a warning
+def _check_references(run, rules, n, found):
+    used = False
+    refs = [(rid, _dict(_dict(rel).get("target"))) for rid, rule in rules.items() for rel in _list(rule.get("relationships"))]
+    refs += [(_rule_id(_dict(res)), _dict(t)) for res in _list(run.get("results")) for t in _list(_dict(res).get("taxa"))]
+    for rid, ref in refs:
+        comp = _dict(ref.get("toolComponent"))
+        if comp.get("name") == "AVE" and isinstance(comp.get("guid"), str) and comp["guid"].lower() != AVE_GUID:
+            found.add("error", "reference_guid_mismatch", (rid, ref.get("id")), f"runs[{n}]: a reference to {ref.get('id')!r} names toolComponent AVE with guid {comp['guid']!r}, not {AVE_GUID}")
+        elif _is_id(ref.get("id")) and _is_ave_ref(ref):
+            used = True
+    supported = _list(_dict(_dict(run.get("tool")).get("driver")).get("supportedTaxonomies"))
+    if used and not any(_is_ave_component(s) or _dict(s).get("name") == "AVE" for s in supported):
+        found.add("warn", "supported_taxonomies_missing", n, f"runs[{n}] relates results to AVE classes but tool.driver.supportedTaxonomies does not declare the AVE taxonomy")
+
+
 # What: judges a SARIF document against docs/specs/ave-in-sarif.md
 # Why:  to tell a tool author what the spec asks for that the output lacks
 # How:  no runs array is an error; an empty one has nothing to judge. Per result: _check_result (errors; a result naming no
 #       AVE class is a warning unless require_ids). Per run: the three ave_* properties (recommended, warnings), the hash against the
 #       catalog given (warning), and the AVE taxonomy: absent (warning), `version` against ave_catalog (error when they
 #       differ, warning when it is missing), one taxon for each class cited (warning). A SARIF with no results is a warning.
-def check_sarif(doc, catalog_info=None, require_ids=False):
+def check_sarif(doc, catalog_info=None, require_ids=False, records=None):
     found = Issues()
     if not isinstance(doc.get("runs"), list):
         return [issue("error", "sarif_no_runs", "the SARIF has no runs array, so there is nothing to judge")]
@@ -306,11 +363,26 @@ def check_sarif(doc, catalog_info=None, require_ids=False):
         recorded = props.get("ave_records_sha256")
         if catalog_info and isinstance(recorded, str) and recorded.strip().lower() != catalog_info["sha256"]:
             found.add("warn", "catalog_sha_differs", n, f"runs[{n}] says it used records with SHA-256 {recorded}, but the catalog given has {catalog_info['sha256']}: the ids are judged against a different catalog than the run used")
+        _check_references(run, rules, n, found)
         taxonomies = _list(run.get("taxonomies")) + _list(doc.get("taxonomies"))
-        taxonomy = next((_dict(t) for t in taxonomies if _dict(t).get("name") == "AVE"), None)
+        taxonomy = next((_dict(t) for t in taxonomies if _dict(t).get("name") == "AVE" or str(_dict(t).get("guid", "")).lower() == AVE_GUID), None)
         if taxonomy is None:
             found.add("warn", "taxonomies_missing", n, f"runs[{n}] has no AVE taxonomy (recommended: taxonomies[] with name \"AVE\")")
             continue
+        guid = taxonomy.get("guid")
+        if guid is None:
+            found.add("warn", "taxonomy_guid_missing", n, f"runs[{n}]: the AVE taxonomy has no guid (recommended: {AVE_GUID}, so it cannot be confused with another taxonomy named AVE)")
+        elif not isinstance(guid, str) or guid.lower() != AVE_GUID:
+            found.add("error", "taxonomy_guid_mismatch", n, f"runs[{n}]: the AVE taxonomy guid is {guid!r}, not {AVE_GUID}")
+        if records is not None:
+            by_id = {r.get("ave_id"): r for r in records if isinstance(r, dict)}
+            for taxon in _list(taxonomy.get("taxa")):
+                taxon = _dict(taxon)
+                tid = taxon.get("id")
+                if tid not in by_id:
+                    found.add("error", "taxon_unknown", tid, f"runs[{n}]: the AVE taxonomy lists {tid!r}, which is not in the catalog")
+                elif isinstance(taxon.get("name"), str) and taxon["name"] != by_id[tid].get("title"):
+                    found.add("warn", "taxon_name_differs", tid, f"runs[{n}]: the taxon {tid} is named {taxon['name']!r}, the catalog title is {by_id[tid].get('title')!r}")
         catalog, version = props.get("ave_catalog"), taxonomy.get("version")
         if catalog == "latest" and version is not None:
             found.add("error", "taxonomy_version_mismatch", n, f"runs[{n}]: ave_catalog is \"latest\", which has no release, so the AVE taxonomy omits version, but it says {version!r}")
@@ -338,7 +410,7 @@ def check_document(doc, records=None, catalog_info=None, file=None, require_ids=
     findings = extract_findings(doc)
     issues = []
     if sarif:
-        issues += check_sarif(doc, catalog_info, require_ids)
+        issues += check_sarif(doc, catalog_info, require_ids, records)
     if records is None:
         issues.append(issue("warn", "catalog_not_supplied", "no --catalog was given, so the ids were not checked against a catalog"))
     else:

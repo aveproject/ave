@@ -213,9 +213,10 @@ why the SHA-256 goes in too.
 
 **SARIF.** Follow [AVE-in-SARIF](ave-in-sarif.md): `result.ruleId` is the
 `ave_id` (or, if your rules keep their own ids, `properties.ave_id` on each
-result and on its rule: the spec accepts both), each AVE record that produced a
-result has an entry in `tool.driver.rules`, and the catalog goes in the run's
-property bag:
+result and on its rule, or a `relationships` link from the rule to the AVE
+taxonomy with `taxa` on the result: the spec accepts all three), each AVE record
+that produced a result has an entry in `tool.driver.rules`, and the catalog goes
+in the run's property bag:
 
 ```json
 {
@@ -236,6 +237,18 @@ property bag:
 
 The spec has the full mapping, including the `rules` block, `taxonomies` and
 which fields never belong on a rule.
+
+**The AVE taxonomy.** Do not write the taxonomy block by hand. `dist/ave-taxonomy-latest.json` is
+the AVE taxonomy as a SARIF `toolComponent`, generated from the records with a frozen `guid`, and
+`scripts/build_taxonomy.py` builds the subset a scanner embeds, so names and links match the catalog:
+
+```bash
+python3 scripts/build_taxonomy.py --only AVE-2026-00001,AVE-2026-00075 --out -
+```
+
+Put that object in the run's `taxonomies`. `--records`, `--release`, `--release-date` and `--download-uri`
+stamp it for a catalog release you pin. `python3 scripts/ave_conformance.py check` compares what you embed
+with the catalog.
 
 **Your own JSON.** The same fields, under whatever names fit your format:
 
@@ -267,7 +280,7 @@ python scripts/ave_conformance.py check output.sarif --catalog ave-records.json 
 python scripts/ave_conformance.py check output.sarif --catalog ave-records.json --require-ids
 ```
 
-`extract` is tolerant: it prints the AVE ids found in the output as JSON, each with `via` (how it was found) and `where` (the artifact, or the JSON path for output that is not SARIF), so any tool's output can be scored whatever its format. It reads SARIF in either form (a result's `ruleId`, or `properties.ave_id` on the result or its rule) and any JSON object with an `ave_id`, `AVEID`, `AveId` or `ave-id` key, or an `ave_ids` list, at any depth.
+`extract` is tolerant: it prints the AVE ids found in the output as JSON, each with `via` (how it was found) and `where` (the artifact, or the JSON path for output that is not SARIF), so any tool's output can be scored whatever its format. It reads SARIF in any of the three forms (a result's `ruleId`; `properties.ave_id` on the result or its rule; or the AVE references in the rule's `relationships` and the result's `taxa`) and any JSON object with an `ave_id`, `AVEID`, `AveId` or `ave-id` key, or an `ave_ids` list, at any depth.
 
 `check` is strict: it judges the output against [AVE-in-SARIF](ave-in-sarif.md) and the catalog file, and prints a JSON report to stdout (and a one-line verdict to stderr):
 
@@ -288,6 +301,9 @@ The exit status is 0 for `pass` and for `warn`, 1 for `warn` with `--strict`, an
 | error | `result_ave_id_missing`, `rule_ave_id_missing` | form B without `properties.ave_id` on the result, or on the rule |
 | error | `id_mismatch` | a `ruleId` and a `properties.ave_id` that name different classes, or a result and its rule that do |
 | error | `taxonomy_version_mismatch` | an AVE taxonomy `version` that is not `ave_catalog` without its `v` (or a `version` when `ave_catalog` is `latest`) |
+| error | `taxonomy_guid_mismatch` | an AVE taxonomy whose `guid` is not AVE's (`5110b285-34d7-5334-94db-0308b24cfb49`) |
+| error | `reference_guid_mismatch` | a `relationships` or `result.taxa` reference naming the component `AVE` with another `guid`; it is a different taxonomy and is not counted |
+| error | `taxon_unknown` | a taxon in the AVE taxonomy whose id is not in the catalog given |
 | error | `unknown_ave_id` | an id that is not in the catalog given |
 | error | `sarif_no_runs`, `not_json`, `input_unreadable`, `catalog_unreadable` | input the check cannot read |
 | warn (error with `--require-ids`) | `no_ave_id` | a result whose `ruleId` is not an AVE id and that carries no `properties.ave_id` |
@@ -295,6 +311,9 @@ The exit status is 0 for `pass` and for `warn`, 1 for `warn` with `--strict`, an
 | warn | `run_property_missing` | none of `ave_catalog`, `ave_schema_version`, `ave_records_sha256` on a run |
 | warn | `catalog_sha_differs` | a run that says it used records other than the catalog file given |
 | warn | `taxonomies_missing`, `taxonomy_version_missing`, `taxon_missing` | no AVE taxonomy, one without a `version`, or no taxon for a class a result cites |
+| warn | `taxonomy_guid_missing` | an AVE taxonomy without a `guid` |
+| warn | `taxon_name_differs` | a taxon whose `name` is not the catalog's title for that class |
+| warn | `supported_taxonomies_missing` | results related to AVE classes, but `tool.driver.supportedTaxonomies` does not declare AVE |
 | warn | `no_results`, `no_ave_ids`, `catalog_not_supplied` | nothing to judge (no results, or results of which none names an AVE class), or no catalog to judge it against |
 
 A result that names no AVE class is a warning, because a tool may report findings outside AVE in the same file (a cfgaudit rule with no AVE mapping, for example): the check judges the results that do name a class. `--require-ids` makes such a result an error, for a tool that means every result to be an AVE finding. A conforming output says nothing about whether the findings are right; it means a consumer can read which class each finding claims and which catalog the scan used.
