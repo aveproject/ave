@@ -25,9 +25,9 @@ def catalog():
     return records, info
 
 
-def report(doc, with_catalog=True):
+def report(doc, with_catalog=True, require_ids=False):
     records, info = catalog() if with_catalog else (None, None)
-    return C.check_document(doc, records, info)
+    return C.check_document(doc, records, info, require_ids=require_ids)
 
 
 def codes(rep, severity=None):
@@ -81,13 +81,41 @@ def test_the_spec_examples_checked_against_another_records_file_are_flagged_not_
 
 # ── 2. results with no AVE id ────────────────────────────────────────────────
 
-def test_a_tool_rule_id_and_no_ave_property_extracts_nothing_and_fails():
+def test_a_tool_rule_id_and_no_ave_property_extracts_nothing_and_is_a_warning_by_default():
     doc = load("unmapped.json")
     assert C.extract_findings(doc) == []
     rep = report(doc)
+    assert codes(rep, "error") == []
+    assert codes(rep, "warn") == ["no_ave_id", "no_ave_ids", "taxonomies_missing"]
+    assert "'tool-rule-7'" in messages(rep, "no_ave_id")[0] and "--require-ids" in messages(rep, "no_ave_id")[0]
+    assert rep["result"] == "warn"
+
+
+def test_require_ids_makes_a_result_with_no_ave_id_an_error():
+    rep = report(load("unmapped.json"), require_ids=True)
     assert codes(rep, "error") == ["no_ave_id"]
-    assert "'tool-rule-7'" in messages(rep, "no_ave_id")[0]
+    assert "'tool-rule-7'" in messages(rep, "no_ave_id")[0] and "--require-ids" not in messages(rep, "no_ave_id")[0]
     assert rep["result"] == "fail"
+
+
+def test_a_run_that_reports_findings_outside_ave_is_judged_on_the_ones_that_name_a_class():
+    doc = load("form_b_mixed.json")
+    assert [f["ave_id"] for f in C.extract_findings(doc)] == ["AVE-2026-90001", "AVE-2026-90005"]
+    rep = report(doc)
+    assert codes(rep, "error") == []
+    named = messages(rep, "no_ave_id")
+    assert len(named) == 2 and all("example-hygiene" in m for m in named)
+    assert rep["result"] == "warn"
+    strict = report(doc, require_ids=True)
+    assert codes(strict, "error") == ["no_ave_id", "no_ave_id"] and strict["result"] == "fail"
+
+
+def test_a_sarif_with_results_but_no_id_at_all_says_so_once():
+    rep = report(load("unmapped.json"))
+    assert messages(rep, "no_ave_ids") == ["the SARIF has results, but none names an AVE class"]
+    assert "no_ave_ids" not in codes(report(load("form_b_mixed.json")))
+    # a SARIF with no results at all is the separate no_results warning, not this one
+    assert "no_ave_ids" not in codes(report({"version": "2.1.0", "runs": [{"results": []}]}))
 
 
 # ── 3. the two SARIF forms ───────────────────────────────────────────────────
@@ -177,9 +205,11 @@ def test_a_malformed_id_is_not_an_id(bad, code):
     doc["runs"][0]["results"][0]["ruleId"] = bad
     doc["runs"][0]["tool"]["driver"]["rules"][0]["id"] = bad
     assert C.extract_findings(doc) == []
+    # a ruleId that tries to be an AVE id and is not one is an error; one that is plainly another tool's rule id is only a warning
     rep = report(doc)
-    assert rep["result"] == "fail"
-    assert codes(rep, "error") == [code]
+    assert code in codes(rep, "error" if code == "ave_id_malformed" else "warn")
+    assert rep["result"] == ("fail" if code == "ave_id_malformed" else "warn")
+    assert report(doc, require_ids=True)["result"] == "fail"
 
 
 def test_a_malformed_ave_id_on_a_form_b_result_is_named_as_the_result_s():
@@ -201,7 +231,7 @@ def test_a_malformed_ave_id_on_a_form_b_rule_is_named_as_the_rule_s():
 def test_the_same_problem_on_many_results_is_one_issue_with_a_count():
     doc = load("unmapped.json")
     doc["runs"][0]["results"] = doc["runs"][0]["results"] * 4
-    rep = report(doc)
+    rep = report(doc, require_ids=True)
     assert codes(rep, "error") == ["no_ave_id"]
     assert rep["issues"][0]["count"] == 4
 
@@ -466,8 +496,11 @@ def test_exit_codes(tmp_path):
     assert C.run_check(DATA / "form_a.json", CATALOG_FILE, strict=True)[1] == 0
     assert C.run_check(DATA / "form_b_bare.json", CATALOG_FILE, strict=False)[1] == 0     # warnings pass
     assert C.run_check(DATA / "form_b_bare.json", CATALOG_FILE, strict=True)[1] == 1      # unless --strict
-    assert C.run_check(DATA / "unmapped.json", CATALOG_FILE, strict=False)[1] == 2        # errors always fail
-    assert C.run_check(DATA / "unmapped.json", CATALOG_FILE, strict=True)[1] == 2
+    assert C.run_check(DATA / "unmapped.json", CATALOG_FILE, strict=False)[1] == 0        # no AVE id is only a warning ...
+    assert C.run_check(DATA / "unmapped.json", CATALOG_FILE, strict=True)[1] == 1
+    assert C.run_check(DATA / "unmapped.json", CATALOG_FILE, strict=False, require_ids=True)[1] == 2    # ... unless ids are required
+    assert C.run_check(DATA / "unmapped.json", CATALOG_FILE, strict=True, require_ids=True)[1] == 2
+    assert C.run_check(DATA / "form_b.json", CATALOG_FILE, require_ids=True)[1] == 0   # and --require-ids changes nothing when ids are there
 
 
 def test_errors_are_listed_before_warnings():
@@ -502,10 +535,18 @@ def test_extract_prints_the_findings_as_json():
 
 
 def test_check_prints_a_json_report_and_a_one_line_summary():
-    out = cli("check", str(DATA / "unmapped.json"), "--catalog", str(CATALOG_FILE))
+    out = cli("check", str(DATA / "unmapped.json"), "--catalog", str(CATALOG_FILE), "--require-ids")
     assert out.returncode == 2
     assert json.loads(out.stdout)["result"] == "fail"
     assert out.stderr.strip().startswith("ave_conformance: fail:") and "tool-rule-7" in out.stderr
+
+
+def test_require_ids_is_a_command_line_flag_and_off_by_default():
+    args = ("check", str(DATA / "form_b_mixed.json"), "--catalog", str(CATALOG_FILE))
+    plain = cli(*args)
+    assert plain.returncode == 0 and json.loads(plain.stdout)["result"] == "warn"
+    assert plain.stderr.strip().startswith("ave_conformance: warn:")
+    assert cli(*args, "--require-ids").returncode == 2
 
 
 def test_strict_changes_the_exit_code_for_warnings():

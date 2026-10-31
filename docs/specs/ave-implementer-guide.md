@@ -264,6 +264,7 @@ fields are what make it reproducible. For people, link each id to
 python scripts/ave_conformance.py extract output.sarif
 python scripts/ave_conformance.py check output.sarif --catalog ave-records.json
 python scripts/ave_conformance.py check output.sarif --catalog ave-records.json --strict
+python scripts/ave_conformance.py check output.sarif --catalog ave-records.json --require-ids
 ```
 
 `extract` is tolerant: it prints the AVE ids found in the output as JSON, each with `via` (how it was found) and `where` (the artifact, or the JSON path for output that is not SARIF), so any tool's output can be scored whatever its format. It reads SARIF in either form (a result's `ruleId`, or `properties.ave_id` on the result or its rule) and any JSON object with an `ave_id`, `AVEID`, `AveId` or `ave-id` key, or an `ave_ids` list, at any depth.
@@ -282,7 +283,6 @@ The exit status is 0 for `pass` and for `warn`, 1 for `warn` with `--strict`, an
 
 | Severity | Code | The output has |
 |---|---|---|
-| error | `no_ave_id` | a result whose `ruleId` is not an AVE id and that carries no `properties.ave_id` |
 | error | `ave_id_malformed` | an id that is not `AVE-YYYY-NNNNN` |
 | error | `rule_missing` | a result with no matching `rules[].id` in its run |
 | error | `result_ave_id_missing`, `rule_ave_id_missing` | form B without `properties.ave_id` on the result, or on the rule |
@@ -290,13 +290,14 @@ The exit status is 0 for `pass` and for `warn`, 1 for `warn` with `--strict`, an
 | error | `taxonomy_version_mismatch` | an AVE taxonomy `version` that is not `ave_catalog` without its `v` (or a `version` when `ave_catalog` is `latest`) |
 | error | `unknown_ave_id` | an id that is not in the catalog given |
 | error | `sarif_no_runs`, `not_json`, `input_unreadable`, `catalog_unreadable` | input the check cannot read |
+| warn (error with `--require-ids`) | `no_ave_id` | a result whose `ruleId` is not an AVE id and that carries no `properties.ave_id` |
 | warn | `not_active` | an id whose record is not `active`; a `merged` or `rejected` record is reported with its `merged_into` or `rejection_reason`, and any status other than `active` counts as not active |
 | warn | `run_property_missing` | none of `ave_catalog`, `ave_schema_version`, `ave_records_sha256` on a run |
 | warn | `catalog_sha_differs` | a run that says it used records other than the catalog file given |
 | warn | `taxonomies_missing`, `taxonomy_version_missing`, `taxon_missing` | no AVE taxonomy, one without a `version`, or no taxon for a class a result cites |
-| warn | `no_results`, `no_ave_ids`, `catalog_not_supplied` | nothing to judge, or no catalog to judge it against |
+| warn | `no_results`, `no_ave_ids`, `catalog_not_supplied` | nothing to judge (no results, or results of which none names an AVE class), or no catalog to judge it against |
 
-`check` judges every result as a finding of an AVE class, so a result that names none is an error. A conforming output says nothing about whether the findings are right; it means a consumer can read which class each finding claims and which catalog the scan used.
+A result that names no AVE class is a warning, because a tool may report findings outside AVE in the same file (a cfgaudit rule with no AVE mapping, for example): the check judges the results that do name a class. `--require-ids` makes such a result an error, for a tool that means every result to be an AVE finding. A conforming output says nothing about whether the findings are right; it means a consumer can read which class each finding claims and which catalog the scan used.
 
 ---
 

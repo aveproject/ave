@@ -11,9 +11,10 @@
 #       release's ave-records.json, or dist/ave-records-latest.json) and its manifest is
 #       read from beside it when there is one.
 #         python scripts/ave_conformance.py extract <output-file>
-#         python scripts/ave_conformance.py check <output-file> [--catalog <records.json>] [--strict]
+#         python scripts/ave_conformance.py check <output-file> [--catalog <records.json>] [--strict] [--require-ids]
 #       `check` prints a JSON report on stdout and a one-line summary on stderr. Exit status:
-#       0 pass (or warnings), 1 warnings with --strict, 2 any error, or input it cannot read.
+#       0 pass (or warnings), 1 warnings with --strict, 2 any error, or input it cannot read. A result that names no
+#       AVE class is a warning, because a tool may report findings outside AVE in the same file; --require-ids makes it an error.
 import argparse
 import hashlib
 import json
@@ -243,8 +244,9 @@ def check_catalog(findings, records):
 # What: judges one result against the spec's two forms
 # Why:  form A (ruleId is the AVE id) and form B (the tool's ruleId, with properties.ave_id on the rule and on the result)
 #       are both conformant; anything else is a result that does not say which class it reports
-# How:  see the branches; every problem is added to `found` keyed by the rule id so repeats merge
-def _check_result(res, rules, where, found):
+# How:  see the branches; every problem is added to `found` keyed by the rule id so repeats merge. A result that names no
+#       AVE class is a warning, or an error with require_ids.
+def _check_result(res, rules, where, found, require_ids):
     rid = _rule_id(res)
     result_id = _dict(res.get("properties")).get("ave_id")
     rule = rules.get(rid)
@@ -260,7 +262,8 @@ def _check_result(res, rules, where, found):
         found.add("error", "ave_id_malformed", rid, f"{where}: ruleId {rid!r} looks like an AVE id but is not one (AVE-YYYY-NNNNN)")
         return
     if result_id is None and rule_id is None:
-        found.add("error", "no_ave_id", rid, f"{where}: ruleId {rid!r} is not an AVE id and the result carries no properties.ave_id (AVE-in-SARIF: ruleId is the ave_id, or properties.ave_id on the result and its rule names it)")
+        note = "" if require_ids else "; not judged, --require-ids makes this an error"
+        found.add("error" if require_ids else "warn", "no_ave_id", rid, f"{where}: ruleId {rid!r} is not an AVE id and the result carries no properties.ave_id (AVE-in-SARIF: ruleId is the ave_id, or properties.ave_id on the result and its rule names it){note}")
         return
     # form B
     if rule is None:
@@ -279,10 +282,11 @@ def _check_result(res, rules, where, found):
 
 # What: judges a SARIF document against docs/specs/ave-in-sarif.md
 # Why:  to tell a tool author what the spec asks for that the output lacks
-# How:  no runs array is an error; an empty one has nothing to judge. Per result: _check_result (errors). Per run: the three ave_* properties (recommended, warnings), the hash against the
+# How:  no runs array is an error; an empty one has nothing to judge. Per result: _check_result (errors; a result naming no
+#       AVE class is a warning unless require_ids). Per run: the three ave_* properties (recommended, warnings), the hash against the
 #       catalog given (warning), and the AVE taxonomy: absent (warning), `version` against ave_catalog (error when they
 #       differ, warning when it is missing), one taxon for each class cited (warning). A SARIF with no results is a warning.
-def check_sarif(doc, catalog_info=None):
+def check_sarif(doc, catalog_info=None, require_ids=False):
     found = Issues()
     if not isinstance(doc.get("runs"), list):
         return [issue("error", "sarif_no_runs", "the SARIF has no runs array, so there is nothing to judge")]
@@ -294,7 +298,7 @@ def check_sarif(doc, catalog_info=None):
         results = _list(run.get("results"))
         any_result = any_result or bool(results)
         for i, res in enumerate(results):
-            _check_result(_dict(res), rules, f"runs[{n}].results[{i}]", found)
+            _check_result(_dict(res), rules, f"runs[{n}].results[{i}]", found, require_ids)
         props = _dict(run.get("properties"))
         for key in RUN_PROPERTIES:
             if key not in props:
@@ -329,17 +333,19 @@ def check_sarif(doc, catalog_info=None):
 # Why:  one place decides pass, warn and fail, so the command line and the tests agree
 # How:  extraction, then the catalog checks when a catalog was given, then the SARIF checks when the document is SARIF.
 #       Errors are listed before warnings. `result` is fail with any error, warn with any warning, else pass.
-def check_document(doc, records=None, catalog_info=None, file=None):
+def check_document(doc, records=None, catalog_info=None, file=None, require_ids=False):
     sarif = is_sarif(doc)
     findings = extract_findings(doc)
     issues = []
     if sarif:
-        issues += check_sarif(doc, catalog_info)
+        issues += check_sarif(doc, catalog_info, require_ids)
     if records is None:
         issues.append(issue("warn", "catalog_not_supplied", "no --catalog was given, so the ids were not checked against a catalog"))
     else:
         issues += check_catalog(findings, records)
-    if not sarif and not findings:
+    if sarif and not findings and any(_list(_dict(run).get("results")) for run in _list(doc.get("runs"))):
+        issues.append(issue("warn", "no_ave_ids", "the SARIF has results, but none names an AVE class"))
+    elif not sarif and not findings:
         issues.append(issue("warn", "no_ave_ids", "no AVE id was found (a clean scan, or a format this checker does not read)"))
     issues.sort(key=lambda i: i["severity"] != "error")
     via = {}
@@ -354,7 +360,7 @@ def check_document(doc, records=None, catalog_info=None, file=None):
 # Why:  the command line and the tests share it
 # How:  read the input and the catalog (an unreadable one is an error report), then check_document.
 #       Exit 2 on any error, 1 on warnings with strict, else 0.
-def run_check(path, catalog_path=None, strict=False):
+def run_check(path, catalog_path=None, strict=False, require_ids=False):
     failed = lambda i: ({"result": "fail", "file": str(path), "format": None, "extracted": {"count": 0, "via": {}}, "catalog": None, "issues": [i]}, 2)
     doc, problem = read_json(path)
     if problem:
@@ -365,7 +371,7 @@ def run_check(path, catalog_path=None, strict=False):
         if problem:
             return failed(problem)
     try:
-        report = check_document(doc, records, info, file=str(path))
+        report = check_document(doc, records, info, file=str(path), require_ids=require_ids)
     except RecursionError:
         return failed(issue("error", "not_json", f"{path} is nested too deeply to read"))
     status = report["result"]
@@ -398,6 +404,7 @@ def main(argv=None):
     ck.add_argument("output")
     ck.add_argument("--catalog", help="an AVE records file (a catalog release's ave-records.json or dist/ave-records-latest.json)")
     ck.add_argument("--strict", action="store_true", help="exit 1 when there are warnings")
+    ck.add_argument("--require-ids", action="store_true", help="make a result that names no AVE class an error (default: a warning)")
     args = parser.parse_args(argv)
     if args.command == "extract":
         doc, problem = read_json(args.output)
@@ -410,7 +417,7 @@ def main(argv=None):
             print(f"ave_conformance: {args.output} is nested too deeply to read", file=sys.stderr)
             return 2
         return 0
-    report, code = run_check(args.output, args.catalog, args.strict)
+    report, code = run_check(args.output, args.catalog, args.strict, args.require_ids)
     print(json.dumps(report, indent=2))
     sys.stdout.flush()
     print(_summary(report), file=sys.stderr)

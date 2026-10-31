@@ -1,0 +1,138 @@
+{
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "example-scanner",
+          "version": "0.0.1",
+          "rules": [
+            {
+              "id": "example-rule-7",
+              "properties": {
+                "ave_id": "AVE-2026-90001"
+              }
+            },
+            {
+              "id": "example-rule-8",
+              "properties": {
+                "ave_id": "AVE-2026-90005"
+              }
+            },
+            {
+              "id": "example-hygiene-1"
+            },
+            {
+              "id": "example-hygiene-2"
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "example-rule-7",
+          "level": "error",
+          "message": {
+            "text": "Example finding"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "skills/example.md"
+                },
+                "region": {
+                  "startLine": 12
+                }
+              }
+            }
+          ],
+          "properties": {
+            "ave_id": "AVE-2026-90001"
+          }
+        },
+        {
+          "ruleId": "example-rule-8",
+          "level": "warning",
+          "message": {
+            "text": "Example finding"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "skills/other.md"
+                },
+                "region": {
+                  "startLine": 4
+                }
+              }
+            }
+          ],
+          "properties": {
+            "ave_id": "AVE-2026-90005"
+          }
+        },
+        {
+          "ruleId": "example-hygiene-1",
+          "level": "note",
+          "message": {
+            "text": "Not an AVE class"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "skills/example.md"
+                },
+                "region": {
+                  "startLine": 30
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "example-hygiene-2",
+          "level": "note",
+          "message": {
+            "text": "Not an AVE class"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "skills/other.md"
+                },
+                "region": {
+                  "startLine": 9
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "taxonomies": [
+        {
+          "name": "AVE",
+          "version": "9.9.9",
+          "taxa": [
+            {
+              "id": "AVE-2026-90001",
+              "name": "Example class one"
+            },
+            {
+              "id": "AVE-2026-90005",
+              "name": "Example class five"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "ave_catalog": "v9.9.9",
+        "ave_schema_version": "9.9.9",
+        "ave_records_sha256": "e281a7144a30845baae5b253424ae745d2ae0156a79f9d9434be2183fcfc4bb4"
+      }
+    }
+  ]
+}
