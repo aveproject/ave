@@ -3,7 +3,7 @@
   "schema_version": "1.3.0",
   "status": "active",
   "published": "2026-07-14T00:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "component_type": "skill",
   "title": "Obfuscated or encoded skill payload designed to evade static scanners",
   "attack_class": "Obfuscation - Static Analysis Evasion",
@@ -34,6 +34,13 @@
   },
   "trifecta_profile": {
     "requires": ["untrusted_content"]
+  },
+  "security_boundary": "as-scanned representation → as-executed representation",
+  "missing_control": "no decode-then-rescan step in the static-analysis pipeline",
+  "vulnerability_rationale": {
+    "capability": "Static scanners pattern-match against a skill's literal, as-written content.",
+    "vulnerability": "Static analysis operates on the encoded representation while execution operates on the decoded representation, with no decode-then-rescan step bridging the two.",
+    "impact": "Pattern-based and keyword-based static scanners fail to match the encoded form, while the decoded or executed form at runtime is fully malicious."
   },
   "mitigation": {
     "strategy": ["validate_input", "deny_by_default"],

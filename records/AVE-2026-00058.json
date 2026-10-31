@@ -3,7 +3,7 @@
   "schema_version": "1.3.0",
   "status": "active",
   "published": "2026-07-14T00:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "component_type": "skill",
   "title": "Deceptive skill trigger or activation-scope manipulation via misleading manifest description",
   "attack_class": "Social Engineering - Trigger Scope Deception",
@@ -34,6 +34,13 @@
   },
   "trifecta_profile": {
     "requires": ["untrusted_content"]
+  },
+  "security_boundary": "declared manifest trigger/description → actual implemented behavior",
+  "missing_control": "no verification that declared triggers match real behavior before invocation decisions are made",
+  "vulnerability_rationale": {
+    "capability": "A skill's declared manifest trigger/description determines when it gets invoked.",
+    "vulnerability": "No verification checks that a declared trigger matches the skill's actual implemented behavior before invocation.",
+    "impact": "Over-broad or implicit invocation in contexts the skill's real behavior does not warrant."
   },
   "mitigation": {
     "strategy": ["validate_input", "provenance_label"],

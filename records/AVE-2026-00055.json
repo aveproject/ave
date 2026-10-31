@@ -40,6 +40,13 @@
       "private_data"
     ]
   },
+  "security_boundary": "configuration data → process-spawn boundary",
+  "missing_control": "no validation gate between configuration/registry data and process execution",
+  "vulnerability_rationale": {
+    "capability": "An MCP client spawns a server as a subprocess using command/args from configuration data.",
+    "vulnerability": "No validation gate exists between untrusted configuration data and the process-spawn boundary.",
+    "impact": "Arbitrary OS command execution under the client's privileges before any protocol handshake occurs."
+  },
   "mitigation": {
     "strategy": [
       "deny_by_default",
@@ -65,7 +72,7 @@
   "researcher": "OX Security",
   "researcher_url": "https://www.ox.security",
   "published": "2026-07-10T00:00:00Z",
-  "last_updated": "2026-07-10T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "OX Security",
