@@ -5784,7 +5784,7 @@
     "mitre_atlas": [
       "AML.T0054"
     ],
-    "behavioral_fingerprint": "Component floods the agent's context window with large amounts of repetitive or irrelevant content to push safety instructions, system prompt constraints, or prior conversation context out of the acti",
+    "behavioral_fingerprint": "Component instructs agent to repeat, pad, or generate large volumes of content with the intent of overflowing the context window.",
     "behavioral_vector": [
       "context-overflow",
       "prompt-injection"
@@ -5841,7 +5841,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Perez 2022",
@@ -5891,7 +5891,17 @@
         "pin_status": "unknown",
         "read_date": "2026-10-15"
       }
-    }
+    },
+    "revisions": [
+      {
+        "date": "2026-10-31",
+        "field": "behavioral_fingerprint",
+        "from": "Component floods the agent's context window with large amounts of repetitive or irrelevant content to push safety instructions, system prompt constraints, or prior conversation context out of the acti",
+        "to": "Component instructs agent to repeat, pad, or generate large volumes of content with the intent of overflowing the context window.",
+        "reason_code": "declaration_corrected",
+        "reason": "Cut off at 200 characters, mid-word, by the AIVSS migration (9e7dd0b, #17, 2026-05-12); restored to the sentence the record had before it, which the cut text does not complete from the record's own words. Corrected in #414."
+      }
+    ]
   },
   {
     "ave_id": "AVE-2026-00024",
@@ -6201,7 +6211,7 @@
     "mitre_atlas": [
       "AML.T0048"
     ],
-    "behavioral_fingerprint": "Component instructs the agent to encode sensitive data (credentials, API keys, PII, system prompt) inside tool call parameters or return values for covert exfiltration through a legitimate-looking too",
+    "behavioral_fingerprint": "Component instructs agent to encode sensitive data (credentials, keys, PII) inside tool call parameters for covert exfiltration.",
     "behavioral_vector": [
       "data-exfil",
       "covert-channel",
@@ -6261,7 +6271,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "CWE-116",
@@ -6312,7 +6322,17 @@
         "pin_status": "unknown",
         "read_date": "2026-10-15"
       }
-    }
+    },
+    "revisions": [
+      {
+        "date": "2026-10-31",
+        "field": "behavioral_fingerprint",
+        "from": "Component instructs the agent to encode sensitive data (credentials, API keys, PII, system prompt) inside tool call parameters or return values for covert exfiltration through a legitimate-looking too",
+        "to": "Component instructs agent to encode sensitive data (credentials, keys, PII) inside tool call parameters for covert exfiltration.",
+        "reason_code": "declaration_corrected",
+        "reason": "Cut off at 200 characters, mid-word, by the AIVSS migration (9e7dd0b, #17, 2026-05-12); restored to the sentence the record had before it, which the cut text does not complete from the record's own words. Corrected in #414."
+      }
+    ]
   },
   {
     "ave_id": "AVE-2026-00027",
@@ -6632,7 +6652,7 @@
     "mitre_atlas": [
       "AML.T0068"
     ],
-    "behavioral_fingerprint": "Component uses visually similar Unicode characters (homoglyphs), zero-width characters, or bidirectional text control codes to hide malicious instructions from human reviewers while remaining fully re",
+    "behavioral_fingerprint": "Skill file contains zero-width characters, bidirectional override codes, or Cyrillic homoglyphs used to conceal instructions from human reviewers.",
     "behavioral_vector": [
       "obfuscation",
       "unicode",
@@ -6691,7 +6711,7 @@
     "researcher": "Boucher & Anderson",
     "researcher_url": "https://arxiv.org/abs/2111.00169",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Boucher 2021",
@@ -6741,7 +6761,17 @@
         "pin_status": "unknown",
         "read_date": "2026-10-15"
       }
-    }
+    },
+    "revisions": [
+      {
+        "date": "2026-10-31",
+        "field": "behavioral_fingerprint",
+        "from": "Component uses visually similar Unicode characters (homoglyphs), zero-width characters, or bidirectional text control codes to hide malicious instructions from human reviewers while remaining fully re",
+        "to": "Skill file contains zero-width characters, bidirectional override codes, or Cyrillic homoglyphs used to conceal instructions from human reviewers.",
+        "reason_code": "declaration_corrected",
+        "reason": "Cut off at 200 characters, mid-word, by the AIVSS migration (9e7dd0b, #17, 2026-05-12); restored to the sentence the record had before it, which the cut text does not complete from the record's own words. Corrected in #414."
+      }
+    ]
   },
   {
     "ave_id": "AVE-2026-00030",
@@ -6772,7 +6802,7 @@
       "MANAGE-1.3"
     ],
     "mitre_atlas": [],
-    "behavioral_fingerprint": "Component instructs the agent to grant elevated privileges when a user or external party falsely claims a privileged role (admin, root, operator), effectively implementing a privilege escalation backd",
+    "behavioral_fingerprint": "Component instructs the agent to grant elevated privileges when a user or external party falsely claims a privileged role (admin, root, operator), effectively implementing a privilege escalation backdoor.",
     "behavioral_vector": [
       "role-claim",
       "dynamic-identity",
@@ -6832,7 +6862,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "CWE-290",
@@ -6878,7 +6908,17 @@
         "pin_status": "unknown",
         "read_date": "2026-10-15"
       }
-    }
+    },
+    "revisions": [
+      {
+        "date": "2026-10-31",
+        "field": "behavioral_fingerprint",
+        "from": "Component instructs the agent to grant elevated privileges when a user or external party falsely claims a privileged role (admin, root, operator), effectively implementing a privilege escalation backd",
+        "to": "Component instructs the agent to grant elevated privileges when a user or external party falsely claims a privileged role (admin, root, operator), effectively implementing a privilege escalation backdoor.",
+        "reason_code": "declaration_corrected",
+        "reason": "Cut off at 200 characters, mid-word, by the AIVSS migration (9e7dd0b, #17, 2026-05-12); completed to the whole word 'backdoor' (a word its description uses) and ended the sentence there. Corrected in #414."
+      }
+    ]
   },
   {
     "ave_id": "AVE-2026-00031",
@@ -7202,7 +7242,7 @@
     "mitre_atlas": [
       "AML.T0011"
     ],
-    "behavioral_fingerprint": "Component instructs the agent to deserialize untrusted data using insecure methods (pickle, yaml.load, eval) or to evaluate dynamic code strings received from external or user-controlled sources, enab",
+    "behavioral_fingerprint": "Component instructs agent to deserialize untrusted input or evaluate dynamic code from external sources.",
     "behavioral_vector": [
       "deserialization",
       "code-exec",
@@ -7262,7 +7302,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "CWE-502",
@@ -7314,7 +7354,17 @@
         "pin_status": "unknown",
         "read_date": "2026-10-15"
       }
-    }
+    },
+    "revisions": [
+      {
+        "date": "2026-10-31",
+        "field": "behavioral_fingerprint",
+        "from": "Component instructs the agent to deserialize untrusted data using insecure methods (pickle, yaml.load, eval) or to evaluate dynamic code strings received from external or user-controlled sources, enab",
+        "to": "Component instructs agent to deserialize untrusted input or evaluate dynamic code from external sources.",
+        "reason_code": "declaration_corrected",
+        "reason": "Cut off at 200 characters, mid-word, by the AIVSS migration (f2f4b40, #18, 2026-05-13); restored to the sentence the record had before it, which the cut text does not complete from the record's own words. Corrected in #414."
+      }
+    ]
   },
   {
     "ave_id": "AVE-2026-00034",
@@ -7919,7 +7969,7 @@
       "GOVERN-1.1"
     ],
     "mitre_atlas": [],
-    "behavioral_fingerprint": "Component grants the agent unlimited authority to use any available tool, spawn sub-agents without limits, or recursively expand its own capabilities without scope boundaries or human oversight checkp",
+    "behavioral_fingerprint": "Component instructs agent to use any available tool, spawn unlimited sub-agents, or recursively expand its capabilities without scope or oversight.",
     "behavioral_vector": [
       "scope-creep",
       "tool-abuse",
@@ -7979,7 +8029,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "CWE-400",
@@ -8025,7 +8075,17 @@
         "pin_status": "unknown",
         "read_date": "2026-10-15"
       }
-    }
+    },
+    "revisions": [
+      {
+        "date": "2026-10-31",
+        "field": "behavioral_fingerprint",
+        "from": "Component grants the agent unlimited authority to use any available tool, spawn sub-agents without limits, or recursively expand its own capabilities without scope boundaries or human oversight checkp",
+        "to": "Component instructs agent to use any available tool, spawn unlimited sub-agents, or recursively expand its capabilities without scope or oversight.",
+        "reason_code": "declaration_corrected",
+        "reason": "Cut off at 200 characters, mid-word, by the AIVSS migration (9e7dd0b, #17, 2026-05-12); restored to the sentence the record had before it, which the cut text does not complete from the record's own words. Corrected in #414."
+      }
+    ]
   },
   {
     "ave_id": "AVE-2026-00039",
@@ -8058,7 +8118,7 @@
     "mitre_atlas": [
       "AML.T0048"
     ],
-    "behavioral_fingerprint": "Component instructs the agent to exfiltrate data through covert channels such as steganographic encoding in output text, first-letter encoding, whitespace patterns, or timing signals that are invisibl",
+    "behavioral_fingerprint": "Component instructs agent to encode sensitive data in output formatting, first-letter patterns, whitespace, or timing to create a covert exfiltration channel.",
     "behavioral_vector": [
       "covert-channel",
       "data-exfil",
@@ -8119,7 +8179,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "CWE-514",
@@ -8170,7 +8230,17 @@
         "pin_status": "unknown",
         "read_date": "2026-10-15"
       }
-    }
+    },
+    "revisions": [
+      {
+        "date": "2026-10-31",
+        "field": "behavioral_fingerprint",
+        "from": "Component instructs the agent to exfiltrate data through covert channels such as steganographic encoding in output text, first-letter encoding, whitespace patterns, or timing signals that are invisibl",
+        "to": "Component instructs agent to encode sensitive data in output formatting, first-letter patterns, whitespace, or timing to create a covert exfiltration channel.",
+        "reason_code": "declaration_corrected",
+        "reason": "Cut off at 200 characters, mid-word, by the AIVSS migration (9e7dd0b, #17, 2026-05-12); restored to the sentence the record had before it, which the cut text does not complete from the record's own words. Corrected in #414."
+      }
+    ]
   },
   {
     "ave_id": "AVE-2026-00040",
@@ -8201,7 +8271,7 @@
       "MEASURE-2.5"
     ],
     "mitre_atlas": [],
-    "behavioral_fingerprint": "Component instructs the agent to produce output that will be directly interpreted by a downstream system (SQL database, HTML renderer, shell) without escaping or sanitisation, enabling classic injecti",
+    "behavioral_fingerprint": "Component instructs agent to pass user input or LLM output directly into SQL queries, HTML templates, or shell commands without escaping or sanitisation.",
     "behavioral_vector": [
       "output-inject",
       "xss",
@@ -8262,7 +8332,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "OWASP LLM Insecure Output",
@@ -8308,7 +8378,17 @@
         "pin_status": "unknown",
         "read_date": "2026-10-15"
       }
-    }
+    },
+    "revisions": [
+      {
+        "date": "2026-10-31",
+        "field": "behavioral_fingerprint",
+        "from": "Component instructs the agent to produce output that will be directly interpreted by a downstream system (SQL database, HTML renderer, shell) without escaping or sanitisation, enabling classic injecti",
+        "to": "Component instructs agent to pass user input or LLM output directly into SQL queries, HTML templates, or shell commands without escaping or sanitisation.",
+        "reason_code": "declaration_corrected",
+        "reason": "Cut off at 200 characters, mid-word, by the AIVSS migration (9e7dd0b, #17, 2026-05-12); restored to the sentence the record had before it, which the cut text does not complete from the record's own words. Corrected in #414."
+      }
+    ]
   },
   {
     "ave_id": "AVE-2026-00042",
