@@ -25,7 +25,7 @@
   "mitre_atlas": [
     "AML.T0048"
   ],
-  "behavioral_fingerprint": "Component instructs the agent to encode sensitive data (credentials, API keys, PII, system prompt) inside tool call parameters or return values for covert exfiltration through a legitimate-looking too",
+  "behavioral_fingerprint": "Component instructs agent to encode sensitive data (credentials, keys, PII) inside tool call parameters for covert exfiltration.",
   "behavioral_vector": [
     "data-exfil",
     "covert-channel",
@@ -85,7 +85,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "CWE-116",
@@ -136,5 +136,15 @@
       "pin_status": "unknown",
       "read_date": "2026-10-15"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "behavioral_fingerprint",
+      "from": "Component instructs the agent to encode sensitive data (credentials, API keys, PII, system prompt) inside tool call parameters or return values for covert exfiltration through a legitimate-looking too",
+      "to": "Component instructs agent to encode sensitive data (credentials, keys, PII) inside tool call parameters for covert exfiltration.",
+      "reason_code": "declaration_corrected",
+      "reason": "Cut off at 200 characters, mid-word, by the AIVSS migration (9e7dd0b, #17, 2026-05-12); restored to the sentence the record had before it, which the cut text does not complete from the record's own words. Corrected in #414."
+    }
+  ]
 }

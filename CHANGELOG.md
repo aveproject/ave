@@ -8,7 +8,20 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 
 ## [Unreleased]
 
+### Records
+- **Eight cut-off fingerprints repaired** (#414). AVE-2026-00023, 00026, 00029, 00030, 00033, 00038, 00039 and
+  00040 had a `behavioral_fingerprint` that stopped mid-word at exactly 200 characters (`... human oversight
+  checkp`), since the AIVSS migration commits of 2026-05-12 and 2026-05-13 (#17, #18). Seven are restored to the
+  sentence each had before the migration; 00030 is completed to "backdoor", a word its description uses. Each has
+  a `revisions` entry (`behavioral_fingerprint`, `declaration_corrected`). The frozen `dist` snapshots and the
+  published v1.2.0 release keep the cut text, as frozen files do; `dist/ave-records-latest.json` and the next
+  catalog release carry the repair.
+
 ### Checks
+- **Fingerprint not cut off** (#414). `scripts/validate_records.py` now fails a record whose
+  `behavioral_fingerprint` does not end in sentence-ending punctuation (`.`, `!`, `?`, or a closing bracket,
+  quote or backtick), which is how a cut-off one reads, or is exactly 200 characters long, the length the eight
+  were cut to. The other 81 fingerprints already pass.
 - **Output conformance checker** (#406). `scripts/ave_conformance.py` reads a tool's output and does two
   separate jobs. `extract` finds the AVE ids in SARIF (either form) or JSON (an `ave_id`, `AVEID`, `AveId` or
   `ave-id` key at any depth) and records how each was found, so any tool can be scored. `check` judges the output

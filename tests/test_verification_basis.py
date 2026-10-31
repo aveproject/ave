@@ -13,7 +13,7 @@ def record(**overrides):
         "title": "Verification basis fixture",
         "description": "Fixture record for the verification_basis derivation.",
         "attack_class": "test",
-        "behavioral_fingerprint": "test",
+        "behavioral_fingerprint": "test.",
         "references": [{"tag": "Source", "text": "Source", "url": "https://example.com"}],
     }
     base.update(overrides)

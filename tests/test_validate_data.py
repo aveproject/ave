@@ -15,7 +15,7 @@ def test_record_validator_rejects_invalid_date_time_format():
         "title": "Invalid date-time fixture",
         "description": "A minimal draft record with malformed published metadata.",
         "attack_class": "test",
-        "behavioral_fingerprint": "test",
+        "behavioral_fingerprint": "test.",
         "references": [{"title": "Example", "url": "https://example.com"}],
         "published": "not-a-date-time",
     }
@@ -307,7 +307,7 @@ def record_with(**overrides):
         "title": "Verification basis fixture",
         "description": "A minimal draft record carrying evidence axes.",
         "attack_class": "test",
-        "behavioral_fingerprint": "test",
+        "behavioral_fingerprint": "test.",
         "references": [{"tag": "Source", "text": "Source", "url": "https://example.com"}],
         # Section 8 forbids a record with both of these empty, so the fixture
         # carries one: without it main() returns 1 for a reason that has nothing

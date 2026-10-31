@@ -28,7 +28,7 @@
   "mitre_atlas": [
     "AML.T0011"
   ],
-  "behavioral_fingerprint": "Component instructs the agent to deserialize untrusted data using insecure methods (pickle, yaml.load, eval) or to evaluate dynamic code strings received from external or user-controlled sources, enab",
+  "behavioral_fingerprint": "Component instructs agent to deserialize untrusted input or evaluate dynamic code from external sources.",
   "behavioral_vector": [
     "deserialization",
     "code-exec",
@@ -88,7 +88,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "CWE-502",
@@ -140,5 +140,15 @@
       "pin_status": "unknown",
       "read_date": "2026-10-15"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "behavioral_fingerprint",
+      "from": "Component instructs the agent to deserialize untrusted data using insecure methods (pickle, yaml.load, eval) or to evaluate dynamic code strings received from external or user-controlled sources, enab",
+      "to": "Component instructs agent to deserialize untrusted input or evaluate dynamic code from external sources.",
+      "reason_code": "declaration_corrected",
+      "reason": "Cut off at 200 characters, mid-word, by the AIVSS migration (f2f4b40, #18, 2026-05-13); restored to the sentence the record had before it, which the cut text does not complete from the record's own words. Corrected in #414."
+    }
+  ]
 }
