@@ -44,6 +44,13 @@
       "untrusted_content"
     ]
   },
+  "security_boundary": "declared, bounded tool/delegation scope → actual, unbounded runtime use",
+  "missing_control": "no ceiling on tool invocations or sub-agent spawning, and no human checkpoint gating either, once a component's instructions grant \"unlimited\" authority",
+  "vulnerability_rationale": {
+    "capability": "Agent can use any declared tool and spawn sub-agents.",
+    "vulnerability": "No mechanism bounds how tool-use and sub-agent-spawning access is used once it is granted: there is no ceiling on invocations or spawning and no human checkpoint.",
+    "impact": "All scope boundaries and human oversight are removed, turning the agent into an unconstrained autonomous actor."
+  },
   "mitigation": {
     "strategy": [
       "least_privilege",

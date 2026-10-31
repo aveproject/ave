@@ -42,6 +42,13 @@
       "untrusted_content"
     ]
   },
+  "security_boundary": "task-result data (should be data) → trusted context from a \"completed\" task",
+  "missing_control": "no validation distinguishes result data from instruction, and the dispatch-to-consumption temporal gap bypasses synchronous safety checks",
+  "vulnerability_rationale": {
+    "capability": "Agent dispatches async tasks and later reads their results in a future turn.",
+    "vulnerability": "No validation distinguishes legitimate result data from instruction, and the temporal gap bypasses checks applied at dispatch time.",
+    "impact": "Injected content is treated as trusted context from a completed task rather than external, untrusted input."
+  },
   "mitigation": {
     "strategy": [
       "validate_input",
@@ -72,7 +79,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-05-01T00:00:00Z",
-  "last_updated": "2026-09-27T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",
