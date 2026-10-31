@@ -9,6 +9,16 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 ## [Unreleased]
 
 ### Checks
+- **Output conformance checker** (#406). `scripts/ave_conformance.py` reads a tool's output and does two
+  separate jobs. `extract` finds the AVE ids in SARIF (either form) or JSON (an `ave_id`, `AVEID`, `AveId` or
+  `ave-id` key at any depth) and records how each was found, so any tool can be scored. `check` judges the output
+  against `docs/specs/ave-in-sarif.md` and a catalog file the caller supplies: ids that do not exist, ids that are
+  not `active` (a `merged` or `rejected` one is reported with its `merged_into` or `rejection_reason`), the
+  `ave_*` run properties and the AVE taxonomy, and a `ruleId` and `ave_id` that disagree. Standard library only,
+  nothing fetched. The AVE-in-SARIF spec now accepts a second form (D6): a tool's own `ruleId`, with
+  `properties.ave_id` on the rule and on each result; the spec moves to v1.1 (revision note 2026-10-31). A result that
+  names no AVE class is a warning, since a tool may report findings outside AVE in the same file; `--require-ids`
+  makes it an error. The implementer guide has a "Check your output" section.
 - **Severity band** (#396). `scripts/validate_records.py` now fails a record whose `severity`, or
   `aivss.aivss_severity` where it carries one, is not the band its `aivss.aivss_score` falls in:
   CRITICAL from 9.0, HIGH from 7.0, MEDIUM from 4.0, LOW below. CLAUDE.md hard rule 6 and the schema

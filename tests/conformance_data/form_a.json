@@ -1,0 +1,59 @@
+{
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "example-scanner",
+          "version": "0.0.1",
+          "rules": [
+            {
+              "id": "AVE-2026-90001",
+              "shortDescription": {
+                "text": "Example class one"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "AVE-2026-90001",
+          "level": "error",
+          "message": {
+            "text": "Example finding"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "skills/example.md"
+                },
+                "region": {
+                  "startLine": 12
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "taxonomies": [
+        {
+          "name": "AVE",
+          "version": "9.9.9",
+          "taxa": [
+            {
+              "id": "AVE-2026-90001",
+              "name": "Example class one"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "ave_catalog": "v9.9.9",
+        "ave_schema_version": "9.9.9",
+        "ave_records_sha256": "e281a7144a30845baae5b253424ae745d2ae0156a79f9d9434be2183fcfc4bb4"
+      }
+    }
+  ]
+}

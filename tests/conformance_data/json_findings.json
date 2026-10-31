@@ -1,0 +1,43 @@
+{
+  "tool": "example-scanner",
+  "findings": [
+    {
+      "rule": "example-rule-1",
+      "ave_id": "AVE-2026-90001",
+      "file": "a.md"
+    },
+    {
+      "rule": "example-rule-2",
+      "AVEID": "AVE-2026-90005",
+      "file": "b.md"
+    },
+    {
+      "rule": "example-rule-3",
+      "detail": {
+        "AveId": "AVE-2026-90002"
+      }
+    },
+    {
+      "rule": "example-rule-4",
+      "ave-id": "AVE-2026-90003"
+    },
+    {
+      "rule": "example-rule-5",
+      "ave_ids": [
+        "AVE-2026-90004",
+        "not-an-id"
+      ]
+    },
+    {
+      "rule": "example-rule-6",
+      "ave_id": "AVE-26-1"
+    },
+    {
+      "rule": "example-rule-7",
+      "ave_id": 90001
+    },
+    {
+      "rule": "example-rule-8"
+    }
+  ]
+}
