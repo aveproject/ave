@@ -46,6 +46,13 @@
       "external_comms"
     ]
   },
+  "security_boundary": "tool result content (data) → code the agent generates and executes",
+  "missing_control": "no boundary prevents tool-result content from breaking out of data context into generated code",
+  "vulnerability_rationale": {
+    "capability": "Agent-generated orchestration code processes tool results in Code/REPL Mode.",
+    "vulnerability": "No boundary prevents tool result content from breaking out of data context into the code the agent generates and executes.",
+    "impact": "Arbitrary code execution bypassing all prompt-level, text-instruction filtering entirely."
+  },
   "mitigation": {
     "strategy": [
       "deny_by_default",
@@ -76,7 +83,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-05-01T00:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "CWE-94",

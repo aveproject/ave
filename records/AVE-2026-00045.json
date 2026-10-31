@@ -47,6 +47,13 @@
       "external_comms"
     ]
   },
+  "security_boundary": "low-trust server's instruction → high-trust server's capability, same session",
+  "missing_control": "no per-server trust isolation within a single multi-server agent session",
+  "vulnerability_rationale": {
+    "capability": "A single agent session can connect to and act on multiple MCP servers simultaneously.",
+    "vulnerability": "No per-server trust isolation prevents a low-trust server's instruction from directing the agent's use of a co-connected high-trust server.",
+    "impact": "Confused-deputy escalation from low-privilege compromise to high-privilege action."
+  },
   "mitigation": {
     "strategy": [
       "isolate_scope",
@@ -77,7 +84,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-05-01T00:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "CWE-269",
