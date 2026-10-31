@@ -1,0 +1,29 @@
+[
+  {
+    "ave_id": "AVE-2026-90001",
+    "status": "active",
+    "title": "Example class one"
+  },
+  {
+    "ave_id": "AVE-2026-90002",
+    "status": "deprecated",
+    "title": "Example class two"
+  },
+  {
+    "ave_id": "AVE-2026-90003",
+    "status": "merged",
+    "merged_into": "AVE-2026-90001",
+    "title": "Example class three"
+  },
+  {
+    "ave_id": "AVE-2026-90004",
+    "status": "rejected",
+    "rejection_reason": "https://example.invalid/decision",
+    "title": "Example class four"
+  },
+  {
+    "ave_id": "AVE-2026-90005",
+    "status": "active",
+    "title": "Example class five"
+  }
+]
