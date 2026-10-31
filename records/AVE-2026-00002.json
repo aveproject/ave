@@ -45,6 +45,13 @@
       "untrusted_content"
     ]
   },
+  "security_boundary": "tool metadata (should be descriptive, inert) → agent instruction (treated as authoritative context)",
+  "missing_control": "no structural separation between descriptive metadata and executable instruction within the tool manifest schema",
+  "vulnerability_rationale": {
+    "capability": "MCP tool description fields are read by the agent during tool discovery.",
+    "vulnerability": "No boundary separates \"metadata describing a tool\" from \"instructions the agent should follow\"; both share the same natural-language channel with nothing to distinguish them.",
+    "impact": "The agent treats the embedded instructions as authoritative context and follows attacker-controlled directives, before any tool is called."
+  },
   "mitigation": {
     "strategy": [
       "validate_input",
@@ -89,7 +96,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-01T09:00:00Z",
-  "last_updated": "2026-08-29T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",

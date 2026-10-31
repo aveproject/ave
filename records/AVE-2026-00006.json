@@ -43,6 +43,13 @@
       "external_comms"
     ]
   },
+  "security_boundary": "tool-use decision → irreversible on-chain action",
+  "missing_control": "no structurally mandatory (vs. component-configurable) approval gate for irreversible financial actions specifically",
+  "vulnerability_rationale": {
+    "capability": "Agent with wallet tool access can transfer funds/approve allowances.",
+    "vulnerability": "No structurally mandatory human-approval gate exists for irreversible financial actions specifically.",
+    "impact": "Irreversible on-chain financial loss."
+  },
   "mitigation": {
     "strategy": [
       "require_human_approval",
@@ -65,7 +72,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "MITRE ATT&CK T1657",

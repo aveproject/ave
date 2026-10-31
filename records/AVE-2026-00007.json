@@ -44,6 +44,13 @@
       "untrusted_content"
     ]
   },
+  "security_boundary": "trusted system instruction ↔ untrusted component content, same channel",
+  "missing_control": "no instruction-hierarchy enforcement distinguishes origin or recency",
+  "vulnerability_rationale": {
+    "capability": "Agent processes instruction-shaped text from untrusted components in the same channel as trusted system instructions.",
+    "vulnerability": "No instruction-hierarchy enforcement distinguishes trusted origin from untrusted, recently-seen text.",
+    "impact": "Complete behavioral takeover, enabling most other AVE attack classes as a follow-on payload."
+  },
   "mitigation": {
     "strategy": [
       "validate_input",
@@ -66,7 +73,7 @@
   "researcher": "Perez & Ribeiro",
   "researcher_url": "https://arxiv.org/abs/2211.09527",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Perez 2022",

@@ -47,6 +47,13 @@
       "external_comms"
     ]
   },
+  "security_boundary": "credential store → external destination",
+  "missing_control": "no content-aware egress control distinguishes legitimate outbound task data from credential exfiltration",
+  "vulnerability_rationale": {
+    "capability": "Agent can read env vars/credentials and make external network calls.",
+    "vulnerability": "No content-aware egress control distinguishes legitimate outbound task data from credential exfiltration.",
+    "impact": "Credential theft enabling follow-on compromise."
+  },
   "mitigation": {
     "strategy": [
       "least_privilege",
@@ -91,7 +98,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-01T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "CWE-522",

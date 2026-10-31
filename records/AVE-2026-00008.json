@@ -45,6 +45,13 @@
       "untrusted_content"
     ]
   },
+  "security_boundary": "task-scoped tool access → durable, cross-session system modification",
+  "missing_control": "no restriction prevents task-scoped filesystem/shell access from writing to persistence locations (cron, startup scripts)",
+  "vulnerability_rationale": {
+    "capability": "Agent has legitimate filesystem/shell tool access for its task.",
+    "vulnerability": "No restriction prevents that task-scoped access from writing to system-persistence locations.",
+    "impact": "Durable compromise surviving reboot, reinstallation, or removal attempts."
+  },
   "mitigation": {
     "strategy": [
       "least_privilege",
@@ -67,7 +74,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Cohen 2024",

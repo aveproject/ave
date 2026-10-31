@@ -44,6 +44,13 @@
       "untrusted_content"
     ]
   },
+  "security_boundary": "claimed permission (in-content) → actual authorization (never checked)",
+  "missing_control": "no verification checks an in-content permission claim against any real authorization system",
+  "vulnerability_rationale": {
+    "capability": "Agent can defer to permission claims made within its instruction context.",
+    "vulnerability": "No verification checks an in-content permission claim against any actual authorization system.",
+    "impact": "Agent performs actions it would otherwise refuse, believing itself newly authorized."
+  },
   "mitigation": {
     "strategy": [
       "verify_identity",
@@ -66,7 +73,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-20T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "CWE-269",

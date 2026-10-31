@@ -56,6 +56,13 @@
       "private_data"
     ]
   },
+  "security_boundary": "reviewed artifact → executed artifact, with a mutable external fetch sitting unchecked between the two",
+  "missing_control": "no pinning or integrity check on runtime-fetched content that replaces a component's own behavior",
+  "vulnerability_rationale": {
+    "capability": "A skill or MCP component can fetch and execute remote content at runtime.",
+    "vulnerability": "No integrity binding exists between what was reviewed (the artifact and its declared behavior at scan time) and what actually executes (mutable, externally-fetched content at run time).",
+    "impact": "The fetched content replaces the component's original instructions, so an attacker can change its behavior after it has passed security review."
+  },
   "mitigation": {
     "strategy": [
       "pin_integrity",
@@ -100,7 +107,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-01T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",
