@@ -58,6 +58,12 @@ def test_exactly_200_characters_fails_even_when_it_ends_like_a_sentence():
     assert len(found) == 1 and "exactly 200 characters" in found[0], found
 
 
+def test_the_200_character_message_says_how_to_fix_it():
+    found = validate_records.check_fingerprint_not_cut_off(record("a" * 199 + "."))
+    assert "finish it or restore the earlier text from git history" in found[0], found
+    assert "if it is whole, reword it" in found[0] and "no longer exactly 200" in found[0], found
+
+
 def test_a_cut_at_exactly_200_reports_both_problems():
     assert len(CUT_AT_200) == 200
     found = validate_records.check_fingerprint_not_cut_off(record(CUT_AT_200))
