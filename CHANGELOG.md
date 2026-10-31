@@ -8,6 +8,20 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 
 ## [Unreleased]
 
+### SARIF
+- **The AVE taxonomy as a canonical file, form C and taxonomy checks** (#420). `dist/ave-taxonomy-latest.json` is the AVE
+  taxonomy as a SARIF 2.1.0 `toolComponent` with a frozen `guid` (`5110b285-34d7-5334-94db-0308b24cfb49`, the UUIDv5 of
+  `https://aveproject.org/taxonomy/AVE`) and one taxon per record, including records whose status is not `active`.
+  `scripts/build_taxonomy.py` builds it deterministically from `dist/ave-records-latest.json` (`--check` fails when it is
+  stale; `--only` builds the subset a scanner embeds; `--release`, `--release-date` and `--download-uri` stamp a release),
+  and the workflow that regenerates `dist/` rebuilds it. `docs/specs/ave-in-sarif.md` moves to v1.2: form C (a tool's own
+  `ruleId`, a rule `relationships` link to the AVE taxonomy, `result.taxa` and `supportedTaxonomies`, recommending `kinds`
+  `["relevant"]` and saying why), the guid as the taxonomy's identity, and a form C example. `scripts/ave_conformance.py`
+  reads form C and gains six checks: `taxonomy_guid_missing`, `taxonomy_guid_mismatch`, `taxon_unknown`,
+  `taxon_name_differs`, `reference_guid_mismatch` and `supported_taxonomies_missing`. Forms A and B are unchanged. The
+  generated file mirrors record text exactly, so it carries the em dashes that AVE-2026-00050 and 00051 have in their
+  titles and description until those records are corrected.
+
 ### Records
 - **Eight cut-off fingerprints repaired** (#414). AVE-2026-00023, 00026, 00029, 00030, 00033, 00038, 00039 and
   00040 had a `behavioral_fingerprint` that stopped mid-word at exactly 200 characters (`... human oversight

@@ -146,6 +146,7 @@ def validate_record(record: dict) -> tuple[bool, list[str]]:
 ```bash
 npm install ajv ajv-formats           # schema validation deps
 node scripts/build-records.js         # build dist/ave-records-latest.json
+python3 scripts/build_taxonomy.py     # build dist/ave-taxonomy-latest.json from it (--check: fail if stale)
 
 # Python validation
 pip install -e ".[dev]"

@@ -39,7 +39,7 @@ def messages(rep, code):
 
 
 def spec_examples():
-    """The complete SARIF examples in docs/specs/ave-in-sarif.md (form A, then form B), read from the spec at test time so the two cannot drift."""
+    """The complete SARIF examples in docs/specs/ave-in-sarif.md (form A, form B, then form C), read from the spec at test time so the two cannot drift."""
     blocks = re.findall(r"```json\n(.*?)\n```", SPEC.read_text(encoding="utf-8"), flags=re.S)
     docs = []
     for block in blocks:
@@ -48,7 +48,7 @@ def spec_examples():
         except ValueError:
             pass  # a fragment, such as the taxonomies block, not a document
     found = [d for d in docs if isinstance(d, dict) and "runs" in d]
-    assert len(found) == 2, "the spec should have exactly two complete SARIF examples, form A and form B"
+    assert len(found) == 3, "the spec should have exactly three complete SARIF examples, form A, form B and form C"
     return found
 
 
@@ -60,7 +60,7 @@ def write(tmp_path, name, content):
 
 # ── 1. the spec's own example ────────────────────────────────────────────────
 
-@pytest.mark.parametrize("n, via", [(0, "sarif.result.ruleId"), (1, "sarif.result.properties.ave_id")], ids=["form A", "form B"])
+@pytest.mark.parametrize("n, via", [(0, "sarif.result.ruleId"), (1, "sarif.result.properties.ave_id"), (2, "sarif.rule.relationships")], ids=["form A", "form B", "form C"])
 def test_each_spec_example_is_conformant_against_the_catalog_it_names(n, via):
     records, info, issue = C.load_catalog("dist/ave-records-v1.2.0.json")
     assert issue is None
@@ -290,10 +290,17 @@ def test_a_taxonomy_at_the_document_level_counts():
     assert "taxonomies_missing" not in codes(report(doc))
 
 
-def test_a_taxonomy_not_named_ave_does_not_count():
+def test_a_taxonomy_not_named_ave_and_without_its_guid_does_not_count():
     doc = load("form_a.json")
     doc["runs"][0]["taxonomies"][0]["name"] = "Other"
+    del doc["runs"][0]["taxonomies"][0]["guid"]
     assert codes(report(doc)) == ["taxonomies_missing"]
+
+
+def test_the_guid_decides_so_a_renamed_taxonomy_with_the_ave_guid_still_counts():
+    doc = load("form_a.json")
+    doc["runs"][0]["taxonomies"][0]["name"] = "Renamed"
+    assert codes(report(doc)) == []
 
 
 def test_a_cited_class_with_no_taxon_is_a_warning():
