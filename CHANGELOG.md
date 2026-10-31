@@ -43,7 +43,7 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   - All 89 records are re-scored and declare `2.0.0`. Each carries a `revisions` entry with its old and new score,
     and a second for a change of severity (81 records), and a sentence in `aivss.notes` saying what was
     assessed (Context and Opacity, by the rules in `references/aivss-scoring.md`), how ThM and
-    Mitigation_Factor mapped, which factors were moved onto the 0, 0.5, 1 scale (21 values on 9 records,
+    Mitigation_Factor mapped, which factors were moved onto the 0, 0.5, 1 scale (17 values on 9 records,
     nearest point, ties up), and what the removed factors had scored. `cvss_base` is kept as each record
     states it.
   - Result: CRITICAL 1 to 40, HIGH 20 to 41, MEDIUM 66 to 8, LOW 2 to 0. The v0.8 equation adds the
