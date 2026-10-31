@@ -395,7 +395,7 @@
         "text": "Prompt Injection - Context Window Manipulation"
       },
       "fullDescription": {
-        "text": "Component floods the agent's context window with large amounts of repetitive or irrelevant content to push safety instructions, system prompt constraints, or prior conversation context out of the acti"
+        "text": "Component instructs agent to repeat, pad, or generate large volumes of content with the intent of overflowing the context window."
       },
       "helpUri": "https://aveproject.org/registry.html#AVE-2026-00023",
       "properties": {
@@ -446,7 +446,7 @@
         "text": "Data Exfiltration - Output Encoding"
       },
       "fullDescription": {
-        "text": "Component instructs the agent to encode sensitive data (credentials, API keys, PII, system prompt) inside tool call parameters or return values for covert exfiltration through a legitimate-looking too"
+        "text": "Component instructs agent to encode sensitive data (credentials, keys, PII) inside tool call parameters for covert exfiltration."
       },
       "helpUri": "https://aveproject.org/registry.html#AVE-2026-00026",
       "properties": {
@@ -497,7 +497,7 @@
         "text": "Obfuscation - Unicode Homoglyph"
       },
       "fullDescription": {
-        "text": "Component uses visually similar Unicode characters (homoglyphs), zero-width characters, or bidirectional text control codes to hide malicious instructions from human reviewers while remaining fully re"
+        "text": "Skill file contains zero-width characters, bidirectional override codes, or Cyrillic homoglyphs used to conceal instructions from human reviewers."
       },
       "helpUri": "https://aveproject.org/registry.html#AVE-2026-00029",
       "properties": {
@@ -514,7 +514,7 @@
         "text": "Privilege Escalation - False Role Claim"
       },
       "fullDescription": {
-        "text": "Component instructs the agent to grant elevated privileges when a user or external party falsely claims a privileged role (admin, root, operator), effectively implementing a privilege escalation backd"
+        "text": "Component instructs the agent to grant elevated privileges when a user or external party falsely claims a privileged role (admin, root, operator), effectively implementing a privilege escalation backdoor."
       },
       "helpUri": "https://aveproject.org/registry.html#AVE-2026-00030",
       "properties": {
@@ -565,7 +565,7 @@
         "text": "Tool Abuse - Unsafe Deserialization"
       },
       "fullDescription": {
-        "text": "Component instructs the agent to deserialize untrusted data using insecure methods (pickle, yaml.load, eval) or to evaluate dynamic code strings received from external or user-controlled sources, enab"
+        "text": "Component instructs agent to deserialize untrusted input or evaluate dynamic code from external sources."
       },
       "helpUri": "https://aveproject.org/registry.html#AVE-2026-00033",
       "properties": {
@@ -650,7 +650,7 @@
         "text": "Tool Abuse - Unbounded Tool Use"
       },
       "fullDescription": {
-        "text": "Component grants the agent unlimited authority to use any available tool, spawn sub-agents without limits, or recursively expand its own capabilities without scope boundaries or human oversight checkp"
+        "text": "Component instructs agent to use any available tool, spawn unlimited sub-agents, or recursively expand its capabilities without scope or oversight."
       },
       "helpUri": "https://aveproject.org/registry.html#AVE-2026-00038",
       "properties": {
@@ -667,7 +667,7 @@
         "text": "Data Exfiltration - Covert Channel"
       },
       "fullDescription": {
-        "text": "Component instructs the agent to exfiltrate data through covert channels such as steganographic encoding in output text, first-letter encoding, whitespace patterns, or timing signals that are invisibl"
+        "text": "Component instructs agent to encode sensitive data in output formatting, first-letter patterns, whitespace, or timing to create a covert exfiltration channel."
       },
       "helpUri": "https://aveproject.org/registry.html#AVE-2026-00039",
       "properties": {
@@ -684,7 +684,7 @@
         "text": "Tool Abuse - Insecure Output Handling"
       },
       "fullDescription": {
-        "text": "Component instructs the agent to produce output that will be directly interpreted by a downstream system (SQL database, HTML renderer, shell) without escaping or sanitisation, enabling classic injecti"
+        "text": "Component instructs agent to pass user input or LLM output directly into SQL queries, HTML templates, or shell commands without escaping or sanitisation."
       },
       "helpUri": "https://aveproject.org/registry.html#AVE-2026-00040",
       "properties": {

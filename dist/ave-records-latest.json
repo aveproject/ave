@@ -51,6 +51,13 @@
         "private_data"
       ]
     },
+    "security_boundary": "component's own declared tool scope → the shared tool-dispatch layer every component's calls route through, which one component can silently claim authority over",
+    "missing_control": "no isolation or authorization check preventing one component's hook registration from intercepting calls belonging to other components",
+    "vulnerability_rationale": {
+      "capability": "Components can register hooks/callbacks into the agent's tool dispatch layer.",
+      "vulnerability": "No authorization or integrity check on hook registration into a shared dispatch layer that all components' tool calls pass through.",
+      "impact": "A hook registered early silently intercepts or redirects all subsequent tool invocations, including those of other skills and system tools, to attacker-controlled callbacks, while the agent continues to believe it is calling the legitimate tool."
+    },
     "mitigation": {
       "strategy": [
         "deny_by_default",
@@ -81,7 +88,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-16T00:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "CWE-601",
@@ -227,6 +234,13 @@
         "private_data"
       ]
     },
+    "security_boundary": "reviewed artifact → executed artifact, with a mutable external fetch sitting unchecked between the two",
+    "missing_control": "no pinning or integrity check on runtime-fetched content that replaces a component's own behavior",
+    "vulnerability_rationale": {
+      "capability": "A skill or MCP component can fetch and execute remote content at runtime.",
+      "vulnerability": "No integrity binding exists between what was reviewed (the artifact and its declared behavior at scan time) and what actually executes (mutable, externally-fetched content at run time).",
+      "impact": "The fetched content replaces the component's original instructions, so an attacker can change its behavior after it has passed security review."
+    },
     "mitigation": {
       "strategy": [
         "pin_integrity",
@@ -271,7 +285,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-01T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -376,6 +390,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "tool metadata (should be descriptive, inert) → agent instruction (treated as authoritative context)",
+    "missing_control": "no structural separation between descriptive metadata and executable instruction within the tool manifest schema",
+    "vulnerability_rationale": {
+      "capability": "MCP tool description fields are read by the agent during tool discovery.",
+      "vulnerability": "No boundary separates \"metadata describing a tool\" from \"instructions the agent should follow\"; both share the same natural-language channel with nothing to distinguish them.",
+      "impact": "The agent treats the embedded instructions as authoritative context and follows attacker-controlled directives, before any tool is called."
+    },
     "mitigation": {
       "strategy": [
         "validate_input",
@@ -420,7 +441,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-01T09:00:00Z",
-    "last_updated": "2026-08-29T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -522,6 +543,13 @@
         "external_comms"
       ]
     },
+    "security_boundary": "tool-use decision → irreversible on-chain action",
+    "missing_control": "no structurally mandatory (vs. component-configurable) approval gate for irreversible financial actions specifically",
+    "vulnerability_rationale": {
+      "capability": "Agent with wallet tool access can transfer funds/approve allowances.",
+      "vulnerability": "No structurally mandatory human-approval gate exists for irreversible financial actions specifically.",
+      "impact": "Irreversible on-chain financial loss."
+    },
     "mitigation": {
       "strategy": [
         "require_human_approval",
@@ -544,7 +572,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "MITRE ATT&CK T1657",
@@ -674,6 +702,13 @@
         "private_data"
       ]
     },
+    "security_boundary": "discovery-layer metadata (read once, pre-execution) → agent context (treated as authoritative), with no execution-layer event for runtime monitoring to catch",
+    "missing_control": "no validation at server-card fetch time, and no detection surface at all for runtime/execution-layer monitoring, since nothing has executed yet",
+    "vulnerability_rationale": {
+      "capability": "An agent fetches and reads a server-card's tool descriptions before making any tool call.",
+      "vulnerability": "No boundary separates metadata describing a tool from instructions the agent should follow, here at the discovery layer: the server card is read before any tool call exists for runtime monitoring to observe.",
+      "impact": "Malicious instructions in tool descriptions, parameter descriptions or config schemas are loaded into the agent's context and executed immediately, before any user interaction and outside runtime monitoring's reach."
+    },
     "mitigation": {
       "strategy": [
         "validate_input",
@@ -703,7 +738,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-01T00:00:00Z",
-    "last_updated": "2026-08-29T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -831,6 +866,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "task-result data (should be data) → trusted context from a \"completed\" task",
+    "missing_control": "no validation distinguishes result data from instruction, and the dispatch-to-consumption temporal gap bypasses synchronous safety checks",
+    "vulnerability_rationale": {
+      "capability": "Agent dispatches async tasks and later reads their results in a future turn.",
+      "vulnerability": "No validation distinguishes legitimate result data from instruction, and the temporal gap bypasses checks applied at dispatch time.",
+      "impact": "Injected content is treated as trusted context from a completed task rather than external, untrusted input."
+    },
     "mitigation": {
       "strategy": [
         "validate_input",
@@ -861,7 +903,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-01T00:00:00Z",
-    "last_updated": "2026-09-27T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -1156,6 +1198,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "parent's full permission set → sub-agent, by default",
+    "missing_control": "no explicit trust-boundary or permission-scoping requirement on delegation",
+    "vulnerability_rationale": {
+      "capability": "Agent can delegate tasks to sub-agents or spawn child agents.",
+      "vulnerability": "No explicit trust boundary or permission-scoping requirement exists on delegation; sub-agents inherit full parent permissions by default.",
+      "impact": "Privilege laundering and audit evasion, since sub-agent actions may not appear in the parent's audit trail."
+    },
     "mitigation": {
       "strategy": [
         "least_privilege",
@@ -1186,7 +1235,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-16T00:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "CWE-269",
@@ -1436,7 +1485,7 @@
     "schema_version": "1.3.0",
     "status": "active",
     "published": "2026-06-21T00:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "component_type": "mcp_server",
     "title": "Parasitic Toolchain — Silent Tool Registration and Persistent Hook Injection",
     "attack_class": "Persistence - Parasitic Toolchain",
@@ -1487,6 +1536,13 @@
         "private_data",
         "external_comms"
       ]
+    },
+    "security_boundary": "declared manifest scope → actual runtime tool-registry footprint",
+    "missing_control": "no conformance check between a component's registered footprint and its declared manifest",
+    "vulnerability_rationale": {
+      "capability": "Tools can register handlers into the agent's tool dispatch layer at runtime.",
+      "vulnerability": "No check verifies a component's actual registered footprint against its declared manifest, at registration or session restart.",
+      "impact": "A persistent, undeclared capability survives context resets, indistinguishable from a legitimately registered tool."
     },
     "mitigation": {
       "strategy": [
@@ -1602,7 +1658,7 @@
     "schema_version": "1.3.0",
     "status": "active",
     "published": "2026-06-21T00:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "component_type": "mcp_server",
     "title": "OAuth Discovery Rebinding — Authorization Endpoint Redirected to Attacker Server",
     "attack_class": "Supply Chain - OAuth Discovery Rebinding",
@@ -1649,6 +1705,13 @@
       "requires": [
         "external_comms"
       ]
+    },
+    "security_boundary": "server's declared origin → discovery-document endpoint values (unverified)",
+    "missing_control": "no verification that discovery-document endpoints match the server's own declared origin",
+    "vulnerability_rationale": {
+      "capability": "Agent follows OAuth 2.0 Authorization Server Metadata / OIDC Discovery per the published standard.",
+      "vulnerability": "No verification that discovery-document endpoint values match the server's own declared origin before the agent trusts them.",
+      "impact": "Interception of authorization codes, access tokens, and credentials during the OAuth exchange."
     },
     "mitigation": {
       "strategy": [
@@ -1953,6 +2016,13 @@
         "private_data"
       ]
     },
+    "security_boundary": "configuration data → process-spawn boundary",
+    "missing_control": "no validation gate between configuration/registry data and process execution",
+    "vulnerability_rationale": {
+      "capability": "An MCP client spawns a server as a subprocess using command/args from configuration data.",
+      "vulnerability": "No validation gate exists between untrusted configuration data and the process-spawn boundary.",
+      "impact": "Arbitrary OS command execution under the client's privileges before any protocol handshake occurs."
+    },
     "mitigation": {
       "strategy": [
         "deny_by_default",
@@ -1978,7 +2048,7 @@
     "researcher": "OX Security",
     "researcher_url": "https://www.ox.security",
     "published": "2026-07-10T00:00:00Z",
-    "last_updated": "2026-07-10T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "OX Security",
@@ -2118,6 +2188,13 @@
         "private_data"
       ]
     },
+    "security_boundary": "per-description review (isolated) → multi-description composition (never reviewed as a whole)",
+    "missing_control": "no cross-description, holistic review step exists",
+    "vulnerability_rationale": {
+      "capability": "MCP tool descriptions across multiple tools/servers are individually reviewed for malicious content.",
+      "vulnerability": "No cross-description review step exists; review is structurally confined to one description at a time.",
+      "impact": "A complete malicious instruction assembles at inference time with no single reviewable artifact ever having existed."
+    },
     "mitigation": {
       "strategy": [
         "validate_input",
@@ -2145,7 +2222,7 @@
     "researcher": "Liu et al.",
     "researcher_url": "https://arxiv.org/abs/2606.27027",
     "published": "2026-07-15T00:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "ShareLock research",
@@ -2385,6 +2462,13 @@
         "private_data"
       ]
     },
+    "security_boundary": "descriptive capability/identity metadata → instruction, once loaded into reasoning context",
+    "missing_control": "no boundary separates the A2A card's descriptive metadata from executable instruction once it is loaded into the host's reasoning context",
+    "vulnerability_rationale": {
+      "capability": "A host agent reads a remote agent's A2A card to plan task delegation.",
+      "vulnerability": "No boundary separates the card's descriptive metadata from executable instruction once loaded into the host's reasoning context.",
+      "impact": "Delegation planning hijacked by a malicious remote agent's self-declared, unverified metadata."
+    },
     "mitigation": {
       "strategy": [
         "validate_input",
@@ -2409,7 +2493,7 @@
     "researcher": "Kumar Aditya",
     "researcher_url": "https://www.keysight.com/blogs/en/tech/nwvs/2026/03/12/agent-card-poisoning",
     "published": "2026-07-27T00:00:00Z",
-    "last_updated": "2026-08-29T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Keysight research",
@@ -2519,6 +2603,13 @@
         "external_comms"
       ]
     },
+    "security_boundary": "trust established at authoring/review time → trust required at every subsequent execution, with no mechanism re-checking the gap between them",
+    "missing_control": "no ongoing verification that an already-approved external anchor is still controlled by its original owner",
+    "vulnerability_rationale": {
+      "capability": "Skills reference external identities (GitHub owners, package names, domains) that were valid at authoring time.",
+      "vulnerability": "No periodic re-verification that a previously-valid external identity reference remains currently owned by the same party; trust is established once, at review time, and never rechecked against real-world ownership changes.",
+      "impact": "An attacker who registers the now-unclaimed name takes control of everything the skill points at, without a single byte of the skill's own committed content changing."
+    },
     "mitigation": {
       "strategy": [
         "verify_identity",
@@ -2547,7 +2638,7 @@
     "researcher": "AIR Security",
     "researcher_url": "https://www.air.security",
     "published": "2026-08-07T00:00:00Z",
-    "last_updated": "2026-10-13T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "repo-forensics dead-anchor scanner",
@@ -3192,6 +3283,13 @@
         "external_comms"
       ]
     },
+    "security_boundary": "credential store → external destination",
+    "missing_control": "no content-aware egress control distinguishes legitimate outbound task data from credential exfiltration",
+    "vulnerability_rationale": {
+      "capability": "Agent can read env vars/credentials and make external network calls.",
+      "vulnerability": "No content-aware egress control distinguishes legitimate outbound task data from credential exfiltration.",
+      "impact": "Credential theft enabling follow-on compromise."
+    },
     "mitigation": {
       "strategy": [
         "least_privilege",
@@ -3236,7 +3334,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-01T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "CWE-522",
@@ -3639,6 +3737,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "trusted system instruction ↔ untrusted component content, same channel",
+    "missing_control": "no instruction-hierarchy enforcement distinguishes origin or recency",
+    "vulnerability_rationale": {
+      "capability": "Agent processes instruction-shaped text from untrusted components in the same channel as trusted system instructions.",
+      "vulnerability": "No instruction-hierarchy enforcement distinguishes trusted origin from untrusted, recently-seen text.",
+      "impact": "Complete behavioral takeover, enabling most other AVE attack classes as a follow-on payload."
+    },
     "mitigation": {
       "strategy": [
         "validate_input",
@@ -3661,7 +3766,7 @@
     "researcher": "Perez & Ribeiro",
     "researcher_url": "https://arxiv.org/abs/2211.09527",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Perez 2022",
@@ -3788,6 +3893,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "task-scoped tool access → durable, cross-session system modification",
+    "missing_control": "no restriction prevents task-scoped filesystem/shell access from writing to persistence locations (cron, startup scripts)",
+    "vulnerability_rationale": {
+      "capability": "Agent has legitimate filesystem/shell tool access for its task.",
+      "vulnerability": "No restriction prevents that task-scoped access from writing to system-persistence locations.",
+      "impact": "Durable compromise surviving reboot, reinstallation, or removal attempts."
+    },
     "mitigation": {
       "strategy": [
         "least_privilege",
@@ -3810,7 +3922,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Cohen 2024",
@@ -3937,6 +4049,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "agent's own configuration (trusted, set once) → content the agent processes (untrusted, arbitrary)",
+    "missing_control": "no enforced separation between \"instructions that configure the agent\" and \"content the agent merely reads\"",
+    "vulnerability_rationale": {
+      "capability": "Agent operates under safety/alignment constraints configured independently of the content it processes.",
+      "vulnerability": "No boundary prevents processed content from redefining the agent's own safety/alignment configuration; constraints that should be structurally immutable to in-context instruction are treated as negotiable.",
+      "impact": "The agent's built-in safety guidelines and ethical constraints are bypassed: it adopts an alternative identity that operates without restrictions."
+    },
     "mitigation": {
       "strategy": [
         "validate_input",
@@ -3959,7 +4078,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-20T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Wei 2023",
@@ -4084,6 +4203,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "component-issued instruction → operator/user visibility of that instruction",
+    "missing_control": "no enforced transparency requirement independent of what the component itself permits the agent to disclose",
+    "vulnerability_rationale": {
+      "capability": "Agent can withhold information from its own output.",
+      "vulnerability": "No requirement that instructions reaching the agent be disclosed to the user or operator on request; there's no operator-visibility boundary the component's instructions can't also suppress.",
+      "impact": "A covert channel between the component and the agent: the component directs the agent's behavior without the user's awareness or consent."
+    },
     "mitigation": {
       "strategy": [
         "validate_input",
@@ -4106,7 +4232,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-20T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -4227,6 +4353,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "task-descriptive content → direct tool-invocation command",
+    "missing_control": "no separation between content describing a task and content commanding a specific tool invocation with attacker-chosen parameters",
+    "vulnerability_rationale": {
+      "capability": "Agent selects and invokes tools based on task content.",
+      "vulnerability": "No boundary prevents component content from directly commanding tool invocations with attacker-chosen parameters, bypassing the agent's own selection logic.",
+      "impact": "Arbitrary tool invocation, including destructive, exfiltration, or lateral-movement capability the user never intended to activate."
+    },
     "mitigation": {
       "strategy": [
         "require_human_approval",
@@ -4249,7 +4382,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-20T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -4374,6 +4507,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "claimed permission (in-content) → actual authorization (never checked)",
+    "missing_control": "no verification checks an in-content permission claim against any real authorization system",
+    "vulnerability_rationale": {
+      "capability": "Agent can defer to permission claims made within its instruction context.",
+      "vulnerability": "No verification checks an in-content permission claim against any actual authorization system.",
+      "impact": "Agent performs actions it would otherwise refuse, believing itself newly authorized."
+    },
     "mitigation": {
       "strategy": [
         "verify_identity",
@@ -4396,7 +4536,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-20T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "CWE-269",
@@ -4522,6 +4662,13 @@
         "external_comms"
       ]
     },
+    "security_boundary": "PII in agent context → external destination",
+    "missing_control": "no content-aware egress control distinguishes legitimate task output from PII exfiltration",
+    "vulnerability_rationale": {
+      "capability": "Agent can access and transmit user PII in the course of normal tasks.",
+      "vulnerability": "No content-aware egress control distinguishes legitimate task output from PII exfiltration.",
+      "impact": "Identity theft, financial fraud, and regulatory-violation exposure for affected users."
+    },
     "mitigation": {
       "strategy": [
         "least_privilege",
@@ -4544,7 +4691,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-20T09:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "CWE-359",
@@ -4667,6 +4814,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "internal configuration → normal output channel",
+    "missing_control": "no confidentiality boundary prevents the agent's own operational configuration from being repeated back through its ordinary output",
+    "vulnerability_rationale": {
+      "capability": "Agent's output channel can include any content it has processed, including its own system prompt.",
+      "vulnerability": "No confidentiality boundary prevents internal configuration from being repeated back through the normal output channel on request.",
+      "impact": "Proprietary logic and security-policy disclosure, revealing attack surface for follow-on exploitation."
+    },
     "mitigation": {
       "strategy": [
         "validate_input",
@@ -4689,7 +4843,7 @@
     "researcher": "Perez & Ribeiro",
     "researcher_url": "https://arxiv.org/abs/2211.09527",
     "published": "2026-04-20T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Perez 2022",
@@ -4811,6 +4965,13 @@
         "private_data"
       ]
     },
+    "security_boundary": "retrieved document (should be data) → trusted context (treated as instruction)",
+    "missing_control": "no boundary distinguishes RAG-retrieved content from instruction",
+    "vulnerability_rationale": {
+      "capability": "A RAG pipeline retrieves external document content into agent context at query time.",
+      "vulnerability": "No boundary distinguishes retrieved document content from instruction once it enters context.",
+      "impact": "Attacker-controlled instructions execute via a corpus the attacker needs no direct system access to."
+    },
     "mitigation": {
       "strategy": [
         "sanitize_output",
@@ -4854,7 +5015,7 @@
     "researcher": "Zou et al.",
     "researcher_url": "https://arxiv.org/abs/2402.07867",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-29T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -4953,6 +5114,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "claimed server identity → actual, verified identity (never checked)",
+    "missing_control": "no identity verification mechanism for MCP servers; trust follows a self-asserted manifest claim",
+    "vulnerability_rationale": {
+      "capability": "Agent grants trust and permission scope based on a server's claimed identity.",
+      "vulnerability": "No verification checks a claimed server identity against anything real.",
+      "impact": "A malicious server receives elevated trust and permissions it has no legitimate claim to."
+    },
     "mitigation": {
       "strategy": [
         "verify_identity",
@@ -4996,7 +5164,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "CWE-290",
@@ -5092,6 +5260,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "actual tool execution result → reported result (agent sits unchecked in the path)",
+    "missing_control": "no integrity check verifies a reported tool result matches what the tool actually returned",
+    "vulnerability_rationale": {
+      "capability": "Agent reports tool call results to users and downstream components.",
+      "vulnerability": "No integrity check verifies a reported result matches what the tool actually returned.",
+      "impact": "False information, hidden errors, or manipulated downstream decisions based on fabricated data."
+    },
     "mitigation": {
       "strategy": [
         "validate_input",
@@ -5135,7 +5310,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -5239,6 +5414,13 @@
         "private_data"
       ]
     },
+    "security_boundary": "write request (untrusted) → persistent memory store (should be trusted)",
+    "missing_control": "no provenance or integrity check gates writes to persistent memory",
+    "vulnerability_rationale": {
+      "capability": "Agent maintains persistent memory across sessions.",
+      "vulnerability": "No provenance or integrity check gates writes to the persistent memory store.",
+      "impact": "Attacker-controlled beliefs influence agent behavior across all future sessions, long after the initial write."
+    },
     "mitigation": {
       "strategy": [
         "validate_input",
@@ -5282,7 +5464,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Cohen 2024",
@@ -5383,6 +5565,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "orchestrator-intended output → sub-agent input, same channel",
+    "missing_control": "no boundary between task content and instruction at the agent-to-agent handoff specifically",
+    "vulnerability_rationale": {
+      "capability": "One agent's output becomes a downstream sub-agent's input in a delegation pipeline.",
+      "vulnerability": "No boundary distinguishes orchestrator-intended content from attacker-crafted instructions at the agent-to-agent handoff.",
+      "impact": "Downstream agent performs actions the orchestrator or user never intended, bypassing orchestrator-level safety controls."
+    },
     "mitigation": {
       "strategy": [
         "validate_input",
@@ -5426,7 +5615,7 @@
     "researcher": "Bawbel Security Research Team",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-29T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Cohen 2024",
@@ -5523,6 +5712,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "agent decision → irreversible/high-impact action",
+    "missing_control": "human confirmation is component-configurable behavior, not a structurally enforced gate",
+    "vulnerability_rationale": {
+      "capability": "Agent can take consequential or irreversible actions.",
+      "vulnerability": "Human confirmation for high-impact actions is component-configurable, not a structurally enforced gate.",
+      "impact": "Irreversible actions execute with no review opportunity, increasing the blast radius of any error or attack."
+    },
     "mitigation": {
       "strategy": [
         "require_human_approval",
@@ -5565,7 +5761,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -5661,6 +5857,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "reviewed artifact (declared manifest scope) → executed behavior (actual runtime access)",
+    "missing_control": "no scope enforcement at the agent-framework layer comparing runtime tool/resource calls against the component's own declared manifest",
+    "vulnerability_rationale": {
+      "capability": "Agent can invoke tools, APIs, files, or databases beyond what a skill's manifest declares as its required resource access.",
+      "vulnerability": "No runtime mechanism compares an agent's actual resource access against the manifest's declared scope. The manifest is a reviewed, trusted declaration; nothing enforces that declaration once the component runs.",
+      "impact": "The agent accesses resources beyond the component's declared scope, violating least privilege and possibly exposing sensitive data or systems that the user did not authorize."
+    },
     "mitigation": {
       "strategy": [
         "least_privilege",
@@ -5704,7 +5907,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "CWE-269",
@@ -5797,6 +6000,13 @@
       "requires": [
         "untrusted_content"
       ]
+    },
+    "security_boundary": "constraint binding (should be persistent) → context-window position (where it actually, and non-persistently, lives)",
+    "missing_control": "no mechanism keeps safety constraints binding independent of how much content has since entered the context",
+    "vulnerability_rationale": {
+      "capability": "Agent's effective attention to system-prompt and safety content can vary with context volume.",
+      "vulnerability": "Safety and system constraints have no persistence guarantee independent of their position in the context window; they can be positionally evicted rather than remaining structurally binding.",
+      "impact": "Safety constraints, user instructions and conversation history are pushed out of the context window, so the model may become more susceptible to subsequent malicious instructions."
     },
     "mitigation": {
       "strategy": [
@@ -5948,6 +6158,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "declared file extension → actual byte-level content",
+    "missing_control": "no content-type verification independent of the declared extension",
+    "vulnerability_rationale": {
+      "capability": "Skill files are loaded and trusted based on their declared extension.",
+      "vulnerability": "No content-type verification independent of the declared extension confirms the file's actual format before it's trusted.",
+      "impact": "Arbitrary executable content runs under the guise of a benign skill file, invisible to text-pattern scanners."
+    },
     "mitigation": {
       "strategy": [
         "validate_input",
@@ -5992,7 +6209,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "CWE-434",
@@ -6091,6 +6308,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "genuine session history (should be structurally distinct) → arbitrary content shaped to resemble history (currently indistinguishable to the model)",
+    "missing_control": "no structural or cryptographic separation between real history and content merely formatted to look like it",
+    "vulnerability_rationale": {
+      "capability": "Agent relies on conversation history to infer prior user intent and consent.",
+      "vulnerability": "No integrity or provenance check distinguishes genuine prior-turn history from content merely styled to resemble it within the current turn's context.",
+      "impact": "The agent believes the user previously approved an action, said something they did not, or established a precedent that does not exist, which enables social engineering of its decisions."
+    },
     "mitigation": {
       "strategy": [
         "validate_input",
@@ -6134,7 +6358,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -6227,6 +6451,13 @@
         "private_data",
         "external_comms"
       ]
+    },
+    "security_boundary": "tool-call parameters/return values → external transmission",
+    "missing_control": "monitoring inspects network destination, not tool-call payload content, for encoded sensitive data",
+    "vulnerability_rationale": {
+      "capability": "Agent can pass parameters to legitimate, already-authorized tools.",
+      "vulnerability": "No inspection of tool-call parameter or return content for encoded sensitive data.",
+      "impact": "Credential/PII/system-prompt exfiltration disguised as ordinary, legitimate-looking tool traffic."
     },
     "mitigation": {
       "strategy": [
@@ -6384,6 +6615,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "single-session, untrusted instruction → cross-session persistent behavior",
+    "missing_control": "no check on instructions that specifically target the agent's own persistence/memory behavior as their payload",
+    "vulnerability_rationale": {
+      "capability": "Agent's stated behavior can be shaped by instructions that ask it to \"remember\" something.",
+      "vulnerability": "No boundary prevents a single untrusted, single-session instruction from converting itself into cross-session persistent behavior via the agent's own compliance with a \"remember this\" directive.",
+      "impact": "A one-time injection becomes a persistent compromise: the instructions are re-applied in all future conversations, regardless of context resets, memory clears or new sessions."
+    },
     "mitigation": {
       "strategy": [
         "isolate_scope",
@@ -6428,7 +6666,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -6527,6 +6765,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "uploaded document content (should be data) → instruction",
+    "missing_control": "no boundary distinguishes uploaded document content from instruction the agent should follow",
+    "vulnerability_rationale": {
+      "capability": "Agent processes user-uploaded documents as part of a task.",
+      "vulnerability": "No boundary distinguishes uploaded document content from instruction the agent should follow.",
+      "impact": "Indirect prompt injection requiring only that a user be convinced to upload a crafted document."
+    },
     "mitigation": {
       "strategy": [
         "validate_input",
@@ -6571,7 +6816,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-29T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -6666,6 +6911,13 @@
       "requires": [
         "untrusted_content"
       ]
+    },
+    "security_boundary": "human visual review → model-level codepoint processing",
+    "missing_control": "no Unicode normalization/canonicalization check before human review",
+    "vulnerability_rationale": {
+      "capability": "Human reviewers evaluate text visually; the model processes Unicode codepoints.",
+      "vulnerability": "No canonicalization or normalization step reconciles what a human reviewer visually sees with what the model actually processes at the codepoint level.",
+      "impact": "Instructions that look innocuous to a human reviewer are processed as instructions by the model."
     },
     "mitigation": {
       "strategy": [
@@ -6818,6 +7070,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "claimed role → actually-verified role (never checked)",
+    "missing_control": "no authentication step backing role claims",
+    "vulnerability_rationale": {
+      "capability": "Skills can implement role-based access checks against user-supplied claims.",
+      "vulnerability": "Role-based access control is implemented by trusting a bare, self-asserted claim with no backing credential or authentication step.",
+      "impact": "Any user who simply claims the privileged role receives elevated access, bypassing all actual authentication."
+    },
     "mitigation": {
       "strategy": [
         "verify_identity",
@@ -6968,6 +7227,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "agent-generated output → training/RLHF feedback signal",
+    "missing_control": "no integrity check on agent-generated feedback prevents the evaluated system from also controlling its own evaluation signal",
+    "vulnerability_rationale": {
+      "capability": "Agent-generated outputs can feed into a downstream training/RLHF feedback pipeline.",
+      "vulnerability": "No integrity check prevents the evaluated system from also controlling its own evaluation signal.",
+      "impact": "Gradual, hard-to-detect manipulation of future model behavior via biased reward signals."
+    },
     "mitigation": {
       "strategy": [
         "validate_input",
@@ -7012,7 +7278,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Wan 2023",
@@ -7111,6 +7377,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "declared task scope → actual network reachability",
+    "missing_control": "no network segmentation or egress scoping tied to a skill's declared purpose; the agent's network capability is all-or-nothing rather than scoped per task",
+    "vulnerability_rationale": {
+      "capability": "Agent has network connectivity or shell access sufficient to reach internal hosts and services.",
+      "vulnerability": "No network-layer segmentation or scope check restricts an agent's granted network capability to the destinations its declared task actually requires.",
+      "impact": "The attacker gains intelligence for further attacks (network scans, enumerated services, a map of internal infrastructure), all executed from a trusted internal host."
+    },
     "mitigation": {
       "strategy": [
         "least_privilege",
@@ -7155,7 +7428,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "CWE-918",
@@ -7419,6 +7692,13 @@
         "external_comms"
       ]
     },
+    "security_boundary": "external URL content → agent's full capability set",
+    "missing_control": "no identity/integrity verification gates dynamically-loaded code before execution",
+    "vulnerability_rationale": {
+      "capability": "Agent can dynamically load and execute code from a URL at runtime.",
+      "vulnerability": "No verification gates code loaded from an external URL before it executes with the agent's full capability set.",
+      "impact": "Full agent compromise via arbitrary attacker-controlled code with no static-review opportunity."
+    },
     "mitigation": {
       "strategy": [
         "pin_integrity",
@@ -7463,7 +7743,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "CWE-829",
@@ -7701,6 +7981,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "task-scoped credentials/access → reach beyond original task scope",
+    "missing_control": "no boundary prevents reuse of granted access to reach systems beyond the declared task",
+    "vulnerability_rationale": {
+      "capability": "Agent has network connectivity and credentials/tokens scoped to its current task.",
+      "vulnerability": "No boundary prevents that access from being reused to reach systems beyond the original task's authorized scope.",
+      "impact": "Compromise expands from one pipeline segment to adjacent systems the attacker could not reach directly."
+    },
     "mitigation": {
       "strategy": [
         "least_privilege",
@@ -7745,7 +8032,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "MITRE ATT&CK T1021",
@@ -7843,6 +8130,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "text-channel untrusted-content boundary (exists) → image-channel untrusted-content boundary (does not exist)",
+    "missing_control": "no cross-modal equivalent of existing text-content trust boundaries",
+    "vulnerability_rationale": {
+      "capability": "Multimodal agents can read text embedded in images.",
+      "vulnerability": "Untrusted-content handling boundaries exist for text but have no equivalent for text rendered inside images; the same class of content is trusted or untrusted depending on which modality carries it.",
+      "impact": "A prompt injection vector that completely bypasses text-level security scanning, because the malicious instruction is never present as text in the input stream, only as pixels in an image."
+    },
     "mitigation": {
       "strategy": [
         "validate_input",
@@ -7887,7 +8181,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Qi 2023",
@@ -7984,6 +8278,13 @@
       "requires": [
         "untrusted_content"
       ]
+    },
+    "security_boundary": "declared, bounded tool/delegation scope → actual, unbounded runtime use",
+    "missing_control": "no ceiling on tool invocations or sub-agent spawning, and no human checkpoint gating either, once a component's instructions grant \"unlimited\" authority",
+    "vulnerability_rationale": {
+      "capability": "Agent can use any declared tool and spawn sub-agents.",
+      "vulnerability": "No mechanism bounds how tool-use and sub-agent-spawning access is used once it is granted: there is no ceiling on invocations or spawning and no human checkpoint.",
+      "impact": "All scope boundaries and human oversight are removed, turning the agent into an unconstrained autonomous actor."
     },
     "mitigation": {
       "strategy": [
@@ -8134,6 +8435,13 @@
         "private_data",
         "external_comms"
       ]
+    },
+    "security_boundary": "network-egress monitoring (exists) → content-level covert-channel monitoring (does not exist)",
+    "missing_control": "no content-level covert-channel detection independent of destination monitoring",
+    "vulnerability_rationale": {
+      "capability": "Agent output is reviewed by humans and monitored at the network layer.",
+      "vulnerability": "Exfiltration monitoring checks network destinations, not whether benign-looking output content itself encodes exfiltrated data; content-level exfiltration has no detection surface at all.",
+      "impact": "Sensitive data is exfiltrated through output that looks benign to a human reviewer, with no detection surface at the content level."
     },
     "mitigation": {
       "strategy": [
@@ -8441,6 +8749,13 @@
         "external_comms"
       ]
     },
+    "security_boundary": "tool result content (data) → code the agent generates and executes",
+    "missing_control": "no boundary prevents tool-result content from breaking out of data context into generated code",
+    "vulnerability_rationale": {
+      "capability": "Agent-generated orchestration code processes tool results in Code/REPL Mode.",
+      "vulnerability": "No boundary prevents tool result content from breaking out of data context into the code the agent generates and executes.",
+      "impact": "Arbitrary code execution bypassing all prompt-level, text-instruction filtering entirely."
+    },
     "mitigation": {
       "strategy": [
         "deny_by_default",
@@ -8471,7 +8786,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-01T00:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "CWE-94",
@@ -8598,6 +8913,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "rendered surface (what the user sees) → processed payload (what the model reads)",
+    "missing_control": "no consistency requirement between rendered and processed content from the same rich-UI payload",
+    "vulnerability_rationale": {
+      "capability": "MCP Apps can render rich UI elements the model also processes as context.",
+      "vulnerability": "No consistency check ensures what's rendered to the user matches what the model actually processes from the same payload.",
+      "impact": "Agent acts on instructions the user has no way to see, in an interface designed to look fully transparent."
+    },
     "mitigation": {
       "strategy": [
         "sanitize_output",
@@ -8627,7 +8949,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-01T00:00:00Z",
-    "last_updated": "2026-08-29T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Greshake 2023",
@@ -8755,6 +9077,13 @@
         "external_comms"
       ]
     },
+    "security_boundary": "low-trust server's instruction → high-trust server's capability, same session",
+    "missing_control": "no per-server trust isolation within a single multi-server agent session",
+    "vulnerability_rationale": {
+      "capability": "A single agent session can connect to and act on multiple MCP servers simultaneously.",
+      "vulnerability": "No per-server trust isolation prevents a low-trust server's instruction from directing the agent's use of a co-connected high-trust server.",
+      "impact": "Confused-deputy escalation from low-privilege compromise to high-privilege action."
+    },
     "mitigation": {
       "strategy": [
         "isolate_scope",
@@ -8785,7 +9114,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-01T00:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "CWE-269",
@@ -9193,6 +9522,13 @@
         "external_comms"
       ]
     },
+    "security_boundary": "agent-generated response content → client's automatic rendering (an unmonitored channel)",
+    "missing_control": "no inspection of response content for embedded exfiltration channels before client rendering acts on it",
+    "vulnerability_rationale": {
+      "capability": "Clients automatically render markdown/rich-content references in agent responses.",
+      "vulnerability": "No inspection of agent-generated response content for embedded exfiltration channels before automatic rendering fetches them.",
+      "impact": "Zero-interaction data exfiltration requiring no tool call and no obfuscation."
+    },
     "mitigation": {
       "strategy": [
         "sanitize_output",
@@ -9218,7 +9554,7 @@
     "researcher": "Aim Labs",
     "researcher_url": "https://arxiv.org/abs/2509.10540",
     "published": "2026-07-10T00:00:00Z",
-    "last_updated": "2026-08-09T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "CVE",
@@ -9300,7 +9636,7 @@
     "schema_version": "1.3.0",
     "status": "active",
     "published": "2026-07-14T00:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "component_type": "skill",
     "title": "Obfuscated or encoded skill payload designed to evade static scanners",
     "attack_class": "Obfuscation - Static Analysis Evasion",
@@ -9333,6 +9669,13 @@
       "requires": [
         "untrusted_content"
       ]
+    },
+    "security_boundary": "as-scanned representation → as-executed representation",
+    "missing_control": "no decode-then-rescan step in the static-analysis pipeline",
+    "vulnerability_rationale": {
+      "capability": "Static scanners pattern-match against a skill's literal, as-written content.",
+      "vulnerability": "Static analysis operates on the encoded representation while execution operates on the decoded representation, with no decode-then-rescan step bridging the two.",
+      "impact": "Pattern-based and keyword-based static scanners fail to match the encoded form, while the decoded or executed form at runtime is fully malicious."
     },
     "mitigation": {
       "strategy": [
@@ -9688,6 +10031,13 @@
         "private_data"
       ]
     },
+    "security_boundary": "instruction-level review (exists) → configuration-level review (does not exist)",
+    "missing_control": "no requirement that safety-relevant config flags receive the same review rigor as instruction text",
+    "vulnerability_rationale": {
+      "capability": "Components can declare configuration flags controlling whether human approval is required.",
+      "vulnerability": "No requirement that safety-relevant configuration flags receive the same review scrutiny as instruction text.",
+      "impact": "A required human-in-the-loop control is silently removed with no instruction-level signal a reviewer would catch."
+    },
     "mitigation": {
       "strategy": [
         "deny_by_default",
@@ -9710,7 +10060,7 @@
     "kill_switch_active": false,
     "researcher": "hackerone.com/cantina_xyz",
     "published": "2026-07-27T00:00:00Z",
-    "last_updated": "2026-10-20T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "CVE-2026-33068 (GHSA-mmgp-wc2j-qcv7)",
@@ -9804,6 +10154,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "passive action (opening a project) → code execution, no confirmation",
+    "missing_control": "no confirmation gate on auto-run behavior triggered passively rather than by explicit tool call",
+    "vulnerability_rationale": {
+      "capability": "IDE/dev-environment configuration can declare commands to run automatically on project load.",
+      "vulnerability": "No confirmation gate exists for auto-run behavior triggered by a passive action rather than an explicit tool call.",
+      "impact": "Code execution requiring no action beyond opening a compromised project directory."
+    },
     "mitigation": {
       "strategy": [
         "deny_by_default",
@@ -9827,7 +10184,7 @@
     "researcher": "Check Point Research (Aviv Donenfeld, Oded Vanunu)",
     "researcher_url": "https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536/",
     "published": "2026-07-27T00:00:00Z",
-    "last_updated": "2026-10-20T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Anthropic GHSA-ph6w-f82w-28w6",
@@ -9948,6 +10305,13 @@
         "external_comms"
       ]
     },
+    "security_boundary": "model's own hallucinated belief → fetch/install action",
+    "missing_control": "no registry-existence or publisher-identity check before acting on a model-generated resource name",
+    "vulnerability_rationale": {
+      "capability": "Agent resolves user requests for well-known resources to package/repo/skill names it generates itself.",
+      "vulnerability": "No registry-existence or publisher-identity check occurs before fetching or installing a model-generated name.",
+      "impact": "Malware installation via a scalable, precomputed, cross-model squatting technique with no injection required at all."
+    },
     "mitigation": {
       "strategy": [
         "verify_identity",
@@ -9972,7 +10336,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-08-02T00:00:00Z",
-    "last_updated": "2026-08-02T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Beware of Agentic Botnets (arXiv 2607.07433)",
@@ -10077,6 +10441,13 @@
       "entry_class": "tool_response",
       "payload_surface": "a benign, correct upstream skill's output (endorsement, audit finding, validation result) consumed by a downstream skill as an implicit trust or authorization signal"
     },
+    "security_boundary": "upstream skill's output (benign) → downstream skill's trust signal (unverified)",
+    "missing_control": "no requirement that a downstream skill independently re-verify a trust claim carried in an upstream skill's output",
+    "vulnerability_rationale": {
+      "capability": "A downstream skill can consume another skill's output as part of its own decision logic.",
+      "vulnerability": "No requirement exists for a downstream skill to independently re-verify a trust or authorization claim in an upstream skill's output.",
+      "impact": "Harmful actions approved based on a spoofable trust credential no single skill's isolated review would ever catch."
+    },
     "mitigation": {
       "strategy": [
         "verify_identity",
@@ -10101,7 +10472,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-08-02T00:00:00Z",
-    "last_updated": "2026-08-02T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Benign in Isolation, Harmful in Composition (arXiv 2606.15242)",
@@ -10181,6 +10552,13 @@
       "payload_surface": "shared OS/shell state (environment variables, file descriptors, working directory, temp files) connecting sequential CLI command executions within one agent session",
       "escalation": "instruction_to_capability"
     },
+    "security_boundary": "single-command security review → multi-command behavioral effect; the boundary is the unit of analysis itself, per-command versus per-sequence",
+    "missing_control": "no cross-command state-flow analysis; every existing tool's unit of analysis stops at the single command",
+    "vulnerability_rationale": {
+      "capability": "Agent can issue sequences of CLI commands, none individually dangerous.",
+      "vulnerability": "No producer-consumer tracking across a command sequence within one session; every existing control (ShellCheck, GTFOBins, LOLBAS, single-command scanners) evaluates each command in isolation, so the composition itself is structurally invisible to them.",
+      "impact": "Benign-looking commands compose through shared operating-system state into a capability beyond what the user's task authorized, which no single-command check observes; published research reports a 96.59% attack success rate across 2,525 trials."
+    },
     "mitigation": {
       "strategy": [
         "isolate_scope",
@@ -10205,7 +10583,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-08-02T00:00:00Z",
-    "last_updated": "2026-08-02T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "MOSAIC (arXiv 2607.02857)",
@@ -10289,6 +10667,13 @@
       "payload_surface": "an image resource bundled within the skill package, distinct from the package's documentation, manifest, or source code text",
       "escalation": "data_to_instruction"
     },
+    "security_boundary": "text-only review pipeline → bundled image resource (never decoded for review)",
+    "missing_control": "no visual/multimodal decoding step exists in static review",
+    "vulnerability_rationale": {
+      "capability": "Multimodal agents can decode and act on bundled image content within a skill package.",
+      "vulnerability": "No visual/multimodal decoding step exists in the text-only static-review pipeline covering the rest of the package.",
+      "impact": "Instructions invisible to every current text-based scanner execute once a multimodal agent processes the resource."
+    },
     "mitigation": {
       "strategy": [
         "validate_input",
@@ -10313,7 +10698,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-08-02T00:00:00Z",
-    "last_updated": "2026-08-02T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "SkillCamo (arXiv 2606.18198)",
@@ -10408,6 +10793,13 @@
         "external_comms"
       ]
     },
+    "security_boundary": "dormant, per-agent fragments → externally reassembled, post-hoc payload",
+    "missing_control": "no anomaly detection for encoded fragments inconsistent with a tool's stated function, and no cross-agent correlation of dormant fragments",
+    "vulnerability_rationale": {
+      "capability": "Tools deliver observations to agents that persist in memory/context after the call.",
+      "vulnerability": "No anomaly detection or cross-agent correlation catches a fragmented payload no single session could ever contain enough of to detect.",
+      "impact": "A complete backdoor exists and becomes executable only after the fact, entirely outside any single session's visibility."
+    },
     "mitigation": {
       "strategy": [
         "provenance_label",
@@ -10432,7 +10824,7 @@
     "researcher": "Pengyu Zhu, Lijun Li, Yaxing Lyu, Li Sun, Sen Su, Jing Shao",
     "researcher_url": "https://arxiv.org/abs/2510.11246",
     "published": "2026-08-02T00:00:00Z",
-    "last_updated": "2026-08-23T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Collaborative Shadows (arXiv 2510.11246)",
@@ -10531,6 +10923,13 @@
         "external_comms"
       ]
     },
+    "security_boundary": "expected local daemon → actual, redirected remote daemon (unverified)",
+    "missing_control": "no verification that a declared daemon target matches the expected local daemon before build/run/pull proceeds",
+    "vulnerability_rationale": {
+      "capability": "Components can declare a container daemon connection target via configuration.",
+      "vulnerability": "No verification confirms a declared daemon target is the expected local daemon before operations proceed against it.",
+      "impact": "Secrets and bind-mounted data are exposed to whatever infrastructure actually receives the redirected connection."
+    },
     "mitigation": {
       "strategy": [
         "deny_by_default",
@@ -10555,7 +10954,7 @@
     "researcher": "Nicolai (predictor2718)",
     "researcher_url": "https://github.com/predictor2718",
     "published": "2026-08-06T00:00:00Z",
-    "last_updated": "2026-08-06T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "cfgaudit crosswalk gap detail",
@@ -11057,6 +11456,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "steering text (targets the checker) → classifier's approve/deny judgment",
+    "missing_control": "no boundary prevents the same class of natural-language content that steers a primary agent from also steering the classifier meant to check it",
+    "vulnerability_rationale": {
+      "capability": "A committed configuration file can declare natural-language steering text consumed by a safety-classifier subagent.",
+      "vulnerability": "No boundary prevents natural-language content from probabilistically steering the classifier meant to check an agent's actions, the same way it steers the agent itself.",
+      "impact": "Auto-approval of shell/MCP/Fetch calls the classifier would otherwise flag, via a committed repository file."
+    },
     "mitigation": {
       "strategy": [
         "require_human_approval",
@@ -11083,7 +11489,7 @@
     "researcher": "Nicolai (predictor2718)",
     "researcher_url": "https://github.com/predictor2718",
     "published": "2026-08-08T00:00:00Z",
-    "last_updated": "2026-08-08T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "predictor2718 PR #123",
@@ -12514,6 +12920,13 @@
       "entry_class": "content",
       "payload_surface": "skill instruction body: false-authority framing"
     },
+    "security_boundary": "claimed identity (asserted in content) → actual, verifiable identity (not checked against anything)",
+    "missing_control": "no authentication of in-band identity/authority claims",
+    "vulnerability_rationale": {
+      "capability": "Agent can act on authority claims present in content it processes.",
+      "vulnerability": "No mechanism authenticates in-content authority claims; any content can assert arbitrary authority with no verification step.",
+      "impact": "The agent follows instructions it would otherwise question, because it defers to the claimed authority within its trust hierarchy."
+    },
     "mitigation": {
       "strategy": [
         "verify_identity",
@@ -12536,7 +12949,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-20T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "CWE-290",
@@ -12618,7 +13031,7 @@
     "schema_version": "1.3.0",
     "status": "active",
     "published": "2026-07-14T00:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "component_type": "skill",
     "title": "Deceptive skill trigger or activation-scope manipulation via misleading manifest description",
     "attack_class": "Social Engineering - Trigger Scope Deception",
@@ -12651,6 +13064,13 @@
       "requires": [
         "untrusted_content"
       ]
+    },
+    "security_boundary": "declared manifest trigger/description → actual implemented behavior",
+    "missing_control": "no verification that declared triggers match real behavior before invocation decisions are made",
+    "vulnerability_rationale": {
+      "capability": "A skill's declared manifest trigger/description determines when it gets invoked.",
+      "vulnerability": "No verification checks that a declared trigger matches the skill's actual implemented behavior before invocation.",
+      "impact": "Over-broad or implicit invocation in contexts the skill's real behavior does not warrant."
     },
     "mitigation": {
       "strategy": [
