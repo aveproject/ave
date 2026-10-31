@@ -28,6 +28,13 @@
     "requires": ["untrusted_content"],
     "amplifies": ["private_data", "external_comms"]
   },
+  "security_boundary": "dormant, per-agent fragments → externally reassembled, post-hoc payload",
+  "missing_control": "no anomaly detection for encoded fragments inconsistent with a tool's stated function, and no cross-agent correlation of dormant fragments",
+  "vulnerability_rationale": {
+    "capability": "Tools deliver observations to agents that persist in memory/context after the call.",
+    "vulnerability": "No anomaly detection or cross-agent correlation catches a fragmented payload no single session could ever contain enough of to detect.",
+    "impact": "A complete backdoor exists and becomes executable only after the fact, entirely outside any single session's visibility."
+  },
   "mitigation": {
     "strategy": ["provenance_label", "isolate_scope"],
     "enforcement_point": "runtime_proxy",
@@ -49,7 +56,7 @@
   "researcher": "Pengyu Zhu, Lijun Li, Yaxing Lyu, Li Sun, Sen Su, Jing Shao",
   "researcher_url": "https://arxiv.org/abs/2510.11246",
   "published": "2026-08-02T00:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Collaborative Shadows (arXiv 2510.11246)",

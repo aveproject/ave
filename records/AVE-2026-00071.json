@@ -33,6 +33,13 @@
   "trifecta_profile": {
     "requires": ["external_comms"]
   },
+  "security_boundary": "expected local daemon → actual, redirected remote daemon (unverified)",
+  "missing_control": "no verification that a declared daemon target matches the expected local daemon before build/run/pull proceeds",
+  "vulnerability_rationale": {
+    "capability": "Components can declare a container daemon connection target via configuration.",
+    "vulnerability": "No verification confirms a declared daemon target is the expected local daemon before operations proceed against it.",
+    "impact": "Secrets and bind-mounted data are exposed to whatever infrastructure actually receives the redirected connection."
+  },
   "mitigation": {
     "strategy": ["deny_by_default", "pin_integrity"],
     "enforcement_point": "static_scan",
@@ -54,7 +61,7 @@
   "researcher": "Nicolai (predictor2718)",
   "researcher_url": "https://github.com/predictor2718",
   "published": "2026-08-06T00:00:00Z",
-  "last_updated": "2026-08-06T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "cfgaudit crosswalk gap detail",
