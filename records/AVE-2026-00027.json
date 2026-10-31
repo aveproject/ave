@@ -45,6 +45,13 @@
       "untrusted_content"
     ]
   },
+  "security_boundary": "single-session, untrusted instruction → cross-session persistent behavior",
+  "missing_control": "no check on instructions that specifically target the agent's own persistence/memory behavior as their payload",
+  "vulnerability_rationale": {
+    "capability": "Agent's stated behavior can be shaped by instructions that ask it to \"remember\" something.",
+    "vulnerability": "No boundary prevents a single untrusted, single-session instruction from converting itself into cross-session persistent behavior via the agent's own compliance with a \"remember this\" directive.",
+    "impact": "A one-time injection becomes a persistent compromise: the instructions are re-applied in all future conversations, regardless of context resets, memory clears or new sessions."
+  },
   "mitigation": {
     "strategy": [
       "isolate_scope",
@@ -89,7 +96,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",

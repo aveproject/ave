@@ -42,6 +42,13 @@
       "external_comms"
     ]
   },
+  "security_boundary": "tool-call parameters/return values → external transmission",
+  "missing_control": "monitoring inspects network destination, not tool-call payload content, for encoded sensitive data",
+  "vulnerability_rationale": {
+    "capability": "Agent can pass parameters to legitimate, already-authorized tools.",
+    "vulnerability": "No inspection of tool-call parameter or return content for encoded sensitive data.",
+    "impact": "Credential/PII/system-prompt exfiltration disguised as ordinary, legitimate-looking tool traffic."
+  },
   "mitigation": {
     "strategy": [
       "sanitize_output",

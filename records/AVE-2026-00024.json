@@ -41,6 +41,13 @@
       "untrusted_content"
     ]
   },
+  "security_boundary": "declared file extension → actual byte-level content",
+  "missing_control": "no content-type verification independent of the declared extension",
+  "vulnerability_rationale": {
+    "capability": "Skill files are loaded and trusted based on their declared extension.",
+    "vulnerability": "No content-type verification independent of the declared extension confirms the file's actual format before it's trusted.",
+    "impact": "Arbitrary executable content runs under the guise of a benign skill file, invisible to text-pattern scanners."
+  },
   "mitigation": {
     "strategy": [
       "validate_input",
@@ -85,7 +92,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "CWE-434",

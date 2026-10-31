@@ -40,6 +40,13 @@
       "untrusted_content"
     ]
   },
+  "security_boundary": "constraint binding (should be persistent) → context-window position (where it actually, and non-persistently, lives)",
+  "missing_control": "no mechanism keeps safety constraints binding independent of how much content has since entered the context",
+  "vulnerability_rationale": {
+    "capability": "Agent's effective attention to system-prompt and safety content can vary with context volume.",
+    "vulnerability": "Safety and system constraints have no persistence guarantee independent of their position in the context window; they can be positionally evicted rather than remaining structurally binding.",
+    "impact": "Safety constraints, user instructions and conversation history are pushed out of the context window, so the model may become more susceptible to subsequent malicious instructions."
+  },
   "mitigation": {
     "strategy": [
       "validate_input",
