@@ -29,6 +29,13 @@
       "external_comms"
     ]
   },
+  "security_boundary": "agent-generated response content → client's automatic rendering (an unmonitored channel)",
+  "missing_control": "no inspection of response content for embedded exfiltration channels before client rendering acts on it",
+  "vulnerability_rationale": {
+    "capability": "Clients automatically render markdown/rich-content references in agent responses.",
+    "vulnerability": "No inspection of agent-generated response content for embedded exfiltration channels before automatic rendering fetches them.",
+    "impact": "Zero-interaction data exfiltration requiring no tool call and no obfuscation."
+  },
   "mitigation": {
     "strategy": [
       "sanitize_output",
@@ -54,7 +61,7 @@
   "researcher": "Aim Labs",
   "researcher_url": "https://arxiv.org/abs/2509.10540",
   "published": "2026-07-10T00:00:00Z",
-  "last_updated": "2026-08-09T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "CVE",

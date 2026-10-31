@@ -38,6 +38,13 @@
     "requires": ["untrusted_content"],
     "amplifies": ["external_comms", "private_data"]
   },
+  "security_boundary": "per-description review (isolated) → multi-description composition (never reviewed as a whole)",
+  "missing_control": "no cross-description, holistic review step exists",
+  "vulnerability_rationale": {
+    "capability": "MCP tool descriptions across multiple tools/servers are individually reviewed for malicious content.",
+    "vulnerability": "No cross-description review step exists; review is structurally confined to one description at a time.",
+    "impact": "A complete malicious instruction assembles at inference time with no single reviewable artifact ever having existed."
+  },
   "mitigation": {
     "strategy": ["validate_input", "pin_integrity"],
     "enforcement_point": "server_card_fetch",
@@ -62,7 +69,7 @@
   "researcher": "Liu et al.",
   "researcher_url": "https://arxiv.org/abs/2606.27027",
   "published": "2026-07-15T00:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "ShareLock research",

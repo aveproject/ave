@@ -44,6 +44,13 @@
       "untrusted_content"
     ]
   },
+  "security_boundary": "parent's full permission set → sub-agent, by default",
+  "missing_control": "no explicit trust-boundary or permission-scoping requirement on delegation",
+  "vulnerability_rationale": {
+    "capability": "Agent can delegate tasks to sub-agents or spawn child agents.",
+    "vulnerability": "No explicit trust boundary or permission-scoping requirement exists on delegation; sub-agents inherit full parent permissions by default.",
+    "impact": "Privilege laundering and audit evasion, since sub-agent actions may not appear in the parent's audit trail."
+  },
   "mitigation": {
     "strategy": [
       "least_privilege",
@@ -74,7 +81,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-05-16T00:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "CWE-269",

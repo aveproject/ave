@@ -3,7 +3,7 @@
   "schema_version": "1.3.0",
   "status": "active",
   "published": "2026-06-21T00:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "component_type": "mcp_server",
   "title": "OAuth Discovery Rebinding \u2014 Authorization Endpoint Redirected to Attacker Server",
   "attack_class": "Supply Chain - OAuth Discovery Rebinding",
@@ -47,6 +47,13 @@
     "requires": [
       "external_comms"
     ]
+  },
+  "security_boundary": "server's declared origin → discovery-document endpoint values (unverified)",
+  "missing_control": "no verification that discovery-document endpoints match the server's own declared origin",
+  "vulnerability_rationale": {
+    "capability": "Agent follows OAuth 2.0 Authorization Server Metadata / OIDC Discovery per the published standard.",
+    "vulnerability": "No verification that discovery-document endpoint values match the server's own declared origin before the agent trusts them.",
+    "impact": "Interception of authorization codes, access tokens, and credentials during the OAuth exchange."
   },
   "mitigation": {
     "strategy": [

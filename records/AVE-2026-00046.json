@@ -48,6 +48,13 @@
       "private_data"
     ]
   },
+  "security_boundary": "component's own declared tool scope → the shared tool-dispatch layer every component's calls route through, which one component can silently claim authority over",
+  "missing_control": "no isolation or authorization check preventing one component's hook registration from intercepting calls belonging to other components",
+  "vulnerability_rationale": {
+    "capability": "Components can register hooks/callbacks into the agent's tool dispatch layer.",
+    "vulnerability": "No authorization or integrity check on hook registration into a shared dispatch layer that all components' tool calls pass through.",
+    "impact": "A hook registered early silently intercepts or redirects all subsequent tool invocations, including those of other skills and system tools, to attacker-controlled callbacks, while the agent continues to believe it is calling the legitimate tool."
+  },
   "mitigation": {
     "strategy": [
       "deny_by_default",
@@ -78,7 +85,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-05-16T00:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "CWE-601",
