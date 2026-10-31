@@ -18,7 +18,7 @@ BASE = {
     "title": "Revisions fixture",
     "description": "A minimal draft record carrying a revisions array.",
     "attack_class": "test",
-    "behavioral_fingerprint": "test",
+    "behavioral_fingerprint": "test.",
     "references": ["https://example.com"],
     "last_updated": "2026-09-28T23:51:58Z",
     "evidence_vantage": "substrate",
