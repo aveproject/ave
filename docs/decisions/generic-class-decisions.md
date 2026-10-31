@@ -68,7 +68,7 @@ It fits 00004, 00005 and 00033 in full. 00047 and 00075 use its second half (too
 
 ### AVE-2026-00033: Unsafe Deserialization or Eval Instruction
 
-> Component instructs the agent to deserialize untrusted data using insecure methods (pickle, yaml.load, eval) or to evaluate dynamic code strings received from external or user-controlled sources, enab (cut off at 200 characters in the record itself, see "Not in the audit" below)
+> Component instructs the agent to deserialize untrusted data using insecure methods (pickle, yaml.load, eval) or to evaluate dynamic code strings received from external or user-controlled sources, enab (as quoted here, cut off at 200 characters; repaired in #414, see "Not in the audit" below)
 
 - **Audit:** lines 753 to 783, classification E, decision JUSTIFY, confidence HIGH.
 - **Weakness it names:** Unsafe deserialization or eval (CWE-502 and CWE-94) instructed in natural language: `pickle.loads`, unguarded `yaml.load`, `eval` or `exec` on untrusted strings.
@@ -92,7 +92,7 @@ It fits 00004, 00005 and 00033 in full. 00047 and 00075 use its second half (too
 
 ### AVE-2026-00040: Insecure Output - Unescaped Injection into Downstream System
 
-> Component instructs the agent to produce output that will be directly interpreted by a downstream system (SQL database, HTML renderer, shell) without escaping or sanitisation, enabling classic injecti (cut off at 200 characters in the record itself, see "Not in the audit" below)
+> Component instructs the agent to produce output that will be directly interpreted by a downstream system (SQL database, HTML renderer, shell) without escaping or sanitisation, enabling classic injecti (as quoted here, cut off at 200 characters; repaired in #414, see "Not in the audit" below)
 
 - **Audit:** lines 1659 to 1669, classification E, decision JUSTIFY, confidence not stated (compact entry).
 - **Weakness it names:** Classic injection (CWE-79, CWE-89, CWE-116 territory) through agent output passed unescaped to a downstream interpreter (SQL, HTML, shell).
@@ -245,14 +245,15 @@ It fits 00004, 00005 and 00033 in full. 00047 and 00075 use its second half (too
 | `has_taxonomy_fields` | whether the record carries `security_boundary`, `missing_control` and `vulnerability_rationale` (true only for 00081 to 00089) |
 | `d7_decision` | the decision above, for the 16 generic-class records |
 | `actions` | what the record needs, from the list below |
-| `needs_maintainer_approval` | the actions among `clarify_fingerprint`, `reframe_fingerprint`, `rewrite`, `restore_truncated_fingerprint` and `reject`. Fingerprint changes are content changes that the compatibility and mutation rules govern, so the work that applies the audit never makes them on its own |
+| `later_actions` | actions that wait for something, each with what it waits for (`after`); empty for most records |
+| `needs_maintainer_approval` | the actions and later actions among `clarify_fingerprint`, `reframe_fingerprint`, `rewrite`, `rewrite_fingerprint` and `reject`. Fingerprint changes are content changes that the compatibility and mutation rules govern, so the work that applies the audit never makes them on its own |
 | `batch` | a number, ten records per batch |
 
 | Action | Means |
 |---|---|
 | `add_taxonomy_fields` | add `security_boundary`, `missing_control` and `vulnerability_rationale` from the audit. 45 audit sections are compact, so for those the fields come from the compact line and the batch flags any where it is too thin |
 | `clarify_fingerprint`, `reframe_fingerprint`, `rewrite` | the audit decisions CLARIFY (23 records), REFRAME (2) and REWRITE (1) |
-| `restore_truncated_fingerprint` | the fingerprint is cut off mid-word at 200 characters (see below) |
+| `rewrite_fingerprint` | a later action: reword the fingerprint from the record's own sources (its references, description and audit entry), in a separate pull request after catalog release v1.3.0. For the seven records whose cut-off fingerprint was restored to an older, shorter sentence (see below) |
 | `write_rationale` | JUSTIFY: state the agentic distinction in `vulnerability_rationale` (the shared text above, plus the record's own point) |
 | `write_rationale_or_reject` | JUSTIFY if written: state it and answer Q6, or reject |
 | `defer_decision` | DEFER: decide before the 2.0.0 release |
@@ -262,9 +263,9 @@ It fits 00004, 00005 and 00033 in full. 00047 and 00075 use its second half (too
 
 **Batches.** Ten records per batch, in this order: the 64 records that need no decision (batches 1 to 7, in id order), the seven JUSTIFY records (batches 7 to 8), the two JUSTIFY-if-written records (batch 8), 00081 to 00089 (batches 8 to 9), then the three deferred records (batch 9, waiting for their deadline) and last the four rejected ones (batch 9, waiting until the decision on #234 is a week old). The last batch is therefore the one that cannot be done early.
 
-**Primary sources.** Twenty-two records have references that are only taxonomy pages, homepages or links back to AVE: 00003, 00004, 00005, 00006, 00012, 00013, 00014, 00017, 00022, 00024, 00026, 00030, 00032, 00033, 00034, 00039, 00040, 00060, 00061, 00062, 00071, 00072. 00060 and 00061 are among them and are being rejected, so they carry no `find_primary_source`; the other twenty do. The list is computed from the references by the rule in the table, so it can be recomputed.
+**Primary sources.** Twenty-two records have references that are only taxonomy pages, homepages or links back to AVE: 00003, 00004, 00005, 00006, 00012, 00013, 00014, 00017, 00022, 00024, 00026, 00030, 00032, 00033, 00034, 00039, 00040, 00060, 00061, 00062, 00071, 00072. 00060 and 00061 are among them and are being rejected, so they carry no `find_primary_source`; the other twenty do. The list is computed from the references by the rule in the table, so it can be recomputed, and it matches the maintainer's own list of 22 by id.
 
-**Not in the audit: truncated fingerprints.** Eight records have a `behavioral_fingerprint` that stops mid-word at exactly 200 characters: 00023, 00026, 00029, 00030, 00033, 00038, 00039, 00040. The schema sets no length limit, and the pre-migration versions of the same records are complete sentences of 104 to 158 characters, so the cut first appears in the AIVSS migration commits of 2026-05-12 and 2026-05-13 (#17 and #18), which replaced each short sentence with a longer one that was stored cut at 200 characters. The history holds only those two versions of each record, the short original and the cut one, so the complete longer text was never committed. Restoring a fingerprint, to the original sentence or to a newly written one, is a content change that needs the maintainer's approval, like the other fingerprint actions. 00033 and 00040 are among the sixteen generic-class records.
+**Not in the audit: truncated fingerprints.** Eight records had a `behavioral_fingerprint` that stopped mid-word at exactly 200 characters: 00023, 00026, 00029, 00030, 00033, 00038, 00039, 00040. The schema sets no length limit, and the pre-migration versions of the same records are complete sentences of 104 to 158 characters, so the cut first appeared in the AIVSS migration commits of 2026-05-12 and 2026-05-13 (#17 and #18), which replaced each short sentence with a longer one that was stored cut at 200 characters. The history holds only those two versions of each record, so the complete longer text was never committed. They were repaired in #414 (pull request #415): 00030 is completed to "backdoor", a word its description uses, and the other seven are restored to the sentence each had before the migration, because the cut text could not be completed from the record's own words. The restored sentences are shorter and older than the rewrites the migration meant to make, so the queue carries `rewrite_fingerprint` for those seven (00023, 00026, 00029, 00033, 00038, 00039, 00040) as a later action: reword each from its own sources, in a separate pull request after catalog release v1.3.0. 00033 and 00040 are among the sixteen generic-class records.
 
 **Not in the queue.** `credit_correction`: the researcher-credit audit (`docs/audits/researcher-credit-audit.json`) is not in the repository yet, so no entry carries it. Score changes: none planned. Rewording a fingerprint or changing a score is a content change; each needs the maintainer's approval first.
 
