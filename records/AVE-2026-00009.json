@@ -45,6 +45,13 @@
       "untrusted_content"
     ]
   },
+  "security_boundary": "agent's own configuration (trusted, set once) → content the agent processes (untrusted, arbitrary)",
+  "missing_control": "no enforced separation between \"instructions that configure the agent\" and \"content the agent merely reads\"",
+  "vulnerability_rationale": {
+    "capability": "Agent operates under safety/alignment constraints configured independently of the content it processes.",
+    "vulnerability": "No boundary prevents processed content from redefining the agent's own safety/alignment configuration; constraints that should be structurally immutable to in-context instruction are treated as negotiable.",
+    "impact": "The agent's built-in safety guidelines and ethical constraints are bypassed: it adopts an alternative identity that operates without restrictions."
+  },
   "mitigation": {
     "strategy": [
       "validate_input",
@@ -67,7 +74,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-20T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Wei 2023",

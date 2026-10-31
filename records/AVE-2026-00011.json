@@ -44,6 +44,13 @@
       "untrusted_content"
     ]
   },
+  "security_boundary": "task-descriptive content → direct tool-invocation command",
+  "missing_control": "no separation between content describing a task and content commanding a specific tool invocation with attacker-chosen parameters",
+  "vulnerability_rationale": {
+    "capability": "Agent selects and invokes tools based on task content.",
+    "vulnerability": "No boundary prevents component content from directly commanding tool invocations with attacker-chosen parameters, bypassing the agent's own selection logic.",
+    "impact": "Arbitrary tool invocation, including destructive, exfiltration, or lateral-movement capability the user never intended to activate."
+  },
   "mitigation": {
     "strategy": [
       "require_human_approval",
@@ -66,7 +73,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-20T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",
