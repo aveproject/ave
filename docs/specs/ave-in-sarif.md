@@ -19,15 +19,33 @@ AVE records are static vulnerability definitions. A scanner (e.g. bawbel/scanner
 
 ---
 
+## Two ways to carry the AVE id
+
+A result names its AVE class in one of two forms. Both are conformant, and a consumer reads either.
+
+| | Form A: the AVE id is the rule id | Form B: the tool keeps its own rule id |
+|---|---|---|
+| `result.ruleId` | the `ave_id`, e.g. `AVE-2026-00001` | the tool's own rule id, e.g. `example-rule-7` |
+| `rules[].id` | the `ave_id` | the same tool rule id |
+| `result.properties.ave_id` | not needed | the `ave_id` (required) |
+| `rules[].properties.ave_id` | not needed | the `ave_id` (required) |
+
+Form A suits a scanner whose rules are AVE classes. Form B suits a scanner whose rules are finer than AVE classes, or exist beyond AVE: several of its rules can name one class, and its own rule ids stay stable for its own users. In either form a result's `ruleId` matches a `rules[].id` in the same run, and everything else in this document applies unchanged.
+
+A consumer reading ids takes `result.ruleId` when it is an AVE id, and otherwise `result.properties.ave_id`. [`scripts/ave_conformance.py`](../../scripts/ave_conformance.py) does exactly this, and judges an output against both forms (see the [implementer guide](ave-implementer-guide.md#check-your-output)).
+
+---
+
 ## Required SARIF fields for AVE findings
 
 ### rules block — static record data (one entry per AVE record)
 
-Each AVE record that produced at least one detection must appear in `run.tool.driver.rules`:
+Each AVE record that produced at least one detection must appear in `run.tool.driver.rules` (form B: the tool's rule that produced it, carrying the id in `properties.ave_id`):
 
 | SARIF field | AVE source | Notes |
 |---|---|---|
-| `rules[].id` | `ave_id` | e.g. `"AVE-2026-00001"` |
+| `rules[].id` | `ave_id` | e.g. `"AVE-2026-00001"`; in form B the tool's own rule id |
+| `rules[].properties.ave_id` | `ave_id` | form B only: the AVE class this rule reports |
 | `rules[].name` | `attack_class` | e.g. `"external_instruction_fetch"` |
 | `rules[].shortDescription.text` | `title` | human-readable title |
 | `rules[].fullDescription.text` | `description` | full paragraph description |
@@ -45,7 +63,8 @@ Each detection instance is a SARIF `result`:
 
 | SARIF field | AVE source | Notes |
 |---|---|---|
-| `result.ruleId` | `ave_id` | must match a `rules[].id` |
+| `result.ruleId` | `ave_id` | form A; in form B the tool's own rule id. Either way it must match a `rules[].id` in the same run |
+| `result.properties.ave_id` | `ave_id` | form B only: required, and the same as the rule's |
 | `result.message.text` | `behavioral_fingerprint` + match location | e.g. `"External URL fetch in tool description at line 12"` |
 | `result.level` | severity mapping (see below) | `"error"`, `"warning"`, or `"note"` |
 | `result.locations[].physicalLocation` | scanner-determined | file path + region (line/column) |
@@ -225,11 +244,86 @@ One finding for AVE-2026-00001 (metamorphic payload via external config fetch) a
 
 ---
 
+## Example: form B
+
+The same finding from a scanner that keeps its own rule ids. Only the rule id and the two `ave_id` properties differ from the example above; the run properties and the taxonomy are the same.
+
+```json
+{
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "example-scanner",
+          "version": "1.0.0",
+          "rules": [
+            {
+              "id": "example-rule-7",
+              "name": "Instructions fetched from a URL",
+              "properties": {
+                "ave_id": "AVE-2026-00001"
+              }
+            }
+          ]
+        }
+      },
+      "taxonomies": [
+        {
+          "name": "AVE",
+          "version": "1.2.0",
+          "informationUri": "https://aveproject.org",
+          "taxa": [
+            {
+              "id": "AVE-2026-00001",
+              "name": "Metamorphic payload via external config fetch"
+            }
+          ]
+        }
+      ],
+      "results": [
+        {
+          "ruleId": "example-rule-7",
+          "level": "error",
+          "message": {
+            "text": "Component fetches its instructions from a URL at runtime, at line 14."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "skills/data-fetcher.md"
+                },
+                "region": {
+                  "startLine": 14
+                }
+              }
+            }
+          ],
+          "properties": {
+            "ave_id": "AVE-2026-00001",
+            "confidence": 0.88,
+            "evidence_stage": "static_detection"
+          }
+        }
+      ],
+      "properties": {
+        "ave_catalog": "v1.2.0",
+        "ave_schema_version": "1.2.0",
+        "ave_records_sha256": "92e002e98cdd10f5de36e0ccfa80696b623cdadf302cc4d884f2a33b7fd94390"
+      }
+    }
+  ]
+}
+```
+
+---
+
 ## Field placement summary
 
 | Data | Goes in `rules[]` | Goes in `result` |
 |---|---|---|
-| `ave_id` | `rules[].id` | `result.ruleId` |
+| `ave_id` | `rules[].id` (form B: `rules[].properties.ave_id`) | `result.ruleId` (form B: `result.properties.ave_id`) |
 | `title` | `rules[].shortDescription.text` | — |
 | `description` | `rules[].fullDescription.text` | — |
 | `behavioral_fingerprint` | — | `result.message.text` (with location) |
@@ -270,3 +364,5 @@ Breaking changes to *this convention* (new required fields, removed fields, chan
 **Revision note (2026-10-01):** the worked example, `taxonomies` block, and properties tables had gone stale against the live schema and corpus without the version number moving, which is itself the failure mode this section exists to prevent. Checked and corrected: `downloadUri`/`organization` were pointing at Bawbel-branded infrastructure (`api.piranha.bawbel.io`, "Bawbel Security Research") rather than AVE's own real, independent API and identity; the worked example cited `AVE-2026-00001` with `owasp_mcp`/`mitre_atlas` values that no longer matched the live record; `owasp_asi` and `nist_ai_rmf` existed on records with no documented SARIF representation at all. All of that is corrected above. None of it was a breaking change under this section's own rule, so the version stays v1.0; what changed is this document matching reality again, not the convention's own shape.
 
 **Revision note (2026-10-29):** added the recommended run properties `ave_catalog`, `ave_schema_version` and `ave_records_sha256`, which name the catalog release a scan used, now that releases are published with a manifest (`v1.2.0` onwards). Also stated what `taxonomies[].version`, `releaseDateUtc` and `downloadUri` hold, which this document had left unspecified: that same release's version, date and `ave-records.json`. Both examples moved from `1.1.0` to the `v1.2.0` release. The run properties are optional and no existing field was removed or changed, so the version stays v1.0.
+
+**Revision note (2026-10-31):** added form B, a second way to carry the AVE id (a tool's own `ruleId`, with `properties.ave_id` on the rule and on each result), because a tool that emits AVE ids in SARIF today does exactly that. Form A is unchanged. No field changed meaning and every output that was conformant still is, so the version stays v1.0; a consumer that read only `result.ruleId` must now also read `properties.ave_id` to see form B's ids. The same change adds `scripts/ave_conformance.py`, which checks an output against both forms.

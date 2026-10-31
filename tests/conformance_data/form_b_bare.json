@@ -1,0 +1,45 @@
+{
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "example-scanner",
+          "version": "0.0.1",
+          "rules": [
+            {
+              "id": "example-rule-7",
+              "properties": {
+                "ave_id": "AVE-2026-90001"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "example-rule-7",
+          "level": "error",
+          "message": {
+            "text": "Example finding"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "skills/example.md"
+                },
+                "region": {
+                  "startLine": 12
+                }
+              }
+            }
+          ],
+          "properties": {
+            "ave_id": "AVE-2026-90001"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -212,8 +212,10 @@ A release tag can be downloaded again at any time. `latest` cannot, which is
 why the SHA-256 goes in too.
 
 **SARIF.** Follow [AVE-in-SARIF](ave-in-sarif.md): `result.ruleId` is the
-`ave_id`, each AVE record that produced a result has an entry in
-`tool.driver.rules`, and the catalog goes in the run's property bag:
+`ave_id` (or, if your rules keep their own ids, `properties.ave_id` on each
+result and on its rule: the spec accepts both), each AVE record that produced a
+result has an entry in `tool.driver.rules`, and the catalog goes in the run's
+property bag:
 
 ```json
 {
@@ -251,6 +253,50 @@ which fields never belong on a rule.
 The smallest useful integration is the `ave_id` on each finding. The run-level
 fields are what make it reproducible. For people, link each id to
 `https://aveproject.org/registry.html#<ave_id>`.
+
+---
+
+## Check your output
+
+`scripts/ave_conformance.py` checks a tool's output. It uses the standard library only, never touches the network, and reads the catalog from a file you give it (a catalog release's `ave-records.json`, or `dist/ave-records-latest.json`):
+
+```bash
+python scripts/ave_conformance.py extract output.sarif
+python scripts/ave_conformance.py check output.sarif --catalog ave-records.json
+python scripts/ave_conformance.py check output.sarif --catalog ave-records.json --strict
+```
+
+`extract` is tolerant: it prints the AVE ids found in the output as JSON, each with `via` (how it was found) and `where` (the artifact, or the JSON path for output that is not SARIF), so any tool's output can be scored whatever its format. It reads SARIF in either form (a result's `ruleId`, or `properties.ave_id` on the result or its rule) and any JSON object with an `ave_id`, `AVEID`, `AveId` or `ave-id` key, or an `ave_ids` list, at any depth.
+
+`check` is strict: it judges the output against [AVE-in-SARIF](ave-in-sarif.md) and the catalog file, and prints a JSON report to stdout (and a one-line verdict to stderr):
+
+| Field | Holds |
+|---|---|
+| `result` | `pass`, `warn` or `fail` |
+| `format` | `sarif`, or `json` for anything else (judged for its ids only) |
+| `extracted` | how many ids were found, and how many by each `via` |
+| `catalog` | the records file given: its path, SHA-256 and record count, and the `release` and `schema_version` from the manifest beside it when there is one |
+| `issues` | each with a `severity`, a `code` and a `message`; the same problem on many results is one issue with a `count` |
+
+The exit status is 0 for `pass` and for `warn`, 1 for `warn` with `--strict`, and 2 for `fail` or for input it cannot read (not JSON, empty, SARIF with no `runs`, a catalog that is not a records file).
+
+| Severity | Code | The output has |
+|---|---|---|
+| error | `no_ave_id` | a result whose `ruleId` is not an AVE id and that carries no `properties.ave_id` |
+| error | `ave_id_malformed` | an id that is not `AVE-YYYY-NNNNN` |
+| error | `rule_missing` | a result with no matching `rules[].id` in its run |
+| error | `result_ave_id_missing`, `rule_ave_id_missing` | form B without `properties.ave_id` on the result, or on the rule |
+| error | `id_mismatch` | a `ruleId` and a `properties.ave_id` that name different classes, or a result and its rule that do |
+| error | `taxonomy_version_mismatch` | an AVE taxonomy `version` that is not `ave_catalog` without its `v` (or a `version` when `ave_catalog` is `latest`) |
+| error | `unknown_ave_id` | an id that is not in the catalog given |
+| error | `sarif_no_runs`, `not_json`, `input_unreadable`, `catalog_unreadable` | input the check cannot read |
+| warn | `not_active` | an id whose record is not `active`; a `merged` or `rejected` record is reported with its `merged_into` or `rejection_reason`, and any status other than `active` counts as not active |
+| warn | `run_property_missing` | none of `ave_catalog`, `ave_schema_version`, `ave_records_sha256` on a run |
+| warn | `catalog_sha_differs` | a run that says it used records other than the catalog file given |
+| warn | `taxonomies_missing`, `taxonomy_version_missing`, `taxon_missing` | no AVE taxonomy, one without a `version`, or no taxon for a class a result cites |
+| warn | `no_results`, `no_ave_ids`, `catalog_not_supplied` | nothing to judge, or no catalog to judge it against |
+
+`check` judges every result as a finding of an AVE class, so a result that names none is an error. A conforming output says nothing about whether the findings are right; it means a consumer can read which class each finding claims and which catalog the scan used.
 
 ---
 
