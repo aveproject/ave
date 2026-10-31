@@ -55,10 +55,11 @@ aivss.aivss_score. CRITICAL implies score >= 9.0.
 The record carries the full breakdown: cvss_base, aarf, aars, thm,
 mitigation_factor, aivss_score, spec_version.
 
-**AARF** — Agentic Amplification and Risk Factors. 10 sub-scores (0.0–1.0)
+**AARF**: Agentic Risk Amplification Factors. 10 sub-scores (0, 0.5 or 1)
 inside the aivss object: autonomy, tool_use, multi_agent, non_determinism,
 self_modification, dynamic_identity, persistent_memory,
-natural_language_input, data_access, external_dependencies.
+natural_language_input, context, opacity. Their sum is the Factor_Sum of
+the AIVSS v0.8 equation; `aars` is the agentic uplift computed from it.
 
 **component_type** — skill | mcp_server | plugin | agent | tool | other.
 Optional. The kind of agent component this class primarily affects.

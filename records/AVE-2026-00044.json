@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00044",
-  "schema_version": "1.3.0",
+  "schema_version": "2.0.0",
   "component_type": "skill",
   "title": "Prompt injection via poisoned async task result injected into future agent context",
   "attack_class": "Prompt Injection - Async Task Result Poisoning",
@@ -15,7 +15,7 @@
     "clawhub.io",
     "any-mcp-server-with-async-task-support"
   ],
-  "aivss_score": 8.1,
+  "aivss_score": 9.8,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:L/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
   "owasp_asi": ["ASI01"],
   "nist_ai_rmf": [
@@ -72,7 +72,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-05-01T00:00:00Z",
-  "last_updated": "2026-09-27T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",
@@ -114,18 +114,18 @@
       "dynamic_identity": 0.5,
       "persistent_memory": 1,
       "natural_language_input": 1,
-      "data_access": 0.5,
-      "external_dependencies": 0.5
+      "context": 1,
+      "opacity": 1
     },
-    "aars": 8,
+    "aars": 1.62,
     "thm": 1,
     "mitigation_factor": 1,
-    "aivss_score": 8.1,
-    "aivss_severity": "HIGH",
+    "aivss_score": 9.8,
+    "aivss_severity": "CRITICAL",
     "spec_version": "0.8",
-    "notes": "AARF scores based on typical agentic deployment context for this attack class. thm raised from 0.75 to 1 on 2026-09-27, and aivss_score recomputed accordingly (6.1 MEDIUM -> 8.1 HIGH): this record's evidence basis was theoretical only (Greshake 2023's general indirect-prompt-injection research, CWE-20, OWASP LLM01, no disclosed incident) until Clinejection, a real, publicly disclosed, in-the-wild exploitation event (real credential theft, a real tampered npm package installed on approximately 4,000 developer machines) grounding this exact mechanism -- an attacker-controlled event payload interpolated unsanitized into an agent's context, read as trusted rather than validated as data. This is a one-time evidentiary upgrade for this specific record, tied to this specific new citation, not a corpus-wide convention; AARF itself is unchanged, since a new observed instance does not by itself change the mechanism's intrinsic properties. Entry-surface note for future review: Clinejection's delivery mechanism is a CI/CD workflow's own event-trigger payload (a GitHub issue title, read synchronously at workflow invocation), not the async task-queue/polling pattern this record's own description and mitigation guidance are written around; the underlying missing content-versus-instruction boundary is the same, and the corpus's own precedent for genuinely distinct entry surfaces within this shared-failure family (AVE-2026-00002/00016/00020/00028/00041/00043/00065) is normally a new ave_id, so a future maintainer may reasonably conclude this specific variant would be better split into its own record rather than folded in here; recorded as a variant now rather than left uncaptured, with this reasoning stated explicitly rather than silently assumed."
+    "notes": "AARF scores based on typical agentic deployment context for this attack class. thm raised from 0.75 to 1 on 2026-09-27, and aivss_score recomputed accordingly (6.1 MEDIUM -> 8.1 HIGH): this record's evidence basis was theoretical only (Greshake 2023's general indirect-prompt-injection research, CWE-20, OWASP LLM01, no disclosed incident) until Clinejection, a real, publicly disclosed, in-the-wild exploitation event (real credential theft, a real tampered npm package installed on approximately 4,000 developer machines) grounding this exact mechanism -- an attacker-controlled event payload interpolated unsanitized into an agent's context, read as trusted rather than validated as data. This is a one-time evidentiary upgrade for this specific record, tied to this specific new citation, not a corpus-wide convention; AARF itself is unchanged, since a new observed instance does not by itself change the mechanism's intrinsic properties. Entry-surface note for future review: Clinejection's delivery mechanism is a CI/CD workflow's own event-trigger payload (a GitHub issue title, read synchronously at workflow invocation), not the async task-queue/polling pattern this record's own description and mitigation guidance are written around; the underlying missing content-versus-instruction boundary is the same, and the corpus's own precedent for genuinely distinct entry surfaces within this shared-failure family (AVE-2026-00002/00016/00020/00028/00041/00043/00065) is normally a new ave_id, so a future maintainer may reasonably conclude this specific variant would be better split into its own record rather than folded in here; recorded as a variant now rather than left uncaptured, with this reasoning stated explicitly rather than silently assumed. Re-scored under OWASP AIVSS v0.8 in #399 (schema 2.0.0, 2026-10-31): context 1 (broad runtime context), opacity 1 (hidden or unattributable); thm 1 (exploited in the wild) is now 1 (Attacked); mitigation_factor 1 (no or weak mitigation); score 8.1 to 9.8. The earlier factors data_access 0.5 and external_dependencies 0.5 are no longer scored; text above that cites them describes the earlier scoring."
   },
-  "severity": "HIGH",
+  "severity": "CRITICAL",
   "evidence_kind_default": "behavioral_pattern",
   "detection_stage": "runtime_observed",
   "detection_layer": "runtime",
@@ -152,5 +152,23 @@
       "pin_status": "unknown",
       "read_date": "2026-10-15"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "aivss_score",
+      "from": 8.1,
+      "to": 9.8,
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    },
+    {
+      "date": "2026-10-31",
+      "field": "severity",
+      "from": "HIGH",
+      "to": "CRITICAL",
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    }
+  ]
 }

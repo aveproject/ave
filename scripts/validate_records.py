@@ -31,6 +31,7 @@
 import json
 import re
 import sys
+from decimal import ROUND_HALF_UP, Decimal
 from pathlib import Path
 
 import jsonschema
@@ -55,6 +56,15 @@ SCHEMA_VERSION_PATTERN = re.compile(r"[0-9]+\.[0-9]+\.[0-9]+")
 # above, HIGH 7.0 to 8.9, MEDIUM 4.0 to 6.9, LOW below 4.0 (README.md "AIVSS
 # Scoring", the schema's severity description, CLAUDE.md hard rule 6).
 SEVERITY_BANDS = (("CRITICAL", 9.0), ("HIGH", 7.0), ("MEDIUM", 4.0), ("LOW", 0.0))
+
+# The ten OWASP AIVSS v0.8 Agentic Risk Amplification Factors a schema 2.x record scores
+# (aivss.aarf), in the order of the schema. Schema 1.x records carry a different set.
+AARF_FACTORS = (
+    "autonomy", "tool_use", "multi_agent", "non_determinism", "self_modification",
+    "dynamic_identity", "persistent_memory", "natural_language_input", "context", "opacity",
+)
+# aivss.aars is stored to four decimals; the score is computed from the unrounded value.
+AARS_STORED_PLACES = Decimal("0.0001")
 
 OLD_FIELD_NAMES = ["owasp_mapping", "mitre_atlas_mapping", "nist_ai_rmf_mapping"]
 MITIGATION_ENUMS = {
@@ -197,12 +207,77 @@ def check_severity_band(record: dict) -> list[str]:
     return errors
 
 
+def aivss_v08(cvss_base, factor_sum, thm, mitigation_factor) -> tuple[Decimal, Decimal]:
+    """The OWASP AIVSS v0.8 calculation (sections 3.3 to 3.5) in exact decimal
+    arithmetic, returning the unrounded AARS and the score rounded half up to
+    one decimal:
+
+        AARS  = (10 - CVSS_Base) x (Factor_Sum / 10) x ThM
+        AIVSS = (CVSS_Base + AARS) x Mitigation_Factor
+
+    Floating point would turn 9.35 into 9.3 and 7.35 into 7.3; the document
+    says round half up, and its own worked examples need it (9.3504 and 9.9529
+    sit either side of an edge)."""
+    d = lambda x: Decimal(str(x))
+    aars = (10 - d(cvss_base)) * (d(factor_sum) / 10) * d(thm)
+    score = ((d(cvss_base) + aars) * d(mitigation_factor)).quantize(Decimal("0.1"), rounding=ROUND_HALF_UP)
+    return aars, score
+
+
 def check_aivss_arithmetic(record: dict) -> list[str]:
     """Recomputes aars and aivss_score from the record's own aarf, cvss_base,
     thm, and mitigation_factor fields, and confirms both the nested
     aivss.aivss_score and the top-level aivss_score field agree with it.
     A record that drifts here is shipping a severity number nobody
-    actually derived from its own stated inputs."""
+    actually derived from its own stated inputs. Schema 1.x records are
+    checked against the equation that schema defined, 2.x against OWASP
+    AIVSS v0.8; the version a record declares says which."""
+    major = str(record.get("schema_version", "")).split(".")[0]
+    if major == "1":
+        return check_aivss_arithmetic_v1(record)
+    return check_aivss_arithmetic_v08(record)
+
+
+def check_aivss_arithmetic_v08(record: dict) -> list[str]:
+    """The v0.8 check: aars is the agentic uplift, the score is
+    (cvss_base + aars) x mitigation_factor rounded half up, and the top-level
+    aivss_score mirrors the nested one. The score is computed from the exact
+    uplift, not from the four-decimal aars the record stores, and aars is
+    allowed the rounding that storing it implies."""
+    aivss = record.get("aivss")
+    if not isinstance(aivss, dict):
+        return []
+    aarf = aivss.get("aarf")
+    if not isinstance(aarf, dict) or not aarf:
+        return []
+
+    required = ("cvss_base", "thm", "mitigation_factor")
+    missing = [f for f in required if f not in aivss]
+    if missing:
+        return [f"aivss missing scoring field(s): {', '.join(missing)}"]
+    if not all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in aarf.values()):
+        return ["aivss.aarf holds a value that is not a number"]
+
+    errors = []
+    aars, score = aivss_v08(aivss["cvss_base"], sum((Decimal(str(v)) for v in aarf.values()), Decimal(0)), aivss["thm"], aivss["mitigation_factor"])
+    stated_aars = aivss.get("aars")
+    if not isinstance(stated_aars, (int, float)) or abs(Decimal(str(stated_aars)) - aars) > AARS_STORED_PLACES / 2:
+        errors.append(f"aivss.aars mismatch: computed {aars.quantize(AARS_STORED_PLACES)}, record states {stated_aars}")
+
+    stated_score = aivss.get("aivss_score")
+    if not isinstance(stated_score, (int, float)) or Decimal(str(stated_score)) != score:
+        errors.append(f"aivss.aivss_score mismatch: computed {score}, record states {stated_score}")
+
+    top_level_score = record.get("aivss_score")
+    if top_level_score != stated_score:
+        errors.append(f"top-level aivss_score ({top_level_score}) does not match aivss.aivss_score ({stated_score})")
+    return errors
+
+
+def check_aivss_arithmetic_v1(record: dict) -> list[str]:
+    """The equation schema 1.x defined, ((cvss_base + aars) / 2) x thm x
+    mitigation_factor with aars the sum of the aarf factors. Kept so a record
+    that declares a 1.x schema is still checked against what that schema said."""
     aivss = record.get("aivss")
     if not isinstance(aivss, dict):
         return []

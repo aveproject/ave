@@ -181,15 +181,15 @@ LOW      → < 4.0
 
 If severity and aivss_score disagree, the record fails validation.
 
-A mechanism that reads as severe in plain English can still land MEDIUM,
-correctly, if it's narrow and single-vector, AARF's ten factors reward
-breadth of amplification, not just raw impact. cvss_base alone carries
-the severity of the underlying impact. Don't inflate AARF factors to
-force a record into a more severe-sounding band; if the honestly computed
-score feels low relative to the mechanism's intuitive severity, say so in
-the record's own aivss.notes field rather than adjusting the inputs to
-hit a target. See references/aivss-scoring.md for the full formula and
-worked examples of this exact situation.
+Scoring follows OWASP AIVSS v0.8: the CVSS v4.0 base is the floor of the
+score and the ten AARF factors (each 0, 0.5 or 1) only add an uplift to
+it, so a narrow mechanism with a near-maximum cvss_base stays near the top
+and one with a modest base stays modest. Don't inflate the CVSS vector or
+the AARF factors to force a record into a more severe-sounding band; if
+the honestly computed score feels wrong relative to the mechanism's
+intuitive severity, say so in the record's own aivss.notes field rather
+than adjusting the inputs to hit a target. See references/aivss-scoring.md
+for the equation, the factor rubric and worked examples.
 
 ## confidence_baseline guide
 

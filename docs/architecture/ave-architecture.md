@@ -166,7 +166,7 @@ itself and never changes per scan:
 - `behavioral_fingerprint` — what the component *does* that is dangerous.
   Behavioral, not a byte signature. This is the heart of the record.
 - `severity` and `aivss` — the OWASP AIVSS v0.8 breakdown (`cvss_base`,
-  `aars`, `thm`, `mitigation_factor`, `aivss_score`, `spec_version`).
+  `aarf`, `aars`, `thm`, `mitigation_factor`, `aivss_score`, `spec_version`).
   Severity and score must agree: CRITICAL implies `aivss_score >= 9.0`.
 - `owasp_mcp`, `owasp`, `mitre_atlas` — framework mappings.
 - `remediation`, `indicators_of_compromise`, `references`.

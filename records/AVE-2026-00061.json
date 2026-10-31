@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00061",
-  "schema_version": "1.3.0",
+  "schema_version": "2.0.0",
   "status": "active",
   "component_type": "skill",
   "title": "TLS certificate verification disabled in agent component configuration",
@@ -13,7 +13,7 @@
   "affected_registries": [
     "clawhub.io", "smithery.ai", "agentskills.io"
   ],
-  "aivss_score": 4.1,
+  "aivss_score": 6.4,
   "cvss_base_vector": "CVSS:4.0/AV:A/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
   "owasp_mcp": ["MCP07"],
   "behavioral_fingerprint": "Configuration explicitly sets a TLS verification bypass flag (verify=False, rejectUnauthorized: false, or equivalent) for the component's own outbound network calls, rather than relying on default, enforced certificate validation.",
@@ -49,7 +49,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-07-27T00:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "CWE-295",
@@ -67,15 +67,15 @@
     "aarf": {
       "autonomy": 0.5, "tool_use": 0.5, "multi_agent": 0, "non_determinism": 0,
       "self_modification": 0, "dynamic_identity": 0, "persistent_memory": 0,
-      "natural_language_input": 0, "data_access": 1, "external_dependencies": 0.5
+      "natural_language_input": 0, "context": 0, "opacity": 0
     },
-    "aars": 2.5,
+    "aars": 0.25,
     "thm": 1,
     "mitigation_factor": 0.83,
-    "aivss_score": 4.1,
+    "aivss_score": 6.4,
     "aivss_severity": "MEDIUM",
     "spec_version": "0.8",
-    "notes": "mitigation_factor discounted to 0.83: unlike the STDIO transport class, this has a simple, well-known, fully effective mitigation (re-enable verification, or configure explicit CA trust), justifying the discount. Requires network position as a precondition (AV:A in the CVSS vector), which is reflected in a lower external_dependencies score than a remotely-triggerable class would carry."
+    "notes": "mitigation_factor discounted to 0.83: unlike the STDIO transport class, this has a simple, well-known, fully effective mitigation (re-enable verification, or configure explicit CA trust), justifying the discount. Requires network position as a precondition (AV:A in the CVSS vector), which is reflected in a lower external_dependencies score than a remotely-triggerable class would carry. Re-scored under OWASP AIVSS v0.8 in #399 (schema 2.0.0, 2026-10-31): context 0 (no dependence on what the agent has read), opacity 0 (deterministic and visible); thm 1 (exploited in the wild) is now 1 (Attacked); mitigation_factor 0.83 (partial mitigation); score 4.1 to 6.4. The earlier factors data_access 1 and external_dependencies 0.5 are no longer scored; text above that cites them describes the earlier scoring."
   },
   "evidence_kind_default": "behavioral_pattern",
   "detection_stage": "static_detection",
@@ -88,5 +88,15 @@
       "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
       "read_date": "2026-09-05"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "aivss_score",
+      "from": 4.1,
+      "to": 6.4,
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    }
+  ]
 }

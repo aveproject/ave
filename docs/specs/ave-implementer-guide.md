@@ -452,6 +452,14 @@ print(f"{len(records)} records valid")  # 89 records valid
 Without a clone, fetch the file from the tag:
 `https://raw.githubusercontent.com/aveproject/ave/v1.2.0/schema/ave-record-1.2.0.schema.json`.
 
+Scores are not comparable across major versions. Schema 2.0.0 moved scoring to
+the OWASP AIVSS v0.8 equation: `aivss.aars` and `aivss.thm` mean different things
+in 1.x and 2.x, and the `aarf` keys differ (`data_access` and
+`external_dependencies` became `context` and `opacity`). A consumer that reads the
+`aivss` object should branch on the major version of `schema_version`, and should
+not compare a score from a 1.x release with one from a 2.x release. The catalog
+release v1.2.0 and earlier carry 1.x scores.
+
 A versioned schema file never changes once published, not even for a typo, and
 neither do the `dist/ave-records-v<schema>.json` snapshots.
 `schema/frozen-artifacts.json` holds their SHA-256s, and

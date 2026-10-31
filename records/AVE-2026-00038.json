@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00038",
-  "schema_version": "1.3.0",
+  "schema_version": "2.0.0",
   "component_type": "skill",
   "title": "Excessive Agency - Unbounded Tool Use or Sub-Agent Spawning",
   "attack_class": "Tool Abuse - Unbounded Tool Use",
@@ -14,7 +14,7 @@
     "smithery.ai",
     "clawhub.io"
   ],
-  "aivss_score": 5.9,
+  "aivss_score": 7.6,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
   "owasp_asi": [
     "ASI01",
@@ -71,16 +71,16 @@
       "dynamic_identity": 0.5,
       "persistent_memory": 0.5,
       "natural_language_input": 1,
-      "data_access": 1,
-      "external_dependencies": 0.5
+      "context": 0.5,
+      "opacity": 0.5
     },
-    "aars": 6.5,
+    "aars": 1.32,
     "thm": 1,
     "mitigation_factor": 0.83,
-    "aivss_score": 5.9,
-    "aivss_severity": "MEDIUM",
+    "aivss_score": 7.6,
+    "aivss_severity": "HIGH",
     "spec_version": "0.8",
-    "notes": "AARF scores based on typical deployment of skill components in agentic workflows."
+    "notes": "AARF scores based on typical deployment of skill components in agentic workflows. Re-scored under OWASP AIVSS v0.8 in #399 (schema 2.0.0, 2026-10-31): context 0.5 (one static source), opacity 0.5 (readable, the agent's choice untraceable); thm 1 (exploited in the wild) is now 1 (Attacked); mitigation_factor 0.83 (partial mitigation); score 5.9 to 7.6. The earlier factors data_access 1 and external_dependencies 0.5 are no longer scored; text above that cites them describes the earlier scoring."
   },
   "remediation": "- Explicitly declare and enforce the tool scope for each skill\n- Implement hard limits on sub-agent spawning depth and count\n- Require human confirmation before expanding tool scope\n- Monitor tool usage against declared scope and alert on violations",
   "status": "active",
@@ -88,7 +88,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "CWE-400",
@@ -111,7 +111,7 @@
       "url": "https://github.com/aveproject/ave/blob/main/records/AVE-2026-00038.json"
     }
   ],
-  "severity": "MEDIUM",
+  "severity": "HIGH",
   "evidence_kind_default": "behavioral_pattern",
   "detection_stage": "static_detection",
   "detection_layer": "content",
@@ -134,5 +134,23 @@
       "pin_status": "unknown",
       "read_date": "2026-10-15"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "aivss_score",
+      "from": 5.9,
+      "to": 7.6,
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    },
+    {
+      "date": "2026-10-31",
+      "field": "severity",
+      "from": "MEDIUM",
+      "to": "HIGH",
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    }
+  ]
 }

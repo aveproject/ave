@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00048",
-  "schema_version": "1.3.0",
+  "schema_version": "2.0.0",
   "component_type": "skill",
   "title": "Unsafe agent delegation chain - sub-agent spawned with inherited permissions and no trust boundary",
   "attack_class": "Privilege Escalation - Unsafe Agent Delegation",
@@ -16,7 +16,7 @@
     "smithery.ai",
     "any-skill-registry"
   ],
-  "aivss_score": 7.7,
+  "aivss_score": 9.7,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
   "owasp_asi": ["ASI03"],
   "nist_ai_rmf": [
@@ -74,7 +74,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-05-16T00:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "CWE-269",
@@ -116,18 +116,18 @@
       "dynamic_identity": 0.5,
       "persistent_memory": 0.5,
       "natural_language_input": 1,
-      "data_access": 1,
-      "external_dependencies": 0.5
+      "context": 0.5,
+      "opacity": 0.5
     },
-    "aars": 8.0,
-    "thm": 0.9,
+    "aars": 0.7275,
+    "thm": 0.97,
     "mitigation_factor": 1,
-    "aivss_score": 7.7,
-    "aivss_severity": "HIGH",
+    "aivss_score": 9.7,
+    "aivss_severity": "CRITICAL",
     "spec_version": "0.8",
-    "notes": "AARF scores reflect multi-agent amplification - blast radius compounds with each delegation hop."
+    "notes": "AARF scores reflect multi-agent amplification - blast radius compounds with each delegation hop. Re-scored under OWASP AIVSS v0.8 in #399 (schema 2.0.0, 2026-10-31): context 0.5 (one static source), opacity 0.5 (readable, the agent's choice untraceable); thm 0.9 (PoC exists) is now 0.97 (Proof-of-Concept); mitigation_factor 1 (no or weak mitigation); score 7.7 to 9.7. The earlier factors data_access 1 and external_dependencies 0.5 are no longer scored; text above that cites them describes the earlier scoring."
   },
-  "severity": "HIGH",
+  "severity": "CRITICAL",
   "evidence_kind_default": "tool_description_pattern",
   "detection_stage": "static_detection",
   "detection_layer": "content",
@@ -156,5 +156,23 @@
       "pin_status": "unknown",
       "read_date": "2026-10-15"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "aivss_score",
+      "from": 7.7,
+      "to": 9.7,
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    },
+    {
+      "date": "2026-10-31",
+      "field": "severity",
+      "from": "HIGH",
+      "to": "CRITICAL",
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    }
+  ]
 }

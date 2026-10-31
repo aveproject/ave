@@ -1,11 +1,11 @@
 {
   "ave_id": "AVE-2026-00074",
-  "schema_version": "1.3.0",
+  "schema_version": "2.0.0",
   "status": "active",
   "component_type": "skill",
   "title": "Reclaimable dead external anchor (GitHub owner, package, domain, or cloud subdomain) referenced by a skill",
   "attack_class": "Supply Chain - Dead Anchor Reclamation (SkillJacking)",
-  "severity": "HIGH",
+  "severity": "CRITICAL",
   "description": "A skill references an external anchor -- a GitHub owner/repo, a package name in an install instruction, a bare domain, or a free-tier cloud subdomain -- that was live and under its original owner's control at the time the skill was authored, but has since been deleted, renamed, or allowed to expire. Because the anchor is now unclaimed, an attacker can register the exact same name and take control of everything the skill points at, without a single byte of the skill's own committed content changing. Distinct from AVE-2026-00062 (unpinned dependency substitution): that record's mechanism is the absence of a pin from the moment a reference was declared, a mutable specifier resolvable to more than one artifact by design. Here the reference may have been fully precise and stable when written -- a specific GitHub username, an exact package name, a specific domain -- pinning it would not have helped, because the vulnerability is not an unresolved reference, it is a previously-resolved one whose target identity changed out from under it after publication. AIR's disclosed SkillJacking research found 925 skills serving roughly 134,000 agents sitting on this exact class of hijackable dependency, including a real takeover: the seedance2-api video-generation skill (11,483 installs, top ~3% of its marketplace) was fully hijacked by re-registering its deleted GitHub owner account, handing the attacker control over what every installing agent would execute with no change to the skill itself.",
   "affected_platforms": [
     "claude-code",
@@ -16,7 +16,7 @@
   "affected_registries": [
     "clawhub.io", "smithery.ai", "agentskills.io", "skills.sh"
   ],
-  "aivss_score": 7.1,
+  "aivss_score": 9.2,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
   "owasp_mcp": ["MCP04"],
   "owasp_asi": ["ASI04"],
@@ -61,7 +61,7 @@
   "researcher": "AIR Security",
   "researcher_url": "https://www.air.security",
   "published": "2026-08-07T00:00:00Z",
-  "last_updated": "2026-10-13T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "repo-forensics dead-anchor scanner",
@@ -89,15 +89,15 @@
     "aarf": {
       "autonomy": 1, "tool_use": 1, "multi_agent": 0, "non_determinism": 0.5,
       "self_modification": 0, "dynamic_identity": 1, "persistent_memory": 0,
-      "natural_language_input": 0, "data_access": 1, "external_dependencies": 1
+      "natural_language_input": 0, "context": 0, "opacity": 0.5
     },
-    "aars": 5.5,
+    "aars": 0.52,
     "thm": 1,
     "mitigation_factor": 1,
-    "aivss_score": 7.1,
-    "aivss_severity": "HIGH",
+    "aivss_score": 9.2,
+    "aivss_severity": "CRITICAL",
     "spec_version": "0.8",
-    "notes": "dynamic_identity scored at genuine maximum (1.0): this class is definitionally trust-anchor confusion, an attacker assumes the exact external identity (GitHub owner, package name, domain, cloud slug) the skill's original review trusted. natural_language_input scored 0: detection and exploitation both turn on live registry/DNS/RDAP state, not on persuading a reader or a model. mitigation_factor left at 1 (no discount): unlike AVE-2026-00062's pinning fix, there is no simple one-time mitigation here, closing this class requires ongoing re-verification of external anchors over time, not a fix applied once at review. mitre_atlas researched and left as an empty array rather than force-fit: AML.T0010.001 (AI Software) names compromising a legitimate package's build/maintainer access, namesquatting, and hallucinated package names as its supply-chain sub-cases, and AML.T0109 (AI Supply Chain Rug Pull) names an original owner deliberately turning malicious; none of these name an attacker legitimately re-registering an identity the original owner abandoned, a genuine, confirmed gap in ATLAS's own taxonomy, not a research shortfall. owasp_asi ASI04 (Supply chain risks) verified against OWASP's own 2026 Top 10 for Agentic Applications list rather than inferred from corpus usage."
+    "notes": "dynamic_identity scored at genuine maximum (1.0): this class is definitionally trust-anchor confusion, an attacker assumes the exact external identity (GitHub owner, package name, domain, cloud slug) the skill's original review trusted. natural_language_input scored 0: detection and exploitation both turn on live registry/DNS/RDAP state, not on persuading a reader or a model. mitigation_factor left at 1 (no discount): unlike AVE-2026-00062's pinning fix, there is no simple one-time mitigation here, closing this class requires ongoing re-verification of external anchors over time, not a fix applied once at review. mitre_atlas researched and left as an empty array rather than force-fit: AML.T0010.001 (AI Software) names compromising a legitimate package's build/maintainer access, namesquatting, and hallucinated package names as its supply-chain sub-cases, and AML.T0109 (AI Supply Chain Rug Pull) names an original owner deliberately turning malicious; none of these name an attacker legitimately re-registering an identity the original owner abandoned, a genuine, confirmed gap in ATLAS's own taxonomy, not a research shortfall. owasp_asi ASI04 (Supply chain risks) verified against OWASP's own 2026 Top 10 for Agentic Applications list rather than inferred from corpus usage. Re-scored under OWASP AIVSS v0.8 in #399 (schema 2.0.0, 2026-10-31): context 0 (no dependence on what the agent has read), opacity 0.5 (readable, the agent's choice untraceable); thm 1 (exploited in the wild) is now 1 (Attacked); mitigation_factor 1 (no or weak mitigation); score 7.1 to 9.2. The earlier factors data_access 1 and external_dependencies 1 are no longer scored; text above that cites them describes the earlier scoring."
   },
   "evidence_kind_default": "behavioral_pattern",
   "detection_stage": "static_detection",
@@ -124,6 +124,22 @@
       "to": "substrate",
       "reason_code": "declaration_added",
       "reason": "Stamped in #299. The derived verification_basis moved from artifact_reconstructed to substrate_reconstructed as a result."
+    },
+    {
+      "date": "2026-10-31",
+      "field": "aivss_score",
+      "from": 7.1,
+      "to": 9.2,
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    },
+    {
+      "date": "2026-10-31",
+      "field": "severity",
+      "from": "HIGH",
+      "to": "CRITICAL",
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
     }
   ]
 }

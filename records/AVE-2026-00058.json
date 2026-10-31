@@ -1,13 +1,13 @@
 {
   "ave_id": "AVE-2026-00058",
-  "schema_version": "1.3.0",
+  "schema_version": "2.0.0",
   "status": "active",
   "published": "2026-07-14T00:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "component_type": "skill",
   "title": "Deceptive skill trigger or activation-scope manipulation via misleading manifest description",
   "attack_class": "Social Engineering - Trigger Scope Deception",
-  "severity": "LOW",
+  "severity": "MEDIUM",
   "description": "A skill's manifest-declared description, trigger phrases, or activation keywords misrepresent the skill's actual scope or purpose, causing the agent or its orchestrator to invoke the skill in a broader range of contexts than its real behavior warrants, or to invoke it implicitly when the user did not intend to engage it. Distinct from AVE-2026-00002 and AVE-2026-00041, which cover instructions embedded in a description that target the agent's behavior once read; this class is about the description misrepresenting when and why the skill activates in the first place, expanding blast radius at the invocation layer rather than the instruction layer.",
   "affected_platforms": [
     "claude-code",
@@ -20,7 +20,7 @@
     "smithery.ai",
     "agentskills.io"
   ],
-  "aivss_score": 3.1,
+  "aivss_score": 6,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:P/VC:L/VI:L/VA:N/SC:L/SI:L/SA:N",
   "behavioral_fingerprint": "Skill manifest declares trigger keywords or a description disproportionately broad relative to its actual narrow function, or promises generic utility while its implementation performs a specific, sensitive action, causing over-broad or implicit invocation.",
   "behavioral_vector": [
@@ -91,16 +91,16 @@
       "dynamic_identity": 0.5,
       "persistent_memory": 0,
       "natural_language_input": 1,
-      "data_access": 0.5,
-      "external_dependencies": 0
+      "context": 0.5,
+      "opacity": 0.5
     },
-    "aars": 3.5,
-    "thm": 0.75,
+    "aars": 0.7,
+    "thm": 0.5,
     "mitigation_factor": 0.83,
-    "aivss_score": 3.1,
-    "aivss_severity": "LOW",
+    "aivss_score": 6,
+    "aivss_severity": "MEDIUM",
     "spec_version": "0.8",
-    "notes": "Scored as a reach-amplifier rather than a primary payload: this class expands how often and where a skill activates, it does not itself constitute the harmful action. Impact depends entirely on what the over-triggered skill does once invoked, which is why cvss_base and aars sit lower than the direct-injection classes."
+    "notes": "Scored as a reach-amplifier rather than a primary payload: this class expands how often and where a skill activates, it does not itself constitute the harmful action. Impact depends entirely on what the over-triggered skill does once invoked, which is why cvss_base and aars sit lower than the direct-injection classes. Re-scored under OWASP AIVSS v0.8 in #399 (schema 2.0.0, 2026-10-31): context 0.5 (one static source), opacity 0.5 (readable, the agent's choice untraceable); thm 0.75 (theoretical) is now 0.5 (Unreported); mitigation_factor 0.83 (partial mitigation); score 3.1 to 6. The earlier factors data_access 0.5 and external_dependencies 0 are no longer scored; text above that cites them describes the earlier scoring."
   },
   "evidence_kind_default": "behavioral_pattern",
   "detection_stage": "static_detection",
@@ -113,5 +113,23 @@
       "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
       "read_date": "2026-09-05"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "aivss_score",
+      "from": 3.1,
+      "to": 6,
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    },
+    {
+      "date": "2026-10-31",
+      "field": "severity",
+      "from": "LOW",
+      "to": "MEDIUM",
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    }
+  ]
 }

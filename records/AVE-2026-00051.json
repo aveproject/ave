@@ -1,13 +1,13 @@
 {
   "ave_id": "AVE-2026-00051",
-  "schema_version": "1.3.0",
+  "schema_version": "2.0.0",
   "status": "active",
   "published": "2026-06-21T00:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "component_type": "mcp_server",
   "title": "OAuth Discovery Rebinding \u2014 Authorization Endpoint Redirected to Attacker Server",
   "attack_class": "Supply Chain - OAuth Discovery Rebinding",
-  "severity": "HIGH",
+  "severity": "CRITICAL",
   "description": "An MCP server's OAuth discovery endpoint (/.well-known/oauth-authorization-server or /.well-known/openid-configuration) returns an authorization_endpoint or token_endpoint URL that points to an attacker-controlled server rather than the legitimate authorization server. The agent, following the OAuth 2.0 Authorization Server Metadata standard (RFC 8414) or OIDC Discovery, fetches these endpoints and trusts the returned metadata. The attacker intercepts the OAuth flow and receives authorization codes, access tokens, and any credentials the agent passes during the exchange. This class represents the MCP-specific instance of DNS rebinding and OAuth metadata poisoning, where the vector is the server's own discovery document rather than a network-level attack.",
   "affected_platforms": [
     "claude-desktop",
@@ -21,7 +21,7 @@
     "any-server-exposing-.well-known/mcp.json",
     "github-public-repos"
   ],
-  "aivss_score": 7.2,
+  "aivss_score": 9.8,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
   "owasp_asi": ["ASI03", "ASI04"],
   "mitre_atlas": [
@@ -119,16 +119,16 @@
       "dynamic_identity": 1,
       "persistent_memory": 0,
       "natural_language_input": 0.5,
-      "data_access": 1,
-      "external_dependencies": 1
+      "context": 0.5,
+      "opacity": 0.5
     },
-    "aars": 6.5,
-    "thm": 0.9,
+    "aars": 0.2668,
+    "thm": 0.97,
     "mitigation_factor": 1,
-    "aivss_score": 7.2,
-    "aivss_severity": "HIGH",
+    "aivss_score": 9.8,
+    "aivss_severity": "CRITICAL",
     "spec_version": "0.8",
-    "notes": "Dynamic identity amplifies score: the attacker's server impersonates the legitimate authorization server in the OAuth flow, receiving tokens the agent believes are securely exchanged."
+    "notes": "Dynamic identity amplifies score: the attacker's server impersonates the legitimate authorization server in the OAuth flow, receiving tokens the agent believes are securely exchanged. Re-scored under OWASP AIVSS v0.8 in #399 (schema 2.0.0, 2026-10-31): context 0.5 (one static source), opacity 0.5 (readable, the agent's choice untraceable); thm 0.9 (PoC exists) is now 0.97 (Proof-of-Concept); mitigation_factor 1 (no or weak mitigation); score 7.2 to 9.8. The earlier factors data_access 1 and external_dependencies 1 are no longer scored; text above that cites them describes the earlier scoring."
   },
   "evidence_kind_default": "config_schema",
   "detection_stage": "static_detection",
@@ -157,5 +157,23 @@
       "pin_status": "unknown",
       "read_date": "2026-10-15"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "aivss_score",
+      "from": 7.2,
+      "to": 9.8,
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    },
+    {
+      "date": "2026-10-31",
+      "field": "severity",
+      "from": "HIGH",
+      "to": "CRITICAL",
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    }
+  ]
 }

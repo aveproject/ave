@@ -31,6 +31,32 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   required and which `reason_code` to use.
 
 ### Schema
+- **Schema 2.0.0** (#399, resolves #395) moves AVE's scoring to the OWASP AIVSS v0.8 equation. AVE had
+  labelled its scores v0.8 but computed `((CVSS_Base + AARS) / 2) x ThM x Mitigation_Factor` with AARS a plain
+  sum, the v0.5 equation with the v0.8 Mitigation_Factor added. It is a major version because `aars` and
+  `thm` change meaning and two `aarf` keys are replaced:
+  - `aivss_score = round_half_up((cvss_base + aars) x mitigation_factor, 1)` with
+    `aars = (10 - cvss_base) x (factor_sum / 10) x thm`. `aivss.aarf` is required and holds all ten factors, each
+    0, 0.5 or 1. `data_access` and `external_dependencies` are removed; `context` (Contextual Awareness) and
+    `opacity` (Opacity and Reflexivity) are added. The other eight keys are kept. `thm` is one of 0.5
+    (Unreported), 0.97 (Proof-of-Concept) or 1 (Attacked); `mitigation_factor` one of 1, 0.83 or 0.67.
+  - All 89 records are re-scored and declare `2.0.0`. Each carries a `revisions` entry with its old and new score,
+    and a second for a change of severity (81 records), and a sentence in `aivss.notes` saying what was
+    assessed (Context and Opacity, by the rules in `references/aivss-scoring.md`), how ThM and
+    Mitigation_Factor mapped, which factors were moved onto the 0, 0.5, 1 scale (21 values on 9 records,
+    nearest point, ties up), and what the removed factors had scored. `cvss_base` is kept as each record
+    states it.
+  - Result: CRITICAL 1 to 40, HIGH 20 to 41, MEDIUM 66 to 8, LOW 2 to 0. The v0.8 equation adds the
+    uplift to the CVSS base instead of averaging with it, so the base is the floor of the score.
+  - `scripts/validate_records.py` computes the v0.8 equation in exact decimal arithmetic and checks 2.x records
+    against it; 1.x records are still checked against the 1.x equation. `tests/test_aivss_v08.py` reproduces
+    the ten worked examples in OWASP's document.
+  - Nothing frozen is touched: schema 1.3.0, `dist/ave-records-v1.3.0.json` and the catalog release v1.2.0 keep
+    the 1.x scores. The build wrote `dist/ave-records-v2.0.0.json` and its manifest, and the new schema file
+    and snapshot pair joined `schema/frozen-artifacts.json`.
+  - Open, not changed here: 85 of the 88 records with a valid CVSS:4.0 vector have a stored `cvss_base` that
+    differs from the base the vector computes to, and one vector (AVE-2026-00066) is not valid CVSS 4.0. Under
+    v0.8 the base matters more, since it is the floor. See #399.
 - **Schema 1.3.0** (#104) implements the deprecation policy in
   `docs/specs/scaling-and-governance.md` section 3, as merged:
   - `status` gains `merged`, with `merged_into` (the surviving `ave_id`) required, and

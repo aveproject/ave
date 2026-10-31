@@ -1,13 +1,13 @@
 {
   "ave_id": "AVE-2026-00070",
-  "schema_version": "1.3.0",
+  "schema_version": "2.0.0",
   "status": "active",
   "component_type": "agent",
   "title": "Distributed cross-agent backdoor fragments reassembled externally after execution",
   "attack_class": "Persistence - Distributed Cross-Agent Backdoor Fragments",
-  "severity": "MEDIUM",
+  "severity": "CRITICAL",
   "description": "A poisoned tool embeds encrypted attack primitives within its observations, which spread across the memories and context of multiple distinct agents as they use that tool during a multi-agent collaborative task. Each individual primitive remains dormant and inert on its own; no single agent's session, memory, or tool output contains anything a local security check would flag as malicious, and the collaborative task itself completes with no observable degradation to benign performance. Only when an attacker later scans the execution trace or the individual agents' memories, decrypts the primitives using a key established in the original poisoning step, and reassembles them, does the full backdoor payload exist and become executable, entirely after the multi-agent run has already finished. This is distinct from a single-session, single-model reassembly of static tool-description fragments (AVE-2026-00059): the fragments here live in multiple agents' own runtime observations and memories, not one client's static tool schema, and the reassembly is external, offline, and attacker-driven, not performed by any agent's own inference process during the session.",
-  "aivss_score": 6.4,
+  "aivss_score": 9.6,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:N",
   "owasp_mcp": ["MCP06"],
   "owasp_asi": ["ASI06"],
@@ -49,7 +49,7 @@
   "researcher": "Pengyu Zhu, Lijun Li, Yaxing Lyu, Li Sun, Sen Su, Jing Shao",
   "researcher_url": "https://arxiv.org/abs/2510.11246",
   "published": "2026-08-02T00:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Collaborative Shadows (arXiv 2510.11246)",
@@ -60,17 +60,17 @@
   "aivss": {
     "cvss_base": 9.0,
     "aarf": {
-      "autonomy": 1, "tool_use": 1, "multi_agent": 1, "non_determinism": 0.25,
+      "autonomy": 1, "tool_use": 1, "multi_agent": 1, "non_determinism": 0.5,
       "self_modification": 0, "dynamic_identity": 0, "persistent_memory": 1,
-      "natural_language_input": 0, "data_access": 0.5, "external_dependencies": 0.5
+      "natural_language_input": 0, "context": 1, "opacity": 1
     },
-    "aars": 5.25,
-    "thm": 0.9,
+    "aars": 0.6305,
+    "thm": 0.97,
     "mitigation_factor": 1,
-    "aivss_score": 6.4,
-    "aivss_severity": "MEDIUM",
+    "aivss_score": 9.6,
+    "aivss_severity": "CRITICAL",
     "spec_version": "0.8",
-    "notes": "multi_agent and persistent_memory both scored at maximum, correctly: this mechanism is definitionally multi-agent (fragments spread across distinct agents' own sessions) and definitionally dependent on memory persistence (fragments must survive in agent memory between the poisoning call and the external reassembly step). non_determinism scored low (0.25): source research reports over 95% attack success, closer to reliable than unpredictable. mitre_atlas and nist_ai_rmf left as researched empty arrays: a candidate ATLAS technique (AI Agent Context Poisoning: Memory) could not be verified against MITRE's own data repository despite genuine effort, and independent research explicitly confirms 'agent-to-agent lateral movement' and 'cross-session memory persistence' as documented gaps in current ATLAS coverage, consistent with finding nothing to cite with confidence rather than a research shortfall."
+    "notes": "multi_agent and persistent_memory both scored at maximum, correctly: this mechanism is definitionally multi-agent (fragments spread across distinct agents' own sessions) and definitionally dependent on memory persistence (fragments must survive in agent memory between the poisoning call and the external reassembly step). non_determinism scored low (0.25): source research reports over 95% attack success, closer to reliable than unpredictable. mitre_atlas and nist_ai_rmf left as researched empty arrays: a candidate ATLAS technique (AI Agent Context Poisoning: Memory) could not be verified against MITRE's own data repository despite genuine effort, and independent research explicitly confirms 'agent-to-agent lateral movement' and 'cross-session memory persistence' as documented gaps in current ATLAS coverage, consistent with finding nothing to cite with confidence rather than a research shortfall. Re-scored under OWASP AIVSS v0.8 in #399 (schema 2.0.0, 2026-10-31): context 1 (broad runtime context), opacity 1 (hidden or unattributable); thm 0.9 (PoC exists) is now 0.97 (Proof-of-Concept); mitigation_factor 1 (no or weak mitigation); score 6.4 to 9.6. Moved onto the 0, 0.5, 1 scale: non_determinism 0.25 to 0.5. The earlier factors data_access 0.5 and external_dependencies 0.5 are no longer scored; text above that cites them describes the earlier scoring."
   },
   "evidence_kind_default": "behavioral_pattern",
   "detection_stage": "runtime_drift_detected",
@@ -87,5 +87,23 @@
       "version": "2026",
       "read_date": "2026-08-23"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "aivss_score",
+      "from": 6.4,
+      "to": 9.6,
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    },
+    {
+      "date": "2026-10-31",
+      "field": "severity",
+      "from": "MEDIUM",
+      "to": "CRITICAL",
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    }
+  ]
 }

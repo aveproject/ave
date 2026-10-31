@@ -116,7 +116,7 @@ Skill or tool registries where this class has been observed. Optional.
 
 ### `aivss`
 
-OWASP AIVSS v0.8 full scoring breakdown.
+OWASP AIVSS v0.8 scoring breakdown. AIVSS = (CVSS_Base + AARS) x Mitigation_Factor, where AARS = (10 - CVSS_Base) x (Factor_Sum / 10) x ThM and Factor_Sum is the sum of the ten aarf factors, rounded half up to one decimal (OWASP AIVSS v0.8, sections 3.3 to 3.5).
 
 ### `aivss_score`
 
@@ -272,7 +272,7 @@ Optional, append-only history of edits that changed a value a consumer may gate 
 
 ### `schema_version`
 
-AVE schema version this record was authored against, e.g. 1.3.0.
+AVE schema version this record was authored against, e.g. 2.0.0.
 
 ### `security_boundary`
 

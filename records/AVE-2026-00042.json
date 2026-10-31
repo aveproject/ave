@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00042",
-  "schema_version": "1.3.0",
+  "schema_version": "2.0.0",
   "component_type": "skill",
   "title": "Payload injection into agent-generated orchestration code via poisoned tool results in REPL/Code Mode",
   "attack_class": "Prompt Injection - REPL Code Mode Payload Injection",
@@ -16,7 +16,7 @@
     "clawhub.io",
     "github.com/topics/agent-skills"
   ],
-  "aivss_score": 4.7,
+  "aivss_score": 7.7,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
   "owasp_asi": ["ASI01", "ASI05"],
   "nist_ai_rmf": [
@@ -76,7 +76,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-05-01T00:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "CWE-94",
@@ -114,18 +114,18 @@
       "dynamic_identity": 0,
       "persistent_memory": 0.5,
       "natural_language_input": 1,
-      "data_access": 1,
-      "external_dependencies": 0.5
+      "context": 1,
+      "opacity": 1
     },
-    "aars": 6,
-    "thm": 0.75,
+    "aars": 0.325,
+    "thm": 0.5,
     "mitigation_factor": 0.83,
-    "aivss_score": 4.7,
-    "aivss_severity": "MEDIUM",
+    "aivss_score": 7.7,
+    "aivss_severity": "HIGH",
     "spec_version": "0.8",
-    "notes": "AARF scores based on typical agentic deployment context for this attack class."
+    "notes": "AARF scores based on typical agentic deployment context for this attack class. Re-scored under OWASP AIVSS v0.8 in #399 (schema 2.0.0, 2026-10-31): context 1 (broad runtime context), opacity 1 (hidden or unattributable); thm 0.75 (theoretical) is now 0.5 (Unreported); mitigation_factor 0.83 (partial mitigation); score 4.7 to 7.7. The earlier factors data_access 1 and external_dependencies 0.5 are no longer scored; text above that cites them describes the earlier scoring."
   },
-  "severity": "MEDIUM",
+  "severity": "HIGH",
   "evidence_kind_default": "behavioral_pattern",
   "detection_stage": "runtime_observed",
   "detection_layer": "runtime",
@@ -154,5 +154,23 @@
       "pin_status": "unknown",
       "read_date": "2026-10-15"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "aivss_score",
+      "from": 4.7,
+      "to": 7.7,
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    },
+    {
+      "date": "2026-10-31",
+      "field": "severity",
+      "from": "MEDIUM",
+      "to": "HIGH",
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    }
+  ]
 }

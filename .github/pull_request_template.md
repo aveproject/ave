@@ -33,7 +33,7 @@
 - [ ] `behavioral_fingerprint` is one clear sentence describing what the component DOES
 - [ ] `indicators_of_compromise` has at least one entry a defender can actually search for
 - [ ] `owasp_mcp` is present with at least one entry
-- [ ] `aivss` block is complete — required sub-fields: cvss_base, aars, thm, mitigation_factor, aivss_score, spec_version
+- [ ] `aivss` block is complete — required sub-fields: cvss_base, aarf (all ten factors), aars, thm, mitigation_factor, aivss_score, spec_version
 - [ ] `aivss.aivss_score` agrees with `severity` (CRITICAL >= 9.0, HIGH 7.0–8.9, MEDIUM 4.0–6.9, LOW < 4.0)
 - [ ] Top-level `aivss_score` matches `aivss.aivss_score` if both are present
 - [ ] `references` has at least one citable primary source

@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00075",
-  "schema_version": "1.3.0",
+  "schema_version": "2.0.0",
   "status": "active",
   "component_type": "skill",
   "title": "Bytecode poisoning: compiled .pyc cache diverges from its own reviewed .py source",
@@ -16,7 +16,7 @@
   "affected_registries": [
     "clawhub.io", "smithery.ai", "agentskills.io"
   ],
-  "aivss_score": 4.4,
+  "aivss_score": 6.7,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
   "owasp_mcp": ["MCP04"],
   "owasp_asi": ["ASI04"],
@@ -59,7 +59,7 @@
   "researcher": "CSA / Trail of Bits",
   "researcher_url": "https://labs.cloudsecurityalliance.org/research/csa-research-note-ai-agent-skill-scanner-bypass-20260610-csa/",
   "published": "2026-08-07T00:00:00Z",
-  "last_updated": "2026-08-07T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "repo-forensics bytecode scanner",
@@ -92,15 +92,15 @@
     "aarf": {
       "autonomy": 1, "tool_use": 0.5, "multi_agent": 0, "non_determinism": 0,
       "self_modification": 0, "dynamic_identity": 0, "persistent_memory": 0,
-      "natural_language_input": 0, "data_access": 1, "external_dependencies": 0.5
+      "natural_language_input": 0, "context": 0, "opacity": 1
     },
-    "aars": 3.0,
+    "aars": 0.625,
     "thm": 1,
     "mitigation_factor": 0.83,
-    "aivss_score": 4.4,
+    "aivss_score": 6.7,
     "aivss_severity": "MEDIUM",
     "spec_version": "0.8",
-    "notes": "non_determinism scored 0, deliberately distinct from AVE-2026-00074's 0.5: once a poisoned .pyc with a matching header sits next to its source, CPython's cache-precedence behavior loads it every time, deterministically, unlike a dead-anchor class whose exploitability depends on external registry state that varies over time. dynamic_identity scored 0: this is a content divergence between two artifacts, not an identity or trust-anchor impersonation, the property that earned AVE-2026-00074 its maximum score on that factor. mitigation_factor discounted to 0.83: refusing to trust bundled .pyc/__pycache__ content from unreviewed sources and forcing recompilation from source is a known, practical, already-documented mitigation, the same discount reasoning applied to AVE-2026-00057. mitre_atlas researched and left as an empty array rather than force-fit: AML.T0010.001 (AI Software) covers AI-software dependency-chain compromise and AML.T0010.003 (Model) covers malicious code in a loaded model file, but neither names a compiled-bytecode-cache-diverging-from-its-own-visible-source mechanism specifically; a real, confirmed gap. owasp_asi ASI04 (Supply chain risks) and owasp_mcp MCP04 (Software Supply Chain Attacks & Dependency Tampering) verified against their respective 2026 primary sources rather than reused by pattern-matching to AVE-2026-00057's mapping."
+    "notes": "non_determinism scored 0, deliberately distinct from AVE-2026-00074's 0.5: once a poisoned .pyc with a matching header sits next to its source, CPython's cache-precedence behavior loads it every time, deterministically, unlike a dead-anchor class whose exploitability depends on external registry state that varies over time. dynamic_identity scored 0: this is a content divergence between two artifacts, not an identity or trust-anchor impersonation, the property that earned AVE-2026-00074 its maximum score on that factor. mitigation_factor discounted to 0.83: refusing to trust bundled .pyc/__pycache__ content from unreviewed sources and forcing recompilation from source is a known, practical, already-documented mitigation, the same discount reasoning applied to AVE-2026-00057. mitre_atlas researched and left as an empty array rather than force-fit: AML.T0010.001 (AI Software) covers AI-software dependency-chain compromise and AML.T0010.003 (Model) covers malicious code in a loaded model file, but neither names a compiled-bytecode-cache-diverging-from-its-own-visible-source mechanism specifically; a real, confirmed gap. owasp_asi ASI04 (Supply chain risks) and owasp_mcp MCP04 (Software Supply Chain Attacks & Dependency Tampering) verified against their respective 2026 primary sources rather than reused by pattern-matching to AVE-2026-00057's mapping. Re-scored under OWASP AIVSS v0.8 in #399 (schema 2.0.0, 2026-10-31): context 0 (no dependence on what the agent has read), opacity 1 (hidden or unattributable); thm 1 (exploited in the wild) is now 1 (Attacked); mitigation_factor 0.83 (partial mitigation); score 4.4 to 6.7. The earlier factors data_access 1 and external_dependencies 0.5 are no longer scored; text above that cites them describes the earlier scoring."
   },
   "evidence_kind_default": "multi_engine",
   "detection_stage": "static_detection",
@@ -117,5 +117,15 @@
       "version": "2026",
       "read_date": "2026-08-23"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "aivss_score",
+      "from": 4.4,
+      "to": 6.7,
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    }
+  ]
 }

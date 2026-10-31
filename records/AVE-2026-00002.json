@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00002",
-  "schema_version": "1.3.0",
+  "schema_version": "2.0.0",
   "component_type": "mcp_server",
   "title": "MCP tool description behavioral injection",
   "attack_class": "Prompt Injection - Tool Description",
@@ -16,7 +16,7 @@
     "glama.ai",
     "mcp-registry"
   ],
-  "aivss_score": 7.3,
+  "aivss_score": 9.5,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:L/VI:H/VA:N/SC:L/SI:H/SA:N",
   "owasp_asi": ["ASI01"],
   "owasp_mcp": [
@@ -72,16 +72,16 @@
       "dynamic_identity": 0.5,
       "persistent_memory": 0,
       "natural_language_input": 1,
-      "data_access": 0.5,
-      "external_dependencies": 0
+      "context": 0.5,
+      "opacity": 0.5
     },
-    "aars": 6,
+    "aars": 0.845,
     "thm": 1,
     "mitigation_factor": 1,
-    "aivss_score": 7.3,
-    "aivss_severity": "HIGH",
+    "aivss_score": 9.5,
+    "aivss_severity": "CRITICAL",
     "spec_version": "0.8",
-    "notes": "AARF scores reflect typical mcp deployment in agentic workflows. See SPEC.md for factor definitions."
+    "notes": "AARF scores reflect typical mcp deployment in agentic workflows. See SPEC.md for factor definitions. Re-scored under OWASP AIVSS v0.8 in #399 (schema 2.0.0, 2026-10-31): context 0.5 (one static source), opacity 0.5 (readable, the agent's choice untraceable); thm 1 (exploited in the wild) is now 1 (Attacked); mitigation_factor 1 (no or weak mitigation); score 7.3 to 9.5. The earlier factors data_access 0.5 and external_dependencies 0 are no longer scored; text above that cites them describes the earlier scoring."
   },
   "remediation": "1. Remove or replace the MCP server.\n2. Review all tool calls made while the server was connected.\n3. Audit agent output for signs of behavioral changes matching the injected instructions.\n4. Report the server to the registry operator.",
   "status": "active",
@@ -89,7 +89,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-01T09:00:00Z",
-  "last_updated": "2026-08-29T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",
@@ -112,7 +112,7 @@
       "url": "https://github.com/aveproject/ave/blob/main/records/AVE-2026-00002.json"
     }
   ],
-  "severity": "HIGH",
+  "severity": "CRITICAL",
   "evidence_kind_default": "tool_description_pattern",
   "detection_stage": "static_detection",
   "detection_layer": "content",
@@ -142,5 +142,23 @@
       "pin_status": "unknown",
       "read_date": "2026-10-15"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "aivss_score",
+      "from": 7.3,
+      "to": 9.5,
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    },
+    {
+      "date": "2026-10-31",
+      "field": "severity",
+      "from": "HIGH",
+      "to": "CRITICAL",
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    }
+  ]
 }

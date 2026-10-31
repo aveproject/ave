@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://aveproject.org/schema/ave-record-1.3.0.schema.json",
+  "$id": "https://aveproject.org/schema/ave-record-2.0.0.schema.json",
   "title": "AVE Record",
-  "description": "AVE (the behavioral vulnerability enumeration standard for agentic AI components) — static definition of one behavioral vulnerability class. Schema v1.3.0.",
+  "description": "AVE (the behavioral vulnerability enumeration standard for agentic AI components) — static definition of one behavioral vulnerability class. Schema v2.0.0.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -81,9 +81,9 @@
     },
     "schema_version": {
       "type": "string",
-      "description": "AVE schema version this record was authored against, e.g. 1.3.0.",
+      "description": "AVE schema version this record was authored against, e.g. 2.0.0.",
       "examples": [
-        "1.3.0"
+        "2.0.0"
       ]
     },
     "status": {
@@ -183,10 +183,11 @@
     },
     "aivss": {
       "type": "object",
-      "description": "OWASP AIVSS v0.8 full scoring breakdown.",
+      "description": "OWASP AIVSS v0.8 scoring breakdown. AIVSS = (CVSS_Base + AARS) x Mitigation_Factor, where AARS = (10 - CVSS_Base) x (Factor_Sum / 10) x ThM and Factor_Sum is the sum of the ten aarf factors, rounded half up to one decimal (OWASP AIVSS v0.8, sections 3.3 to 3.5).",
       "additionalProperties": false,
       "required": [
         "cvss_base",
+        "aarf",
         "aars",
         "thm",
         "mitigation_factor",
@@ -198,72 +199,114 @@
           "type": "number",
           "minimum": 0,
           "maximum": 10,
-          "description": "CVSS base score (0-10)."
+          "description": "CVSS v4.0 base score (0-10), the baseline AIVSS requires."
         },
         "aarf": {
           "type": "object",
-          "description": "Agentic Amplification and Risk Factors — 10 sub-scores 0.0-1.0. Optional.",
+          "description": "The ten AIVSS v0.8 Agentic Risk Amplification Factors, each scored 0.0 (none), 0.5 (partial) or 1.0 (full). Factor_Sum is their sum.",
           "additionalProperties": false,
+          "required": [
+            "autonomy",
+            "tool_use",
+            "multi_agent",
+            "non_determinism",
+            "self_modification",
+            "dynamic_identity",
+            "persistent_memory",
+            "natural_language_input",
+            "context",
+            "opacity"
+          ],
           "properties": {
             "autonomy": {
               "type": "number",
-              "minimum": 0,
-              "maximum": 1,
-              "description": "Autonomous action without human confirmation."
+              "enum": [
+                0,
+                0.5,
+                1
+              ],
+              "description": "Execution Autonomy: the ability to execute actions without human verification."
             },
             "tool_use": {
               "type": "number",
-              "minimum": 0,
-              "maximum": 1,
-              "description": "Access to external tools or capabilities."
+              "enum": [
+                0,
+                0.5,
+                1
+              ],
+              "description": "External Tool Control Surface (Tools): the breadth and privilege of the external APIs and tools the agent can access."
             },
             "multi_agent": {
               "type": "number",
-              "minimum": 0,
-              "maximum": 1,
-              "description": "Multi-agent or sub-agent delegation."
+              "enum": [
+                0,
+                0.5,
+                1
+              ],
+              "description": "Multi-Agent Interactions (Multi-Agent): coordination or dependencies on other autonomous agents."
             },
             "non_determinism": {
               "type": "number",
-              "minimum": 0,
-              "maximum": 1,
-              "description": "Behavioral variability across runs."
+              "enum": [
+                0,
+                0.5,
+                1
+              ],
+              "description": "Behavioral Non-Determinism: the variance in output or action for identical inputs."
             },
             "self_modification": {
               "type": "number",
-              "minimum": 0,
-              "maximum": 1,
-              "description": "Ability to alter own instructions at runtime."
+              "enum": [
+                0,
+                0.5,
+                1
+              ],
+              "description": "Self-Modification (Self-Mod): the ability to alter its own code, prompts or tool configurations."
             },
             "dynamic_identity": {
               "type": "number",
-              "minimum": 0,
-              "maximum": 1,
-              "description": "Ability to assume different identities or personas."
+              "enum": [
+                0,
+                0.5,
+                1
+              ],
+              "description": "Dynamic Identity (Identity): the ability to assume different user roles or permissions at runtime."
             },
             "persistent_memory": {
               "type": "number",
-              "minimum": 0,
-              "maximum": 1,
-              "description": "Access to persistent storage across sessions."
+              "enum": [
+                0,
+                0.5,
+                1
+              ],
+              "description": "Persistent State Retention (Persistence): the ability to retain memory or state across sessions."
             },
             "natural_language_input": {
               "type": "number",
-              "minimum": 0,
-              "maximum": 1,
-              "description": "Degree to which natural language drives behavior."
+              "enum": [
+                0,
+                0.5,
+                1
+              ],
+              "description": "Natural Language Interface (Language): the reliance on unstructured natural language for goal formulation and instruction."
             },
-            "data_access": {
+            "context": {
               "type": "number",
-              "minimum": 0,
-              "maximum": 1,
-              "description": "Access to sensitive data sources."
+              "enum": [
+                0,
+                0.5,
+                1
+              ],
+              "description": "Contextual Awareness (Context): the use of environmental sensors or broad data context to drive decisions."
             },
-            "external_dependencies": {
+            "opacity": {
               "type": "number",
-              "minimum": 0,
-              "maximum": 1,
-              "description": "Reliance on external URLs, APIs, or remote content."
+              "enum": [
+                0,
+                0.5,
+                1
+              ],
+              "description": "Opacity and Reflexivity (Opacity): the lack of internal visibility, or of the ability to audit decision logic."
             }
           }
         },
@@ -271,25 +314,31 @@
           "type": "number",
           "minimum": 0,
           "maximum": 10,
-          "description": "Agentic Amplification and Reachability Score (0-10). Derived from AARF factors."
+          "description": "Agentic AI Risk Score (AARS): the agentic uplift (10 - CVSS_Base) x (Factor_Sum / 10) x ThM, 0-10. Derived from cvss_base, aarf and thm; recorded for transparency, it is not the reported score."
         },
         "thm": {
           "type": "number",
-          "minimum": 0.5,
-          "maximum": 1.5,
-          "description": "Threat and Heuristic Multiplier (0.5-1.5). 1.0 = neutral. Reflects exploit availability and in-the-wild evidence."
+          "enum": [
+            0.5,
+            0.97,
+            1
+          ],
+          "description": "Threat Multiplier (ThM) from exploit maturity: 1.0 Attacked (exploited in the wild), 0.97 Proof-of-Concept (functional exploit code or a detailed walkthrough exists), 0.5 Unreported (no known exploit, theoretical only)."
         },
         "mitigation_factor": {
           "type": "number",
-          "minimum": 0,
-          "maximum": 1,
-          "description": "Mitigation factor (0-1). 1.0 = no known effective mitigation."
+          "enum": [
+            0.67,
+            0.83,
+            1
+          ],
+          "description": "Mitigation Factor: 1.0 no or weak mitigation, 0.83 partial mitigation, 0.67 strong, validated mitigation."
         },
         "aivss_score": {
           "type": "number",
           "minimum": 0,
           "maximum": 10,
-          "description": "Final composed OWASP AIVSS score (0-10). Must agree with top-level severity."
+          "description": "Final composed OWASP AIVSS v0.8 score (0-10), rounded half up to one decimal. Must agree with top-level severity."
         },
         "aivss_severity": {
           "type": "string",

@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00004",
-  "schema_version": "1.3.0",
+  "schema_version": "2.0.0",
   "component_type": "skill",
   "title": "Arbitrary code execution via shell pipe injection in agentic component",
   "attack_class": "Tool Abuse - Shell Pipe Injection",
@@ -17,7 +17,7 @@
     "agentskills.io",
     "github.com/topics/agent-skills"
   ],
-  "aivss_score": 5.9,
+  "aivss_score": 7.9,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
   "owasp_asi": ["ASI01", "ASI05"],
   "nist_ai_rmf": [
@@ -68,7 +68,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "CWE-78",
@@ -102,21 +102,21 @@
       "dynamic_identity": 0,
       "persistent_memory": 0,
       "natural_language_input": 1,
-      "data_access": 0.5,
-      "external_dependencies": 1
+      "context": 0.5,
+      "opacity": 1
     },
-    "aars": 5.5,
+    "aars": 0.66,
     "thm": 1,
     "mitigation_factor": 0.83,
-    "aivss_score": 5.9,
-    "aivss_severity": "MEDIUM",
+    "aivss_score": 7.9,
+    "aivss_severity": "HIGH",
     "spec_version": "0.8",
-    "notes": "curl|bash pattern. Active in wild. NL delivery invisible to SAST."
+    "notes": "curl|bash pattern. Active in wild. NL delivery invisible to SAST. Re-scored under OWASP AIVSS v0.8 in #399 (schema 2.0.0, 2026-10-31): context 0.5 (one static source), opacity 1 (hidden or unattributable); thm 1 (exploited in the wild) is now 1 (Attacked); mitigation_factor 0.83 (partial mitigation); score 5.9 to 7.9. The earlier factors data_access 0.5 and external_dependencies 1 are no longer scored; text above that cites them describes the earlier scoring."
   },
   "owasp_mcp": [
     "MCP05"
   ],
-  "severity": "MEDIUM",
+  "severity": "HIGH",
   "evidence_kind_default": "multi_engine",
   "detection_stage": "static_detection",
   "detection_layer": "content",
@@ -145,5 +145,23 @@
       "pin_status": "unknown",
       "read_date": "2026-10-15"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "aivss_score",
+      "from": 5.9,
+      "to": 7.9,
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    },
+    {
+      "date": "2026-10-31",
+      "field": "severity",
+      "from": "MEDIUM",
+      "to": "HIGH",
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    }
+  ]
 }

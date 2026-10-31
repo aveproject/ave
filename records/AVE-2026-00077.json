@@ -1,11 +1,11 @@
 {
   "ave_id": "AVE-2026-00077",
-  "schema_version": "1.3.0",
+  "schema_version": "2.0.0",
   "status": "active",
   "component_type": "mcp_server",
   "title": "Cross-origin tool and resource declaration within a single MCP server manifest",
   "attack_class": "Trust Boundary - Cross-Origin Tool and Resource Declaration",
-  "severity": "MEDIUM",
+  "severity": "HIGH",
   "description": "A single MCP server's own manifest declares tools and/or resources whose URLs (in parameters, input/output schemas, descriptions, or metadata) resolve to more than one unrelated root domain, or mix http:// and https:// schemes across those declared endpoints. Because every tool and resource in one server's manifest is typically treated as sharing a single trust boundary once the server itself is trusted, a minority-domain tool or resource declared alongside a majority-domain cluster can inject, override, or hijack context intended for the trusted majority origin, within the same session, with no identity claim required. Distinct from AVE-2026-00001 (metamorphic payload via external config fetch): that record's mechanism is a single external source's fetched content changing at read time. Distinct from AVE-2026-00017 (MCP server impersonation or spoofing): that record requires a false identity claim -- lying about who the server is. Here every declared origin is honestly identified; the vulnerability is structural domain diversity within one server's own declared surface, not deception about identity.",
   "affected_platforms": [
     "claude-desktop", "claude-code", "cursor", "windsurf", "any-mcp-client"
@@ -13,7 +13,7 @@
   "affected_registries": [
     "clawhub.io", "smithery.ai", "registry.modelcontextprotocol.io"
   ],
-  "aivss_score": 4.8,
+  "aivss_score": 8.6,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
   "owasp_mcp": ["MCP07"],
   "owasp_asi": ["ASI02"],
@@ -56,7 +56,7 @@
   "researcher": "Akash Krishna (akashjavelin)",
   "researcher_url": "https://github.com/akashjavelin",
   "published": "2026-08-10T00:00:00Z",
-  "last_updated": "2026-08-10T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Ramparts cross-origin scanner",
@@ -89,15 +89,15 @@
     "aarf": {
       "autonomy": 1, "tool_use": 1, "multi_agent": 0, "non_determinism": 0.5,
       "self_modification": 0, "dynamic_identity": 0, "persistent_memory": 0,
-      "natural_language_input": 0, "data_access": 1, "external_dependencies": 1
+      "natural_language_input": 0, "context": 0, "opacity": 0.5
     },
-    "aars": 4.5,
-    "thm": 0.75,
+    "aars": 0.255,
+    "thm": 0.5,
     "mitigation_factor": 1,
-    "aivss_score": 4.8,
-    "aivss_severity": "MEDIUM",
+    "aivss_score": 8.6,
+    "aivss_severity": "HIGH",
     "spec_version": "0.8",
-    "notes": "thm set to 0.75 (theoretical/architectural) rather than 1.0: ramparts' own scanner cites no disclosed CVE or documented in-the-wild exploitation of this specific mechanism, only a shipped, real detection rule implying deployed defensive value -- a working detection implementation, not a confirmed incident. natural_language_input scored 0: detection and exploitation both turn on declared URL/domain analysis, not instruction text, mirroring the same reasoning already applied to AVE-2026-00073 and AVE-2026-00074. dynamic_identity scored 0, deliberately distinct from AVE-2026-00017's maximum score on that factor: every origin here is honestly, non-deceptively declared; the risk is structural domain diversity, not an identity claim. owasp_mcp corrected from the originating issue's own MCP03 (Tool Poisoning) proposal to MCP07 (Insufficient Authentication and Authorization) + MCP10 (Context Injection and Over-Sharing), verified against OWASP's real 2025 MCP Top 10 list: MCP03 describes malicious content inside a single tool's own description manipulating the model, which is not this mechanism; MCP10's own name (context sharing across boundaries) and MCP07 (no authorization boundary enforced between declared origins) are the precise fits. mitre_atlas confirmed empty, independently re-verified against the full current ATLAS.yaml technique set (170 techniques) via keyword search for cross-origin/multi-domain/trust-boundary concepts, not just accepting the originating issue's own 'checked, no fit' claim at face value -- a genuine, confirmed gap, not a research shortfall. nist_ai_rmf: MAP-4.2 ('Internal risk controls for components of the AI system including third-party AI technologies are identified and documented') verified against NIST's own AIRC playbook text -- each declared origin in a multi-domain MCP manifest is effectively a distinct third-party integration point this control would require risk controls for."
+    "notes": "thm set to 0.75 (theoretical/architectural) rather than 1.0: ramparts' own scanner cites no disclosed CVE or documented in-the-wild exploitation of this specific mechanism, only a shipped, real detection rule implying deployed defensive value -- a working detection implementation, not a confirmed incident. natural_language_input scored 0: detection and exploitation both turn on declared URL/domain analysis, not instruction text, mirroring the same reasoning already applied to AVE-2026-00073 and AVE-2026-00074. dynamic_identity scored 0, deliberately distinct from AVE-2026-00017's maximum score on that factor: every origin here is honestly, non-deceptively declared; the risk is structural domain diversity, not an identity claim. owasp_mcp corrected from the originating issue's own MCP03 (Tool Poisoning) proposal to MCP07 (Insufficient Authentication and Authorization) + MCP10 (Context Injection and Over-Sharing), verified against OWASP's real 2025 MCP Top 10 list: MCP03 describes malicious content inside a single tool's own description manipulating the model, which is not this mechanism; MCP10's own name (context sharing across boundaries) and MCP07 (no authorization boundary enforced between declared origins) are the precise fits. mitre_atlas confirmed empty, independently re-verified against the full current ATLAS.yaml technique set (170 techniques) via keyword search for cross-origin/multi-domain/trust-boundary concepts, not just accepting the originating issue's own 'checked, no fit' claim at face value -- a genuine, confirmed gap, not a research shortfall. nist_ai_rmf: MAP-4.2 ('Internal risk controls for components of the AI system including third-party AI technologies are identified and documented') verified against NIST's own AIRC playbook text -- each declared origin in a multi-domain MCP manifest is effectively a distinct third-party integration point this control would require risk controls for. Re-scored under OWASP AIVSS v0.8 in #399 (schema 2.0.0, 2026-10-31): context 0 (no dependence on what the agent has read), opacity 0.5 (readable, the agent's choice untraceable); thm 0.75 (theoretical) is now 0.5 (Unreported); mitigation_factor 1 (no or weak mitigation); score 4.8 to 8.6. The earlier factors data_access 1 and external_dependencies 1 are no longer scored; text above that cites them describes the earlier scoring."
   },
   "evidence_kind_default": "config_schema",
   "detection_stage": "static_detection",
@@ -118,5 +118,23 @@
       "pin_status": "unknown",
       "read_date": "2026-10-15"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "aivss_score",
+      "from": 4.8,
+      "to": 8.6,
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    },
+    {
+      "date": "2026-10-31",
+      "field": "severity",
+      "from": "MEDIUM",
+      "to": "HIGH",
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    }
+  ]
 }

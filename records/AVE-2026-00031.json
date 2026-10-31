@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00031",
-  "schema_version": "1.3.0",
+  "schema_version": "2.0.0",
   "component_type": "skill",
   "title": "Training Data or Feedback Loop Poisoning",
   "attack_class": "Persistence - Feedback Loop Poisoning",
@@ -12,7 +12,7 @@
   "affected_registries": [
     "clawhub.io"
   ],
-  "aivss_score": 5.4,
+  "aivss_score": 8.5,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N",
   "owasp_asi": ["ASI01"],
   "owasp_mcp": [
@@ -71,16 +71,16 @@
       "dynamic_identity": 0,
       "persistent_memory": 1,
       "natural_language_input": 1,
-      "data_access": 0.5,
-      "external_dependencies": 0
+      "context": 0.5,
+      "opacity": 1
     },
-    "aars": 7,
-    "thm": 0.75,
+    "aars": 1,
+    "thm": 0.5,
     "mitigation_factor": 1,
-    "aivss_score": 5.4,
-    "aivss_severity": "MEDIUM",
+    "aivss_score": 8.5,
+    "aivss_severity": "HIGH",
     "spec_version": "0.8",
-    "notes": "AARF scores based on typical deployment of skill components in agentic workflows."
+    "notes": "AARF scores based on typical deployment of skill components in agentic workflows. Re-scored under OWASP AIVSS v0.8 in #399 (schema 2.0.0, 2026-10-31): context 0.5 (one static source), opacity 1 (hidden or unattributable); thm 0.75 (theoretical) is now 0.5 (Unreported); mitigation_factor 1 (no or weak mitigation); score 5.4 to 8.5. The earlier factors data_access 0.5 and external_dependencies 0 are no longer scored; text above that cites them describes the earlier scoring."
   },
   "remediation": "- Isolate feedback collection from skill execution context\n- Validate feedback signals before incorporating into training pipelines\n- Monitor feedback signal distributions for anomalies\n- Use human-in-the-loop review for feedback that will be used in fine-tuning",
   "status": "active",
@@ -88,7 +88,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Wan 2023",
@@ -111,7 +111,7 @@
       "url": "https://github.com/aveproject/ave/blob/main/records/AVE-2026-00031.json"
     }
   ],
-  "severity": "MEDIUM",
+  "severity": "HIGH",
   "evidence_kind_default": "behavioral_pattern",
   "detection_stage": "runtime_observed",
   "detection_layer": "runtime",
@@ -138,5 +138,23 @@
       "pin_status": "unknown",
       "read_date": "2026-10-15"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "aivss_score",
+      "from": 5.4,
+      "to": 8.5,
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    },
+    {
+      "date": "2026-10-31",
+      "field": "severity",
+      "from": "MEDIUM",
+      "to": "HIGH",
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    }
+  ]
 }

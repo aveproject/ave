@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00034",
-  "schema_version": "1.3.0",
+  "schema_version": "2.0.0",
   "component_type": "skill",
   "title": "Supply Chain - Dynamic Third-Party Skill Import",
   "attack_class": "Supply Chain - Dynamic Skill Import",
@@ -15,7 +15,7 @@
     "smithery.ai",
     "skills.sh"
   ],
-  "aivss_score": 6.6,
+  "aivss_score": 9.4,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
   "owasp_asi": ["ASI01", "ASI04"],
   "owasp_mcp": [
@@ -75,16 +75,16 @@
       "dynamic_identity": 0.5,
       "persistent_memory": 0.5,
       "natural_language_input": 1,
-      "data_access": 0.5,
-      "external_dependencies": 1
+      "context": 0.5,
+      "opacity": 1
     },
-    "aars": 8.5,
-    "thm": 0.75,
+    "aars": 0.425,
+    "thm": 0.5,
     "mitigation_factor": 1,
-    "aivss_score": 6.6,
-    "aivss_severity": "MEDIUM",
+    "aivss_score": 9.4,
+    "aivss_severity": "CRITICAL",
     "spec_version": "0.8",
-    "notes": "AARF scores based on typical deployment of skill components in agentic workflows."
+    "notes": "AARF scores based on typical deployment of skill components in agentic workflows. Re-scored under OWASP AIVSS v0.8 in #399 (schema 2.0.0, 2026-10-31): context 0.5 (one static source), opacity 1 (hidden or unattributable); thm 0.75 (theoretical) is now 0.5 (Unreported); mitigation_factor 1 (no or weak mitigation); score 6.6 to 9.4. The earlier factors data_access 0.5 and external_dependencies 1 are no longer scored; text above that cites them describes the earlier scoring."
   },
   "remediation": "- Disallow dynamic loading of skills from external sources\n- Maintain a signed allowlist of permitted skills\n- Verify cryptographic signatures on all skill files before loading\n- Sandbox skill execution regardless of source",
   "status": "active",
@@ -92,7 +92,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "CWE-829",
@@ -115,7 +115,7 @@
       "url": "https://github.com/aveproject/ave/blob/main/records/AVE-2026-00034.json"
     }
   ],
-  "severity": "MEDIUM",
+  "severity": "CRITICAL",
   "evidence_kind_default": "behavioral_pattern",
   "detection_stage": "static_detection",
   "detection_layer": "content",
@@ -143,5 +143,23 @@
       "pin_status": "unknown",
       "read_date": "2026-10-15"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "aivss_score",
+      "from": 6.6,
+      "to": 9.4,
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    },
+    {
+      "date": "2026-10-31",
+      "field": "severity",
+      "from": "MEDIUM",
+      "to": "CRITICAL",
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    }
+  ]
 }

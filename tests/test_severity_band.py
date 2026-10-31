@@ -71,6 +71,6 @@ def test_the_check_is_part_of_the_pipeline_a_record_goes_through():
     raw = path.read_text(encoding="utf-8")
     good = json.loads(raw)
     assert validate_records.record_errors(good, raw, validator) == []
-    bad = dict(good, severity="CRITICAL")
+    bad = dict(good, severity="LOW" if good["severity"] != "LOW" else "HIGH")
     found = validate_records.record_errors(bad, raw, validator)
     assert any("does not match aivss.aivss_score" in e for e in found), found

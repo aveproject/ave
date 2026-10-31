@@ -7,10 +7,13 @@
     "dist/ave-records-v1.2.0.manifest.json": "f4577f4a18a1ad7ca4c9e550c447aea83b5c94c8bc6da3787e4b6757171b1c89",
     "dist/ave-records-v1.3.0.json": "07099dddd495669beef67f4f1742500828c49411126f545ee27c586647c917aa",
     "dist/ave-records-v1.3.0.manifest.json": "078013c7c2569eb50348a6f14d20e28ce9db445f629018d59c441e9c159b5baf",
+    "dist/ave-records-v2.0.0.json": "4fee6e0ce5fc37573ad8abea286a4bbeda3208c3b4ded39eb71b646f9c98a746",
+    "dist/ave-records-v2.0.0.manifest.json": "1bb8866300404bb66259b392a823d20b500e56ea27e09fbb803d076cdc02c2a1",
     "schema/ave-record-1.0.0.schema.json": "ae21572c5c0db4ae2fc7a0d73302dd9b1d8fe0ee86cc750603b2af4f4c9abb32",
     "schema/ave-record-1.1.0.schema.json": "8771c3610b67af6e138f901e2661b84a2dd9e02713635336877cdb22abf33a1a",
     "schema/ave-record-1.2.0.schema.json": "52bade262bc804c0c9f26c71a76caa72abbb89dc2f4f1e4033a51fc755fa8c92",
     "schema/ave-record-1.3.0.schema.json": "d4b4121987b63f6bcaf5a7dcbc1152fd00d75900c76994f9b5279031c2887245",
+    "schema/ave-record-2.0.0.schema.json": "47bc52c11a8c57d4b988a4fa96b052379788e2d49e8e456329a3c32d7cd62f14",
     "schema/crosswalk-1.0.0.schema.json": "bb32493c51370583fb9eccc55d99ef30bed59824352ef0eabbd9d51ae4f5905c"
   }
 }

@@ -190,34 +190,36 @@ let a record ship with the key silently absent.
 
 ## Step 5: score it
 
-Full formula and worked examples in `references/aivss-scoring.md`.
-Short version: `aivss_score = round(((cvss_base + aars) / 2) * thm * mitigation_factor, 1)`,
-where `aars` is the sum of the ten `aarf` factors.
+Full equation, rubric and worked examples in `references/aivss-scoring.md`.
+Short version, from OWASP AIVSS v0.8: `aars = (10 - cvss_base) * (factor_sum / 10) * thm`, then
+`aivss_score = round_half_up((cvss_base + aars) * mitigation_factor, 1)`, where `factor_sum` is the sum of
+the ten `aarf` factors, each 0, 0.5 or 1.
 
 Compute it, then independently re-verify the arithmetic before moving on,
 don't trust your own mental math:
 
 ```bash
 python3 -c "
+from decimal import Decimal as D, ROUND_HALF_UP
 aarf = {'autonomy': 0, 'tool_use': 0, 'multi_agent': 0, 'non_determinism': 0,
         'self_modification': 0, 'dynamic_identity': 0, 'persistent_memory': 0,
-        'natural_language_input': 0, 'data_access': 0, 'external_dependencies': 0}
-# fill in your candidate's real values above
-aars = sum(aarf.values())
-cvss_base = 0  # fill in
-thm = 1
-mitigation_factor = 1  # 1 if no broad ecosystem-wide mitigation exists yet, 0.83 if a simple standard fix exists
-score = round(((cvss_base + aars) / 2) * thm * mitigation_factor, 1)
+        'natural_language_input': 0, 'context': 0, 'opacity': 0}
+# fill in your candidate's real values above: each 0, 0.5 or 1
+cvss_base = D('0')  # fill in: the CVSS v4.0 base score
+thm = D('1')  # 1 exploited in the wild, 0.97 a PoC exists, 0.5 theoretical
+mitigation_factor = D('1')  # 1 no or weak mitigation, 0.83 partial (a simple standard fix exists), 0.67 strong and validated
+aars = (10 - cvss_base) * (sum(D(str(v)) for v in aarf.values()) / 10) * thm
+score = ((cvss_base + aars) * mitigation_factor).quantize(D('0.1'), ROUND_HALF_UP)
 print('aars:', aars, '| aivss_score:', score)
 "
 ```
 
-**Don't inflate factors to hit a more severe-sounding band.** A narrow,
-single-vector mechanism can honestly score MEDIUM even with a
-near-maximum `cvss_base`, AARF rewards breadth of amplification, not raw
-impact alone. If the honest number feels low relative to the mechanism's
-intuitive severity, say so in `aivss.notes`, don't adjust the inputs to
-force a different result.
+**Don't inflate the factors or the CVSS vector to hit a more severe-sounding
+band.** In this equation the CVSS base is the floor of the score and the
+factors only add to it: a record with a modest base stays modest however
+many factors apply, and one with a near-maximum base stays near the top. If
+the honest number feels wrong relative to the mechanism's intuitive severity,
+say so in `aivss.notes`, don't adjust the inputs to force a different result.
 
 ## Step 6: validate
 
@@ -398,17 +400,19 @@ standard this project has applied to every other correction.
 
 ```bash
 python3 -c "
+from decimal import Decimal as D, ROUND_HALF_UP
 aarf = {'autonomy':1,'tool_use':1,'multi_agent':0,'non_determinism':0,'self_modification':0,
-        'dynamic_identity':0,'persistent_memory':0,'natural_language_input':0.5,'data_access':1,'external_dependencies':1}
-aars = sum(aarf.values())
-score = round(((9.8 + aars) / 2) * 1 * 1, 1)
+        'dynamic_identity':0,'persistent_memory':0,'natural_language_input':0.5,'context':0,'opacity':0}
+cvss_base, thm, mitigation_factor = D('9.8'), D('1'), D('1')
+aars = (10 - cvss_base) * (sum(D(str(v)) for v in aarf.values()) / 10) * thm
+score = ((cvss_base + aars) * mitigation_factor).quantize(D('0.1'), ROUND_HALF_UP)
 print('aars:', aars, '| aivss_score:', score)
 "
 ```
-Output: `aars: 4.5 | aivss_score: 7.2`, HIGH, not CRITICAL, honestly, because
-this is a narrow, single-vector mechanism even though the underlying
-impact (RCE) is severe. Noted directly in the record's own
-`aivss.notes` rather than adjusted to score higher.
+Output: `aars: 0.050 | aivss_score: 9.9`, CRITICAL: this is a narrow,
+single-vector mechanism, but its underlying impact (RCE) gives it a
+`cvss_base` of 9.8, and under the v0.8 equation the base is the floor of the
+score. Noted directly in the record's own `aivss.notes`.
 
 **Step 6, validation**: ran clean against the schema, arithmetic check,
 and mitigation-enum check on first pass for this record specifically

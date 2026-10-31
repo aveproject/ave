@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00047",
-  "schema_version": "1.3.0",
+  "schema_version": "2.0.0",
   "component_type": "skill",
   "title": "Hardcoded credentials in agent component - API keys and secrets exposed in skill files",
   "attack_class": "Sensitive Data Exposure - Hardcoded Credentials",
@@ -18,7 +18,7 @@
     "any-skill-registry",
     "github-public-repos"
   ],
-  "aivss_score": 7.6,
+  "aivss_score": 9.3,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:L/VA:N/SC:H/SI:H/SA:H",
   "owasp_asi": [
     "ASI02",
@@ -79,7 +79,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-05-16T00:00:00Z",
-  "last_updated": "2026-05-16T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "CWE-798",
@@ -121,18 +121,18 @@
       "dynamic_identity": 0.5,
       "persistent_memory": 1,
       "natural_language_input": 1,
-      "data_access": 1,
-      "external_dependencies": 1
+      "context": 0,
+      "opacity": 0
     },
-    "aars": 6.5,
+    "aars": 0.585,
     "thm": 1.0,
     "mitigation_factor": 1,
-    "aivss_score": 7.6,
-    "aivss_severity": "HIGH",
+    "aivss_score": 9.3,
+    "aivss_severity": "CRITICAL",
     "spec_version": "0.8",
-    "notes": "AARF scores reflect credential exposure amplified by agent context window accessibility and prompt injection risk."
+    "notes": "AARF scores reflect credential exposure amplified by agent context window accessibility and prompt injection risk. Re-scored under OWASP AIVSS v0.8 in #399 (schema 2.0.0, 2026-10-31): context 0 (no dependence on what the agent has read), opacity 0 (deterministic and visible); thm 1 (exploited in the wild) is now 1 (Attacked); mitigation_factor 1 (no or weak mitigation); score 7.6 to 9.3. The earlier factors data_access 1 and external_dependencies 1 are no longer scored; text above that cites them describes the earlier scoring."
   },
-  "severity": "HIGH",
+  "severity": "CRITICAL",
   "evidence_kind_default": "multi_engine",
   "detection_stage": "static_detection",
   "detection_layer": "content",
@@ -161,5 +161,23 @@
       "pin_status": "unknown",
       "read_date": "2026-10-15"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "aivss_score",
+      "from": 7.6,
+      "to": 9.3,
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    },
+    {
+      "date": "2026-10-31",
+      "field": "severity",
+      "from": "HIGH",
+      "to": "CRITICAL",
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    }
+  ]
 }

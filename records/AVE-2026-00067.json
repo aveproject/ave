@@ -1,13 +1,13 @@
 {
   "ave_id": "AVE-2026-00067",
-  "schema_version": "1.3.0",
+  "schema_version": "2.0.0",
   "status": "active",
   "component_type": "skill",
   "title": "Skill composition trust transfer: an upstream skill's output silently becomes a downstream skill's trust signal",
   "attack_class": "Privilege Escalation - Skill Composition Trust Transfer",
-  "severity": "MEDIUM",
+  "severity": "HIGH",
   "description": "A skill that is entirely benign when reviewed or executed in isolation produces an output, such as an audit finding, an endorsement, a validation result, or another benign-looking artifact, that a separate, later-invoked skill treats as a trust or authorization signal without independently re-verifying the underlying claim. Neither skill individually does anything dangerous; the vulnerability exists only in the composition, when both are invoked along the same task path in a shared execution context. Because per-skill security review evaluates each skill's own behavior in isolation, it structurally cannot see this class of risk: an upstream skill's legitimate, correct output becomes a spoofable trust credential the moment a downstream skill treats it as authoritative rather than re-verifying the claim itself. Published research demonstrates this mechanism accepting harmful software installation at over 96% success across four of five tested model backends when preceded by an approval-like output from an unrelated upstream skill, versus near-zero success when the same downstream skill is invoked in isolation.",
-  "aivss_score": 5.0,
+  "aivss_score": 8.7,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:L/SC:L/SI:H/SA:N",
   "owasp_mcp": ["MCP07"],
   "owasp_asi": ["ASI03", "ASI08"],
@@ -44,7 +44,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-08-02T00:00:00Z",
-  "last_updated": "2026-08-02T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Benign in Isolation, Harmful in Composition (arXiv 2606.15242)",
@@ -57,15 +57,15 @@
     "aarf": {
       "autonomy": 1, "tool_use": 1, "multi_agent": 0, "non_determinism": 0.5,
       "self_modification": 0, "dynamic_identity": 0.5, "persistent_memory": 0,
-      "natural_language_input": 0, "data_access": 0.5, "external_dependencies": 0
+      "natural_language_input": 0, "context": 1, "opacity": 1
     },
-    "aars": 3.5,
-    "thm": 0.9,
+    "aars": 1.2125,
+    "thm": 0.97,
     "mitigation_factor": 1,
-    "aivss_score": 5.0,
-    "aivss_severity": "MEDIUM",
+    "aivss_score": 8.7,
+    "aivss_severity": "HIGH",
     "spec_version": "0.8",
-    "notes": "multi_agent scored 0, not partial: this is a single-agent, multi-skill composition risk, not a multi-agent one -- the composition happens across sequential skill invocations within one agent's own session, not across distinct agents. natural_language_input scored 0: the vulnerable signal is a skill's structured output/return value, not natural-language instruction text. Scoped specifically to the SCR-TrustLift sub-mechanism (trust-signal propagation) rather than all three SCR sub-types the source paper covers, since SCR-CapFlow (capability-flow composition) and SCR-AuthBlur (authorization-confusion composition) are related but structurally distinct mechanisms worth their own records if drafted, not folded into one record broad enough to blur the fingerprint. mitre_atlas and nist_ai_rmf left as empty arrays deliberately, not omitted: researched directly against primary/near-primary sources rather than corpus pattern-matching. The closest ATLAS candidate, AML.T0053 (AI Agent Tool Invocation), describes an agent exploiting its own access to invoke connected tools for elevated privilege, a different mechanism from a downstream skill trusting an upstream skill's benign output, so it was not force-fit. For NIST AI RMF, independent research corroborates a documented gap: the current MAP function has no subcategory evaluating emergent risk from AI system component/tool combinations, matching this record's own finding that no clean mapping exists yet."
+    "notes": "multi_agent scored 0, not partial: this is a single-agent, multi-skill composition risk, not a multi-agent one -- the composition happens across sequential skill invocations within one agent's own session, not across distinct agents. natural_language_input scored 0: the vulnerable signal is a skill's structured output/return value, not natural-language instruction text. Scoped specifically to the SCR-TrustLift sub-mechanism (trust-signal propagation) rather than all three SCR sub-types the source paper covers, since SCR-CapFlow (capability-flow composition) and SCR-AuthBlur (authorization-confusion composition) are related but structurally distinct mechanisms worth their own records if drafted, not folded into one record broad enough to blur the fingerprint. mitre_atlas and nist_ai_rmf left as empty arrays deliberately, not omitted: researched directly against primary/near-primary sources rather than corpus pattern-matching. The closest ATLAS candidate, AML.T0053 (AI Agent Tool Invocation), describes an agent exploiting its own access to invoke connected tools for elevated privilege, a different mechanism from a downstream skill trusting an upstream skill's benign output, so it was not force-fit. For NIST AI RMF, independent research corroborates a documented gap: the current MAP function has no subcategory evaluating emergent risk from AI system component/tool combinations, matching this record's own finding that no clean mapping exists yet. Re-scored under OWASP AIVSS v0.8 in #399 (schema 2.0.0, 2026-10-31): context 1 (broad runtime context), opacity 1 (hidden or unattributable); thm 0.9 (PoC exists) is now 0.97 (Proof-of-Concept); mitigation_factor 1 (no or weak mitigation); score 5 to 8.7. The earlier factors data_access 0.5 and external_dependencies 0 are no longer scored; text above that cites them describes the earlier scoring."
   },
   "evidence_kind_default": "semantic_inference",
   "detection_stage": "runtime_observed",
@@ -82,5 +82,23 @@
       "version": "2026",
       "read_date": "2026-08-23"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "aivss_score",
+      "from": 5.0,
+      "to": 8.7,
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    },
+    {
+      "date": "2026-10-31",
+      "field": "severity",
+      "from": "MEDIUM",
+      "to": "HIGH",
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    }
+  ]
 }

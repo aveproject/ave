@@ -1,7 +1,7 @@
 {
-  "schema_version": "1.3.0",
+  "schema_version": "2.0.0",
   "record_count": 89,
-  "generated_at": "2026-10-29T15:12:16.382Z",
+  "generated_at": "2026-10-31T04:08:33.597Z",
   "source": "https://github.com/aveproject/ave",
-  "sha256": "07099dddd495669beef67f4f1742500828c49411126f545ee27c586647c917aa"
+  "sha256": "4fee6e0ce5fc37573ad8abea286a4bbeda3208c3b4ded39eb71b646f9c98a746"
 }

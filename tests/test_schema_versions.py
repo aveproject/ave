@@ -8,11 +8,13 @@ import pytest
 
 from scripts import validate_records
 
-REAL_RECORD = Path("records/AVE-2026-00001.json")
+# The record as published under schema 1.3.0: the frozen snapshot keeps the 1.x shape
+# (aarf with data_access and external_dependencies) that the 1.x schema files describe.
+SNAPSHOT = Path("dist/ave-records-v1.3.0.json")
 
 
 def _real_record(version):
-    record = json.loads(REAL_RECORD.read_text(encoding="utf-8"))
+    record = next(r for r in json.loads(SNAPSHOT.read_text(encoding="utf-8")) if r["ave_id"] == "AVE-2026-00001")
     record["schema_version"] = version
     return record
 
@@ -114,9 +116,7 @@ def _stage_corpus(tmp_path, monkeypatch, versions):
     for path in Path("schema").glob("ave-record-*.schema.json"):
         shutil.copy(path, schemas / path.name)
     for index, version in enumerate(versions, start=1):
-        text = REAL_RECORD.read_text(encoding="utf-8")
-        current = json.loads(text)["schema_version"]
-        text = text.replace(f'"schema_version": "{current}"', f'"schema_version": "{version}"')
+        text = json.dumps(_real_record(version), indent=2) + "\n"
         (records / f"AVE-2026-0000{index}.json").write_text(text, encoding="utf-8")
     monkeypatch.setattr(validate_records, "RECORDS_DIR", records)
     monkeypatch.setattr(validate_records, "SCHEMA_DIR", schemas)

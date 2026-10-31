@@ -1,12 +1,12 @@
 {
   "ave_id": "AVE-2026-00081",
-  "schema_version": "1.3.0",
+  "schema_version": "2.0.0",
   "status": "active",
   "title": "Lingering authority: a task-scoped capability outlives the episode that justified it",
   "attack_class": "Persistence - Lingering Authority",
-  "severity": "MEDIUM",
+  "severity": "CRITICAL",
   "description": "An agent is granted a temporary resource or effect capability -- a tool permission, credential, or access token -- scoped to a specific task, subgoal, or episode. That episode closes (the subgoal completes, a task ends, an incident resolves, an approval window expires) but nothing in the agent's runtime ties the capability's revocation to that closure event, so the capability remains structurally valid and reusable. The agent's own later turns in the same session -- or an attacker who can extend, race, or mimic the closure signal -- continue to invoke the stale capability for actions the now-closed episode no longer justifies, executing writes, mutations, or network egress the current task has no standing to authorize. Distinct from AVE-2026-00021 (Human-in-Loop Bypass) and AVE-2026-00063 (Approval Gate Bypass Configuration): those records describe actively bypassing a confirmation or approval check at the moment of action, via instruction or config. This record involves no bypass of any check -- the grant was legitimately issued and nothing re-checks it when its own justifying condition ends. Distinct from AVE-2026-00045 (Cross-App-Access Escalation): that record's grant is legitimately used, unexpired, for a purpose outside its scope, within a single session with no elapsed time or external event required. Here the grant is used within its originally intended purpose, but past the point where a real external, checkable event (episode closure) should have ended it -- the inverse framing: temporal and lifecycle, not scope. Distinct from AVE-2026-00050 (Parasitic Toolchain): that record smuggles in an undeclared registration beyond manifest scope at session init. Here the capability was legitimately declared and granted; the failure is purely a missing closure-triggered revocation. First formalized and measured by PORTICO (arXiv:2606.22504), whose non-revoking baseline permitted all 10 of 10 tested post-closure capability reuses and executed 6 of 6 forbidden effects (file writes, git mutation, network egress) in a deterministic stale-write audit, versus 0 of 10 and 0 of 6 respectively under a revoking reference monitor with the same initial grants at the same turns.",
-  "aivss_score": 6.1,
+  "aivss_score": 9.2,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
   "owasp_mcp": [
     "MCP02"
@@ -60,7 +60,7 @@
   "researcher": "Igor Santos-Grueiro",
   "researcher_url": "https://arxiv.org/abs/2606.22504",
   "published": "2026-09-09T00:00:00Z",
-  "last_updated": "2026-09-09T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "arXiv:2606.22504",
@@ -84,16 +84,16 @@
       "dynamic_identity": 0,
       "persistent_memory": 1,
       "natural_language_input": 0.5,
-      "data_access": 1,
-      "external_dependencies": 0.5
+      "context": 1,
+      "opacity": 1
     },
-    "aars": 5.5,
-    "thm": 0.9,
+    "aars": 1.164,
+    "thm": 0.97,
     "mitigation_factor": 1,
-    "aivss_score": 6.1,
-    "aivss_severity": "MEDIUM",
+    "aivss_score": 9.2,
+    "aivss_severity": "CRITICAL",
     "spec_version": "0.8",
-    "notes": "persistent_memory and data_access scored at maximum (1): the entire mechanism is a capability persisting in the agent's own runtime state across what should have been a hard boundary, and the worst-case reuse is typically against files, credentials, or other sensitive data the grant covers. autonomy and tool_use also at maximum: the reuse happens with no human confirmation, and the mechanism is definitionally about tool/resource access. multi_agent, self_modification, and dynamic_identity scored 0: the mechanism is single-agent and does not require the component to alter its own instructions or assume a different persona. non_determinism and natural_language_input scored 0.5: whether an episode's closure is correctly detected can vary run to run (especially where closure is inferred from a natural-language completion claim rather than a structured event), but the core failure -- no closure-triggered revocation -- is structural, not language-driven, so neither extreme fit cleanly. external_dependencies scored 0.5: one of the paper's three tested effect classes is network egress, but exploitability of that specific effect depends on what the granted capability actually covers. thm set to 0.90 (PoC exists, not yet exploited in the wild): PORTICO's own evaluation is a real, working, measured demonstration (scripted traces, six live model traces, frozen real-repository runs with recorded commits), not a theoretical scenario, but there is no disclosed in-the-wild incident yet. mitigation_factor set to 1 (no broad ecosystem-wide mitigation exists yet): PORTICO is a novel 2026 research design, not yet a widely adopted standard fix. owasp_mcp mapped to MCP02 (Privilege Escalation via Scope Creep) after reading the category's full primary-source text (github.com/OWASP/www-project-mcp-top-10, 2025/MCP02 document, commit 165fe0f78ef104459237b4a8e0f6e78db9b02391): its detection checklist names 'no enforced expiration for scopes or tokens' verbatim, and its own remediation #3 ('Expiry-Based & Just-in-Time (JIT) Access... require revalidation for long-running or recurring tasks') is the same gap this record describes, even though MCP02's top-line description frames the more general case as privileges expanding rather than failing to contract. MCP07 (Insufficient Authentication & Authorization) was also checked and rejected: its own text is about authentication/identity verification and cross-agent token reuse, not episode-closure-triggered revocation specifically. owasp_asi mapped to ASI03 (Identity and Privilege Abuse) after reading the actual 2026 PDF directly (genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026, pages 15-16): Common Example of the Vulnerability #4 is literally 'Time-of-Check to Time-of-Use (TOCTOU) in Agent Workflows... Permissions may be validated at the start of a workflow but change or expire before execution. The agent continues with outdated authorization,' and Example Attack Scenario #5 ('Workflow Authorization Drift') describes the same mechanism verbatim in worked form. mitre_atlas confirmed empty: swept the live ATLAS.yaml (mitre-atlas/atlas-data, 170+ techniques) directly for stale/expired/revalidation/TOCTOU/closure language; the only hit, AML.T0091.000 (Application Access Token), describes an adversary using a *stolen* token to bypass authentication -- a different mechanism (credential theft) from a legitimately-issued grant the agent's own runtime fails to revoke. A genuine gap, not an unresearched omission. nist_ai_rmf confirmed empty: checked the actual NIST AI 100-1 text (Tables 1-4) directly; MANAGE-2.4 ('mechanisms... to supersede, disengage, or deactivate AI systems that demonstrate performance or outcomes inconsistent with intended use') and GOVERN-1.7 (decommissioning AI systems) are the closest, but both operate at whole-AI-system deactivation/decommissioning granularity, not per-capability, per-episode revocation. Neither is a clean fit at the granularity this class describes."
+    "notes": "persistent_memory and data_access scored at maximum (1): the entire mechanism is a capability persisting in the agent's own runtime state across what should have been a hard boundary, and the worst-case reuse is typically against files, credentials, or other sensitive data the grant covers. autonomy and tool_use also at maximum: the reuse happens with no human confirmation, and the mechanism is definitionally about tool/resource access. multi_agent, self_modification, and dynamic_identity scored 0: the mechanism is single-agent and does not require the component to alter its own instructions or assume a different persona. non_determinism and natural_language_input scored 0.5: whether an episode's closure is correctly detected can vary run to run (especially where closure is inferred from a natural-language completion claim rather than a structured event), but the core failure -- no closure-triggered revocation -- is structural, not language-driven, so neither extreme fit cleanly. external_dependencies scored 0.5: one of the paper's three tested effect classes is network egress, but exploitability of that specific effect depends on what the granted capability actually covers. thm set to 0.90 (PoC exists, not yet exploited in the wild): PORTICO's own evaluation is a real, working, measured demonstration (scripted traces, six live model traces, frozen real-repository runs with recorded commits), not a theoretical scenario, but there is no disclosed in-the-wild incident yet. mitigation_factor set to 1 (no broad ecosystem-wide mitigation exists yet): PORTICO is a novel 2026 research design, not yet a widely adopted standard fix. owasp_mcp mapped to MCP02 (Privilege Escalation via Scope Creep) after reading the category's full primary-source text (github.com/OWASP/www-project-mcp-top-10, 2025/MCP02 document, commit 165fe0f78ef104459237b4a8e0f6e78db9b02391): its detection checklist names 'no enforced expiration for scopes or tokens' verbatim, and its own remediation #3 ('Expiry-Based & Just-in-Time (JIT) Access... require revalidation for long-running or recurring tasks') is the same gap this record describes, even though MCP02's top-line description frames the more general case as privileges expanding rather than failing to contract. MCP07 (Insufficient Authentication & Authorization) was also checked and rejected: its own text is about authentication/identity verification and cross-agent token reuse, not episode-closure-triggered revocation specifically. owasp_asi mapped to ASI03 (Identity and Privilege Abuse) after reading the actual 2026 PDF directly (genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026, pages 15-16): Common Example of the Vulnerability #4 is literally 'Time-of-Check to Time-of-Use (TOCTOU) in Agent Workflows... Permissions may be validated at the start of a workflow but change or expire before execution. The agent continues with outdated authorization,' and Example Attack Scenario #5 ('Workflow Authorization Drift') describes the same mechanism verbatim in worked form. mitre_atlas confirmed empty: swept the live ATLAS.yaml (mitre-atlas/atlas-data, 170+ techniques) directly for stale/expired/revalidation/TOCTOU/closure language; the only hit, AML.T0091.000 (Application Access Token), describes an adversary using a *stolen* token to bypass authentication -- a different mechanism (credential theft) from a legitimately-issued grant the agent's own runtime fails to revoke. A genuine gap, not an unresearched omission. nist_ai_rmf confirmed empty: checked the actual NIST AI 100-1 text (Tables 1-4) directly; MANAGE-2.4 ('mechanisms... to supersede, disengage, or deactivate AI systems that demonstrate performance or outcomes inconsistent with intended use') and GOVERN-1.7 (decommissioning AI systems) are the closest, but both operate at whole-AI-system deactivation/decommissioning granularity, not per-capability, per-episode revocation. Neither is a clean fit at the granularity this class describes. Re-scored under OWASP AIVSS v0.8 in #399 (schema 2.0.0, 2026-10-31): context 1 (broad runtime context), opacity 1 (hidden or unattributable); thm 0.9 (PoC exists) is now 0.97 (Proof-of-Concept); mitigation_factor 1 (no or weak mitigation); score 6.1 to 9.2. The earlier factors data_access 1 and external_dependencies 0.5 are no longer scored; text above that cites them describes the earlier scoring."
   },
   "evidence_kind_default": "behavioral_pattern",
   "detection_stage": "runtime_observed",
@@ -117,5 +117,23 @@
       "read_date": "2026-09-09",
       "source_url": "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "aivss_score",
+      "from": 6.1,
+      "to": 9.2,
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    },
+    {
+      "date": "2026-10-31",
+      "field": "severity",
+      "from": "MEDIUM",
+      "to": "CRITICAL",
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    }
+  ]
 }

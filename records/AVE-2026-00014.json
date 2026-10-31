@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00014",
-  "schema_version": "1.3.0",
+  "schema_version": "2.0.0",
   "component_type": "skill",
   "title": "False authority claim via trust escalation impersonation in agentic component",
   "attack_class": "Social Engineering - Trust Escalation",
@@ -17,7 +17,7 @@
     "agentskills.io",
     "github.com/topics/agent-skills"
   ],
-  "aivss_score": 3.7,
+  "aivss_score": 6.3,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:L/VI:H/VA:N/SC:L/SI:H/SA:N",
   "owasp_asi": ["ASI01"],
   "nist_ai_rmf": [
@@ -59,7 +59,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-20T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "CWE-290",
@@ -93,21 +93,21 @@
       "dynamic_identity": 1,
       "persistent_memory": 0.5,
       "natural_language_input": 1,
-      "data_access": 0,
-      "external_dependencies": 0
+      "context": 0.5,
+      "opacity": 0.5
     },
-    "aars": 5.5,
-    "thm": 0.75,
+    "aars": 1.1375,
+    "thm": 0.5,
     "mitigation_factor": 0.83,
-    "aivss_score": 3.7,
-    "aivss_severity": "LOW",
+    "aivss_score": 6.3,
+    "aivss_severity": "MEDIUM",
     "spec_version": "0.8",
-    "notes": "Social engineering. Multi-agent + dynamic identity amplify."
+    "notes": "Social engineering. Multi-agent + dynamic identity amplify. Re-scored under OWASP AIVSS v0.8 in #399 (schema 2.0.0, 2026-10-31): context 0.5 (one static source), opacity 0.5 (readable, the agent's choice untraceable); thm 0.75 (theoretical) is now 0.5 (Unreported); mitigation_factor 0.83 (partial mitigation); score 3.7 to 6.3. The earlier factors data_access 0 and external_dependencies 0 are no longer scored; text above that cites them describes the earlier scoring."
   },
   "owasp_mcp": [
     "MCP03"
   ],
-  "severity": "LOW",
+  "severity": "MEDIUM",
   "evidence_kind_default": "semantic_inference",
   "detection_stage": "static_detection",
   "detection_layer": "content",
@@ -134,5 +134,23 @@
       "pin_status": "unknown",
       "read_date": "2026-10-15"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "aivss_score",
+      "from": 3.7,
+      "to": 6.3,
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    },
+    {
+      "date": "2026-10-31",
+      "field": "severity",
+      "from": "LOW",
+      "to": "MEDIUM",
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    }
+  ]
 }

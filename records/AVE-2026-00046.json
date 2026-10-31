@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00046",
-  "schema_version": "1.3.0",
+  "schema_version": "2.0.0",
   "component_type": "skill",
   "title": "MCP tool hook hijacking - redirect tool execution to attacker-controlled callback",
   "attack_class": "Execution Hijack - Tool Hook Interception",
@@ -16,7 +16,7 @@
     "smithery.ai",
     "any-skill-registry"
   ],
-  "aivss_score": 9.2,
+  "aivss_score": 10,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
   "owasp_asi": ["ASI04"],
   "nist_ai_rmf": [
@@ -78,7 +78,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-05-16T00:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "CWE-601",
@@ -126,16 +126,16 @@
       "dynamic_identity": 1,
       "persistent_memory": 0.5,
       "natural_language_input": 1,
-      "data_access": 1,
-      "external_dependencies": 1
+      "context": 1,
+      "opacity": 1
     },
-    "aars": 8.5,
+    "aars": 0,
     "thm": 1.0,
     "mitigation_factor": 1,
-    "aivss_score": 9.2,
+    "aivss_score": 10,
     "aivss_severity": "CRITICAL",
     "spec_version": "0.8",
-    "notes": "AARF scores reflect full tool interception capability with external exfiltration."
+    "notes": "AARF scores reflect full tool interception capability with external exfiltration. Re-scored under OWASP AIVSS v0.8 in #399 (schema 2.0.0, 2026-10-31): context 1 (broad runtime context), opacity 1 (hidden or unattributable); thm 1 (exploited in the wild) is now 1 (Attacked); mitigation_factor 1 (no or weak mitigation); score 9.2 to 10. The earlier factors data_access 1 and external_dependencies 1 are no longer scored; text above that cites them describes the earlier scoring."
   },
   "severity": "CRITICAL",
   "evidence_kind_default": "config_schema",
@@ -164,5 +164,15 @@
       "pin_status": "unknown",
       "read_date": "2026-10-15"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "aivss_score",
+      "from": 9.2,
+      "to": 10,
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    }
+  ]
 }

@@ -14,8 +14,8 @@ the conformance fixtures, and the validation tooling.
 records/              AVE record JSON files, the standard's data
 schema/               JSON schema the records validate against
   ave-record.schema.json             alias, always points to current
-  ave-record-1.1.0.schema.json       versioned canonical, current, permanent
-  ave-record-1.0.0.schema.json       versioned canonical, frozen, permanent
+  ave-record-2.0.0.schema.json       versioned canonical, current, permanent
+  ave-record-1.0.0.schema.json to 1.3.0   earlier versions, frozen, permanent
 tests/fixtures/       Positive and negative conformance fixtures per record.
                        Any implementation's own detection logic is tested
                        against these; the logic itself lives in that

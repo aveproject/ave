@@ -1,11 +1,11 @@
 {
   "ave_id": "AVE-2026-00071",
-  "schema_version": "1.3.0",
+  "schema_version": "2.0.0",
   "status": "active",
   "component_type": "skill",
   "title": "MCP daemon redirect via DOCKER_HOST or host flag, container operations land on attacker infrastructure",
   "attack_class": "Supply Chain - Container Daemon Redirect",
-  "severity": "MEDIUM",
+  "severity": "HIGH",
   "description": "A component's declared configuration sets DOCKER_HOST in a settings.json env block or an MCP server's own env, or supplies a -H/--host flag in a committed command site, pointing the container daemon at a remote tcp:// or ssh:// host instead of the local daemon. Once set, every subsequent build, run, image pull, and bind mount silently targets attacker-controlled infrastructure rather than the machine the user believes they are operating on. Nothing in the compose file or image reference itself looks unusual, since the redirection lives entirely in the daemon connection target, not in what is being built or run. Any secret present in the build context, and any data touched by a bind mount, is exposed to whatever actually receives the daemon connection.",
   "affected_platforms": [
     "any-agent-or-mcp-server-with-configurable-docker-host"
@@ -13,7 +13,7 @@
   "affected_registries": [
     "clawhub.io", "smithery.ai", "agentskills.io"
   ],
-  "aivss_score": 5.6,
+  "aivss_score": 8.9,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
   "owasp_mcp": ["MCP04"],
   "owasp_asi": ["ASI04", "ASI05"],
@@ -54,7 +54,7 @@
   "researcher": "Nicolai (predictor2718)",
   "researcher_url": "https://github.com/predictor2718",
   "published": "2026-08-06T00:00:00Z",
-  "last_updated": "2026-08-06T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "cfgaudit crosswalk gap detail",
@@ -77,15 +77,15 @@
     "aarf": {
       "autonomy": 1, "tool_use": 1, "multi_agent": 0, "non_determinism": 0,
       "self_modification": 0, "dynamic_identity": 0, "persistent_memory": 0.5,
-      "natural_language_input": 0, "data_access": 0.5, "external_dependencies": 1
+      "natural_language_input": 0, "context": 0, "opacity": 0.5
     },
-    "aars": 4.0,
-    "thm": 0.9,
+    "aars": 0.4365,
+    "thm": 0.97,
     "mitigation_factor": 1.0,
-    "aivss_score": 5.6,
-    "aivss_severity": "MEDIUM",
+    "aivss_score": 8.9,
+    "aivss_severity": "HIGH",
     "spec_version": "0.8",
-    "notes": "natural_language_input scored 0: this is a pure config-state check (reading DOCKER_HOST and classifying local vs. remote), no instruction text is analyzed, the same distinguishing property predictor2718 used to separate telemetry redirect from AVE-2026-00002. thm set to 0.90 (PoC exists) rather than 1.0: cfgaudit actively detects this pattern in real deployed configs, a documented, demonstrable mechanism, but no specific disclosed in-the-wild exploitation campaign is cited for CFG082 specifically, unlike CFG066/CFG069/CFG005 which do carry named CVEs. MEDIUM severity despite a near-maximum cvss_base (8.5, full daemon-compromise-equivalent impact once redirected) reflects AARF's narrow amplification profile: single-component, no multi-agent, no natural-language surface, no self-modification. Scoped specifically to the daemon-redirect mechanism (CFG082) per predictor2718's own correction: CFG083 (browser subprocess replacement via launcher flags) only superficially resembles container posture and is process-launch hijacking, a distinct mechanism, deliberately not folded in. CFG084 (container image trust verification disabled) is likewise a real, separate mechanism, out of scope for this record, a future candidate."
+    "notes": "natural_language_input scored 0: this is a pure config-state check (reading DOCKER_HOST and classifying local vs. remote), no instruction text is analyzed, the same distinguishing property predictor2718 used to separate telemetry redirect from AVE-2026-00002. thm set to 0.90 (PoC exists) rather than 1.0: cfgaudit actively detects this pattern in real deployed configs, a documented, demonstrable mechanism, but no specific disclosed in-the-wild exploitation campaign is cited for CFG082 specifically, unlike CFG066/CFG069/CFG005 which do carry named CVEs. MEDIUM severity despite a near-maximum cvss_base (8.5, full daemon-compromise-equivalent impact once redirected) reflects AARF's narrow amplification profile: single-component, no multi-agent, no natural-language surface, no self-modification. Scoped specifically to the daemon-redirect mechanism (CFG082) per predictor2718's own correction: CFG083 (browser subprocess replacement via launcher flags) only superficially resembles container posture and is process-launch hijacking, a distinct mechanism, deliberately not folded in. CFG084 (container image trust verification disabled) is likewise a real, separate mechanism, out of scope for this record, a future candidate. Re-scored under OWASP AIVSS v0.8 in #399 (schema 2.0.0, 2026-10-31): context 0 (no dependence on what the agent has read), opacity 0.5 (readable, the agent's choice untraceable); thm 0.9 (PoC exists) is now 0.97 (Proof-of-Concept); mitigation_factor 1 (no or weak mitigation); score 5.6 to 8.9. The earlier factors data_access 0.5 and external_dependencies 1 are no longer scored; text above that cites them describes the earlier scoring."
   },
   "evidence_kind_default": "config_schema",
   "detection_stage": "static_detection",
@@ -106,5 +106,23 @@
       "pin_status": "unknown",
       "read_date": "2026-10-15"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "aivss_score",
+      "from": 5.6,
+      "to": 8.9,
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    },
+    {
+      "date": "2026-10-31",
+      "field": "severity",
+      "from": "MEDIUM",
+      "to": "HIGH",
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    }
+  ]
 }

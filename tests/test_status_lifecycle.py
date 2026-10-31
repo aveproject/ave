@@ -16,7 +16,8 @@ import pytest
 
 from scripts import validate_records
 
-REAL_RECORD = Path("records/AVE-2026-00001.json")
+# The record as published under schema 1.3.0 (the frozen snapshot), since these tests are about 1.3.0.
+SNAPSHOT = Path("dist/ave-records-v1.3.0.json")
 DECISION = "https://github.com/aveproject/ave/discussions/234"
 
 
@@ -27,7 +28,7 @@ def _validator(version="1.3.0"):
 
 def _record(ave_id="AVE-2026-00001", **changes):
     """A real, fully populated record on schema 1.3.0, with changes applied."""
-    record = json.loads(REAL_RECORD.read_text(encoding="utf-8"))
+    record = next(r for r in json.loads(SNAPSHOT.read_text(encoding="utf-8")) if r["ave_id"] == "AVE-2026-00001")
     record["schema_version"] = "1.3.0"
     record["ave_id"] = ave_id
     record.update(changes)

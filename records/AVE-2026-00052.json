@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00052",
-  "schema_version": "1.3.0",
+  "schema_version": "2.0.0",
   "component_type": "mcp_server",
   "title": "Command injection via unsanitized tool-call parameter in MCP server implementation",
   "attack_class": "Tool Abuse - Implementation Command Injection",
@@ -17,7 +17,7 @@
     "smithery.ai",
     "registry.modelcontextprotocol.io"
   ],
-  "aivss_score": 7.5,
+  "aivss_score": 9.9,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
   "behavioral_fingerprint": "MCP tool handler code passes a caller-supplied tool-call parameter value directly into a shell or system-command execution function without sanitization, executing arbitrary OS commands under the server process's privileges -- independent of any agent instruction or prompt content.",
   "behavioral_vector": [
@@ -63,7 +63,7 @@
   "researcher": "Peter Girnus (ZDI)",
   "researcher_url": "https://www.zerodayinitiative.com/advisories/ZDI-26-021/",
   "published": "2026-07-10T00:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "ZDI-26-021",
@@ -105,24 +105,24 @@
     "aarf": {
       "autonomy": 1,
       "tool_use": 1,
-      "multi_agent": 0.3,
-      "non_determinism": 0.3,
+      "multi_agent": 0.5,
+      "non_determinism": 0.5,
       "self_modification": 0,
       "dynamic_identity": 0,
-      "persistent_memory": 0.2,
-      "natural_language_input": 0.7,
-      "data_access": 1,
-      "external_dependencies": 0.7
+      "persistent_memory": 0,
+      "natural_language_input": 0.5,
+      "context": 0,
+      "opacity": 0
     },
-    "aars": 5.2,
+    "aars": 0.07,
     "thm": 1.0,
     "mitigation_factor": 1.0,
-    "aivss_score": 7.5,
-    "aivss_severity": "HIGH",
+    "aivss_score": 9.9,
+    "aivss_severity": "CRITICAL",
     "spec_version": "0.8",
-    "notes": "cvss_base reflects the originating CVE-2026-0755 (unauthenticated network RCE, full C/I/A impact). AARF is scored lower than comparable execution-hijack records (e.g. AVE-2026-00046) because this class is a single-call injection, not a persistent self-modifying or identity-assuming mechanism -- self_modification and dynamic_identity are both 0. natural_language_input (0.7) and external_dependencies (0.7) reflect that the malicious parameter value is commonly shaped by upstream agent reasoning or untrusted content, though the raw vulnerability itself fires independent of any LLM involvement. thm=1.0: real, disclosed, patched CVE with multiple independent corroborating technical writeups (NVD, Snyk, GitLab Advisory Database) describing a fully working exploit chain. mitigation_factor=1.0: the originating CVE is patched, but this AVE record represents the general implementation-vulnerability class, which remains unaudited across most MCP tool packages ecosystem-wide."
+    "notes": "cvss_base reflects the originating CVE-2026-0755 (unauthenticated network RCE, full C/I/A impact). AARF is scored lower than comparable execution-hijack records (e.g. AVE-2026-00046) because this class is a single-call injection, not a persistent self-modifying or identity-assuming mechanism -- self_modification and dynamic_identity are both 0. natural_language_input (0.7) and external_dependencies (0.7) reflect that the malicious parameter value is commonly shaped by upstream agent reasoning or untrusted content, though the raw vulnerability itself fires independent of any LLM involvement. thm=1.0: real, disclosed, patched CVE with multiple independent corroborating technical writeups (NVD, Snyk, GitLab Advisory Database) describing a fully working exploit chain. mitigation_factor=1.0: the originating CVE is patched, but this AVE record represents the general implementation-vulnerability class, which remains unaudited across most MCP tool packages ecosystem-wide. Re-scored under OWASP AIVSS v0.8 in #399 (schema 2.0.0, 2026-10-31): context 0 (no dependence on what the agent has read), opacity 0 (deterministic and visible); thm 1 (exploited in the wild) is now 1 (Attacked); mitigation_factor 1 (no or weak mitigation); score 7.5 to 9.9. Moved onto the 0, 0.5, 1 scale: multi_agent 0.3 to 0.5, non_determinism 0.3 to 0.5, persistent_memory 0.2 to 0, natural_language_input 0.7 to 0.5. The earlier factors data_access 1 and external_dependencies 0.7 are no longer scored; text above that cites them describes the earlier scoring."
   },
-  "severity": "HIGH",
+  "severity": "CRITICAL",
   "evidence_kind_default": "multi_engine",
   "detection_stage": "static_detection",
   "detection_layer": "content",
@@ -144,5 +144,23 @@
       "version": "2026",
       "read_date": "2026-08-23"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "aivss_score",
+      "from": 7.5,
+      "to": 9.9,
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    },
+    {
+      "date": "2026-10-31",
+      "field": "severity",
+      "from": "HIGH",
+      "to": "CRITICAL",
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    }
+  ]
 }

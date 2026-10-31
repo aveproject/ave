@@ -1,11 +1,11 @@
 {
   "ave_id": "AVE-2026-00072",
-  "schema_version": "1.3.0",
+  "schema_version": "2.0.0",
   "status": "active",
   "component_type": "mcp_server",
   "title": "MCP server bound to all network interfaces with no authentication step (NeighborJack)",
   "attack_class": "Insecure Configuration - Network Bind Exposure",
-  "severity": "MEDIUM",
+  "severity": "CRITICAL",
   "description": "An MCP server's declared args or env set its bind address to 0.0.0.0 or [::], the wildcard address, rather than a loopback or explicitly scoped interface. Once bound this way, the server is reachable by anyone on the local network, not just the local machine, and no authentication step separates a local, trusted caller from a remote, untrusted one on the same LAN. The configuration difference from a safe deployment is a single token in the server's args or env; nothing about the server's declared tools or capabilities changes, only who can reach them. predictor2718's own name for this pattern is NeighborJack: a server bound this way grants any device on the same network segment the same tool access a legitimate local client would have, with no credential, token, or prompt required.",
   "affected_platforms": [
     "any-mcp-server-with-configurable-bind-address"
@@ -13,7 +13,7 @@
   "affected_registries": [
     "clawhub.io", "smithery.ai", "agentskills.io"
   ],
-  "aivss_score": 5.0,
+  "aivss_score": 9,
   "cvss_base_vector": "CVSS:4.0/AV:A/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
   "owasp_mcp": ["MCP07"],
   "mitre_atlas": [],
@@ -53,7 +53,7 @@
   "researcher": "Nicolai (predictor2718)",
   "researcher_url": "https://github.com/predictor2718",
   "published": "2026-08-06T00:00:00Z",
-  "last_updated": "2026-08-06T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "cfgaudit crosswalk gap detail",
@@ -76,15 +76,15 @@
     "aarf": {
       "autonomy": 1, "tool_use": 1, "multi_agent": 0, "non_determinism": 0,
       "self_modification": 0, "dynamic_identity": 0, "persistent_memory": 0,
-      "natural_language_input": 0, "data_access": 0.5, "external_dependencies": 0
+      "natural_language_input": 0, "context": 0, "opacity": 0
     },
-    "aars": 2.5,
-    "thm": 0.9,
+    "aars": 0.2522,
+    "thm": 0.97,
     "mitigation_factor": 1.0,
-    "aivss_score": 5.0,
-    "aivss_severity": "MEDIUM",
+    "aivss_score": 9,
+    "aivss_severity": "CRITICAL",
     "spec_version": "0.8",
-    "notes": "AV:A (adjacent network) rather than AV:N in the CVSS vector: exploitation requires LAN adjacency, not full internet reachability, reflected in a lower external_dependencies AARF score than a remotely-triggerable class would carry. thm set to 0.90 (PoC exists) rather than 1.0: predictor2718 did not cite a specific CVE for CFG018 the way he did for the CORS/logging rules in the same network-posture bucket (CFG066/CFG069), but cfgaudit actively detects this pattern in real deployed configs. MEDIUM severity despite a near-maximum cvss_base (8.7, full unauthenticated tool access to any LAN party) reflects AARF's narrow amplification profile: single-component, no multi-agent, no natural-language surface. owasp_asi intentionally omitted rather than force-fit: this is a network access-control gap, not a match for any of the ten agent-behavior-focused ASI categories, same omission discipline already applied to AVE-2026-00061. Scoped specifically to the wildcard-bind mechanism (CFG018) per predictor2718's own recommendation; CORS wildcard (CFG066, escalates to CVE-2026-33010 combined with disabled auth), deprecated SSE transport (CFG058), non-local proxy routing (CFG021), and unredacted HTTP logging (CFG069, CVE-2026-42282/CVE-2026-41495) are real, separate mechanisms he documented individually, deliberately not folded in here."
+    "notes": "AV:A (adjacent network) rather than AV:N in the CVSS vector: exploitation requires LAN adjacency, not full internet reachability, reflected in a lower external_dependencies AARF score than a remotely-triggerable class would carry. thm set to 0.90 (PoC exists) rather than 1.0: predictor2718 did not cite a specific CVE for CFG018 the way he did for the CORS/logging rules in the same network-posture bucket (CFG066/CFG069), but cfgaudit actively detects this pattern in real deployed configs. MEDIUM severity despite a near-maximum cvss_base (8.7, full unauthenticated tool access to any LAN party) reflects AARF's narrow amplification profile: single-component, no multi-agent, no natural-language surface. owasp_asi intentionally omitted rather than force-fit: this is a network access-control gap, not a match for any of the ten agent-behavior-focused ASI categories, same omission discipline already applied to AVE-2026-00061. Scoped specifically to the wildcard-bind mechanism (CFG018) per predictor2718's own recommendation; CORS wildcard (CFG066, escalates to CVE-2026-33010 combined with disabled auth), deprecated SSE transport (CFG058), non-local proxy routing (CFG021), and unredacted HTTP logging (CFG069, CVE-2026-42282/CVE-2026-41495) are real, separate mechanisms he documented individually, deliberately not folded in here. Re-scored under OWASP AIVSS v0.8 in #399 (schema 2.0.0, 2026-10-31): context 0 (no dependence on what the agent has read), opacity 0 (deterministic and visible); thm 0.9 (PoC exists) is now 0.97 (Proof-of-Concept); mitigation_factor 1 (no or weak mitigation); score 5 to 9. The earlier factors data_access 0.5 and external_dependencies 0 are no longer scored; text above that cites them describes the earlier scoring."
   },
   "evidence_kind_default": "config_schema",
   "detection_stage": "static_detection",
@@ -97,5 +97,23 @@
       "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
       "read_date": "2026-09-05"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "aivss_score",
+      "from": 5.0,
+      "to": 9,
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    },
+    {
+      "date": "2026-10-31",
+      "field": "severity",
+      "from": "MEDIUM",
+      "to": "CRITICAL",
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    }
+  ]
 }

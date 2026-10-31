@@ -36,7 +36,7 @@ contribution makes AI agents safer for everyone.
    before writing JSON. The maintainer will confirm the next available id.
 
 4. **Read the schema** at
-   [`schema/ave-record-1.3.0.schema.json`](schema/ave-record-1.3.0.schema.json)
+   [`schema/ave-record-2.0.0.schema.json`](schema/ave-record-2.0.0.schema.json)
    for field definitions, types, and required/optional status. The schema
    reference page is at [aveproject.org/schema.html](https://aveproject.org/schema.html).
 
@@ -126,28 +126,34 @@ Key rules:
 ### AIVSS v0.8 calculation
 
 ```
-AIVSS = ((CVSS_Base + AARS) / 2) x ThM x Mitigation_Factor
+AARS  = (10 - CVSS_Base) x (Factor_Sum / 10) x ThM
+AIVSS = (CVSS_Base + AARS) x Mitigation_Factor
 ```
 
-Score each AARF factor 0.0 (not applicable) to 1.0 (fully applicable):
+`CVSS_Base` is a CVSS v4.0 base score. `Factor_Sum` is the sum of the ten factors below. Round the score half up to
+one decimal. `scripts/validate_records.py` recomputes both `aars` and the score. Score each AARF factor 0 (none),
+0.5 (partial) or 1 (full), for the typical agentic deployment the class acts in; the rubric is in
+`references/aivss-scoring.md`:
 
 | Factor | Score when... |
 |---|---|
-| autonomy | agent acts without human confirmation |
-| tool_use | component grants access to external tools or APIs |
-| multi_agent | attack chains across multiple agents |
-| non_determinism | behavior varies unpredictably across runs |
-| self_modification | component can alter its own instructions at runtime |
-| dynamic_identity | component assumes roles or personas |
+| autonomy | agent acts without human verification |
+| tool_use | component grants access to broad or privileged external tools or APIs |
+| multi_agent | attack chains across or depends on other autonomous agents |
+| non_determinism | behavior varies for identical inputs |
+| self_modification | component can alter its own code, prompts or tool configuration |
+| dynamic_identity | component assumes roles, identities or permissions at runtime |
 | persistent_memory | state is retained across sessions |
-| natural_language_input | instructions are delivered via natural language |
-| data_access | component reads sensitive data (files, env, databases) |
-| external_dependencies | component loads remote code or content |
+| natural_language_input | unstructured natural language drives goals and instructions |
+| context | broad environmental or data context drives the agent's decisions |
+| opacity | the behavior cannot be seen, audited or attributed from logs |
 
 ThM values:
-- `0.75` -- theoretical, no known PoC
-- `0.90` -- PoC exists
-- `1.0` -- exploited in the wild or weaponised
+- `0.5` -- theoretical, no known PoC (Unreported)
+- `0.97` -- PoC exists (Proof-of-Concept)
+- `1.0` -- exploited in the wild or weaponised (Attacked)
+
+Mitigation_Factor is `1.0` (no or weak mitigation), `0.83` (partial) or `0.67` (strong, validated).
 
 Write a one-line rationale for each non-zero AARF factor in the PR
 description. Reviewers will ask for this if it is missing.
@@ -251,11 +257,11 @@ compatibility rule in
 A published versioned schema file never changes, not even a description; a
 correction ships in the next version.
 
-Current schema: **v1.3.0**.
-Canonical file: `schema/ave-record-1.3.0.schema.json`.
-(`schema/ave-record-1.0.0.schema.json`, `schema/ave-record-1.1.0.schema.json` and
-`schema/ave-record-1.2.0.schema.json` remain, permanently, as frozen earlier versions;
-`tests/test_frozen_artifacts.py` fails if any of them changes.)
+Current schema: **v2.0.0**.
+Canonical file: `schema/ave-record-2.0.0.schema.json`.
+(`schema/ave-record-1.0.0.schema.json`, `schema/ave-record-1.1.0.schema.json`,
+`schema/ave-record-1.2.0.schema.json` and `schema/ave-record-1.3.0.schema.json` remain, permanently, as
+frozen earlier versions; `tests/test_frozen_artifacts.py` fails if any of them changes.)
 
 **Any change to a field's description, additive or structural, requires
 regenerating `docs/terms.md`**: `python scripts/generate_terms.py`, then

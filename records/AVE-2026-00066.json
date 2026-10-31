@@ -1,11 +1,11 @@
 {
   "ave_id": "AVE-2026-00066",
-  "schema_version": "1.3.0",
+  "schema_version": "2.0.0",
   "status": "active",
   "component_type": "skill",
   "title": "Hallucinated skill-name squatting (HalluSquatting)",
   "attack_class": "Supply Chain - Hallucinated Resource Squatting",
-  "severity": "MEDIUM",
+  "severity": "CRITICAL",
   "description": "An attacker precomputes which plausible-but-nonexistent package, repository, or skill names large language models are statistically likely to generate when asked about a well-known or trending resource, then preemptively registers those exact names on a public registry with malicious content. When an agent hallucinates one of these names in response to an ordinary user request and proceeds to fetch, clone, or install it, no attacker-controlled instruction or injected content is present anywhere in the interaction; the entry point is the model's own hallucinated belief that the resource exists, not a component-level compromise reached through prompt injection or tampering of a real package. Published research demonstrates the hallucination is reliably predictable and transferable across different foundation models and prompt phrasings, letting an attacker precompute a fixed, reusable set of squatted names that yield a scalable, low-cost distribution channel for malware across heterogeneous platforms.",
   "affected_platforms": [
     "cursor", "windsurf", "github-copilot", "cline", "gemini-cli", "openclaw"
@@ -13,7 +13,7 @@
   "affected_registries": [
     "npm", "pypi", "github", "clawhub.io", "skillsmp"
   ],
-  "aivss_score": 6.2,
+  "aivss_score": 9.5,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:R/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
   "owasp_mcp": ["MCP04"],
   "owasp_asi": ["ASI04"],
@@ -53,7 +53,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-08-02T00:00:00Z",
-  "last_updated": "2026-08-02T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Beware of Agentic Botnets (arXiv 2607.07433)",
@@ -79,17 +79,17 @@
   "aivss": {
     "cvss_base": 9.0,
     "aarf": {
-      "autonomy": 1, "tool_use": 1, "multi_agent": 0, "non_determinism": 0.25,
+      "autonomy": 1, "tool_use": 1, "multi_agent": 0, "non_determinism": 0.5,
       "self_modification": 0, "dynamic_identity": 0, "persistent_memory": 0,
-      "natural_language_input": 1, "data_access": 0.5, "external_dependencies": 1
+      "natural_language_input": 1, "context": 0.5, "opacity": 1
     },
-    "aars": 4.75,
-    "thm": 0.9,
+    "aars": 0.485,
+    "thm": 0.97,
     "mitigation_factor": 1,
-    "aivss_score": 6.2,
-    "aivss_severity": "MEDIUM",
+    "aivss_score": 9.5,
+    "aivss_severity": "CRITICAL",
     "spec_version": "0.8",
-    "notes": "non_determinism scored low (0.25), not high, deliberately: the defining property of this class per its own source research is that the hallucination is unusually predictable and transferable across models and phrasings, the opposite of high run-to-run variance, which is what makes precomputing a fixed squatting list viable for an attacker in the first place. thm set to 0.90 (PoC exists) rather than 1.0: demonstrated against real production LLM applications and named platforms with high success rates, but no disclosed real-world exploitation campaign yet, distinct from an in-the-wild incident like ClawHavoc. cvss_base held at 9.0 to match the demonstrated RCE/botnet-formation impact once a squatted name is installed; MEDIUM severity reflects AARF's narrower amplification profile (single-agent, no persistent memory or identity manipulation required) rather than an inflated attempt to force a HIGH/CRITICAL label onto a real but single-vector entry mechanism. mitre_atlas and nist_ai_rmf researched directly against primary/near-primary sources, not corpus pattern-matching: AML.T0010 (AI Supply Chain Compromise) and its sub-technique AML.T0011.001 (Malicious Package -- 'software packages that when imported by a user have a deleterious effect') both confirmed via MITRE's own ATLAS data repository. GOVERN-6.1 ('policies and procedures address AI risks associated with third-party entities') confirmed as the matching NIST AI RMF subcategory for third-party/supply-chain risk."
+    "notes": "non_determinism scored low (0.25), not high, deliberately: the defining property of this class per its own source research is that the hallucination is unusually predictable and transferable across models and phrasings, the opposite of high run-to-run variance, which is what makes precomputing a fixed squatting list viable for an attacker in the first place. thm set to 0.90 (PoC exists) rather than 1.0: demonstrated against real production LLM applications and named platforms with high success rates, but no disclosed real-world exploitation campaign yet, distinct from an in-the-wild incident like ClawHavoc. cvss_base held at 9.0 to match the demonstrated RCE/botnet-formation impact once a squatted name is installed; MEDIUM severity reflects AARF's narrower amplification profile (single-agent, no persistent memory or identity manipulation required) rather than an inflated attempt to force a HIGH/CRITICAL label onto a real but single-vector entry mechanism. mitre_atlas and nist_ai_rmf researched directly against primary/near-primary sources, not corpus pattern-matching: AML.T0010 (AI Supply Chain Compromise) and its sub-technique AML.T0011.001 (Malicious Package -- 'software packages that when imported by a user have a deleterious effect') both confirmed via MITRE's own ATLAS data repository. GOVERN-6.1 ('policies and procedures address AI risks associated with third-party entities') confirmed as the matching NIST AI RMF subcategory for third-party/supply-chain risk. Re-scored under OWASP AIVSS v0.8 in #399 (schema 2.0.0, 2026-10-31): context 0.5 (one static source), opacity 1 (hidden or unattributable); thm 0.9 (PoC exists) is now 0.97 (Proof-of-Concept); mitigation_factor 1 (no or weak mitigation); score 6.2 to 9.5. Moved onto the 0, 0.5, 1 scale: non_determinism 0.25 to 0.5. The earlier factors data_access 0.5 and external_dependencies 1 are no longer scored; text above that cites them describes the earlier scoring."
   },
   "evidence_kind_default": "behavioral_pattern",
   "detection_stage": "runtime_observed",
@@ -114,5 +114,23 @@
       "pin_status": "unknown",
       "read_date": "2026-10-15"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "aivss_score",
+      "from": 6.2,
+      "to": 9.5,
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    },
+    {
+      "date": "2026-10-31",
+      "field": "severity",
+      "from": "MEDIUM",
+      "to": "CRITICAL",
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    }
+  ]
 }

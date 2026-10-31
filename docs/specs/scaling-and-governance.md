@@ -84,6 +84,8 @@ Under this rule:
 - Requiring the framework keys (#178) is minor only once every published record
   carries them.
 - Removing or renaming a field, or changing a field's meaning, is major (1.x to 2.0).
+- Moving scoring to the OWASP AIVSS v0.8 equation changed what `aivss.aars` and
+  `aivss.thm` mean and replaced two `aarf` keys, so it is major (1.3 to 2.0, #399).
 
 Every record must validate against the schema version it declares in its
 own `schema_version` field, enforced in CI: `scripts/validate_records.py` looks up
@@ -118,6 +120,11 @@ on, the 1.0.0, 1.1.0 and 1.2.0 files are frozen exactly as they stand, and
 `dist/ave-records-v1.1.0.json` and `dist/ave-records-v1.2.0.json` with them.
 Schema 1.3.0 (#104) is the first version shipped by the process above from the
 start; its schema file and `dist/ave-records-v1.3.0.json` are frozen the same way.
+Schema 2.0.0 (#399) is the first major version: it moved scoring from AVE's own
+equation (the AIVSS v0.5 equation with the v0.8 Mitigation_Factor added, #395) to the
+OWASP AIVSS v0.8 equation, re-scored every record, and froze its own schema file and
+`dist/ave-records-v2.0.0.json`. Nothing already frozen was touched: schema 1.3.0 and
+the catalog release v1.2.0 keep the 1.x scores.
 
 ## 3. Deprecation policy
 

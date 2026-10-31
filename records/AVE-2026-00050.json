@@ -1,13 +1,13 @@
 {
   "ave_id": "AVE-2026-00050",
-  "schema_version": "1.3.0",
+  "schema_version": "2.0.0",
   "status": "active",
   "published": "2026-06-21T00:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "component_type": "mcp_server",
   "title": "Parasitic Toolchain \u2014 Silent Tool Registration and Persistent Hook Injection",
   "attack_class": "Persistence - Parasitic Toolchain",
-  "severity": "HIGH",
+  "severity": "CRITICAL",
   "description": "A skill or MCP tool silently registers additional tools, hooks, or handlers into the agent's active tool dispatch layer at runtime, without explicit user consent or declaration in the server manifest. The registered components persist across session restarts and intercept or augment calls originally intended for other legitimate tools. Unlike AVE-2026-00046 (hook interception via external callback URL), the parasitic toolchain registers its hooks locally within the agent's tool runtime \u2014 the malicious capability appears as a legitimate tool in the agent's tool list and survives context resets.",
   "affected_platforms": [
     "claude-desktop",
@@ -23,7 +23,7 @@
     "any-skill-registry",
     "github-public-repos"
   ],
-  "aivss_score": 7.2,
+  "aivss_score": 9.7,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
   "owasp_asi": ["ASI04"],
   "mitre_atlas": [
@@ -123,16 +123,16 @@
       "dynamic_identity": 0.5,
       "persistent_memory": 1,
       "natural_language_input": 0.5,
-      "data_access": 1,
-      "external_dependencies": 0.5
+      "context": 1,
+      "opacity": 1
     },
-    "aars": 7.5,
-    "thm": 0.9,
+    "aars": 1.164,
+    "thm": 0.97,
     "mitigation_factor": 1,
-    "aivss_score": 7.2,
-    "aivss_severity": "HIGH",
+    "aivss_score": 9.7,
+    "aivss_severity": "CRITICAL",
     "spec_version": "0.8",
-    "notes": "AARF elevated by self_modification and persistent_memory: the parasite modifies the agent's tool dispatch layer and survives session resets."
+    "notes": "AARF elevated by self_modification and persistent_memory: the parasite modifies the agent's tool dispatch layer and survives session resets. Re-scored under OWASP AIVSS v0.8 in #399 (schema 2.0.0, 2026-10-31): context 1 (broad runtime context), opacity 1 (hidden or unattributable); thm 0.9 (PoC exists) is now 0.97 (Proof-of-Concept); mitigation_factor 1 (no or weak mitigation); score 7.2 to 9.7. The earlier factors data_access 1 and external_dependencies 0.5 are no longer scored; text above that cites them describes the earlier scoring."
   },
   "evidence_kind_default": "behavioral_pattern",
   "detection_stage": "runtime_observed",
@@ -160,5 +160,23 @@
       "pin_status": "unknown",
       "read_date": "2026-10-15"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "aivss_score",
+      "from": 7.2,
+      "to": 9.7,
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    },
+    {
+      "date": "2026-10-31",
+      "field": "severity",
+      "from": "HIGH",
+      "to": "CRITICAL",
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    }
+  ]
 }

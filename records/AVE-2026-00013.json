@@ -1,6 +1,6 @@
 {
   "ave_id": "AVE-2026-00013",
-  "schema_version": "1.3.0",
+  "schema_version": "2.0.0",
   "component_type": "skill",
   "title": "Personal data exfiltration via PII collection and transmission in agentic component",
   "attack_class": "Data Exfiltration - PII Theft",
@@ -17,7 +17,7 @@
     "agentskills.io",
     "github.com/topics/agent-skills"
   ],
-  "aivss_score": 6.5,
+  "aivss_score": 8.9,
   "cvss_base_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:N/VA:N/SC:H/SI:H/SA:L",
   "owasp_asi": ["ASI01"],
   "nist_ai_rmf": [
@@ -67,7 +67,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-20T09:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "CWE-359",
@@ -101,22 +101,22 @@
       "dynamic_identity": 0,
       "persistent_memory": 0,
       "natural_language_input": 1,
-      "data_access": 1,
-      "external_dependencies": 0.5
+      "context": 0.5,
+      "opacity": 0.5
     },
-    "aars": 5,
+    "aars": 0.9,
     "thm": 1,
     "mitigation_factor": 1,
-    "aivss_score": 6.5,
-    "aivss_severity": "MEDIUM",
+    "aivss_score": 8.9,
+    "aivss_severity": "HIGH",
     "spec_version": "0.8",
-    "notes": "PII collection + exfil. Confirmed in Smithery sbb-mcp and strale findings."
+    "notes": "PII collection + exfil. Confirmed in Smithery sbb-mcp and strale findings. Re-scored under OWASP AIVSS v0.8 in #399 (schema 2.0.0, 2026-10-31): context 0.5 (one static source), opacity 0.5 (readable, the agent's choice untraceable); thm 1 (exploited in the wild) is now 1 (Attacked); mitigation_factor 1 (no or weak mitigation); score 6.5 to 8.9. The earlier factors data_access 1 and external_dependencies 0.5 are no longer scored; text above that cites them describes the earlier scoring."
   },
   "owasp_mcp": [
     "MCP05",
     "MCP06"
   ],
-  "severity": "MEDIUM",
+  "severity": "HIGH",
   "evidence_kind_default": "multi_engine",
   "detection_stage": "static_detection",
   "detection_layer": "content",
@@ -144,5 +144,23 @@
       "pin_status": "unknown",
       "read_date": "2026-10-15"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-31",
+      "field": "aivss_score",
+      "from": 6.5,
+      "to": 8.9,
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    },
+    {
+      "date": "2026-10-31",
+      "field": "severity",
+      "from": "MEDIUM",
+      "to": "HIGH",
+      "reason_code": "score_revised",
+      "reason": "Rescored under OWASP AIVSS v0.8 in #399 (schema 2.0.0)."
+    }
+  ]
 }

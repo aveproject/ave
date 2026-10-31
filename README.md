@@ -12,7 +12,7 @@ MCP server, system prompt, or agent plugin can be weaponized — scored consiste
 mapped to the frameworks security teams already report against.
 
 [![Records](https://img.shields.io/badge/records-89-0f6e56?style=flat-square)](records/)
-[![Schema](https://img.shields.io/badge/schema-v1.3.0-0a3024?style=flat-square)](schema/ave-record-1.3.0.schema.json)
+[![Schema](https://img.shields.io/badge/schema-v2.0.0-0a3024?style=flat-square)](schema/ave-record-2.0.0.schema.json)
 [![AIVSS](https://img.shields.io/badge/AIVSS-v0.8-d4a017?style=flat-square)](https://aivss.owasp.org)
 [![OWASP MCP](https://img.shields.io/badge/OWASP-MCP%20Top%2010-0a3024?style=flat-square)](https://owasp.org)
 [![MITRE ATLAS](https://img.shields.io/badge/MITRE-ATLAS-4a3f9e?style=flat-square)](https://atlas.mitre.org)
@@ -120,7 +120,7 @@ curl -s https://api.aveproject.org/v1/records/AVE-2026-00046 \
   "ave_id": "AVE-2026-00046",
   "title": "MCP tool hook hijacking - redirect tool execution to attacker-controlled callback",
   "severity": "CRITICAL",
-  "score": 9.2,
+  "score": 10,
   "owasp_mcp": ["MCP03", "MCP06"]
 }
 ```
@@ -227,12 +227,12 @@ individual records.
 | | |
 |---|---|
 | Total records | 89 |
-| Schema version | 1.3.0 |
+| Schema version | 2.0.0 |
 | AIVSS spec | v0.8 |
-| CRITICAL (>= 9.0) | 1 |
-| HIGH (7.0-8.9) | 20 |
-| MEDIUM (4.0-6.9) | 66 |
-| LOW (< 4.0) | 2 |
+| CRITICAL (>= 9.0) | 40 |
+| HIGH (7.0-8.9) | 41 |
+| MEDIUM (4.0-6.9) | 8 |
+| LOW (< 4.0) | 0 |
 | Framework: OWASP MCP Top 10 | all records |
 | Framework: MITRE ATLAS | where applicable |
 | Framework: OWASP Agentic AI Top 10 | where applicable |
@@ -242,28 +242,33 @@ individual records.
 
 ## AIVSS Scoring
 
-Every record is scored with [OWASP AIVSS v0.8](https://aivss.owasp.org):
+Every record is scored with [OWASP AIVSS v0.8](https://aivss.owasp.org), using the equation in sections 3.3 to 3.5
+of its specification:
 
 ```
-AIVSS = ((CVSS_Base + AARS) / 2) x ThM x Mitigation_Factor
+AARS  = (10 - CVSS_Base) x (Factor_Sum / 10) x ThM
+AIVSS = (CVSS_Base + AARS) x Mitigation_Factor
 ```
 
-**AARS** (Agentic Amplification and Reachability Score) is the sum of 10
-Agentic Amplification and Risk Factors (AARF), each scored 0.0-1.0. They are
-stored in `aivss.aarf`, and `aivss.aars` is their sum:
+`CVSS_Base` is a CVSS v4.0 base score (`aivss.cvss_base`). `Factor_Sum` is the sum of ten Agentic Risk Amplification
+Factors (AARF), each scored 0.0, 0.5 or 1.0 and stored in `aivss.aarf`. `AARS`, the agentic uplift, is the part of
+the distance from the CVSS base to 10 that the factors bridge, and `aivss.aars` records it. The score is rounded half
+up to one decimal. AVE scores a behavioral class, the way OWASP's own case studies score its Core Risks (section
+3.6), so a factor describes the typical agentic deployment the class acts in. How each factor is judged is in
+[references/aivss-scoring.md](references/aivss-scoring.md).
 
-| # | Factor | Why it matters |
-|---|---|---|
-| 1 | **Autonomy** | Agent acts without human approval |
-| 2 | **Tool Use** | Agent has access to external tools or APIs |
-| 3 | **Multi-Agent** | Agent interacts with or spawns other agents |
-| 4 | **Non-Determinism** | Behavior varies unpredictably across runs |
-| 5 | **Self-Modification** | Can alter own instructions or memory at runtime |
-| 6 | **Dynamic Identity** | Assumes roles or identities at runtime |
-| 7 | **Persistent Memory** | Retains state across sessions |
-| 8 | **Natural Language Input** | Instruction surface via natural language |
-| 9 | **Data Access** | Reads sensitive data (files, env vars, databases) |
-| 10 | **External Dependencies** | Loads external code, skills, or remote content |
+| # | Factor | AVE key | What it measures |
+|---|---|---|---|
+| 1 | **Autonomy** | `autonomy` | Executes actions without human verification |
+| 2 | **Tools** | `tool_use` | Breadth and privilege of the external tools and APIs the agent can use |
+| 3 | **Language** | `natural_language_input` | Reliance on unstructured natural language for goals and instructions |
+| 4 | **Context** | `context` | Environmental signals or broad data context drive decisions |
+| 5 | **Non-Determinism** | `non_determinism` | Variance in output or action for identical inputs |
+| 6 | **Opacity** | `opacity` | Lack of visibility into, or ability to audit, decision logic |
+| 7 | **Persistence** | `persistent_memory` | Retains memory or state across sessions |
+| 8 | **Identity** | `dynamic_identity` | Assumes different roles or permissions at runtime |
+| 9 | **Multi-Agent** | `multi_agent` | Coordinates with, or depends on, other autonomous agents |
+| 10 | **Self-Mod** | `self_modification` | Can alter its own code, prompts or tool configuration |
 
 **Severity bands:**
 
@@ -274,38 +279,38 @@ stored in `aivss.aarf`, and `aivss.aars` is their sum:
 | MEDIUM | 4.0-6.9 | Meaningful risk requiring review |
 | LOW | < 4.0 | Limited impact or requires chaining |
 
-**ThM (Threat and Heuristic Multiplier) valid values:** `0.75` (theoretical) · `0.90` (PoC exists) · `1.0` (in-the-wild)
+**ThM (Threat Multiplier) valid values:** `0.5` (Unreported, theoretical) · `0.97` (Proof-of-Concept) · `1.0` (Attacked, in the wild)
 
-**Worked example — AVE-2026-00001 (Metamorphic Payload):**
+**Mitigation_Factor valid values:** `1.0` (no or weak mitigation) · `0.83` (partial) · `0.67` (strong, validated)
+
+**Worked example, AVE-2026-00001 (Metamorphic Payload):**
 
 ```
-AARF factors:
-  autonomy=1.0  tool_use=1.0  multi_agent=0.5  non_determinism=1.0  self_modification=1.0
-  dynamic_identity=0.0  persistent_memory=0.5  natural_language_input=1.0
-  data_access=0.5  external_dependencies=1.0
+Factors:
+  autonomy=1.0  tool_use=1.0  natural_language_input=1.0  context=0.5  non_determinism=1.0
+  opacity=1.0  persistent_memory=0.5  dynamic_identity=0.0  multi_agent=0.5  self_modification=1.0
 
-AARS = 1.0 + 1.0 + 0.5 + 1.0 + 1.0 + 0.0 + 0.5 + 1.0 + 0.5 + 1.0 = 7.5
-CVSS_Base = 8.5   ThM = 1.0 (in-the-wild)   Mitigation_Factor = 1
+Factor_Sum = 7.5
+CVSS_Base = 8.5   ThM = 1.0 (Attacked)   Mitigation_Factor = 1.0
 
-AIVSS = ((8.5 + 7.5) / 2) x 1.0 x 1 = 8.0  ->  HIGH
+AARS  = (10 - 8.5) x (7.5 / 10) x 1.0 = 1.125
+AIVSS = (8.5 + 1.125) x 1.0 = 9.625  ->  9.6  CRITICAL
 ```
 
 Before you rely on a score:
 
-- **Rounding.** The score is the result rounded to one decimal the way
-  `scripts/validate_records.py` does it, with Python's `round()` on the
-  floating-point result, so a value that looks like a tie can fall either way:
-  9.25 is stored as 9.2.
-- **Checking.** `scripts/validate_records.py` recomputes `aivss.aars` from the
-  factors and the score from the formula for every record, and requires the
-  top-level `aivss_score` to match.
-- **Not a confidence.** AIVSS says how bad a class is if it fires. How sure a
-  scanner is that it fired is `confidence`, assigned per detection on the
-  finding and never stored in a record
+- **The CVSS base is the floor.** The equation adds the uplift to the CVSS base score, so a record never scores
+  below its `cvss_base` times its Mitigation_Factor. A low score needs a low base.
+- **Rounding.** Half up, as the OWASP document says: 9.625 is 9.6 and 9.35 is 9.4. `scripts/validate_records.py`
+  works in exact decimal arithmetic, so no result falls on the wrong side of a floating-point representation.
+- **Checking.** `scripts/validate_records.py` recomputes `aivss.aars` from the base, the factors and ThM, and the
+  score from `aars` and the Mitigation_Factor, for every record; it requires the top-level `aivss_score` to match and
+  `severity` to be the band the score falls in. Its test reproduces the ten worked examples in OWASP's document.
+- **Not a confidence.** AIVSS says how bad a class is if it fires. How sure a scanner is that it fired is
+  `confidence`, assigned per detection on the finding and never stored in a record
   ([record versus finding](#how-it-works)).
-- **Scores can move, ids do not.** A re-score is a correction to a record
-  ([Stability](#stability)). Pin a catalog release if a score must not change
-  under you.
+- **Scores can move, ids do not.** A re-score is a correction to a record, recorded in its `revisions`
+  ([Stability](#stability)). Pin a catalog release if a score must not change under you.
 
 The [Scoring page](https://aveproject.org/scoring.html) shows the factor
 definitions, how the published scores are spread, and worked examples built
@@ -326,6 +331,11 @@ the ones a machine can check are checked in CI.
 | The schema | A minor version never removes or renames a field, changes its meaning, or narrows a type or enum; anything else is a major version. Each published `schema/ave-record-X.Y.Z.schema.json` and `dist/ave-records-vX.Y.Z.json` is frozen, and a test fails if one changes. Every record validates against the version it declares. | [Schema versioning policy](docs/specs/scaling-and-governance.md#2-schema-versioning-policy) |
 | A catalog release | A GitHub Release `vX.Y.Z` never changes, and carries checksums and a build provenance attestation. A patch release corrects existing records, a minor one adds records or takes a minor schema, a major one takes a major schema or changes what an id means. At most monthly unless a correction is urgent. | [Catalog releases](docs/specs/scaling-and-governance.md#6-catalog-releases), [Releases and pinning](#releases-and-pinning) |
 | The API | `/v1` is the versioned contract and the unversioned paths stay as aliases. A pinned release (`?release=`) never changes. | [aveproject/ave-api](https://github.com/aveproject/ave-api#endpoints) |
+
+**Scoring changed in schema 2.0.0.** AVE moved to the OWASP AIVSS v0.8 equation. That changed what `aivss.aars`
+and `aivss.thm` mean and replaced two `aarf` factors, which makes it a major version, and every record was re-scored:
+each one carries a `revisions` entry with its old and new score, and one more for any change of severity. Schema
+1.3.0 and the catalog release v1.2.0 keep the earlier scores exactly as published; pin v1.2.0 to keep them.
 
 What is not promised: the latest data (`dist/ave-records-latest.json`, or the API without `?release=`) changes
 whenever the records do. For repeatable scans, pin a release.
@@ -365,95 +375,95 @@ pre-disclosure finding privately, see [SECURITY.md](SECURITY.md).
 
 | AVE ID | Title | AIVSS | Severity |
 |---|---|---|---|
-| [AVE-2026-00001](records/AVE-2026-00001.json) | Metamorphic Payload via External Config Fetch | 8.0 | HIGH |
-| [AVE-2026-00002](records/AVE-2026-00002.json) | Tool Poisoning via Description Manipulation | 7.3 | HIGH |
-| [AVE-2026-00003](records/AVE-2026-00003.json) | Data Exfiltration via Credential Theft | 6.8 | MEDIUM |
-| [AVE-2026-00004](records/AVE-2026-00004.json) | Arbitrary Code Execution via Shell Pipe Injection | 5.9 | MEDIUM |
-| [AVE-2026-00005](records/AVE-2026-00005.json) | Destructive Command Execution | 5.6 | MEDIUM |
-| [AVE-2026-00006](records/AVE-2026-00006.json) | Cryptocurrency Drain via Wallet Access | 7.5 | HIGH |
-| [AVE-2026-00007](records/AVE-2026-00007.json) | Goal Hijacking via Prompt Injection | 6.1 | MEDIUM |
-| [AVE-2026-00008](records/AVE-2026-00008.json) | Persistence via Self-Replication | 6.3 | MEDIUM |
-| [AVE-2026-00009](records/AVE-2026-00009.json) | Jailbreak via Safety Constraint Removal | 5.5 | MEDIUM |
-| [AVE-2026-00010](records/AVE-2026-00010.json) | Hidden Instruction Concealment | 5.6 | MEDIUM |
-| [AVE-2026-00011](records/AVE-2026-00011.json) | Dynamic Tool Call with Attacker Parameters | 5.7 | MEDIUM |
-| [AVE-2026-00012](records/AVE-2026-00012.json) | Privilege Escalation via Permission Grant | 4.5 | MEDIUM |
-| [AVE-2026-00013](records/AVE-2026-00013.json) | PII Exfiltration Pattern | 6.5 | MEDIUM |
-| [AVE-2026-00014](records/AVE-2026-00014.json) | Social Engineering via Trust Escalation | 3.7 | LOW |
-| [AVE-2026-00015](records/AVE-2026-00015.json) | System Prompt Disclosure | 4.9 | MEDIUM |
-| [AVE-2026-00016](records/AVE-2026-00016.json) | Indirect Prompt Injection via RAG Retrieval | 6.4 | MEDIUM |
-| [AVE-2026-00017](records/AVE-2026-00017.json) | MCP Server Impersonation | 5.7 | MEDIUM |
-| [AVE-2026-00018](records/AVE-2026-00018.json) | Tool Result Manipulation | 4.4 | MEDIUM |
-| [AVE-2026-00019](records/AVE-2026-00019.json) | Agent Memory Poisoning | 5.6 | MEDIUM |
-| [AVE-2026-00020](records/AVE-2026-00020.json) | Cross-Agent Injection via A2A Protocol | 5.9 | MEDIUM |
-| [AVE-2026-00021](records/AVE-2026-00021.json) | Human-in-the-Loop Bypass | 4.5 | MEDIUM |
-| [AVE-2026-00022](records/AVE-2026-00022.json) | Scope Creep via Undeclared Resource Access | 6.0 | MEDIUM |
-| [AVE-2026-00023](records/AVE-2026-00023.json) | Context Window Manipulation | 5.8 | MEDIUM |
-| [AVE-2026-00024](records/AVE-2026-00024.json) | Supply Chain: Binary Content Disguised as Skill | 6.8 | MEDIUM |
-| [AVE-2026-00025](records/AVE-2026-00025.json) | Conversation History Injection | 4.5 | MEDIUM |
-| [AVE-2026-00026](records/AVE-2026-00026.json) | Tool Output Exfiltration via Encoding | 6.8 | MEDIUM |
-| [AVE-2026-00027](records/AVE-2026-00027.json) | Multi-Turn Persistence Attack | 5.6 | MEDIUM |
-| [AVE-2026-00028](records/AVE-2026-00028.json) | File Content Injection | 5.9 | MEDIUM |
-| [AVE-2026-00029](records/AVE-2026-00029.json) | Homoglyph and Unicode Obfuscation | 4.8 | MEDIUM |
-| [AVE-2026-00030](records/AVE-2026-00030.json) | False Role Claim | 4.3 | MEDIUM |
-| [AVE-2026-00031](records/AVE-2026-00031.json) | Feedback Loop Poisoning | 5.4 | MEDIUM |
-| [AVE-2026-00032](records/AVE-2026-00032.json) | Internal Network Reconnaissance | 4.0 | MEDIUM |
-| [AVE-2026-00033](records/AVE-2026-00033.json) | Unsafe Deserialization in Skill Context | 4.2 | MEDIUM |
-| [AVE-2026-00034](records/AVE-2026-00034.json) | Dynamic Skill Import at Runtime | 6.6 | MEDIUM |
-| [AVE-2026-00035](records/AVE-2026-00035.json) | Sensor and Environment Manipulation | 4.2 | MEDIUM |
-| [AVE-2026-00036](records/AVE-2026-00036.json) | Lateral Movement via Agent Pivot | 5.9 | MEDIUM |
-| [AVE-2026-00037](records/AVE-2026-00037.json) | Vision and Multimodal Injection | 5.1 | MEDIUM |
-| [AVE-2026-00038](records/AVE-2026-00038.json) | Unbounded Tool Use | 5.9 | MEDIUM |
-| [AVE-2026-00039](records/AVE-2026-00039.json) | Covert Exfiltration via Steganographic Channel | 4.9 | MEDIUM |
-| [AVE-2026-00040](records/AVE-2026-00040.json) | Insecure Output Handling | 5.4 | MEDIUM |
-| [AVE-2026-00041](records/AVE-2026-00041.json) | MCP Server-Card Injection | 8.2 | HIGH |
-| [AVE-2026-00042](records/AVE-2026-00042.json) | REPL Code Mode Credential Exposure | 4.7 | MEDIUM |
-| [AVE-2026-00043](records/AVE-2026-00043.json) | MCP App UI Injection | 4.7 | MEDIUM |
-| [AVE-2026-00044](records/AVE-2026-00044.json) | Async Task Result Poisoning | 8.1 | HIGH |
-| [AVE-2026-00045](records/AVE-2026-00045.json) | Cross-App-Access Escalation | 6.4 | MEDIUM |
-| [AVE-2026-00046](records/AVE-2026-00046.json) | MCP Tool Hook Hijacking | 9.2 | **CRITICAL** |
-| [AVE-2026-00047](records/AVE-2026-00047.json) | Hardcoded Credentials in Agent Component | 7.6 | HIGH |
-| [AVE-2026-00048](records/AVE-2026-00048.json) | Unsafe Agent Delegation Chain | 7.7 | HIGH |
-| [AVE-2026-00049](records/AVE-2026-00049.json) | HTTP Host Header Injection (BadHost) | 7.2 | HIGH |
-| [AVE-2026-00050](records/AVE-2026-00050.json) | Parasitic Toolchain — Silent Tool Registration | 7.2 | HIGH |
-| [AVE-2026-00051](records/AVE-2026-00051.json) | OAuth Discovery Rebinding | 7.2 | HIGH |
-| [AVE-2026-00052](records/AVE-2026-00052.json) | MCP Tool Implementation Command Injection | 7.5 | HIGH |
-| [AVE-2026-00053](records/AVE-2026-00053.json) | MCP Resource Path Traversal | 6.3 | MEDIUM |
-| [AVE-2026-00054](records/AVE-2026-00054.json) | Code-Execution Sandbox Escape | 6.7 | MEDIUM |
-| [AVE-2026-00055](records/AVE-2026-00055.json) | MCP STDIO Launch Configuration Injection | 7.7 | HIGH |
-| [AVE-2026-00056](records/AVE-2026-00056.json) | Zero-Click Exfiltration via Rendered Content Auto-Fetch | 5.8 | MEDIUM |
-| [AVE-2026-00057](records/AVE-2026-00057.json) | Obfuscated Payload — Static Scanner Evasion | 4.4 | MEDIUM |
-| [AVE-2026-00058](records/AVE-2026-00058.json) | Deceptive Trigger — Activation-Scope Manipulation | 3.1 | LOW |
-| [AVE-2026-00059](records/AVE-2026-00059.json) | Fragmented Cross-Description Reassembly (ShareLock) | 7.1 | HIGH |
-| [AVE-2026-00060](records/AVE-2026-00060.json) | STDIO Transport Shell Injection | 7.2 | HIGH |
-| [AVE-2026-00061](records/AVE-2026-00061.json) | TLS Verification Disabled in Agent Configuration | 4.1 | MEDIUM |
-| [AVE-2026-00062](records/AVE-2026-00062.json) | Unpinned Dependency Supply Chain Substitution | 4.4 | MEDIUM |
-| [AVE-2026-00063](records/AVE-2026-00063.json) | Approval Gate Bypass via Configuration | 4.8 | MEDIUM |
-| [AVE-2026-00064](records/AVE-2026-00064.json) | Zero-Click Code Execution via Auto-Run Configuration | 5.2 | MEDIUM |
-| [AVE-2026-00065](records/AVE-2026-00065.json) | A2A Agent Card Poisoning | 7.1 | HIGH |
-| [AVE-2026-00066](records/AVE-2026-00066.json) | Hallucinated Skill-Name Squatting (HalluSquatting) | 6.2 | MEDIUM |
-| [AVE-2026-00067](records/AVE-2026-00067.json) | Skill Composition Trust Transfer (SCR-TrustLift) | 5.0 | MEDIUM |
-| [AVE-2026-00068](records/AVE-2026-00068.json) | CLI Command Composition Risk (MOSAIC) | 5.1 | MEDIUM |
-| [AVE-2026-00069](records/AVE-2026-00069.json) | Multimodal Image-Hidden Instructions (SkillCamo) | 4.8 | MEDIUM |
-| [AVE-2026-00070](records/AVE-2026-00070.json) | Distributed Cross-Agent Backdoor Fragments | 6.4 | MEDIUM |
-| [AVE-2026-00071](records/AVE-2026-00071.json) | MCP Daemon Redirect (Container Posture) | 5.6 | MEDIUM |
-| [AVE-2026-00072](records/AVE-2026-00072.json) | MCP Server Bound to All Interfaces (NeighborJack) | 5.0 | MEDIUM |
-| [AVE-2026-00073](records/AVE-2026-00073.json) | Telemetry/Endpoint Redirect via Static Configuration | 4.1 | MEDIUM |
-| [AVE-2026-00074](records/AVE-2026-00074.json) | Reclaimable Dead External Anchor (SkillJacking) | 7.1 | HIGH |
-| [AVE-2026-00075](records/AVE-2026-00075.json) | Bytecode Poisoning (Compiled Cache/Source Divergence) | 4.4 | MEDIUM |
-| [AVE-2026-00076](records/AVE-2026-00076.json) | Natural-Language Steering of an Approval Classifier Subagent | 4.5 | MEDIUM |
-| [AVE-2026-00077](records/AVE-2026-00077.json) | Cross-Origin Tool and Resource Declaration in a Single MCP Server Manifest | 4.8 | MEDIUM |
-| [AVE-2026-00078](records/AVE-2026-00078.json) | Consensus Poisoning: Unverified Multi-Agent Result Acceptance | 6.4 | MEDIUM |
-| [AVE-2026-00079](records/AVE-2026-00079.json) | Plan Hijacking via False Completion Signal | 6.2 | MEDIUM |
-| [AVE-2026-00080](records/AVE-2026-00080.json) | Silent Agent Substitution (Sybil) via Unverified Retry | 6.8 | MEDIUM |
-| [AVE-2026-00081](records/AVE-2026-00081.json) | Lingering Authority: Stale Capability Survives Episode Closure | 6.1 | MEDIUM |
-| [AVE-2026-00082](records/AVE-2026-00082.json) | Local Skill Name Collision (Deterministic Router Shadowing) | 4.4 | MEDIUM |
-| [AVE-2026-00083](records/AVE-2026-00083.json) | Silent guardrail comparison failure: a protection mechanism that executes but never evaluates its verdict | 6.3 | MEDIUM |
-| [AVE-2026-00084](records/AVE-2026-00084.json) | Lifecycle hook trust decoupling: a vetted plugin update silently rebinds hooks outside the model's decision path | 7.0 | HIGH |
-| [AVE-2026-00085](records/AVE-2026-00085.json) | Collusive cross-skill composition: a malicious workflow split across independently benign skills | 7.1 | HIGH |
-| [AVE-2026-00086](records/AVE-2026-00086.json) | Mid-session WebMCP tool hijacking: a live registry swap replaces an already-discovered tool under its own name | 7.0 | HIGH |
-| [AVE-2026-00087](records/AVE-2026-00087.json) | Agentjacking: a crafted tool response visually mimics a trusted system template to hijack an agent | 7.8 | HIGH |
-| [AVE-2026-00088](records/AVE-2026-00088.json) | Sandbox side-effect trust handoff: an agent-written workspace file is run by a trusted component outside the sandbox | 6.4 | MEDIUM |
-| [AVE-2026-00089](records/AVE-2026-00089.json) | Model-supplied sandbox boundary: a tool parameter the model sets defines or widens the sandbox's writable scope | 6.6 | MEDIUM |
+| [AVE-2026-00001](records/AVE-2026-00001.json) | Metamorphic Payload via External Config Fetch | 9.6 | CRITICAL |
+| [AVE-2026-00002](records/AVE-2026-00002.json) | Tool Poisoning via Description Manipulation | 9.5 | CRITICAL |
+| [AVE-2026-00003](records/AVE-2026-00003.json) | Data Exfiltration via Credential Theft | 9.2 | CRITICAL |
+| [AVE-2026-00004](records/AVE-2026-00004.json) | Arbitrary Code Execution via Shell Pipe Injection | 7.9 | HIGH |
+| [AVE-2026-00005](records/AVE-2026-00005.json) | Destructive Command Execution | 7.9 | HIGH |
+| [AVE-2026-00006](records/AVE-2026-00006.json) | Cryptocurrency Drain via Wallet Access | 9.8 | CRITICAL |
+| [AVE-2026-00007](records/AVE-2026-00007.json) | Goal Hijacking via Prompt Injection | 7.8 | HIGH |
+| [AVE-2026-00008](records/AVE-2026-00008.json) | Persistence via Self-Replication | 9.1 | CRITICAL |
+| [AVE-2026-00009](records/AVE-2026-00009.json) | Jailbreak via Safety Constraint Removal | 7.7 | HIGH |
+| [AVE-2026-00010](records/AVE-2026-00010.json) | Hidden Instruction Concealment | 7.7 | HIGH |
+| [AVE-2026-00011](records/AVE-2026-00011.json) | Dynamic Tool Call with Attacker Parameters | 7.6 | HIGH |
+| [AVE-2026-00012](records/AVE-2026-00012.json) | Privilege Escalation via Permission Grant | 7.1 | HIGH |
+| [AVE-2026-00013](records/AVE-2026-00013.json) | PII Exfiltration Pattern | 8.9 | HIGH |
+| [AVE-2026-00014](records/AVE-2026-00014.json) | Social Engineering via Trust Escalation | 6.3 | MEDIUM |
+| [AVE-2026-00015](records/AVE-2026-00015.json) | System Prompt Disclosure | 6.9 | MEDIUM |
+| [AVE-2026-00016](records/AVE-2026-00016.json) | Indirect Prompt Injection via RAG Retrieval | 8.0 | HIGH |
+| [AVE-2026-00017](records/AVE-2026-00017.json) | MCP Server Impersonation | 8.9 | HIGH |
+| [AVE-2026-00018](records/AVE-2026-00018.json) | Tool Result Manipulation | 7.0 | HIGH |
+| [AVE-2026-00019](records/AVE-2026-00019.json) | Agent Memory Poisoning | 8.9 | HIGH |
+| [AVE-2026-00020](records/AVE-2026-00020.json) | Cross-Agent Injection via A2A Protocol | 9.3 | CRITICAL |
+| [AVE-2026-00021](records/AVE-2026-00021.json) | Human-in-the-Loop Bypass | 7.5 | HIGH |
+| [AVE-2026-00022](records/AVE-2026-00022.json) | Scope Creep via Undeclared Resource Access | 7.6 | HIGH |
+| [AVE-2026-00023](records/AVE-2026-00023.json) | Context Window Manipulation | 7.9 | HIGH |
+| [AVE-2026-00024](records/AVE-2026-00024.json) | Supply Chain: Binary Content Disguised as Skill | 9.2 | CRITICAL |
+| [AVE-2026-00025](records/AVE-2026-00025.json) | Conversation History Injection | 7.2 | HIGH |
+| [AVE-2026-00026](records/AVE-2026-00026.json) | Tool Output Exfiltration via Encoding | 9.5 | CRITICAL |
+| [AVE-2026-00027](records/AVE-2026-00027.json) | Multi-Turn Persistence Attack | 8.9 | HIGH |
+| [AVE-2026-00028](records/AVE-2026-00028.json) | File Content Injection | 7.8 | HIGH |
+| [AVE-2026-00029](records/AVE-2026-00029.json) | Homoglyph and Unicode Obfuscation | 7.3 | HIGH |
+| [AVE-2026-00030](records/AVE-2026-00030.json) | False Role Claim | 7.1 | HIGH |
+| [AVE-2026-00031](records/AVE-2026-00031.json) | Feedback Loop Poisoning | 8.5 | HIGH |
+| [AVE-2026-00032](records/AVE-2026-00032.json) | Internal Network Reconnaissance | 6.9 | MEDIUM |
+| [AVE-2026-00033](records/AVE-2026-00033.json) | Unsafe Deserialization in Skill Context | 7.3 | HIGH |
+| [AVE-2026-00034](records/AVE-2026-00034.json) | Dynamic Skill Import at Runtime | 9.4 | CRITICAL |
+| [AVE-2026-00035](records/AVE-2026-00035.json) | Sensor and Environment Manipulation | 7.0 | HIGH |
+| [AVE-2026-00036](records/AVE-2026-00036.json) | Lateral Movement via Agent Pivot | 9.2 | CRITICAL |
+| [AVE-2026-00037](records/AVE-2026-00037.json) | Vision and Multimodal Injection | 8.7 | HIGH |
+| [AVE-2026-00038](records/AVE-2026-00038.json) | Unbounded Tool Use | 7.6 | HIGH |
+| [AVE-2026-00039](records/AVE-2026-00039.json) | Covert Exfiltration via Steganographic Channel | 8.8 | HIGH |
+| [AVE-2026-00040](records/AVE-2026-00040.json) | Insecure Output Handling | 7.4 | HIGH |
+| [AVE-2026-00041](records/AVE-2026-00041.json) | MCP Server-Card Injection | 9.8 | CRITICAL |
+| [AVE-2026-00042](records/AVE-2026-00042.json) | REPL Code Mode Credential Exposure | 7.7 | HIGH |
+| [AVE-2026-00043](records/AVE-2026-00043.json) | MCP App UI Injection | 7.5 | HIGH |
+| [AVE-2026-00044](records/AVE-2026-00044.json) | Async Task Result Poisoning | 9.8 | CRITICAL |
+| [AVE-2026-00045](records/AVE-2026-00045.json) | Cross-App-Access Escalation | 9.4 | CRITICAL |
+| [AVE-2026-00046](records/AVE-2026-00046.json) | MCP Tool Hook Hijacking | 10.0 | CRITICAL |
+| [AVE-2026-00047](records/AVE-2026-00047.json) | Hardcoded Credentials in Agent Component | 9.3 | CRITICAL |
+| [AVE-2026-00048](records/AVE-2026-00048.json) | Unsafe Agent Delegation Chain | 9.7 | CRITICAL |
+| [AVE-2026-00049](records/AVE-2026-00049.json) | HTTP Host Header Injection (BadHost) | 8.9 | HIGH |
+| [AVE-2026-00050](records/AVE-2026-00050.json) | Parasitic Toolchain — Silent Tool Registration | 9.7 | CRITICAL |
+| [AVE-2026-00051](records/AVE-2026-00051.json) | OAuth Discovery Rebinding | 9.8 | CRITICAL |
+| [AVE-2026-00052](records/AVE-2026-00052.json) | MCP Tool Implementation Command Injection | 9.9 | CRITICAL |
+| [AVE-2026-00053](records/AVE-2026-00053.json) | MCP Resource Path Traversal | 8.9 | HIGH |
+| [AVE-2026-00054](records/AVE-2026-00054.json) | Code-Execution Sandbox Escape | 9.5 | CRITICAL |
+| [AVE-2026-00055](records/AVE-2026-00055.json) | MCP STDIO Launch Configuration Injection | 9.7 | CRITICAL |
+| [AVE-2026-00056](records/AVE-2026-00056.json) | Zero-Click Exfiltration via Rendered Content Auto-Fetch | 8.6 | HIGH |
+| [AVE-2026-00057](records/AVE-2026-00057.json) | Obfuscated Payload — Static Scanner Evasion | 7.0 | HIGH |
+| [AVE-2026-00058](records/AVE-2026-00058.json) | Deceptive Trigger — Activation-Scope Manipulation | 6.0 | MEDIUM |
+| [AVE-2026-00059](records/AVE-2026-00059.json) | Fragmented Cross-Description Reassembly (ShareLock) | 9.5 | CRITICAL |
+| [AVE-2026-00060](records/AVE-2026-00060.json) | STDIO Transport Shell Injection | 9.9 | CRITICAL |
+| [AVE-2026-00061](records/AVE-2026-00061.json) | TLS Verification Disabled in Agent Configuration | 6.4 | MEDIUM |
+| [AVE-2026-00062](records/AVE-2026-00062.json) | Unpinned Dependency Supply Chain Substitution | 6.4 | MEDIUM |
+| [AVE-2026-00063](records/AVE-2026-00063.json) | Approval Gate Bypass via Configuration | 7.5 | HIGH |
+| [AVE-2026-00064](records/AVE-2026-00064.json) | Zero-Click Code Execution via Auto-Run Configuration | 7.7 | HIGH |
+| [AVE-2026-00065](records/AVE-2026-00065.json) | A2A Agent Card Poisoning | 9.4 | CRITICAL |
+| [AVE-2026-00066](records/AVE-2026-00066.json) | Hallucinated Skill-Name Squatting (HalluSquatting) | 9.5 | CRITICAL |
+| [AVE-2026-00067](records/AVE-2026-00067.json) | Skill Composition Trust Transfer (SCR-TrustLift) | 8.7 | HIGH |
+| [AVE-2026-00068](records/AVE-2026-00068.json) | CLI Command Composition Risk (MOSAIC) | 9.0 | CRITICAL |
+| [AVE-2026-00069](records/AVE-2026-00069.json) | Multimodal Image-Hidden Instructions (SkillCamo) | 8.7 | HIGH |
+| [AVE-2026-00070](records/AVE-2026-00070.json) | Distributed Cross-Agent Backdoor Fragments | 9.6 | CRITICAL |
+| [AVE-2026-00071](records/AVE-2026-00071.json) | MCP Daemon Redirect (Container Posture) | 8.9 | HIGH |
+| [AVE-2026-00072](records/AVE-2026-00072.json) | MCP Server Bound to All Interfaces (NeighborJack) | 9.0 | CRITICAL |
+| [AVE-2026-00073](records/AVE-2026-00073.json) | Telemetry/Endpoint Redirect via Static Configuration | 6.4 | MEDIUM |
+| [AVE-2026-00074](records/AVE-2026-00074.json) | Reclaimable Dead External Anchor (SkillJacking) | 9.2 | CRITICAL |
+| [AVE-2026-00075](records/AVE-2026-00075.json) | Bytecode Poisoning (Compiled Cache/Source Divergence) | 6.7 | MEDIUM |
+| [AVE-2026-00076](records/AVE-2026-00076.json) | Natural-Language Steering of an Approval Classifier Subagent | 7.5 | HIGH |
+| [AVE-2026-00077](records/AVE-2026-00077.json) | Cross-Origin Tool and Resource Declaration in a Single MCP Server Manifest | 8.6 | HIGH |
+| [AVE-2026-00078](records/AVE-2026-00078.json) | Consensus Poisoning: Unverified Multi-Agent Result Acceptance | 9.3 | CRITICAL |
+| [AVE-2026-00079](records/AVE-2026-00079.json) | Plan Hijacking via False Completion Signal | 9.3 | CRITICAL |
+| [AVE-2026-00080](records/AVE-2026-00080.json) | Silent Agent Substitution (Sybil) via Unverified Retry | 9.4 | CRITICAL |
+| [AVE-2026-00081](records/AVE-2026-00081.json) | Lingering Authority: Stale Capability Survives Episode Closure | 9.2 | CRITICAL |
+| [AVE-2026-00082](records/AVE-2026-00082.json) | Local Skill Name Collision (Deterministic Router Shadowing) | 7.7 | HIGH |
+| [AVE-2026-00083](records/AVE-2026-00083.json) | Silent guardrail comparison failure: a protection mechanism that executes but never evaluates its verdict | 9.2 | CRITICAL |
+| [AVE-2026-00084](records/AVE-2026-00084.json) | Lifecycle hook trust decoupling: a vetted plugin update silently rebinds hooks outside the model's decision path | 9.4 | CRITICAL |
+| [AVE-2026-00085](records/AVE-2026-00085.json) | Collusive cross-skill composition: a malicious workflow split across independently benign skills | 9.4 | CRITICAL |
+| [AVE-2026-00086](records/AVE-2026-00086.json) | Mid-session WebMCP tool hijacking: a live registry swap replaces an already-discovered tool under its own name | 9.3 | CRITICAL |
+| [AVE-2026-00087](records/AVE-2026-00087.json) | Agentjacking: a crafted tool response visually mimics a trusted system template to hijack an agent | 9.6 | CRITICAL |
+| [AVE-2026-00088](records/AVE-2026-00088.json) | Sandbox side-effect trust handoff: an agent-written workspace file is run by a trusted component outside the sandbox | 9.2 | CRITICAL |
+| [AVE-2026-00089](records/AVE-2026-00089.json) | Model-supplied sandbox boundary: a tool parameter the model sets defines or widens the sandbox's writable scope | 9.3 | CRITICAL |
 
 </details>
 
@@ -556,15 +566,15 @@ schema 1.1.0).
 
 ---
 
-## Schema v1.3.0
+## Schema v2.0.0
 
 Records validate against
-[`schema/ave-record-1.3.0.schema.json`](schema/ave-record-1.3.0.schema.json).
+[`schema/ave-record-2.0.0.schema.json`](schema/ave-record-2.0.0.schema.json).
 Each record is checked against the versioned file named by its own `schema_version`;
 earlier versions stay published and frozen (`schema/frozen-artifacts.json`).
 
 Canonical `$id`:
-`https://aveproject.org/schema/ave-record-1.3.0.schema.json`
+`https://aveproject.org/schema/ave-record-2.0.0.schema.json`
 
 **15 required fields:**
 
@@ -581,17 +591,21 @@ references · researcher
 ```json
 {
   "ave_id": "AVE-2026-00001",
-  "schema_version": "1.3.0",
+  "schema_version": "2.0.0",
   "status": "active",
   "published": "2026-04-01T09:00:00Z",
   "title": "Metamorphic payload via external config fetch",
   "attack_class": "Supply Chain - Metamorphic Payload",
-  "severity": "HIGH",
+  "severity": "CRITICAL",
   "description": "A skill fetches its instructions from an external URL at runtime...",
   "behavioral_fingerprint": "Component fetches and executes remote content, replacing its own instructions at runtime.",
   "aivss": {
-    "cvss_base": 8.5, "aars": 7.5, "thm": 1.0,
-    "mitigation_factor": 1.0, "aivss_score": 8.0, "spec_version": "0.8"
+    "cvss_base": 8.5,
+    "aarf": {
+      "autonomy": 1, "tool_use": 1, "multi_agent": 0.5, "non_determinism": 1, "self_modification": 1,
+      "dynamic_identity": 0, "persistent_memory": 0.5, "natural_language_input": 1, "context": 0.5, "opacity": 1
+    },
+    "aars": 1.125, "thm": 1.0, "mitigation_factor": 1.0, "aivss_score": 9.6, "spec_version": "0.8"
   },
   "owasp_mcp": ["MCP04", "MCP06"],
   "indicators_of_compromise": ["fetch() pointing to external URL"],
@@ -607,7 +621,7 @@ references · researcher
 `nist_ai_rmf` · `provenance_vector` · `trifecta_profile` · `mitigation` ·
 `affected_platforms` · `affected_registries` ·
 `mutation_count` · `detection_methodology` · `kill_switch_active` ·
-`researcher_url` · `aivss.aarf` · `aivss.aivss_severity` ·
+`researcher_url` · `aivss.aivss_severity` ·
 `aivss.notes` · `evidence_kind_default` ·
 `detection_stage` · `detection_layer` · `confidence_baseline` ·
 `evidence_basis_engines` · `derivable_into` · `evidence_vantage` ·
@@ -668,12 +682,13 @@ template. All 15 required fields must be present and valid.
 
 AIVSS calculation:
 ```
-1. Score each AARF factor 0.0-1.0
-2. AARS = sum of all 10 AARF scores
-3. AIVSS = ((CVSS_Base + AARS) / 2) x ThM x Mitigation_Factor
-4. ThM: 0.75 theoretical · 0.90 PoC exists · 1.0 in-the-wild
-5. Round to 1 decimal
-6. Severity: CRITICAL >= 9.0 · HIGH >= 7.0 · MEDIUM >= 4.0 · LOW < 4.0
+1. Score each of the ten AARF factors 0, 0.5 or 1
+2. Factor_Sum = the sum of the ten scores
+3. AARS = (10 - CVSS_Base) x (Factor_Sum / 10) x ThM
+4. AIVSS = (CVSS_Base + AARS) x Mitigation_Factor
+5. ThM: 0.5 theoretical · 0.97 PoC exists · 1.0 in-the-wild
+6. Round half up to 1 decimal
+7. Severity: CRITICAL >= 9.0 · HIGH >= 7.0 · MEDIUM >= 4.0 · LOW < 4.0
 ```
 
 Validate before opening a PR:
@@ -684,7 +699,7 @@ const Ajv = require('ajv/dist/2020');
 const addFormats = require('ajv-formats');
 const ajv = new Ajv({ strict: false });
 addFormats(ajv);
-const schema = require('./schema/ave-record-1.3.0.schema.json');
+const schema = require('./schema/ave-record-2.0.0.schema.json');
 const record = require('./records/AVE-2026-NNNNN.json');
 const ok = ajv.validate(schema, record);
 if (!ok) console.error(ajv.errors); else console.log('valid');
