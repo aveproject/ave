@@ -48,6 +48,13 @@
       "external_comms"
     ]
   },
+  "security_boundary": "external URL content → agent's full capability set",
+  "missing_control": "no identity/integrity verification gates dynamically-loaded code before execution",
+  "vulnerability_rationale": {
+    "capability": "Agent can dynamically load and execute code from a URL at runtime.",
+    "vulnerability": "No verification gates code loaded from an external URL before it executes with the agent's full capability set.",
+    "impact": "Full agent compromise via arbitrary attacker-controlled code with no static-review opportunity."
+  },
   "mitigation": {
     "strategy": [
       "pin_integrity",
@@ -92,7 +99,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "CWE-829",

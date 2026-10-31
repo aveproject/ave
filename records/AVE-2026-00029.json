@@ -40,6 +40,13 @@
       "untrusted_content"
     ]
   },
+  "security_boundary": "human visual review → model-level codepoint processing",
+  "missing_control": "no Unicode normalization/canonicalization check before human review",
+  "vulnerability_rationale": {
+    "capability": "Human reviewers evaluate text visually; the model processes Unicode codepoints.",
+    "vulnerability": "No canonicalization or normalization step reconciles what a human reviewer visually sees with what the model actually processes at the codepoint level.",
+    "impact": "Instructions that look innocuous to a human reviewer are processed as instructions by the model."
+  },
   "mitigation": {
     "strategy": [
       "validate_input",

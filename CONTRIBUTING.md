@@ -169,6 +169,7 @@ python scripts/check_mutation_thm_trail.py --strict --only AVE-2026-NNNNN   # if
 python scripts/check_framework_sources.py --strict --only AVE-2026-NNNNN   # CI enforces this for every record now; run it scoped to yours before pushing, same check either way
 python scripts/generate_terms.py      # regenerate docs/terms.md after any schema field or description change
 python scripts/check_terms_sync.py    # hard failure if docs/terms.md disagrees with the live schema -- run before opening a PR
+python3 scripts/build_taxonomy.py --check   # dist/ave-taxonomy-latest.json must match dist/ave-records-latest.json; run python3 scripts/build_taxonomy.py after you change that file
 pytest tests/ -x -q                   # full suite: schema, AIVSS arithmetic, mitigation enums
 ```
 

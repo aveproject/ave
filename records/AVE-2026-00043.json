@@ -45,6 +45,13 @@
       "untrusted_content"
     ]
   },
+  "security_boundary": "rendered surface (what the user sees) → processed payload (what the model reads)",
+  "missing_control": "no consistency requirement between rendered and processed content from the same rich-UI payload",
+  "vulnerability_rationale": {
+    "capability": "MCP Apps can render rich UI elements the model also processes as context.",
+    "vulnerability": "No consistency check ensures what's rendered to the user matches what the model actually processes from the same payload.",
+    "impact": "Agent acts on instructions the user has no way to see, in an interface designed to look fully transparent."
+  },
   "mitigation": {
     "strategy": [
       "sanitize_output",
@@ -74,7 +81,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-05-01T00:00:00Z",
-  "last_updated": "2026-08-29T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",

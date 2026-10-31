@@ -1,0 +1,1531 @@
+{
+  "guid": "5110b285-34d7-5334-94db-0308b24cfb49",
+  "name": "AVE",
+  "fullName": "Agentic Vulnerability Enumeration",
+  "organization": "AVE Project",
+  "product": "AVE",
+  "informationUri": "https://aveproject.org",
+  "shortDescription": {
+    "text": "Agentic Vulnerability Enumeration: behavioral vulnerability classes for agentic AI components"
+  },
+  "language": "en",
+  "contents": [
+    "nonLocalizedData"
+  ],
+  "isComprehensive": true,
+  "taxa": [
+    {
+      "id": "AVE-2026-00001",
+      "name": "Metamorphic payload via external config fetch",
+      "shortDescription": {
+        "text": "Supply Chain - Metamorphic Payload"
+      },
+      "fullDescription": {
+        "text": "Component contains instructions to fetch and execute remote content, replacing its own behavioral instructions at runtime."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00001",
+      "properties": {
+        "status": "active",
+        "severity": "HIGH",
+        "aivss_score": 8,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00002",
+      "name": "MCP tool description behavioral injection",
+      "shortDescription": {
+        "text": "Prompt Injection - Tool Description"
+      },
+      "fullDescription": {
+        "text": "MCP tool description field contains directives targeting agent behavior rather than describing tool functionality."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00002",
+      "properties": {
+        "status": "active",
+        "severity": "HIGH",
+        "aivss_score": 7.3,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00003",
+      "name": "Credential exfiltration via agent instruction",
+      "shortDescription": {
+        "text": "Data Exfiltration - Credential Theft"
+      },
+      "fullDescription": {
+        "text": "Component instructs agent to read and transmit environment variables, API keys, or other credentials to an external destination."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00003",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 6.8,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00004",
+      "name": "Arbitrary code execution via shell pipe injection in agentic component",
+      "shortDescription": {
+        "text": "Tool Abuse - Shell Pipe Injection"
+      },
+      "fullDescription": {
+        "text": "Component instructs the agent to pipe remote content into a shell interpreter (curl|bash, wget|sh, eval(requests.get(...)))."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00004",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 5.9,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00005",
+      "name": "Recursive file system destruction via destructive command injection in agentic component",
+      "shortDescription": {
+        "text": "Tool Abuse - Destructive Command"
+      },
+      "fullDescription": {
+        "text": "Component instructs the agent to execute recursive deletion commands on broad filesystem paths or system directories."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00005",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 5.6,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00006",
+      "name": "Cryptocurrency wallet drain via malicious fund transfer instruction in agentic component",
+      "shortDescription": {
+        "text": "Tool Abuse - Cryptocurrency Drain"
+      },
+      "fullDescription": {
+        "text": "Component instructs agent to transfer all funds, approve unlimited token allowance, or sign a transaction to an externally supplied address."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00006",
+      "properties": {
+        "status": "active",
+        "severity": "HIGH",
+        "aivss_score": 7.5,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00007",
+      "name": "Agent goal hijack via direct instruction override in agentic component",
+      "shortDescription": {
+        "text": "Prompt Injection - Goal Hijack"
+      },
+      "fullDescription": {
+        "text": "Component contains explicit instruction-override language directing the agent to abandon its current task and follow new instructions from the component."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00007",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 6.1,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00008",
+      "name": "Agent persistence via self-replication instruction in agentic component",
+      "shortDescription": {
+        "text": "Persistence - Self-Replication"
+      },
+      "fullDescription": {
+        "text": "Component instructs the agent to write to startup scripts, schedule itself via cron, or copy itself to directories that execute on login or reboot."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00008",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 6.3,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00009",
+      "name": "AI identity jailbreak via role-play or persona override in agentic component",
+      "shortDescription": {
+        "text": "Prompt Injection - Jailbreak"
+      },
+      "fullDescription": {
+        "text": "Component instructs the agent to pretend to be a different AI, adopt a persona without safety constraints, or activate a fictional unrestricted mode."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00009",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 5.5,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00010",
+      "name": "Covert instruction concealment via secrecy directive in agentic component",
+      "shortDescription": {
+        "text": "Prompt Injection - Hidden Instruction"
+      },
+      "fullDescription": {
+        "text": "Component instructs the agent to not reveal, disclose, or acknowledge these instructions to the user or operator."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00010",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 5.6,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00011",
+      "name": "Arbitrary tool invocation via dynamic tool call injection in agentic component",
+      "shortDescription": {
+        "text": "Tool Abuse - Dynamic Tool Call"
+      },
+      "fullDescription": {
+        "text": "Component contains explicit tool invocation directives with specific parameters the agent must pass, bypassing the agent's own tool selection logic."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00011",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 5.7,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00012",
+      "name": "Capability escalation via false permission grant in agentic component",
+      "shortDescription": {
+        "text": "Privilege Escalation - Permission Grant"
+      },
+      "fullDescription": {
+        "text": "Component asserts that elevated permissions have been granted to the agent, claiming authority to override normal operational boundaries."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00012",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 4.5,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00013",
+      "name": "Personal data exfiltration via PII collection and transmission in agentic component",
+      "shortDescription": {
+        "text": "Data Exfiltration - PII Theft"
+      },
+      "fullDescription": {
+        "text": "Component instructs the agent to collect PII fields (name, email, phone, address, SSN, passport, credit card) and transmit or store them externally."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00013",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 6.5,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00014",
+      "name": "False authority claim via trust escalation impersonation in agentic component",
+      "shortDescription": {
+        "text": "Social Engineering - Trust Escalation"
+      },
+      "fullDescription": {
+        "text": "Component claims to be a message from Anthropic, OpenAI, Google, Microsoft, or the developer/operator to establish false authority over the agent."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00014",
+      "properties": {
+        "status": "active",
+        "severity": "LOW",
+        "aivss_score": 3.7,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00015",
+      "name": "System prompt extraction via direct interrogation instruction in agentic component",
+      "shortDescription": {
+        "text": "Information Disclosure - System Prompt Leak"
+      },
+      "fullDescription": {
+        "text": "Component instructs the agent to reveal, output, or repeat its system prompt, instructions, configuration, or internal guidelines."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00015",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 4.9,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00016",
+      "name": "Indirect Prompt Injection via RAG Retrieval",
+      "shortDescription": {
+        "text": "Prompt Injection - RAG Retrieval"
+      },
+      "fullDescription": {
+        "text": "Component embeds malicious instructions in content indexed by a RAG pipeline, causing the agent to execute attacker-controlled instructions when that content is retrieved."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00016",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 6.4,
+        "detection_stage": "runtime_observed"
+      }
+    },
+    {
+      "id": "AVE-2026-00017",
+      "name": "MCP Server Impersonation or Spoofing",
+      "shortDescription": {
+        "text": "Supply Chain - Server Impersonation"
+      },
+      "fullDescription": {
+        "text": "Component falsely claims to be an official, verified, or trusted MCP server to gain elevated trust or bypass agent-level permission checks."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00017",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 5.7,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00018",
+      "name": "Tool Result Manipulation or Output Poisoning",
+      "shortDescription": {
+        "text": "Tool Abuse - Result Manipulation"
+      },
+      "fullDescription": {
+        "text": "Component instructs the agent to modify, fabricate, or suppress tool call results before reporting them to the user or passing them to downstream components."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00018",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 4.4,
+        "detection_stage": "runtime_observed"
+      }
+    },
+    {
+      "id": "AVE-2026-00019",
+      "name": "Agent Memory Poisoning",
+      "shortDescription": {
+        "text": "Persistence - Memory Poisoning"
+      },
+      "fullDescription": {
+        "text": "Component writes malicious instructions or false facts into the agent's persistent memory store, causing the agent to act on attacker-controlled beliefs in future conversations."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00019",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 5.6,
+        "detection_stage": "runtime_observed"
+      }
+    },
+    {
+      "id": "AVE-2026-00020",
+      "name": "Cross-Agent Prompt Injection (A2A)",
+      "shortDescription": {
+        "text": "Prompt Injection - Cross-Agent A2A"
+      },
+      "fullDescription": {
+        "text": "Component embeds instructions targeting a secondary agent in a multi-agent pipeline, causing the downstream agent to perform actions not intended by the orchestrating agent or user."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00020",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 5.9,
+        "detection_stage": "runtime_observed"
+      }
+    },
+    {
+      "id": "AVE-2026-00021",
+      "name": "Autonomous Action Without User Confirmation",
+      "shortDescription": {
+        "text": "Prompt Injection - Human-in-Loop Bypass"
+      },
+      "fullDescription": {
+        "text": "Component instructs the agent to take irreversible or high-impact actions without requesting user confirmation, removing the human from the decision loop."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00021",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 4.5,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00022",
+      "name": "Scope Creep - Accessing Undeclared Resources",
+      "shortDescription": {
+        "text": "Privilege Escalation - Scope Creep"
+      },
+      "fullDescription": {
+        "text": "Component instructs the agent to access files, APIs, databases, or systems that were not declared in the component's manifest or authorised by the user."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00022",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 6,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00023",
+      "name": "Model Context Window Manipulation",
+      "shortDescription": {
+        "text": "Prompt Injection - Context Window Manipulation"
+      },
+      "fullDescription": {
+        "text": "Component instructs agent to repeat, pad, or generate large volumes of content with the intent of overflowing the context window."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00023",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 5.8,
+        "detection_stage": "runtime_observed"
+      }
+    },
+    {
+      "id": "AVE-2026-00024",
+      "name": "Supply Chain - Content Type Mismatch (Magika)",
+      "shortDescription": {
+        "text": "Supply Chain - Content Type Mismatch"
+      },
+      "fullDescription": {
+        "text": "A file's actual content type does not match its declared extension. An ELF binary, Windows executable, Python pickle, PHP script, or other executable content is disguised as a benign skill file."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00024",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 6.8,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00025",
+      "name": "Conversation History Injection",
+      "shortDescription": {
+        "text": "Prompt Injection - Conversation History"
+      },
+      "fullDescription": {
+        "text": "Component embeds fake prior conversation history to manipulate the agent's understanding of what the user previously said, consented to, or approved."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00025",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 4.5,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00026",
+      "name": "Exfiltration via Tool Output Encoding",
+      "shortDescription": {
+        "text": "Data Exfiltration - Output Encoding"
+      },
+      "fullDescription": {
+        "text": "Component instructs agent to encode sensitive data (credentials, keys, PII) inside tool call parameters for covert exfiltration."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00026",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 6.8,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00027",
+      "name": "Multi-Turn Attack - Instruction Persistence Across Conversations",
+      "shortDescription": {
+        "text": "Prompt Injection - Multi-Turn Persistence"
+      },
+      "fullDescription": {
+        "text": "Component instructs the agent to retain and re-apply malicious instructions across multiple conversation turns, surviving memory resets or context window rollovers."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00027",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 5.6,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00028",
+      "name": "Prompt Injection via File or Document Content",
+      "shortDescription": {
+        "text": "Prompt Injection - File Content"
+      },
+      "fullDescription": {
+        "text": "Component instructs the agent to execute instructions embedded in user-supplied files, documents, or images, enabling indirect prompt injection through untrusted content."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00028",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 5.9,
+        "detection_stage": "runtime_observed"
+      }
+    },
+    {
+      "id": "AVE-2026-00029",
+      "name": "Homoglyph or Unicode Obfuscation Attack",
+      "shortDescription": {
+        "text": "Obfuscation - Unicode Homoglyph"
+      },
+      "fullDescription": {
+        "text": "Skill file contains zero-width characters, bidirectional override codes, or Cyrillic homoglyphs used to conceal instructions from human reviewers."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00029",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 4.8,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00030",
+      "name": "Privilege Escalation via False Role Claim",
+      "shortDescription": {
+        "text": "Privilege Escalation - False Role Claim"
+      },
+      "fullDescription": {
+        "text": "Component instructs the agent to grant elevated privileges when a user or external party falsely claims a privileged role (admin, root, operator), effectively implementing a privilege escalation backdoor."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00030",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 4.3,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00031",
+      "name": "Training Data or Feedback Loop Poisoning",
+      "shortDescription": {
+        "text": "Persistence - Feedback Loop Poisoning"
+      },
+      "fullDescription": {
+        "text": "Component instructs the agent to generate outputs designed to corrupt training pipelines, feedback loops, or RLHF reward signals to manipulate future model behaviour."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00031",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 5.4,
+        "detection_stage": "runtime_observed"
+      }
+    },
+    {
+      "id": "AVE-2026-00032",
+      "name": "Network Reconnaissance Instruction",
+      "shortDescription": {
+        "text": "Reconnaissance - Internal Network Scanning"
+      },
+      "fullDescription": {
+        "text": "Component instructs the agent to probe internal network topology, scan ports, enumerate services, or map infrastructure beyond the declared scope of the skill."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00032",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 4,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00033",
+      "name": "Unsafe Deserialization or Eval Instruction",
+      "shortDescription": {
+        "text": "Tool Abuse - Unsafe Deserialization"
+      },
+      "fullDescription": {
+        "text": "Component instructs agent to deserialize untrusted input or evaluate dynamic code from external sources."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00033",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 4.2,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00034",
+      "name": "Supply Chain - Dynamic Third-Party Skill Import",
+      "shortDescription": {
+        "text": "Supply Chain - Dynamic Skill Import"
+      },
+      "fullDescription": {
+        "text": "Component instructs the agent to dynamically load, import, or install a third-party skill, plugin, or tool from an unverified external URL or source at runtime, enabling supply chain compromise."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00034",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 6.6,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00035",
+      "name": "Environment or Sensor Data Manipulation",
+      "shortDescription": {
+        "text": "Manipulation - Sensor Data Poisoning"
+      },
+      "fullDescription": {
+        "text": "Component instructs the agent to fabricate, alter, or suppress sensor readings, environment observations, or system state reports to deceive operators or downstream agents."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00035",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 4.2,
+        "detection_stage": "runtime_observed"
+      }
+    },
+    {
+      "id": "AVE-2026-00036",
+      "name": "Lateral Movement - Pivot to Other Systems",
+      "shortDescription": {
+        "text": "Lateral Movement - Agent Pivot"
+      },
+      "fullDescription": {
+        "text": "Component instructs the agent to use access gained in the current context to connect to, enumerate, or attack other systems, services, or agents not within the original authorised scope."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00036",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 5.9,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00037",
+      "name": "Prompt Injection via Image or Vision Input",
+      "shortDescription": {
+        "text": "Prompt Injection - Multimodal Vision"
+      },
+      "fullDescription": {
+        "text": "Component instructs the agent to execute instructions found in images, screenshots, or visual content, enabling prompt injection through multimodal inputs that bypass text-level security filters."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00037",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 5.1,
+        "detection_stage": "runtime_observed"
+      }
+    },
+    {
+      "id": "AVE-2026-00038",
+      "name": "Excessive Agency - Unbounded Tool Use or Sub-Agent Spawning",
+      "shortDescription": {
+        "text": "Tool Abuse - Unbounded Tool Use"
+      },
+      "fullDescription": {
+        "text": "Component instructs agent to use any available tool, spawn unlimited sub-agents, or recursively expand its capabilities without scope or oversight."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00038",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 5.9,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00039",
+      "name": "Covert Channel - Steganographic Data Exfiltration",
+      "shortDescription": {
+        "text": "Data Exfiltration - Covert Channel"
+      },
+      "fullDescription": {
+        "text": "Component instructs agent to encode sensitive data in output formatting, first-letter patterns, whitespace, or timing to create a covert exfiltration channel."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00039",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 4.9,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00040",
+      "name": "Insecure Output - Unescaped Injection into Downstream System",
+      "shortDescription": {
+        "text": "Tool Abuse - Insecure Output Handling"
+      },
+      "fullDescription": {
+        "text": "Component instructs agent to pass user input or LLM output directly into SQL queries, HTML templates, or shell commands without escaping or sanitisation."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00040",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 5.4,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00041",
+      "name": "Prompt injection via MCP server-card tool descriptions before agent makes first call",
+      "shortDescription": {
+        "text": "Prompt Injection - MCP Server-Card Injection"
+      },
+      "fullDescription": {
+        "text": "Tool descriptions in the server-card contain behavioral instructions targeting the agent - IMPORTANT/WARNING/NOTE prefixes, before/after calling directives, or instructions to perform actions not related to the tool's declared function."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00041",
+      "properties": {
+        "status": "active",
+        "severity": "HIGH",
+        "aivss_score": 8.2,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00042",
+      "name": "Payload injection into agent-generated orchestration code via poisoned tool results in REPL/Code Mode",
+      "shortDescription": {
+        "text": "Prompt Injection - REPL Code Mode Payload Injection"
+      },
+      "fullDescription": {
+        "text": "Skill instructs agent to pass tool results directly into eval(), exec(), or dynamically constructed code strings. Tool result content contains code fragments, escape sequences, or string terminators designed to break out of data context into code context."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00042",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 4.7,
+        "detection_stage": "runtime_observed"
+      }
+    },
+    {
+      "id": "AVE-2026-00043",
+      "name": "Prompt injection via rich UI payload (canvas, artifact, form) rendered by MCP App",
+      "shortDescription": {
+        "text": "Prompt Injection - MCP App UI Payload Injection"
+      },
+      "fullDescription": {
+        "text": "Rich UI payload (canvas, artifact, SVG, HTML) contains prompt injection instructions in non-rendered elements - hidden divs, alt attributes, aria-labels, SVG metadata, HTML comments, or zero-width characters - that the model processes but the user does not see."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00043",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 4.7,
+        "detection_stage": "runtime_observed"
+      }
+    },
+    {
+      "id": "AVE-2026-00044",
+      "name": "Prompt injection via poisoned async task result injected into future agent context",
+      "shortDescription": {
+        "text": "Prompt Injection - Async Task Result Poisoning"
+      },
+      "fullDescription": {
+        "text": "Agent reads async task results from an external queue, webhook, or polling endpoint without validating that result content is data - not instructions. Result payload contains imperative language or structured injection patterns targeting the agent's next action."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00044",
+      "properties": {
+        "status": "active",
+        "severity": "HIGH",
+        "aivss_score": 8.1,
+        "detection_stage": "runtime_observed"
+      }
+    },
+    {
+      "id": "AVE-2026-00045",
+      "name": "Privilege escalation via cross-app-access - pivot from low-trust to high-trust MCP server using shared agent session",
+      "shortDescription": {
+        "text": "Privilege Escalation - Cross-App-Access Escalation"
+      },
+      "fullDescription": {
+        "text": "A tool description or result from a low-trust MCP server instructs the agent to use tools from a different, higher-trust MCP server connected in the same session. The instruction crosses server trust boundaries using the agent as a confused deputy."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00045",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 6.4,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00046",
+      "name": "MCP tool hook hijacking - redirect tool execution to attacker-controlled callback",
+      "shortDescription": {
+        "text": "Execution Hijack - Tool Hook Interception"
+      },
+      "fullDescription": {
+        "text": "Skill instructs agent to register a hook, callback, or interceptor on tool execution. The hook targets all tool calls or a broad class of tools and routes them through an external URL or attacker-controlled handler before the legitimate tool runs."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00046",
+      "properties": {
+        "status": "active",
+        "severity": "CRITICAL",
+        "aivss_score": 9.2,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00047",
+      "name": "Hardcoded credentials in agent component - API keys and secrets exposed in skill files",
+      "shortDescription": {
+        "text": "Sensitive Data Exposure - Hardcoded Credentials"
+      },
+      "fullDescription": {
+        "text": "Skill file contains a high-entropy string adjacent to a credential keyword such as api_key, secret, token, password, or a known key format prefix such as sk- or Bearer. The credential is a literal value, not an environment variable reference or secrets manager path."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00047",
+      "properties": {
+        "status": "active",
+        "severity": "HIGH",
+        "aivss_score": 7.6,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00048",
+      "name": "Unsafe agent delegation chain - sub-agent spawned with inherited permissions and no trust boundary",
+      "shortDescription": {
+        "text": "Privilege Escalation - Unsafe Agent Delegation"
+      },
+      "fullDescription": {
+        "text": "Skill instructs agent to spawn a sub-agent or delegate a task to another agent without specifying an explicit tool allowlist or permission scope for the sub-agent. The delegation instruction uses language such as full access, inherit your permissions, or grant all tools."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00048",
+      "properties": {
+        "status": "active",
+        "severity": "HIGH",
+        "aivss_score": 7.7,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00049",
+      "name": "HTTP Host Header Injection via Agent-Initiated Request (BadHost)",
+      "shortDescription": {
+        "text": "Supply Chain - HTTP Header Injection"
+      },
+      "fullDescription": {
+        "text": "Component sets or overwrites the HTTP Host header on outbound requests to a value that does not match the declared target endpoint's natural host. The injected host points to attacker infrastructure. Pattern also manifests as X-Forwarded-Host, X-Original-URL, or Forwarded header manipulation that causes server-side request routing to an unintended destination."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00049",
+      "properties": {
+        "status": "active",
+        "severity": "HIGH",
+        "aivss_score": 7.2,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00050",
+      "name": "Parasitic Toolchain — Silent Tool Registration and Persistent Hook Injection",
+      "shortDescription": {
+        "text": "Persistence - Parasitic Toolchain"
+      },
+      "fullDescription": {
+        "text": "Component registers tool handlers or hooks beyond its declared manifest scope during session initialization. The registration extends the component's footprint into the agent's tool dispatch layer, granting it visibility into or control over calls intended for other tools. The parasitic tools appear as first-class registered tools, not obviously distinguishable from legitimately registered ones."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00050",
+      "properties": {
+        "status": "active",
+        "severity": "HIGH",
+        "aivss_score": 7.2,
+        "detection_stage": "runtime_observed"
+      }
+    },
+    {
+      "id": "AVE-2026-00051",
+      "name": "OAuth Discovery Rebinding — Authorization Endpoint Redirected to Attacker Server",
+      "shortDescription": {
+        "text": "Supply Chain - OAuth Discovery Rebinding"
+      },
+      "fullDescription": {
+        "text": "MCP server's OAuth discovery metadata document returns authorization_endpoint, token_endpoint, or jwks_uri values whose host component does not match the server's own declared origin or a pre-approved authorization server domain. The mismatch causes the agent to initiate OAuth flows against an attacker-controlled endpoint."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00051",
+      "properties": {
+        "status": "active",
+        "severity": "HIGH",
+        "aivss_score": 7.2,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00052",
+      "name": "Command injection via unsanitized tool-call parameter in MCP server implementation",
+      "shortDescription": {
+        "text": "Tool Abuse - Implementation Command Injection"
+      },
+      "fullDescription": {
+        "text": "MCP tool handler code passes a caller-supplied tool-call parameter value directly into a shell or system-command execution function without sanitization, executing arbitrary OS commands under the server process's privileges -- independent of any agent instruction or prompt content."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00052",
+      "properties": {
+        "status": "active",
+        "severity": "HIGH",
+        "aivss_score": 7.5,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00053",
+      "name": "Path traversal via unsanitized path parameter in MCP resource/file-handler implementation",
+      "shortDescription": {
+        "text": "Tool Abuse - Resource Path Traversal"
+      },
+      "fullDescription": {
+        "text": "MCP resource or file-handler tool's own path-validation code fails to canonicalize and contain a caller-supplied path or URL parameter, allowing directory-traversal sequences to read or write files and resources outside the tool's declared scope."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00053",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 6.3,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00054",
+      "name": "Code-execution sandbox escape via JavaScript prototype-chain traversal",
+      "shortDescription": {
+        "text": "Execution Hijack - Code Execution Sandbox Escape"
+      },
+      "fullDescription": {
+        "text": "A code-execution tool's sandbox fails to contain a submitted payload that uses prototype-chain traversal to reach the host JavaScript or Python runtime, achieving code execution with host-level privileges outside the tool's declared execution boundary."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00054",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 6.7,
+        "detection_stage": "runtime_observed"
+      }
+    },
+    {
+      "id": "AVE-2026-00055",
+      "name": "Command execution via untrusted MCP server launch configuration (STDIO)",
+      "shortDescription": {
+        "text": "Supply Chain - MCP STDIO Launch Configuration Injection"
+      },
+      "fullDescription": {
+        "text": "An MCP client spawns a server as a STDIO subprocess using command and args fields taken directly from configuration or registry data with no validation, executing arbitrary OS commands under the client's privileges before any MCP protocol handshake occurs."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00055",
+      "properties": {
+        "status": "active",
+        "severity": "HIGH",
+        "aivss_score": 7.7,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00056",
+      "name": "Zero-click data exfiltration via markdown image auto-fetch in agent response",
+      "shortDescription": {
+        "text": "Data Exfiltration - Rendered Content Auto-Fetch"
+      },
+      "fullDescription": {
+        "text": "Agent-generated response embeds a plain markdown image or link reference carrying sensitive data in its URL; the client's automatic rendering behavior fetches that URL, exfiltrating the data with no tool call, no obfuscation, and no further user interaction."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00056",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 5.8,
+        "detection_stage": "runtime_observed"
+      }
+    },
+    {
+      "id": "AVE-2026-00057",
+      "name": "Obfuscated or encoded skill payload designed to evade static scanners",
+      "shortDescription": {
+        "text": "Obfuscation - Static Analysis Evasion"
+      },
+      "fullDescription": {
+        "text": "Component contains base64, hex, or similarly encoded strings that decode to instruction-like or executable content at runtime, or splits scanner-relevant keywords across string concatenation or variable interpolation to avoid single-pass static pattern matches."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00057",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 4.4,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00058",
+      "name": "Deceptive skill trigger or activation-scope manipulation via misleading manifest description",
+      "shortDescription": {
+        "text": "Social Engineering - Trigger Scope Deception"
+      },
+      "fullDescription": {
+        "text": "Skill manifest declares trigger keywords or a description disproportionately broad relative to its actual narrow function, or promises generic utility while its implementation performs a specific, sensitive action, causing over-broad or implicit invocation."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00058",
+      "properties": {
+        "status": "active",
+        "severity": "LOW",
+        "aivss_score": 3.1,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00059",
+      "name": "Fragmented cross-description prompt injection reassembled at a planted trigger (ShareLock-class)",
+      "shortDescription": {
+        "text": "Prompt Injection - Fragmented Cross-Description Reassembly"
+      },
+      "fullDescription": {
+        "text": "Tool descriptions across multiple tools each carry an individually benign-looking fragment of a larger instruction. A separately planted trigger, commonly introduced during a server update, causes the model to reassemble the fragments into a complete, actionable instruction at inference time, after tool discovery and before any tool call."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00059",
+      "properties": {
+        "status": "active",
+        "severity": "HIGH",
+        "aivss_score": 7.1,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00060",
+      "name": "STDIO transport shell injection via unsanitized tool call parameters",
+      "shortDescription": {
+        "text": "Remote Code Execution - STDIO Transport Shell Injection"
+      },
+      "fullDescription": {
+        "text": "Tool call parameters containing shell metacharacters (backticks, pipes, semicolons, command substitution syntax) are passed to a host shell without escaping or parameterization, resulting in execution of attacker-controlled shell commands rather than the parameter being treated as inert string data."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00060",
+      "properties": {
+        "status": "active",
+        "severity": "HIGH",
+        "aivss_score": 7.2,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00061",
+      "name": "TLS certificate verification disabled in agent component configuration",
+      "shortDescription": {
+        "text": "Insecure Configuration - TLS Verification Disabled"
+      },
+      "fullDescription": {
+        "text": "Configuration explicitly sets a TLS verification bypass flag (verify=False, rejectUnauthorized: false, or equivalent) for the component's own outbound network calls, rather than relying on default, enforced certificate validation."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00061",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 4.1,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00062",
+      "name": "Unpinned dependency version allowing supply chain substitution",
+      "shortDescription": {
+        "text": "Supply Chain - Unpinned Dependency Substitution"
+      },
+      "fullDescription": {
+        "text": "A component's declared dependency references a mutable version specifier (a floating tag, a version range with no upper bound, an unpinned package name with no hash or lockfile entry) rather than a specific, content-addressed or exact-version reference."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00062",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 4.4,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00063",
+      "name": "Human approval gate bypassed via declarative configuration, distinct from AVE-2026-00048",
+      "shortDescription": {
+        "text": "Privilege Escalation - Approval Gate Bypass Configuration"
+      },
+      "fullDescription": {
+        "text": "Configuration sets a declarative flag (auto_approve, skip_confirmation, require_approval: false, or equivalent) that removes a human-in-the-loop check for high-risk actions, present in config rather than in instruction text, and therefore invisible to a review process that only inspects a component's stated instructions."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00063",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 4.8,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00064",
+      "name": "Zero-click code execution via project-load auto-run configuration",
+      "shortDescription": {
+        "text": "Remote Code Execution - Zero-Click Auto-Run Configuration"
+      },
+      "fullDescription": {
+        "text": "A project-level configuration file declares a command or script to execute automatically on project load or open, with no corresponding user confirmation step, distinct from a tool call the model or user explicitly initiates."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00064",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 5.2,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00065",
+      "name": "A2A agent card poisoning via embedded adversarial instructions",
+      "shortDescription": {
+        "text": "Prompt Injection - A2A Agent Card Poisoning"
+      },
+      "fullDescription": {
+        "text": "A remote agent's A2A agent card contains embedded natural-language instructions disguised as capability descriptions or operational metadata, which the receiving agent's reasoning context treats as authoritative once the card is loaded during discovery or delegation planning, before any explicit task exchange occurs."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00065",
+      "properties": {
+        "status": "active",
+        "severity": "HIGH",
+        "aivss_score": 7.1,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00066",
+      "name": "Hallucinated skill-name squatting (HalluSquatting)",
+      "shortDescription": {
+        "text": "Supply Chain - Hallucinated Resource Squatting"
+      },
+      "fullDescription": {
+        "text": "Agent resolves a user's request referencing a well-known or trending resource to a package, repository, or skill name absent from any verified registry the request could plausibly resolve to, then fetches or installs content from that unverified name without a registry-existence or publisher-identity check."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00066",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 6.2,
+        "detection_stage": "runtime_observed"
+      }
+    },
+    {
+      "id": "AVE-2026-00067",
+      "name": "Skill composition trust transfer: an upstream skill's output silently becomes a downstream skill's trust signal",
+      "shortDescription": {
+        "text": "Privilege Escalation - Skill Composition Trust Transfer"
+      },
+      "fullDescription": {
+        "text": "A downstream skill accepts an upstream skill's output (an endorsement, an audit result, a validation finding, or similar artifact) as sufficient authorization or trust justification for a sensitive action, without independently re-verifying the claim the upstream output represents."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00067",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 5,
+        "detection_stage": "runtime_observed"
+      }
+    },
+    {
+      "id": "AVE-2026-00068",
+      "name": "CLI command composition risk: benign commands compose through shared shell state into unauthorized capability",
+      "shortDescription": {
+        "text": "Tool Abuse - CLI Command Composition"
+      },
+      "fullDescription": {
+        "text": "A command sequence issued by an agent contains no single command that is independently dangerous, but an earlier command's output, environment modification, or file artifact is consumed by a later command in the same sequence to produce a capability or effect the task did not authorize."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00068",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 5.1,
+        "detection_stage": "runtime_observed"
+      }
+    },
+    {
+      "id": "AVE-2026-00069",
+      "name": "Multimodal image-hidden instructions (SkillCamo) bundled within a skill package",
+      "shortDescription": {
+        "text": "Obfuscation - Multimodal Image-Hidden Instructions"
+      },
+      "fullDescription": {
+        "text": "A skill package bundles an image resource whose visual content encodes instructions not present anywhere in the package's own text (documentation, manifest, or source), with surrounding documentation phrased to reference the image as an ordinary asset rather than describing what it actually contains."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00069",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 4.8,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00070",
+      "name": "Distributed cross-agent backdoor fragments reassembled externally after execution",
+      "shortDescription": {
+        "text": "Persistence - Distributed Cross-Agent Backdoor Fragments"
+      },
+      "fullDescription": {
+        "text": "A tool's observation or return value delivered to an agent contains an encrypted or encoded fragment inconsistent with the tool's stated function, persisting in that agent's memory or context after the call, with no single agent's session containing enough fragments to reconstruct a complete instruction on its own."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00070",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 6.4,
+        "detection_stage": "runtime_drift_detected"
+      }
+    },
+    {
+      "id": "AVE-2026-00071",
+      "name": "MCP daemon redirect via DOCKER_HOST or host flag, container operations land on attacker infrastructure",
+      "shortDescription": {
+        "text": "Supply Chain - Container Daemon Redirect"
+      },
+      "fullDescription": {
+        "text": "A component's settings.json env block, an MCP server's own env, or a committed command site sets DOCKER_HOST, or supplies a -H/--host flag, pointing the container daemon connection at a remote tcp:// or ssh:// host rather than the local daemon."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00071",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 5.6,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00072",
+      "name": "MCP server bound to all network interfaces with no authentication step (NeighborJack)",
+      "shortDescription": {
+        "text": "Insecure Configuration - Network Bind Exposure"
+      },
+      "fullDescription": {
+        "text": "An MCP server's declared args or env set its bind address to the wildcard 0.0.0.0 or [::] rather than a loopback address or an explicitly scoped, narrower interface, with no accompanying authentication requirement for incoming connections."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00072",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 5,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00073",
+      "name": "Telemetry or API endpoint redirect via static configuration value",
+      "shortDescription": {
+        "text": "Data Exfiltration - Static Endpoint Redirect"
+      },
+      "fullDescription": {
+        "text": "A component's committed configuration sets a telemetry exporter endpoint, a model/provider base URL, an MCP server URL, an agent_card_url, or an equivalent traffic-destination value to a host other than the component's own declared or default provider, or to a host reachable only over cleartext http://, with no accompanying instruction text and no content injected into the model's context."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00073",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 4.1,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00074",
+      "name": "Reclaimable dead external anchor (GitHub owner, package, domain, or cloud subdomain) referenced by a skill",
+      "shortDescription": {
+        "text": "Supply Chain - Dead Anchor Reclamation (SkillJacking)"
+      },
+      "fullDescription": {
+        "text": "A skill's committed content (documentation, manifest, or install instructions) references an external GitHub owner/repo, installable package name, bare domain, or cloud subdomain that currently returns a not-found, unregistered, or deleted-account state from the relevant authority (GitHub's own user API, a package registry, domain RDAP, or a cloud provider's app-slug check), meaning the anchor is presently re-registerable by any third party even though it was a legitimate, resolvable target when the skill was authored."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00074",
+      "properties": {
+        "status": "active",
+        "severity": "HIGH",
+        "aivss_score": 7.1,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00075",
+      "name": "Bytecode poisoning: compiled .pyc cache diverges from its own reviewed .py source",
+      "shortDescription": {
+        "text": "Supply Chain - Compiled Bytecode / Source Divergence (Bytecode Poisoning)"
+      },
+      "fullDescription": {
+        "text": "A skill package contains a .pyc (or .pyo) file whose disassembled bytecode references dangerous primitives (os.system, subprocess, eval, exec, socket, urlopen, credential file paths such as .aws/credentials or .ssh/id_) that do not appear anywhere in its sibling .py source's own text, meaning the compiled artifact the interpreter will actually load and execute contains capability its reviewed source does not show."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00075",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 4.4,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00076",
+      "name": "Natural-language steering of an approval classifier subagent, distinct from AVE-2026-00021 and AVE-2026-00063",
+      "shortDescription": {
+        "text": "Prompt Injection - Approval Classifier Steering"
+      },
+      "fullDescription": {
+        "text": "A committed configuration file (Cursor's permissions.json) declares allow_instructions or block_instructions entries containing free-form natural-language sentences aimed at biasing a separate classifier subagent's approve/deny decision for unattended shell, MCP, or Fetch tool calls, rather than a boolean flag or an instruction embedded in the primary agent's own task content."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00076",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 4.5,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00077",
+      "name": "Cross-origin tool and resource declaration within a single MCP server manifest",
+      "shortDescription": {
+        "text": "Trust Boundary - Cross-Origin Tool and Resource Declaration"
+      },
+      "fullDescription": {
+        "text": "A single MCP server's manifest declares tool and/or resource URL fields (parameters, input/output schemas, descriptions, metadata, or resource URIs) that resolve to two or more unique root domains, or that mix http:// and https:// schemes across those declared endpoints, with no false identity claim present -- honest, structural domain diversity within one server's own declared tool/resource surface."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00077",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 4.8,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00078",
+      "name": "Consensus poisoning: orchestrator accepts a single sub-agent result as authoritative with no quorum verification",
+      "shortDescription": {
+        "text": "Trust Boundary - Unverified Multi-Agent Consensus"
+      },
+      "fullDescription": {
+        "text": "An orchestrator agent commits to a sub-task result supplied by exactly one sub-agent -- among two or more that were dispatched in parallel for the same sub-task, or in a single-source delegation chain with no independent check -- and forwards or acts on that result as ground truth with no quorum vote, redundancy comparison, or independent corroboration step evaluated first."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00078",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 6.4,
+        "detection_stage": "runtime_observed"
+      }
+    },
+    {
+      "id": "AVE-2026-00079",
+      "name": "Plan hijacking via false completion signal: forced early termination bypasses undeclared execution steps",
+      "shortDescription": {
+        "text": "Execution Hijack - Plan-to-Execution Binding Bypass"
+      },
+      "fullDescription": {
+        "text": "An agent's output (from a planner, an executor, or a poisoned tool result reaching either) contains a self-reported task-completion or high-certainty claim -- language equivalent to 'already completed', 'no further action needed', or an explicit confidence score used to justify stopping -- and the orchestrator invokes its final-answer or termination step in response, with the actual number of executed steps in the trace falling short of the number the declared plan specified, and no verification step comparing the two."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00079",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 6.2,
+        "detection_stage": "runtime_drift_detected"
+      }
+    },
+    {
+      "id": "AVE-2026-00080",
+      "name": "Silent agent substitution: unverified process at a routing slot treated as the legitimate agent during retry (Sybil)",
+      "shortDescription": {
+        "text": "Trust Boundary - Runtime Agent Identity Substitution"
+      },
+      "fullDescription": {
+        "text": "A tool call or agent invocation fails and the orchestrator retries at the same routing position; the response that arrives after the retry is accepted and forwarded downstream with no cryptographic credential, session token, or attestation check confirming it originates from the same agent instance that occupied the position before the failure, and no such check exists anywhere in the retry path."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00080",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 6.8,
+        "detection_stage": "runtime_observed"
+      }
+    },
+    {
+      "id": "AVE-2026-00081",
+      "name": "Lingering authority: a task-scoped capability outlives the episode that justified it",
+      "shortDescription": {
+        "text": "Persistence - Lingering Authority"
+      },
+      "fullDescription": {
+        "text": "A capability, tool permission, or access grant issued for one task, subgoal, or episode is invoked again after that episode's own closure event (task completion, subgoal resolution, incident closure, approval-window expiry) has already occurred in the same session, with no intervening revocation, re-grant, or re-authorization event recorded between the closure and the reuse."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00081",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 6.1,
+        "detection_stage": "runtime_observed"
+      }
+    },
+    {
+      "id": "AVE-2026-00082",
+      "name": "Local skill name collision: deterministic router shadowing across discovery roots",
+      "shortDescription": {
+        "text": "local_skill_name_collision"
+      },
+      "fullDescription": {
+        "text": "Two skill files under different local discovery roots resolve to an identical effective name (declared or filename-derived), and the agent's router silently invokes whichever one resolution order picks, with no check that the two roots carry different trust levels and no signal surfaced when the collision occurs."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00082",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 4.4,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00083",
+      "name": "Silent guardrail comparison failure: a protection mechanism that executes but never evaluates its verdict",
+      "shortDescription": {
+        "text": "Trust Boundary - Silent Guardrail Comparison Failure"
+      },
+      "fullDescription": {
+        "text": "A guardrail, judge, approval gate, or similar protection-mechanism check executes on every request and returns a value read downstream as 'permitted' or 'no violation', without its own comparison, branch, or aggregation logic having actually evaluated the real verdict against the specific input in front of it -- because an elif is scoped under the wrong enclosing conditional making a verdict branch unreachable, an equality comparison is made against an unconstrained or loosely-typed value so any phrasing other than the one literal it expects falls through to the permissive branch, two code paths reach the same decision point with opposite defaults for identical input, an error-handling path omits the field the downstream verdict logic reads, or a security verdict is aggregated with all()/any() over a collection a caller-controlled configuration path can leave empty. The check's own logging, code coverage, and test suite all show it running normally, because the deciding branch is reached and executes -- it just never receives, or never compares against, the value that would make it fail."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00083",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 6.3,
+        "detection_stage": "runtime_observed"
+      }
+    },
+    {
+      "id": "AVE-2026-00084",
+      "name": "Lifecycle hook trust decoupling: a vetted plugin update silently rebinds hooks outside the model's decision path",
+      "shortDescription": {
+        "text": "Supply Chain - Lifecycle Hook Trust Decoupling"
+      },
+      "fullDescription": {
+        "text": "A plugin or skill that already passed marketplace/registry vetting under a benign, reviewed lifecycle-hook configuration receives a later version update, published under the same stable public identity, that adds or changes the shell command bound to a lifecycle event (session start, tool invocation, file or config edit). The harness applies the updated hook binding via its own automatic update-sync path, with no new LLM decision, per-entry re-authorization, or user-facing notification distinguishing the updated binding from the plugin's original, already-reviewed state. When the bound event next fires, the harness dispatches the attacker-chosen command as a subprocess directly from its own event-dispatch layer, never passing through the model's own reasoning or tool-call decision, so the exploitation step is invisible to any defense that only inspects prompts, model outputs, or tool calls."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00084",
+      "properties": {
+        "status": "active",
+        "severity": "HIGH",
+        "aivss_score": 7,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00085",
+      "name": "Collusive cross-skill composition: a malicious workflow split across independently benign skills",
+      "shortDescription": {
+        "text": "Obfuscation - Collusive Cross-Skill Composition"
+      },
+      "fullDescription": {
+        "text": "Three or more independently-installed skill files, each with a real, narrow, individually-benign function, connect through genuine runtime artifacts (a file, an environment variable, a task-state value) that one sub-skill's actual execution produces and a subsequent sub-skill's execution consumes. No single sub-skill's declared instructions, code, or permissions contain the harmful behavior; it exists only in the ordered composition's real data flow once all sub-skills are installed together and executed in their intended sequence during genuine agent operation, so a scanner that evaluates each skill's own content and behavior in isolation, without cross-skill dependency or artifact-flow analysis, finds nothing to flag in any individual skill."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00085",
+      "properties": {
+        "status": "active",
+        "severity": "HIGH",
+        "aivss_score": 7.1,
+        "detection_stage": "static_detection"
+      }
+    },
+    {
+      "id": "AVE-2026-00086",
+      "name": "Mid-session WebMCP tool hijacking: a live registry swap replaces an already-discovered tool under its own name",
+      "shortDescription": {
+        "text": "Trust Boundary - Mid-Session Tool Registry Hijacking"
+      },
+      "fullDescription": {
+        "text": "A tool an agent has already discovered, and in some cases already invoked, within a live WebMCP session is unregistered (via a browser lifecycle API such as AbortSignal, or by losing a registration-order race before it ever registers) and a malicious replacement is registered under the exact same tool name, by a third-party script executing on the same page rather than by the tool's own origin. The agent's subsequent invocation of that tool name is dispatched to the attacker's replacement implementation with no content, schema, or description change signaling the substitution, and no mechanism in the agent's own tool-selection logic checks whether the implementation currently bound to a trusted name is the same one that was present when the name was first trusted."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00086",
+      "properties": {
+        "status": "active",
+        "severity": "HIGH",
+        "aivss_score": 7,
+        "detection_stage": "runtime_observed"
+      }
+    },
+    {
+      "id": "AVE-2026-00087",
+      "name": "Agentjacking: a crafted tool response visually mimics a trusted system template to hijack an agent",
+      "shortDescription": {
+        "text": "Prompt Injection - Tool Response Template Mimicry"
+      },
+      "fullDescription": {
+        "text": "An MCP tool response, returned by a legitimate, correctly functioning integration server in answer to an agent's own genuine query (an error lookup, a diagnostic check), contains content an attacker injected upstream at the integration's own publicly-writable ingest point, formatted with markdown or equivalent structured styling that exactly mimics the integration's authentic, system-generated output template. The agent's own handling of the tool response treats it as authoritative system data rather than untrusted external content, finds no visual or structural cue distinguishing it from a genuine event because the formatting is indistinguishable from the real template, and executes an embedded command the injected content presents as legitimate remediation guidance."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00087",
+      "properties": {
+        "status": "active",
+        "severity": "HIGH",
+        "aivss_score": 7.8,
+        "detection_stage": "runtime_observed"
+      }
+    },
+    {
+      "id": "AVE-2026-00088",
+      "name": "Sandbox side-effect trust handoff: an agent-written workspace file is run by a trusted component outside the sandbox",
+      "shortDescription": {
+        "text": "Sandbox Escape - Side-Effect Trust Handoff"
+      },
+      "fullDescription": {
+        "text": "A sandboxed agent, steered by content it processes, writes a file inside the workspace it is permitted to write (a hook definition, an editor task, Git metadata or hooks, the agent tool's own project configuration, or an interpreter in a virtualenv), and a more-privileged component outside the sandbox later loads and executes that file as trusted configuration or code, without distinguishing agent-written files from user-authored ones and without applying the sandbox's execution policy, so the agent's side effect runs on the host."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00088",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 6.4,
+        "detection_stage": "runtime_observed"
+      }
+    },
+    {
+      "id": "AVE-2026-00089",
+      "name": "Model-supplied sandbox boundary: a tool parameter the model sets defines or widens the sandbox's writable scope",
+      "shortDescription": {
+        "text": "Sandbox Escape - Model-Supplied Policy Boundary"
+      },
+      "fullDescription": {
+        "text": "A coding agent's sandbox computes its writable scope from a value the model supplies in a tool call (a terminal command's working directory or an equivalent path parameter) instead of from the session's user-established root, so a model steered by content it reads sets that value to a location outside the workspace and the sandbox grants write access there, letting the agent overwrite files such as the sandbox's own helper or the user's shell startup files without approval."
+      },
+      "helpUri": "https://aveproject.org/registry.html#AVE-2026-00089",
+      "properties": {
+        "status": "active",
+        "severity": "MEDIUM",
+        "aivss_score": 6.6,
+        "detection_stage": "runtime_observed"
+      }
+    }
+  ]
+}

@@ -42,6 +42,13 @@
       "untrusted_content"
     ]
   },
+  "security_boundary": "text-channel untrusted-content boundary (exists) → image-channel untrusted-content boundary (does not exist)",
+  "missing_control": "no cross-modal equivalent of existing text-content trust boundaries",
+  "vulnerability_rationale": {
+    "capability": "Multimodal agents can read text embedded in images.",
+    "vulnerability": "Untrusted-content handling boundaries exist for text but have no equivalent for text rendered inside images; the same class of content is trusted or untrusted depending on which modality carries it.",
+    "impact": "A prompt injection vector that completely bypasses text-level security scanning, because the malicious instruction is never present as text in the input stream, only as pixels in an image."
+  },
   "mitigation": {
     "strategy": [
       "validate_input",
@@ -86,7 +93,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Qi 2023",

@@ -43,6 +43,13 @@
       "untrusted_content"
     ]
   },
+  "security_boundary": "uploaded document content (should be data) → instruction",
+  "missing_control": "no boundary distinguishes uploaded document content from instruction the agent should follow",
+  "vulnerability_rationale": {
+    "capability": "Agent processes user-uploaded documents as part of a task.",
+    "vulnerability": "No boundary distinguishes uploaded document content from instruction the agent should follow.",
+    "impact": "Indirect prompt injection requiring only that a user be convinced to upload a crafted document."
+  },
   "mitigation": {
     "strategy": [
       "validate_input",
@@ -87,7 +94,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-29T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",

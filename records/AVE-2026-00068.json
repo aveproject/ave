@@ -24,6 +24,13 @@
     "payload_surface": "shared OS/shell state (environment variables, file descriptors, working directory, temp files) connecting sequential CLI command executions within one agent session",
     "escalation": "instruction_to_capability"
   },
+  "security_boundary": "single-command security review → multi-command behavioral effect; the boundary is the unit of analysis itself, per-command versus per-sequence",
+  "missing_control": "no cross-command state-flow analysis; every existing tool's unit of analysis stops at the single command",
+  "vulnerability_rationale": {
+    "capability": "Agent can issue sequences of CLI commands, none individually dangerous.",
+    "vulnerability": "No producer-consumer tracking across a command sequence within one session; every existing control (ShellCheck, GTFOBins, LOLBAS, single-command scanners) evaluates each command in isolation, so the composition itself is structurally invisible to them.",
+    "impact": "Benign-looking commands compose through shared operating-system state into a capability beyond what the user's task authorized, which no single-command check observes; published research reports a 96.59% attack success rate across 2,525 trials."
+  },
   "mitigation": {
     "strategy": ["isolate_scope", "least_privilege"],
     "enforcement_point": "runtime_proxy",
@@ -45,7 +52,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-08-02T00:00:00Z",
-  "last_updated": "2026-08-02T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "MOSAIC (arXiv 2607.02857)",

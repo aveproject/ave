@@ -33,6 +33,13 @@
     "requires": ["untrusted_content"],
     "amplifies": ["external_comms", "private_data"]
   },
+  "security_boundary": "descriptive capability/identity metadata → instruction, once loaded into reasoning context",
+  "missing_control": "no boundary separates the A2A card's descriptive metadata from executable instruction once it is loaded into the host's reasoning context",
+  "vulnerability_rationale": {
+    "capability": "A host agent reads a remote agent's A2A card to plan task delegation.",
+    "vulnerability": "No boundary separates the card's descriptive metadata from executable instruction once loaded into the host's reasoning context.",
+    "impact": "Delegation planning hijacked by a malicious remote agent's self-declared, unverified metadata."
+  },
   "mitigation": {
     "strategy": ["validate_input", "provenance_label"],
     "enforcement_point": "server_card_fetch",
@@ -54,7 +61,7 @@
   "researcher": "Kumar Aditya",
   "researcher_url": "https://www.keysight.com/blogs/en/tech/nwvs/2026/03/12/agent-card-poisoning",
   "published": "2026-07-27T00:00:00Z",
-  "last_updated": "2026-08-29T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Keysight research",

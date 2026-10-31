@@ -43,6 +43,13 @@
       "untrusted_content"
     ]
   },
+  "security_boundary": "declared task scope → actual network reachability",
+  "missing_control": "no network segmentation or egress scoping tied to a skill's declared purpose; the agent's network capability is all-or-nothing rather than scoped per task",
+  "vulnerability_rationale": {
+    "capability": "Agent has network connectivity or shell access sufficient to reach internal hosts and services.",
+    "vulnerability": "No network-layer segmentation or scope check restricts an agent's granted network capability to the destinations its declared task actually requires.",
+    "impact": "The attacker gains intelligence for further attacks (network scans, enumerated services, a map of internal infrastructure), all executed from a trusted internal host."
+  },
   "mitigation": {
     "strategy": [
       "least_privilege",
@@ -87,7 +94,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "CWE-918",

@@ -47,6 +47,13 @@
       "private_data"
     ]
   },
+  "security_boundary": "write request (untrusted) → persistent memory store (should be trusted)",
+  "missing_control": "no provenance or integrity check gates writes to persistent memory",
+  "vulnerability_rationale": {
+    "capability": "Agent maintains persistent memory across sessions.",
+    "vulnerability": "No provenance or integrity check gates writes to the persistent memory store.",
+    "impact": "Attacker-controlled beliefs influence agent behavior across all future sessions, long after the initial write."
+  },
   "mitigation": {
     "strategy": [
       "validate_input",
@@ -90,7 +97,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Cohen 2024",

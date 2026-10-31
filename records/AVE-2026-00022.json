@@ -43,6 +43,13 @@
       "untrusted_content"
     ]
   },
+  "security_boundary": "reviewed artifact (declared manifest scope) → executed behavior (actual runtime access)",
+  "missing_control": "no scope enforcement at the agent-framework layer comparing runtime tool/resource calls against the component's own declared manifest",
+  "vulnerability_rationale": {
+    "capability": "Agent can invoke tools, APIs, files, or databases beyond what a skill's manifest declares as its required resource access.",
+    "vulnerability": "No runtime mechanism compares an agent's actual resource access against the manifest's declared scope. The manifest is a reviewed, trusted declaration; nothing enforces that declaration once the component runs.",
+    "impact": "The agent accesses resources beyond the component's declared scope, violating least privilege and possibly exposing sensitive data or systems that the user did not authorize."
+  },
   "mitigation": {
     "strategy": [
       "least_privilege",
@@ -86,7 +93,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "CWE-269",

@@ -40,6 +40,13 @@
       "untrusted_content"
     ]
   },
+  "security_boundary": "actual tool execution result → reported result (agent sits unchecked in the path)",
+  "missing_control": "no integrity check verifies a reported tool result matches what the tool actually returned",
+  "vulnerability_rationale": {
+    "capability": "Agent reports tool call results to users and downstream components.",
+    "vulnerability": "No integrity check verifies a reported result matches what the tool actually returned.",
+    "impact": "False information, hidden errors, or manipulated downstream decisions based on fabricated data."
+  },
   "mitigation": {
     "strategy": [
       "validate_input",
@@ -83,7 +90,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",

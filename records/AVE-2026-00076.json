@@ -33,6 +33,13 @@
   "trifecta_profile": {
     "requires": ["untrusted_content"]
   },
+  "security_boundary": "steering text (targets the checker) → classifier's approve/deny judgment",
+  "missing_control": "no boundary prevents the same class of natural-language content that steers a primary agent from also steering the classifier meant to check it",
+  "vulnerability_rationale": {
+    "capability": "A committed configuration file can declare natural-language steering text consumed by a safety-classifier subagent.",
+    "vulnerability": "No boundary prevents natural-language content from probabilistically steering the classifier meant to check an agent's actions, the same way it steers the agent itself.",
+    "impact": "Auto-approval of shell/MCP/Fetch calls the classifier would otherwise flag, via a committed repository file."
+  },
   "mitigation": {
     "strategy": ["require_human_approval", "deny_by_default"],
     "enforcement_point": "agent_framework",
@@ -56,7 +63,7 @@
   "researcher": "Nicolai (predictor2718)",
   "researcher_url": "https://github.com/predictor2718",
   "published": "2026-08-08T00:00:00Z",
-  "last_updated": "2026-08-08T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "predictor2718 PR #123",

@@ -44,6 +44,13 @@
       "external_comms"
     ]
   },
+  "security_boundary": "network-egress monitoring (exists) → content-level covert-channel monitoring (does not exist)",
+  "missing_control": "no content-level covert-channel detection independent of destination monitoring",
+  "vulnerability_rationale": {
+    "capability": "Agent output is reviewed by humans and monitored at the network layer.",
+    "vulnerability": "Exfiltration monitoring checks network destinations, not whether benign-looking output content itself encodes exfiltrated data; content-level exfiltration has no detection surface at all.",
+    "impact": "Sensitive data is exfiltrated through output that looks benign to a human reviewer, with no detection surface at the content level."
+  },
   "mitigation": {
     "strategy": [
       "sanitize_output",

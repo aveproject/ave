@@ -30,6 +30,13 @@
     "requires": ["untrusted_content"],
     "amplifies": ["external_comms", "private_data"]
   },
+  "security_boundary": "instruction-level review (exists) → configuration-level review (does not exist)",
+  "missing_control": "no requirement that safety-relevant config flags receive the same review rigor as instruction text",
+  "vulnerability_rationale": {
+    "capability": "Components can declare configuration flags controlling whether human approval is required.",
+    "vulnerability": "No requirement that safety-relevant configuration flags receive the same review scrutiny as instruction text.",
+    "impact": "A required human-in-the-loop control is silently removed with no instruction-level signal a reviewer would catch."
+  },
   "mitigation": {
     "strategy": ["deny_by_default", "validate_input"],
     "enforcement_point": "server_card_fetch",
@@ -49,7 +56,7 @@
   "kill_switch_active": false,
   "researcher": "hackerone.com/cantina_xyz",
   "published": "2026-07-27T00:00:00Z",
-  "last_updated": "2026-10-20T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "CVE-2026-33068 (GHSA-mmgp-wc2j-qcv7)",

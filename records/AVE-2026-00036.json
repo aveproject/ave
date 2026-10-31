@@ -46,6 +46,13 @@
       "untrusted_content"
     ]
   },
+  "security_boundary": "task-scoped credentials/access → reach beyond original task scope",
+  "missing_control": "no boundary prevents reuse of granted access to reach systems beyond the declared task",
+  "vulnerability_rationale": {
+    "capability": "Agent has network connectivity and credentials/tokens scoped to its current task.",
+    "vulnerability": "No boundary prevents that access from being reused to reach systems beyond the original task's authorized scope.",
+    "impact": "Compromise expands from one pipeline segment to adjacent systems the attacker could not reach directly."
+  },
   "mitigation": {
     "strategy": [
       "least_privilege",
@@ -90,7 +97,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "MITRE ATT&CK T1021",

@@ -48,6 +48,13 @@
       "private_data"
     ]
   },
+  "security_boundary": "discovery-layer metadata (read once, pre-execution) → agent context (treated as authoritative), with no execution-layer event for runtime monitoring to catch",
+  "missing_control": "no validation at server-card fetch time, and no detection surface at all for runtime/execution-layer monitoring, since nothing has executed yet",
+  "vulnerability_rationale": {
+    "capability": "An agent fetches and reads a server-card's tool descriptions before making any tool call.",
+    "vulnerability": "No boundary separates metadata describing a tool from instructions the agent should follow, here at the discovery layer: the server card is read before any tool call exists for runtime monitoring to observe.",
+    "impact": "Malicious instructions in tool descriptions, parameter descriptions or config schemas are loaded into the agent's context and executed immediately, before any user interaction and outside runtime monitoring's reach."
+  },
   "mitigation": {
     "strategy": [
       "validate_input",
@@ -77,7 +84,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-05-01T00:00:00Z",
-  "last_updated": "2026-08-29T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Greshake 2023",

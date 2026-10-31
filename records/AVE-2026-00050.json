@@ -3,7 +3,7 @@
   "schema_version": "1.3.0",
   "status": "active",
   "published": "2026-06-21T00:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "component_type": "mcp_server",
   "title": "Parasitic Toolchain \u2014 Silent Tool Registration and Persistent Hook Injection",
   "attack_class": "Persistence - Parasitic Toolchain",
@@ -52,6 +52,13 @@
       "private_data",
       "external_comms"
     ]
+  },
+  "security_boundary": "declared manifest scope → actual runtime tool-registry footprint",
+  "missing_control": "no conformance check between a component's registered footprint and its declared manifest",
+  "vulnerability_rationale": {
+    "capability": "Tools can register handlers into the agent's tool dispatch layer at runtime.",
+    "vulnerability": "No check verifies a component's actual registered footprint against its declared manifest, at registration or session restart.",
+    "impact": "A persistent, undeclared capability survives context resets, indistinguishable from a legitimately registered tool."
   },
   "mitigation": {
     "strategy": [

@@ -41,6 +41,13 @@
       "untrusted_content"
     ]
   },
+  "security_boundary": "claimed role → actually-verified role (never checked)",
+  "missing_control": "no authentication step backing role claims",
+  "vulnerability_rationale": {
+    "capability": "Skills can implement role-based access checks against user-supplied claims.",
+    "vulnerability": "Role-based access control is implemented by trusting a bare, self-asserted claim with no backing credential or authentication step.",
+    "impact": "Any user who simply claims the privileged role receives elevated access, bypassing all actual authentication."
+  },
   "mitigation": {
     "strategy": [
       "verify_identity",
