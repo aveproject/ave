@@ -367,8 +367,11 @@ personal ones. We are all trying to make AI agents safer.
 
 ## Researcher recognition
 
-Every accepted AVE record permanently credits the `researcher` field by
-name. Records are immutable once published — your attribution stays forever.
+Every accepted AVE record credits the original researcher by name in the
+`researcher` field. A published record is never deleted and its `ave_id`
+never changes. Its content can be corrected after publication (a score, a
+source, a mapping, or the credit itself when it named the wrong source),
+and every such correction is listed in CHANGELOG.md.
 
 ---
 

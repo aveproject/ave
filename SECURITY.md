@@ -59,5 +59,6 @@ No redacted or partial disclosures.
 
 Researchers who responsibly disclose a vulnerability in Bawbel tooling, or
 who submit an accepted AVE record, receive permanent attribution in the
-`researcher` field of the published record. That attribution is immutable —
-once published, it stays forever.
+`researcher` field of the published record. A published record is never
+deleted and its `ave_id` never changes; the credit is corrected only to
+point at the original source.
