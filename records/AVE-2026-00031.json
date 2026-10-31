@@ -44,6 +44,13 @@
       "untrusted_content"
     ]
   },
+  "security_boundary": "agent-generated output → training/RLHF feedback signal",
+  "missing_control": "no integrity check on agent-generated feedback prevents the evaluated system from also controlling its own evaluation signal",
+  "vulnerability_rationale": {
+    "capability": "Agent-generated outputs can feed into a downstream training/RLHF feedback pipeline.",
+    "vulnerability": "No integrity check prevents the evaluated system from also controlling its own evaluation signal.",
+    "impact": "Gradual, hard-to-detect manipulation of future model behavior via biased reward signals."
+  },
   "mitigation": {
     "strategy": [
       "validate_input",
@@ -88,7 +95,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Wan 2023",
