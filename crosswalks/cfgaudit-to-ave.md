@@ -1,6 +1,6 @@
 # cfgaudit → AVE crosswalk
 
-[cfgaudit](https://github.com/cfgaudit/cfgaudit) is a static auditor of committable AI-agent **configuration files** (Claude Code `settings.json` / `CLAUDE.md` / `.mcp.json` / hooks / plugins, and the cross-agent equivalents: Cursor, Copilot, Gemini, Codex, Devin, Zed, Continue, OpenCode, Kimi, Cline, qwen, Grok). It does not connect to running servers or observe runtime, so it maps only to AVE's `static_detection` records.
+[cfgaudit](https://github.com/cfgaudit/cfgaudit) is a static auditor of committable AI-agent **configuration files** (Claude Code `settings.json` / `CLAUDE.md` / `.mcp.json` / hooks / plugins, and the cross-agent equivalents: Cursor, Copilot, Gemini, Codex, Devin, Zed, Continue, OpenCode, Kimi, Cline, Roo Code, qwen, Grok). It does not connect to running servers or observe runtime, so it maps only to AVE's `static_detection` records.
 
 cfgaudit emits each rule's primary AVE id in its JSON and SARIF output (`AVEID` in JSON; `properties.ave_id` in SARIF). This crosswalk is the source of truth that mapping is kept in sync with. Full write-up: [`docs/cfgaudit-to-ave.md`](https://github.com/cfgaudit/cfgaudit/blob/main/docs/cfgaudit-to-ave.md).
 
@@ -8,21 +8,25 @@ cfgaudit emits each rule's primary AVE id in its JSON and SARIF output (`AVEID` 
 
 | | Version |
 |---|---|
-| cfgaudit | 1.18.1, read at the tag (`d490362`) |
-| AVE record set | 89 records (AVE-2026-00001 .. 00089), 61 of them `static_detection`, read at `8e08eaa` |
+| cfgaudit | 1.20.0, read at the tag (`ad25f5a`) |
+| AVE record set | 89 records (AVE-2026-00001 .. 00089), 61 of them `static_detection`, schema 1.3.0, read at `6914f60` |
 | Bawbel Scanner (validation, below) | 1.3.0 |
 
 ## Coverage
 
-cfgaudit has **116 rules** in total. **66 of them map onto 28 AVE behavioral classes**, the same as at v1.16.0. It is a many-to-one mapping: several cfgaudit rules land on the same AVE class, because cfgaudit slices threats by config surface where AVE slices by behavior. For example, cfgaudit has five distinct secret-detection rules (a secret in `settings.json` env, in an MCP `env`/`headers` block, an entropy fallback, a Continue inline `apiKey`, a crypto signing key), and all five map to the single AVE class `AVE-2026-00047` (hardcoded credentials in component).
+cfgaudit has **123 rules** in total. **67 of them map onto 29 AVE behavioral classes.** It is a many-to-one mapping: several cfgaudit rules land on the same AVE class, because cfgaudit slices threats by config surface where AVE slices by behavior. For example, cfgaudit has five distinct secret-detection rules (a secret in `settings.json` env, in an MCP `env`/`headers` block, an entropy fallback, a Continue inline `apiKey`, a crypto signing key), and all five map to the single AVE class `AVE-2026-00047` (hardcoded credentials in component).
 
-The other 50 rules have no AVE class: they check config surfaces AVE's skill and MCP-server records do not enumerate (see "Config surfaces beyond AVE's model" below).
+The other 56 rules have no AVE class: they check config surfaces AVE's skill and MCP-server records do not enumerate (see "Config surfaces beyond AVE's model" below).
 
-**This revision spans cfgaudit v1.17.0 to v1.18.1**, which added two rules, `CFG115` and `CFG116`. No mapping changes. **Both new rules are left unmapped on purpose:** each makes the agent read a file on the reader's machine, which no record covers; the reason is under "Config surfaces beyond AVE's model". (v1.18.0 has no published binaries, its release job hung before upload; v1.18.1 is the same code.)
+**This revision spans cfgaudit v1.19.0 to v1.20.0.** v1.19.0 added no rule; v1.20.0 added seven, `CFG117` to `CFG123`.
 
-**The record set grew from 87 to 89.** `AVE-2026-00088` (an agent-written workspace file later run by a trusted component outside the sandbox) and `AVE-2026-00089` (a sandbox whose writable scope comes from a tool parameter the model sets) are both `runtime_observed`, so the static count stays at 61 and no gap is added.
+- **Two new rules are mapped.** `CFG120` (an exfiltration directive written in prose) maps to `AVE-2026-00013`, PII exfiltration, a class new to this crosswalk. `CFG119` (payload markers in a script that an auto-run hook, folder-open task or MCP launch starts) maps to `AVE-2026-00057` as an imperfect fit, stated in the table.
+- **One mapping is dropped.** `CFG052` no longer maps to `AVE-2026-00017`. Measured on Claude Code 2.1.316, an `mcpServers` block in `.claude/settings.json` is not loaded (`claude mcp list` and `claude mcp get` do not show it, and the settings reference has no such key), so there is no second source that could shadow a server name. The rule now reports that block, at `info`, as having no effect, and joins the "declared configuration that never loads" surface below.
+- **Five new rules are unmapped.** `CFG117` (a key defined twice in a Claude Code settings file) extends the "declared configuration that never loads" surface. `CFG121`, `CFG122` and `CFG123` form a new surface, a committed file that takes the place of a tool the agent runs. `CFG118` (an agent-neutral policy deny that an agent can take only from user settings) is informational and has no behaviour of its own.
 
-**Both sides are pinned by commit**, so the counts can be re-derived. The cfgaudit tree read is the `v1.18.1` tag itself.
+**The record set is unchanged at 89**, 61 of them `static_detection`. Schema 1.3.0 added the `merged` and `rejected` statuses; every record is `active`, and no title or class of a mapped record changed.
+
+**Both sides are pinned by commit**, so the counts can be re-derived. The cfgaudit tree read is the `v1.20.0` tag itself.
 
 ## Rule mapping
 
@@ -39,7 +43,8 @@ The other 50 rules have no AVE class: they check config surfaces AVE's skill and
 | CFG031, CFG036, CFG037, CFG038 | AVE-2026-00003 | credential exfiltration | sensitive-path read, env dump, embedded exfil shell |
 | CFG033, CFG072 | AVE-2026-00039 | covert-channel exfiltration | markdown-image sink, DNS-name exfil |
 | CFG056 | AVE-2026-00058 | deceptive trigger / activation-scope | broad always-on skill trigger |
-| CFG057 | AVE-2026-00057 | obfuscated / encoded payload | base64 or data-URI encoded injection |
+| CFG057, CFG119 | AVE-2026-00057 | obfuscated / encoded payload | base64 or data-URI encoded injection; CFG119 an obfuscated payload in a script an auto-run hook or task starts. Imperfect fit for CFG119: it also reports a download-and-run step with a credential hunt and no obfuscation, which no record covers |
+| CFG120 | AVE-2026-00013 | PII exfiltration | an instruction in prose to send named sensitive data, or to send data unseen, to an outside address or URL; the shell form is CFG036 under AVE-2026-00003 |
 | CFG081 | AVE-2026-00027 | multi-turn instruction persistence | "survive context compaction" directive |
 | CFG051, CFG085 | AVE-2026-00048 | unsafe agent delegation chain | over-broad tool grant in agent frontmatter |
 | CFG090 | AVE-2026-00032 | network reconnaissance instruction | scan or enumerate an internal network (see gaps re: precision) |
@@ -47,7 +52,7 @@ The other 50 rules have no AVE class: they check config surfaces AVE's skill and
 | CFG039 | AVE-2026-00005 | recursive filesystem destruction | `rm -rf` |
 | CFG027, CFG028 | AVE-2026-00008 | persistence / self-replication | cron/startup persistence, writing trust files |
 | CFG007, CFG050, CFG054, CFG065, CFG073, CFG097 | AVE-2026-00047 | hardcoded credentials in component | secrets in settings or MCP env/headers; CFG097 adds a literal in a Gemini remote agent's `auth` block |
-| CFG052, CFG059 | AVE-2026-00017 | server impersonation / spoofing | MCP name shadowing, typosquat |
+| CFG059 | AVE-2026-00017 | server impersonation / spoofing | MCP server name typosquat |
 | CFG019, CFG020, CFG070 | AVE-2026-00055 | command exec via untrusted MCP launch config | inline-script, env-code, repo-relative launcher |
 | CFG075 | AVE-2026-00061 | TLS verification disabled in config | `NODE_TLS_REJECT_UNAUTHORIZED=0`, `GIT_SSL_NO_VERIFY`, `--insecure` in MCP `env`/`args` |
 | CFG010, CFG055, CFG074, CFG089, CFG098 | AVE-2026-00062 | unpinned dependency / supply-chain substitution | unpinned `@latest`/`:latest`, `skills-lock.json` with no integrity pin, marketplace source without a full-SHA pin; CFG098 adds a `marketplace.json` archive source with no `sha256` and an npm source at a non-default registry |
@@ -77,9 +82,10 @@ Seven of the eight surfaces listed here at v1.10.0 have since been closed by AVE
 | Repository grants browser or desktop-application access | Codex `[browser_use]` `full_cdp_access`, `[computer_use]` app access | CFG106 | not filed under `AVE-2026-00063` on purpose |
 | A configuration-declared environment that loads code into every shell | Codex `shell_environment_policy.set`, Claude Code settings `env` with `BASH_ENV`, `LD_PRELOAD`, `NODE_OPTIONS` | CFG107, CFG110 | added at v1.14.0 (CFG107) and v1.15.0 (CFG110) |
 | A committed scheduler that fires prompts on a timer | `.claude/scheduled_tasks.json` | CFG108 | added at v1.14.0 |
-| A declared configuration that never loads | a Codex config that fails to parse, a Claude Code settings file the agent discards | CFG109, CFG012 | added at v1.15.0 (CFG109; CFG012 is older) |
+| A declared configuration that never loads | a Codex config that fails to parse, a Claude Code settings file the agent discards, a key defined twice, `mcpServers` in `settings.json` | CFG109, CFG012, CFG117, CFG052 | CFG109 added at v1.15.0, CFG012 older; CFG117 and CFG052 at v1.20.0 |
 | A committed credential source sent to a committed endpoint | MCP `bearer_token_file` | CFG112 | added at v1.15.0 |
-| A committed path that makes the agent read a file on the reader's machine | a config path that is a symbolic link leaving the repository; an `@~/...` or `../` import in `CLAUDE.md` | CFG115, CFG116 | new |
+| A committed path that makes the agent read a file on the reader's machine | a config path that is a symbolic link leaving the repository; an `@~/...` or `../` import in `CLAUDE.md` | CFG115, CFG116 | CFG115 added at v1.17.1, CFG116 at v1.18.0 |
+| A committed file that takes the place of a tool the agent runs | a nested bare repository with `core.fsmonitor`, `git.exe` at the root, a committed `.venv`, a `.yarnrc.yml` `yarnPath` | CFG121, CFG122, CFG123 | new |
 
 ### Sandbox weakening, the one surface still open
 
@@ -112,9 +118,21 @@ This is the last of the eight, and the reason it is still open is that the field
 
 `CFG111` extends the "guardrail that does not hold" row: an invisible character such as a zero-width space inside a permission rule or hook matcher leaves the rule present and matching nothing. Like `CFG101`, it is an ineffective control rather than an attacker behaviour.
 
-### The surface new in this revision
+### The surface added in the previous revision (v1.17.1 and v1.18.0)
 
 **A committed path that makes the agent read a file on the reader's machine (CFG115, CFG116).** `CFG115`: a committed config path (`.claude/settings.json`, `.mcp.json`, `CLAUDE.md`, a skill) is a symbolic link, or runs through a linked directory, that resolves outside the repository, so the agent loads a file from the machine that checked the repository out. `CFG116`: an `@path` import in a committed `CLAUDE.md`, `AGENTS.md` or `.claude/rules` file resolves outside the repository (`@~/...`, an absolute path elsewhere, `../` past the root). Measured with Claude Code 2.1.310, such an import is not loaded in print mode, and an interactive session loads it only after a once-per-project dialog that lists the files. In both cases the repository chooses which local file the agent reads. A reviewer sees the link or the import line, but not the content of the file it reaches. The nearest records do not cover this: `AVE-2026-00001` is a fetch from a remote source, `AVE-2026-00047` a credential written into the component, `AVE-2026-00053` a path traversal in an MCP tool's own path validation, and `AVE-2026-00089` a sandbox whose writable scope comes from a tool parameter (`runtime_observed`).
+
+### Changes in this revision
+
+**A declared configuration that never loads, extended (CFG117, CFG052).** `CFG117`: a key defined twice in one object of a Claude Code settings file, such as two top-level `"hooks"` or two `"deny"` under `permissions`. Measured on Claude Code 2.1.312 and 2.1.314, the last occurrence is kept and the earlier ones ignored, as `JSON.parse` does, so a hook or deny list a reviewer reads in the first copy is not in force. `AVE-2026-00075` (compiled bytecode that diverges from its reviewed source) has the same "what is reviewed is not what runs" shape on a different artifact and is not stretched onto a settings file. `CFG052`: an `mcpServers` block in `.claude/settings.json`, which Claude Code does not load, reported at `info`.
+
+**A committed file that takes the place of a tool the agent runs (CFG121, CFG122, CFG123).** Coding agents run ordinary tools in the checkout on their own: `git status` after an edit, `git submodule update`, `node`, `python`, `yarn`. A committed file can take the tool's place:
+
+- `CFG121`: a nested bare repository whose `config` sets a key git runs as a command (`core.fsmonitor`, `core.hooksPath`, `core.sshCommand`, a filter driver), so the agent's next git call there runs it; also an unencrypted or lookalike submodule URL in `.gitmodules`.
+- `CFG123`: a Windows program named like a tool at the repository root (`git.exe`, `node.cmd`), which Windows runs from the current directory before `PATH`; a committed Python virtual environment; a `.yarnrc.yml` `yarnPath` that is not a Yarn release, which yarn runs as JavaScript on every command.
+- `CFG122`: the same tool binaries and a `.git` entry inside an archive given as the scan target, which a clone of the repository never produces.
+
+`AVE-2026-00055` is bound to an untrusted MCP launch config and `AVE-2026-00075` to a `.pyc` cache. Neither covers the agent's own tool call being redirected by a committed file.
 
 ### The three deliberately unmapped rules
 

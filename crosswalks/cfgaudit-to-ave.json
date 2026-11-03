@@ -3,13 +3,13 @@
   "source": {
     "tool": "cfgaudit",
     "vendor": "cfgaudit",
-    "version": "1.18.1",
+    "version": "1.20.0",
     "url": "https://github.com/cfgaudit/cfgaudit",
     "license": "Apache-2.0",
     "tool_class": "static configuration auditor",
-    "rules_total": 116,
-    "rules_mapped": 66,
-    "commit": "d490362f1889e84c2704ae304a0e6bb1863697fa"
+    "rules_total": 123,
+    "rules_mapped": 67,
+    "commit": "ad25f5a095a27dd08e8746347963d233e55686f7"
   },
   "target": {
     "standard": "AVE",
@@ -17,10 +17,10 @@
     "url": "https://aveproject.org",
     "record_count": 89,
     "static_record_count": 61,
-    "commit": "8e08eaaf2a6a870f44172c4504f46325d6ecde8c"
+    "commit": "6914f60e344ac5329c512d2f63530c99bf1ccc0d"
   },
-  "generated": "2026-10-24",
-  "note": "cfgaudit is a static auditor of committable AI-agent CONFIGURATION files. It does not connect to running servers or observe runtime, so it maps only to AVE's static_detection records. Each cfgaudit rule emits its primary AVE id in JSON/SARIF output (see github.com/cfgaudit/cfgaudit/blob/main/docs/cfgaudit-to-ave.md). Mappings are class-level behavioral equivalence, not asserted identity. cfgaudit maps 66 config-surface rules onto 28 AVE behavioral classes, the same as at v1.16.0. This revision spans cfgaudit v1.17.0 to v1.18.1, which added two rules, CFG115 and CFG116. Both are left unmapped on purpose and listed under config_surfaces_beyond_ave with the reason: each makes the agent read a file on the reader's machine, which no record covers. The record set grew from 87 to 89; AVE-2026-00088 and 00089 are both runtime_observed, so the static count stays at 61 and no gap is added. Both sides are pinned by commit: cfgaudit at the v1.18.1 tag, AVE at the commit read.",
+  "generated": "2026-11-03",
+  "note": "cfgaudit is a static auditor of committable AI-agent CONFIGURATION files. It does not connect to running servers or observe runtime, so it maps only to AVE's static_detection records. Each cfgaudit rule emits its primary AVE id in JSON/SARIF output (see github.com/cfgaudit/cfgaudit/blob/main/docs/cfgaudit-to-ave.md). Mappings are class-level behavioral equivalence, not asserted identity. cfgaudit maps 67 config-surface rules onto 29 AVE behavioral classes. This revision spans cfgaudit v1.19.0 to v1.20.0 (v1.19.0 added no rule), which added seven rules, CFG117 to CFG123. Two are mapped: CFG120 (an exfiltration directive in prose) to AVE-2026-00013, a class new to this crosswalk, and CFG119 (payload markers in a script an auto-run hook or task starts) to AVE-2026-00057, an imperfect fit. CFG052 is no longer mapped to AVE-2026-00017: measured on Claude Code 2.1.316, an mcpServers block in .claude/settings.json is not loaded, so there is no second source to shadow a server name, and the rule now reports that block as having no effect. CFG117 and CFG052 join the surface 'a declared configuration that never loads'; CFG121, CFG122 and CFG123 form a new surface, 'a committed file that takes the place of a tool the agent runs'; CFG118 is informational. The record set is unchanged at 89 (61 static) under schema 1.3.0, every record active. Both sides are pinned by commit: cfgaudit at the v1.20.0 tag, AVE at the commit read.",
   "mappings": [
     {
       "ave_id": "AVE-2026-00001",
@@ -85,10 +85,17 @@
       ]
     },
     {
+      "ave_id": "AVE-2026-00013",
+      "title": "Personal data exfiltration via PII collection and transmission in agentic component",
+      "cfgaudit_rules": [
+        "CFG120"
+      ],
+      "note": "CFG120: an instruction file tells the agent, in prose, to send data to an outside address or URL (forward the passport numbers to archive@..., send the conversation history to https://...) and names sensitive data or hides the sending. CFG036 covers the shell form under AVE-2026-00003; a credential sent to its own API to authenticate is reported at info only."
+    },
+    {
       "ave_id": "AVE-2026-00017",
       "title": "MCP Server Impersonation or Spoofing",
       "cfgaudit_rules": [
-        "CFG052",
         "CFG059"
       ]
     },
@@ -168,8 +175,10 @@
       "ave_id": "AVE-2026-00057",
       "title": "Obfuscated or encoded skill payload designed to evade static scanners",
       "cfgaudit_rules": [
-        "CFG057"
-      ]
+        "CFG057",
+        "CFG119"
+      ],
+      "note": "CFG119 maps on its obfuscation marker, the way the payloads in the v1.20.0 corpus run got past every pattern rule. It also reports a download-and-run step together with a credential hunt without obfuscation, which no record covers as such."
     },
     {
       "ave_id": "AVE-2026-00058",
@@ -302,10 +311,10 @@
   ],
   "coverage": {
     "ave_static_records": 61,
-    "cfgaudit_rules_total": 116,
-    "cfgaudit_rules_mapped": 66,
-    "ave_classes_covered": 28,
-    "cfgaudit_rules_unmapped": 50
+    "cfgaudit_rules_total": 123,
+    "cfgaudit_rules_mapped": 67,
+    "ave_classes_covered": 29,
+    "cfgaudit_rules_unmapped": 56
   },
   "validation": {
     "against": {
@@ -392,9 +401,11 @@
       "surface": "a declared configuration that never loads",
       "example_rules": [
         "CFG109",
-        "CFG012"
+        "CFG012",
+        "CFG117",
+        "CFG052"
       ],
-      "note": "CFG109 added at v1.15.0; CFG012 is older. The repository states guardrails that are not in force because the agent does not load the file. Measured in both directions: Codex logs 'Invalid configuration; using defaults' and runs, and Claude Code silently discards a whole settings file, every deny rule and hook with it, on a top-level type error or on one unloadable PreToolUse or PermissionRequest hook entry. AVE-2026-00083 is the nearest in effect but is runtime_observed and scoped to a mechanism's own comparison logic."
+      "note": "CFG109 added at v1.15.0; CFG012 is older. The repository states guardrails that are not in force because the agent does not load the file. Measured in both directions: Codex logs 'Invalid configuration; using defaults' and runs, and Claude Code silently discards a whole settings file, every deny rule and hook with it, on a top-level type error or on one unloadable PreToolUse or PermissionRequest hook entry. AVE-2026-00083 is the nearest in effect but is runtime_observed and scoped to a mechanism's own comparison logic. Extended at v1.20.0 by two rules. CFG117: a key defined twice in one object of a Claude Code settings file; measured on 2.1.312 and 2.1.314, the last occurrence wins, so a hook or deny list in an earlier copy is not in force. AVE-2026-00075 (compiled bytecode diverging from its reviewed source) has the same 'what is reviewed is not what runs' shape on a different artifact and is not stretched onto a settings file. CFG052: an mcpServers block in .claude/settings.json, which Claude Code does not load (measured on 2.1.316), reported at info."
     },
     {
       "surface": "a committed credential source sent to a committed endpoint",
@@ -409,7 +420,16 @@
         "CFG115",
         "CFG116"
       ],
-      "note": "New. CFG115: a committed config path is a symbolic link that resolves outside the repository, so the agent loads its settings, MCP config or instructions from a file on the machine that checked the repository out. CFG116: an @path import in a committed CLAUDE.md, AGENTS.md or .claude/rules file resolves outside the repository (~/..., an absolute path, ../ past the root); Claude Code loads it after a once-per-project approval dialog. A reviewer sees the link or the import line, but not the content of the file it reaches. AVE-2026-00001 is a remote fetch, AVE-2026-00047 a credential written into the component, AVE-2026-00053 a path traversal in an MCP tool's own path validation and AVE-2026-00089 a runtime_observed sandbox scope taken from a tool parameter; none covers a repository choosing which local file the agent reads."
+      "note": "CFG115 added at v1.17.1, CFG116 at v1.18.0. CFG115: a committed config path is a symbolic link that resolves outside the repository, so the agent loads its settings, MCP config or instructions from a file on the machine that checked the repository out. CFG116: an @path import in a committed CLAUDE.md, AGENTS.md or .claude/rules file resolves outside the repository (~/..., an absolute path, ../ past the root); Claude Code loads it after a once-per-project approval dialog. A reviewer sees the link or the import line, but not the content of the file it reaches. AVE-2026-00001 is a remote fetch, AVE-2026-00047 a credential written into the component, AVE-2026-00053 a path traversal in an MCP tool's own path validation and AVE-2026-00089 a runtime_observed sandbox scope taken from a tool parameter; none covers a repository choosing which local file the agent reads."
+    },
+    {
+      "surface": "a committed file that takes the place of a tool the agent runs",
+      "example_rules": [
+        "CFG121",
+        "CFG122",
+        "CFG123"
+      ],
+      "note": "New at v1.20.0. Coding agents run ordinary tools in the checkout on their own (git status after an edit, git submodule update, node, python, yarn), and a committed file can take the tool's place. CFG121: a nested bare repository whose config sets a key git runs as a command (core.fsmonitor, core.hooksPath, core.sshCommand, a filter), so the agent's next git call there runs it; also an unencrypted or lookalike submodule URL. CFG123: a Windows program named like a tool at the repository root (git.exe, node.cmd), which Windows runs from the current directory before PATH; a committed Python virtual environment; a .yarnrc.yml yarnPath that is not a Yarn release, which yarn runs as JavaScript on every command. CFG122: the same tool binaries and a .git entry inside an archive given as the scan target, which a clone never produces. AVE-2026-00055 is bound to an untrusted MCP launch config and AVE-2026-00075 to a .pyc cache; neither covers the agent's own tool call being redirected by a committed file."
     }
   ]
 }
