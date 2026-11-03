@@ -33,6 +33,13 @@
   "trifecta_profile": {
     "requires": ["external_comms"]
   },
+  "security_boundary": "single server's trust boundary → multiple, unrelated actual origins within it",
+  "missing_control": "no per-origin trust segmentation within one server's own declared manifest",
+  "vulnerability_rationale": {
+    "capability": "A single MCP server's manifest can declare tools/resources whose URLs span multiple distinct domains.",
+    "vulnerability": "No per-origin trust segmentation exists within one server's declared surface.",
+    "impact": "A minority-domain tool or resource can hijack context intended for the trusted majority origin, with no deception required."
+  },
   "mitigation": {
     "strategy": ["isolate_scope", "deny_by_default"],
     "enforcement_point": "static_scan",
@@ -56,7 +63,7 @@
   "researcher": "Akash Krishna (akashjavelin)",
   "researcher_url": "https://github.com/akashjavelin",
   "published": "2026-08-10T00:00:00Z",
-  "last_updated": "2026-08-10T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "Ramparts cross-origin scanner",
