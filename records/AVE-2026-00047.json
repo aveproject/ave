@@ -49,6 +49,13 @@
       "private_data"
     ]
   },
+  "security_boundary": "static file content → LLM context window (a boundary that does not exist the same way for a deterministic program reading the same file)",
+  "missing_control": "no separation between content an LLM incidentally reads and content a co-located prompt-injection payload can induce the LLM to act on; a hardcoded credential is exposed to both",
+  "vulnerability_rationale": {
+    "capability": "Skill/component files can contain literal string values, including credential-shaped ones.",
+    "vulnerability": "Conventional secrets-in-source (CWE-798), amplified by a property specific to agent components: the credential sits in the same context window an LLM reads, so a prompt injection payload elsewhere in that context can instruct the agent to read and exfiltrate it. A compiled program reading the same file has no such boundary.",
+    "impact": "The credential is readable by any process that loads the component, including the agent itself, any injected instructions that reach the context window, and any observer with read access to the file."
+  },
   "mitigation": {
     "strategy": [
       "validate_input",
@@ -79,7 +86,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-05-16T00:00:00Z",
-  "last_updated": "2026-05-16T00:00:00Z",
+  "last_updated": "2026-11-04T00:00:00Z",
   "references": [
     {
       "tag": "CWE-798",
