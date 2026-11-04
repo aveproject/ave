@@ -1,8 +1,8 @@
 # AIVSS v0.8 conformance statement for AVE
 
-**Status (2026-11-05): decisions D1 to D12, D15, D16 and D18 are approved by the maintainer (D12 stays conditional on TX4); D13, D14 and D17 are approved as changed in the same message; D19 and D20 were added at the maintainer's direction and are not yet approved in writing (section 13).** Step S01 of the plan to conform AVE scoring to OWASP AIVSS v0.8 (#399, issue #446). It is report only: no record, schema file, validator or `dist/` file changes. The one code addition is a standalone arithmetic module, `scripts/aivss_v08.py`, with its tests in `tests/test_aivss_v08.py`; nothing imports it. Nothing here becomes AVE's rule except what section 13 marks approved, and nothing is applied to a record before S02, which waits for this pull request to merge and the public comment period (D18) to open. The pilot that tests this statement is `docs/audits/aivss-v0.8-pilot.md`, with its data in `docs/audits/aivss-v0.8-pilot.json`.
+**Status (2026-11-05): decisions D1 to D12, D15, D16, D18 and D19 are approved by the maintainer (D12 stays conditional on TX4); D13, D14 and D17 are approved as changed; D20 is withdrawn and replaced by an amendment to D1, the table in section 6.1; D21 was added at the maintainer's direction and is not yet approved in writing (section 13).** Step S01 of the plan to conform AVE scoring to OWASP AIVSS v0.8 (#399, issue #446). It is report only: no record, schema file, validator or `dist/` file changes. The one code addition is a standalone arithmetic module, `scripts/aivss_v08.py`, with its tests in `tests/test_aivss_v08.py`; nothing imports it. Nothing here becomes AVE's rule except what section 13 marks approved, and nothing is applied to a record before S02, which waits for this pull request to merge and the public comment period (D18) to open. The pilot that tests this statement is `docs/audits/aivss-v0.8-pilot.md`, with its data in `docs/audits/aivss-v0.8-pilot.json`.
 
-**Date:** 2026-11-04, reread and extended 2026-11-05 (the arithmetic module and its tests, the approvals, D17 to D20). **Repository state:** `develop` at `0753b2d`.
+**Date:** 2026-11-04, reread and extended 2026-11-05 (the arithmetic module and its tests, the approvals, D17 to D21). **Repository state:** `develop` at `0753b2d`.
 
 ## 1. What this statement is for
 
@@ -113,7 +113,7 @@ All ten use ThM 0.97 and Mitigation_Factor 1.0 (3.6, introduction). What they sh
 
 ### 5.3 The rule
 
-*Decision D20 (not yet approved) would replace items 2 and 3 for the factors: the ten values would come from one of 5 to 8 reference deployment profiles and not be assigned per record. D1, as approved, keeps this section as written until D20 is decided.*
+*Amended 2026-11-05 (D1): the four deployment factors take the values in the table in section 6.1, one column per component type. Items 2 and 3 describe what that table is for.*
 
 1. **Reference deployment profile (RDP).** A class is assessed as deployed this way: one agent of the kind the record's `component_type` names (skill, mcp_server, agent), operated by one user, with the tools and permissions its ecosystem grants by default, with its ecosystem's default confirmation behaviour, and with no hardening beyond those defaults. A multi-agent deployment applies only to a class whose mechanism is multi-agent. Hardening is credited once, in Mitigation_Factor, and never inside the factors.
 2. **Two kinds of factor.** *Mechanism factors* (Language, Context, Persistence, Identity, Multi-Agent, Self-Mod) are taken from what the class does, as its description and fingerprint state it, whatever the deployment. *Deployment factors* (Autonomy, Tools, Non-Determinism, Opacity) are taken from the RDP. Table 6 in section 6 says what each level means for each factor.
@@ -155,6 +155,28 @@ Adapted from Table 2. "Mechanism" factors come from the class; "deployment" fact
 | 10 Self-Mod | Mechanism | None | Can change its own prompts or configuration only | Can alter tools, control flow, or generate and execute code |
 
 Three clarifications were made while piloting, and the pilot lists where they applied: Persistence (1.0 only for the agent's own state, consistent with OWASP's 3.6.2 against 3.6.8), Context (the rule PR #401 also used), and Self-Mod for a single injected instruction (0.5, as in 3.6.1; 1.0 only for repeated goal conditioning, as in 3.6.10).
+
+### 6.1 Deployment-factor values per component type (amendment to D1)
+
+D1 takes the four deployment factors (Autonomy, Tools, Non-Determinism, Opacity) from the reference deployment and not from the class. They are published here, one column per `component_type`, so that every record of a type starts from the same four numbers and a second assessor checks them against one table. They are "typical as shipped" (section 5.3). **The values are drafted here from the Table 2 rubric and the pilot, and take effect when the maintainer confirms them.**
+
+| Factor | skill | mcp_server | agent |
+|---|---|---|---|
+| Autonomy | 1.0 | 0.5 | 1.0 |
+| Tools | 1.0 | 0.5 | 1.0 |
+| Non-Determinism | 1.0 | 0.0 | 1.0 |
+| Opacity | 0.5 | 0.5 | 1.0 |
+
+Basis, from Table 2:
+
+- **Autonomy.** skill 1.0: the host agent executes the skill's instructions and tools without a per-step human co-sign once the skill is enabled. mcp_server 0.5: the client normally asks before a tool call or a server's first use, a confirmation users routinely accept. agent 1.0: it acts on its own plan (nine of OWASP's ten examples score 1.0).
+- **Tools.** skill 1.0: a skill reaches the host agent's tools (shell, filesystem, network). mcp_server 0.5: it exposes its own tool set, mixed read and write and scoped to the server. agent 1.0: broad, high-authority tools.
+- **Non-Determinism.** skill 1.0 and agent 1.0: an LLM interprets the instructions or plans with no hard guardrail. mcp_server 0.0: server code is deterministic, and the variance sits in the client that calls it.
+- **Opacity.** skill 0.5 and mcp_server 0.5: the artifact (instruction text, schema, code) is readable and reviewable, but why the agent acted is a black box. agent 1.0: the agent's decision logic is not externally auditable (all ten OWASP examples score Opacity 1.0).
+
+Not covered: 8 records have no column, because 6 have no `component_type`, one is `tool` and one is `other`. S03b assigns each a type (the field exists and is optional) or the maintainer adds a column; that is not decided here.
+
+Effect on the pilot: replacing the four factors by the table's values, with the pilot's six mechanism factors kept, changes no band of the ten records. Scores move by -0.1 to +0.3 and Factor_Sum by -1.5 to +1.5. Limits: the pilot has 9 skills, 1 `mcp_server` and no `agent`, so the `agent` column is tested by nothing and the `mcp_server` column by one record, and no value was checked against any product's default behaviour. A table loses some class difference: the pilot scored Non-Determinism 0 for AVE-2026-00063, a deterministic configuration flag, and the table gives a skill 1.0. That is the price of fixing the deployment factors per type.
 
 AVE's current factors map as follows (they were assigned against AVE's own definitions, not Table 2): `autonomy`, `non_determinism` and `multi_agent` keep their names; `tool_use` is Tools; `natural_language_input` is Language; `persistent_memory` is Persistence; `dynamic_identity` is Identity; `self_modification` is Self-Mod; `data_access` and `external_dependencies` have no counterpart; Context and Opacity are new. Carrying the eight over by value would carry definitions that differ from Table 2 (this is why the S01 plan says not to).
 
@@ -280,11 +302,14 @@ Each item has a recommendation. None is applied until approved in writing. Statu
 | Decision | Status |
 |---|---|
 | D1 to D11, D15, D16, D18 | Approved as recommended |
+| D1 (amendment) | The deployment-factor values per component type are published as a table (section 6.1), in place of D20. The table's values are drafted and take effect when the maintainer confirms them |
 | D12 | Approved as recommended; stays conditional on TX4 |
 | D13, D14, D17 | Approved as changed in the maintainer's message of 2026-11-05 (D2 is amended by D17 part 4) |
-| D19, D20 | Added at the maintainer's direction; not yet approved in writing. D20 amends D1 |
+| D19 | Approved (maintainer, 2026-11-05) |
+| D20 | Withdrawn as written; replaced by the D1 amendment |
+| D21 | Added at the maintainer's direction; not yet approved in writing |
 
-**D1. Reference profile rule.** Adopt section 5.3: the RDP, mechanism factors from the class, deployment factors typical as shipped, an anchor per class, a stated basis for every non-zero factor. Alternatives: worst case for deployment factors (sets four factors to 1.0 almost everywhere), or a profile per component type (more precise, more to maintain). *Recommend: the RDP as written.*
+**D1. Reference profile rule.** Adopt section 5.3: the RDP, mechanism factors from the class, deployment factors typical as shipped, an anchor per class, a stated basis for every non-zero factor. Alternatives: worst case for deployment factors (sets four factors to 1.0 almost everywhere), or a profile per component type (more precise, more to maintain). *Recommend: the RDP as written.* *Amended 2026-11-05 by the maintainer: the deployment-factor values per component type are published as a table (section 6.1) in place of a new decision. The table's values are drafted and take effect when the maintainer confirms them.*
 
 **D2. Subsequent-system impact, and reach counted once.** Score `SC/SI/SA` only for propagation the class itself states, and count tool reach once, in the Tools factor. The literal reading of 3.1.1 gives every steering class `SC:H/SI:H` and a base near 9.4. *Recommend: as written; it follows nine of OWASP's ten examples.* *Amended by D17 part 4 (2026-11-05) for `SC`, `SI` and `SA`: the test is impact outside the vulnerable system's security domain at the reasonable worst case, not only propagation the description states. The half that counts tool reach once, in Tools, is unchanged.*
 
@@ -343,11 +368,22 @@ The floors and ceilings use each record's stored Mitigation_Factor and ThM 0.97.
 Policy, approved 2026-11-05 with part 4 as changed by the maintainer:
 
 1. **CVSS-B only.** Base metrics only. Threat, Environmental and Supplemental metrics are not used; exploit maturity is ThM.
-2. **Reasonable worst case, per FIRST.** The CVSS v4.0 specification says the Base Score "assumes the reasonable worst-case impact across different deployed environments". For a class, the environment is its reference deployment profile (section 5.3, D20).
+2. **Reasonable worst case, per FIRST.** The CVSS v4.0 specification says the Base Score "assumes the reasonable worst-case impact across different deployed environments". For a class, the environment is its reference deployment profile (section 5.3).
 3. **Name the systems.** Each vector's notes name the vulnerable system and any subsequent system, in words (for example, "the agent runtime and its host" and "the sub-agent that obeys the output").
-4. **Subsequent systems.** `SC`, `SI` or `SA` is `H` when the class's mechanism, as described, causes impact outside the vulnerable system's security domain at the reasonable worst case for the reference deployment profile (FIRST). A cited demonstration is preferred evidence but not required. Propagation that needs further steps beyond the class is not counted. Tool reach is counted once, in Tools (D2). The profile is the same one that sets the factors.
+4. **Subsequent systems.** `SC`, `SI` or `SA` is `H` when the class's mechanism, as described, causes impact outside the vulnerable system's security domain at the reasonable worst case for the reference deployment profile (FIRST). A cited demonstration is preferred evidence but not required. Propagation that needs further steps beyond the class is not counted. Tool reach is counted once, in Tools (D2). The profile is the same one that sets the deployment factors (section 6.1).
 5. **No double counting.** An effect is counted once: tool reach in Tools, exploit maturity in ThM, hardening in Mitigation_Factor, and an impact in the vector or in a factor but not in both.
-6. **An advisory vector as a start where one exists.** The maintainer's estimate is about 6 records. This audit found 12 records that cite a CVE, GHSA or advisory (AVE-2026-00029, 00044, 00052, 00053, 00054, 00055, 00056, 00063, 00064, 00073, 00088 and 00089). Of these, 00044's is an incident write-up, 00052 and 00053 are proposed for rejection and 00054 is deferred. This audit did not check which publishers give a CVSS v4.0 vector, and only the references of 00088 and 00089 quote one. If an advisory has only CVSS 3.1, do not convert it (3.1.1). If it is for the nearest instance and not the class, say so and change only what the class differs in.
+6. **An advisory vector as a start where one exists.** Seeds for S03a, each confirmed on 2026-11-05 against its entry in the GitHub Advisory Database (all `reviewed`), which carries the publisher's CVSS v4.0 vector, and each recomputed with both implementations (all agree with the stated score):
+
+| Record | Advisory | CVE | Product | Vector | Score |
+|---|---|---|---|---|---|
+| AVE-2026-00064 | GHSA-4fgq-fpq9-mr3g | CVE-2025-59536 | Claude Code | `CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:P/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N` | 8.7 |
+| AVE-2026-00063 | GHSA-mmgp-wc2j-qcv7 | CVE-2026-33068 | Claude Code | `CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:P/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N` | 7.7 |
+| AVE-2026-00088 | GHSA-ff64-7w26-62rf | CVE-2026-25725 | Claude Code | `CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:P/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N` | 7.7 |
+| AVE-2026-00089 | GHSA-w5fx-fh39-j5rw | CVE-2025-59532 | Codex | `CVSS:4.0/AV:N/AC:L/AT:N/PR:L/UI:P/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N` | 8.6 |
+| AVE-2026-00089 | GHSA-w828-4qhx-vxx3 | CVE-2026-34452 | Anthropic SDK for Python | `CVSS:4.0/AV:L/AC:H/AT:N/PR:L/UI:N/VC:H/VI:L/VA:N/SC:N/SI:N/SA:N` | 5.8 |
+| AVE-2026-00073 | GHSA-jh7p-qr78-84p7 | CVE-2026-21852 | Claude Code | `CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:P/VC:L/VI:L/VA:L/SC:N/SI:N/SA:N` | 5.3 |
+
+   That is five records and six advisories; the maintainer's estimate was about 6 records. Each vector is for the nearest instance in a named product and not for the class, so S03a starts from it, changes only what the class differs in, and says so. The only seeded record in the pilot is AVE-2026-00063: its pilot vector (7.2) differs from the advisory's (7.7) in `AT` (`N` against `P`) and in `VC` and `VA` (`L` against `H`). The advisory GHSA-w828-4qhx-vxx3 also carries a CVSS 3.1 score (5.3), which is not used (3.1.1). None of the six publishers scores any subsequent-system impact, while 82 of the 88 vectors in the records have at least one High (part 4 decides which is right for a class). Records 00064, 00088 and 00089 cite further advisories that are not seeded here. The other records that cite a CVE, GHSA or advisory are 00029, 00044 (an incident write-up), 00052 and 00053 (proposed for rejection), 00054 (deferred), 00055 and 00056; no CVSS v4.0 vector was checked for them. If an advisory has only CVSS 3.1, do not convert it (3.1.1).
 7. **Two implementations.** The Red Hat `cvss` library and FIRST's calculator source, pinned, with a test that fails if they disagree on any record.
 8. **A second assessor on ten records.** Before S03a's vectors are applied, a second assessor, or a separate pass that has not seen the first vectors, derives vectors independently for the pilot's ten records, and the two sets are compared metric by metric: exact-vector agreement per metric, the difference in base score, and whether the CVSS-B band agrees. The pass thresholds are the maintainer's to set. The pilot's own sensitivity is the evidence: 6 of 10 records change band under one alternative choice, and the vector is the choice that moves the most (4 of the 9 records with a valid stored vector).
 
@@ -371,24 +407,20 @@ Points the maintainer should settle:
 - **Where it is announced.** The thread should be somewhere downstream tools and consumers of the dist files can subscribe to. Which channels is the maintainer's call, and nothing is announced outside the repository without approval.
 - **What "merging" means.** The wording is "before merging". Read here as the merge that publishes schema 2.0.0 (S05), not the merges into a `release/2.0` branch. If the maintainer reads it as the first merge of 2.0.0 files into `develop`, the period has to be complete before S02.
 
-**D19. Split S03 into S03a and S03b.** *Added at the maintainer's direction; not yet approved in writing.*
+**D19. Split S03 into S03a and S03b.** *Approved 2026-11-05.*
 
 - **S03a: the CVSS vectors**, for all 89 records, under D17. They are reusable: the OWASP 1.0 candidate keeps the official CVSS v4.0 vector and score intact (its README), so the vectors carry over to a later AIVSS method as well as serving v0.8 now.
-- **S03b: the AIVSS inputs** under v0.8 (the profile, the ThM tier, the mitigation level and, under D20, the factor values), only after a checkpoint on OWASP's status. The checkpoint re-reads `aivss.owasp.org`, its publications list and the candidate repository. It is made at S03 start (D13) and again before S03b begins, because S03a does not depend on the answer and the answer may change while it runs. OWASP's announcement of 2026-03-19 says v1.0 is "slated for publication before the end of 2026". If v1.0 has been published by then, S03b waits for a maintainer decision (D13 gives the cost); if not, S03b proceeds on v0.8.
+- **S03b: the AIVSS inputs** under v0.8 (the four deployment factors for the record's component type from the table in section 6.1, the six mechanism factors, the ThM tier and the mitigation level, tiered by D21), only after a checkpoint on OWASP's status. The checkpoint re-reads `aivss.owasp.org`, its publications list and the candidate repository. It is made at S03 start (D13) and again before S03b begins, because S03a does not depend on the answer and the answer may change while it runs. OWASP's announcement of 2026-03-19 says v1.0 is "slated for publication before the end of 2026". If v1.0 has been published by then, S03b waits for a maintainer decision (D13 gives the cost); if not, S03b proceeds on v0.8.
 - **Where S03a's output lives (proposed).** S00 warned that changing `cvss_base` before 2.0.0 would silently rescore the 1.x scores. So S03a delivers a reviewed table of vectors, with the systems named (D17), and applies it to the records only on the 2.0.0 branch with the rest of the migration, not on `develop`.
 - **Gate.** S02 does not start until this pull request has merged and the public comment period (D18) has opened.
 
-**D20. 5 to 8 reference deployment profiles instead of per-record factors.** *Added at the maintainer's direction; not yet approved in writing. It amends D1, which is approved.*
+**D20. Withdrawn 2026-11-05.** The maintainer withdrew it as written (5 to 8 reference deployment profiles instead of per-record factors) and amended D1 instead, with the table of deployment-factor values per component type in section 6.1. No new decision. One finding is kept because it supports D19 and D21: with the vectors in the records today, the factor sum moves the distribution little (50 CRITICAL, 35 HIGH, 2 MEDIUM, 1 LOW at a Factor_Sum of 3.0, and 54, 33, 1, 0 at 8.0; 88 valid vectors, ThM 0.97, stored mitigation), because 67 of the 88 bases already put the CVSS-B band at CRITICAL.
 
-- **What.** Define 5 to 8 reference deployment profiles. Each fixes the ten factor values and is the environment for the reasonable worst case in D17. Each record names its profile. The per-record judgements shrink to the CVSS vector (S03a), the ThM tier, the mitigation level and the profile, each with a stated basis: 89 x 10 factor judgements become about 8 x 10. A record that fits no profile is a signal to revise the profiles, not to override one.
-- **Tension with D1.** D1, as approved, takes the four deployment factors from the profile and the six mechanism factors from the class. The pilot needed that, because mechanism factors differ by class (Language is 0 for AVE-2026-00024 and 00063 and 1.0 for 00001; Persistence is 1.0 only for 00019). If D20 replaces D1's per-class mechanism factors, those differences have to live in the profiles (profiles defined by deployment and mechanism family together) or they are lost. The pilot's ten records had 6 distinct nearest Core Risks; OWASP has 10.
-- **Measured.** With the vectors in the records today, a profile's Factor_Sum moves the distribution little:
+**D21. Tier S03b by band sensitivity.** *Added at the maintainer's direction; not yet approved in writing.* After S03a, compute each record's band at zero and at maximum uplift:
 
-| Profile Factor_Sum | CRITICAL | HIGH | MEDIUM | LOW |
-|---|---|---|---|---|
-| 3.0 | 50 | 35 | 2 | 1 |
-| 5.0 | 50 | 37 | 1 | 0 |
-| 8.0 | 54 | 33 | 1 | 0 |
+- **Floor:** its S03a vector base times its Mitigation_Factor (stored, or assessed once S03b assesses it), at Factor_Sum 0.
+- **Ceiling:** Factor_Sum 10 with the top of its ThM range (Attacked 1.00, unless its sources rule that tier out), times the same Mitigation_Factor. At ThM 1.00 the ceiling is 10 times the Mitigation_Factor: 10.0 with no mitigation credit, 8.3 with Partial, 6.7 with Strong.
+- **Light tier:** the band cannot change (floor and ceiling are in the same band) and neither end is within 0.5 of a band boundary. The record gets the six mechanism factors with a one-line basis each, on top of the four values from the table in section 6.1.
+- **Full tier:** the band can change, or the floor is less than 0.5 above the lower boundary of its band, or the ceiling is less than 0.5 below the next boundary up. The record gets the full assessment as in the pilot (every factor with a basis, the uncertain calls scored) and second-assessor review.
 
-  (88 valid vectors, ThM 0.97, each record's stored mitigation.) That is because 67 of the 88 bases already put the CVSS-B band at CRITICAL. After S03a the bases will move (the pilot's re-derived bases averaged 0.7 lower), and the profiles' sums will then matter more, so the profile set should be designed after S03a and not before. That is a further reason for D19.
-- **Recommend:** adopt, with the profiles designed after S03a from the re-derived vectors; each profile states its ten values with a one-line basis for every non-zero factor, as the pilot does, and a named anchor; no per-record override. Open questions: how profiles are named and versioned, and who may add one. A change to a profile can change the severity of every record that names it, and each such change needs its own `revisions` entry under hard rule 11.
+Indicative sizes on today's vectors, which S03a will change: of the 88 valid vectors, 47 are light and 41 are full (14 band-sensitive and 27 band-insensitive but within 0.5 of a boundary), and AVE-2026-00066 has no valid vector yet. The numbers will move, because re-derived bases were 0.7 lower on average in the pilot and lower bases make more records band-sensitive. With no mitigation credit a record is band-insensitive only if its floor is CRITICAL (a base of 9.0 or more); with Partial credit (ceiling 8.3), only if its floor is HIGH (a base of about 8.4 or more). The six mechanism factors are still assessed for the light tier because AARS and the score are stored and exported. *Recommend: adopt.*
