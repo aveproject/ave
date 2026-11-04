@@ -30,6 +30,13 @@
   "trifecta_profile": {
     "requires": ["untrusted_content"]
   },
+  "security_boundary": "sub-agent result (unverified) → orchestrator's accepted ground truth (propagated downstream as though verified)",
+  "missing_control": "no quorum vote, redundancy comparison, or independent corroboration before committing to a single source's claim",
+  "vulnerability_rationale": {
+    "capability": "An orchestrator can dispatch sub-tasks to parallel sub-agents or accept results from a delegation chain.",
+    "vulnerability": "No quorum or redundancy check exists at the result-aggregation step of a multi-agent pipeline; a single compromised or adversarially-influenced source unilaterally determines the accepted output.",
+    "impact": "A single compromised or adversarially-influenced sub-agent unilaterally determines the pipeline's accepted output, which propagates downstream as though it had been verified."
+  },
   "mitigation": {
     "strategy": ["validate_input", "deny_by_default"],
     "enforcement_point": "agent_framework",
@@ -53,7 +60,7 @@
   "researcher": "Faisal Haque Bappy, Tahrim Hossain, Tarannum Shaila Zaman, Raiful Hasan, Kamrul Hasan, Tariqul Islam",
   "researcher_url": "https://arxiv.org/abs/2608.00718",
   "published": "2026-08-14T00:00:00Z",
-  "last_updated": "2026-08-14T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "arXiv:2608.00718",

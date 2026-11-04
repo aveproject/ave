@@ -30,6 +30,13 @@
   "trifecta_profile": {
     "requires": ["untrusted_content"]
   },
+  "security_boundary": "declared plan (N steps) → actual executed trace (fewer steps, unverified)",
+  "missing_control": "no plan-to-execution-trace verification gates a self-reported completion signal",
+  "vulnerability_rationale": {
+    "capability": "An orchestrator tracks a declared plan and invokes a final step based on agent-reported status.",
+    "vulnerability": "No verification compares the actual executed step count against the declared plan before accepting a self-reported completion signal.",
+    "impact": "Remaining planned steps, including verification steps, are silently skipped."
+  },
   "mitigation": {
     "strategy": ["validate_input", "require_human_approval"],
     "enforcement_point": "agent_framework",
@@ -53,7 +60,7 @@
   "researcher": "Faisal Haque Bappy, Tahrim Hossain, Tarannum Shaila Zaman, Raiful Hasan, Kamrul Hasan, Tariqul Islam",
   "researcher_url": "https://arxiv.org/abs/2608.00718",
   "published": "2026-08-14T00:00:00Z",
-  "last_updated": "2026-08-14T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "arXiv:2608.00718",
