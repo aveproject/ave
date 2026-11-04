@@ -31,6 +31,13 @@
   "trifecta_profile": {
     "requires": ["untrusted_content"]
   },
+  "security_boundary": "routing position (observable, spoofable) → agent identity (should be credential-bound, is not)",
+  "missing_control": "no attestation or session-token check confirming a post-retry response originates from the same agent instance as before the failure",
+  "vulnerability_rationale": {
+    "capability": "An agent's identity in a multi-agent pipeline is inferred from its routing position rather than a bound credential.",
+    "vulnerability": "No persistent, verifiable credential binds identity to a routing position; identity is positional, not cryptographic, so anything answering at the expected slot inherits its full existing trust.",
+    "impact": "An adversary-controlled process that answers at the expected routing position is silently accepted as the legitimate agent, and its adversarial payload propagates downstream with the full trust the legitimate agent would have received."
+  },
   "mitigation": {
     "strategy": ["verify_identity", "provenance_label"],
     "enforcement_point": "agent_framework",
@@ -54,7 +61,7 @@
   "researcher": "Faisal Haque Bappy, Tahrim Hossain, Tarannum Shaila Zaman, Raiful Hasan, Kamrul Hasan, Tariqul Islam",
   "researcher_url": "https://arxiv.org/abs/2608.00718",
   "published": "2026-08-14T00:00:00Z",
-  "last_updated": "2026-08-14T00:00:00Z",
+  "last_updated": "2026-10-31T00:00:00Z",
   "references": [
     {
       "tag": "arXiv:2608.00718",
