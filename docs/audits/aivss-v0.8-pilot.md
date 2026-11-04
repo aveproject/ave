@@ -203,6 +203,7 @@ Separately, the S01 task's `aivss_v08.py` was found to misround 36 of 19,089 gri
 - Coverage is partial (see the selection rule): one `mcp_server`, no `agent` component, 8 of 13 entry classes.
 - The ThM tiers rest on the references each record cites today. Four of the ten (00024, 00039, 00046, 00058) cite nothing that demonstrates the class; the tier would change if a primary source is found (the quality queue has the 22 records that have none).
 - Nothing was checked against NVD or against a vendor's own CVSS vector for the nearest instances (for example CVE-2026-33068).
+- The vectors were derived before decision D17 was approved (2026-11-05) and are not re-derived here. Its parts 2 and 4 (the reasonable worst case, and subsequent systems by security domain) may change some of them; S03a re-derives them. The pilot's value now is as evidence of how much the outcome moves, not as scores to apply.
 
 ## Reproduction
 
