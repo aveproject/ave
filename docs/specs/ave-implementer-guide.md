@@ -35,13 +35,15 @@ comes first.
 ## Pin and verify a release
 
 A catalog release is a [GitHub Release](https://github.com/aveproject/ave/releases)
-tagged `vX.Y.Z`. It never changes after it is published, and carries three files:
+tagged `vX.Y.Z`. It never changes after it is published, and carries three files,
+and from v1.3.0 a fourth:
 
 - `ave-records.json`: every published record, whatever its status, except drafts.
 - `ave-records.manifest.json`: what the release is (below).
-- `SHA256SUMS`: checksums of both files.
+- `ave-taxonomy.json` (from v1.3.0): the SARIF taxonomy of exactly those records.
+- `SHA256SUMS`: checksums of the data files.
 
-The first two also carry a build provenance attestation, signed by the workflow
+The data files also carry a build provenance attestation, signed by the workflow
 that built them. `v1.2.0` is the first release with these files.
 
 Download a release and verify it. This needs network access, `curl`, `git`,
@@ -77,6 +79,19 @@ What each check proves:
 - **`gh attestation verify`**: the file was built by `catalog-release.yml` in
   `aveproject/ave`. This is the check that does not trust where you downloaded
   from. A file that differs by a single byte has no attestation and fails.
+
+From v1.3.0 the release also carries `ave-taxonomy.json`, the AVE taxonomy for the SARIF you
+emit ([AVE-in-SARIF](ave-in-sarif.md)), already stamped with the release's version, date and
+download link. Download it with the other files; `sha256sum -c SHA256SUMS` then covers three
+files, `check_release_assets.py` regenerates the taxonomy from the release's records and refuses a
+release whose copy differs by a byte (pass `--repo owner/name` to verify a fork's release), and
+the attestation check takes it too:
+
+```bash
+curl -fsSL -o "ave-$TAG/ave-taxonomy.json" "https://github.com/aveproject/ave/releases/download/$TAG/ave-taxonomy.json"
+gh attestation verify "ave-$TAG/ave-taxonomy.json" --repo aveproject/ave \
+  --signer-workflow aveproject/ave/.github/workflows/catalog-release.yml
+```
 
 The manifest of `v1.2.0`:
 
