@@ -9,6 +9,13 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 ## [Unreleased]
 
 ### SARIF
+- **The taxonomy as a verified catalog-release asset** (#442). The `catalog-release` workflow builds
+  `ave-taxonomy.json` with `scripts/build_taxonomy.py` from the release's own `ave-records.json`, stamped with the
+  release's version, the manifest's date and its own download URL, lists it in `SHA256SUMS` and attests it with the
+  other data files. `scripts/check_release_assets.py` regenerates it from the release's records and demands a byte
+  match, naming the field or taxon that differs first, and takes a new `--repo owner/name` (default `aveproject/ave`)
+  so a fork's release is verified against the fork. Releases from v1.3.0 must carry the taxonomy; v1.0.0 to v1.2.0
+  verify as before. That makes the order mechanical: this has to merge before v1.3.0 is cut.
 - **The AVE taxonomy as a canonical file, form C and taxonomy checks** (#420). `dist/ave-taxonomy-latest.json` is the AVE
   taxonomy as a SARIF 2.1.0 `toolComponent` with a frozen `guid` (`5110b285-34d7-5334-94db-0308b24cfb49`, the UUIDv5 of
   `https://aveproject.org/taxonomy/AVE`) and one taxon per record, including records whose status is not `active`.

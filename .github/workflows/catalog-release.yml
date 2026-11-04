@@ -1,8 +1,9 @@
 name: catalog-release
 
 # Publishes a catalog release: a GitHub Release tagged v<version> carrying
-# ave-records.json, ave-records.manifest.json and SHA256SUMS, with a build
-# provenance attestation for the two data files. Run by hand from
+# ave-records.json, ave-records.manifest.json, ave-taxonomy.json (the SARIF
+# taxonomy of exactly those records) and SHA256SUMS, with a build provenance
+# attestation for the three data files. Run by hand from
 # Actions > catalog-release; it builds a commit already on main and never
 # pushes to the repository. Policy: docs/specs/scaling-and-governance.md,
 # section 6.
@@ -126,19 +127,26 @@ jobs:
             --manifest-out release/ave-records.manifest.json
           jq --arg release "v$VERSION" '{release: $release} + .' release/ave-records.manifest.json > manifest.tmp
           mv manifest.tmp release/ave-records.manifest.json
-          (cd release && sha256sum ave-records.json ave-records.manifest.json > SHA256SUMS)
+          python3 scripts/build_taxonomy.py \
+            --records release/ave-records.json \
+            --release "v$VERSION" \
+            --release-date "$(jq -r '.generated_at[:10]' release/ave-records.manifest.json)" \
+            --download-uri "https://github.com/$GITHUB_REPOSITORY/releases/download/v$VERSION/ave-taxonomy.json" \
+            --out release/ave-taxonomy.json
+          (cd release && sha256sum ave-records.json ave-records.manifest.json ave-taxonomy.json > SHA256SUMS)
           cat release/ave-records.manifest.json release/SHA256SUMS
 
       # the tag does not exist yet, so source_commit is checked against this run's commit
       - name: Verify the release files
-        run: python scripts/check_release_assets.py release --tag "v$VERSION" --commit "$(git rev-parse HEAD)"
+        run: python scripts/check_release_assets.py release --tag "v$VERSION" --commit "$(git rev-parse HEAD)" --repo "$GITHUB_REPOSITORY"
 
-      - name: Attest build provenance for both data files
+      - name: Attest build provenance for the three data files
         uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
         with:
           subject-path: |
             release/ave-records.json
             release/ave-records.manifest.json
+            release/ave-taxonomy.json
 
       - name: Create the release
         env:
@@ -157,4 +165,4 @@ jobs:
             --title "AVE v$VERSION" \
             --notes-file release-notes.md \
             "${draft_flag[@]}" \
-            release/ave-records.json release/ave-records.manifest.json release/SHA256SUMS
+            release/ave-records.json release/ave-records.manifest.json release/ave-taxonomy.json release/SHA256SUMS

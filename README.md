@@ -512,12 +512,16 @@ watching and the API.
 A catalog release is a [GitHub Release](https://github.com/aveproject/ave/releases)
 tagged `vX.Y.Z`: a fixed copy of the record set that does not change after it is
 published. Each one carries three files and a build provenance attestation for
-the first two:
+the first two; from v1.3.0 it carries a fourth, the SARIF taxonomy, which the
+attestation covers too:
 
 - `ave-records.json`: every published record.
 - `ave-records.manifest.json`: the release tag, `schema_version`, `record_count`,
   the SHA-256 of `ave-records.json` and `source_commit`, the commit it was built from.
-- `SHA256SUMS`: checksums of both files.
+- `ave-taxonomy.json` (from v1.3.0): the [SARIF taxonomy](docs/specs/ave-in-sarif.md)
+  of exactly these records, stamped with the release's own version, date and
+  download link, ready to embed in a tool's SARIF output.
+- `SHA256SUMS`: checksums of the data files (three of them from v1.3.0).
 
 Pin a tag, then check what you downloaded:
 
@@ -535,7 +539,24 @@ gh attestation verify ave-records.manifest.json --repo aveproject/ave
 ```
 
 `check_release_assets.py` confirms the checksums, that the manifest matches the
-records file, and that `source_commit` is the commit the tag points at.
+records file, and that `source_commit` is the commit the tag points at. From
+v1.3.0 it also regenerates `ave-taxonomy.json` from the records file and requires
+a byte for byte match, and refuses a release without it.
+
+From v1.3.0 on, add the taxonomy to the same steps. `--repo` is the repository the
+release is published under, so verify a fork's release with `--repo owner/name`:
+
+```bash
+TAG=v1.3.0
+curl -fsSLO "https://github.com/aveproject/ave/releases/download/$TAG/ave-taxonomy.json"
+sha256sum -c SHA256SUMS                # now covers three files
+python ave-src/scripts/check_release_assets.py . --tag "$TAG" --git-dir ave-src --repo aveproject/ave
+gh attestation verify ave-taxonomy.json --repo aveproject/ave
+```
+
+The taxonomy has stable URLs: `https://github.com/aveproject/ave/releases/download/vX.Y.Z/ave-taxonomy.json`
+for a release, and `https://github.com/aveproject/ave/releases/latest/download/ave-taxonomy.json`
+for the newest.
 
 Three kinds of record file, and which is which:
 
