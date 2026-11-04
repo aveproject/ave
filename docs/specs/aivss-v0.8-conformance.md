@@ -1,8 +1,8 @@
 # AIVSS v0.8 conformance statement for AVE
 
-**Status: draft for the maintainer's decision.** Step S01 of the plan to conform AVE scoring to OWASP AIVSS v0.8 (#399, issue #446). It is report only: no record, schema file, script or `dist/` file changes. Nothing here becomes AVE's rule until the maintainer approves the decision list in section 13. The pilot that tests this statement is `docs/audits/aivss-v0.8-pilot.md`, with its data in `docs/audits/aivss-v0.8-pilot.json`.
+**Status: draft for the maintainer's decision.** Step S01 of the plan to conform AVE scoring to OWASP AIVSS v0.8 (#399, issue #446). It is report only: no record, schema file, validator or `dist/` file changes. The one code addition is a standalone arithmetic module, `scripts/aivss_v08.py`, with its tests in `tests/test_aivss_v08.py`; nothing imports it. Nothing here becomes AVE's rule until the maintainer approves the decision list in section 13. The pilot that tests this statement is `docs/audits/aivss-v0.8-pilot.md`, with its data in `docs/audits/aivss-v0.8-pilot.json`.
 
-**Date:** 2026-11-04. **Repository state:** `develop` at `0753b2d`.
+**Date:** 2026-11-04, reread and extended 2026-11-05 (the arithmetic module and its tests, decision D17). **Repository state:** `develop` at `0753b2d`.
 
 ## 1. What this statement is for
 
@@ -37,7 +37,7 @@ Where a secondary source, a task file or an AVE document differs from the specif
 
 The score is computed from the unrounded AARS (3.4.0, step 3). AARS has at most five decimal places for every legal input (CVSS to one decimal, Factor_Sum in steps of 0.5, ThM to two decimals; checked by enumerating the whole input grid), so an exact stored AARS needs five places.
 
-**Arithmetic must be exact decimal.** A float product misrounds raw values that are exact ties. Over the full grid (CVSS 0.0 to 10.0 in steps of 0.1, Factor_Sum 0.0 to 10.0 in steps of 0.5, three ThM levels, three mitigation levels: 19,089 inputs) a float implementation rounds 36 results, every one exactly one tenth low, and 2 of those cross a band: for example CVSS 3.9, Factor_Sum 5.0, ThM 1.00, Mitigation_Factor 1.0 has raw score 6.95, which the specification's rule makes 7.0 HIGH and a float product makes 6.9 MEDIUM. The reference arithmetic below is exact; it is the form S02 should adopt.
+**Arithmetic must be exact decimal.** A float product misrounds raw values that are exact ties. Over the full grid (CVSS 0.0 to 10.0 in steps of 0.1, Factor_Sum 0.0 to 10.0 in steps of 0.5, three ThM levels, three mitigation levels: 19,089 inputs) a float implementation rounds 36 results, every one exactly one tenth low, and 2 of those cross a band: for example CVSS 3.9, Factor_Sum 5.0, ThM 1.00, Mitigation_Factor 1.0 has raw score 6.95, which the specification's rule makes 7.0 HIGH and a float product makes 6.9 MEDIUM. `scripts/aivss_v08.py` is the exact implementation. Its tests (`tests/test_aivss_v08.py`) cover OWASP's ten examples, the tie inputs above, the constants, the refusals and the five-decimal bound on AARS, and all 22 mutations of the module that were tried are caught. The excerpt below is its core.
 
 ```python
 from decimal import Decimal as D, ROUND_HALF_UP
@@ -61,7 +61,7 @@ def band(score):                               # 3.5.2; below 0.1 the specificat
 
 ## 4. How `cvss_base` is determined
 
-v0.8 takes a CVSS v4.0 base score as input (3.1.1). The audit in `docs/audits/cvss-input-reconciliation.md` (S00, #403) found that the stored `cvss_base` equals the score of the record's own vector for 3 of 88 valid vectors, and that one vector (AVE-2026-00066) is not valid CVSS v4.0. Because v0.8 adds the uplift to the base, the base is the floor of the score (section 5.4). This statement therefore makes the vector the input and the number a derived value.
+v0.8 takes a CVSS v4.0 base score as input (3.1.1). The audit in `docs/audits/cvss-input-reconciliation.md` (S00, #403) found that the stored `cvss_base` equals the score of the record's own vector for 3 of 88 valid vectors, and that one vector (AVE-2026-00066) is not valid CVSS v4.0. Because v0.8 adds the uplift to the base, the base is the floor of the score (section 5.4). This statement therefore makes the vector the input and the number a derived value. Decision D17 sets the policy for choosing among sources for a vector and for the subsequent-system metrics.
 
 1. **The vector is authoritative.** `cvss_base_vector` is the assessment; `aivss.cvss_base` is the score computed from it. A validator rule recomputes it and fails on a mismatch.
 2. **Base metrics only.** The vector carries the eleven base metrics. Threat (`E`) and environmental metrics are not used: exploit maturity is already ThM, and counting it in both would count it twice. The specification's own examples are base vectors (3.6).
@@ -131,7 +131,7 @@ Because v0.8 adds the uplift to the CVSS base, the base is a floor. With OWASP's
 | 8.0 | 8.2 | 8.7 | 9.1 | 9.6 | 0.0 | 5.4 |
 | 9.5 | 9.4 | 9.5 | 9.7 | 9.8 | 0.0 | 0.0 |
 
-(ThM 0.97, Mitigation_Factor 1.0.) At OWASP's lowest sum, a class is HIGH from a base of 1.8. The only things that keep a class with a high base out of HIGH or CRITICAL are a low Factor_Sum and a Mitigation_Factor below 1. For the corpus this means the CVSS vectors, not the factors, decide most of the severity distribution (decision D14).
+(ThM 0.97, Mitigation_Factor 1.0.) At OWASP's lowest sum, a class is HIGH from a base of 1.8. The only things that keep a class with a high base out of HIGH or CRITICAL are a low Factor_Sum and a Mitigation_Factor below 1. For the corpus this means the CVSS vectors, not the factors, decide most of the severity distribution (decisions D14 and D17).
 
 ## 6. The ten factors for a catalogue entry
 
@@ -164,7 +164,7 @@ AVE's current factors map as follows (they were assigned against AVE's own defin
 
 The specification's default is 0.97 and argues that for agentic exploits the distance from proof of concept to attack is negligible (3.3.2). AVE therefore uses PoC when the evidence tier cannot be told apart, and records the tier and its source in the notes.
 
-**What happens to today's `thm` (1, 0.9, 0.75).** The plan in #399 maps them by definition (0.75 to Unreported, 0.9 to PoC, 1.0 to Attacked). That is wrong for 1.0, because AVE's own documents define it two ways. `CONTRIBUTING.md` says 1.0 is "exploited in the wild or weaponised". `references/aivss-scoring.md` says 1 is "real and demonstrated (a disclosed CVE, published research, a working exploit description)" and that "every record in this corpus so far has scored 1". In the pilot, mapping by value agrees with the tier the cited evidence supports for 4 of 10 records. Of the five pilot records stored at 1.0, one cites an in-the-wild source (AVE-2026-00044); two are PoC; two cite nothing that demonstrates the class (and AVE-2026-00046's writeup says its 1.0 "reflects ... an in-the-wild threat maturity" while the record cites no incident). Two of the four stored at 0.75 are demonstrated in cited research and are PoC. This is decision D3.
+**What happens to today's `thm` (1, 0.9, 0.75).** The plan in #399 maps them by definition (0.75 to Unreported, 0.9 to PoC, 1.0 to Attacked). That is wrong for 1.0, because AVE's own documents define it two ways. `CONTRIBUTING.md` says 1.0 is "exploited in the wild or weaponised". `references/aivss-scoring.md` says 1 is "real and demonstrated (a disclosed CVE, published research, a working exploit description)" and that "every record in this corpus so far has scored 1". In the pilot, mapping by value agrees with the tier the cited evidence supports for **4 of the 10 pilot records** (00039, 00044, 00058, 00066). The ten are not a sample of the 89, so no corpus rate follows: 49 of the 89 records are stored at 1.0, and only the five of those in the pilot were checked against their sources. Of those five, one cites an in-the-wild source (AVE-2026-00044); two are PoC; two cite nothing that demonstrates the class (and AVE-2026-00046's writeup says its 1.0 "reflects ... an in-the-wild threat maturity" while the record cites no incident). Two of the four stored at 0.75 are demonstrated in cited research and are PoC. This is decision D3.
 
 ## 8. The mitigation factor
 
@@ -277,7 +277,7 @@ Each item has a recommendation. None is applied until approved in writing.
 
 **D2. Subsequent-system impact, and reach counted once.** Score `SC/SI/SA` only for propagation the class itself states, and count tool reach once, in the Tools factor. The literal reading of 3.1.1 gives every steering class `SC:H/SI:H` and a base near 9.4. *Recommend: as written; it follows nine of OWASP's ten examples.*
 
-**D3. ThM mapping.** Options: (a) assess each record's tier from its cited sources (recommended); (b) map by value as #399 plans (agrees with the evidence for 4 of 10 pilot records, and calls two uncited records "Attacked"); (c) PoC for every record except cited in-the-wild exploitation. Option (a) needs primary sources, and 22 records still lack one (the quality queue). *Recommend (a), with PoC where the evidence tier cannot be told apart, and a rule that an in-the-wild claim must carry its citation.*
+**D3. ThM mapping.** Options: (a) assess each record's tier from its cited sources (recommended); (b) map by value as #399 plans (agrees with the evidence for 4 of the 10 pilot records, which are not a sample of the 89; of the five pilot records stored at 1.0 it calls all five Attacked, where the evidence supports that for one); (c) PoC for every record except cited in-the-wild exploitation. Option (a) needs primary sources, and 22 records still lack one (the quality queue). *Recommend (a), with PoC where the evidence tier cannot be told apart, and a rule that an in-the-wild claim must carry its citation.*
 
 **D4. Mitigation mapping.** Carry 1.0 to None and 0.83 to Partial by value, and apply section 8's definition to new assessments. *Recommend: yes.* `Strong` only with a cited validation.
 
@@ -326,3 +326,31 @@ The floors and ceilings use each record's stored Mitigation_Factor and ThM 0.97.
 **D15. A second assessor near the band edges.** In the pilot, 6 of 10 records change band under at least one reasonable alternative choice (vector, ThM rule, mitigation, or a half-point on every factor). *Recommend:* a second independent assessment for any record whose score is within 0.5 of a band boundary, using the annotator-agreement kit once it exists.
 
 **D16. Update #399.** Its statements that `cvss_base` is kept as stored and that there is no catalog v1.3.0 no longer match the plan. *Recommend:* edit #399 or close it in favour of a corrected tracking issue.
+
+**D17. CVSS vector policy.** The base is the floor of the v0.8 score (section 5.4), and the vectors in the records today put it high. Of the 88 valid vectors, 67 compute to a base of 9.0 or more and 87 to 7.0 or more (only AVE-2026-00058, at 2.3, is below 7.0; nine are exactly 10.0), and 63 set at least one subsequent-system metric to High (19 set all three). A class with a base of 9.0 and no mitigation credit is CRITICAL whatever its factors say, so the vectors, more than the factors, will decide the distribution. Proposed policy for the S03 re-derivation:
+
+1. **Prefer the primary-source advisory vector.** Where a record cites an advisory, CVE or GHSA whose publisher gave a CVSS v4.0 vector for this mechanism, start from that vector and cite it. If the publisher gave only CVSS 3.1, do not convert it (3.1.1): derive the vector by section 4 and note the advisory's score as context. If the advisory is for the nearest instance and not the class, say so and change only what the class differs in.
+2. **Score the vulnerable system's own impact.** `VC`, `VI` and `VA` are the effect on the agent runtime and its host that the class causes by itself. Downstream effects are not folded in.
+3. **Subsequent-system High only when demonstrated.** `SC`, `SI` or `SA` is `H` only when a cited source demonstrates the propagation (an incident, an advisory, a paper that shows it). Propagation the description merely states is `L` at most, and absent propagation is `N`. This tightens D2, which scores stated propagation. Applied to the pilot it would change AVE-2026-00046, whose `SC/SI:H` rest on the description (with `L` the base is 8.6 and the score 9.2, still CRITICAL), and leave AVE-2026-00020 as it is (Cohen et al. 2024 demonstrates propagation between agents).
+4. **A second assessor on ten records.** Before S03 starts, a second assessor, or a separate pass that has not seen the first vectors, derives vectors independently for the pilot's ten records, and the two sets are compared metric by metric. The comparison reports exact-vector agreement per metric, the difference in base score, and whether the band agrees. The pass thresholds are the maintainer's to set. Without a pass, the section 4 rules are not yet reproducible enough to apply to 89 records.
+
+*Recommend: adopt 1 to 4.* The pilot's own sensitivity is the evidence for 4: 6 of 10 records change band under one alternative choice, and the vector is the choice that moves the most (4 of the 9 records with a valid stored vector).
+
+**D18. When to open the 30-day public comment period.** `CONTRIBUTING.md` ("Schema changes") says a major schema version "needs a migration path for existing records and a 30-day comment period before merging". It names no start event, no venue and no content. Schema 2.0.0 is a major version: it changes the meaning of `aars` and `thm`, removes two `aarf` keys and renames five. The release step S05 gates on the period having closed.
+
+*Recommend:* open it as soon as the S01 pull request merges, so that what the public reads is the approved statement and not a draft. Open it in a public issue or discussion on `aveproject/ave`, not in a comment on the pull request, and put in the opening post:
+
+1. links to the conformance statement, the pilot report with its data file, and the migration path;
+2. the migration path as it stands then: what each existing field becomes (the `aarf` keys, `aars`, `thm`, `mitigation_factor`, the score and severity, `schema_version`), what happens to the 1.x numbers (D9, D10), and what consumers must change. Section 10 of the statement is the field mapping; the per-record migration itself comes later, in S03;
+3. the day it opens and the day it closes;
+4. what is open to change (the choices in D1 to D17) and what is not (the equations, constants and bands, which are OWASP's);
+5. how to comment, and that each comment gets a written answer on the thread before S05.
+
+Points the maintainer should settle:
+
+- **The clock starts when the post is made**, not when this list is approved, and nothing is posted before the S01 pull request has merged. The post is a public act, so it is drafted for approval first.
+- **Early or late.** Opening before S03 lets comments change the method before 89 records are re-assessed, which is cheap, but the public cannot yet see re-scored values. Opening after S03 shows the real numbers, but a change to the method then costs a re-score. Recommend early.
+- **What restarts the clock.** Proposed: a change to the equations, the field mapping or the migration path restarts the 30 days; an editorial change does not.
+- **Where it is announced.** The thread should be somewhere downstream tools and consumers of the dist files can subscribe to. Which channels is the maintainer's call, and nothing is announced outside the repository without approval.
+- **What "merging" means.** The wording is "before merging". Read here as the merge that publishes schema 2.0.0 (S05), not the merges into a `release/2.0` branch. If the maintainer reads it as the first merge of 2.0.0 files into `develop`, the period has to be complete before S02.
+
