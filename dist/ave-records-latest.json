@@ -1036,6 +1036,13 @@
         "private_data"
       ]
     },
+    "security_boundary": "static file content → LLM context window (a boundary that does not exist the same way for a deterministic program reading the same file)",
+    "missing_control": "no separation between content an LLM incidentally reads and content a co-located prompt-injection payload can induce the LLM to act on; a hardcoded credential is exposed to both",
+    "vulnerability_rationale": {
+      "capability": "Skill/component files can contain literal string values, including credential-shaped ones.",
+      "vulnerability": "Conventional secrets-in-source (CWE-798), amplified by a property specific to agent components: the credential sits in the same context window an LLM reads, so a prompt injection payload elsewhere in that context can instruct the agent to read and exfiltrate it. A compiled program reading the same file has no such boundary.",
+      "impact": "The credential is readable by any process that loads the component, including the agent itself, any injected instructions that reach the context window, and any observer with read access to the file."
+    },
     "mitigation": {
       "strategy": [
         "validate_input",
@@ -1066,7 +1073,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-05-16T00:00:00Z",
-    "last_updated": "2026-05-16T00:00:00Z",
+    "last_updated": "2026-11-04T00:00:00Z",
     "references": [
       {
         "tag": "CWE-798",
@@ -3438,6 +3445,13 @@
         "external_comms"
       ]
     },
+    "security_boundary": "trusted instruction content → shell execution, with no boundary between the two once a component's text is treated as instruction",
+    "missing_control": "no distinction between natural-language content that merely describes a step and natural-language content that constitutes an executable directive",
+    "vulnerability_rationale": {
+      "capability": "Agent with shell/code-execution tool access follows embedded commands.",
+      "vulnerability": "Conventional command injection (CWE-78 territory) delivered through natural language rather than code. The mechanism is conventional; what makes it an AVE class is the channel: the input is natural-language content that an agent reads and treats as an instruction, and tools built to find command injection in code, such as SAST scanners, do not read that channel, so the flaw stays invisible to them until the agent has acted on it.",
+      "impact": "Arbitrary remote code executes on the host with the agent's privilege level."
+    },
     "mitigation": {
       "strategy": [
         "deny_by_default",
@@ -3460,7 +3474,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-11-04T00:00:00Z",
     "references": [
       {
         "tag": "CWE-78",
@@ -3588,6 +3602,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "instruction content → shell execution, with no boundary between the two",
+    "missing_control": "no distinction between natural-language content that merely describes a step and natural-language content that constitutes an executable directive",
+    "vulnerability_rationale": {
+      "capability": "Agent with filesystem/shell access follows embedded destructive commands.",
+      "vulnerability": "Conventional destructive-command pattern (`rm -rf /` class), delivered through natural language by the same channel as AVE-2026-00004: instructions an agent follows, which code-oriented scanners do not read. It stays a separate class from 00004 because the impact differs: irrecoverable data loss with no code-execution requirement, a severity and detection distinction and not only a label.",
+      "impact": "Files on the host are permanently destroyed, and the loss is irrecoverable without backup."
+    },
     "mitigation": {
       "strategy": [
         "require_human_approval",
@@ -3610,7 +3631,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-08-26T00:00:00Z",
+    "last_updated": "2026-11-04T00:00:00Z",
     "references": [
       {
         "tag": "CWE-78",
@@ -7531,6 +7552,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "instruction content → unsafe deserialization/eval call, with no boundary between them",
+    "missing_control": "no detection of unsafe deserialization or eval when it is instructed in natural language and not written as code",
+    "vulnerability_rationale": {
+      "capability": "Agent follows instructions to deserialize or evaluate externally supplied data.",
+      "vulnerability": "Conventional remote code execution through unsafe deserialization or eval (CWE-502 and CWE-94), delivered through natural language. The mechanism is conventional; the distinction is the channel, as for AVE-2026-00004 and 00005: the unsafe operation is instructed in text that an agent follows, and code-oriented scanners do not read that text.",
+      "impact": "A reliable code execution path through the agent's execution environment."
+    },
     "mitigation": {
       "strategy": [
         "validate_input",
@@ -7575,7 +7603,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-10-31T00:00:00Z",
+    "last_updated": "2026-11-04T00:00:00Z",
     "references": [
       {
         "tag": "CWE-502",
@@ -8596,6 +8624,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "agent output (trusted-intermediary status) → downstream interpreter (SQL/HTML/shell)",
+    "missing_control": "no escaping or sanitization gate between agent-generated output and downstream interpretation",
+    "vulnerability_rationale": {
+      "capability": "Agent output is passed to downstream interpreters as a trusted intermediary.",
+      "vulnerability": "No escaping/sanitization gate exists between agent-generated output and downstream interpretation. The mechanism is classic injection (CWE-79 and CWE-89 territory); what is agentic is the trust elevation backend systems grant an agent compared with raw user input, so the agent's trusted role draws less scrutiny than raw user input would.",
+      "impact": "Classic injection (SQLi/XSS/command injection) via a trust-elevated conduit."
+    },
     "mitigation": {
       "strategy": [
         "sanitize_output",
@@ -8640,7 +8675,7 @@
     "researcher": "Saray Chak",
     "researcher_url": "https://bawbel.io",
     "published": "2026-04-19T09:00:00Z",
-    "last_updated": "2026-10-31T00:00:00Z",
+    "last_updated": "2026-11-04T00:00:00Z",
     "references": [
       {
         "tag": "OWASP LLM Insecure Output",
@@ -11179,6 +11214,13 @@
         "external_comms"
       ]
     },
+    "security_boundary": "declared or default provider endpoint → actual configured endpoint",
+    "missing_control": "no verification that a provider or telemetry endpoint value matches the component's declared or default provider before traffic is sent",
+    "vulnerability_rationale": {
+      "capability": "Components can declare telemetry, provider and API endpoint values in configuration.",
+      "vulnerability": "Conventional config-based traffic redirection, but tied to infrastructure that exists only because the component is agentic: LLM provider base URLs, MCP server URLs and A2A agent-card URLs. No verification checks the endpoint against the declared or default provider, and a committed value redirects the traffic with no content injected into the model's context. The record cites a real case, CVE-2026-21852, where a redirected ANTHROPIC_BASE_URL leaked a user's API key.",
+      "impact": "Telemetry, model or provider traffic is sent to a host the component's author did not intend, so credentials such as the user's API key can leak, before any trust confirmation is shown."
+    },
     "mitigation": {
       "strategy": [
         "deny_by_default",
@@ -11206,7 +11248,7 @@
     "researcher": "Nicolai (predictor2718)",
     "researcher_url": "https://github.com/predictor2718",
     "published": "2026-08-06T00:00:00Z",
-    "last_updated": "2026-08-08T00:00:00Z",
+    "last_updated": "2026-11-04T00:00:00Z",
     "references": [
       {
         "tag": "cfgaudit crosswalk gap detail",
@@ -11314,6 +11356,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "reviewed artifact (the .py source a human or scanner reads) → executed artifact (the .pyc the interpreter actually loads)",
+    "missing_control": "no bytecode-versus-source comparison step in the review or scanning pipeline",
+    "vulnerability_rationale": {
+      "capability": "CPython prefers a valid cached .pyc over recompiling source when one is present.",
+      "vulnerability": "The bytecode-cache preference is a general interpreter property and not agent-specific in mechanism. What makes it an AVE class is the target: research cited in the record (CSA AI Safety Initiative and Trail of Bits) frames it as a technique for evading agent-skill scanners specifically, which document their own inability to analyze binary or encrypted code, so a skill's .pyc can carry dangerous primitives that a source-only scan never sees.",
+      "impact": "The interpreter executes dangerous primitives (process execution, network calls, credential-path access) that appear nowhere in the .py source a reviewer or source-only scanner reads."
+    },
     "mitigation": {
       "strategy": [
         "validate_input",
@@ -11340,7 +11389,7 @@
     "researcher": "CSA / Trail of Bits",
     "researcher_url": "https://labs.cloudsecurityalliance.org/research/csa-research-note-ai-agent-skill-scanner-bypass-20260610-csa/",
     "published": "2026-08-07T00:00:00Z",
-    "last_updated": "2026-08-07T00:00:00Z",
+    "last_updated": "2026-11-04T00:00:00Z",
     "references": [
       {
         "tag": "repo-forensics bytecode scanner",
