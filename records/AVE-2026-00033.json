@@ -44,6 +44,13 @@
       "untrusted_content"
     ]
   },
+  "security_boundary": "instruction content → unsafe deserialization/eval call, with no boundary between them",
+  "missing_control": "no detection of unsafe deserialization or eval when it is instructed in natural language and not written as code",
+  "vulnerability_rationale": {
+    "capability": "Agent follows instructions to deserialize or evaluate externally supplied data.",
+    "vulnerability": "Conventional remote code execution through unsafe deserialization or eval (CWE-502 and CWE-94), delivered through natural language. The mechanism is conventional; the distinction is the channel, as for AVE-2026-00004 and 00005: the unsafe operation is instructed in text that an agent follows, and code-oriented scanners do not read that text.",
+    "impact": "A reliable code execution path through the agent's execution environment."
+  },
   "mitigation": {
     "strategy": [
       "validate_input",
@@ -88,7 +95,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-10-31T00:00:00Z",
+  "last_updated": "2026-11-04T00:00:00Z",
   "references": [
     {
       "tag": "CWE-502",
