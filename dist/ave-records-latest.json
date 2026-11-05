@@ -11613,6 +11613,13 @@
         "external_comms"
       ]
     },
+    "security_boundary": "single server's trust boundary → multiple, unrelated actual origins within it",
+    "missing_control": "no per-origin trust segmentation within one server's own declared manifest",
+    "vulnerability_rationale": {
+      "capability": "A single MCP server's manifest can declare tools/resources whose URLs span multiple distinct domains.",
+      "vulnerability": "No per-origin trust segmentation exists within one server's declared surface.",
+      "impact": "A minority-domain tool or resource can hijack context intended for the trusted majority origin, with no deception required."
+    },
     "mitigation": {
       "strategy": [
         "isolate_scope",
@@ -11639,7 +11646,7 @@
     "researcher": "Akash Krishna (akashjavelin)",
     "researcher_url": "https://github.com/akashjavelin",
     "published": "2026-08-10T00:00:00Z",
-    "last_updated": "2026-08-10T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "Ramparts cross-origin scanner",
@@ -11756,6 +11763,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "sub-agent result (unverified) → orchestrator's accepted ground truth (propagated downstream as though verified)",
+    "missing_control": "no quorum vote, redundancy comparison, or independent corroboration before committing to a single source's claim",
+    "vulnerability_rationale": {
+      "capability": "An orchestrator can dispatch sub-tasks to parallel sub-agents or accept results from a delegation chain.",
+      "vulnerability": "No quorum or redundancy check exists at the result-aggregation step of a multi-agent pipeline; a single compromised or adversarially-influenced source unilaterally determines the accepted output.",
+      "impact": "A single compromised or adversarially-influenced sub-agent unilaterally determines the pipeline's accepted output, which propagates downstream as though it had been verified."
+    },
     "mitigation": {
       "strategy": [
         "validate_input",
@@ -11782,7 +11796,7 @@
     "researcher": "Faisal Haque Bappy, Tahrim Hossain, Tarannum Shaila Zaman, Raiful Hasan, Kamrul Hasan, Tariqul Islam",
     "researcher_url": "https://arxiv.org/abs/2608.00718",
     "published": "2026-08-14T00:00:00Z",
-    "last_updated": "2026-08-14T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "arXiv:2608.00718",
@@ -11891,6 +11905,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "declared plan (N steps) → actual executed trace (fewer steps, unverified)",
+    "missing_control": "no plan-to-execution-trace verification gates a self-reported completion signal",
+    "vulnerability_rationale": {
+      "capability": "An orchestrator tracks a declared plan and invokes a final step based on agent-reported status.",
+      "vulnerability": "No verification compares the actual executed step count against the declared plan before accepting a self-reported completion signal.",
+      "impact": "Remaining planned steps, including verification steps, are silently skipped."
+    },
     "mitigation": {
       "strategy": [
         "validate_input",
@@ -11917,7 +11938,7 @@
     "researcher": "Faisal Haque Bappy, Tahrim Hossain, Tarannum Shaila Zaman, Raiful Hasan, Kamrul Hasan, Tariqul Islam",
     "researcher_url": "https://arxiv.org/abs/2608.00718",
     "published": "2026-08-14T00:00:00Z",
-    "last_updated": "2026-08-14T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "arXiv:2608.00718",
@@ -12027,6 +12048,13 @@
         "untrusted_content"
       ]
     },
+    "security_boundary": "routing position (observable, spoofable) → agent identity (should be credential-bound, is not)",
+    "missing_control": "no attestation or session-token check confirming a post-retry response originates from the same agent instance as before the failure",
+    "vulnerability_rationale": {
+      "capability": "An agent's identity in a multi-agent pipeline is inferred from its routing position rather than a bound credential.",
+      "vulnerability": "No persistent, verifiable credential binds identity to a routing position; identity is positional, not cryptographic, so anything answering at the expected slot inherits its full existing trust.",
+      "impact": "An adversary-controlled process that answers at the expected routing position is silently accepted as the legitimate agent, and its adversarial payload propagates downstream with the full trust the legitimate agent would have received."
+    },
     "mitigation": {
       "strategy": [
         "verify_identity",
@@ -12053,7 +12081,7 @@
     "researcher": "Faisal Haque Bappy, Tahrim Hossain, Tarannum Shaila Zaman, Raiful Hasan, Kamrul Hasan, Tariqul Islam",
     "researcher_url": "https://arxiv.org/abs/2608.00718",
     "published": "2026-08-14T00:00:00Z",
-    "last_updated": "2026-08-14T00:00:00Z",
+    "last_updated": "2026-10-31T00:00:00Z",
     "references": [
       {
         "tag": "arXiv:2608.00718",

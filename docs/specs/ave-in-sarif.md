@@ -179,7 +179,7 @@ Add one taxon per AVE record that appears in the scan results. Scanners may incl
 python3 scripts/build_taxonomy.py --only AVE-2026-00001,AVE-2026-00075 --out -
 ```
 
-The release-stamped form, for a scanner pinned to a catalog release, takes that release's records file and its facts: `python3 scripts/build_taxonomy.py --records ave-records.json --release v1.2.0 --release-date 2026-10-29 --download-uri <the release's ave-records.json> --out -`. The file is not yet a catalog-release asset. A taxon's `id` and `name` are the record's `ave_id` and `title` exactly, and the checker compares them with the catalog (`taxon_unknown`, `taxon_name_differs`).
+The release-stamped form, for a scanner pinned to a catalog release, takes that release's records file and its facts: `python3 scripts/build_taxonomy.py --records ave-records.json --release v1.2.0 --release-date 2026-10-29 --download-uri <the release's ave-records.json> --out -`. From v1.3.0 every catalog release carries the same file as an asset, `ave-taxonomy.json`: the pinned copy a tool should embed, already stamped with the release's `version`, `semanticVersion`, `releaseDateUtc` and `downloadUri` (`https://github.com/aveproject/ave/releases/download/vX.Y.Z/ave-taxonomy.json`, or `https://github.com/aveproject/ave/releases/latest/download/ave-taxonomy.json` for the newest), listed in the release's `SHA256SUMS`, attested, and checked byte for byte against the release's own records by `scripts/check_release_assets.py`. `dist/ave-taxonomy-latest.json` is the moving copy, and `latest` has no `version`. A taxon's `id` and `name` are the record's `ave_id` and `title` exactly, and the checker compares them with the catalog (`taxon_unknown`, `taxon_name_differs`).
 
 ---
 

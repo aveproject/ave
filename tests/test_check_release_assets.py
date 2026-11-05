@@ -260,17 +260,17 @@ def test_source_commit_from_another_commit_is_refused_against_the_tag(tmp_path, 
 
 def test_a_tag_missing_from_the_repository_is_refused(tmp_path, tagged_repo):
     repo, tagged, _, _ = tagged_repo
-    release = _release(tmp_path / "release", commit=tagged, release="v9.9.9")
+    release = _release(tmp_path / "release", commit=tagged, release="v1.2.9")
 
-    assert cra.release_errors(release, "v9.9.9", git_dir=repo) == [f"tag v9.9.9 was not found in {repo}"]
+    assert cra.release_errors(release, "v1.2.9", git_dir=repo) == [f"tag v1.2.9 was not found in {repo}"]
 
 
 def test_a_branch_named_like_the_tag_does_not_stand_in_for_it(tmp_path, tagged_repo):
     repo, tagged, later, _ = tagged_repo
-    _git(repo, "branch", "v9.9.9")  # a branch, at the later commit, with a tag's name
-    release = _release(tmp_path / "release", commit=later, release="v9.9.9")
+    _git(repo, "branch", "v1.2.9")  # a branch, at the later commit, with a tag's name
+    release = _release(tmp_path / "release", commit=later, release="v1.2.9")
 
-    assert cra.release_errors(release, "v9.9.9", git_dir=repo) == [f"tag v9.9.9 was not found in {repo}"]
+    assert cra.release_errors(release, "v1.2.9", git_dir=repo) == [f"tag v1.2.9 was not found in {repo}"]
 
 
 # --- the command line ---------------------------------------------------------------

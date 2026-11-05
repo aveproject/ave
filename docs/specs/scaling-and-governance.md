@@ -293,14 +293,32 @@ The two are numbered separately.
 - `ave-records.manifest.json`: `release`, `schema_version`, `record_count`,
   `generated_at`, `source`, `sha256` (of `ave-records.json`) and `source_commit`,
   the tagged commit.
-- `SHA256SUMS`: both files, in `sha256sum` format.
-- A build provenance attestation for both files, checked with
+- `ave-taxonomy.json` (from v1.3.0): the SARIF taxonomy (see
+  `docs/specs/ave-in-sarif.md`) of exactly this release's records, built by
+  `scripts/build_taxonomy.py` from `ave-records.json`, with the release's own
+  version, the manifest's `generated_at` date and its own download URL.
+- `SHA256SUMS`: the data files, in `sha256sum` format (all three from v1.3.0).
+- A build provenance attestation for each data file, checked with
   `gh attestation verify <file> --repo aveproject/ave`.
 
 Asset names carry no version; the tag does. `scripts/check_release_assets.py`
 checks the files against each other, against the tag and against the tagged commit.
 The release workflow runs it before publishing, and an implementer can run it after
 downloading (README, "Releases and pinning").
+
+**The taxonomy asset.** The verifier regenerates `ave-taxonomy.json` from the
+release's own `ave-records.json` and demands a byte match, so no field, taxon or
+character can differ from what the generator produces; a failure names the field
+or taxon first. Releases from v1.3.0 must carry it and a release without it fails
+verification; v1.0.0 to v1.2.0 shipped before it existed and verify without it.
+That makes the order mechanical: a release cut by a workflow that does not build
+the taxonomy fails its own verification, so the change that builds it has to merge
+before v1.3.0 is cut. Its `downloadUri` must point at the repository it is
+published under (`--repo owner/name`, default `aveproject/ave`), so a fork's
+release is verified against the fork. Stable URLs:
+`https://github.com/aveproject/ave/releases/download/vX.Y.Z/ave-taxonomy.json`
+and `https://github.com/aveproject/ave/releases/latest/download/ave-taxonomy.json`.
+`dist/ave-taxonomy-latest.json` is the moving copy and has no `version`.
 
 **Cadence:** a release when records have changed, at most monthly unless a
 correction is urgent. This is the maintainer's policy, and the maintainer can change
