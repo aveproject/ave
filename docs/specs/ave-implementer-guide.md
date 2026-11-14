@@ -340,13 +340,15 @@ A result that names no AVE class is a warning, because a tool may report finding
 An `ave_id` is never renumbered, reused or deleted. A record's status can still
 change: schema 1.2.0 has `active`, `deprecated` and `draft`, and schema 1.3.0
 ([#104](https://github.com/aveproject/ave/issues/104)) added `merged` and
-`rejected`. Schema 1.3.0 is in `dist/ave-records-latest.json`, but no catalog
-release carries it yet (`v1.2.0` is on schema 1.2.0), so a tool tracking
-`latest` can meet the new statuses before a pinned release can. A record that
+`rejected`. Catalog release `v1.3.0` is the first on schema 1.3.0 (`v1.2.0` and
+earlier are on earlier schemas, with only `active` records), so a tool pinned to
+an earlier release never meets the new statuses, and one tracking `latest` meets
+them as soon as a change merges. A record that
 leaves `active` stays in the published files with its full content. Treat any
 status other than `active` as not active, and do not assume the list of
-statuses is complete. No record has left `active` yet, but a tool that cites
-ids should find out when one does.
+statuses is complete. Four records have left `active`: AVE-2026-00052, 00053,
+00060 and 00061 are `rejected` (discussion #234). A tool that cites ids should
+find out when another does.
 
 Run a scheduled check against `dist/ave-records-latest.json`, which shows a
 status change as soon as it is merged, before the next release. This workflow,
