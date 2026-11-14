@@ -58,12 +58,13 @@
     "Absence of an allowlist or sanitization step between a tool's declared parameter schema and its shell/system-call invocation"
   ],
   "remediation": "1. Never pass caller-supplied parameter values into a shell command string; use an argument-array invocation form (execFile, spawn without shell:true) that does not invoke a shell interpreter. 2. Validate and allowlist parameter values against an expected format before any process-execution call. 3. If a local file reference is accepted as a parameter, resolve and canonicalize the path, then verify it stays within an expected working directory before use. 4. Run the MCP server process with the minimum OS privileges necessary, never as an administrator/root account or the interactive user's full session. 5. If using a known-vulnerable third-party tool package, upgrade to a patched version.",
-  "status": "active",
+  "status": "rejected",
+  "rejection_reason": "Rejected: a conventional implementation weakness (OS command injection, CWE-78) whose mechanism is unchanged if the model is replaced by a deterministic program, so it has no distinct agentic mechanism. The cited CVE stays as evidence. Public decision: https://github.com/aveproject/ave/discussions/234#discussioncomment-19308955",
   "kill_switch_active": false,
   "researcher": "Peter Girnus (ZDI)",
   "researcher_url": "https://www.zerodayinitiative.com/advisories/ZDI-26-021/",
   "published": "2026-07-10T00:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-11-14T00:00:00Z",
   "references": [
     {
       "tag": "ZDI-26-021",
@@ -144,5 +145,15 @@
       "version": "2026",
       "read_date": "2026-08-23"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-11-14",
+      "field": "status",
+      "from": "active",
+      "to": "rejected",
+      "reason_code": "status_changed",
+      "reason": "Status changed to rejected on the public decision in discussion #234; rejection_reason links it."
+    }
+  ]
 }
