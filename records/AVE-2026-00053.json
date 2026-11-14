@@ -59,12 +59,13 @@
     "`../` or URL-encoded traversal sequences (`%2e%2e%2f`) accepted unmodified in a resource URI or file-path parameter"
   ],
   "remediation": "1. Resolve the caller-supplied path to its canonical absolute form (e.g. os.path.realpath, path.resolve) before any file operation. 2. Verify the resolved path is contained within a configured root directory using a proper prefix/containment check on the canonical path, not a blacklist of forbidden substrings. 3. Reject requests containing raw or encoded traversal sequences (../, ..\\, %2e%2e%2f) before resolution, as defense in depth. 4. Apply the same canonicalization and containment check to URL-based resource builders, not just filesystem path parameters -- dot-segment normalization during URL resolution is a common gap. 5. Run the MCP server process with read/write access limited to only the directories it actually needs.",
-  "status": "active",
+  "status": "rejected",
+  "rejection_reason": "Rejected: a conventional implementation weakness (path traversal, CWE-22) whose mechanism is unchanged if the model is replaced by a deterministic program, so it has no distinct agentic mechanism. The cited CVEs stay as evidence. Public decision: https://github.com/aveproject/ave/discussions/234#discussioncomment-19308955",
   "kill_switch_active": false,
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-07-10T00:00:00Z",
-  "last_updated": "2026-08-23T00:00:00Z",
+  "last_updated": "2026-11-14T00:00:00Z",
   "references": [
     {
       "tag": "CVE",
@@ -146,5 +147,15 @@
       "pin_status": "unknown",
       "read_date": "2026-10-15"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-11-14",
+      "field": "status",
+      "from": "active",
+      "to": "rejected",
+      "reason_code": "status_changed",
+      "reason": "Status changed to rejected on the public decision in discussion #234; rejection_reason links it."
+    }
+  ]
 }
