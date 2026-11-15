@@ -5,18 +5,21 @@
     "vendor": "Highflame Inc.",
     "url": "https://github.com/highflame-ai/ramparts",
     "license": "Apache-2.0",
-    "commit": "a62b320ae1f59da9937e721715bec54c9a5bc5c0"
+    "commit": "70457dbf2b64c92bb4601951bc74d36d6dbf7551",
+    "tag": "v0.8.10",
+    "pin_note": "Pinned to the newest release tag, v0.8.10. Tags v0.8.7 to v0.8.10 all point at this commit (tagged 2026-08-21; the GitHub release v0.8.10 was published 2026-10-01). The default branch has moved on: HEAD 14ff71ef40bc6ff28ce57ded77466e138a562267 (2026-10-08) was not read. Cargo.toml still reports version 0.8.2 at this commit."
   },
   "target": {
     "standard": "AVE",
-    "version": "1.1.0",
+    "version": "1.3.0",
     "url": "https://aveproject.org",
-    "record_count": 76,
-    "static_record_count": 57,
-    "commit": "a97254dc18677bd6a2fcb76ae1bc7bf173158c31"
+    "record_count": 89,
+    "static_record_count": 61,
+    "commit": "647e1ce2fff39b26957b8f232a42ab3117f5c2ec"
   },
-  "generated": "2026-08-08",
-  "note": "Ramparts and AVE both draft their own reading of the still-unratified OWASP MCP Top 10, independently, and their MCP01-MCP10 numbering does not align category-for-category; Ramparts' MCP03 (Excessive Agency) and AVE's MCP03 (Tool Poisoning) are unrelated despite sharing a number. This crosswalk matches by verified mechanism, not by shared tag number, see AVE issue #138 for the full verification. One Ramparts rule, EnvironmentVariableLeakage, splits into two distinct AVE mappings depending on which internal condition fires, a literal-value branch and a theft-language branch, not one-to-one. Near-miss not included in mappings: Ramparts' CommandInjection is a signature match over dangerous syntax anywhere in content; AVE-2026-00052 specifically requires a taint path from a caller-supplied parameter to shell exec. Same subject, different rigor, the exact distinction between signature-based scanning and reachability analysis. Real gaps in both directions: Ramparts' cross-origin tool confusion detection and its MCPConfigChanged baseline-diff check (a previously-approved server's fingerprint changing after the fact) have no AVE analog today; AVE has nothing for session-memory or cross-agent-state poisoning, which Ramparts does not currently touch either.",
+  "generated": "2026-11-15",
+  "note": "Ramparts and AVE both draft their own reading of the still-unratified OWASP MCP Top 10, independently, and their MCP01-MCP10 numbering does not align category-for-category; Ramparts' MCP03 (Excessive Agency) and AVE's MCP03 (Tool Poisoning) are unrelated despite sharing a number. This crosswalk matches by verified mechanism, not by shared tag number, see AVE issue #138 for the full verification. One Ramparts rule, EnvironmentVariableLeakage, splits into two distinct AVE mappings depending on which internal condition fires, a literal-value branch and a theft-language branch, not one-to-one. Not mapped: Ramparts' CommandInjection is a signature match over dangerous syntax anywhere in content. It was a near-miss to AVE-2026-00052, which required a taint path from a caller-supplied parameter to shell exec; AVE-2026-00052 was rejected (discussion 234, AVE v1.3.0), so CommandInjection now has no AVE record. The distinction it showed, signature-based scanning versus reachability analysis, still holds. Real gaps in both directions: Ramparts' cross-origin tool confusion detection and its MCPConfigChanged baseline-diff check (a previously-approved server's fingerprint changing after the fact) have no AVE analog today; AVE has nothing for session-memory or cross-agent-state poisoning, which Ramparts does not currently touch either.",
+  "revision_note": "Refreshed 2026-11-15 to Ramparts v0.8.10 (commit 70457dbf2b64c92bb4601951bc74d36d6dbf7551) and AVE v1.3.0 (commit 647e1ce2fff39b26957b8f232a42ab3117f5c2ec). AVE-2026-00053 was rejected (discussion 234, AVE v1.3.0), so the PathTraversalVulnerability mapping is dropped and listed under gaps, and the CommandInjection near-miss to AVE-2026-00052 now reads as unmapped for the same reason. The remaining nine mappings were re-read at v0.8.10: each finding still exists, EnvironmentVariableLeakage is unchanged, SecretsLeakage's patterns were tightened and stay consistent with its note, and no change touches the code behind OverbroadAllowedTools, SkillEmbeddedPayload or GenericSkillTrigger. The mapped AVE records keep their titles and descriptions; AVE-2026-00038's fingerprint was reworded (from granting unlimited authority to instructing the agent to use any tool) and its mapping and note are left as they were. This file is not an inventory of Ramparts' findings: eight findings that did not exist at the previous pin were not assessed here, CovertExfiltration (a YARA rule) and AgentIdentityFileWrite, BrandImpersonation, ExternalReferenceInventory, JsonPrototypePollution, ScanCoverageIncomplete, UndeclaredNetworkEgress and UnsafeYamlDeserialization (skills.rs).",
   "mappings": [
     {
       "ramparts_finding": "SecretsLeakage",
@@ -41,12 +44,6 @@
       "ave_id": "AVE-2026-00055",
       "title": "Command execution via untrusted MCP server launch configuration (STDIO)",
       "notes": "Both: STDIO launch config (command/args) executes without a validation gate."
-    },
-    {
-      "ramparts_finding": "PathTraversalVulnerability",
-      "ave_id": "AVE-2026-00053",
-      "title": "Path traversal via unsanitized path parameter in MCP resource/file-handler implementation",
-      "notes": "Direct mechanism match."
     },
     {
       "ramparts_finding": "SkillEmbeddedPayload",
@@ -79,9 +76,15 @@
       "notes": "Both: coercing an unrestricted persona or mode."
     }
   ],
+  "gaps": [
+    {
+      "ramparts_finding": "PathTraversalVulnerability",
+      "reason": "Mapped to AVE-2026-00053 until that record was rejected (discussion 234, AVE v1.3.0). AVE has no path traversal class now, so the finding has no AVE record."
+    }
+  ],
   "coverage": {
-    "ramparts_findings_mapped": 10,
-    "ave_classes_covered": 9,
+    "ramparts_findings_mapped": 9,
+    "ave_classes_covered": 8,
     "note_on_unmapped": "Ramparts' full finding list is broader than what's mapped here; only mechanism-verified matches are included. See note field for near-misses and known gaps in both directions."
   }
 }
