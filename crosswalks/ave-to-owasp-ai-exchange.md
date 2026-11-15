@@ -5,12 +5,14 @@
 (commit `caf2e43bd8dd21666d2c08ddb532192ac255a248`, committed 2026-10-16)
 **Verified against live source:** 2026-10-20
 
-This is a deliberate pilot, not a full-corpus crosswalk: 13 AVE records
-selected by a rule fixed *before* mapping, mapped at the mechanism level
-against the Exchange's 25 permalinked threat items as they stand at the
-pinned commit. 7 of 13 found a real correspondence (6 narrower, 1
-related); 6 are honest no-fits, split between conventional/delegated (4)
-and genuine gaps in the Exchange's current agentic coverage (2).
+This is a deliberate pilot, not a full-corpus crosswalk: 10 AVE records,
+the 13 selected by a rule fixed *before* mapping less three that AVE
+rejected later (AVE-2026-00052, 00053 and 00061, removed 2026-11-16),
+mapped at the mechanism level against the Exchange's 25 permalinked threat
+items as they stand at the pinned commit. 7 of 10 found a real
+correspondence (6 narrower, 1 related); 3 are honest no-fits, split between
+conventional/delegated (1) and genuine gaps in the Exchange's current
+agentic coverage (2).
 
 **Licence basis.** The target repository has no LICENSE file. CC0 1.0 is
 stated twice in its content: `content/ai_exchange/content/charter.md`
@@ -80,21 +82,14 @@ independently verified.
 - **AVE-2026-00078** (consensus poisoning, no quorum verification): no
   Exchange threat addresses multi-agent result corroboration. AI-specific,
   genuinely unrepresented.
-- **AVE-2026-00052, AVE-2026-00053** (command injection and path
-  traversal in an MCP server's own handler code): both records' own text
-  states no LLM reasoning is required to trigger them. Conventional,
-  explicitly delegated by the Exchange's own scope statement ("AI
-  security = threats to AI-specific assets (AI Exchange) + threats to
-  other assets (other resources)"), not a gap to fill.
-- **AVE-2026-00061** (TLS certificate verification disabled): a
-  declared configuration flag. Conventional, delegated.
 - **AVE-2026-00047** (hardcoded credential in a skill file): a literal
   secret string. Conventional, delegated.
 
 ## Coverage
 
-13 AVE records piloted, out of 87 published. 7 mapped (6 narrower, 1
-related), landing on 2 of the Exchange's 25 threat items. 6 honest
-no-fits (4 conventional/delegated, 2 genuine Exchange-side gaps). No
-claim is made about the other 23 Exchange threat items or the ~74 AVE
+10 AVE records piloted, out of 83 active (87 in the v1.1.0 tree, 4 since
+rejected, 3 of them in the original 13-record pilot). 7 mapped (6 narrower, 1
+related), landing on 2 of the Exchange's 25 threat items. 3 honest
+no-fits (1 conventional/delegated, 2 genuine Exchange-side gaps). No
+claim is made about the other 23 Exchange threat items or the ~73 active AVE
 records outside this pilot; a full-corpus pass was not attempted.
