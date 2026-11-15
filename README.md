@@ -190,32 +190,42 @@ Anyone can run their own instance, and nothing about AVE depends on the hosted o
 
 ---
 
-## Independent validation
+## Crosswalks and who built them
 
-AVE's ID scheme has been tested by people who didn't build it, not
-just used by people who did.
+AVE has eight scanner crosswalks in [crosswalks/](crosswalks/), for
+cfgaudit, ClawScan, nova-proximity, Ramparts, Semia, SkillSpector
+(NVIDIA), skill-security-scanner and skillsentry. Each maps a tool's
+rules onto AVE classes by mechanism, not by category label: real
+trigger conditions are checked against real behavioral fingerprints.
 
-Eight independent tools, cfgaudit, ClawScan, nova-proximity, Ramparts,
-Semia, SkillSpector (NVIDIA), skill-security-scanner, and skillsentry,
-none of them sharing code with AVE or with each other, built
-crosswalks against AVE's records on their own initiative, unprompted.
-In each case the comparison went beyond matching category labels:
-mechanism-level correspondence was checked field by field, real
-trigger conditions against real behavioral fingerprints, and dozens of
-findings converged on the identical AVE ID independently.
+- **One was built by its tool's own author.** predictor2718, who
+  maintains cfgaudit, built the cfgaudit crosswalk (#67) unprompted and
+  compared it from scratch against the reference scanner. cfgaudit
+  emits AVE ids in its output. See [CONTRIBUTORS.md](CONTRIBUTORS.md).
+- **Seven were built by AVE's maintainer** from each tool's public
+  source: ClawScan, nova-proximity, Ramparts, Semia, SkillSpector,
+  skill-security-scanner and skillsentry. The tools' own authors did
+  not write them. The Semia crosswalk was built with its maintainer's
+  permission (berabuddies/Semia#36).
 
-One of those crosswalks (Ramparts) also surfaced a real methodological
-lesson: two independently-drafted readings of the same still-
-unratified OWASP MCP Top 10 numbered their own categories differently,
-confirmed and documented so future crosswalks match by category
-meaning, not by tag number.
+A crosswalk written by AVE's own maintainer shows that the mapping can
+be done and records where it fits and where it does not. It is not
+independent validation, and none of this means those tools have adopted
+AVE.
+
+Building the Ramparts crosswalk also surfaced a real methodological
+lesson: Ramparts and AVE each drafted their own reading of the
+still-unratified OWASP MCP Top 10 and numbered their categories
+differently. This is confirmed and documented so future crosswalks
+match by category meaning, not by tag number.
 
 Separately, an external maintainer caught a real attribution error in
 two published AVE records, corrected the underlying process
 documentation, not just the two records, credited in
 [CONTRIBUTORS.md](CONTRIBUTORS.md).
 
-89 records. 8 independent crosswalks. See
+89 records (85 active, 4 rejected). 8 scanner crosswalks, 1 by its tool's
+author and 7 by AVE's maintainer. See
 [crosswalks/](crosswalks/) for the full mappings, and
 [docs/writeups/](docs/writeups/) for full technical write-ups on
 individual records.
@@ -345,7 +355,7 @@ to verify it yourself.
 | The framework mappings are anchored | Every framework a record maps to has a `framework_sources` entry saying which edition the mapping was made against, or that the edition is unknown. CI fails without it. | `python scripts/check_framework_sources.py --strict` |
 | A record did not change under you | A change to `severity`, `status` or the derived basis is recorded in `revisions`, and git keeps every version. A released copy never changes. | `git log -p records/AVE-YYYY-NNNNN.json` |
 | The files you downloaded are the ones published | Each catalog release carries SHA-256 checksums and a build provenance attestation. | the commands in [Releases and pinning](#releases-and-pinning) |
-| Others have tested it | Eight independent tools built crosswalks against the records on their own initiative. | [Independent validation](#independent-validation), [`crosswalks/`](crosswalks/) |
+| Others have used it | One tool's author built and maintains a crosswalk and emits AVE ids in its output. AVE's maintainer built seven more from other tools' public source; they are not independent validation. | [Crosswalks and who built them](#crosswalks-and-who-built-them), [`crosswalks/`](crosswalks/) |
 | The repository itself is looked after | CodeQL, dependency review, secret scanning and OpenSSF Scorecard run on it. | the badges at the top |
 
 What AVE does not claim: that it lists every agentic vulnerability. Records grow with research, not with

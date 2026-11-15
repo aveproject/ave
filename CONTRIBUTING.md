@@ -122,7 +122,7 @@ Key rules:
   CRITICAL >= 9.0 · HIGH 7.0-8.9 · MEDIUM 4.0-6.9 · LOW < 4.0.
 - Add the record's row to the README record index and update the Stats
   total and band count, the records badge, the index summary and the
-  record count in the "Independent validation" paragraph;
+  record count in the "Crosswalks and who built them" section;
   `tests/test_readme_sync.py` checks all but the last against `records/`.
 
 ### AIVSS v0.8 calculation
