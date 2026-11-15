@@ -9,7 +9,7 @@ cfgaudit emits each rule's primary AVE id in its JSON and SARIF output (`AVEID` 
 | | Version |
 |---|---|
 | cfgaudit | 1.21.0, read at the tag (`8e13742`); the next release drops CFG075's AVE id ([cfgaudit#1769](https://github.com/cfgaudit/cfgaudit/pull/1769)) |
-| AVE record set | v1.3.0: 89 records (AVE-2026-00001 .. 00089), 61 of them `static_detection`, 4 of them `rejected`, read at the release commit (`647e1ce`) |
+| AVE record set | v1.3.0: 89 records (AVE-2026-00001 .. 00089), 4 of them `rejected`; 57 active `static_detection` records (61 counting the rejected ones), read at the release commit (`647e1ce`) |
 | Bawbel Scanner (validation, below) | 1.3.0 |
 
 ## Coverage
@@ -31,7 +31,7 @@ The other 62 rules have no AVE class: they check config surfaces AVE's skill and
 - **Six new rules are unmapped.** `CFG133` (VS Code agent sandbox settings) joins "sandbox weakening in config". `CFG135` (a `plugin.json` component path that leaves the plugin root) joins "a committed path that makes the agent read a file on the reader's machine", with the local-path halves of `CFG131` and `CFG132`. `CFG124`, `CFG126` with `CFG128`, and `CFG130` form three new surfaces, listed below.
 - **`AVE-2026-00065` is now partly covered** for committed inline Gemini agent cards. The gap row says how far.
 
-**The record set is unchanged at 89**, 61 of them `static_detection`; the counts include the four rejected records. The other 85 are `active`, and no title or class of a mapped record changed.
+**The record set is unchanged at 89**. 57 active records are `static_detection`, 61 with the four rejected ones; `coverage.ave_static_records` counts only the active ones. The other 85 are `active`, and no title or class of a mapped record changed.
 
 **Both sides are pinned by commit**, so the counts can be re-derived. The cfgaudit tree read is the `v1.21.0` tag itself, and the AVE tree the commit the v1.3.0 release was built from.
 

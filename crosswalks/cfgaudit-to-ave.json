@@ -323,7 +323,7 @@
     }
   ],
   "coverage": {
-    "ave_static_records": 61,
+    "ave_static_records": 57,
     "cfgaudit_rules_total": 135,
     "cfgaudit_rules_mapped": 73,
     "ave_classes_covered": 29,
