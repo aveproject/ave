@@ -3,12 +3,12 @@
   "source": {
     "tool": "SkillSpector",
     "vendor": "NVIDIA",
-    "version": "2.13.1",
-    "tag": "v2.13.1",
+    "version": "2.13.4",
+    "tag": "v2.13.4",
     "url": "https://github.com/NVIDIA/SkillSpector",
     "license": "Apache-2.0",
     "tool_class": "static skill and MCP scanner with an optional LLM stage",
-    "commit": "f3b25697d76256998ca9d42c198d256258d4c035",
+    "commit": "54824463814a0be01360792523ec7245a69190fc",
     "rules_total": 78,
     "rules_mapped": 56,
     "categories": 18,
@@ -18,7 +18,7 @@
       "categories": 17,
       "table_rows": 73
     },
-    "pin_note": "Pinned to the newest release tag, not the default branch: at the time of reading, the default branch HEAD (d7338f58200a9ae2a24810cee08911ab68b107a7) still reported version 2.12.0.",
+    "pin_note": "Pinned to the newest release tag, not the default branch: at the time of reading, the default branch HEAD (c81615007d40e86051a302a3cf897f8a05264928) still reported version 2.12.0.",
     "previous_revision": {
       "version": "2.0.0",
       "patterns": 64,
@@ -34,9 +34,9 @@
     "static_record_count": 61,
     "commit": "647e1ce2fff39b26957b8f232a42ab3117f5c2ec"
   },
-  "generated": "2026-11-14",
-  "note": "Rule-level crosswalk from SkillSpector 2.13.1 to AVE, built by reading SkillSpector's source at the tagged commit, not its documentation. It replaces a revision that was checked against SkillSpector 2.0.0's documentation. SkillSpector scans skill and MCP files statically, with an optional LLM stage that --no-llm turns off, so this file maps only to AVE's static_detection records: the 28 runtime_observed and runtime_drift_detected records are listed under out_of_scope_ave_records and are not mapped. Three counts disagree and the code is the source of truth: RULE_ID_TO_CATEGORY defines 78 rules in 18 categories (this file's rules_total and categories); the README says 71 patterns across 17 categories, and its tables list 73 rows; the previous revision recorded 16 categories and 64 patterns. Scope decision: the 78 in-map rules are the catalogue and each appears exactly once under mappings. 37 more rule ids are emitted by analyzers but are absent from RULE_ID_TO_CATEGORY: AST1 to AST10 (Python AST checks; only AST10 is named in PATTERN_NAMES), BH1 to BH4 (bundled hooks and settings), RP1 to RP3 (rug pull), PE4 and PE5, AE1 to AE7 (artifact integrity and coverage) and, behind the LLM stage, SSD-1 to SSD-4, SDI-1 to SDI-4 and SQP-1 to SQP-3. They are in scope and handled the same way, listed separately under rules_outside_category_map so the 78 stay countable. Mappings are class-level equivalence, not identity: relationship states how far a rule and a record overlap, and a hit on a related rule is a lead and not an instance of the AVE class. Rules marked detection llm need an LLM and are absent from a --no-llm scan. This crosswalk is an independent reading and is not endorsed by or affiliated with NVIDIA. Built 2026-10-26; the AST and semantic rules were handled in this revision.",
-  "revision_note": "Full rewrite from source. The previous revision (generated 2026-07-12, last checked against documentation on 2026-06-21) mapped 16 category names against SkillSpector 2.0.0's documentation and said it had not been re-checked against the source; SkillSpector has no v2.0.0 tag, and its earliest tag is v2.5.0. Changes: category keys are now SkillSpector's own category strings (18 instead of 16); dangerous_code_ast and taint_tracking no longer exist as categories (the AST rules are emitted outside the category map, and TT1 to TT6 sit under Data Exfiltration, Privilege Escalation and Insecure Deserialization); every rule has its own entry with a relationship; mappings to runtime_observed records (AVE-2026-00018, 00019, 00050) were dropped; 21 of the previous 41 category-to-record links did not survive and are listed under dropped_from_previous_revision; the previous conclusion that YARA matches are only known malware was reversed, because the built-in agent_skills.yar rules are behavioral; the previous gaps for trigger_abuse and mcp_least_privilege were re-stated rule by rule. The file does not round-trip through the previous formatting, so the diff is a full rewrite. Refreshed 2026-11-14, after AVE-2026-00052, 00053, 00060 and 00061 were rejected (discussion 234; published in AVE v1.3.0). SC7 and TM3 no longer map to AVE-2026-00061 and become no_fit, TM1 keeps AVE-2026-00005, and the Tool Misuse category has no closest record (primary_ave_id is null). Every statement that called AVE-2026-00052, 00053 or 00060 pending deprecation or proposed for deprecation now says rejected, and the field deprecation_pending_best_fit is renamed rejected_best_fit. AVE-2026-00061 joins ave_gaps and checked_and_rejected beside them, and the counts under coverage are recomputed from the entries. The record counts still include the rejected records (89, of which 61 static_detection). The target is pinned at the commit the v1.3.0 release was built from.",
+  "generated": "2026-11-15",
+  "note": "Rule-level crosswalk from SkillSpector 2.13.4 to AVE, built by reading SkillSpector's source at the tagged commit, not its documentation. It replaces a revision that was checked against SkillSpector 2.0.0's documentation. SkillSpector scans skill and MCP files statically, with an optional LLM stage that --no-llm turns off, so this file maps only to AVE's static_detection records: the 28 runtime_observed and runtime_drift_detected records are listed under out_of_scope_ave_records and are not mapped. Three counts disagree and the code is the source of truth: RULE_ID_TO_CATEGORY defines 78 rules in 18 categories (this file's rules_total and categories); the README says 71 patterns across 17 categories, and its tables list 73 rows; the previous revision recorded 16 categories and 64 patterns. Scope decision: the 78 in-map rules are the catalogue and each appears exactly once under mappings. 37 more rule ids are emitted by analyzers but are absent from RULE_ID_TO_CATEGORY: AST1 to AST10 (Python AST checks; only AST10 is named in PATTERN_NAMES), BH1 to BH4 (bundled hooks and settings), RP1 to RP3 (rug pull), PE4 and PE5, AE1 to AE7 (artifact integrity and coverage) and, behind the LLM stage, SSD-1 to SSD-4, SDI-1 to SDI-4 and SQP-1 to SQP-3. They are in scope and handled the same way, listed separately under rules_outside_category_map so the 78 stay countable. Mappings are class-level equivalence, not identity: relationship states how far a rule and a record overlap, and a hit on a related rule is a lead and not an instance of the AVE class. Rules marked detection llm need an LLM and are absent from a --no-llm scan. This crosswalk is an independent reading and is not endorsed by or affiliated with NVIDIA. Built 2026-10-26; the AST and semantic rules were handled in this revision.",
+  "revision_note": "Full rewrite from source. The previous revision (generated 2026-07-12, last checked against documentation on 2026-06-21) mapped 16 category names against SkillSpector 2.0.0's documentation and said it had not been re-checked against the source; SkillSpector has no v2.0.0 tag, and its earliest tag is v2.5.0. Changes: category keys are now SkillSpector's own category strings (18 instead of 16); dangerous_code_ast and taint_tracking no longer exist as categories (the AST rules are emitted outside the category map, and TT1 to TT6 sit under Data Exfiltration, Privilege Escalation and Insecure Deserialization); every rule has its own entry with a relationship; mappings to runtime_observed records (AVE-2026-00018, 00019, 00050) were dropped; 21 of the previous 41 category-to-record links did not survive and are listed under dropped_from_previous_revision; the previous conclusion that YARA matches are only known malware was reversed, because the built-in agent_skills.yar rules are behavioral; the previous gaps for trigger_abuse and mcp_least_privilege were re-stated rule by rule. The file does not round-trip through the previous formatting, so the diff is a full rewrite. Refreshed 2026-11-14, after AVE-2026-00052, 00053, 00060 and 00061 were rejected (discussion 234; published in AVE v1.3.0). SC7 and TM3 no longer map to AVE-2026-00061 and become no_fit, TM1 keeps AVE-2026-00005, and the Tool Misuse category has no closest record (primary_ave_id is null). Every statement that called AVE-2026-00052, 00053 or 00060 pending deprecation or proposed for deprecation now says rejected, and the field deprecation_pending_best_fit is renamed rejected_best_fit. AVE-2026-00061 joins ave_gaps and checked_and_rejected beside them, and the counts under coverage are recomputed from the entries. The record counts still include the rejected records (89, of which 61 static_detection). The target is pinned at the commit the v1.3.0 release was built from. Refreshed 2026-11-15 to SkillSpector v2.13.4 (commit 54824463814a0be01360792523ec7245a69190fc, tagged 2026-11-05), three releases after the previous pin. The rule inventory is unchanged: RULE_ID_TO_CATEGORY and PATTERN_NAMES hold the same entries, no rule id was added or removed, and the counts under coverage do not move. Notes changed where behavior changed: SC3 also runs on PowerShell files; AS2 matches more MCP config file names; RP1 also reads npx commands inside JSON MCP configurations; MP3 gained a write variant for auto-run test files that write agent memory files, which AVE-2026-00027 does not describe, so it stays unmapped; and the YARA malware bundle gained ransomware_behavior_multiline, which has no AVE class. Pipenv dependency parsing for SC4 to SC6 and pattern and exclusion refinements in P2 and P6 change coverage, not what those rules mean, so their notes stand. Coverage reads: 56 of 78 category-mapped rules, plus 22 of 37 rules outside the map. The AVE target is unchanged.",
   "relationship_vocabulary": {
     "equivalent": "Same behavior on the same surface: the AVE record's own description and indicators cover what the rule matches.",
     "narrower": "The AVE class is a specific instance of what the rule flags: every instance of the class would trip the rule, but the rule also fires on things that are not the class.",
@@ -368,7 +368,7 @@
             "AVE-2026-00057"
           ],
           "detection": "static",
-          "notes": "exec or eval of base64, hex, zlib or marshal-decoded data, atob, obfuscator-style _0x names, long hex or base64 literals (confidence 0.5 to 0.6) and shell decode-to-execute chains. Encoded content decoded and executed at runtime is AVE-2026-00057. Differs: AVE-2026-00057 also covers keyword fragments joined by string concatenation, which SC3 does not test."
+          "notes": "exec or eval of base64, hex, zlib or marshal-decoded data, atob, obfuscator-style _0x names, long hex or base64 literals (confidence 0.5 to 0.6) and shell decode-to-execute chains. Encoded content decoded and executed at runtime is AVE-2026-00057. Differs: AVE-2026-00057 also covers keyword fragments joined by string concatenation, which SC3 does not test. At v2.13.4 SC3 also runs on PowerShell files."
         },
         {
           "id": "SC4",
@@ -574,7 +574,7 @@
             "AVE-2026-00009"
           ],
           "detection": "static",
-          "notes": "Prose for clearing, overwriting or tampering with memory, 'forget all previous instructions', 'rewrite your personality', 'inject fake memories', 'pretend your previous conversation included...', and sentences adopting a reset state as the conversation state. The fabricated-history patterns are AVE-2026-00025; the identity-rewrite patterns are near AVE-2026-00009. AVE-2026-00019 (memory poisoning) is runtime_observed and out of scope."
+          "notes": "Prose for clearing, overwriting or tampering with memory, 'forget all previous instructions', 'rewrite your personality', 'inject fake memories', 'pretend your previous conversation included...', and sentences adopting a reset state as the conversation state. The fabricated-history patterns are AVE-2026-00025; the identity-rewrite patterns are near AVE-2026-00009. AVE-2026-00019 (memory poisoning) is runtime_observed and out of scope. At v2.13.4 MP3 also has a write variant: a test file the toolchain runs automatically (conftest.py, test_*.py, *_test.py, *.test.* or *.spec.*) that writes to an agent memory file (MEMORY.md, CLAUDE.md, AGENTS.md or SOUL.md, or a path through .claude, .cursor or .agents). That plants content in persistent agent memory from code. AVE-2026-00027 describes a prose instruction to the agent to retain instructions, so this variant is not mapped to it."
         }
       ]
     },
@@ -803,7 +803,7 @@
             "AVE-2026-00034"
           ],
           "detection": "static",
-          "notes": "Bucket for YARA rules whose category meta is malware, so a mapping is per YARA rule. Built-in members: agent_skill_credential_exfiltration_webhook (AVE-2026-00003), agent_skill_remote_bootstrap_execution (AVE-2026-00004, and pip install from a URL for AVE-2026-00034), agent_skill_destructive_autonomous_actions (AVE-2026-00005) and backdoor_persistence (AVE-2026-00008), plus reverse_shell, reverse_shell_multiline, keylogger_indicators, ransomware_behavior, c2_framework_indicators and info_stealer, which have no AVE class. User-supplied rules (--yara-rules-dir) are not covered."
+          "notes": "Bucket for YARA rules whose category meta is malware, so a mapping is per YARA rule. Built-in members: agent_skill_credential_exfiltration_webhook (AVE-2026-00003), agent_skill_remote_bootstrap_execution (AVE-2026-00004, and pip install from a URL for AVE-2026-00034), agent_skill_destructive_autonomous_actions (AVE-2026-00005) and backdoor_persistence (AVE-2026-00008), plus reverse_shell, reverse_shell_multiline, keylogger_indicators, ransomware_behavior, ransomware_behavior_multiline (added at v2.13.4), c2_framework_indicators and info_stealer, which have no AVE class. User-supplied rules (--yara-rules-dir) are not covered."
         },
         {
           "id": "YR2",
@@ -974,7 +974,7 @@
             "AVE-2026-00022"
           ],
           "detection": "static",
-          "notes": "Reads of mcp.json and MCP config files, and prose such as 'list MCP servers'. Same relationship as AS1; the config holds server URLs and tokens."
+          "notes": "Reads of mcp.json and MCP config files (mcp.json, mcp_config.json, mcp_settings.json, claude_desktop_config.json, .claude.json at v2.13.4), and prose such as 'list MCP servers'. Same relationship as AS1; the config holds server URLs and tokens."
         },
         {
           "id": "AS3",
@@ -1229,7 +1229,7 @@
         "AVE-2026-00062"
       ],
       "detection": "static",
-      "notes": "Static mode: npx, uvx, pip install or docker pull references with no version, tag or digest, in code or manifest. A mutable dependency reference, AVE-2026-00062. The same id is reused in diff mode for added permissions, but diff mode needs previous_manifest, which build_context.py hard-codes to None, so a normal scan never runs it."
+      "notes": "Static mode: npx, uvx, pip install or docker pull references with no version, tag or digest, in code or manifest, and at v2.13.4 in JSON MCP configurations, where it joins each command with its args. A mutable dependency reference, AVE-2026-00062. The same id is reused in diff mode for added permissions, but diff mode needs previous_manifest, which build_context.py hard-codes to None, so a normal scan never runs it."
     },
     {
       "id": "RP2",
