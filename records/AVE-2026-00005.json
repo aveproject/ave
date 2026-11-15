@@ -45,6 +45,13 @@
       "untrusted_content"
     ]
   },
+  "security_boundary": "instruction content → shell execution, with no boundary between the two",
+  "missing_control": "no distinction between natural-language content that merely describes a step and natural-language content that constitutes an executable directive",
+  "vulnerability_rationale": {
+    "capability": "Agent with filesystem/shell access follows embedded destructive commands.",
+    "vulnerability": "Conventional destructive-command pattern (`rm -rf /` class), delivered through natural language by the same channel as AVE-2026-00004: instructions an agent follows, which code-oriented scanners do not read. It stays a separate class from 00004 because the impact differs: irrecoverable data loss with no code-execution requirement, a severity and detection distinction and not only a label.",
+    "impact": "Files on the host are permanently destroyed, and the loss is irrecoverable without backup."
+  },
   "mitigation": {
     "strategy": [
       "require_human_approval",
@@ -67,7 +74,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-11-04T00:00:00Z",
   "references": [
     {
       "tag": "CWE-78",

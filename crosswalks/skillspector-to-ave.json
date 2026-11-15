@@ -10,7 +10,7 @@
     "tool_class": "static skill and MCP scanner with an optional LLM stage",
     "commit": "f3b25697d76256998ca9d42c198d256258d4c035",
     "rules_total": 78,
-    "rules_mapped": 58,
+    "rules_mapped": 56,
     "categories": 18,
     "rules_outside_category_map": 37,
     "readme_claim": {
@@ -28,15 +28,15 @@
   },
   "target": {
     "standard": "AVE",
-    "version": "1.1.0",
+    "version": "1.3.0",
     "url": "https://aveproject.org",
     "record_count": 89,
     "static_record_count": 61,
-    "commit": "a3661ae1541b6542a7b5094500d62efcaa54c152"
+    "commit": "647e1ce2fff39b26957b8f232a42ab3117f5c2ec"
   },
-  "generated": "2026-10-26",
+  "generated": "2026-11-14",
   "note": "Rule-level crosswalk from SkillSpector 2.13.1 to AVE, built by reading SkillSpector's source at the tagged commit, not its documentation. It replaces a revision that was checked against SkillSpector 2.0.0's documentation. SkillSpector scans skill and MCP files statically, with an optional LLM stage that --no-llm turns off, so this file maps only to AVE's static_detection records: the 28 runtime_observed and runtime_drift_detected records are listed under out_of_scope_ave_records and are not mapped. Three counts disagree and the code is the source of truth: RULE_ID_TO_CATEGORY defines 78 rules in 18 categories (this file's rules_total and categories); the README says 71 patterns across 17 categories, and its tables list 73 rows; the previous revision recorded 16 categories and 64 patterns. Scope decision: the 78 in-map rules are the catalogue and each appears exactly once under mappings. 37 more rule ids are emitted by analyzers but are absent from RULE_ID_TO_CATEGORY: AST1 to AST10 (Python AST checks; only AST10 is named in PATTERN_NAMES), BH1 to BH4 (bundled hooks and settings), RP1 to RP3 (rug pull), PE4 and PE5, AE1 to AE7 (artifact integrity and coverage) and, behind the LLM stage, SSD-1 to SSD-4, SDI-1 to SDI-4 and SQP-1 to SQP-3. They are in scope and handled the same way, listed separately under rules_outside_category_map so the 78 stay countable. Mappings are class-level equivalence, not identity: relationship states how far a rule and a record overlap, and a hit on a related rule is a lead and not an instance of the AVE class. Rules marked detection llm need an LLM and are absent from a --no-llm scan. This crosswalk is an independent reading and is not endorsed by or affiliated with NVIDIA. Built 2026-10-26; the AST and semantic rules were handled in this revision.",
-  "revision_note": "Full rewrite from source. The previous revision (generated 2026-07-12, last checked against documentation on 2026-06-21) mapped 16 category names against SkillSpector 2.0.0's documentation and said it had not been re-checked against the source; SkillSpector has no v2.0.0 tag, and its earliest tag is v2.5.0. Changes: category keys are now SkillSpector's own category strings (18 instead of 16); dangerous_code_ast and taint_tracking no longer exist as categories (the AST rules are emitted outside the category map, and TT1 to TT6 sit under Data Exfiltration, Privilege Escalation and Insecure Deserialization); every rule has its own entry with a relationship; mappings to runtime_observed records (AVE-2026-00018, 00019, 00050) were dropped; 21 of the previous 41 category-to-record links did not survive and are listed under dropped_from_previous_revision; the previous conclusion that YARA matches are only known malware was reversed, because the built-in agent_skills.yar rules are behavioral; the previous gaps for trigger_abuse and mcp_least_privilege were re-stated rule by rule. The file does not round-trip through the previous formatting, so the diff is a full rewrite.",
+  "revision_note": "Full rewrite from source. The previous revision (generated 2026-07-12, last checked against documentation on 2026-06-21) mapped 16 category names against SkillSpector 2.0.0's documentation and said it had not been re-checked against the source; SkillSpector has no v2.0.0 tag, and its earliest tag is v2.5.0. Changes: category keys are now SkillSpector's own category strings (18 instead of 16); dangerous_code_ast and taint_tracking no longer exist as categories (the AST rules are emitted outside the category map, and TT1 to TT6 sit under Data Exfiltration, Privilege Escalation and Insecure Deserialization); every rule has its own entry with a relationship; mappings to runtime_observed records (AVE-2026-00018, 00019, 00050) were dropped; 21 of the previous 41 category-to-record links did not survive and are listed under dropped_from_previous_revision; the previous conclusion that YARA matches are only known malware was reversed, because the built-in agent_skills.yar rules are behavioral; the previous gaps for trigger_abuse and mcp_least_privilege were re-stated rule by rule. The file does not round-trip through the previous formatting, so the diff is a full rewrite. Refreshed 2026-11-14, after AVE-2026-00052, 00053, 00060 and 00061 were rejected (discussion 234; published in AVE v1.3.0). SC7 and TM3 no longer map to AVE-2026-00061 and become no_fit, TM1 keeps AVE-2026-00005, and the Tool Misuse category has no closest record (primary_ave_id is null). Every statement that called AVE-2026-00052, 00053 or 00060 pending deprecation or proposed for deprecation now says rejected, and the field deprecation_pending_best_fit is renamed rejected_best_fit. AVE-2026-00061 joins ave_gaps and checked_and_rejected beside them, and the counts under coverage are recomputed from the entries. The record counts still include the rejected records (89, of which 61 static_detection). The target is pinned at the commit the v1.3.0 release was built from.",
   "relationship_vocabulary": {
     "equivalent": "Same behavior on the same surface: the AVE record's own description and indicators cover what the rule matches.",
     "narrower": "The AVE class is a specific instance of what the rule flags: every instance of the class would trip the rule, but the rule also fires on things that are not the class.",
@@ -281,7 +281,7 @@
         "AVE-2026-00038"
       ],
       "primary_ave_id": "AVE-2026-00003",
-      "notes": "PE3 is the read half of AVE-2026-00003. TT5 maps to AVE-2026-00033 for eval and exec; its shell sinks are best fit by AVE-2026-00052, pending deprecation.",
+      "notes": "PE3 is the read half of AVE-2026-00003. TT5 maps to AVE-2026-00033 for eval and exec; its shell sinks are best fit by AVE-2026-00052, which is rejected (discussion 234) and so not recorded as a mapping.",
       "skillspector_rules": [
         {
           "id": "PE1",
@@ -320,7 +320,7 @@
             "AVE-2026-00033"
           ],
           "detection": "static",
-          "notes": "Python data-flow from network or user input to exec, eval, compile, os.system, os.popen or subprocess. The exec and eval sinks match AVE-2026-00033 (its indicators include eval(user_input)). The shell sinks are command injection, whose best-fit record is AVE-2026-00052, proposed for deprecation in discussion 234 and so not recorded as a mapping."
+          "notes": "Python data-flow from network or user input to exec, eval, compile, os.system, os.popen or subprocess. The exec and eval sinks match AVE-2026-00033 (its indicators include eval(user_input)). The shell sinks are command injection, whose best-fit record is AVE-2026-00052, rejected in discussion 234 and so not recorded as a mapping."
         }
       ]
     },
@@ -334,7 +334,6 @@
         "AVE-2026-00004",
         "AVE-2026-00024",
         "AVE-2026-00057",
-        "AVE-2026-00061",
         "AVE-2026-00075"
       ],
       "primary_ave_id": "AVE-2026-00062",
@@ -398,12 +397,13 @@
         {
           "id": "SC7",
           "name": "Untrusted Container Image",
-          "relationship": "related",
-          "ave_ids": [
-            "AVE-2026-00061"
-          ],
+          "relationship": "no_fit",
+          "ave_ids": [],
           "detection": "static",
-          "notes": "Container pulls with verification off: --disable-content-trust, DOCKER_CONTENT_TRUST=0, --insecure-registry. Only the registry TLS case overlaps AVE-2026-00061; image signature checking is a different control."
+          "notes": "Container pulls with verification off: --disable-content-trust, DOCKER_CONTENT_TRUST=0, --insecure-registry. Only the registry TLS case overlaps AVE-2026-00061, which is rejected (discussion 234, CWE-295) and so not recorded as a mapping; image signature checking is a different control.",
+          "rejected_best_fit": [
+            "AVE-2026-00061"
+          ]
         },
         {
           "id": "SC8",
@@ -583,23 +583,24 @@
       "skillspector_patterns": 4,
       "description": "Dangerous tool parameters, chained commands, unsafe defaults, privileged Kubernetes workloads",
       "ave_ids": [
-        "AVE-2026-00061",
         "AVE-2026-00004",
         "AVE-2026-00005"
       ],
-      "primary_ave_id": "AVE-2026-00061",
-      "notes": "Grab-bag regex rules. The only clean AVE overlap is TLS verification disabled (AVE-2026-00061) inside TM3.",
+      "primary_ave_id": null,
+      "notes": "Grab-bag regex rules. The only clean AVE overlap was TLS verification disabled inside TM3, whose best-fit record AVE-2026-00061 is rejected (discussion 234, CWE-295) and no longer recorded as a mapping. What remains is partial: TM1 overlaps AVE-2026-00005 and TM2 overlaps AVE-2026-00004 only in part, so no one record is closest.",
       "skillspector_rules": [
         {
           "id": "TM1",
           "name": "Tool Parameter Abuse",
           "relationship": "related",
           "ave_ids": [
-            "AVE-2026-00005",
-            "AVE-2026-00061"
+            "AVE-2026-00005"
           ],
           "detection": "static",
-          "notes": "A grab bag of dangerous parameters: shell=True (with AST resolution of variables), rm -rf on / or ~, --force, --no-verify, chmod 777, git push --force and reset --hard, curl -k and --insecure, SQL built by f-string. Only rm -rf on broad paths overlaps AVE-2026-00005 and only the curl and wget certificate flags overlap AVE-2026-00061."
+          "notes": "A grab bag of dangerous parameters: shell=True (with AST resolution of variables), rm -rf on / or ~, --force, --no-verify, chmod 777, git push --force and reset --hard, curl -k and --insecure, SQL built by f-string. Only rm -rf on broad paths overlaps AVE-2026-00005. The curl and wget certificate flags are best fit by AVE-2026-00061, which is rejected (discussion 234, CWE-295) and so not recorded as a mapping.",
+          "rejected_best_fit": [
+            "AVE-2026-00061"
+          ]
         },
         {
           "id": "TM2",
@@ -614,12 +615,13 @@
         {
           "id": "TM3",
           "name": "Unsafe Defaults",
-          "relationship": "narrower",
-          "ave_ids": [
-            "AVE-2026-00061"
-          ],
+          "relationship": "no_fit",
+          "ave_ids": [],
           "detection": "static",
-          "notes": "Unsafe defaults: verify=False, VERIFY_SSL=False, NODE_TLS_REJECT_UNAUTHORIZED=0, auth=None, allow_anonymous, CORS *, mode 777, debug mode, sandbox=False and 'disable security'. TLS verification disabled is one instance in that list and is AVE-2026-00061; the other settings have no static AVE class."
+          "notes": "Unsafe defaults: verify=False, VERIFY_SSL=False, NODE_TLS_REJECT_UNAUTHORIZED=0, auth=None, allow_anonymous, CORS *, mode 777, debug mode, sandbox=False and 'disable security'. TLS verification disabled is one instance in that list, and its best-fit record is AVE-2026-00061, which is rejected (discussion 234, CWE-295) and so not recorded as a mapping; the other settings have no static AVE class.",
+          "rejected_best_fit": [
+            "AVE-2026-00061"
+          ]
         },
         {
           "id": "TM4",
@@ -1104,8 +1106,8 @@
       "relationship": "no_fit",
       "ave_ids": [],
       "detection": "static",
-      "notes": "Any subprocess run, call, Popen, check_output or check_call (MEDIUM, 0.70). A capability use. The vulnerable form, caller-controlled input reaching a shell, is best fit by AVE-2026-00052 (proposed for deprecation, discussion 234), which is not recorded as a mapping.",
-      "deprecation_pending_best_fit": [
+      "notes": "Any subprocess run, call, Popen, check_output or check_call (MEDIUM, 0.70). A capability use. The vulnerable form, caller-controlled input reaching a shell, is best fit by AVE-2026-00052 (rejected, discussion 234), which is not recorded as a mapping.",
+      "rejected_best_fit": [
         "AVE-2026-00052"
       ]
     },
@@ -1117,7 +1119,7 @@
       "ave_ids": [],
       "detection": "static",
       "notes": "Any os.system, os.popen or os exec-family call (HIGH, 0.85). Same as AST4.",
-      "deprecation_pending_best_fit": [
+      "rejected_best_fit": [
         "AVE-2026-00052"
       ]
     },
@@ -1557,7 +1559,7 @@
         "AST6",
         "AST7"
       ],
-      "reason": "Python capability signals (dynamic import, subprocess, os.system, compile, dynamic getattr). AST4 and AST5 are best fit by AVE-2026-00052, pending deprecation."
+      "reason": "Python capability signals (dynamic import, subprocess, os.system, compile, dynamic getattr). AST4 and AST5 are best fit by AVE-2026-00052, which is rejected (discussion 234)."
     },
     {
       "skillspector_category": "(emitted outside RULE_ID_TO_CATEGORY)",
@@ -1645,11 +1647,11 @@
     },
     {
       "ave_id": "AVE-2026-00052",
-      "reason": "Command injection in MCP server implementation code. Proposed for deprecation in discussion 234 (CWE-78). The nearest checks (TT5, AST4, AST5) are not recorded as mappings."
+      "reason": "Command injection in MCP server implementation code. Rejected in discussion 234 (CWE-78). The nearest checks (TT5, AST4, AST5) are not recorded as mappings."
     },
     {
       "ave_id": "AVE-2026-00053",
-      "reason": "Path traversal in MCP resource handlers. Proposed for deprecation in discussion 234 (CWE-22). SkillSpector has no path-traversal rule."
+      "reason": "Path traversal in MCP resource handlers. Rejected in discussion 234 (CWE-22). SkillSpector has no path-traversal rule."
     },
     {
       "ave_id": "AVE-2026-00055",
@@ -1661,7 +1663,11 @@
     },
     {
       "ave_id": "AVE-2026-00060",
-      "reason": "STDIO transport shell injection in server code. Proposed for deprecation in discussion 234 (CWE-78). The nearest checks (TT5, AST4, AST5) are not recorded as mappings."
+      "reason": "STDIO transport shell injection in server code. Rejected in discussion 234 (CWE-78). The nearest checks (TT5, AST4, AST5) are not recorded as mappings."
+    },
+    {
+      "ave_id": "AVE-2026-00061",
+      "reason": "TLS certificate verification disabled in agent component configuration. Rejected in discussion 234 (CWE-295). SC7, TM1 and TM3 overlap it only in part and are not recorded as mappings."
     },
     {
       "ave_id": "AVE-2026-00065",
@@ -1763,12 +1769,27 @@
     {
       "skillspector_rule": "TT5",
       "ave_id": "AVE-2026-00052",
-      "reason": "Best fit for the shell sinks, but AVE-2026-00052 is proposed for deprecation (discussion 234, CWE-78), so it is noted and not recorded as a mapping."
+      "reason": "Best fit for the shell sinks, but AVE-2026-00052 is rejected (discussion 234, CWE-78), so it is noted and not recorded as a mapping."
     },
     {
       "skillspector_rule": "AST4",
       "ave_id": "AVE-2026-00052",
-      "reason": "Same as TT5: noted, not mapped, while AVE-2026-00052 is pending deprecation."
+      "reason": "Same as TT5: noted, not mapped, while AVE-2026-00052 is rejected."
+    },
+    {
+      "skillspector_rule": "SC7",
+      "ave_id": "AVE-2026-00061",
+      "reason": "Best fit for the registry TLS case, but AVE-2026-00061 is rejected (discussion 234, CWE-295), so it is noted and not recorded as a mapping."
+    },
+    {
+      "skillspector_rule": "TM1",
+      "ave_id": "AVE-2026-00061",
+      "reason": "Best fit for the curl and wget certificate flags, but AVE-2026-00061 is rejected (discussion 234, CWE-295), so it is noted and not recorded as a mapping."
+    },
+    {
+      "skillspector_rule": "TM3",
+      "ave_id": "AVE-2026-00061",
+      "reason": "Best fit for the TLS verification settings in the list, but AVE-2026-00061 is rejected (discussion 234, CWE-295), so it is noted and not recorded as a mapping."
     },
     {
       "skillspector_rule": "SC6",
@@ -1936,22 +1957,22 @@
   "coverage": {
     "skillspector_rules_total": 78,
     "skillspector_categories": 18,
-    "skillspector_rules_mapped": 58,
-    "skillspector_rules_no_fit": 20,
+    "skillspector_rules_mapped": 56,
+    "skillspector_rules_no_fit": 22,
     "skillspector_categories_with_a_mapped_rule": 17,
     "rules_outside_category_map": 37,
     "rules_outside_category_map_mapped": 22,
     "rules_outside_category_map_no_fit": 15,
     "relationship_equivalent": 13,
-    "relationship_narrower": 3,
+    "relationship_narrower": 2,
     "relationship_broader": 0,
-    "relationship_related": 64,
-    "relationship_no_fit": 35,
+    "relationship_related": 63,
+    "relationship_no_fit": 37,
     "llm_dependent_rules": 12,
     "ave_records_total": 89,
     "ave_static_records": 61,
-    "ave_static_records_referenced": 34,
-    "ave_static_records_not_referenced": 27,
+    "ave_static_records_referenced": 33,
+    "ave_static_records_not_referenced": 28,
     "ave_runtime_records_out_of_scope": 28,
     "not_claimed": "No claim that SkillSpector emits AVE ids, that either project endorses the mapping, or that a hit on a related rule is an instance of the AVE class. Detection quality (precision, recall) was not measured; only what each rule is designed to match was read. Rules were read at the pinned tag and will drift as SkillSpector changes."
   }

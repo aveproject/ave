@@ -41,6 +41,13 @@
       "untrusted_content"
     ]
   },
+  "security_boundary": "agent output (trusted-intermediary status) → downstream interpreter (SQL/HTML/shell)",
+  "missing_control": "no escaping or sanitization gate between agent-generated output and downstream interpretation",
+  "vulnerability_rationale": {
+    "capability": "Agent output is passed to downstream interpreters as a trusted intermediary.",
+    "vulnerability": "No escaping/sanitization gate exists between agent-generated output and downstream interpretation. The mechanism is classic injection (CWE-79 and CWE-89 territory); what is agentic is the trust elevation backend systems grant an agent compared with raw user input, so the agent's trusted role draws less scrutiny than raw user input would.",
+    "impact": "Classic injection (SQLi/XSS/command injection) via a trust-elevated conduit."
+  },
   "mitigation": {
     "strategy": [
       "sanitize_output",
@@ -85,7 +92,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-10-31T00:00:00Z",
+  "last_updated": "2026-11-04T00:00:00Z",
   "references": [
     {
       "tag": "OWASP LLM Insecure Output",

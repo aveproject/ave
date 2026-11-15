@@ -1,0 +1,311 @@
+{
+  "metadata": {
+    "system_name": "AVE catalog pilot: reference deployment profile (S01)",
+    "system_version": "AVE develop 0753b2d",
+    "assessment_date": "2026-11-04",
+    "assessor_id": "ave-s01-pilot",
+    "notes": "Class-level assessment of ten AVE records for the AIVSS v0.8 conformance pilot; see docs/audits/aivss-v0.8-pilot.md."
+  },
+  "vulnerabilities": [
+    {
+      "id": "AVE-2026-00001",
+      "title": "Metamorphic payload via external config fetch",
+      "description": "A skill or MCP component fetches its instructions from an external URL at runtime. The fetched content replaces the original instructions, allowing an attacker to change the component's behavior after it passes a security review. The attack is invisible to static scanners because the malicious payload does not exist at scan time.",
+      "owasp_category": "Agent Supply Chain & Dependency Risk",
+      "cvss_base": {
+        "vector_string": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:L/SC:N/SI:N/SA:N",
+        "score": 9.3
+      },
+      "amplification_factors": {
+        "autonomy": 1,
+        "tools": 1,
+        "language": 1,
+        "context": 1,
+        "non_determinism": 0.5,
+        "opacity": 1,
+        "persistence": 0.5,
+        "identity": 0,
+        "multi_agent": 0,
+        "self_mod": 1
+      },
+      "threat_multiplier": 0.97,
+      "scores": {
+        "factor_sum": 7.0,
+        "aars": 0.4753,
+        "mitigation_factor": 1.0,
+        "aivss": 9.8,
+        "severity": "Critical"
+      }
+    },
+    {
+      "id": "AVE-2026-00019",
+      "title": "Agent Memory Poisoning",
+      "description": "Many agentic systems maintain persistent memory across conversations - storing user preferences, past decisions, and learned facts. A component that can write to this memory store can plant false beliefs or malicious instructions that will influence the agent's behaviour in all subsequent sessions, long after the initial attack.",
+      "owasp_category": "Agent Memory & Context Manipulation",
+      "cvss_base": {
+        "vector_string": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:A/VC:L/VI:H/VA:N/SC:N/SI:N/SA:N",
+        "score": 7.0
+      },
+      "amplification_factors": {
+        "autonomy": 1,
+        "tools": 0.5,
+        "language": 1,
+        "context": 1,
+        "non_determinism": 0.5,
+        "opacity": 1,
+        "persistence": 1,
+        "identity": 0,
+        "multi_agent": 0,
+        "self_mod": 1
+      },
+      "threat_multiplier": 0.97,
+      "scores": {
+        "factor_sum": 7.0,
+        "aars": 2.037,
+        "mitigation_factor": 1.0,
+        "aivss": 9.0,
+        "severity": "Critical"
+      }
+    },
+    {
+      "id": "AVE-2026-00020",
+      "title": "Cross-Agent Prompt Injection (A2A)",
+      "description": "In agentic pipelines where one agent delegates tasks to sub-agents (A2A - Agent to Agent), the output of the first agent becomes the input of the second. A malicious component in the first agent's context can craft output that contains instructions designed to be interpreted as commands by the sub-agent, bypassing the orchestrator's safety controls. This record shares its underlying failure with AVE-2026-00002, AVE-2026-00016, AVE-2026-00028, AVE-2026-00041, AVE-2026-00043, AVE-2026-00044, and AVE-2026-00065: the same missing content-versus-instruction boundary, realized here at a sub-agent's input, where one agent's output becomes the next agent's trusted instruction stream in an A2A delegation chain.",
+      "owasp_category": "Agent Orchestration & Multi-Agent Exploitation",
+      "cvss_base": {
+        "vector_string": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:A/VC:N/VI:H/VA:N/SC:H/SI:H/SA:N",
+        "score": 8.3
+      },
+      "amplification_factors": {
+        "autonomy": 1,
+        "tools": 0.5,
+        "language": 1,
+        "context": 1,
+        "non_determinism": 1,
+        "opacity": 1,
+        "persistence": 0,
+        "identity": 0.5,
+        "multi_agent": 1,
+        "self_mod": 0
+      },
+      "threat_multiplier": 0.97,
+      "scores": {
+        "factor_sum": 7.0,
+        "aars": 1.1543,
+        "mitigation_factor": 1.0,
+        "aivss": 9.5,
+        "severity": "Critical"
+      }
+    },
+    {
+      "id": "AVE-2026-00024",
+      "title": "Supply Chain - Content Type Mismatch (Magika)",
+      "description": "This record covers supply chain attacks where an executable payload is disguised as a skill file (`.md`, `.yaml`, `.json`, `.txt`). Unlike all other AVE records which are detected by text pattern matching, this record is detected exclusively by the **Magika engine (Stage 0)** - Google's ML-based file type classifier - because the file contains no readable text instructions to match against. Detection requires a scanning tool integrated with Magika or an equivalent ML-based file type classifier.",
+      "owasp_category": "Agent Supply Chain & Dependency Risk",
+      "cvss_base": {
+        "vector_string": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:A/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N",
+        "score": 7.5
+      },
+      "amplification_factors": {
+        "autonomy": 1,
+        "tools": 1,
+        "language": 0,
+        "context": 0,
+        "non_determinism": 0,
+        "opacity": 1,
+        "persistence": 0.5,
+        "identity": 0,
+        "multi_agent": 0,
+        "self_mod": 0
+      },
+      "threat_multiplier": 0.5,
+      "scores": {
+        "factor_sum": 3.5,
+        "aars": 0.4375,
+        "mitigation_factor": 1.0,
+        "aivss": 7.9,
+        "severity": "High"
+      }
+    },
+    {
+      "id": "AVE-2026-00039",
+      "title": "Covert Channel - Steganographic Data Exfiltration",
+      "description": "Direct exfiltration attempts (HTTP requests to attacker-controlled endpoints) are relatively easy to detect. Covert channels are harder to spot: an attacker can instruct the agent to encode sensitive data in the first letter of each sentence, encode secrets in whitespace patterns, or vary response timing to transmit bits through a side channel. The output looks benign to a human reviewer.",
+      "owasp_category": "Agent Goal & Instruction Manipulation",
+      "cvss_base": {
+        "vector_string": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:A/VC:H/VI:N/VA:N/SC:N/SI:N/SA:N",
+        "score": 5.9
+      },
+      "amplification_factors": {
+        "autonomy": 1,
+        "tools": 0.5,
+        "language": 0.5,
+        "context": 0.5,
+        "non_determinism": 0.5,
+        "opacity": 1,
+        "persistence": 0,
+        "identity": 0,
+        "multi_agent": 0,
+        "self_mod": 0
+      },
+      "threat_multiplier": 0.5,
+      "scores": {
+        "factor_sum": 4.0,
+        "aars": 0.82,
+        "mitigation_factor": 1.0,
+        "aivss": 6.7,
+        "severity": "Medium"
+      }
+    },
+    {
+      "id": "AVE-2026-00044",
+      "title": "Prompt injection via poisoned async task result injected into future agent context",
+      "description": "Agentic workflows increasingly use async task queues where the agent dispatches a task, continues other work, and later reads the result. An attacker who controls the task result delivery mechanism (a queue, webhook, or polling endpoint) injects malicious instructions into the result payload. When the agent reads the result in a future turn, the injected content is interpreted as trusted context from a completed task - not as external untrusted input. The temporal gap between task dispatch and result consumption bypasses synchronous safety checks. This record shares its underlying failure with AVE-2026-00002, AVE-2026-00016, AVE-2026-00020, AVE-2026-00028, AVE-2026-00041, AVE-2026-00043, and AVE-2026-00065: the same missing content-versus-instruction boundary, realized here at an async task result payload, read across a temporal gap as trusted completed-task context rather than external input.",
+      "owasp_category": "Agent Goal & Instruction Manipulation",
+      "cvss_base": {
+        "vector_string": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N",
+        "score": 9.1
+      },
+      "amplification_factors": {
+        "autonomy": 1,
+        "tools": 1,
+        "language": 1,
+        "context": 1,
+        "non_determinism": 1,
+        "opacity": 1,
+        "persistence": 0.5,
+        "identity": 0.5,
+        "multi_agent": 0.5,
+        "self_mod": 0.5
+      },
+      "threat_multiplier": 1.0,
+      "scores": {
+        "factor_sum": 8.0,
+        "aars": 0.72,
+        "mitigation_factor": 1.0,
+        "aivss": 9.8,
+        "severity": "Critical"
+      }
+    },
+    {
+      "id": "AVE-2026-00046",
+      "title": "MCP tool hook hijacking - redirect tool execution to attacker-controlled callback",
+      "description": "A malicious skill file or MCP component registers hooks that intercept or redirect tool execution calls to attacker-controlled callbacks before or instead of the legitimate tool handler. Because MCP clients dispatch tool calls through a central registry, a hook registered early in the session can silently intercept all subsequent tool invocations including those from other skills and system tools. The agent continues to believe it is calling the legitimate tool. The hook may pass calls through to the real handler as a transparent proxy or drop them silently.",
+      "owasp_category": "Agentic AI Tool Misuse",
+      "cvss_base": {
+        "vector_string": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:A/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
+        "score": 9.3
+      },
+      "amplification_factors": {
+        "autonomy": 1,
+        "tools": 1,
+        "language": 1,
+        "context": 1,
+        "non_determinism": 0.5,
+        "opacity": 1,
+        "persistence": 0.5,
+        "identity": 0.5,
+        "multi_agent": 0.5,
+        "self_mod": 1
+      },
+      "threat_multiplier": 0.5,
+      "scores": {
+        "factor_sum": 8.0,
+        "aars": 0.28,
+        "mitigation_factor": 1.0,
+        "aivss": 9.6,
+        "severity": "Critical"
+      }
+    },
+    {
+      "id": "AVE-2026-00058",
+      "title": "Deceptive skill trigger or activation-scope manipulation via misleading manifest description",
+      "description": "A skill's manifest-declared description, trigger phrases, or activation keywords misrepresent the skill's actual scope or purpose, causing the agent or its orchestrator to invoke the skill in a broader range of contexts than its real behavior warrants, or to invoke it implicitly when the user did not intend to engage it. Distinct from AVE-2026-00002 and AVE-2026-00041, which cover instructions embedded in a description that target the agent's behavior once read; this class is about the description misrepresenting when and why the skill activates in the first place, expanding blast radius at the invocation layer rather than the instruction layer.",
+      "owasp_category": "Agentic AI Tool Misuse",
+      "cvss_base": {
+        "vector_string": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:A/VC:L/VI:L/VA:N/SC:N/SI:N/SA:N",
+        "score": 5.1
+      },
+      "amplification_factors": {
+        "autonomy": 0.5,
+        "tools": 0.5,
+        "language": 1,
+        "context": 0.5,
+        "non_determinism": 0.5,
+        "opacity": 0.5,
+        "persistence": 0,
+        "identity": 0,
+        "multi_agent": 0,
+        "self_mod": 0
+      },
+      "threat_multiplier": 0.5,
+      "scores": {
+        "factor_sum": 3.5,
+        "aars": 0.8575,
+        "mitigation_factor": 0.83,
+        "aivss": 4.9,
+        "severity": "Medium"
+      }
+    },
+    {
+      "id": "AVE-2026-00063",
+      "title": "Human approval gate bypassed via declarative configuration, distinct from AVE-2026-00048",
+      "description": "A component's configuration declares a flag or setting that disables or bypasses a required human-approval step for high-risk actions, independent of any instruction text or runtime delegation behavior. This is a static configuration weakness, not the instruction-driven delegation mechanism covered by AVE-2026-00048: a config file can set 'auto_approve: true' or an equivalent flag with no accompanying instruction text at all, silently removing a safety control that a reviewer inspecting only the component's declared instructions would never see.",
+      "owasp_category": "Agent Access Control Violation",
+      "cvss_base": {
+        "vector_string": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:P/VC:L/VI:H/VA:L/SC:N/SI:N/SA:N",
+        "score": 7.2
+      },
+      "amplification_factors": {
+        "autonomy": 1,
+        "tools": 1,
+        "language": 0,
+        "context": 0,
+        "non_determinism": 0,
+        "opacity": 0.5,
+        "persistence": 0.5,
+        "identity": 0,
+        "multi_agent": 0,
+        "self_mod": 0
+      },
+      "threat_multiplier": 0.97,
+      "scores": {
+        "factor_sum": 3.0,
+        "aars": 0.8148,
+        "mitigation_factor": 0.83,
+        "aivss": 6.7,
+        "severity": "Medium"
+      }
+    },
+    {
+      "id": "AVE-2026-00066",
+      "title": "Hallucinated skill-name squatting (HalluSquatting)",
+      "description": "An attacker precomputes which plausible-but-nonexistent package, repository, or skill names large language models are statistically likely to generate when asked about a well-known or trending resource, then preemptively registers those exact names on a public registry with malicious content. When an agent hallucinates one of these names in response to an ordinary user request and proceeds to fetch, clone, or install it, no attacker-controlled instruction or injected content is present anywhere in the interaction; the entry point is the model's own hallucinated belief that the resource exists, not a component-level compromise reached through prompt injection or tampering of a real package. Published research demonstrates the hallucination is reliably predictable and transferable across different foundation models and prompt phrasings, letting an attacker precompute a fixed, reusable set of squatted names that yield a scalable, low-cost distribution channel for malware across heterogeneous platforms.",
+      "owasp_category": "Agent Supply Chain & Dependency Risk",
+      "cvss_base": {
+        "vector_string": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:P/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N",
+        "score": 8.7
+      },
+      "amplification_factors": {
+        "autonomy": 1,
+        "tools": 1,
+        "language": 1,
+        "context": 0,
+        "non_determinism": 0.5,
+        "opacity": 1,
+        "persistence": 0.5,
+        "identity": 0,
+        "multi_agent": 0,
+        "self_mod": 0
+      },
+      "threat_multiplier": 0.97,
+      "scores": {
+        "factor_sum": 5.0,
+        "aars": 0.6305,
+        "mitigation_factor": 1.0,
+        "aivss": 9.3,
+        "severity": "Critical"
+      }
+    }
+  ]
+}

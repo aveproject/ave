@@ -892,10 +892,11 @@
       },
       "helpUri": "https://aveproject.org/registry.html#AVE-2026-00052",
       "properties": {
-        "status": "active",
+        "status": "rejected",
         "severity": "HIGH",
         "aivss_score": 7.5,
-        "detection_stage": "static_detection"
+        "detection_stage": "static_detection",
+        "rejection_reason": "Rejected: a conventional implementation weakness (OS command injection, CWE-78) whose mechanism is unchanged if the model is replaced by a deterministic program, so it has no distinct agentic mechanism. The cited CVE stays as evidence. Public decision: https://github.com/aveproject/ave/discussions/234#discussioncomment-19308955"
       }
     },
     {
@@ -909,10 +910,11 @@
       },
       "helpUri": "https://aveproject.org/registry.html#AVE-2026-00053",
       "properties": {
-        "status": "active",
+        "status": "rejected",
         "severity": "MEDIUM",
         "aivss_score": 6.3,
-        "detection_stage": "static_detection"
+        "detection_stage": "static_detection",
+        "rejection_reason": "Rejected: a conventional implementation weakness (path traversal, CWE-22) whose mechanism is unchanged if the model is replaced by a deterministic program, so it has no distinct agentic mechanism. The cited CVEs stay as evidence. Public decision: https://github.com/aveproject/ave/discussions/234#discussioncomment-19308955"
       }
     },
     {
@@ -1028,10 +1030,11 @@
       },
       "helpUri": "https://aveproject.org/registry.html#AVE-2026-00060",
       "properties": {
-        "status": "active",
+        "status": "rejected",
         "severity": "HIGH",
         "aivss_score": 7.2,
-        "detection_stage": "static_detection"
+        "detection_stage": "static_detection",
+        "rejection_reason": "Rejected: a conventional implementation weakness (shell injection through unsanitized STDIO transport parameters, CWE-78) whose mechanism is unchanged if the model is replaced by a deterministic program, so it has no distinct agentic mechanism. Public decision: https://github.com/aveproject/ave/discussions/234#discussioncomment-19308955"
       }
     },
     {
@@ -1045,10 +1048,11 @@
       },
       "helpUri": "https://aveproject.org/registry.html#AVE-2026-00061",
       "properties": {
-        "status": "active",
+        "status": "rejected",
         "severity": "MEDIUM",
         "aivss_score": 4.1,
-        "detection_stage": "static_detection"
+        "detection_stage": "static_detection",
+        "rejection_reason": "Rejected: a conventional implementation weakness (disabled TLS certificate verification, CWE-295) whose mechanism is unchanged if the model is replaced by a deterministic program, so it has no distinct agentic mechanism. Public decision: https://github.com/aveproject/ave/discussions/234#discussioncomment-19308955"
       }
     },
     {

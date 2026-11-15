@@ -36,6 +36,13 @@
   "trifecta_profile": {
     "requires": ["untrusted_content"]
   },
+  "security_boundary": "reviewed artifact (the .py source a human or scanner reads) → executed artifact (the .pyc the interpreter actually loads)",
+  "missing_control": "no bytecode-versus-source comparison step in the review or scanning pipeline",
+  "vulnerability_rationale": {
+    "capability": "CPython prefers a valid cached .pyc over recompiling source when one is present.",
+    "vulnerability": "The bytecode-cache preference is a general interpreter property and not agent-specific in mechanism. What makes it an AVE class is the target: research cited in the record (CSA AI Safety Initiative and Trail of Bits) frames it as a technique for evading agent-skill scanners specifically, which document their own inability to analyze binary or encrypted code, so a skill's .pyc can carry dangerous primitives that a source-only scan never sees.",
+    "impact": "The interpreter executes dangerous primitives (process execution, network calls, credential-path access) that appear nowhere in the .py source a reviewer or source-only scanner reads."
+  },
   "mitigation": {
     "strategy": ["validate_input", "deny_by_default"],
     "enforcement_point": "static_scan",
@@ -59,7 +66,7 @@
   "researcher": "CSA / Trail of Bits",
   "researcher_url": "https://labs.cloudsecurityalliance.org/research/csa-research-note-ai-agent-skill-scanner-bypass-20260610-csa/",
   "published": "2026-08-07T00:00:00Z",
-  "last_updated": "2026-08-07T00:00:00Z",
+  "last_updated": "2026-11-04T00:00:00Z",
   "references": [
     {
       "tag": "repo-forensics bytecode scanner",

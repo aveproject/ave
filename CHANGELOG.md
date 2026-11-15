@@ -8,6 +8,30 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-11-14
+
+### Summary
+- **The first records to leave `active`.** AVE-2026-00052, 00053, 00060 and 00061 are `rejected` (#454, #455). Each is a
+  conventional weakness (OS command injection, path traversal, STDIO shell injection, disabled TLS verification) whose
+  mechanism is unchanged if the model is replaced by a deterministic program. The decision was made in public, in
+  discussion #234, and each record's `rejection_reason` links it. The ids stay resolvable with their full content, and
+  the CVEs cited in 00052 and 00053 stay in their records as evidence. No id was removed, renumbered or reused, and no
+  record was merged or deprecated. A consumer must treat any status other than `active` as not active; every earlier
+  catalog release has only `active` records.
+- **89 records: 85 `active` and 4 `rejected`**, all on schema 1.3.0 (`v1.2.0` shipped schema 1.2.0, which has no
+  `rejected` status). By severity: 1 CRITICAL, 20 HIGH, 66 MEDIUM and 2 LOW across all 89, and 1, 18, 64 and 2 among
+  the 85 `active`. No score or severity changed since `v1.2.0`.
+- **A fourth release asset: the SARIF taxonomy.** `ave-taxonomy.json` is the AVE taxonomy (one taxon per record, the
+  rejected ones included) of exactly this release's records. The release workflow builds it from the release's own
+  `ave-records.json`, `scripts/check_release_assets.py` rebuilds it and demands a byte match, and it is attested with
+  the other data files (#442).
+- **Record text.** 71 records gained `security_boundary`, `missing_control` and `vulnerability_rationale`, so 80 of 89
+  carry them now, and eight fingerprints that had been cut off at 200 characters are repaired.
+- **New checks** run in CI: the revisions ratchet, the severity band, a guard against cut-off fingerprints and the
+  documented field lists. `scripts/ave_conformance.py` checks the output of tools that emit AVE ids.
+- **12 crosswalks**, two of them refreshed (cfgaudit and the agent-evidence vocabulary).
+- Everything below was merged after `v1.2.0` (2026-10-29).
+
 ### SARIF
 - **The taxonomy as a verified catalog-release asset** (#442). The `catalog-release` workflow builds
   `ave-taxonomy.json` with `scripts/build_taxonomy.py` from the release's own `ave-records.json`, stamped with the
@@ -15,7 +39,7 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   other data files. `scripts/check_release_assets.py` regenerates it from the release's records and demands a byte
   match, naming the field or taxon that differs first, and takes a new `--repo owner/name` (default `aveproject/ave`)
   so a fork's release is verified against the fork. Releases from v1.3.0 must carry the taxonomy; v1.0.0 to v1.2.0
-  verify as before. That makes the order mechanical: this has to merge before v1.3.0 is cut.
+  verify as before.
 - **The AVE taxonomy as a canonical file, form C and taxonomy checks** (#420). `dist/ave-taxonomy-latest.json` is the AVE
   taxonomy as a SARIF 2.1.0 `toolComponent` with a frozen `guid` (`5110b285-34d7-5334-94db-0308b24cfb49`, the UUIDv5 of
   `https://aveproject.org/taxonomy/AVE`) and one taxon per record, including records whose status is not `active`.
@@ -30,6 +54,16 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   titles and description until those records are corrected.
 
 ### Records
+- **Four records rejected** (#454, #455). AVE-2026-00052 (command injection, CWE-78), 00053 (path traversal, CWE-22),
+  00060 (STDIO transport shell injection, CWE-78) and 00061 (TLS verification disabled, CWE-295). Each has `status`
+  `rejected`, a `rejection_reason` that states the reason and links the public decision (discussion #234), and a
+  `revisions` entry (`status`, `active` to `rejected`, `status_changed`). Nothing else in them changed: scores,
+  mappings, references and researcher credit stay. Crosswalk rows that name them are refreshed separately.
+- **Taxonomy fields on 71 more records** (#422, #424, #426, #428, #430, #432, #438, #444). `security_boundary`,
+  `missing_control` and `vulnerability_rationale` were added in seven batches covering 64 records, and to seven more
+  (AVE-2026-00004, 00005, 00033, 00040, 00047, 00073 and 00075) whose `vulnerability_rationale.vulnerability` also
+  states what makes the class agentic and not a conventional weakness. Nine records do not carry them yet:
+  AVE-2026-00035, 00049, 00052, 00053, 00054, 00060, 00061, 00062 and 00072.
 - **Eight cut-off fingerprints repaired** (#414). AVE-2026-00023, 00026, 00029, 00030, 00033, 00038, 00039 and
   00040 had a `behavioral_fingerprint` that stopped mid-word at exactly 200 characters (`... human oversight
   checkp`), since the AIVSS migration commits of 2026-05-12 and 2026-05-13 (#17, #18). Seven are restored to the
@@ -73,6 +107,32 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   repository's history it reports the AVE-2026-00044 rescore (#294) and the AVE-2026-00074
   stamp (#299), the two changes that had no entry. `CONTRIBUTING.md` says when an entry is
   required and which `reason_code` to use.
+
+### Crosswalks
+- **cfgaudit refreshed from v1.16.0 to v1.18.1** (#357). cfgaudit has 116 rules, 66 of them mapped onto 28 classes, and
+  no mapping changed. The two rules added since (CFG115 and CFG116) are unmapped. The 89 records were read again.
+- **The agent-evidence vocabulary mapping refreshed to vocabulary 0.8.0** (#364), 37 terms against the 8 of the first
+  mapping, and the 89 records. Sixteen records carry a mapped field where the old file said none, so the
+  `evidence_vantage` and `verification_basis` rows move from inferred to emitted.
+
+### Documentation
+- **README.** It explains how AVE works and how to use it, and states what is stable (#392). Statements that were no
+  longer true are removed: a coverage badge for a directory that does not exist, and the claim that every record has
+  detection rules in the scanner (#386).
+- **What is immutable** (#404). `CONTRIBUTING.md` and `SECURITY.md` promise that the `ave_id` is never renumbered,
+  reused or deleted, and no longer that records and credit never change.
+- **Implementer guide.** Schema 1.3.0's statuses are described as published (#380), and the guide says which release is
+  the first on schema 1.3.0 and which records have left `active`.
+- **CVSS input audit** (#402), `docs/audits/cvss-input-reconciliation.md`. Of 88 valid CVSS v4.0 vectors, 3 have a
+  stored `cvss_base` equal to the vector's base score and 85 differ; one vector (AVE-2026-00066) is not valid v4.0.
+  Nothing was changed by the audit.
+- **Decisions and a work queue** (#410, #418), `docs/decisions/generic-class-decisions.md` and
+  `docs/decisions/quality-queue.json`: the maintainer's decisions on the 16 generic-class records and a queue of
+  quality work over all 89.
+- **AIVSS v0.8 conformance statement and pilot** (#446), `docs/specs/aivss-v0.8-conformance.md`,
+  `docs/audits/aivss-v0.8-pilot.md` and its data file, with `scripts/aivss_v08.py`, the v0.8 arithmetic in exact decimal,
+  and its tests. This is a proposal. The scores in the records are still computed by the schema 1.x equation, and
+  nothing in this release applies the statement.
 
 ### Schema
 - **Schema 1.3.0** (#104) implements the deprecation policy in

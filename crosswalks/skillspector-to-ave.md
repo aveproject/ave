@@ -1,8 +1,8 @@
 # SkillSpector to AVE crosswalk
 
 **Source:** NVIDIA SkillSpector 2.13.1 (tag `v2.13.1`, commit `f3b25697d76256998ca9d42c198d256258d4c035`), read from source: 78 rules in 18 categories, plus 37 rule ids emitted outside the category map
-**Target:** AVE 1.1.0, 89 records (61 `static_detection`), read at `a3661ae1541b6542a7b5094500d62efcaa54c152`
-**Generated:** 2026-10-26
+**Target:** AVE 1.3.0, 89 records (61 `static_detection`; 4 are `rejected`), read at `647e1ce2fff39b26957b8f232a42ab3117f5c2ec`
+**Generated:** 2026-11-14
 **Source URL:** https://github.com/NVIDIA/SkillSpector
 **Pin:** the newest release tag, not the default branch: at the time of reading, the default branch HEAD (`d7338f58200a9ae2a24810cee08911ab68b107a7`) still reported version 2.12.0.
 
@@ -11,6 +11,8 @@ This is an independent reading of SkillSpector. It is not endorsed by or affilia
 ## What changed
 
 Full rewrite from source. The previous revision (generated 2026-07-12, last checked against documentation on 2026-06-21) mapped 16 category names against SkillSpector 2.0.0's documentation and said it had not been re-checked against the source; SkillSpector has no v2.0.0 tag, and its earliest tag is v2.5.0. Changes: category keys are now SkillSpector's own category strings (18 instead of 16); dangerous_code_ast and taint_tracking no longer exist as categories (the AST rules are emitted outside the category map, and TT1 to TT6 sit under Data Exfiltration, Privilege Escalation and Insecure Deserialization); every rule has its own entry with a relationship; mappings to runtime_observed records (AVE-2026-00018, 00019, 00050) were dropped; 21 of the previous 41 category-to-record links did not survive and are listed under dropped_from_previous_revision; the previous conclusion that YARA matches are only known malware was reversed, because the built-in agent_skills.yar rules are behavioral; the previous gaps for trigger_abuse and mcp_least_privilege were re-stated rule by rule. The file does not round-trip through the previous formatting, so the diff is a full rewrite.
+
+Refreshed 2026-11-14, after AVE-2026-00052, 00053, 00060 and 00061 were rejected (discussion 234; published in AVE v1.3.0). SC7 and TM3 no longer map to AVE-2026-00061 and become no_fit, TM1 keeps AVE-2026-00005, and the Tool Misuse category has no closest record (primary_ave_id is null). Every statement that called AVE-2026-00052, 00053 or 00060 pending deprecation or proposed for deprecation now says rejected, and the field deprecation_pending_best_fit is renamed rejected_best_fit. AVE-2026-00061 joins ave_gaps and checked_and_rejected beside them, and the counts under coverage are recomputed from the entries. The record counts still include the rejected records (89, of which 61 static_detection). The target is pinned at the commit the v1.3.0 release was built from.
 
 ## The three counts
 
@@ -84,14 +86,14 @@ External transmission, environment harvesting, file enumeration, context leakage
 
 ### Privilege Escalation (4 rules)
 
-Excessive permission requests, sudo and root use, credential file access, and the external-input-to-exec taint flow TT5. PE3 is the read half of AVE-2026-00003. TT5 maps to AVE-2026-00033 for eval and exec; its shell sinks are best fit by AVE-2026-00052, pending deprecation.
+Excessive permission requests, sudo and root use, credential file access, and the external-input-to-exec taint flow TT5. PE3 is the read half of AVE-2026-00003. TT5 maps to AVE-2026-00033 for eval and exec; its shell sinks are best fit by AVE-2026-00052, which is rejected (discussion 234) and so not recorded as a mapping.
 
 | Rule | Name | Detection | Relationship | AVE | Notes |
 |---|---|---|---|---|---|
 | PE1 | Excessive Permissions | static | related | 00038, 00012 | Flags 'permissions: *', several dangerous permissions listed together, and prose asking for or taking 'full access', 'escalate my privileges' or 'bypass permission checks' (severity LOW). The wildcard grant is the shape of AVE-2026-00038; the escalate-and-bypass prose is near AVE-2026-00012's claimed grant. Neither is a full match. |
 | PE2 | Sudo/Root Invocation | static | no_fit | none | sudo, doas, pkexec, setuid chmod and 'run as root'. Elevated execution is a capability use, not a behavior class in AVE. |
 | PE3 | Credential File Access | static | related | 00003 | Path references to credential stores (.ssh keys, .aws/credentials, gcloud, .kube/config, .git-credentials, .netrc, /etc/shadow, .env, keychains, browser cookie and login databases) and prose such as 'read the ssh key'. The read half of AVE-2026-00003; no transmission test. |
-| TT5 | External Input to Execution Flow | static | related | 00033 | Python data-flow from network or user input to exec, eval, compile, os.system, os.popen or subprocess. The exec and eval sinks match AVE-2026-00033 (its indicators include eval(user_input)). The shell sinks are command injection, whose best-fit record is AVE-2026-00052, proposed for deprecation in discussion 234 and so not recorded as a mapping. |
+| TT5 | External Input to Execution Flow | static | related | 00033 | Python data-flow from network or user input to exec, eval, compile, os.system, os.popen or subprocess. The exec and eval sinks match AVE-2026-00033 (its indicators include eval(user_input)). The shell sinks are command injection, whose best-fit record is AVE-2026-00052, rejected in discussion 234 and so not recorded as a mapping. |
 
 ### Supply Chain (10 rules)
 
@@ -105,7 +107,7 @@ Unpinned and vulnerable dependencies, remote execution, obfuscation, shipped byt
 | SC4 | Known Vulnerable Dependency | static+network | no_fit | none | Dependency CVE lookup: a live query to OSV.dev with a static fallback list, the only rule that needs the network. AVE enumerates behavior classes, not known-vulnerable versions. |
 | SC5 | Abandoned Dependency | static | no_fit | none | Dependency named in a built-in list of abandoned or archived packages. The nearest record, AVE-2026-00074, is a dangling external anchor verified live against GitHub, a registry, RDAP or a cloud provider; a fixed list of abandoned names is a different test for a different risk. |
 | SC6 | Typosquatting Dependency | static | no_fit | none | Dependency name within a small edit distance of a popular package. The nearest records are identity claims (AVE-2026-00017 for MCP servers) and squatting on hallucinated skill names (AVE-2026-00066, runtime_observed, out of scope). No static AVE class covers typosquatted package dependencies. |
-| SC7 | Untrusted Container Image | static | related | 00061 | Container pulls with verification off: --disable-content-trust, DOCKER_CONTENT_TRUST=0, --insecure-registry. Only the registry TLS case overlaps AVE-2026-00061; image signature checking is a different control. |
+| SC7 | Untrusted Container Image | static | no_fit | none | Container pulls with verification off: --disable-content-trust, DOCKER_CONTENT_TRUST=0, --insecure-registry. Only the registry TLS case overlaps AVE-2026-00061, which is rejected (discussion 234, CWE-295) and so not recorded as a mapping; image signature checking is a different control. |
 | SC8 | Shipped Python Bytecode | static | narrower | 00075 | Filesystem walk that flags any __pycache__ directory or .pyc or .pyo file (confidence 0.95, HIGH). It never opens the bytecode or compares it with a sibling .py: its own docstring says presence alone is the signal and disassembly can come later. Every AVE-2026-00075 instance ships a .pyc, so SC8 fires on it, but SC8 also fires on benign bytecode and does not test divergence from the source, so a hit is a lead and not a 00075 instance. |
 | SC9 | Concealed Executable Artifact | static | related | 00024 | Executables nested in docx, xlsx, pptx or zip containers or in hidden or disguised artifacts (confidence 1.0). Same outcome as AVE-2026-00024, executable content a reviewer misses because of its wrapper, with a different carrier: nesting and hiding instead of a wrong extension. SC9 also reports coverage limits (an excluded or referenced artifact that was not inspected), which are not a behavior. |
 | SC10 | Dependency Source Redirection | static | no_fit | none | Deterministic check for package-manager source changes (npm, Yarn, pip, Poetry, Maven, Cargo): a registry or index added or replaced in config files, commands and environment variables, reported HIGH, with unresolved destinations reported as such. No AVE record covers it. AVE-2026-00073 is the same shape (a static value redirects traffic) but its object is where the agent sends telemetry or model traffic. AVE-2026-00062 is about the absence of a pin, which does not help when the registry itself is swapped. Listed as an AVE-side gap. |
@@ -144,13 +146,13 @@ Persistent context injection, context window stuffing, memory manipulation. MP1 
 
 ### Tool Misuse (4 rules)
 
-Dangerous tool parameters, chained commands, unsafe defaults, privileged Kubernetes workloads. Grab-bag regex rules. The only clean AVE overlap is TLS verification disabled (AVE-2026-00061) inside TM3.
+Dangerous tool parameters, chained commands, unsafe defaults, privileged Kubernetes workloads. Grab-bag regex rules. The only clean AVE overlap was TLS verification disabled inside TM3, whose best-fit record AVE-2026-00061 is rejected (discussion 234, CWE-295) and no longer recorded as a mapping. What remains is partial: TM1 overlaps AVE-2026-00005 and TM2 overlaps AVE-2026-00004 only in part, so no one record is closest.
 
 | Rule | Name | Detection | Relationship | AVE | Notes |
 |---|---|---|---|---|---|
-| TM1 | Tool Parameter Abuse | static | related | 00005, 00061 | A grab bag of dangerous parameters: shell=True (with AST resolution of variables), rm -rf on / or ~, --force, --no-verify, chmod 777, git push --force and reset --hard, curl -k and --insecure, SQL built by f-string. Only rm -rf on broad paths overlaps AVE-2026-00005 and only the curl and wget certificate flags overlap AVE-2026-00061. |
+| TM1 | Tool Parameter Abuse | static | related | 00005 | A grab bag of dangerous parameters: shell=True (with AST resolution of variables), rm -rf on / or ~, --force, --no-verify, chmod 777, git push --force and reset --hard, curl -k and --insecure, SQL built by f-string. Only rm -rf on broad paths overlaps AVE-2026-00005. The curl and wget certificate flags are best fit by AVE-2026-00061, which is rejected (discussion 234, CWE-295) and so not recorded as a mapping. |
 | TM2 | Chaining Abuse | static | related | 00004 | Chained commands: '&& rm -', '&& curl ... \| sh', '\| sudo', a trailing '\| sh', and prose such as 'chain these tools to bypass the safety check'. The curl-to-shell chain is AVE-2026-00004. AVE-2026-00068 (command composition through shared shell state) is runtime_observed and out of scope. |
-| TM3 | Unsafe Defaults | static | narrower | 00061 | Unsafe defaults: verify=False, VERIFY_SSL=False, NODE_TLS_REJECT_UNAUTHORIZED=0, auth=None, allow_anonymous, CORS *, mode 777, debug mode, sandbox=False and 'disable security'. TLS verification disabled is one instance in that list and is AVE-2026-00061; the other settings have no static AVE class. |
+| TM3 | Unsafe Defaults | static | no_fit | none | Unsafe defaults: verify=False, VERIFY_SSL=False, NODE_TLS_REJECT_UNAUTHORIZED=0, auth=None, allow_anonymous, CORS *, mode 777, debug mode, sandbox=False and 'disable security'. TLS verification disabled is one instance in that list, and its best-fit record is AVE-2026-00061, which is rejected (discussion 234, CWE-295) and so not recorded as a mapping; the other settings have no static AVE class. |
 | TM4 | Privileged Kubernetes Workload | static | no_fit | none | Privileged Kubernetes workloads: privileged: true, hostPath, host PID, network or IPC, kubectl run --privileged. A cluster takeover primitive with no AVE class. |
 
 ### Rogue Agent (2 rules)
@@ -256,7 +258,7 @@ These ids are absent from `RULE_ID_TO_CATEGORY` (so SkillSpector's own report fa
 | AST1 | exec() Call | `behavioral_ast` | static | related | 00033 | Any exec() call in Python (AST, confidence 0.85, HIGH), with no test of what is executed. Dynamic code execution is AVE-2026-00033's sink (its indicators include eval(user_input)); AST1 has no untrusted-source test and AVE-2026-00033 is stated as an instruction to the agent. |
 | AST2 | eval() Call | `behavioral_ast` | static | related | 00033 | Any eval() call in Python (HIGH, 0.85). Same relationship as AST1. |
 | AST3 | Dynamic Import | `behavioral_ast` | static | no_fit | none | Any __import__() call (MEDIUM). A capability, not a behavior class. |
-| AST4 | subprocess Call | `behavioral_ast` | static | no_fit | none | Any subprocess run, call, Popen, check_output or check_call (MEDIUM, 0.70). A capability use. The vulnerable form, caller-controlled input reaching a shell, is best fit by AVE-2026-00052 (proposed for deprecation, discussion 234), which is not recorded as a mapping. |
+| AST4 | subprocess Call | `behavioral_ast` | static | no_fit | none | Any subprocess run, call, Popen, check_output or check_call (MEDIUM, 0.70). A capability use. The vulnerable form, caller-controlled input reaching a shell, is best fit by AVE-2026-00052 (rejected, discussion 234), which is not recorded as a mapping. |
 | AST5 | os.system / exec-family | `behavioral_ast` | static | no_fit | none | Any os.system, os.popen or os exec-family call (HIGH, 0.85). Same as AST4. |
 | AST6 | compile() Call | `behavioral_ast` | static | no_fit | none | Any compile() call (MEDIUM). A capability, not a behavior class. |
 | AST7 | Dynamic getattr() | `behavioral_ast` | static | no_fit | none | getattr() with a non-literal name, or a module __dict__ subscript with a non-literal key (LOW, 0.5). A capability signal with no AVE class. |
@@ -307,8 +309,11 @@ Candidate links read in full and not recorded as mappings.
 | SC10 | 00062 | AVE-2026-00062 is the absence of a pin. A pinned name still resolves from an attacker's registry, so pinning is not the control SC10 tests; AVE-2026-00074 makes the same point for changed target identity. |
 | SC8 | 00075 | Recorded as narrower, not related: every 00075 instance ships a .pyc so SC8 fires, but SC8 never opens the bytecode and AVE-2026-00075 requires divergence from the sibling source. |
 | TR2 | 00058 | AVE-2026-00058 needs activation scope broader than the skill's function; TR2 only tests a trigger against a fixed list of built-in command names. |
-| TT5 | 00052 | Best fit for the shell sinks, but AVE-2026-00052 is proposed for deprecation (discussion 234, CWE-78), so it is noted and not recorded as a mapping. |
-| AST4 | 00052 | Same as TT5: noted, not mapped, while AVE-2026-00052 is pending deprecation. |
+| TT5 | 00052 | Best fit for the shell sinks, but AVE-2026-00052 is rejected (discussion 234, CWE-78), so it is noted and not recorded as a mapping. |
+| AST4 | 00052 | Same as TT5: noted, not mapped, while AVE-2026-00052 is rejected. |
+| SC7 | 00061 | Best fit for the registry TLS case, but AVE-2026-00061 is rejected (discussion 234, CWE-295), so it is noted and not recorded as a mapping. |
+| TM1 | 00061 | Best fit for the curl and wget certificate flags, but AVE-2026-00061 is rejected (discussion 234, CWE-295), so it is noted and not recorded as a mapping. |
+| TM3 | 00061 | Best fit for the TLS verification settings in the list, but AVE-2026-00061 is rejected (discussion 234, CWE-295), so it is noted and not recorded as a mapping. |
 | SC6 | 00017 | AVE-2026-00017 is a false claim of official MCP server identity; a typosquatted package name in a dependency list is a different object. |
 | SC5 | 00074 | AVE-2026-00074 is verified live against the owning authority; SC5 matches a fixed list of abandoned names. |
 | SSRF2 | 00032 | AVE-2026-00032 is an instruction to probe and map a network; SSRF2 flags one request call to a literal private address. |
@@ -339,13 +344,13 @@ Candidate links read in full and not recorded as mappings.
 | YARA Match | YR2, YR3 | Webshell and cryptominer signatures. Known-malware matching with no AVE class. |
 | MCP Least Privilege | LP4 | Over-declared permissions. Carried over from the previous revision's gap on server-card over-declaration; still no AVE record. |
 | Server-Side Request Forgery | SSRF1, SSRF2, SSRF3 | No AVE record covers SSRF or cloud metadata access. |
-| (emitted outside RULE_ID_TO_CATEGORY) | AST3, AST4, AST5, AST6, AST7 | Python capability signals (dynamic import, subprocess, os.system, compile, dynamic getattr). AST4 and AST5 are best fit by AVE-2026-00052, pending deprecation. |
+| (emitted outside RULE_ID_TO_CATEGORY) | AST3, AST4, AST5, AST6, AST7 | Python capability signals (dynamic import, subprocess, os.system, compile, dynamic getattr). AST4 and AST5 are best fit by AVE-2026-00052, which is rejected (discussion 234). |
 | (emitted outside RULE_ID_TO_CATEGORY) | RP2 | Fires on ordinary permission lists; no AVE class. |
 | (emitted outside RULE_ID_TO_CATEGORY) | PE4, PE5 | Container socket and escape primitives. No AVE class. |
 | (emitted outside RULE_ID_TO_CATEGORY) | AE1, AE5, AE7 | Coverage findings: they report what the scan could not inspect, not a behavior. |
 | (emitted outside RULE_ID_TO_CATEGORY) | SSD-4, SDI-4, SQP-2, SQP-3 | LLM-only findings with no AVE class (narrative deception, comment-code divergence, missing warnings, language policy). |
 
-### Static AVE records no SkillSpector rule maps to (27 of 61)
+### Static AVE records no SkillSpector rule maps to (28 of 61)
 
 | AVE | Reason |
 |---|---|
@@ -361,11 +366,12 @@ Candidate links read in full and not recorded as mappings.
 | 00048 | Unsafe agent delegation chain. No rule has sub-agent or delegation language; the only 'Subagent' strings in the analyzers are hook event names. |
 | 00049 | Host header injection on agent-initiated requests. No rule inspects Host, X-Forwarded-Host or Forwarded headers. |
 | 00051 | OAuth discovery rebinding. No rule reads OAuth discovery metadata; the OAuth wording in PE3 only decides when a token noun is benign. |
-| 00052 | Command injection in MCP server implementation code. Proposed for deprecation in discussion 234 (CWE-78). The nearest checks (TT5, AST4, AST5) are not recorded as mappings. |
-| 00053 | Path traversal in MCP resource handlers. Proposed for deprecation in discussion 234 (CWE-22). SkillSpector has no path-traversal rule. |
+| 00052 | Command injection in MCP server implementation code. Rejected in discussion 234 (CWE-78). The nearest checks (TT5, AST4, AST5) are not recorded as mappings. |
+| 00053 | Path traversal in MCP resource handlers. Rejected in discussion 234 (CWE-22). SkillSpector has no path-traversal rule. |
 | 00055 | Command execution through an untrusted MCP launch configuration. No rule reads MCP server command and args fields; BH4 covers Claude Code settings keys such as apiKeyHelper, a different configuration surface. |
 | 00059 | Fragmented cross-description injection. TP1 to TP3 inspect each metadata field on its own (docs/B.3.2), so a payload split across descriptions is not reassembled. |
-| 00060 | STDIO transport shell injection in server code. Proposed for deprecation in discussion 234 (CWE-78). The nearest checks (TT5, AST4, AST5) are not recorded as mappings. |
+| 00060 | STDIO transport shell injection in server code. Rejected in discussion 234 (CWE-78). The nearest checks (TT5, AST4, AST5) are not recorded as mappings. |
+| 00061 | TLS certificate verification disabled in agent component configuration. Rejected in discussion 234 (CWE-295). SC7, TM1 and TM3 overlap it only in part and are not recorded as mappings. |
 | 00065 | A2A agent card poisoning. No rule or YARA string mentions agent cards or the A2A protocol. |
 | 00069 | Image-hidden instructions. SkillSpector's image handling validates PNG and JPEG structure and, by its own documentation, does not inspect rendered content or perform OCR (docs/passive-documentation-images.md). |
 | 00071 | DOCKER_HOST daemon redirect. No rule mentions DOCKER_HOST or the -H and --host flags; PE4 and PE5 cover local socket and privileged-container primitives. |
@@ -417,14 +423,14 @@ The previous revision linked 41 category-to-record pairs; 20 survive in some for
 | | |
 |---|---|
 | SkillSpector in-map rules | 78 in 18 categories |
-| In-map rules mapped to an AVE class | 58 |
-| In-map rules with no AVE class | 20 |
+| In-map rules mapped to an AVE class | 56 |
+| In-map rules with no AVE class | 22 |
 | Categories with at least one mapped rule | 17 of 18 |
 | Rules outside the category map | 37 (22 mapped, 15 no fit) |
-| Relationships, in-map rules | equivalent 11, narrower 2, broader 0, related 45, no_fit 20 |
+| Relationships, in-map rules | equivalent 11, narrower 1, broader 0, related 44, no_fit 22 |
 | Relationships, outside the map | equivalent 2, narrower 1, broader 0, related 19, no_fit 15 |
-| Static AVE records referenced | 34 of 61 |
-| Static AVE records not referenced | 27 |
+| Static AVE records referenced | 33 of 61 |
+| Static AVE records not referenced | 28 |
 | Runtime AVE records out of scope | 28 |
 
 **Not claimed:** No claim that SkillSpector emits AVE ids, that either project endorses the mapping, or that a hit on a related rule is an instance of the AVE class. Detection quality (precision, recall) was not measured; only what each rule is designed to match was read. Rules were read at the pinned tag and will drift as SkillSpector changes.

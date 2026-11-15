@@ -1,7 +1,8 @@
 {
   "ave_id": "AVE-2026-00061",
   "schema_version": "1.3.0",
-  "status": "active",
+  "status": "rejected",
+  "rejection_reason": "Rejected: a conventional implementation weakness (disabled TLS certificate verification, CWE-295) whose mechanism is unchanged if the model is replaced by a deterministic program, so it has no distinct agentic mechanism. Public decision: https://github.com/aveproject/ave/discussions/234#discussioncomment-19308955",
   "component_type": "skill",
   "title": "TLS certificate verification disabled in agent component configuration",
   "attack_class": "Insecure Configuration - TLS Verification Disabled",
@@ -49,7 +50,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-07-27T00:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-11-14T00:00:00Z",
   "references": [
     {
       "tag": "CWE-295",
@@ -88,5 +89,15 @@
       "commit": "165fe0f78ef104459237b4a8e0f6e78db9b02391",
       "read_date": "2026-09-05"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-11-14",
+      "field": "status",
+      "from": "active",
+      "to": "rejected",
+      "reason_code": "status_changed",
+      "reason": "Status changed to rejected on the public decision in discussion #234; rejection_reason links it."
+    }
+  ]
 }

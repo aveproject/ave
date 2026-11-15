@@ -46,6 +46,13 @@
       "external_comms"
     ]
   },
+  "security_boundary": "trusted instruction content → shell execution, with no boundary between the two once a component's text is treated as instruction",
+  "missing_control": "no distinction between natural-language content that merely describes a step and natural-language content that constitutes an executable directive",
+  "vulnerability_rationale": {
+    "capability": "Agent with shell/code-execution tool access follows embedded commands.",
+    "vulnerability": "Conventional command injection (CWE-78 territory) delivered through natural language rather than code. The mechanism is conventional; what makes it an AVE class is the channel: the input is natural-language content that an agent reads and treats as an instruction, and tools built to find command injection in code, such as SAST scanners, do not read that channel, so the flaw stays invisible to them until the agent has acted on it.",
+    "impact": "Arbitrary remote code executes on the host with the agent's privilege level."
+  },
   "mitigation": {
     "strategy": [
       "deny_by_default",
@@ -68,7 +75,7 @@
   "researcher": "Saray Chak",
   "researcher_url": "https://bawbel.io",
   "published": "2026-04-19T09:00:00Z",
-  "last_updated": "2026-08-26T00:00:00Z",
+  "last_updated": "2026-11-04T00:00:00Z",
   "references": [
     {
       "tag": "CWE-78",
