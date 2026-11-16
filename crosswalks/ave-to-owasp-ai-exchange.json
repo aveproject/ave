@@ -17,7 +17,8 @@
     "checked_against_live_site": "2026-10-20"
   },
   "generated": "2026-10-20",
-  "note": "Deliberate pilot, not a full-corpus crosswalk: 13 AVE records selected by a rule fixed before mapping (two from each of the four largest provenance_vector.entry_class groups, one each from the two smaller major groups, plus four records expected not to fit), mapped at the mechanism level against the Exchange's 25 permalinked threat items as they stand at the pinned commit. 7 of 13 found a real correspondence (6 narrower, 1 related); 6 are honest no_fit, split between conventional/delegated (4) and genuine gaps in the Exchange's current agentic coverage (2). Licence basis: no LICENSE file in the target repository; CC0 1.0 is stated in the content itself (charter.md and the overview's attribution block), recorded here as that, not as a repo-level grant. The Exchange has no real versioning (its only tag is a placeholder v0.0.0); this crosswalk is pinned by commit and will go stale as the Exchange's content changes under it, the same caveat the Exchange's own living-document framing states about itself. This crosswalk is not endorsed by, affiliated with, or submitted to OWASP or the AI Exchange; it lives only in this repository, the same way ave-to-maestro.json does. It makes no claim about ISO/IEC 27090 or prEN 18282: the Exchange's own public statements about its contribution to those standards are the Exchange's claims, not something this crosswalk has read or verified. Controls are explicitly out of scope; every mapping below is threat-to-threat.",
+  "note": "Deliberate pilot, not a full-corpus crosswalk: 10 AVE records: 13 were selected by a rule fixed before mapping, and three of them (AVE-2026-00052, 00053 and 00061) were rejected in AVE v1.3.0 and removed on 2026-11-16. The 13 were selected as (two from each of the four largest provenance_vector.entry_class groups, one each from the two smaller major groups, plus four records expected not to fit), mapped at the mechanism level against the Exchange's 25 permalinked threat items as they stand at the pinned commit. 7 of 10 found a real correspondence (6 narrower, 1 related); 3 are honest no_fit, split between conventional/delegated (1) and genuine gaps in the Exchange's current agentic coverage (2). Licence basis: no LICENSE file in the target repository; CC0 1.0 is stated in the content itself (charter.md and the overview's attribution block), recorded here as that, not as a repo-level grant. The Exchange has no real versioning (its only tag is a placeholder v0.0.0); this crosswalk is pinned by commit and will go stale as the Exchange's content changes under it, the same caveat the Exchange's own living-document framing states about itself. This crosswalk is not endorsed by, affiliated with, or submitted to OWASP or the AI Exchange; it lives only in this repository, the same way ave-to-maestro.json does. It makes no claim about ISO/IEC 27090 or prEN 18282: the Exchange's own public statements about its contribution to those standards are the Exchange's claims, not something this crosswalk has read or verified. Controls are explicitly out of scope; every mapping below is threat-to-threat.",
+  "revision_note": "Revised 2026-11-16: AVE-2026-00052, 00053 and 00061 were rejected in AVE v1.3.0 (discussion 234), so their three gaps_in_exchange entries are removed and the pilot reads 10 records, not 13: pilot_ave_records 13 to 10 and relationship_no_fit 6 to 3. They were three of the four records the pilot expected not to fit as conventional or delegated; AVE-2026-00047 remains. No mapping row changes. source.record_count (87) and source.commit still describe the AVE v1.1.0 tree this pilot was read against, in which all four rejected records were active; 83 of those 87 are active now, and the ~73 outside the pilot is 83 less 10. The AI Exchange side was not re-checked.",
   "mappings": [
     {
       "aix_section": "2.2.2",
@@ -86,7 +87,7 @@
   "gaps_in_ave": [
     {
       "topic": "2.1.1-2.1.5 Evasion (all five sub-types)",
-      "reason": "Not attempted in this pilot's 13-record sample, which deliberately targeted agent-component mechanisms. Evasion concerns a deployed model's own decision boundary against crafted input, territory AVE's gaps_in_maestro note already scopes out of AVE's current coverage (behavioral classes in agentic components, not attacks on a foundation model's own inference properties). Not re-litigated here; same boundary as the MAESTRO crosswalk's existing gap."
+      "reason": "Not attempted in this pilot's 10-record sample, which deliberately targeted agent-component mechanisms. Evasion concerns a deployed model's own decision boundary against crafted input, territory AVE's gaps_in_maestro note already scopes out of AVE's current coverage (behavioral classes in agentic components, not attacks on a foundation model's own inference properties). Not re-litigated here; same boundary as the MAESTRO crosswalk's existing gap."
     },
     {
       "topic": "3.1.1-3.2.3 Development-time threats (data/model poisoning and leak, source leak)",
@@ -107,31 +108,19 @@
       "reason": "Consensus poisoning: an orchestrator's aggregation-layer accepts a single sub-agent's result with no quorum or cross-verification step. AVE's own record text is explicit that this is not injected content at all. No Exchange threat addresses multi-agent result corroboration or aggregation-layer trust. AI-specific, genuinely unrepresented."
     },
     {
-      "ave_id": "AVE-2026-00052",
-      "reason": "Command injection in an MCP server's own handler code. Record's own text: 'no LLM reasoning or natural-language instruction is required to trigger it.' Conventional, explicitly delegated by the Exchange's own scope statement to other resources, not a gap to fill."
-    },
-    {
-      "ave_id": "AVE-2026-00053",
-      "reason": "Path traversal in an MCP resource handler's own implementation. Record's own text: 'a code-level flaw in the tool's implementation, not a prompt-driven instruction.' Conventional, delegated, same as AVE-2026-00052."
-    },
-    {
-      "ave_id": "AVE-2026-00061",
-      "reason": "A declared TLS-verification-disabled configuration flag, fires regardless of any agent reasoning. Conventional, delegated."
-    },
-    {
       "ave_id": "AVE-2026-00047",
       "reason": "A hardcoded credential literal in a skill file. The record notes a downstream prompt-injection risk from an already-compromised agent, but as scoped, the record itself is a conventional secrets-hygiene issue. Delegated."
     }
   ],
   "coverage": {
-    "pilot_ave_records": 13,
+    "pilot_ave_records": 10,
     "aix_threats_mapped": 2,
     "mapping_rows": 7,
     "relationship_equivalent": 0,
     "relationship_narrower": 6,
     "relationship_related": 1,
     "relationship_broader": 0,
-    "relationship_no_fit": 6,
-    "note_on_unmapped": "This is a deliberate 13-record pilot, not a full-corpus crosswalk. The 7 mapped rows land on only 2 of the Exchange's 25 threat items (2.2.2 Indirect prompt injection, 2.3.1 Disclosure of sensitive data in model output), which the feasibility report flags explicitly as the expected shape of a full crosswalk: AVE's agent-component scope concentrates heavily on the content-versus-instruction boundary that 2.2.2 names, not spread evenly across the Exchange's threat list. No claim is made about the other 23 threat items or the ~74 AVE records outside this pilot; a full-corpus pass was not attempted here."
+    "relationship_no_fit": 3,
+    "note_on_unmapped": "This is a deliberate 10-record pilot, not a full-corpus crosswalk. The 7 mapped rows land on only 2 of the Exchange's 25 threat items (2.2.2 Indirect prompt injection, 2.3.1 Disclosure of sensitive data in model output), which the feasibility report flags explicitly as the expected shape of a full crosswalk: AVE's agent-component scope concentrates heavily on the content-versus-instruction boundary that 2.2.2 names, not spread evenly across the Exchange's threat list. No claim is made about the other 23 threat items or the ~73 active AVE records outside this pilot; a full-corpus pass was not attempted here."
   }
 }
