@@ -25,8 +25,8 @@ needs to resolve.
 ## Crosswalk contributions
 
 **[predictor2718 (Nicolai)](https://github.com/predictor2718)**: the cfgaudit crosswalk
-(`crosswalks/cfgaudit-to-ave.json`), built independently and
-unprompted after AVE's initial launch, including a from-scratch
+(`crosswalks/cfgaudit-to-ave.json`), built independently after AVE's
+initial launch, including a from-scratch
 comparison against the reference scanner that produced the strongest
 independent validation this project has had that its ID scheme is
 interoperable, not just internally consistent. Provided detailed,
