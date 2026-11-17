@@ -20,7 +20,7 @@
     "commit": "647e1ce2fff39b26957b8f232a42ab3117f5c2ec"
   },
   "generated": "2026-11-16",
-  "note": "cfgaudit is a static auditor of committable AI-agent CONFIGURATION files. It does not connect to running servers or observe runtime, so it maps only to AVE's static_detection records. Each cfgaudit rule emits its primary AVE id in JSON/SARIF output (see github.com/cfgaudit/cfgaudit/blob/main/docs/cfgaudit-to-ave.md). Mappings are class-level behavioral equivalence, not asserted identity. cfgaudit maps 76 config-surface rules onto 29 AVE behavioral classes. This revision covers cfgaudit v1.22.0, which added nine rules, CFG137 to CFG145. Three are mapped: CFG139 (a committed Kimi Code local.toml allow rule) to AVE-2026-00063, CFG141 (an auto-run command that decodes an embedded payload) to AVE-2026-00057, and CFG143 (packages from a registry the repository chooses) to AVE-2026-00062. Six are unmapped: CFG138 joins 'repository grants the agent browser or desktop-application access', CFG140 'a guardrail that does not hold', CFG142 'sandbox weakening in config' and CFG144 'a committed path that makes the agent read a file on the reader's machine'; CFG137 and CFG145 form two new surfaces. AVE v1.3.0 rejects AVE-2026-00052, 00053, 00060 and 00061 (discussion 234) as conventional weaknesses with no agentic mechanism. Of the four, only 00061 was mapped, to CFG075: that mapping is dropped, 00061 joins the gaps with a CWE-295 pointer, and cfgaudit v1.22.0 emits no AVE id for CFG075 (cfgaudit/cfgaudit#1769). The record set has 89 records, 4 of them rejected; coverage.ave_static_records counts the 57 active static_detection records. Both sides are pinned by commit: cfgaudit at the v1.22.0 tag, AVE at the commit the v1.3.0 release was built from.",
+  "note": "cfgaudit is a static auditor of committable AI-agent CONFIGURATION files. It does not connect to running servers or observe runtime, so it maps only to AVE's static_detection records. Each cfgaudit rule emits its primary AVE id in JSON/SARIF output (see github.com/cfgaudit/cfgaudit/blob/main/docs/cfgaudit-to-ave.md). Mappings are class-level behavioral equivalence, not asserted identity. cfgaudit maps 76 config-surface rules onto 29 AVE behavioral classes. This revision covers cfgaudit v1.22.0, which added nine rules, CFG137 to CFG145. Three are mapped: CFG139 (a committed Kimi Code local.toml allow rule) to AVE-2026-00063, CFG141 (an auto-run command that decodes an embedded payload) to AVE-2026-00057, and CFG143 (packages from a registry the repository chooses) to AVE-2026-00062. Six are unmapped: CFG138 joins 'repository grants the agent browser or desktop-application access', CFG140 'a guardrail that does not hold', CFG142 'sandbox weakening in config' and CFG144 'a committed path that makes the agent read a file on the reader's machine'; CFG137 and CFG145 form two new surfaces. AVE v1.3.0 rejects AVE-2026-00052, 00053, 00060 and 00061 (discussion 234) as conventional weaknesses with no agentic mechanism. Of the four, only 00061 was mapped, to CFG075: that mapping is dropped, the rejection is recorded under checked_and_rejected with a CWE-295 pointer, and cfgaudit v1.22.0 emits no AVE id for CFG075 (cfgaudit/cfgaudit#1769). 00060, a gap until this revision (STDIO transport shell injection, a server-side flaw that needs SAST of the MCP server's source rather than a read of its launch configuration), leaves the gaps with 00061: a rejected record is not a class cfgaudit could map (aveproject/ave#473). The record set has 89 records, 4 of them rejected; coverage.ave_static_records counts the 57 active static_detection records. Both sides are pinned by commit: cfgaudit at the v1.22.0 tag, AVE at the commit the v1.3.0 release was built from.",
   "mappings": [
     {
       "ave_id": "AVE-2026-00001",
@@ -295,14 +295,6 @@
       "note": "fragmented cross-description injection. Needs multi-source correlation; cfgaudit checks each file independently."
     },
     {
-      "ave_id": "AVE-2026-00060",
-      "note": "STDIO transport shell injection. Server-side implementation flaw, requires SAST of the MCP server source rather than reading its launch configuration. Same layer as AVE-2026-00052 and AVE-2026-00053; see the static_detection note below. Rejected in AVE v1.3.0 with 00052, 00053 and 00061 (discussion 234)."
-    },
-    {
-      "ave_id": "AVE-2026-00061",
-      "note": "TLS certificate verification disabled in component configuration. Rejected in AVE v1.3.0 (discussion 234): turning verification off works the same whether a model or a program makes the connection, so the class is CWE-295 (improper certificate validation) rather than an agentic one. CFG075 reports exactly this in an MCP server's env or args (NODE_TLS_REJECT_UNAUTHORIZED=0, GIT_SSL_NO_VERIFY, --insecure) and was mapped here until this revision. cfgaudit v1.21.0 still emits the id; from the next release on it emits none (cfgaudit/cfgaudit#1769)."
-    },
-    {
       "ave_id": "AVE-2026-00065",
       "note": "A2A agent card poisoning. Partly covered since v1.21.0 for committed inline Gemini cards: cfgaudit parses the serialized agent_card_json and runs its instruction-content rules (CFG024, CFG026, CFG030 to CFG033, CFG036, CFG057, CFG080, CFG113, CFG120) on exactly what Gemini copies into the remote-agent tool description, the card description and each skill name and description. Those rules emit their own primary ids, so no finding carries AVE-2026-00065, and a card fetched at runtime stays outside static analysis. CFG097 still reports a cleartext agent_card_url and a credential literal in the auth block."
     },
@@ -325,6 +317,13 @@
     {
       "ave_id": "AVE-2026-00085",
       "note": "Collusive cross-skill composition. Needs correlation across independently benign skills; cfgaudit checks each file in isolation. Same deferral as AVE-2026-00059."
+    }
+  ],
+  "checked_and_rejected": [
+    {
+      "cfgaudit_rule": "CFG075",
+      "ave_id": "AVE-2026-00061",
+      "reason": "Best fit for CFG075, which reports TLS certificate verification turned off in an MCP server's env or args (NODE_TLS_REJECT_UNAUTHORIZED=0, GIT_SSL_NO_VERIFY, --insecure), and mapped to it through cfgaudit v1.21.0. AVE-2026-00061 is rejected in AVE v1.3.0 (discussion 234): turning verification off works the same whether a model or a program makes the connection, so the class is CWE-295 (improper certificate validation) rather than an agentic one. Noted, not recorded as a mapping; cfgaudit v1.22.0 emits no AVE id for CFG075 (cfgaudit/cfgaudit#1769)."
     }
   ],
   "coverage": {
