@@ -114,6 +114,27 @@ One set per run, in the run's property bag, so that a finding can be checked lat
 
 These are catalog data, not record data: they never go on `rules[]` or on a `result`. The [implementer guide](ave-implementer-guide.md#what-to-put-in-your-output) covers the same fields for output that is not SARIF.
 
+### run and artifact properties: what the scan read (recommended)
+
+An AVE id names a class of behavior and never expires. A finding is what ages: a remote MCP server can change a tool description without changing its version, so a finding describes a target at one moment, and the properties above name only the catalog the scan used, not the content it read or when. These fields pin the other side. They use SARIF's own fields where SARIF has one, so a generic SARIF consumer can read them, and they are optional: a scan with no digest is still conformant, and can then only be judged by its scan time.
+
+For each scanned component whose content was read from a remote server or registry, one entry in `runs[].artifacts[]`, and the scan time on the run:
+
+| SARIF field | Holds | Notes |
+|---|---|---|
+| `runs[].invocations[].startTimeUtc`, `endTimeUtc` | when the scan began and ended | UTC, in the SARIF date-time form with a time and a `Z`, for example `2026-11-17T09:00:00Z` (SARIF 2.1.0 sections 3.20.7, 3.20.8 and 3.9) |
+| `runs[].artifacts[].location.uri` | the target | the server URL or registry coordinates the content was read from |
+| `runs[].artifacts[].hashes` | the content that was read | `{"sha-256": "<64 lowercase hex characters>"}`; SARIF asks that the object contain `sha-256` (section 3.24.11) |
+| `runs[].artifacts[].properties.ave_digest_scope` | what was hashed | `tools-list`, `server-card`, or another named document |
+| `runs[].artifacts[].properties.ave_digest_canonicalization` | how it was prepared before hashing | `jcs-rfc8785` (the JSON document in RFC 8785 canonical form) or `bytes` (the bytes as received) |
+| `result.locations[].physicalLocation.artifactLocation.index` | which artifact the finding was made on | the position of that artifact in `runs[].artifacts[]` (SARIF section 3.4.5) |
+
+These describe a scan, not a record: they never go on `rules[]`, and no AVE record carries them. A digest only compares with another tool's when both hashed the same thing, which is why the scope and the canonicalization are declared beside it.
+
+**Consumer rule.** Before relying on a stored finding, re-read the target and compare digests. A mismatch means "rescan needed", never "fixed" and never "still vulnerable". A finding with no digest can only be judged by its scan time.
+
+`scripts/ave_conformance.py check` validates these fields when they are present (a UTC time, and a warning when the end is before the start; 64 lowercase hex characters on an artifact that declares an `ave_digest_*` property, while the `hashes` of any other artifact are SARIF's and are left alone; a known canonicalization; an artifact index that resolves) and never requires them. `--require-target` makes a result about an MCP server class (a record whose `component_type` is `mcp_server`) an error when it points at no artifact that declares a digest: a valid SHA-256 together with `ave_digest_scope` and `ave_digest_canonicalization`. A bare SHA-256 does not satisfy it, because a digest that does not say what was hashed or how cannot be compared across tools. The [example below](#example-scan-time-and-target-digest) uses AVE-2026-00002, whose own description says the attack fires before any tool is called, at the moment the agent reads the tool manifest: for that class the content read at discovery time is the whole finding.
+
 ---
 
 ## Severity mapping
@@ -458,6 +479,104 @@ The same finding from a scanner that relates its own rule to the AVE taxonomy. O
 
 ---
 
+## Example: scan time and target digest
+
+One finding for AVE-2026-00002 (MCP tool description behavioral injection) against a hypothetical remote MCP server, with the scan time and the digest of the tool list the scanner read. The server is on `example.com` and the digest is made up (64 hex characters, `0123456789abcdef` repeated); a real one is the SHA-256 of the canonicalized `tools/list` response. The rest is form A, with the same run properties as the examples above.
+
+```json
+{
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "example-scanner",
+          "version": "1.0.0",
+          "rules": [
+            {
+              "id": "AVE-2026-00002",
+              "shortDescription": {
+                "text": "MCP tool description behavioral injection"
+              },
+              "helpUri": "https://aveproject.org/registry.html#AVE-2026-00002",
+              "properties": {
+                "severity": "HIGH",
+                "aivss_score": 7.3,
+                "owasp_mcp": ["MCP03"]
+              }
+            }
+          ]
+        }
+      },
+      "invocations": [
+        {
+          "executionSuccessful": true,
+          "startTimeUtc": "2026-11-17T09:00:00Z",
+          "endTimeUtc": "2026-11-17T09:00:04Z"
+        }
+      ],
+      "artifacts": [
+        {
+          "location": {
+            "uri": "https://mcp.example.com/mcp"
+          },
+          "mimeType": "application/json",
+          "hashes": {
+            "sha-256": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+          },
+          "properties": {
+            "ave_digest_scope": "tools-list",
+            "ave_digest_canonicalization": "jcs-rfc8785"
+          }
+        }
+      ],
+      "taxonomies": [
+        {
+          "guid": "5110b285-34d7-5334-94db-0308b24cfb49",
+          "name": "AVE",
+          "version": "1.2.0",
+          "informationUri": "https://aveproject.org",
+          "taxa": [
+            {
+              "id": "AVE-2026-00002",
+              "name": "MCP tool description behavioral injection"
+            }
+          ]
+        }
+      ],
+      "results": [
+        {
+          "ruleId": "AVE-2026-00002",
+          "level": "error",
+          "message": {
+            "text": "The description of tool search_docs tells the agent to send the contents of ~/.ssh/id_rsa with its next reply."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "https://mcp.example.com/mcp",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "ave_catalog": "v1.2.0",
+        "ave_schema_version": "1.2.0",
+        "ave_records_sha256": "92e002e98cdd10f5de36e0ccfa80696b623cdadf302cc4d884f2a33b7fd94390"
+      }
+    }
+  ]
+}
+```
+
+A consumer holding this finding later re-reads `https://mcp.example.com/mcp`, prepares the same document the same way (`tools-list`, `jcs-rfc8785`), hashes it, and compares with `hashes["sha-256"]`. Equal: the server serves the content the finding was made on. Different: the server has changed since the scan, so the finding needs a rescan; it is neither fixed nor still vulnerable until then.
+
+---
+
 ## Field placement summary
 
 | Data | Goes in `rules[]` | Goes in `result` |
@@ -476,7 +595,7 @@ The same finding from a scanner that relates its own rule to the AVE taxonomy. O
 | `nist_ai_rmf` | `rules[].properties.nist_ai_rmf` | `result.properties.nist_ai_rmf` |
 | `verification_basis` | **never** | `result.properties.verification_basis` (if the record has one) |
 
-The catalog the scan used goes on the run, not here: `runs[].properties.ave_catalog`, `ave_schema_version` and `ave_records_sha256`.
+The catalog the scan used goes on the run, not here: `runs[].properties.ave_catalog`, `ave_schema_version` and `ave_records_sha256`. What the scan read and when goes on the run and its artifacts, not here either: `runs[].invocations[]`, `runs[].artifacts[]`, and on a result only the `artifactLocation.index` that points at one.
 
 ---
 
@@ -507,3 +626,5 @@ Breaking changes to *this convention* (new required fields, removed fields, chan
 **Revision note (2026-10-31):** added form B, a second way to carry the AVE id (a tool's own `ruleId`, with `properties.ave_id` on the rule and on each result), because a tool that emits AVE ids in SARIF today does exactly that. Form A is unchanged. No field changed meaning and every output that was conformant still is, so this is a minor version, v1.1, not a major one; a consumer that read only `result.ruleId` must now also read `properties.ave_id` to see form B's ids. The same change adds `scripts/ave_conformance.py`, which checks an output against both forms.
 
 **Revision note (2026-10-31, v1.2):** added form C, a third way to carry the AVE id through SARIF's own taxonomy mechanism (a rule's `relationships` to the AVE taxonomy, the result's `taxa`, and `tool.driver.supportedTaxonomies`), and stated which `kinds` AVE recommends and why. The embedded AVE taxonomy gains a `guid` (`5110b285-34d7-5334-94db-0308b24cfb49`), a canonical generated file (`dist/ave-taxonomy-latest.json`, built by `scripts/build_taxonomy.py`, with a subset mode for scanners) and the rule that a taxonomy is identified by that guid. The checker gained form C extraction and six checks: `taxonomy_guid_missing`, `taxonomy_guid_mismatch`, `taxon_unknown`, `taxon_name_differs`, `reference_guid_mismatch` and `supported_taxonomies_missing`. Forms A and B are unchanged and every output that was conformant still is, with a `taxonomy_guid_missing` warning if it embeds an AVE taxonomy without a guid. A consumer that read only `result.ruleId` and `properties.ave_id` must now also read `rules[].relationships` and `result.taxa` to see form C's ids. A new form widens what a conforming output may contain, so this is a minor version. The spec's taxonomy example no longer has an em dash in its `shortDescription`; it matches the generated file.
+
+**Revision note (2026-11-19):** added the recommended run and artifact properties that say what the scan read and when: `runs[].invocations[].startTimeUtc` and `endTimeUtc`, one `runs[].artifacts[]` entry per remote target with `hashes["sha-256"]`, `properties.ave_digest_scope` and `properties.ave_digest_canonicalization`, and the result's `artifactLocation.index` that points at it, with a consumer rule (a digest mismatch means "rescan needed") and a worked example for AVE-2026-00002. Until now the convention pinned the catalog a scan used but not the content it read or the moment. All of it is optional and uses SARIF's own fields, no existing field changed meaning, and no AVE record or schema field changed, so the version stays v1.2 (an additive optional property, as in the 2026-10-29 note). `scripts/ave_conformance.py` validates the fields when present and gains `--require-target`, which makes a missing or undeclared digest an error on a result about an MCP server class; the output of a tool that carries none of it is judged exactly as before.
