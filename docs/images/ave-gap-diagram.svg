@@ -50,9 +50,9 @@
   <!-- Scanner interop -->
   <rect x="440" y="565" width="320" height="130" rx="10" fill="#EAF2ED" stroke="#1B5E3F" stroke-width="1.5"/>
   <text x="460" y="596" font-size="15" font-weight="bold" fill="#1B5E3F" font-family="'Helvetica Neue', Arial, sans-serif">Scanner interop</text>
-  <text x="460" y="620" font-size="13" fill="#3A3A32" font-family="'Helvetica Neue', Arial, sans-serif">Independent implementations</text>
-  <text x="460" y="640" font-size="13" fill="#3A3A32" font-family="'Helvetica Neue', Arial, sans-serif">converge on the same IDs,</text>
-  <text x="460" y="660" font-size="13" fill="#3A3A32" font-family="'Helvetica Neue', Arial, sans-serif">no shared code required</text>
+  <text x="460" y="620" font-size="13" fill="#3A3A32" font-family="'Helvetica Neue', Arial, sans-serif">Crosswalks map scanner rules</text>
+  <text x="460" y="640" font-size="13" fill="#3A3A32" font-family="'Helvetica Neue', Arial, sans-serif">to the same IDs; each file</text>
+  <text x="460" y="660" font-size="13" fill="#3A3A32" font-family="'Helvetica Neue', Arial, sans-serif">says who built the mapping</text>
 
   <!-- Open governance -->
   <rect x="810" y="565" width="320" height="130" rx="10" fill="#EAF2ED" stroke="#1B5E3F" stroke-width="1.5"/>

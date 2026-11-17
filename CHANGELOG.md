@@ -8,6 +8,14 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
 
 ## [Unreleased]
 
+### Checks
+- **A crosswalk no longer points at a rejected record unnoticed.** `scripts/validate_crosswalks.py` fails when a
+  crosswalk names a `rejected` record in an `ave_id`, `primary_ave_id` or `ave_ids` field, ids inside a
+  comma-separated value included. A `checked_and_rejected` section is exempt, and prose is not read. A crosswalk
+  maintained by its tool's own author (cfgaudit and the agent-evidence vocabulary today) only warns, naming the owner,
+  so it cannot block their refresh. After v1.3.0, four rejected records stayed listed as gaps in three crosswalks with
+  nothing to say so.
+
 ## [1.3.0] - 2026-11-14
 
 ### Summary

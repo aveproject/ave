@@ -199,9 +199,9 @@ rules onto AVE classes by mechanism, not by category label: real
 trigger conditions are checked against real behavioral fingerprints.
 
 - **One was built by its tool's own author.** predictor2718, who
-  maintains cfgaudit, built the cfgaudit crosswalk (#67) unprompted and
-  compared it from scratch against the reference scanner. cfgaudit
-  emits AVE ids in its output. See [CONTRIBUTORS.md](CONTRIBUTORS.md).
+  maintains cfgaudit, built the cfgaudit crosswalk (#67) and compared it
+  from scratch against the reference scanner. cfgaudit emits AVE ids in
+  its output. See [CONTRIBUTORS.md](CONTRIBUTORS.md).
 - **Seven were built by AVE's maintainer** from each tool's public
   source: ClawScan, nova-proximity, Ramparts, Semia, SkillSpector,
   skill-security-scanner and skillsentry. The tools' own authors did
