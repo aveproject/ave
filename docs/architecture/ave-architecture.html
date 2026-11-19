@@ -535,7 +535,7 @@
       </div>
     </div>
     <p>The static definition describes the vulnerability class itself and never changes per scan. <code>ave_id</code> is immutable — once published it is never renumbered or reused; a wrong record is deprecated via <code>status</code>, never deleted. <code>behavioral_fingerprint</code> is the heart of the record: it describes what the component <em>does</em>, not a byte signature. Severity and <code>aivss_score</code> must agree — CRITICAL implies a score of 9.0 or higher.</p>
-    <p>The evidence declarations were added in schema v1.1 (issues #69–72). They are all optional, so every pre-v1.1 record still validates. Crucially, they do not carry per-detection values — they declare the <em>defaults and baselines</em> a scanner uses to assign per-finding evidence metadata.</p>
+    <p>The evidence declarations were added in schema v1.1 (issues bawbel/scanner#69 to bawbel/scanner#72). They are all optional, so every pre-v1.1 record still validates. Crucially, they do not carry per-detection values — they declare the <em>defaults and baselines</em> a scanner uses to assign per-finding evidence metadata.</p>
 
     <h3 id="validation">Validation — the record/rule/fixture triangle</h3>
     <p>A definition nobody can detect is not useful, and a detection with no false-positive guard is a liability. Every record therefore requires three things beyond the JSON:</p>
