@@ -222,9 +222,25 @@ used, so that a finding can be checked later against the same records:
 | The run | catalog | The manifest's `release`, such as `v1.2.0`, or `latest` if you track `dist/ave-records-latest.json` |
 | The run | schema version | The manifest's `schema_version` |
 | The run | records SHA-256 | The manifest's `sha256` |
+| Each finding (optional) | target digest | The SHA-256 of the content you read from a remote server or registry, as 64 lowercase hex characters |
+| Each finding (optional) | digest scope | What was hashed (`tools-list`, `server-card`, or another named document) and how it was prepared (`jcs-rfc8785` or `bytes`) |
+| The run (optional) | scan time | When the scan began and ended, in UTC, such as `2026-11-17T09:00:00Z` |
 
 A release tag can be downloaded again at any time. `latest` cannot, which is
 why the SHA-256 goes in too.
+
+The last three rows are for a scan that reads content from a remote server or
+registry. A remote MCP server can change a tool description without changing its
+version, so a finding describes the target at one moment, and the catalog alone
+does not say which. A consumer that holds a stored finding follows one rule.
+
+**Consumer rule.** Before relying on a stored finding, re-read the target and
+compare digests. A mismatch means "rescan needed", never "fixed" and never "still
+vulnerable". A finding with no digest can only be judged by its scan time.
+
+In SARIF these are `runs[].invocations[]` and `runs[].artifacts[]`; the
+[spec](ave-in-sarif.md#run-and-artifact-properties-what-the-scan-read-recommended)
+has the fields and a worked example.
 
 **SARIF.** Follow [AVE-in-SARIF](ave-in-sarif.md): `result.ruleId` is the
 `ave_id` (or, if your rules keep their own ids, `properties.ave_id` on each
@@ -293,6 +309,7 @@ python scripts/ave_conformance.py extract output.sarif
 python scripts/ave_conformance.py check output.sarif --catalog ave-records.json
 python scripts/ave_conformance.py check output.sarif --catalog ave-records.json --strict
 python scripts/ave_conformance.py check output.sarif --catalog ave-records.json --require-ids
+python scripts/ave_conformance.py check output.sarif --catalog ave-records.json --require-target
 ```
 
 `extract` is tolerant: it prints the AVE ids found in the output as JSON, each with `via` (how it was found) and `where` (the artifact, or the JSON path for output that is not SARIF), so any tool's output can be scored whatever its format. It reads SARIF in any of the three forms (a result's `ruleId`; `properties.ave_id` on the result or its rule; or the AVE references in the rule's `relationships` and the result's `taxa`) and any JSON object with an `ave_id`, `AVEID`, `AveId` or `ave-id` key, or an `ave_ids` list, at any depth.
@@ -320,6 +337,11 @@ The exit status is 0 for `pass` and for `warn`, 1 for `warn` with `--strict`, an
 | error | `reference_guid_mismatch` | a `relationships` or `result.taxa` reference naming the component `AVE` with another `guid`; it is a different taxonomy and is not counted |
 | error | `taxon_unknown` | a taxon in the AVE taxonomy whose id is not in the catalog given |
 | error | `unknown_ave_id` | an id that is not in the catalog given |
+| error | `scan_time_invalid` | an invocation's `startTimeUtc` or `endTimeUtc` that is not a UTC date and time |
+| error | `digest_malformed` | an artifact that declares an `ave_digest_*` property and whose `hashes` is not an object, or whose `sha-256` is not 64 lowercase hex characters; the `hashes` of an artifact with no `ave_digest_*` property are not judged |
+| error | `digest_canonicalization_invalid` | an `ave_digest_canonicalization` that is not `jcs-rfc8785` or `bytes` |
+| error | `artifact_index_unresolved` | an `artifactLocation.index` that is not a position in the run's `artifacts` |
+| error (only with `--require-target`) | `target_digest_missing`, `catalog_required` | a result about an MCP server class (its record's `component_type` is `mcp_server`) that points at no artifact, or at one that does not declare a digest: it needs a valid `sha-256`, a non-empty `ave_digest_scope` and an `ave_digest_canonicalization` of `jcs-rfc8785` or `bytes`, so a bare `sha-256` fails; or `--require-target` with no `--catalog` to read the class from |
 | error | `sarif_no_runs`, `not_json`, `input_unreadable`, `catalog_unreadable` | input the check cannot read |
 | warn (error with `--require-ids`) | `no_ave_id` | a result whose `ruleId` is not an AVE id and that carries no `properties.ave_id` |
 | warn | `not_active` | an id whose record is not `active`; a `merged` or `rejected` record is reported with its `merged_into` or `rejection_reason`, and any status other than `active` counts as not active |
@@ -329,9 +351,12 @@ The exit status is 0 for `pass` and for `warn`, 1 for `warn` with `--strict`, an
 | warn | `taxonomy_guid_missing` | an AVE taxonomy without a `guid` |
 | warn | `taxon_name_differs` | a taxon whose `name` is not the catalog's title for that class |
 | warn | `supported_taxonomies_missing` | results related to AVE classes, but `tool.driver.supportedTaxonomies` does not declare AVE |
+| warn | `digest_incomplete` | an artifact that declares an `ave_digest_*` property but lacks the `sha-256`, the scope or the canonicalization; a plain artifact hash with no `ave_digest_*` property is not judged |
+| warn | `scan_time_reversed` | an invocation whose `endTimeUtc` is earlier than its `startTimeUtc`; equal is fine, and it is only looked for when both are valid UTC times |
+| warn (only with `--require-target`) | `target_not_judged` | output that is not SARIF, which `--require-target` does not read |
 | warn | `no_results`, `no_ave_ids`, `catalog_not_supplied` | nothing to judge (no results, or results of which none names an AVE class), or no catalog to judge it against |
 
-A result that names no AVE class is a warning, because a tool may report findings outside AVE in the same file (a cfgaudit rule with no AVE mapping, for example): the check judges the results that do name a class. `--require-ids` makes such a result an error, for a tool that means every result to be an AVE finding. A conforming output says nothing about whether the findings are right; it means a consumer can read which class each finding claims and which catalog the scan used.
+A result that names no AVE class is a warning, because a tool may report findings outside AVE in the same file (a cfgaudit rule with no AVE mapping, for example): the check judges the results that do name a class. `--require-ids` makes such a result an error, for a tool that means every result to be an AVE finding. The scan time and the target digest are judged only when the output carries them, and no output is required to; a digest is judged only on an artifact that declares an `ave_digest_*` property, and an ordinary SARIF artifact hash is left alone. `--require-target` is for a tool that scans remote MCP servers and means every such finding to carry a digest: it makes a missing one an error, and so is one that is only a bare SHA-256 with no `ave_digest_scope` or `ave_digest_canonicalization`, because such a digest cannot be compared across tools. It needs `--catalog` because the class comes from the record. A conforming output says nothing about whether the findings are right; it means a consumer can read which class each finding claims and which catalog the scan used.
 
 ---
 
