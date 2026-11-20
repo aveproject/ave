@@ -2,7 +2,7 @@
 
 Status: Accepted
 Date: 2026-06-05
-Issues: #69, #70, #71, #72
+Issues: bawbel/scanner#69, bawbel/scanner#70, bawbel/scanner#71, bawbel/scanner#72
 
 ## Context
 
@@ -15,12 +15,12 @@ No. confidence is per-detection and lives only on the scanner Finding.
 The AVE record declares baselines and defaults that the scanner uses to
 assign per-finding values:
 
-- confidence_baseline    → starting confidence for a Finding (#69)
-- evidence_kind_default  → default Finding.evidence_kind (#69)
-- detection_stage        → floor for Finding.evidence_stage (#71)
-- detection_layer        → where the AVE surfaces (#72)
-- evidence_basis_engines → engines that can detect it (#69)
-- derivable_into         → toxic flow chains it joins (#70)
+- confidence_baseline    → starting confidence for a Finding (bawbel/scanner#69)
+- evidence_kind_default  → default Finding.evidence_kind (bawbel/scanner#69)
+- detection_stage        → floor for Finding.evidence_stage (bawbel/scanner#71)
+- detection_layer        → where the AVE surfaces (bawbel/scanner#72)
+- evidence_basis_engines → engines that can detect it (bawbel/scanner#69)
+- derivable_into         → toxic flow chains it joins (bawbel/scanner#70)
 
 ## Consequences
 
