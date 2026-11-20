@@ -171,7 +171,7 @@ itself and never changes per scan:
 - `owasp_mcp`, `owasp`, `mitre_atlas` — framework mappings.
 - `remediation`, `indicators_of_compromise`, `references`.
 
-**The evidence declarations** were added in schema v1.1 (issues #69-72).
+**The evidence declarations** were added in schema v1.1 (issues bawbel/scanner#69 to bawbel/scanner#72).
 They are all optional, so every pre-v1.1 record still validates. They do not
 carry per-detection values — they declare the *defaults and baselines* a
 scanner uses to assign per-finding evidence metadata:
