@@ -16,6 +16,9 @@ Format: [Semantic Versioning](https://semver.org). Schema versions and record se
   so it cannot block their refresh. After v1.3.0, four rejected records stayed listed as gaps in three crosswalks with
   nothing to say so.
 
+### Scoring
+- **AIVSS 1.0 evaluated, not adopted** (#486): schema 2.0.0 stays on AIVSS v0.8, with an `aivss` object that selects its shape from `spec_version`. The evaluation and the reasons to revisit are in `docs/specs/aivss-v0.8-conformance.md` and `docs/audits/aivss-v1.0-band-movement.md`.
+
 ## [1.3.0] - 2026-11-14
 
 ### Summary
