@@ -11,10 +11,14 @@
 #       release's ave-records.json, or dist/ave-records-latest.json) and its manifest is
 #       read from beside it when there is one.
 #         python scripts/ave_conformance.py extract <output-file>
-#         python scripts/ave_conformance.py check <output-file> [--catalog <records.json>] [--strict] [--require-ids]
+#         python scripts/ave_conformance.py check <output-file> [--catalog <records.json>] [--strict] [--require-ids] [--require-target]
 #       `check` prints a JSON report on stdout and a one-line summary on stderr. Exit status:
 #       0 pass (or warnings), 1 warnings with --strict, 2 any error, or input it cannot read. A result that names no
 #       AVE class is a warning, because a tool may report findings outside AVE in the same file; --require-ids makes it an error.
+#       The scan time and the target digest (run and artifact properties in docs/specs/ave-in-sarif.md) are judged only when
+#       present (a digest only on an artifact that declares an ave_digest_* property; an end time before the start is a
+#       warning); --require-target makes a missing or undeclared digest an error on a result whose class is an MCP server (the
+#       artifact it points at must carry a valid sha-256 and declare ave_digest_scope and ave_digest_canonicalization; SARIF only).
 import argparse
 import hashlib
 import json
@@ -25,6 +29,11 @@ from pathlib import Path
 ID = re.compile(r"AVE-[0-9]{4}-[0-9]{5}")
 JSON_ID_KEY = re.compile(r"ave[_-]?ids?", re.IGNORECASE)
 RUN_PROPERTIES = ("ave_catalog", "ave_schema_version", "ave_records_sha256")
+# What a target digest may declare (docs/specs/ave-in-sarif.md, "run and artifact properties: what the scan read").
+DIGEST_CANONICALIZATIONS = ("jcs-rfc8785", "bytes")
+SHA256 = re.compile(r"[0-9a-f]{64}")
+# SARIF 2.1.0 section 3.9, the form that names a moment: a date, "T", hh:mm with optional seconds and fraction, and "Z".
+UTC_TIME = re.compile(r"([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2})(?::([0-9]{2})(?:\.[0-9]+)?)?Z")
 # The AVE taxonomy's SARIF identity: a taxonomy is matched by guid first, so another tool's "AVE" is not this one.
 # Frozen, and equal to GUID in scripts/build_taxonomy.py (a test pins the pair).
 AVE_GUID = "5110b285-34d7-5334-94db-0308b24cfb49"
@@ -337,13 +346,153 @@ def _check_references(run, rules, n, found):
         found.add("warn", "supported_taxonomies_missing", n, f"runs[{n}] relates results to AVE classes but tool.driver.supportedTaxonomies does not declare the AVE taxonomy")
 
 
+# What: whether a value is a SARIF date and time in UTC that names a moment
+# Why:  a scan time that is a date only, or carries an offset, cannot say which moment a target was read
+# How:  the SARIF 3.9 grammar with a mandatory time and the Z, then the calendar: month 1-12, day within the month (leap
+#       years counted), hour to 24, minute to 59, second to 60 (the grammar allows midnight as 24 and a leap second as 60)
+def _is_utc_time(x):
+    m = UTC_TIME.fullmatch(x) if isinstance(x, str) else None
+    if m is None:
+        return False
+    year, month, day, hour, minute = (int(g) for g in m.groups()[:5])
+    second = int(m.group(6) or 0)
+    leap = year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)
+    days = (31, 29 if leap else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+    return 1 <= month <= 12 and 1 <= day <= days[month - 1] and hour <= 24 and minute <= 59 and second <= 60
+
+
+# What: the moment a valid UTC date and time names, as a value that sorts in time order
+# Why:  scan_time_reversed must say whether the end is before the start, and the strings do not sort right: "09:00Z" sorts
+#       after "09:00:01Z", and hour 24 is the start of the next day
+# How:  only for a value _is_utc_time accepts. A tuple of (seconds since 1970-01-01 from the calendar date, which is Hinnant's
+#       days-from-civil so no datetime import is needed; 1 for a leap second and 0 otherwise; the fraction digits with trailing
+#       zeros dropped). A leap second (:60) is the second after :59, so it sorts after every :59 time and before the next
+#       minute. The fraction strings compare as numbers: after the zeros are dropped, a prefix is the smaller number.
+def _utc_key(x):
+    m = UTC_TIME.fullmatch(x)
+    year, month, day, hour, minute = (int(g) for g in m.groups()[:5])
+    second = int(m.group(6) or 0)
+    era, year_of_era = divmod(year - (month <= 2), 400)
+    day_of_year = (153 * (month + (9 if month <= 2 else -3)) + 2) // 5 + day - 1
+    days = era * 146097 + year_of_era * 365 + year_of_era // 4 - year_of_era // 100 + day_of_year - 719468
+    fraction = x[:-1].partition(".")[2].rstrip("0")
+    return (days * 86400 + hour * 3600 + minute * 60 + min(second, 59), second == 60, fraction)
+
+
+# What: whether an artifact carries a SHA-256 entry in its hashes
+# Why:  the incomplete-digest warning asks "is there a digest", and whether it is well formed is a separate question
+# How:  hashes is an object with a "sha-256" key; the value is not looked at here (_check_scan_and_target judges it)
+def _has_sha256(artifact):
+    hashes = _dict(artifact).get("hashes")
+    return isinstance(hashes, dict) and "sha-256" in hashes
+
+
+# What: what an artifact lacks to count as a declared, well-formed target digest, for --require-target
+# Why:  a bare SHA-256 in an artifact's hashes is SARIF's own and does not say what was hashed or how, so two tools' digests
+#       cannot be compared; --require-target asks for a digest a consumer can compare
+# How:  the names of the parts that are missing or invalid, in this order: hashes["sha-256"] of 64 lowercase hex characters,
+#       an ave_digest_scope that is a non-empty string, an ave_digest_canonicalization of jcs-rfc8785 or bytes. An empty list
+#       means the digest is declared and well formed. Not an artifact at all (None) lacks all three.
+def _target_digest_gaps(artifact):
+    art = _dict(artifact)
+    props = _dict(art.get("properties"))
+    sha, scope = _dict(art.get("hashes")).get("sha-256"), props.get("ave_digest_scope")
+    return [name for name, ok in (
+        ("hashes[\"sha-256\"]", isinstance(sha, str) and bool(SHA256.fullmatch(sha))),
+        ("properties.ave_digest_scope", isinstance(scope, str) and bool(scope.strip())),
+        ("properties.ave_digest_canonicalization", props.get("ave_digest_canonicalization") in DIGEST_CANONICALIZATIONS),
+    ) if not ok]
+
+
+# What: the artifact a result points at through artifactLocation.index
+# Why:  the target digest is on the artifact, and the result names it by position (SARIF 3.4.5)
+# How:  the first location whose index is an integer inside the run's artifacts; -1 is SARIF's "no index" and is skipped.
+#       Returns the artifact or None.
+def _artifact_of(res, artifacts):
+    for loc in _list(_dict(res).get("locations")):
+        idx = _dict(_dict(_dict(loc).get("physicalLocation")).get("artifactLocation")).get("index")
+        if type(idx) is int and 0 <= idx < len(artifacts):
+            return _dict(artifacts[idx])
+    return None
+
+
+# What: checks what the scan read and when, for one run, wherever the output says it
+# Why:  a finding describes a target at one moment; the scan time, the digest and the index that ties a result to its digest
+#       are only useful to a consumer if they are well formed. None of it is required, so only what is present is judged.
+# How:  errors: an invocation's startTimeUtc or endTimeUtc that is not a UTC date and time; on an artifact that declares an
+#       ave_digest_* property, a sha-256 that is not 64 lowercase hex characters, or hashes that is not an object; an
+#       ave_digest_canonicalization other than jcs-rfc8785 or bytes; an artifactLocation.index on a result that does not
+#       point into the run's artifacts. Warnings: an invocation whose endTimeUtc is earlier than its startTimeUtc; an
+#       artifact that declares any ave_digest_* property but lacks the sha-256, the scope or the canonicalization. An artifact
+#       that declares no ave_digest_* property is an ordinary SARIF artifact: its hashes are not judged here at all.
+def _check_scan_and_target(run, n, found):
+    for j, inv in enumerate(_list(run.get("invocations"))):
+        inv = _dict(inv)
+        for key in ("startTimeUtc", "endTimeUtc"):
+            if key in inv and not _is_utc_time(inv[key]):
+                found.add("error", "scan_time_invalid", (n, j, key), f"runs[{n}].invocations[{j}].{key} is {inv[key]!r}, not a UTC date and time (SARIF 3.9, for example 2026-11-17T09:00:00Z)")
+        start, end = inv.get("startTimeUtc"), inv.get("endTimeUtc")
+        if _is_utc_time(start) and _is_utc_time(end) and _utc_key(end) < _utc_key(start):
+            found.add("warn", "scan_time_reversed", (n, j), f"runs[{n}].invocations[{j}]: endTimeUtc {end!r} is earlier than startTimeUtc {start!r}, so one of the two is wrong and a consumer cannot tell how old a finding is")
+    artifacts = _list(run.get("artifacts"))
+    for k, art in enumerate(artifacts):
+        art, where = _dict(art), f"runs[{n}].artifacts[{k}]"
+        props = _dict(art.get("properties"))
+        declares_digest = any(isinstance(key, str) and key.startswith("ave_digest_") for key in props)
+        hashes = art.get("hashes")
+        if declares_digest and "hashes" in art and not isinstance(hashes, dict):
+            found.add("error", "digest_malformed", (n, k), f"{where}.hashes is not an object")
+        elif declares_digest and isinstance(hashes, dict) and "sha-256" in hashes:
+            value = hashes["sha-256"]
+            if not (isinstance(value, str) and SHA256.fullmatch(value)):
+                found.add("error", "digest_malformed", (n, k), f"{where}.hashes[\"sha-256\"] is {repr(value)[:90]}, not 64 lowercase hex characters")
+        if "ave_digest_canonicalization" in props and props["ave_digest_canonicalization"] not in DIGEST_CANONICALIZATIONS:
+            found.add("error", "digest_canonicalization_invalid", (n, k), f"{where}.properties.ave_digest_canonicalization is {props['ave_digest_canonicalization']!r}, not one of {' or '.join(DIGEST_CANONICALIZATIONS)}")
+        if declares_digest:
+            scope = props.get("ave_digest_scope")
+            missing = [name for name, ok in (
+                ("hashes[\"sha-256\"]", _has_sha256(art)),
+                ("properties.ave_digest_scope", isinstance(scope, str) and bool(scope.strip())),
+                ("properties.ave_digest_canonicalization", "ave_digest_canonicalization" in props),
+            ) if not ok]
+            if missing:
+                found.add("warn", "digest_incomplete", (n, k), f"{where} declares a target digest but lacks {', '.join(missing)}: a digest only compares across tools when it says what was hashed and how")
+    for i, res in enumerate(_list(run.get("results"))):
+        for j, loc in enumerate(_list(_dict(res).get("locations"))):
+            al = _dict(_dict(_dict(loc).get("physicalLocation")).get("artifactLocation"))
+            idx = al.get("index")
+            if "index" in al and not (type(idx) is int and (idx == -1 or 0 <= idx < len(artifacts))):
+                found.add("error", "artifact_index_unresolved", (n, repr(idx)), f"runs[{n}].results[{i}].locations[{j}]: artifactLocation.index is {idx!r}, which is not a position in runs[{n}].artifacts ({len(artifacts)} entries; SARIF 3.4.5)")
+
+
+# What: with --require-target, checks that a finding about an MCP server says what was read
+# Why:  for an MCP server class the content read at discovery time is the whole finding, so a result with no digest cannot be
+#       told from a stale one; a bare SHA-256 with no scope or canonicalization cannot be compared across tools, so it does not count
+# How:  per result, the classes it names (extract_findings on that result alone) whose record's component_type is
+#       mcp_server; unless the result points at an artifact for which _target_digest_gaps is empty (a valid sha-256 and a declared
+#       ave_digest_scope and ave_digest_canonicalization), each such class is an error, once per class and run
+def _check_required_targets(run, n, by_id, found):
+    artifacts = _list(run.get("artifacts"))
+    for i, res in enumerate(_list(run.get("results"))):
+        res = _dict(res)
+        ids = [f["ave_id"] for f in extract_findings({"runs": [{"tool": run.get("tool"), "results": [res]}]})]
+        needed = [a for a in dict.fromkeys(ids) if _dict(by_id.get(a)).get("component_type") == "mcp_server"]
+        art = _artifact_of(res, artifacts)
+        gaps = _target_digest_gaps(art)
+        if needed and gaps:
+            what = f"points at no artifact in runs[{n}].artifacts" if art is None else f"points at an artifact that does not declare a valid digest (missing or invalid: {', '.join(gaps)})"
+            for ave_id in needed:
+                found.add("error", "target_digest_missing", (n, ave_id), f"runs[{n}].results[{i}]: {ave_id} is an MCP server class and the result {what}, so it does not say what the scan read (--require-target needs a valid sha-256 and a declared ave_digest_scope and ave_digest_canonicalization; AVE-in-SARIF, run and artifact properties)")
+
+
 # What: judges a SARIF document against docs/specs/ave-in-sarif.md
 # Why:  to tell a tool author what the spec asks for that the output lacks
 # How:  no runs array is an error; an empty one has nothing to judge. Per result: _check_result (errors; a result naming no
 #       AVE class is a warning unless require_ids). Per run: the three ave_* properties (recommended, warnings), the hash against the
-#       catalog given (warning), and the AVE taxonomy: absent (warning), `version` against ave_catalog (error when they
+#       catalog given (warning), what the scan read and when (_check_scan_and_target, only what is present; with require_target,
+#       _check_required_targets), and the AVE taxonomy: absent (warning), `version` against ave_catalog (error when they
 #       differ, warning when it is missing), one taxon for each class cited (warning). A SARIF with no results is a warning.
-def check_sarif(doc, catalog_info=None, require_ids=False, records=None):
+def check_sarif(doc, catalog_info=None, require_ids=False, records=None, require_target=False):
     found = Issues()
     if not isinstance(doc.get("runs"), list):
         return [issue("error", "sarif_no_runs", "the SARIF has no runs array, so there is nothing to judge")]
@@ -364,7 +513,10 @@ def check_sarif(doc, catalog_info=None, require_ids=False, records=None):
         if catalog_info and isinstance(recorded, str) and recorded.strip().lower() != catalog_info["sha256"]:
             found.add("warn", "catalog_sha_differs", n, f"runs[{n}] says it used records with SHA-256 {recorded}, but the catalog given has {catalog_info['sha256']}: the ids are judged against a different catalog than the run used")
         _check_references(run, rules, n, found)
-        taxonomies = _list(run.get("taxonomies")) + _list(doc.get("taxonomies"))
+        _check_scan_and_target(run, n, found)
+        if require_target and records is not None:
+            _check_required_targets(run, n, {r.get("ave_id"): r for r in records if isinstance(r, dict)}, found)
+        taxonomies =_list(run.get("taxonomies")) + _list(doc.get("taxonomies"))
         taxonomy = next((_dict(t) for t in taxonomies if _dict(t).get("name") == "AVE" or str(_dict(t).get("guid", "")).lower() == AVE_GUID), None)
         if taxonomy is None:
             found.add("warn", "taxonomies_missing", n, f"runs[{n}] has no AVE taxonomy (recommended: taxonomies[] with name \"AVE\")")
@@ -404,13 +556,19 @@ def check_sarif(doc, catalog_info=None, require_ids=False, records=None):
 # What: the report for one parsed document
 # Why:  one place decides pass, warn and fail, so the command line and the tests agree
 # How:  extraction, then the catalog checks when a catalog was given, then the SARIF checks when the document is SARIF.
-#       Errors are listed before warnings. `result` is fail with any error, warn with any warning, else pass.
-def check_document(doc, records=None, catalog_info=None, file=None, require_ids=False):
+#       With require_target, no catalog is an error (the class's component_type comes from the catalog) and output that is
+#       not SARIF is a warning (the digest is judged in SARIF only). Errors are listed before warnings. `result` is fail
+#       with any error, warn with any warning, else pass.
+def check_document(doc, records=None, catalog_info=None, file=None, require_ids=False, require_target=False):
     sarif = is_sarif(doc)
     findings = extract_findings(doc)
     issues = []
     if sarif:
-        issues += check_sarif(doc, catalog_info, require_ids, records)
+        issues += check_sarif(doc, catalog_info, require_ids, records, require_target)
+    if require_target and records is None:
+        issues.append(issue("error", "catalog_required", "--require-target reads each class's component_type from the catalog, so it needs --catalog"))
+    if require_target and not sarif:
+        issues.append(issue("warn", "target_not_judged", "--require-target judges SARIF output only; this output is not SARIF, so no target digest was looked for"))
     if records is None:
         issues.append(issue("warn", "catalog_not_supplied", "no --catalog was given, so the ids were not checked against a catalog"))
     else:
@@ -432,7 +590,7 @@ def check_document(doc, records=None, catalog_info=None, file=None, require_ids=
 # Why:  the command line and the tests share it
 # How:  read the input and the catalog (an unreadable one is an error report), then check_document.
 #       Exit 2 on any error, 1 on warnings with strict, else 0.
-def run_check(path, catalog_path=None, strict=False, require_ids=False):
+def run_check(path, catalog_path=None, strict=False, require_ids=False, require_target=False):
     failed = lambda i: ({"result": "fail", "file": str(path), "format": None, "extracted": {"count": 0, "via": {}}, "catalog": None, "issues": [i]}, 2)
     doc, problem = read_json(path)
     if problem:
@@ -443,7 +601,7 @@ def run_check(path, catalog_path=None, strict=False, require_ids=False):
         if problem:
             return failed(problem)
     try:
-        report = check_document(doc, records, info, file=str(path), require_ids=require_ids)
+        report = check_document(doc, records, info, file=str(path), require_ids=require_ids, require_target=require_target)
     except RecursionError:
         return failed(issue("error", "not_json", f"{path} is nested too deeply to read"))
     status = report["result"]
@@ -477,6 +635,7 @@ def main(argv=None):
     ck.add_argument("--catalog", help="an AVE records file (a catalog release's ave-records.json or dist/ave-records-latest.json)")
     ck.add_argument("--strict", action="store_true", help="exit 1 when there are warnings")
     ck.add_argument("--require-ids", action="store_true", help="make a result that names no AVE class an error (default: a warning)")
+    ck.add_argument("--require-target", action="store_true", help="make a result about an MCP server class with no SHA-256 target digest an error (needs --catalog; SARIF only)")
     args = parser.parse_args(argv)
     if args.command == "extract":
         doc, problem = read_json(args.output)
@@ -489,7 +648,7 @@ def main(argv=None):
             print(f"ave_conformance: {args.output} is nested too deeply to read", file=sys.stderr)
             return 2
         return 0
-    report, code = run_check(args.output, args.catalog, args.strict, args.require_ids)
+    report, code = run_check(args.output, args.catalog, args.strict, args.require_ids, args.require_target)
     print(json.dumps(report, indent=2))
     sys.stdout.flush()
     print(_summary(report), file=sys.stderr)
